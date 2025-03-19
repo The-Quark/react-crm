@@ -1,6 +1,7 @@
 import { User as Auth0UserModel } from '@auth0/auth0-spa-js';
 import { getData, setData } from '@/utils';
 import { type AuthModel } from './_models';
+import { toast } from 'sonner';
 
 const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
   import.meta.env.VITE_APP_VERSION
@@ -49,6 +50,35 @@ export function setupAxios(axios: any) {
       return config;
     },
     async (err: any) => await Promise.reject(err)
+  );
+  axios.interceptors.response.use(
+    (response: any) => {
+      const { method, url } = response.config;
+      const endpoint = url?.split('/').filter(Boolean).pop();
+      const requestName = `[${method?.toUpperCase()}] ${endpoint}`;
+      if (response.status >= 200 && response.status < 300) {
+        toast.success(`✅ The ${requestName} request was completed successfully!`);
+      }
+      return response;
+    },
+    (error: any) => {
+      if (error.response) {
+        const { status } = error.response;
+
+        if (status === 401) {
+          toast.error('⛔️ The session has expired, log in again');
+          removeAuth();
+        } else if (status >= 400 && status < 500) {
+          toast.error(`🚨 Client error: ${error.response.data.message}`);
+        } else if (status >= 500) {
+          toast.error('🔥 Server error. Try again later.');
+        }
+      } else {
+        toast.error('❌ Network error');
+      }
+
+      return Promise.reject(error);
+    }
   );
 }
 
