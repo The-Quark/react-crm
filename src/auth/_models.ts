@@ -5,10 +5,15 @@ export interface AuthModel {
 }
 
 export interface UserModel {
-  id: number;
-  username: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string;
+    created_at: string;
+    updated_at: string;
+  };
   password: string | undefined;
-  email: string;
   first_name: string;
   last_name: string;
   fullname?: string;

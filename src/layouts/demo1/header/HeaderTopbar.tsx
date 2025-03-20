@@ -131,7 +131,7 @@ const HeaderTopbar = () => {
           <MenuToggle className="btn btn-icon rounded-full">
             <img
               className="size-9 rounded-full border-2 border-success shrink-0"
-              src={toAbsoluteUrl('/media/avatars/300-2.png')}
+              src={toAbsoluteUrl('/media/avatars/blank.png')}
               alt=""
             />
           </MenuToggle>
