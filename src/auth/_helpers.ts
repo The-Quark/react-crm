@@ -57,7 +57,7 @@ export function setupAxios(axios: any) {
       const endpoint = url?.split('/').filter(Boolean).pop();
       const requestName = `[${method?.toUpperCase()}] ${endpoint}`;
       if (response.status >= 200 && response.status < 300) {
-        toast.success(`✅ The ${requestName} request was completed successfully!`);
+        toast.success(`The ${requestName} request was completed successfully!`);
       }
       return response;
     },
@@ -66,15 +66,15 @@ export function setupAxios(axios: any) {
         const { status } = error.response;
 
         if (status === 401) {
-          toast.error('⛔️ The session has expired, log in again');
+          toast.error('The session has expired, log in again');
           removeAuth();
         } else if (status >= 400 && status < 500) {
-          toast.error(`🚨 Client error: ${error.response.data.message}`);
+          toast.error(`Client error: ${error.response.data.message}`);
         } else if (status >= 500) {
-          toast.error('🔥 Server error. Try again later.');
+          toast.error('Server error. Try again later.');
         }
       } else {
-        toast.error('❌ Network error');
+        toast.error('Network error');
       }
 
       return Promise.reject(error);

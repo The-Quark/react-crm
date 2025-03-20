@@ -1,5 +1,5 @@
 import { KeenIcon } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 interface INFTProps {
   image: string;

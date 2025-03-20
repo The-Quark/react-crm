@@ -14,7 +14,7 @@ import {
 import { CommonRating } from '@/partials/common';
 import { Team, QueryApiResponse } from './teams-types';
 import axios from 'axios';
-import { formatIsoDate } from '@/utils/Date';
+import { formatIsoDate } from '@/utils/include/Date.ts';
 import { TeamUsers } from './TeamUsers';
 import { Input } from '@/components/ui/input';
 
@@ -212,7 +212,7 @@ const Teams = () => {
           // Add or update the 'query' filter
           table.setColumnFilters([
             ...table.getState().columnFilters.filter((filter) => filter.id !== 'query'), // Remove existing 'query' filter
-            { id: 'query', value: inputValue }, // Add the new filter
+            { id: 'query', value: inputValue } // Add the new filter
           ]);
         }
       }

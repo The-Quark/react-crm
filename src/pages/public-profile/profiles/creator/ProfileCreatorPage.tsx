@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { KeenIcon } from '@/components';
 import { Container } from '@/components/container';
 

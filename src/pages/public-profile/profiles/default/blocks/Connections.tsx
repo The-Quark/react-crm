@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/i18n';
 import { KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 import { DropdownCard1 } from '@/partials/dropdowns/general';
 

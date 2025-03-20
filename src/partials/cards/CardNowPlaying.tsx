@@ -1,5 +1,5 @@
 import { CommonAvatars } from '@/partials/common';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 interface INowPlayingItem {
   number: string;

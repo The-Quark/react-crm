@@ -1,5 +1,5 @@
 import { KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { useLanguage } from '@/i18n';
 import { DropdownCard2 } from '../dropdowns/general';
 import { ICampaignItem, ICampaignProps } from './CardCampaign';

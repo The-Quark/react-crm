@@ -1,5 +1,5 @@
 import { KeenIcon } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { ImageInput } from '@/components/image-input';
 import type { IImageInputFile } from '@/components/image-input';
 import { useState } from 'react';

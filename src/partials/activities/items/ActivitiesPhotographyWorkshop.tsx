@@ -1,4 +1,4 @@
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 import { TimelinesWrapper } from '@/partials/timelines/default/item';
 

@@ -5,7 +5,6 @@ import {
   type Dispatch,
   type PropsWithChildren,
   type SetStateAction,
-  useEffect,
   useState
 } from 'react';
 

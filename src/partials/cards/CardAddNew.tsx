@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { KeenIcon } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 import { CommonHexagonBadge } from '../common';
 import { IAddNewProps } from './CardAddNewRow';

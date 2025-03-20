@@ -1,5 +1,5 @@
 import { KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { useLanguage } from '@/i18n';
 import { DropdownCrud1, DropdownCrudItem1 } from '@/partials/dropdowns/general';
 

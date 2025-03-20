@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { toAbsoluteUrl } from '@/utils/Assets';
+import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 
 import { Comments, Heading, Likes, Saves, Tabs } from '../post/';
 
