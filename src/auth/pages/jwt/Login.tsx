@@ -23,8 +23,8 @@ const loginSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  email: 'admin@thequark.kz',
-  password: 'J*kd0^3ehjd7^%swd9',
+  email: '',
+  password: '',
   remember: false
 };
 

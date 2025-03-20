@@ -16,7 +16,7 @@ export const LOGIN_URL = `${API_URL}/login`;
 export const REGISTER_URL = `${API_URL}/register`;
 export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
-export const GET_USER_URL = `${API_URL}/user`;
+export const GET_USER_URL = `${API_URL}/get_user`;
 
 interface AuthContextProps {
   loading: boolean;
