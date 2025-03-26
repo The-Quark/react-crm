@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-
 import { Container } from '@/components/container';
 import {
   Toolbar,
@@ -8,8 +7,6 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { PageNavbar } from '@/pages/account';
-
 import { useLayout } from '@/providers';
 import { TeamsPageContent } from './components/teamsPageContent.tsx';
 
@@ -18,8 +15,6 @@ export const TeamsPage = () => {
 
   return (
     <Fragment>
-      <PageNavbar />
-
       {currentLayout?.name === 'demo1-layout' && (
         <Container>
           <Toolbar>

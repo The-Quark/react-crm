@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/i18n';
-import { toAbsoluteUrl } from '@/utils';
 import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import {
   DataGrid,
@@ -19,6 +18,7 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input.tsx';
 import { DropdownCard1 } from '@/partials/dropdowns/general';
 import { MembersData, IMembersData } from './membersData.ts';
+import { getUserList } from './membersApi.ts';
 
 interface IColumnFilterProps<TData, TValue> {
   column: Column<TData, TValue>;
@@ -27,6 +27,25 @@ interface IColumnFilterProps<TData, TValue> {
 export const MembersDataGrid = () => {
   const { isRTL } = useLanguage();
   const storageFilterId = 'members-filter';
+
+  // useEffect(() => {
+  //   getUserList()
+  //     .then((users) => {
+  //       const formattedData = users.map((user) => ({
+  //         member: {
+  //           avatar: toAbsoluteUrl('/media/avatars/default-avatar.png'), // Placeholder
+  //           name: user.name,
+  //           position: 'User' // Placeholder
+  //         },
+  //         role: 'User', // Placeholder
+  //         location: 'Unknown', // Placeholder
+  //         recentlyActivity: new Date(user.updated_at).toLocaleString()
+  //       }));
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching users:', error);
+  //     });
+  // }, []);
 
   const ColumnInputFilter = <TData, TValue>({ column }: IColumnFilterProps<TData, TValue>) => {
     return (
@@ -66,7 +85,11 @@ export const MembersDataGrid = () => {
           <div className="flex items-center gap-2.5">
             <div className="shrink-0">
               <img
-                src={toAbsoluteUrl(`/media/avatars/${info.row.original.member.avatar}`)}
+                src={
+                  info.row.original.member.avatar
+                    ? info.row.original.member.avatar
+                    : '/media/avatars/blank.png'
+                }
                 className="h-9 rounded-full"
                 alt=""
               />
@@ -79,7 +102,7 @@ export const MembersDataGrid = () => {
                 {info.row.original.member.name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
-                {info.row.original.member.tasks} tasks
+                {info.row.original.member.position} tasks
               </span>
             </div>
           </div>
@@ -90,17 +113,15 @@ export const MembersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.roles,
+        accessorFn: (row) => row.role,
         id: 'roles',
         header: ({ column }) => <DataGridColumnHeader title="Roles" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
-            {info.row.original.roles.map((role: string, index: number) => (
-              <span key={index} className="badge badge-sm badge-light badge-outline">
-                {role}
-              </span>
-            ))}
+            <span className="badge badge-sm badge-light badge-outline">
+              {info.row.original.role}
+            </span>
           </div>
         ),
         meta: {
@@ -114,30 +135,10 @@ export const MembersDataGrid = () => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <img
-              src={toAbsoluteUrl(`/media/flags/${info.row.original.location.flag}`)}
-              className="h-4 rounded-full"
-              alt=""
-            />
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.location.name}
+              {info.row.original.location}
             </span>
           </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[165px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.status,
-        id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <span className={`badge badge-sm badge-outline  ${info.row.original.status.variant}`}>
-            {info.row.original.status.label}
-          </span>
         ),
         meta: {
           headerClassName: 'min-w-[165px]',
@@ -212,7 +213,7 @@ export const MembersDataGrid = () => {
     return data.filter(
       (member) =>
         member.member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.member.tasks.toLowerCase().includes(searchTerm.toLowerCase())
+        member.member.position.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm, data]);
 

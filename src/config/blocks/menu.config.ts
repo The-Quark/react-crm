@@ -3,7 +3,8 @@ import { type TMenuConfig } from '@/components/menu';
 export const MENU_SIDEBAR: TMenuConfig = [
   {
     title: 'Dashboard',
-    icon: 'element-11'
+    icon: 'element-11',
+    path: '/'
   },
   {
     heading: 'Features'
@@ -37,6 +38,9 @@ export const MENU_SIDEBAR: TMenuConfig = [
         path: '/crm/roles-permissions'
       }
     ]
+  },
+  {
+    heading: 'Demonstration'
   },
   {
     title: 'Public Profile',
@@ -391,16 +395,6 @@ export const MENU_SIDEBAR: TMenuConfig = [
         title: 'Cooperations',
         path: '/network/cooperations',
         disabled: true
-      },
-      {
-        title: 'Leads',
-        path: '/network/leads',
-        disabled: true
-      },
-      {
-        title: 'Donators',
-        path: '/network/donators',
-        disabled: true
       }
     ]
   },
@@ -514,7 +508,7 @@ export const MENU_SIDEBAR: TMenuConfig = [
 
 export const MENU_MEGA: TMenuConfig = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     path: '/'
   },
   {

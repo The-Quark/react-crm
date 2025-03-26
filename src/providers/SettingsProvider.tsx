@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { createContext, type PropsWithChildren, useContext, useState } from 'react';
 
-import { defaultSettings, ISettings, type TSettingsThemeMode } from '@/config/settings.config';
+import {
+  defaultSettings,
+  ISettings,
+  type TSettingsThemeMode
+} from '@/config/blocks/settings.config.ts';
 
 import { getData, setData } from '@/utils';
 

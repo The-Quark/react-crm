@@ -1,4 +1,4 @@
-import { type TKeenIconsStyle } from '../components/keenicons/types';
+import { type TKeenIconsStyle } from '../../components/keenicons/types';
 
 export type TSettingsThemeMode = 'light' | 'dark' | 'system';
 

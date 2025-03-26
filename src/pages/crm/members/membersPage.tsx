@@ -7,7 +7,6 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { PageNavbar } from '@/pages/account';
 import { useLayout } from '@/providers';
 import { MembersPageContent } from '@/pages/crm/members/components/membersPageContent.tsx';
 
@@ -16,8 +15,6 @@ export const MembersPage = () => {
 
   return (
     <Fragment>
-      <PageNavbar />
-
       {currentLayout?.name === 'demo1-layout' && (
         <Container>
           <Toolbar>

@@ -7,17 +7,14 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { PageNavbar } from '@/pages/account';
 import { useLayout } from '@/providers';
-import { RolesPermissionPageContent } from '@/pages/crm/roles-permission/components/rolesPermissionPageContent.tsx';
+import { RolesPermissionPageContent } from './components/rolesPermissionPageContent';
 
 export const RolesPermissionPage = () => {
   const { currentLayout } = useLayout();
 
   return (
     <Fragment>
-      <PageNavbar />
-
       {currentLayout?.name === 'demo1-layout' && (
         <Container>
           <Toolbar>

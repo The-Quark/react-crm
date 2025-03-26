@@ -1,8 +1,8 @@
 import { TMenuConfig, IMenuItemConfig, MenuSub } from '@/components/menu';
 import { MegaMenuSubDefault } from './components';
 
-const MegaMenuSubProfiles = (items: TMenuConfig) => {
-  const publicProfilesItem = items[1];
+const MegaMenuSubCRM = (items: TMenuConfig) => {
+  const publicProfilesItem = items[0];
 
   return (
     <MenuSub className="w-full gap-0 lg:max-w-[875px]">
@@ -32,4 +32,4 @@ const MegaMenuSubProfiles = (items: TMenuConfig) => {
   );
 };
 
-export { MegaMenuSubProfiles };
+export { MegaMenuSubCRM };

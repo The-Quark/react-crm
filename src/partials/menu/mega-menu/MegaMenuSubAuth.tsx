@@ -1,5 +1,5 @@
 import { IMenuItemConfig, TMenuConfig, MenuSub } from '@/components/menu';
-import { MegaMenuFooter, MegaMenuSubDefault, MegaMenuSubHighlighted } from './components';
+import { MegaMenuSubDefault, MegaMenuSubHighlighted } from './components';
 
 const MegaMenuSubAuth = (items: TMenuConfig) => {
   const authItem = items[4];
@@ -39,7 +39,6 @@ const MegaMenuSubAuth = (items: TMenuConfig) => {
           </div>
         </div>
       </div>
-      <MegaMenuFooter />
     </MenuSub>
   );
 };
