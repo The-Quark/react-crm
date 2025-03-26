@@ -82,7 +82,9 @@ import {
   AuthenticationAccountDeactivatedPage,
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
-import ListEnquiryPage from '@/pages/crm/list-enquiry/listEnquiryPage.tsx';
+import { MembersStarterPage, TeamsStarterPage } from '@/pages/crm';
+import { TeamsPage } from '@/pages/crm/teams';
+import { MembersPage } from '@/pages/crm/members';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -91,7 +93,10 @@ const AppRoutingSetup = (): ReactElement => {
         <Route element={<Demo1Layout />}>
           <Route path="/" element={<DefaultPage />} />
           {/*<Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} />*/}
-          <Route path="/crm/list-enquiry" element={<ListEnquiryPage />} />
+          <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
+          <Route path="/crm/teams" element={<TeamsPage />} />
+          <Route path="/crm/members-starter" element={<MembersStarterPage />} />
+          <Route path="/crm/members" element={<MembersPage />} />
           <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
           <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />

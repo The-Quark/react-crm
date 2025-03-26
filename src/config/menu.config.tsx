@@ -13,20 +13,20 @@ export const MENU_SIDEBAR: TMenuConfig = [
     icon: 'users',
     children: [
       {
-        title: 'List Enquiry',
-        path: '/crm/list-enquiry'
+        title: 'Teams Starter',
+        path: '/crm/teams-starter'
       },
       {
-        title: 'Direct Enquiry List',
-        path: '#'
+        title: 'Teams',
+        path: '/crm/teams'
       },
       {
-        title: 'List Complaint',
-        path: '#'
+        title: 'Members Starter',
+        path: '/crm/members-starter'
       },
       {
-        title: 'Customer Rate Calculator',
-        path: '#'
+        title: 'Members',
+        path: '/crm/members'
       }
     ]
   },
