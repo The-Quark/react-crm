@@ -1,19 +1,15 @@
 import { Fragment } from 'react';
 import { Container } from '@/components/container';
-import {
-  Toolbar,
-  ToolbarActions,
-  ToolbarDescription,
-  ToolbarHeading,
-  ToolbarPageTitle
-} from '@/partials/toolbar';
+import { Toolbar, ToolbarDescription, ToolbarHeading, ToolbarPageTitle } from '@/partials/toolbar';
 import { PageNavbar } from '@/pages/account';
 import { AccountGetStartedContent } from '.';
 import { useLayout } from '@/providers';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '@/auth';
 
 const AccountGetStartedPage = () => {
   const { currentLayout } = useLayout();
+  const { currentUser } = useAuthContext();
 
   return (
     <Fragment>
@@ -26,12 +22,9 @@ const AccountGetStartedPage = () => {
               <ToolbarPageTitle />
               <ToolbarDescription>
                 <div className="flex items-center gap-2 text-sm font-medium">
-                  <span className="text-gray-800 font-medium">Jayson Tatum</span>
-                  <a
-                    href="mailto:jaytatum@ktstudio.com"
-                    className="text-gray-700 hover:text-primary"
-                  >
-                    jaytatum@ktstudio.com
+                  <span className="text-gray-800 font-medium">{currentUser?.user.name}</span>
+                  <a href="#" className="text-gray-700 hover:text-primary">
+                    {currentUser?.user.email}
                   </a>
                   <span className="size-0.75 bg-gray-600 rounded-full"></span>
                   <Link to="/account/members/team-info" className="font-semibold btn btn-link link">

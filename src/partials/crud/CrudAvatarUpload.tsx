@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const CrudAvatarUpload = () => {
   const [avatar, setAvatar] = useState<IImageInputFile[]>([
-    { dataURL: toAbsoluteUrl(`/media/avatars/300-2.png`) }
+    { dataURL: toAbsoluteUrl(`/media/avatars/blank.png`) }
   ]);
 
   return (
