@@ -27,6 +27,14 @@ export const MENU_SIDEBAR: TMenuConfig = [
       {
         title: 'Members',
         path: '/crm/members'
+      },
+      {
+        title: 'Roles',
+        path: '/crm/roles'
+      },
+      {
+        title: 'Roles - Permissions',
+        path: '/crm/roles-permissions'
       }
     ]
   },

@@ -85,6 +85,8 @@ import {
 import { MembersStarterPage, TeamsStarterPage } from '@/pages/crm';
 import { TeamsPage } from '@/pages/crm/teams';
 import { MembersPage } from '@/pages/crm/members';
+import { RolesPage } from '@/pages/crm/roles';
+import { RolesPermissionPage } from '@/pages/crm/roles-permission';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -97,6 +99,9 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/crm/teams" element={<TeamsPage />} />
           <Route path="/crm/members-starter" element={<MembersStarterPage />} />
           <Route path="/crm/members" element={<MembersPage />} />
+          <Route path="/crm/roles" element={<RolesPage />} />
+          <Route path="/crm/roles-permissions" element={<RolesPermissionPage />} />
+
           <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
           <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />
