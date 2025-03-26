@@ -2,21 +2,33 @@ import { type TMenuConfig } from '@/components/menu';
 
 export const MENU_SIDEBAR: TMenuConfig = [
   {
-    title: 'Dashboards',
-    icon: 'element-11',
-    children: [
-      {
-        title: 'Light Sidebar',
-        path: '/'
-      },
-      {
-        title: 'Dark Sidebar',
-        path: '/dark-sidebar'
-      }
-    ]
+    title: 'Dashboard',
+    icon: 'element-11'
   },
   {
-    heading: 'User'
+    heading: 'Features'
+  },
+  {
+    title: 'CRM',
+    icon: 'users',
+    children: [
+      {
+        title: 'List Enquiry',
+        path: '/crm/list-enquiry'
+      },
+      {
+        title: 'Direct Enquiry List',
+        path: '#'
+      },
+      {
+        title: 'List Complaint',
+        path: '#'
+      },
+      {
+        title: 'Customer Rate Calculator',
+        path: '#'
+      }
+    ]
   },
   {
     title: 'Public Profile',
@@ -489,7 +501,7 @@ export const MENU_SIDEBAR: TMenuConfig = [
         path: '/error/500'
       }
     ]
-  },
+  }
 ];
 
 export const MENU_MEGA: TMenuConfig = [
