@@ -2,7 +2,7 @@ import { IMenuItemConfig, TMenuConfig, MenuSub } from '@/components/menu';
 import { MegaMenuSubDefault, MegaMenuSubHighlighted } from './components';
 
 const MegaMenuSubAuth = (items: TMenuConfig) => {
-  const authItem = items[4];
+  const authItem = items[5];
   const authItemGeneral = authItem.children ? authItem.children[0] : {};
   const authItemOthers = authItem.children ? authItem.children[1] : {};
 

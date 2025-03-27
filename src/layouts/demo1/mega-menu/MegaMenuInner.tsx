@@ -7,7 +7,8 @@ import {
   MegaMenuSubAccount,
   MegaMenuSubNetwork,
   MegaMenuSubAuth,
-  MegaMenuSubHelp
+  MegaMenuSubHelp,
+  MegaMenuSubCRM
 } from '@/partials/menu/mega-menu';
 import { useDemo1Layout } from '../Demo1LayoutProvider';
 import { MENU_MEGA } from '@/config';
@@ -37,11 +38,12 @@ const MegaMenuInner = () => {
 
   const build = (items: TMenuConfig) => {
     const homeItem = items[0];
-    const publicProfilesItem = items[1];
-    const myAccountItem = items[2];
-    const networkItem = items[3];
-    const authItem = items[4];
-    const helpItem = items[5];
+    const crmItem = items[1];
+    const publicProfilesItem = items[2];
+    const myAccountItem = items[3];
+    const networkItem = items[4];
+    const authItem = items[5];
+    const helpItem = items[6];
 
     const linkClass =
       'menu-link text-sm text-gray-700 font-medium menu-link-hover:text-primary menu-item-active:text-gray-900 menu-item-show:text-primary menu-item-here:text-gray-900';
@@ -53,6 +55,21 @@ const MegaMenuInner = () => {
           <MenuLink path={homeItem.path} className={linkClass}>
             <MenuTitle className={titleClass}>{homeItem.title}</MenuTitle>
           </MenuLink>
+        </MenuItem>
+
+        <MenuItem
+          key="crm"
+          toggle={desktopMode ? 'dropdown' : 'accordion'}
+          trigger={desktopMode ? 'hover' : 'click'}
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-end' : 'bottom-start'
+          }}
+        >
+          <MenuLink className={linkClass}>
+            <MenuTitle className={titleClass}>{crmItem.title}</MenuTitle>
+            {buildArrow()}
+          </MenuLink>
+          {MegaMenuSubCRM(items)}
         </MenuItem>
 
         <MenuItem

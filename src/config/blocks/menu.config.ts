@@ -512,6 +512,50 @@ export const MENU_MEGA: TMenuConfig = [
     path: '/'
   },
   {
+    title: 'CRM',
+    children: [
+      {
+        title: 'CRM',
+        children: [
+          {
+            children: [
+              {
+                title: 'Teams Starter',
+                icon: 'users',
+                path: '/crm/teams-starter'
+              },
+              {
+                title: 'Teams',
+                icon: 'people',
+                path: '/crm/teams'
+              },
+              {
+                title: 'Members Starter',
+                icon: 'user-edit',
+                path: '/crm/members-starter'
+              },
+              {
+                title: 'Members',
+                icon: 'user',
+                path: '/crm/members'
+              },
+              {
+                title: 'Roles',
+                icon: 'briefcase',
+                path: '/crm/roles'
+              },
+              {
+                title: 'Roles - Permissions',
+                icon: 'data',
+                path: '/crm/roles-permissions'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     title: 'Profiles',
     children: [
       {
