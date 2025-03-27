@@ -1,20 +1,10 @@
 import { CrudAvatarUpload } from '@/partials/crud';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { KeenIcon } from '@/components';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { postCreateUser } from './membersStarterCreateUserApi';
+import { AxiosError } from 'axios';
 
 interface IGeneralSettingsProps {
   title: string;
@@ -29,39 +19,61 @@ const createUserSchema = Yup.object().shape({
   password: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
-    .required('Password is required')
+    .required('Password is required'),
+  name: Yup.string()
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Name is required'),
+  phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
+  avatar: Yup.mixed().test(
+    'fileType',
+    'Avatar must be a valid image (jpeg, png, webp, etc.)',
+    (value) => {
+      if (!value) return true;
+      return [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/bmp',
+        'image/webp',
+        'image/avif'
+      ].includes((value as File).type);
+    }
+  ),
+  position: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols')
 });
 
 const initialValues = {
   email: '',
-  password: ''
+  password: '',
+  name: '',
+  phone: '',
+  location: '',
+  position: ''
 };
 
 export const MembersStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProps) => {
-  const [date, setDate] = useState<Date | undefined>(new Date(1984, 0, 20));
-  const [nameInput, setNameInput] = useState('');
-  const [emailInput, setEmailInput] = useState('');
-  const [addressInput, setAddressInput] = useState('');
-  const [cityInput, setCityInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues,
     validationSchema: createUserSchema,
-    onSubmit: async (values, { setStatus, setSubmitting }) => {
+    onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
+      setStatus(null);
 
       try {
-        // if (!login) {
-        //   throw new Error('JWTProvider is required for this form.');
-        // }
-        // await login(values.email, values.password);
-      } catch {
-        setStatus('The login details are incorrect');
-        setSubmitting(false);
+        console.log(values);
+        await postCreateUser(values);
+        resetForm();
+        setStatus('User created successfully!');
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        setStatus(error.response?.data?.message || 'Failed to create user');
       }
+
       setLoading(false);
+      setSubmitting(false);
     }
   });
 
@@ -81,117 +93,104 @@ export const MembersStarterPageContentUserCRUD = ({ title }: IGeneralSettingsPro
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <label className="form-label max-w-56">Name</label>
-          <input
-            className="input"
-            type="text"
-            value={nameInput}
-            placeholder="Name"
-            onChange={(e) => setNameInput(e.target.value)}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.email}
-            </span>
-          )}
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Name"
+              {...formik.getFieldProps('name')}
+            />
+            {formik.touched.name && formik.errors.name && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.name}
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="w-full">
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label flex items-center gap-1 max-w-56">Birth Date</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  id="date"
-                  className={cn(
-                    'input data-[state=open]:border-primary',
-                    !date && 'text-muted-foreground'
-                  )}
-                >
-                  <KeenIcon icon="calendar" className="-ms-0.5" />
-                  {date ? format(date, 'LLL dd, y') : <span>Pick a date</span>}
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  initialFocus
-                  mode="single" // Single date selection
-                  defaultMonth={date}
-                  selected={date}
-                  onSelect={setDate}
-                  numberOfMonths={1}
-                />
-              </PopoverContent>
-            </Popover>
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Email</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Email"
+              {...formik.getFieldProps('email')}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.email}
+              </span>
+            )}
           </div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <label className="form-label max-w-56">Phone number</label>
-          <input type="text" className="input" placeholder="Phone number" />
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Phone number"
+              {...formik.getFieldProps('phone')}
+            />
+            {formik.touched.phone && formik.errors.phone && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.phone}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">Email</label>
-          <input
-            className="input"
-            type="text"
-            value={emailInput}
-            placeholder="Email"
-            onChange={(e) => setEmailInput(e.target.value)}
-          />
+          <label className="form-label max-w-56">Position</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Position"
+              {...formik.getFieldProps('position')}
+            />
+            {formik.touched.position && formik.errors.position && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.position}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">Address</label>
-          <input
-            className="input"
-            type="text"
-            value={addressInput}
-            placeholder="Address"
-            onChange={(e) => setAddressInput(e.target.value)}
-          />
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">Country</label>
-
-          <Select defaultValue="1">
-            <SelectTrigger>
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">Spain</SelectItem>
-              <SelectItem value="2">Option 2</SelectItem>
-              <SelectItem value="3">Option 3</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">State</label>
-          <input type="text" className="input" placeholder="State" />
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">City</label>
-          <input
-            className="input"
-            type="text"
-            placeholder="City"
-            value={cityInput}
-            onChange={(e) => setCityInput(e.target.value)}
-          />
+          <label className="form-label max-w-56">Location</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Location"
+              {...formik.getFieldProps('location')}
+            />
+            {formik.touched.location && formik.errors.location && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.location}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
           <label className="form-label max-w-56">Password</label>
-          <input
-            className="input"
-            type="text"
-            placeholder="Password"
-            value={passwordInput}
-            onChange={(e) => setPasswordInput(e.target.value)}
-          />
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Password"
+              {...formik.getFieldProps('password')}
+            />
+            {formik.touched.password && formik.errors.password && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.password}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-end">
