@@ -36,7 +36,6 @@ const USERS_LIST_AVATAR_URL = `${STORAGE_URL}/avatars`;
 export const MembersDataGrid = () => {
   const { isRTL } = useLanguage();
   const [members, setMembers] = useState<Member[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -80,6 +79,11 @@ export const MembersDataGrid = () => {
         id: 'member',
         header: ({ column }) => <DataGridColumnHeader title="Member" column={column} />,
         enableSorting: true,
+        filterFn: (row, columnId, filterValue) => {
+          const member = row.original.member;
+          const nameMatch = member.name?.toLowerCase().includes(filterValue.toLowerCase());
+          return nameMatch;
+        },
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="shrink-0">
@@ -192,15 +196,6 @@ export const MembersDataGrid = () => {
     [isRTL]
   );
 
-  const filteredData = useMemo(() => {
-    if (!searchTerm) return members;
-
-    return members.filter((member) => {
-      const nameMatch = member.member.name.toLowerCase().includes(searchTerm.toLowerCase());
-      return nameMatch;
-    });
-  }, [searchTerm, members]);
-
   const handleRowSelection = (state: RowSelectionState) => {
     const selectedRowIds = Object.keys(state);
 
@@ -232,8 +227,8 @@ export const MembersDataGrid = () => {
               type="text"
               placeholder="Search Members"
               className="input input-sm ps-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={(table.getColumn('member')?.getFilterValue() as string) ?? ''}
+              onChange={(event) => table.getColumn('member')?.setFilterValue(event.target.value)}
             />
           </div>
           <DataGridColumnVisibility table={table} />
@@ -251,7 +246,7 @@ export const MembersDataGrid = () => {
       ) : (
         <DataGrid
           columns={columns}
-          data={filteredData}
+          data={members}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
