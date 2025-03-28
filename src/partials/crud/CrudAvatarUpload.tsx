@@ -2,23 +2,42 @@ import { KeenIcon } from '@/components';
 import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { ImageInput } from '@/components/image-input';
 import type { IImageInputFile } from '@/components/image-input';
-import { useState } from 'react';
+import React, { FC, useState } from 'react';
 
-const CrudAvatarUpload = () => {
-  const [avatar, setAvatar] = useState<IImageInputFile[]>([
-    { dataURL: toAbsoluteUrl(`/media/avatars/blank.png`) }
-  ]);
+interface CrudAvatarUploadProps {
+  avatarUser?: IImageInputFile | null | undefined;
+  onChange?: (file: IImageInputFile | null) => void;
+}
+
+const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) => {
+  const [avatar, setAvatar] = useState<IImageInputFile[]>(avatarUser ? [avatarUser] : []);
+
+  const handleAvatarChange = (selectedAvatar: IImageInputFile[]) => {
+    setAvatar(selectedAvatar);
+    if (onChange) {
+      onChange(selectedAvatar.length > 0 ? selectedAvatar[0] : null);
+    }
+  };
+
+  const handleRemoveAvatar = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setAvatar([]);
+    if (onChange) {
+      onChange(null);
+    }
+  };
 
   return (
-    <ImageInput value={avatar} onChange={(selectedAvatar) => setAvatar(selectedAvatar)}>
+    <ImageInput
+      value={avatar}
+      onChange={handleAvatarChange}
+      acceptType={['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/webp', 'image/avif']}
+    >
       {({ onImageUpload }) => (
         <div className="image-input size-16" onClick={onImageUpload}>
           <div
             className="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 size-5 -top-0.5 -end-0.5 rounded-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              setAvatar([]);
-            }}
+            onClick={handleRemoveAvatar}
           >
             <KeenIcon icon="cross" />
           </div>
