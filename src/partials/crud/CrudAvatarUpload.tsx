@@ -31,7 +31,7 @@ const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) =
     <ImageInput
       value={avatar}
       onChange={handleAvatarChange}
-      acceptType={['image/jpeg', 'image/gif', 'image/bmp', 'image/png', 'image/webp', 'image/avif']}
+      acceptType={['jpeg', 'jpg', 'gif', 'bmp', 'png', 'webp', 'avif']}
     >
       {({ onImageUpload }) => (
         <div className="image-input size-16" onClick={onImageUpload}>
