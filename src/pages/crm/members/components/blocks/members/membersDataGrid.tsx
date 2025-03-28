@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/i18n';
-import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
+import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import {
   DataGrid,
   DataGridColumnHeader,
@@ -15,50 +15,55 @@ import {
   MenuToggle
 } from '@/components';
 import { toast } from 'sonner';
-import { Input } from '@/components/ui/input.tsx';
 import { DropdownCard1 } from '@/partials/dropdowns/general';
-import { MembersData, IMembersData } from './membersData.ts';
 import { getUserList } from './membersApi.ts';
+import { toAbsoluteUrl } from '@/utils/index.ts';
+import { CircularProgress } from '@mui/material';
 
-interface IColumnFilterProps<TData, TValue> {
-  column: Column<TData, TValue>;
+interface Member {
+  member: {
+    avatar?: string | null;
+    name: string;
+    position?: string | null;
+  };
+  role?: string;
+  location?: string | null;
+  recentlyActivity: string;
 }
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_URL;
+const USERS_LIST_AVATAR_URL = `${STORAGE_URL}/avatars`;
 
 export const MembersDataGrid = () => {
   const { isRTL } = useLanguage();
-  const storageFilterId = 'members-filter';
+  const [members, setMembers] = useState<Member[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   getUserList()
-  //     .then((users) => {
-  //       const formattedData = users.map((user) => ({
-  //         member: {
-  //           avatar: toAbsoluteUrl('/media/avatars/default-avatar.png'), // Placeholder
-  //           name: user.name,
-  //           position: 'User' // Placeholder
-  //         },
-  //         role: 'User', // Placeholder
-  //         location: 'Unknown', // Placeholder
-  //         recentlyActivity: new Date(user.updated_at).toLocaleString()
-  //       }));
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching users:', error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    getUserList()
+      .then((users) => {
+        const formattedData = users.result.map((user) => ({
+          member: {
+            avatar: user.avatar,
+            name: user.name,
+            position: user.position
+          },
+          role: user.roles?.[0]?.name ?? 'No role',
+          location: user.location ?? 'No location',
+          recentlyActivity: new Date(user.updated_at).toLocaleString()
+        }));
+        setMembers(formattedData);
+      })
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
-  const ColumnInputFilter = <TData, TValue>({ column }: IColumnFilterProps<TData, TValue>) => {
-    return (
-      <Input
-        placeholder="Filter..."
-        value={(column.getFilterValue() as string) ?? ''}
-        onChange={(event) => column.setFilterValue(event.target.value)}
-        className="h-9 w-full max-w-40"
-      />
-    );
-  };
-
-  const columns = useMemo<ColumnDef<IMembersData>[]>(
+  const columns = useMemo<ColumnDef<Member>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -73,13 +78,7 @@ export const MembersDataGrid = () => {
       {
         accessorFn: (row) => row.member,
         id: 'member',
-        header: ({ column }) => (
-          <DataGridColumnHeader
-            title="Member"
-            filter={<ColumnInputFilter column={column} />}
-            column={column}
-          />
-        ),
+        header: ({ column }) => <DataGridColumnHeader title="Member" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -87,11 +86,11 @@ export const MembersDataGrid = () => {
               <img
                 src={
                   info.row.original.member.avatar
-                    ? info.row.original.member.avatar
-                    : '/media/avatars/blank.png'
+                    ? `${USERS_LIST_AVATAR_URL}/${info.row.original.member.avatar}`
+                    : toAbsoluteUrl('/media/avatars/blank.png')
                 }
                 className="h-9 rounded-full"
-                alt=""
+                alt="Avatar"
               />
             </div>
             <div className="flex flex-col gap-0.5">
@@ -193,29 +192,14 @@ export const MembersDataGrid = () => {
     [isRTL]
   );
 
-  // Memoize the team data
-  const data: IMembersData[] = useMemo(() => MembersData, []);
-
-  // Initialize search term from localStorage if available
-  const [searchTerm, setSearchTerm] = useState(() => {
-    return localStorage.getItem(storageFilterId) || '';
-  });
-
-  // Update localStorage whenever the search term changes
-  useEffect(() => {
-    localStorage.setItem(storageFilterId, searchTerm);
-  }, [searchTerm]);
-
-  // Filtered data based on search term
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data; // If no search term, return full data
+    if (!searchTerm) return members;
 
-    return data.filter(
-      (member) =>
-        member.member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.member.position.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [searchTerm, data]);
+    return members.filter((member) => {
+      const nameMatch = member.member.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return nameMatch;
+    });
+  }, [searchTerm, members]);
 
   const handleRowSelection = (state: RowSelectionState) => {
     const selectedRowIds = Object.keys(state);
@@ -249,29 +233,33 @@ export const MembersDataGrid = () => {
               placeholder="Search Members"
               className="input input-sm ps-8"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <DataGridColumnVisibility table={table} />
-          <label className="switch switch-sm">
-            <input name="check" type="checkbox" value="1" className="order-2" readOnly />
-            <span className="switch-label order-1">Active Users</span>
-          </label>
         </div>
       </div>
     );
   };
 
   return (
-    <DataGrid
-      columns={columns}
-      data={filteredData}
-      rowSelection={true}
-      onRowSelectionChange={handleRowSelection}
-      pagination={{ size: 10 }}
-      sorting={[{ id: 'member', desc: false }]}
-      toolbar={<Toolbar />}
-      layout={{ card: true }}
-    />
+    <>
+      {isLoading ? (
+        <div className="card flex justify-center items-center p-5">
+          <CircularProgress />
+        </div>
+      ) : (
+        <DataGrid
+          columns={columns}
+          data={filteredData}
+          rowSelection={true}
+          onRowSelectionChange={handleRowSelection}
+          pagination={{ size: 10 }}
+          sorting={[{ id: 'member', desc: false }]}
+          toolbar={<Toolbar />}
+          layout={{ card: true }}
+        />
+      )}
+    </>
   );
 };
