@@ -7,8 +7,8 @@ export const MembersPageContent = () => {
     <div className="grid gap-5 lg:gap-7.5">
       <MembersDataGrid />
       <div className="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
-        <InvitePeople />
-        <InviteWithLink />
+        {/*<InvitePeople />*/}
+        {/*<InviteWithLink />*/}
       </div>
     </div>
   );

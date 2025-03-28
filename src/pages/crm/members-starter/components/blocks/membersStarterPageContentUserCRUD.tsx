@@ -71,8 +71,8 @@ export const MembersStarterPageContentUserCRUD = ({ title }: IGeneralSettingsPro
           ...values,
           avatar: values.avatar?.file || null
         };
-        console.log(payload);
         await postCreateUser(payload);
+        resetForm();
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
