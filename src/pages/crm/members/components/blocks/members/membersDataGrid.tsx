@@ -49,7 +49,7 @@ export const MembersDataGrid = () => {
             id: user.id,
             avatar: user.avatar,
             name: user.name,
-            position: user.position
+            position: user.position ?? 'No position'
           },
           role: user.roles?.[0]?.name ?? 'No role',
           location: user.location ?? 'No location',
@@ -108,7 +108,7 @@ export const MembersDataGrid = () => {
                 {info.row.original.member.name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
-                {info.row.original.member.position} tasks
+                {info.row.original.member.position}
               </span>
             </div>
           </div>
@@ -221,7 +221,7 @@ export const MembersDataGrid = () => {
 
     return (
       <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-        <h3 className="card-title">Team Members</h3>
+        <h3 className="card-title">Members</h3>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="relative">
@@ -256,7 +256,7 @@ export const MembersDataGrid = () => {
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
-          sorting={[{ id: 'member', desc: false }]}
+          sorting={[{ id: 'member', desc: true }]}
           toolbar={<Toolbar />}
           layout={{ card: true }}
         />

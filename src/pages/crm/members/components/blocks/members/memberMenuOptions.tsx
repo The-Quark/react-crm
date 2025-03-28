@@ -52,9 +52,9 @@ const MemberMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => 
       <MenuItem onClick={handleDelete}>
         <MenuLink>
           <MenuIcon>
-            <KeenIcon icon="trash" />
+            <KeenIcon icon="trash" className="text-danger !text-red-500" />
           </MenuIcon>
-          <MenuTitle>Delete</MenuTitle>
+          <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
         </MenuLink>
       </MenuItem>
     </MenuSub>
