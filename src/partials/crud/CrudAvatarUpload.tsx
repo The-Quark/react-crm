@@ -2,7 +2,7 @@ import { KeenIcon } from '@/components';
 import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
 import { ImageInput } from '@/components/image-input';
 import type { IImageInputFile } from '@/components/image-input';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 interface CrudAvatarUploadProps {
   avatarUser?: IImageInputFile | null | undefined;
@@ -11,6 +11,10 @@ interface CrudAvatarUploadProps {
 
 const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) => {
   const [avatar, setAvatar] = useState<IImageInputFile[]>(avatarUser ? [avatarUser] : []);
+
+  useEffect(() => {
+    setAvatar(avatarUser ? [avatarUser] : []);
+  }, [avatarUser]);
 
   const handleAvatarChange = (selectedAvatar: IImageInputFile[]) => {
     setAvatar(selectedAvatar);
