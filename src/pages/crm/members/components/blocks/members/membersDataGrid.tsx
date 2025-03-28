@@ -15,13 +15,14 @@ import {
   MenuToggle
 } from '@/components';
 import { toast } from 'sonner';
-import { DropdownCard1 } from '@/partials/dropdowns/general';
 import { getUserList } from './membersApi.ts';
 import { toAbsoluteUrl } from '@/utils/index.ts';
 import { CircularProgress } from '@mui/material';
+import { MemberMenuOptions } from '@/pages/crm/members/components/blocks/members/memberMenuOptions.tsx';
 
 interface Member {
   member: {
+    id?: number;
     avatar?: string | null;
     name: string;
     position?: string | null;
@@ -37,6 +38,7 @@ export const MembersDataGrid = () => {
   const { isRTL } = useLanguage();
   const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,6 +46,7 @@ export const MembersDataGrid = () => {
       .then((users) => {
         const formattedData = users.result.map((user) => ({
           member: {
+            id: user.id,
             avatar: user.avatar,
             name: user.name,
             position: user.position
@@ -60,7 +63,7 @@ export const MembersDataGrid = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [reload]);
 
   const columns = useMemo<ColumnDef<Member>[]>(
     () => [
@@ -164,7 +167,7 @@ export const MembersDataGrid = () => {
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: () => (
+        cell: (info) => (
           <Menu className="items-stretch">
             <MenuItem
               toggle="dropdown"
@@ -184,7 +187,10 @@ export const MembersDataGrid = () => {
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {DropdownCard1()}
+              {MemberMenuOptions({
+                id: info.row.original.member.id,
+                handleReload: () => setReload(!reload)
+              })}
             </MenuItem>
           </Menu>
         ),
