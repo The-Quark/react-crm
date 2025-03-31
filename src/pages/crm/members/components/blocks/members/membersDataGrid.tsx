@@ -256,7 +256,7 @@ export const MembersDataGrid = () => {
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
-          sorting={[{ id: 'member', desc: true }]}
+          sorting={[{ id: 'member', desc: false }]}
           toolbar={<Toolbar />}
           layout={{ card: true }}
         />

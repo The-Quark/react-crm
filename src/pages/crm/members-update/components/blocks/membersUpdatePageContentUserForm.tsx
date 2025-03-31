@@ -19,10 +19,6 @@ const createUserSchema = Yup.object().shape({
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Email is required'),
-  password: Yup.string()
-    .min(10, 'Minimum 10 symbols')
-    .max(150, 'Maximum 150 symbols')
-    .required('Password is required'),
   name: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
@@ -40,7 +36,6 @@ interface IUserFormValues {
   position: string;
   avatar: string | IImageInputFile | null;
 }
-
 export const MembersUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +52,7 @@ export const MembersUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ ti
   const formik = useFormik({
     initialValues,
     validationSchema: createUserSchema,
-    onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true);
       setStatus(null);
       try {
@@ -66,7 +61,6 @@ export const MembersUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ ti
           avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
         await postUpdateUser(payload);
-        resetForm();
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
