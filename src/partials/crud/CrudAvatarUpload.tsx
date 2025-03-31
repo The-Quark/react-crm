@@ -5,15 +5,17 @@ import type { IImageInputFile } from '@/components/image-input';
 import React, { FC, useEffect, useState } from 'react';
 
 interface CrudAvatarUploadProps {
-  avatarUser?: IImageInputFile | null | undefined;
+  avatarUser?: IImageInputFile | null | string;
   onChange?: (file: IImageInputFile | null) => void;
 }
 
 const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) => {
-  const [avatar, setAvatar] = useState<IImageInputFile[]>(avatarUser ? [avatarUser] : []);
+  const [avatar, setAvatar] = useState<IImageInputFile[]>(
+    avatarUser && typeof avatarUser !== 'string' ? [avatarUser] : []
+  );
 
   useEffect(() => {
-    setAvatar(avatarUser ? [avatarUser] : []);
+    setAvatar(avatarUser && typeof avatarUser !== 'string' ? [avatarUser] : []);
   }, [avatarUser]);
 
   const handleAvatarChange = (selectedAvatar: IImageInputFile[]) => {

@@ -82,11 +82,15 @@ import {
   AuthenticationAccountDeactivatedPage,
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
-import { MembersStarterPage, TeamsStarterPage } from '@/pages/crm';
-import { TeamsPage } from '@/pages/crm/teams';
-import { MembersPage } from '@/pages/crm/members';
-import { RolesPage } from '@/pages/crm/roles';
-import { RolesPermissionPage } from '@/pages/crm/roles-permission';
+import {
+  MembersStarterPage,
+  TeamsStarterPage,
+  MembersPage,
+  TeamsPage,
+  RolesPage,
+  RolesPermissionPage,
+  MembersUpdatePage
+} from '@/pages/crm';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -98,6 +102,7 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
           <Route path="/crm/teams" element={<TeamsPage />} />
           <Route path="/crm/members-starter" element={<MembersStarterPage />} />
+          <Route path="/crm/members-update/:id" element={<MembersUpdatePage />} />
           <Route path="/crm/members" element={<MembersPage />} />
           <Route path="/crm/roles" element={<RolesPage />} />
           <Route path="/crm/roles-permissions" element={<RolesPermissionPage />} />
