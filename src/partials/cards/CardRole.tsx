@@ -14,12 +14,12 @@ interface Badge {
 }
 
 interface IRoleProps {
-  badge: Badge;
+  badge?: Badge;
   title: string;
-  subTitle: string;
-  description: string;
-  team: string;
-  path: string;
+  subTitle?: string;
+  description?: string;
+  team?: string;
+  path?: string;
 }
 
 const CardRole = ({ path, title, subTitle, description, team, badge }: IRoleProps) => {
