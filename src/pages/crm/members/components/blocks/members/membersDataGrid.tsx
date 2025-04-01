@@ -78,15 +78,10 @@ export const MembersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.member,
+        accessorFn: (row) => row.member.name,
         id: 'member',
         header: ({ column }) => <DataGridColumnHeader title="Member" column={column} />,
         enableSorting: true,
-        filterFn: (row, columnId, filterValue) => {
-          const member = row.original.member;
-          const nameMatch = member.name?.toLowerCase().includes(filterValue.toLowerCase());
-          return nameMatch;
-        },
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="shrink-0">
@@ -156,6 +151,7 @@ export const MembersDataGrid = () => {
         id: 'recentlyActivity',
         header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
         enableSorting: true,
+        sortingFn: 'datetime',
         cell: (info) => info.getValue(),
         meta: {
           headerTitle: 'Recent activity',
@@ -189,7 +185,7 @@ export const MembersDataGrid = () => {
               </MenuToggle>
               {MemberMenuOptions({
                 id: info.row.original.member.id,
-                handleReload: () => setReload(!reload)
+                handleReload: () => setReload((prev) => !prev)
               })}
             </MenuItem>
           </Menu>
