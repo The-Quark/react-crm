@@ -31,8 +31,7 @@ interface Member {
   location?: string | null;
   recentlyActivity: string;
 }
-const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_URL;
-const USERS_LIST_AVATAR_URL = `${STORAGE_URL}/avatars`;
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 export const MembersDataGrid = () => {
   const { isRTL } = useLanguage();
@@ -88,7 +87,7 @@ export const MembersDataGrid = () => {
               <img
                 src={
                   info.row.original.member.avatar
-                    ? `${USERS_LIST_AVATAR_URL}/${info.row.original.member.avatar}`
+                    ? `${STORAGE_URL}/${info.row.original.member.avatar}`
                     : toAbsoluteUrl('/media/avatars/blank.png')
                 }
                 className="h-9 rounded-full"

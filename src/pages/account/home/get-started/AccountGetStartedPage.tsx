@@ -22,9 +22,11 @@ const AccountGetStartedPage = () => {
               <ToolbarPageTitle />
               <ToolbarDescription>
                 <div className="flex items-center gap-2 text-sm font-medium">
-                  <span className="text-gray-800 font-medium">{currentUser?.user.name}</span>
+                  <span className="text-gray-800 font-medium">
+                    {currentUser ? currentUser[0].result.name : 'Not Found'}
+                  </span>
                   <a href="#" className="text-gray-700 hover:text-primary">
-                    {currentUser?.user.email}
+                    {currentUser ? currentUser[0].result.email : 'Not Found'}
                   </a>
                   <span className="size-0.75 bg-gray-600 rounded-full"></span>
                   <Link to="/account/members/team-info" className="font-semibold btn btn-link link">

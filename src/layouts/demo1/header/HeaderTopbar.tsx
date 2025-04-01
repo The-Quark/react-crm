@@ -8,6 +8,8 @@ import { DropdownApps } from '@/partials/dropdowns/apps';
 import { DropdownChat } from '@/partials/dropdowns/chat';
 import { ModalSearch } from '@/partials/modals/search/ModalSearch';
 import { useLanguage } from '@/i18n';
+import { useAuthContext } from '@/auth';
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 const HeaderTopbar = () => {
   const { isRTL } = useLanguage();
@@ -15,6 +17,7 @@ const HeaderTopbar = () => {
   const itemAppsRef = useRef<any>(null);
   const itemUserRef = useRef<any>(null);
   const itemNotificationsRef = useRef<any>(null);
+  const { currentUser } = useAuthContext();
 
   const handleShow = () => {
     window.dispatchEvent(new Event('resize'));
@@ -131,8 +134,12 @@ const HeaderTopbar = () => {
           <MenuToggle className="btn btn-icon rounded-full">
             <img
               className="size-9 rounded-full border-2 border-success shrink-0"
-              src={toAbsoluteUrl('/media/avatars/blank.png')}
-              alt=""
+              src={
+                currentUser
+                  ? `${STORAGE_URL}/${currentUser[0].result.avatar}`
+                  : toAbsoluteUrl('/media/avatars/blank.png')
+              }
+              alt="avatar"
             />
           </MenuToggle>
           {DropdownUser({ menuItemRef: itemUserRef })}

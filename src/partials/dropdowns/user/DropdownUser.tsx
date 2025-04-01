@@ -20,7 +20,7 @@ import {
 interface IDropdownUserProps {
   menuItemRef: any;
 }
-
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
   const { currentUser } = useAuthContext();
   const { settings, storeSettings } = useSettings();
@@ -41,25 +41,35 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
         <div className="flex items-center gap-2">
           <img
             className="size-9 rounded-full border-2 border-success"
-            src={toAbsoluteUrl('/media/avatars/blank.png')}
-            alt=""
+            src={
+              currentUser
+                ? `${STORAGE_URL}/${currentUser[0].result.avatar}`
+                : toAbsoluteUrl('/media/avatars/blank.png')
+            }
+            alt="avatar"
           />
           <div className="flex flex-col gap-1.5">
             <Link
               to="/account/home/user-profile"
               className="text-sm text-gray-800 hover:text-primary font-semibold leading-none"
             >
-              {currentUser?.user?.name}
+              {currentUser ? currentUser[0].result.name : 'Not Found'}
             </Link>
             <a
               href="#"
               className="text-xs text-gray-600 hover:text-primary font-medium leading-none"
             >
-              {currentUser?.user?.email}
+              {currentUser ? currentUser[0].result.email : 'Not Found'}
             </a>
           </div>
         </div>
-        <span className="badge badge-xs badge-primary badge-outline">Admin</span>
+        <span className="badge badge-xs badge-primary badge-outline">
+          {currentUser
+            ? currentUser[0]?.result?.roles?.[0]?.nicename
+              ? currentUser[0].result.roles[0].nicename
+              : `${currentUser[0].result.roles[0].name[0].toUpperCase()}${currentUser[0].result.roles[0].name.slice(1)}`
+            : 'Not Found'}
+        </span>
       </div>
     );
   };
@@ -250,7 +260,7 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
 
   return (
     <MenuSub
-      className="menu-default light:border-gray-300 w-[200px] md:w-[250px]"
+      className="menu-default light:border-gray-300 w-[250px] md:w-[300px]"
       rootClassName="p-0"
     >
       {buildHeader()}

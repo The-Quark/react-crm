@@ -9,8 +9,7 @@ interface CrudAvatarUploadProps {
   onChange?: (file: IImageInputFile | null) => void;
 }
 
-const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_URL;
-const AVATAR_URL = `${STORAGE_URL}/avatars`;
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) => {
   const [avatar, setAvatar] = useState<IImageInputFile[]>(
@@ -60,7 +59,7 @@ const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({ avatarUser, onChange }) =
           >
             {avatar.length > 0 && <img src={avatar[0].dataURL} alt="avatar" />}
             {typeof avatarUser === 'string' && (
-              <img src={`${AVATAR_URL}/${avatarUser}`} alt="image" />
+              <img src={`${STORAGE_URL}/${avatarUser}`} alt="image" />
             )}
             <div className="flex items-center justify-center cursor-pointer h-5 left-0 right-0 bottom-0 bg-dark-clarity absolute">
               <svg

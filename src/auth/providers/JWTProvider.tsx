@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import * as authHelper from '../_helpers';
-import { type AuthModel, type UserModel } from '@/auth';
+import { type AuthModel, type UserResponse } from '@/auth';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 export const LOGIN_URL = `${API_URL}/auth/login`;
@@ -23,8 +23,8 @@ interface AuthContextProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
   auth: AuthModel | undefined;
   saveAuth: (auth: AuthModel | undefined) => void;
-  currentUser: UserModel | undefined;
-  setCurrentUser: Dispatch<SetStateAction<UserModel | undefined>>;
+  currentUser: UserResponse | undefined;
+  setCurrentUser: Dispatch<SetStateAction<UserResponse | undefined>>;
   login: (login: string, password: string) => Promise<void>;
   loginWithGoogle?: () => Promise<void>;
   loginWithFacebook?: () => Promise<void>;
@@ -47,7 +47,7 @@ const AuthContext = createContext<AuthContextProps | null>(null);
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
-  const [currentUser, setCurrentUser] = useState<UserModel | undefined>();
+  const [currentUser, setCurrentUser] = useState<UserResponse | undefined>();
 
   const verify = async () => {
     if (auth) {
@@ -122,7 +122,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const getUser = async () => {
-    return await axios.get<UserModel>(GET_USER_URL);
+    return await axios.get<UserResponse>(GET_USER_URL);
   };
 
   const logout = () => {

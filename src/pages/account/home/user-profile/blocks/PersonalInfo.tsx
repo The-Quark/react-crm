@@ -25,7 +25,9 @@ const PersonalInfo = () => {
             </tr>
             <tr>
               <td className="py-2 text-gray-600 font-normal">Name</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">{currentUser?.user?.name}</td>
+              <td className="py-2 text-gray-800 font-normaltext-sm">
+                {currentUser ? currentUser[0].result.name : 'Not Found'}
+              </td>
               <td className="py-2 text-center">
                 <a href="#" className="btn btn-sm btn-icon btn-clear btn-primary">
                   <KeenIcon icon="notepad-edit" />
