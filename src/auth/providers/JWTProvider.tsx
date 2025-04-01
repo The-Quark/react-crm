@@ -25,7 +25,7 @@ interface AuthContextProps {
   saveAuth: (auth: AuthModel | undefined) => void;
   currentUser: UserModel | undefined;
   setCurrentUser: Dispatch<SetStateAction<UserModel | undefined>>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (login: string, password: string) => Promise<void>;
   loginWithGoogle?: () => Promise<void>;
   loginWithFacebook?: () => Promise<void>;
   loginWithGithub?: () => Promise<void>;
@@ -70,10 +70,10 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (login: string, password: string) => {
     try {
       const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, {
-        email,
+        login,
         password
       });
       saveAuth(auth);
