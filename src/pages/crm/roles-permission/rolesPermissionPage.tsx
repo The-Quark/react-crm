@@ -23,7 +23,7 @@ export const RolesPermissionPage = () => {
               <ToolbarDescription>Overview of all team members and roles.</ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <a href="#" className="btn btn-sm btn-light">
+              <a href="/crm/roles" className="btn btn-sm btn-light">
                 View Roles
               </a>
             </ToolbarActions>
