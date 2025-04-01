@@ -91,6 +91,7 @@ import {
   RolesPermissionPage,
   MembersUpdatePage
 } from '@/pages/crm';
+import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -99,6 +100,9 @@ const AppRoutingSetup = (): ReactElement => {
         <Route element={<Demo1Layout />}>
           <Route path="/" element={<DefaultPage />} />
           {/*<Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} />*/}
+
+          <Route path="/profile" element={<ProfilePage />} />
+
           <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
           <Route path="/crm/teams" element={<TeamsPage />} />
           <Route path="/crm/members-starter" element={<MembersStarterPage />} />

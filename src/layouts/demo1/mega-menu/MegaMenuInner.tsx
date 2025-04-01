@@ -38,12 +38,13 @@ const MegaMenuInner = () => {
 
   const build = (items: TMenuConfig) => {
     const homeItem = items[0];
-    const crmItem = items[1];
-    const publicProfilesItem = items[2];
-    const myAccountItem = items[3];
-    const networkItem = items[4];
-    const authItem = items[5];
-    const helpItem = items[6];
+    const profileItem = items[1];
+    const crmItem = items[2];
+    const publicProfilesItem = items[3];
+    const myAccountItem = items[4];
+    const networkItem = items[5];
+    const authItem = items[6];
+    const helpItem = items[7];
 
     const linkClass =
       'menu-link text-sm text-gray-700 font-medium menu-link-hover:text-primary menu-item-active:text-gray-900 menu-item-show:text-primary menu-item-here:text-gray-900';
@@ -54,6 +55,12 @@ const MegaMenuInner = () => {
         <MenuItem key="home">
           <MenuLink path={homeItem.path} className={linkClass}>
             <MenuTitle className={titleClass}>{homeItem.title}</MenuTitle>
+          </MenuLink>
+        </MenuItem>
+
+        <MenuItem key="profile">
+          <MenuLink path={profileItem.path} className={linkClass}>
+            <MenuTitle className={titleClass}>{profileItem.title}</MenuTitle>
           </MenuLink>
         </MenuItem>
 

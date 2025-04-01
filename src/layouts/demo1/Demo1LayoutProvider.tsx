@@ -2,7 +2,7 @@
 import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useMenuChildren } from '@/components/menu';
-import { MENU_SIDEBAR } from '@/config/blocks/menu.config.ts';
+import { MENU_SIDEBAR } from '@/config';
 import { useScrollPosition } from '@/hooks/useScrollPosition';
 import { useMenus } from '@/providers';
 import { ILayoutConfig, useLayout } from '@/providers';
