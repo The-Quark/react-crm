@@ -4,7 +4,7 @@ import { NavbarMenu } from '@/partials/menu/NavbarMenu';
 const PageMenu = () => {
   const { getMenuConfig } = useMenus();
   const menuConfig = getMenuConfig('primary');
-  const accountMenuConfig = menuConfig?.['2']?.children;
+  const accountMenuConfig = menuConfig?.['3']?.children;
 
   if (accountMenuConfig) {
     return <NavbarMenu items={accountMenuConfig} />;

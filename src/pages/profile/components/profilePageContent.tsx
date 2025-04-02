@@ -1,17 +1,23 @@
-import { Contributors, Tags } from '../default';
-import { ApiCredentials, Attributes, Deals, GeneralInfo, RecentInvoices } from './blocks';
-import { ProfilePageContentActivity } from '@/pages/profile/components/blocks/profilePageContentActivity.tsx';
+import { Contributors, Tags } from '@/pages/public-profile/profiles/default';
+import {
+  ProfilePageContentActivity,
+  ProfilePageContentApiCredentials,
+  ProfilePageContentAttributes,
+  ProfilePageContentDeals,
+  ProfilePageContentGeneralInfo,
+  ProfilePageContentRecentInvoices
+} from './blocks';
 
-const ProfileCRMContent = () => {
+export const ProfilePageContent = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
       <div className="col-span-1">
         <div className="grid gap-5 lg:gap-7.5">
-          <GeneralInfo />
+          <ProfilePageContentGeneralInfo />
 
-          <Attributes />
+          <ProfilePageContentAttributes />
 
-          <ApiCredentials />
+          <ProfilePageContentApiCredentials />
 
           <Tags title="Skills" />
         </div>
@@ -19,13 +25,13 @@ const ProfileCRMContent = () => {
       <div className="col-span-2">
         <div className="flex flex-col gap-5 lg:gap-7.5">
           <div className="flex flex-col gap-5 lg:gap-7.5">
-            <Deals />
+            <ProfilePageContentDeals />
 
             <ProfilePageContentActivity />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
               <Contributors />
 
-              <RecentInvoices />
+              <ProfilePageContentRecentInvoices />
             </div>
           </div>
         </div>
@@ -33,5 +39,3 @@ const ProfileCRMContent = () => {
     </div>
   );
 };
-
-export { ProfileCRMContent };
