@@ -1,9 +1,21 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useMemo, useState } from 'react';import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/i18n';
 import { toAbsoluteUrl } from '@/utils';
 import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
-import { DataGrid, DataGridColumnHeader, DataGridColumnVisibility, DataGridRowSelect, DataGridRowSelectAll, KeenIcon, useDataGrid, Menu, MenuItem, MenuToggle } from '@/components';
+import {
+  DataGrid,
+  DataGridColumnHeader,
+  DataGridColumnVisibility,
+  DataGridRowSelect,
+  DataGridRowSelectAll,
+  KeenIcon,
+  useDataGrid,
+  Menu,
+  MenuItem,
+  MenuToggle
+} from '@/components';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { DropdownCrudItem1 } from '@/partials/dropdowns/general';
@@ -43,7 +55,13 @@ const Invites = () => {
       {
         accessorFn: (row) => row.member,
         id: 'member',
-        header: ({ column }) => <DataGridColumnHeader title='Member' filter={<ColumnInputFilter column={column} />} column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title="Member"
+            filter={<ColumnInputFilter column={column} />}
+            column={column}
+          />
+        ),
         enableSorting: true,
         cell: (info) => {
           return (
@@ -77,7 +95,7 @@ const Invites = () => {
       {
         accessorFn: (row) => row.location,
         id: 'location',
-        header: ({ column }) => <DataGridColumnHeader title='Location' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Location" column={column} />,
         enableSorting: true,
         cell: (info) => {
           return (
@@ -102,10 +120,12 @@ const Invites = () => {
         accessorFn: (row) => row.status,
         id: 'status',
         enableSorting: true,
-        header: ({ column }) => <DataGridColumnHeader title='Status' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         cell: (info) => {
           return (
-            <span className={`badge badge-xs badge-outline ${info.row.original.status.variant} items-center`}>
+            <span
+              className={`badge badge-xs badge-outline ${info.row.original.status.variant} items-center`}
+            >
               <span className={info.row.original.status.variant}></span>
               {info.row.original.status.label}
             </span>
@@ -119,7 +139,7 @@ const Invites = () => {
       {
         accessorFn: (row) => row.recentlyActivity,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title='Recent activity' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
         enableSorting: true,
         cell: (info) => info.getValue(),
         meta: {
@@ -157,9 +177,9 @@ const Invites = () => {
           </Menu>
         ),
         meta: {
-          headerClassName: 'w-[60px]',
-        },
-      },
+          headerClassName: 'w-[60px]'
+        }
+      }
     ],
     [isRTL]
   );
@@ -218,12 +238,12 @@ const Invites = () => {
             <input
               type="text"
               className="input input-sm ps-8"
-              placeholder="Search Members"
+              placeholder="Search Member"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update search term
             />
           </div>
-          <DataGridColumnVisibility table={table}/>
+          <DataGridColumnVisibility table={table} />
           <label className="switch switch-sm">
             <input name="check" type="checkbox" value="1" className="order-2" readOnly />
             <span className="switch-label order-1">Active Users</span>
@@ -234,13 +254,13 @@ const Invites = () => {
   };
 
   return (
-    <DataGrid 
-      columns={columns} 
-      data={filteredData} 
-      rowSelection={true} 
+    <DataGrid
+      columns={columns}
+      data={filteredData}
+      rowSelection={true}
       onRowSelectionChange={handleRowSelection}
       pagination={{ size: 10 }}
-      sorting={[{ id: 'member', desc: false }]} 
+      sorting={[{ id: 'member', desc: false }]}
       toolbar={<Toolbar />}
       layout={{ card: true }}
     />

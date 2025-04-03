@@ -3,7 +3,18 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/i18n';
 import { toAbsoluteUrl } from '@/utils';
 import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
-import { DataGrid, DataGridColumnHeader, DataGridColumnVisibility, DataGridRowSelect, DataGridRowSelectAll, KeenIcon, useDataGrid, Menu, MenuItem, MenuToggle  } from '@/components';
+import {
+  DataGrid,
+  DataGridColumnHeader,
+  DataGridColumnVisibility,
+  DataGridRowSelect,
+  DataGridRowSelectAll,
+  KeenIcon,
+  useDataGrid,
+  Menu,
+  MenuItem,
+  MenuToggle
+} from '@/components';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { DropdownCard1 } from '@/partials/dropdowns/general';
@@ -43,7 +54,13 @@ const Members = () => {
       {
         accessorFn: (row) => row.member,
         id: 'member',
-        header: ({ column }) => <DataGridColumnHeader title='Member' filter={<ColumnInputFilter column={column} />} column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title="Member"
+            filter={<ColumnInputFilter column={column} />}
+            column={column}
+          />
+        ),
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -55,7 +72,10 @@ const Members = () => {
               />
             </div>
             <div className="flex flex-col gap-0.5">
-              <a className="leading-none font-medium text-sm text-gray-900 hover:text-primary" href="#">
+              <a
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                href="#"
+              >
                 {info.row.original.member.name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
@@ -67,12 +87,12 @@ const Members = () => {
         meta: {
           headerClassName: 'min-w-[300px]',
           cellClassName: 'text-gray-700 font-normal'
-        },
+        }
       },
       {
         accessorFn: (row) => row.roles,
         id: 'roles',
-        header: ({ column }) => <DataGridColumnHeader title='Roles' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Roles" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
@@ -85,12 +105,12 @@ const Members = () => {
         ),
         meta: {
           headerClassName: 'min-w-[165px]'
-        },
+        }
       },
       {
         accessorFn: (row) => row.location,
         id: 'location',
-        header: ({ column }) => <DataGridColumnHeader title='Location' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Location" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -107,12 +127,12 @@ const Members = () => {
         meta: {
           headerClassName: 'min-w-[165px]',
           cellClassName: 'text-gray-700 font-normal'
-        },
+        }
       },
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title='Status' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <span className={`badge badge-sm badge-outline  ${info.row.original.status.variant}`}>
@@ -122,19 +142,19 @@ const Members = () => {
         meta: {
           headerClassName: 'min-w-[165px]',
           cellClassName: 'text-gray-700 font-normal'
-        },
+        }
       },
       {
         accessorFn: (row) => row.recentlyActivity,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title='Recent activity' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
         enableSorting: true,
         cell: (info) => info.getValue(),
         meta: {
           headerTitle: 'Recent activity',
           headerClassName: 'min-w-[165px]',
           cellClassName: 'text-gray-700 font-normal'
-        },
+        }
       },
       {
         id: 'click',
@@ -165,9 +185,9 @@ const Members = () => {
           </Menu>
         ),
         meta: {
-          headerClassName: 'w-[60px]',
-        },
-      },
+          headerClassName: 'w-[60px]'
+        }
+      }
     ],
     [isRTL]
   );
@@ -225,13 +245,13 @@ const Members = () => {
             />
             <input
               type="text"
-              placeholder="Search Members"
+              placeholder="Search Member"
               className="input input-sm ps-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update search term
             />
           </div>
-          <DataGridColumnVisibility table={table}/>
+          <DataGridColumnVisibility table={table} />
           <label className="switch switch-sm">
             <input name="check" type="checkbox" value="1" className="order-2" readOnly />
             <span className="switch-label order-1">Active Users</span>
@@ -242,13 +262,13 @@ const Members = () => {
   };
 
   return (
-    <DataGrid 
-      columns={columns} 
-      data={filteredData} 
-      rowSelection={true} 
+    <DataGrid
+      columns={columns}
+      data={filteredData}
+      rowSelection={true}
       onRowSelectionChange={handleRowSelection}
       pagination={{ size: 10 }}
-      sorting={[{ id: 'member', desc: false }]} 
+      sorting={[{ id: 'member', desc: false }]}
       toolbar={<Toolbar />}
       layout={{ card: true }}
     />

@@ -3,7 +3,18 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/i18n';
 import { toAbsoluteUrl } from '@/utils';
 import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
-import { DataGrid, DataGridColumnHeader, DataGridColumnVisibility, DataGridRowSelect, DataGridRowSelectAll, KeenIcon, useDataGrid, Menu, MenuItem, MenuToggle  } from '@/components';
+import {
+  DataGrid,
+  DataGridColumnHeader,
+  DataGridColumnVisibility,
+  DataGridRowSelect,
+  DataGridRowSelectAll,
+  KeenIcon,
+  useDataGrid,
+  Menu,
+  MenuItem,
+  MenuToggle
+} from '@/components';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { DropdownCard1 } from '@/partials/dropdowns/general';
@@ -17,7 +28,7 @@ interface IColumnFilterProps<TData, TValue> {
   column: Column<TData, TValue>;
 }
 
-const Members = ({ title}: IMembersProps) => {
+const Members = ({ title }: IMembersProps) => {
   const { isRTL } = useLanguage();
   const storageFilterId = 'members-filter';
 
@@ -47,7 +58,13 @@ const Members = ({ title}: IMembersProps) => {
       {
         accessorFn: (row) => row.member,
         id: 'member',
-        header: ({ column }) => <DataGridColumnHeader title='Member' filter={<ColumnInputFilter column={column} />} column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title="Member"
+            filter={<ColumnInputFilter column={column} />}
+            column={column}
+          />
+        ),
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -59,7 +76,10 @@ const Members = ({ title}: IMembersProps) => {
               />
             </div>
             <div className="flex flex-col gap-0.5">
-              <a className="leading-none font-medium text-sm text-gray-900 hover:text-primary" href="#">
+              <a
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                href="#"
+              >
                 {info.row.original.member.name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
@@ -70,12 +90,12 @@ const Members = ({ title}: IMembersProps) => {
         ),
         meta: {
           headerClassName: 'min-w-[300px]'
-        },
+        }
       },
       {
         accessorFn: (row) => row.location,
         id: 'location',
-        header: ({ column }) => <DataGridColumnHeader title='Location' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Location" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -90,13 +110,13 @@ const Members = ({ title}: IMembersProps) => {
           </div>
         ),
         meta: {
-          headerClassName: 'w-[225px]',
-        },
+          headerClassName: 'w-[225px]'
+        }
       },
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title='Status' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <span className={`badge badge-sm badge-outline ${info.row.original.status.variant}`}>
@@ -104,19 +124,19 @@ const Members = ({ title}: IMembersProps) => {
           </span>
         ),
         meta: {
-          headerClassName: 'w-[225px]',
-        },
+          headerClassName: 'w-[225px]'
+        }
       },
       {
         accessorFn: (row) => row.recentlyActivity,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title='Recent activity' column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
         enableSorting: true,
         cell: (info) => info.getValue(),
         meta: {
           headerTitle: 'Recent activity',
-          headerClassName: 'min-w-[225px]',
-        },
+          headerClassName: 'min-w-[225px]'
+        }
       },
       {
         id: 'click',
@@ -147,9 +167,9 @@ const Members = ({ title}: IMembersProps) => {
           </Menu>
         ),
         meta: {
-          headerClassName: 'w-[60px]',
-        },
-      },
+          headerClassName: 'w-[60px]'
+        }
+      }
     ],
     [isRTL]
   );
@@ -207,18 +227,16 @@ const Members = ({ title}: IMembersProps) => {
             />
             <input
               type="text"
-              placeholder="Search Members"
+              placeholder="Search Member"
               className="input input-sm ps-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Update search term
             />
           </div>
-          <DataGridColumnVisibility table={table}/>
+          <DataGridColumnVisibility table={table} />
           <label className="switch switch-sm">
             <input name="check" type="checkbox" value="1" className="order-2" readOnly />
-            <span className="switch-label order-1">
-              Active Users
-            </span>
+            <span className="switch-label order-1">Active Users</span>
           </label>
         </div>
       </div>
@@ -226,13 +244,13 @@ const Members = ({ title}: IMembersProps) => {
   };
 
   return (
-    <DataGrid 
-      columns={columns} 
-      data={filteredData} 
-      rowSelection={true} 
+    <DataGrid
+      columns={columns}
+      data={filteredData}
+      rowSelection={true}
       onRowSelectionChange={handleRowSelection}
       pagination={{ size: 10 }}
-      sorting={[{ id: 'member', desc: false }]} 
+      sorting={[{ id: 'member', desc: false }]}
       toolbar={<Toolbar />}
       layout={{ card: true }}
     />

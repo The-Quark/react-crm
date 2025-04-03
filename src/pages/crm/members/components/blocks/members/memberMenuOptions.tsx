@@ -41,11 +41,19 @@ const MemberMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
+        <MenuLink path={`/crm/member-role-update/${id}`}>
+          <MenuIcon>
+            <KeenIcon icon="briefcase" />
+          </MenuIcon>
+          <MenuTitle>Edit Member Role</MenuTitle>
+        </MenuLink>
+      </MenuItem>
+      <MenuItem>
         <MenuLink path={`/crm/member-update/${id}`}>
           <MenuIcon>
-            <KeenIcon icon="setting-3" />
+            <KeenIcon icon="user-edit" />
           </MenuIcon>
-          <MenuTitle>Edit User</MenuTitle>
+          <MenuTitle>Edit Member</MenuTitle>
         </MenuLink>
       </MenuItem>
       <MenuSeparator />

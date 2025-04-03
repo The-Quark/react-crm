@@ -226,7 +226,7 @@ export const MembersDataGrid = () => {
             />
             <input
               type="text"
-              placeholder="Search Members"
+              placeholder="Search Member"
               className="input input-sm ps-8"
               value={(table.getColumn('member')?.getFilterValue() as string) ?? ''}
               onChange={(event) => table.getColumn('member')?.setFilterValue(event.target.value)}
