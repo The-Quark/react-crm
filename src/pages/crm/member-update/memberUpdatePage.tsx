@@ -8,9 +8,9 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { useLayout } from '@/providers';
-import { MembersUpdatePageContent } from '@/pages/crm/members-update/components/membersUpdatePageContent.tsx';
+import { MemberUpdatePageContent } from '@/pages/crm/member-update/components/memberUpdatePageContent.tsx';
 
-export const MembersUpdatePage = () => {
+export const MemberUpdatePage = () => {
   const { currentLayout } = useLayout();
 
   return (
@@ -35,7 +35,7 @@ export const MembersUpdatePage = () => {
       )}
 
       <Container>
-        <MembersUpdatePageContent />
+        <MemberUpdatePageContent />
       </Container>
     </Fragment>
   );

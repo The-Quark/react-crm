@@ -27,8 +27,8 @@ export const MENU_SIDEBAR: TMenuConfig = [
         path: '/crm/teams'
       },
       {
-        title: 'Members Starter',
-        path: '/crm/members-starter'
+        title: 'Member Starter',
+        path: '/crm/member-starter'
       },
       {
         title: 'Members',
@@ -272,8 +272,8 @@ export const MENU_SIDEBAR: TMenuConfig = [
             path: '/account/members/team-info'
           },
           {
-            title: 'Members Starter',
-            path: '/account/members/members-starter'
+            title: 'Member Starter',
+            path: '/account/members/member-starter'
           },
           {
             title: 'Team Members',

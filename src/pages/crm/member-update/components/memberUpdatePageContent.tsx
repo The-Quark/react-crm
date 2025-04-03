@@ -1,11 +1,11 @@
-import { MembersUpdatePageContentUserForm } from '@/pages/crm/members-update/components/blocks/membersUpdatePageContentUserForm.tsx';
+import { MemberUpdatePageContentUserForm } from '@/pages/crm/member-update/components/blocks/memberUpdatePageContentUserForm.tsx';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getUser } from './membersUpdatePageGetUser';
+import { getUser } from './memberUpdatePageGetUser.ts';
 import { CircularProgress } from '@mui/material';
 import { UserModel } from './types.ts';
 
-const MembersUpdatePageContent = () => {
+const MemberUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserModel | null>(null);
@@ -44,9 +44,9 @@ const MembersUpdatePageContent = () => {
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <MembersUpdatePageContentUserForm title="Update User" user={user} />
+      <MemberUpdatePageContentUserForm title="Update User" user={user} />
     </div>
   );
 };
 
-export { MembersUpdatePageContent };
+export { MemberUpdatePageContent };

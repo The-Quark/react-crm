@@ -3,7 +3,7 @@ import { type MouseEvent, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { postCreateUser } from './membersStarterCreateUserApi';
+import { postCreateUser } from './memberStarterCreateUserApi.ts';
 import { AxiosError } from 'axios';
 import { KeenIcon } from '@/components';
 import clsx from 'clsx';
@@ -51,7 +51,7 @@ const initialValues: IUserFormValues = {
   avatar: null
 };
 
-export const MembersStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProps) => {
+export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProps) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 

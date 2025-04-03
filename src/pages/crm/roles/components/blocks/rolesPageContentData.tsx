@@ -7,7 +7,7 @@ import { KeenIcon } from '@/components';
 
 export const RolesPageContentData = () => {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);

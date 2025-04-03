@@ -83,13 +83,14 @@ import {
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
 import {
-  MembersStarterPage,
+  MemberStarterPage,
   TeamsStarterPage,
   MembersPage,
   TeamsPage,
   RolesPage,
   RolesPermissionPage,
-  MembersUpdatePage
+  MemberRoleUpdate,
+  MemberUpdatePage
 } from '@/pages/crm';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 
@@ -105,8 +106,9 @@ const AppRoutingSetup = (): ReactElement => {
 
           <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
           <Route path="/crm/teams" element={<TeamsPage />} />
-          <Route path="/crm/members-starter" element={<MembersStarterPage />} />
-          <Route path="/crm/members-update/:id" element={<MembersUpdatePage />} />
+          <Route path="/crm/member-starter" element={<MemberStarterPage />} />
+          <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdate />} />
+          <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
           <Route path="/crm/members" element={<MembersPage />} />
           <Route path="/crm/roles" element={<RolesPage />} />
           <Route path="/crm/roles-permissions" element={<RolesPermissionPage />} />

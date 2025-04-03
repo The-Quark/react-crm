@@ -28,9 +28,9 @@ export const MENU_MEGA: TMenuConfig = [
                 path: '/crm/teams'
               },
               {
-                title: 'Members Starter',
+                title: 'Member Starter',
                 icon: 'user-edit',
-                path: '/crm/members-starter'
+                path: '/crm/member-starter'
               },
               {
                 title: 'Members',
@@ -283,7 +283,7 @@ export const MENU_MEGA: TMenuConfig = [
               { title: 'Teams Starter', path: '/account/members/team-starter' },
               { title: 'Teams', path: '/account/members/teams' },
               { title: 'Team Info', path: '/account/members/team-info' },
-              { title: 'Members Starter', path: '/account/members/members-starter' },
+              { title: 'Member Starter', path: '/account/members/member-starter' },
               { title: 'Team Members', path: '/account/members/team-members' },
               { title: 'Import Members', path: '/account/members/import-members' },
               { title: 'Roles', path: '/account/members/roles' },

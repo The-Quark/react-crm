@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { AxiosError } from 'axios';
 import { IImageInputFile } from '@/components/image-input';
-import { postUpdateUser } from '@/pages/crm/members-update/components/blocks/membersUpdatePostUserApi.ts';
+import { postUpdateUser } from '@/pages/crm/member-update/components/blocks/memberUpdatePostUserApi.ts';
 import { UserModel } from '../types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 
@@ -36,7 +36,7 @@ interface IUserFormValues {
   position: string;
   avatar: string | IImageInputFile | null;
 }
-export const MembersUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
+export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
   const [loading, setLoading] = useState(false);
 
   const initialValues: IUserFormValues = {

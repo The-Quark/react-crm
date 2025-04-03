@@ -41,7 +41,7 @@ const MemberMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/crm/members-update/${id}`}>
+        <MenuLink path={`/crm/member-update/${id}`}>
           <MenuIcon>
             <KeenIcon icon="setting-3" />
           </MenuIcon>

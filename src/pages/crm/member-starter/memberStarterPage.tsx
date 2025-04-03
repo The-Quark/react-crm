@@ -8,9 +8,9 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { useLayout } from '@/providers';
-import { MembersStarterPageContent } from './components/membersStarterPageContent';
+import { MemberStarterPageContent } from './components/memberStarterPageContent.tsx';
 
-export const MembersStarterPage = () => {
+export const MemberStarterPage = () => {
   const { currentLayout } = useLayout();
 
   return (
@@ -35,7 +35,7 @@ export const MembersStarterPage = () => {
       )}
 
       <Container>
-        <MembersStarterPageContent />
+        <MemberStarterPageContent />
       </Container>
     </Fragment>
   );
