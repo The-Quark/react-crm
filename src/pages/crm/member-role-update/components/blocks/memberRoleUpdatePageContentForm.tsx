@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
@@ -17,7 +17,8 @@ import {
   putMemberRole,
   UpdateMemberRole
 } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdateApi.ts';
-
+import { getPermissions } from '@/api/getPermissions';
+import { Permission } from '@/api/getPermissions/types.ts';
 interface IGeneralSettingsProps {
   title: string;
   user: UserModel | null;
@@ -26,7 +27,7 @@ interface IGeneralSettingsProps {
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 const createUserSchema = Yup.object().shape({
-  role: Yup.number().required('Name is required')
+  role: Yup.number().required('Role is required')
 });
 export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
   title,
@@ -34,12 +35,29 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
   roles
 }) => {
   const [loading, setLoading] = useState(false);
+  const [permissions, setPermissions] = useState<Permission[]>([]);
 
   const initialValues: UpdateMemberRole = {
     user: user?.id || 0,
     role: user?.roles?.[0]?.id || 0,
     mode: 'give'
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const permissionsData = await getPermissions();
+        setPermissions(permissionsData.result);
+      } catch (err) {
+        console.error('Ошибка получения разрешений:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const formik = useFormik({
     initialValues,
@@ -54,7 +72,6 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
         const error = err as AxiosError<{ message?: string }>;
         setStatus(error.response?.data?.message || 'Update member role failed');
       }
-
       setLoading(false);
       setSubmitting(false);
     }

@@ -38,6 +38,7 @@ interface IUserFormValues {
 }
 export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
   const [loading, setLoading] = useState(false);
+  const [removeAvatar, setRemoveAvatar] = useState<boolean>(user?.avatar ? false : true);
 
   const initialValues: IUserFormValues = {
     id: user?.id || 0,
@@ -60,7 +61,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
           ...values,
           avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
-        await postUpdateUser(payload);
+        await postUpdateUser(payload, removeAvatar);
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -85,6 +86,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
             <CrudAvatarUpload
               avatarUser={formik.values.avatar}
               onChange={(newAvatar) => formik.setFieldValue('avatar', newAvatar)}
+              onChangeRemoveAvatar={() => setRemoveAvatar(!removeAvatar)}
             />
           </div>
         </div>

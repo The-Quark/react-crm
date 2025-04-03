@@ -15,7 +15,8 @@ const api = import.meta.env.VITE_APP_API_URL;
 export const UPDATE_USER_URL = `${api}/users/manage`;
 
 export const postUpdateUser = async (
-  userData: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>
+  userData: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
+  removeAvatar: boolean = false
 ): Promise<UserModel> => {
   const formData = new FormData();
 
@@ -24,9 +25,10 @@ export const postUpdateUser = async (
       formData.append(key, value instanceof Blob ? value : String(value));
     }
   });
+  const urlWithParam = removeAvatar ? `${UPDATE_USER_URL}?remove_avatar=true` : UPDATE_USER_URL;
 
   return await axios
-    .post<UserModel>(UPDATE_USER_URL, formData, {
+    .post<UserModel>(urlWithParam, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     .then((res) => res.data);
