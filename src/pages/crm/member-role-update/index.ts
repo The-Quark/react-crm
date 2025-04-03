@@ -1,1 +1,1 @@
-export * from './memberRoleUpdate.tsx';
+export * from './memberRoleUpdatePage.tsx';

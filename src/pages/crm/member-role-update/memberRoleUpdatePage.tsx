@@ -8,8 +8,9 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { useLayout } from '@/providers';
+import { MemberRoleUpdatePageContent } from '@/pages/crm/member-role-update/components/memberRoleUpdatePageContent.tsx';
 
-export const MemberRoleUpdate = () => {
+export const MemberRoleUpdatePage = () => {
   const { currentLayout } = useLayout();
 
   return (
@@ -33,7 +34,9 @@ export const MemberRoleUpdate = () => {
         </Container>
       )}
 
-      <Container>123</Container>
+      <Container>
+        <MemberRoleUpdatePageContent />
+      </Container>
     </Fragment>
   );
 };

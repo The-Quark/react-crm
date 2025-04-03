@@ -5,7 +5,7 @@ import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { AxiosError } from 'axios';
 import { IImageInputFile } from '@/components/image-input';
 import { postUpdateUser } from '@/pages/crm/member-update/components/blocks/memberUpdatePostUserApi.ts';
-import { UserModel } from '../types.ts';
+import { UserModel } from '@/api/getMemberById/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 
 interface IGeneralSettingsProps {
