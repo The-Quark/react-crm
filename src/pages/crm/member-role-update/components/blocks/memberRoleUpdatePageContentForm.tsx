@@ -12,10 +12,12 @@ import {
 } from '@/components/ui/select';
 import { toAbsoluteUrl } from '@/utils';
 import { Link } from 'react-router-dom';
+import { Role } from '@/api/getRoles/types.ts';
 
 interface IGeneralSettingsProps {
   title: string;
   user: UserModel | null;
+  roles: Role[];
 }
 
 interface IUserFormValues {
@@ -26,7 +28,11 @@ const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 const createUserSchema = Yup.object().shape({
   role: Yup.number().required('Name is required')
 });
-export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
+export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
+  title,
+  user,
+  roles
+}) => {
   const [loading, setLoading] = useState(false);
 
   const initialValues: IUserFormValues = {

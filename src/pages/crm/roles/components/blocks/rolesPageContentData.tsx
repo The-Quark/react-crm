@@ -1,7 +1,7 @@
 import { CardAddNew, CardRole } from '@/partials/cards';
 import { useEffect, useState } from 'react';
-import { getRoles } from '@/pages/crm/roles/components/blocks/rolesPageContentApi.ts';
-import { Role } from './types';
+import { getRoles } from '@/api/getRoles';
+import { Role } from '@/api/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';
 import { KeenIcon } from '@/components';
 

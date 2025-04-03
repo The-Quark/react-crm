@@ -1,29 +1,35 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getMemberById } from '@/api';
+import { getMemberById, getRoles } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { UserModel } from '@/api/getMemberById/types.ts';
 import { MemberRoleUpdatePageContentForm } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdatePageContentForm.tsx';
+import { RolePermissionsResponse } from '@/api/getRoles/types.ts';
 
 const MemberRoleUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserModel | null>(null);
+  const [roles, setRoles] = useState<RolePermissionsResponse>();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const userData = await getMemberById(Number(id));
+        const [userData, roleData] = await Promise.all([
+          getMemberById(Number(id)),
+          getRoles(Number(id))
+        ]);
         setUser(userData);
+        setRoles(roleData);
       } catch (err) {
-        console.error('Ошибка получения данных пользователя:', err);
+        console.error('Ошибка получения данных пользователя или ролей:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, [id]);
 
   if (loading) {
@@ -34,7 +40,7 @@ const MemberRoleUpdatePageContent = () => {
     );
   }
 
-  if (!user) {
+  if (!user || !roles) {
     return (
       <div className="card flex justify-center items-center p-5 text-danger">
         Пользователь не найден или произошла ошибка загрузки данных.
@@ -44,7 +50,11 @@ const MemberRoleUpdatePageContent = () => {
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <MemberRoleUpdatePageContentForm title="Update Member Role" user={user} />
+      <MemberRoleUpdatePageContentForm
+        title="Update Member Role"
+        user={user}
+        roles={roles.result}
+      />
     </div>
   );
 };
