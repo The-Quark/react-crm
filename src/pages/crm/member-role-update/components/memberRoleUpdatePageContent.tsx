@@ -5,12 +5,14 @@ import { CircularProgress } from '@mui/material';
 import { UserModel } from '@/api/getMemberById/types.ts';
 import { MemberRoleUpdatePageContentForm } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdatePageContentForm.tsx';
 import { RolePermissionsResponse } from '@/api/getRoles/types.ts';
+import { useAuthContext } from '@/auth';
 
 const MemberRoleUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserModel | null>(null);
   const [roles, setRoles] = useState<RolePermissionsResponse>();
+  const { currentUser } = useAuthContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +20,8 @@ const MemberRoleUpdatePageContent = () => {
         setLoading(true);
         const [userData, roleData] = await Promise.all([
           getMemberById(Number(id)),
-          getRoles(Number(id))
+          // getRoles(currentUser ? Number(currentUser[0].result.id) : 0)
+          getRoles()
         ]);
         setUser(userData);
         setRoles(roleData);

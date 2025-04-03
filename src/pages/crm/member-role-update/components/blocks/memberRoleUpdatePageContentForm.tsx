@@ -13,6 +13,10 @@ import {
 import { toAbsoluteUrl } from '@/utils';
 import { Link } from 'react-router-dom';
 import { Role } from '@/api/getRoles/types.ts';
+import {
+  putMemberRole,
+  UpdateMemberRole
+} from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdateApi.ts';
 
 interface IGeneralSettingsProps {
   title: string;
@@ -20,10 +24,6 @@ interface IGeneralSettingsProps {
   roles: Role[];
 }
 
-interface IUserFormValues {
-  user: number;
-  role: number | undefined;
-}
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 const createUserSchema = Yup.object().shape({
   role: Yup.number().required('Name is required')
@@ -35,9 +35,10 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const initialValues: IUserFormValues = {
+  const initialValues: UpdateMemberRole = {
     user: user?.id || 0,
-    role: user?.roles?.[0]?.id || 0
+    role: user?.roles?.[0]?.id || 0,
+    mode: 'give'
   };
 
   const formik = useFormik({
@@ -47,11 +48,11 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
       setLoading(true);
       setStatus(null);
       try {
-        // await postUpdateUser(...values);
-        setStatus('User created successfully!');
+        await putMemberRole(values);
+        setStatus('Member role updated successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
-        setStatus(error.response?.data?.message || 'Failed to create user');
+        setStatus(error.response?.data?.message || 'Update member role failed');
       }
 
       setLoading(false);
@@ -95,14 +96,19 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <label className="form-label max-w-56">Role</label>
           <div className="flex columns-1 w-full flex-wrap">
-            <Select {...formik.getFieldProps('role')}>
+            <Select
+              value={formik.values.role?.toString()}
+              onValueChange={(value) => formik.setFieldValue('role', Number(value))}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Spain</SelectItem>
-                <SelectItem value="2">Option 2</SelectItem>
-                <SelectItem value="3">Option 3</SelectItem>
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.id.toString()}>
+                    {role.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             {formik.touched.role && formik.errors.role && (
