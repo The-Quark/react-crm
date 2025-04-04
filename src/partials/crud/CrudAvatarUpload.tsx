@@ -7,7 +7,7 @@ import React, { FC, useEffect, useState } from 'react';
 interface CrudAvatarUploadProps {
   avatarUser?: IImageInputFile | null | string;
   onChange?: (file: IImageInputFile | null) => void;
-  onChangeRemoveAvatar: () => void;
+  onChangeRemoveAvatar?: () => void;
 }
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
@@ -29,14 +29,18 @@ const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({
     setAvatar(selectedAvatar);
     if (onChange) {
       onChange(selectedAvatar.length > 0 ? selectedAvatar[0] : null);
-      onChangeRemoveAvatar();
+      if (onChangeRemoveAvatar) {
+        onChangeRemoveAvatar();
+      }
     }
   };
 
   const handleRemoveAvatar = (e: React.MouseEvent) => {
     e.stopPropagation();
     setAvatar([]);
-    onChangeRemoveAvatar();
+    if (onChangeRemoveAvatar) {
+      onChangeRemoveAvatar();
+    }
     if (onChange) {
       onChange(null);
     }

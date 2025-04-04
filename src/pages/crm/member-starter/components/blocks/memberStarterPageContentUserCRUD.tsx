@@ -21,7 +21,10 @@ const createUserSchema = Yup.object().shape({
     .required('Email is required'),
   password: Yup.string()
     .min(10, 'Minimum 10 symbols')
-    .max(150, 'Maximum 150 symbols')
+    .max(100, 'Maximum 100 symbols')
+    .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
+    .matches(/\d/, 'Must contain at least one number')
+    .matches(/[^a-zA-Z0-9]/, 'Must contain at least one special character')
     .required('Password is required'),
   name: Yup.string()
     .min(3, 'Minimum 3 symbols')
