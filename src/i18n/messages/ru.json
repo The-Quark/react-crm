@@ -12,5 +12,6 @@
   "USER.MENU.PAYMENT_&_SUBSCRIPTION_INFO": "Информация об оплате и подписке",
   "USER.MENU.DARK_MODE": "Тёмная тема",
   "USER.MENU.LOGOUT": "Выйти",
-  "USER.MENU.LANGUAGE": "Язык"
+  "USER.MENU.LANGUAGE": "Язык",
+  "USER.MENU.CURRENCY": "Валюта"
 }

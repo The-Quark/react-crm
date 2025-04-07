@@ -16,6 +16,7 @@ import {
   MenuArrow,
   MenuIcon
 } from '@/components/menu';
+import { DropdownUserCurrency } from '@/partials/dropdowns/user/DropdownUserCurrency.tsx';
 
 interface IDropdownUserProps {
   menuItemRef: any;
@@ -219,6 +220,7 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
               </MenuTitle>
             </MenuLink>
           </MenuItem>
+          <DropdownUserCurrency menuItemRef={menuItemRef} />
           <DropdownUserLanguages menuItemRef={menuItemRef} />
           <MenuSeparator />
         </div>

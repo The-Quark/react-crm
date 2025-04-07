@@ -12,5 +12,6 @@
   "USER.MENU.PAYMENT_&_SUBSCRIPTION_INFO": "Payment & subscription info",
   "USER.MENU.DARK_MODE": "Dark Mode",
   "USER.MENU.LOGOUT": "Logout",
-  "USER.MENU.LANGUAGE": "Language"
+  "USER.MENU.LANGUAGE": "Language",
+  "USER.MENU.CURRENCY": "Currency"
 }
