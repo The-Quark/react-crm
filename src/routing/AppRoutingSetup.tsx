@@ -93,6 +93,11 @@ import {
 import { RolesPage, PermissionPage } from '@/pages/roles-permissions';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import GlobalParametersPage from '@/pages/global-parameters/globalParametersPage.tsx';
+import ClientsPage from '@/pages/clients/clientsPage.tsx';
+import HrModulePage from '@/pages/hr-module/hrModulePage.tsx';
+import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
+import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
+import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -108,6 +113,13 @@ const AppRoutingSetup = (): ReactElement => {
 
           <Route path="/roles-permissions/roles" element={<RolesPage />} />
           <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+
+          <Route path="/clients" element={<ClientsPage />} />
+
+          <Route path="/hr-module" element={<HrModulePage />} />
+          <Route path="/hr-module/staff" element={<StaffPage />} />
+          <Route path="/hr-module/drivers" element={<DriversPage />} />
+          <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
           <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
           <Route path="/crm/teams" element={<TeamsPage />} />

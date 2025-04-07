@@ -34,6 +34,29 @@ export const MENU_SIDEBAR: TMenuConfig = [
     ]
   },
   {
+    title: 'Clients',
+    icon: 'badge',
+    path: '/clients'
+  },
+  {
+    title: 'HR Module',
+    icon: 'address-book',
+    children: [
+      {
+        title: 'Staff',
+        path: '/hr-module/staff'
+      },
+      {
+        title: 'Drivers',
+        path: '/hr-module/drivers'
+      },
+      {
+        title: 'Couriers',
+        path: '/hr-module/couriers'
+      }
+    ]
+  },
+  {
     title: 'CRM',
     icon: 'users',
     children: [
