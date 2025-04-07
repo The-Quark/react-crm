@@ -15,6 +15,25 @@ export const MENU_SIDEBAR: TMenuConfig = [
     path: '/profile'
   },
   {
+    title: 'Global Parameters',
+    icon: 'icon',
+    path: '/global-parameters'
+  },
+  {
+    title: 'Roles & Permissions',
+    icon: 'clipboard',
+    children: [
+      {
+        title: 'Roles',
+        path: '/roles-permissions/roles'
+      },
+      {
+        title: 'Permissions',
+        path: '/roles-permissions/permissions'
+      }
+    ]
+  },
+  {
     title: 'CRM',
     icon: 'users',
     children: [

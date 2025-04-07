@@ -87,12 +87,12 @@ import {
   TeamsStarterPage,
   MembersPage,
   TeamsPage,
-  RolesPage,
-  RolesPermissionPage,
   MemberRoleUpdatePage,
   MemberUpdatePage
 } from '@/pages/crm';
+import { RolesPage, PermissionPage } from '@/pages/roles-permissions';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
+import GlobalParametersPage from '@/pages/global-parameters/globalParametersPage.tsx';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -104,14 +104,17 @@ const AppRoutingSetup = (): ReactElement => {
 
           <Route path="/profile" element={<ProfilePage />} />
 
+          <Route path="/global-parameters" element={<GlobalParametersPage />} />
+
+          <Route path="/roles-permissions/roles" element={<RolesPage />} />
+          <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+
           <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
           <Route path="/crm/teams" element={<TeamsPage />} />
           <Route path="/crm/member-starter" element={<MemberStarterPage />} />
           <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
           <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
           <Route path="/crm/members" element={<MembersPage />} />
-          <Route path="/crm/roles" element={<RolesPage />} />
-          <Route path="/crm/roles-permissions" element={<RolesPermissionPage />} />
 
           <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />

@@ -7,7 +7,7 @@ interface IPermissionsCheckItem {
 }
 interface IPermissionsCheckItems extends Array<IPermissionsCheckItem> {}
 
-export const RolesPermissionPageContentCheck = () => {
+export const PermissionsPageContentCheck = () => {
   const data: IPermissionsCheckItems = [
     {
       module: 'Workspace Settings',

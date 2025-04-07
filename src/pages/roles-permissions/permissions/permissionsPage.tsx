@@ -8,9 +8,9 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { useLayout } from '@/providers';
-import { RolesPermissionPageContent } from './components/rolesPermissionPageContent';
+import { PermissionsPageContent } from '@/pages/roles-permissions/permissions/components/permissionsPageContent.tsx';
 
-export const RolesPermissionPage = () => {
+export const PermissionPage = () => {
   const { currentLayout } = useLayout();
 
   return (
@@ -32,7 +32,7 @@ export const RolesPermissionPage = () => {
       )}
 
       <Container>
-        <RolesPermissionPageContent />
+        <PermissionsPageContent />
       </Container>
     </Fragment>
   );
