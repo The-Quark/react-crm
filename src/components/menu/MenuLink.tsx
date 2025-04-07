@@ -10,7 +10,8 @@ const MenuLink = ({
   className,
   handleToggle,
   handleClick,
-  children
+  children,
+  href
 }: IMenuLinkProps) => {
   if (!hasItemSub && path) {
     if (externalLink) {

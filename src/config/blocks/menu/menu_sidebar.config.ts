@@ -57,6 +57,20 @@ export const MENU_SIDEBAR: TMenuConfig = [
     ]
   },
   {
+    title: 'Call Center',
+    icon: 'satellite',
+    children: [
+      {
+        title: 'Applications',
+        path: '/call-center/applications'
+      },
+      {
+        title: 'Orders',
+        path: '/call-center/orders'
+      }
+    ]
+  },
+  {
     title: 'CRM',
     icon: 'users',
     children: [
@@ -75,14 +89,6 @@ export const MENU_SIDEBAR: TMenuConfig = [
       {
         title: 'Members',
         path: '/crm/members'
-      },
-      {
-        title: 'Roles',
-        path: '/crm/roles'
-      },
-      {
-        title: 'Roles - Permissions',
-        path: '/crm/roles-permissions'
       }
     ]
   },

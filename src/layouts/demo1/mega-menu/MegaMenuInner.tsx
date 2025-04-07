@@ -2,14 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useResponsive } from '@/hooks';
 import { KeenIcon } from '@/components';
 import { TMenuConfig, MenuItem, MenuLink, MenuTitle, MenuArrow, Menu } from '@/components/menu';
-import {
-  MegaMenuSubProfiles,
-  MegaMenuSubAccount,
-  MegaMenuSubNetwork,
-  MegaMenuSubAuth,
-  MegaMenuSubHelp,
-  MegaMenuSubCRM
-} from '@/partials/menu/mega-menu';
+import { MegaMenuSubWithSubSets } from '@/partials/menu/mega-menu';
 import { useDemo1Layout } from '../Demo1LayoutProvider';
 import { MENU_MEGA } from '@/config';
 import { useLanguage } from '@/i18n';
@@ -39,12 +32,12 @@ const MegaMenuInner = () => {
   const build = (items: TMenuConfig) => {
     const homeItem = items[0];
     const profileItem = items[1];
-    const crmItem = items[2];
-    const publicProfilesItem = items[3];
-    const myAccountItem = items[4];
-    const networkItem = items[5];
-    const authItem = items[6];
-    const helpItem = items[7];
+    const globalItem = items[2];
+    const rolesPermissionsItem = items[3];
+    const clientsItem = items[4];
+    const hrModuleItem = items[5];
+    const callCenterItem = items[6];
+    const crmItem = items[7];
 
     const linkClass =
       'menu-link text-sm text-gray-700 font-medium menu-link-hover:text-primary menu-item-active:text-gray-900 menu-item-show:text-primary menu-item-here:text-gray-900';
@@ -64,6 +57,63 @@ const MegaMenuInner = () => {
           </MenuLink>
         </MenuItem>
 
+        <MenuItem key="global parameters">
+          <MenuLink path={globalItem.path} className={linkClass}>
+            <MenuTitle className={titleClass}>{globalItem.title}</MenuTitle>
+          </MenuLink>
+        </MenuItem>
+
+        <MenuItem
+          key="roles-permissions"
+          toggle={desktopMode ? 'dropdown' : 'accordion'}
+          trigger={desktopMode ? 'hover' : 'click'}
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-end' : 'bottom-start'
+          }}
+        >
+          <MenuLink className={linkClass}>
+            <MenuTitle className={titleClass}>{rolesPermissionsItem.title}</MenuTitle>
+            {buildArrow()}
+          </MenuLink>
+          {MegaMenuSubWithSubSets(items, 3)}
+        </MenuItem>
+
+        <MenuItem key="clients">
+          <MenuLink path={clientsItem.path} className={linkClass}>
+            <MenuTitle className={titleClass}>{clientsItem.title}</MenuTitle>
+          </MenuLink>
+        </MenuItem>
+
+        <MenuItem
+          key="hr module"
+          toggle={desktopMode ? 'dropdown' : 'accordion'}
+          trigger={desktopMode ? 'hover' : 'click'}
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-end' : 'bottom-start'
+          }}
+        >
+          <MenuLink className={linkClass}>
+            <MenuTitle className={titleClass}>{hrModuleItem.title}</MenuTitle>
+            {buildArrow()}
+          </MenuLink>
+          {MegaMenuSubWithSubSets(items, 5)}
+        </MenuItem>
+
+        <MenuItem
+          key="call center"
+          toggle={desktopMode ? 'dropdown' : 'accordion'}
+          trigger={desktopMode ? 'hover' : 'click'}
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-end' : 'bottom-start'
+          }}
+        >
+          <MenuLink className={linkClass}>
+            <MenuTitle className={titleClass}>{callCenterItem.title}</MenuTitle>
+            {buildArrow()}
+          </MenuLink>
+          {MegaMenuSubWithSubSets(items, 6)}
+        </MenuItem>
+
         <MenuItem
           key="crm"
           toggle={desktopMode ? 'dropdown' : 'accordion'}
@@ -76,114 +126,7 @@ const MegaMenuInner = () => {
             <MenuTitle className={titleClass}>{crmItem.title}</MenuTitle>
             {buildArrow()}
           </MenuLink>
-          {MegaMenuSubCRM(items)}
-        </MenuItem>
-
-        <MenuItem
-          key="public-profiles"
-          toggle={desktopMode ? 'dropdown' : 'accordion'}
-          trigger={desktopMode ? 'hover' : 'click'}
-          dropdownProps={{
-            placement: isRTL() ? 'bottom-end' : 'bottom-start'
-          }}
-        >
-          <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{publicProfilesItem.title}</MenuTitle>
-            {buildArrow()}
-          </MenuLink>
-          {MegaMenuSubProfiles(items)}
-        </MenuItem>
-
-        <MenuItem
-          key="my-account"
-          toggle={desktopMode ? 'dropdown' : 'accordion'}
-          trigger={desktopMode ? 'hover' : 'click'}
-          dropdownProps={{
-            placement: isRTL() ? 'bottom-end' : 'bottom-start',
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: isRTL() ? [300, 0] : [-300, 0] // [skid, distance]
-                }
-              }
-            ]
-          }}
-        >
-          <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{myAccountItem.title}</MenuTitle>
-            {buildArrow()}
-          </MenuLink>
-          {MegaMenuSubAccount(items)}
-        </MenuItem>
-
-        <MenuItem
-          key="network"
-          toggle={desktopMode ? 'dropdown' : 'accordion'}
-          trigger={desktopMode ? 'hover' : 'click'}
-          dropdownProps={{
-            placement: isRTL() ? 'bottom-end' : 'bottom-start',
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: isRTL() ? [300, 0] : [-300, 0] // [skid, distance]
-                }
-              }
-            ]
-          }}
-        >
-          <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{networkItem.title}</MenuTitle>
-            {buildArrow()}
-          </MenuLink>
-          {MegaMenuSubNetwork(items)}
-        </MenuItem>
-
-        <MenuItem
-          key="auth"
-          toggle={desktopMode ? 'dropdown' : 'accordion'}
-          trigger={desktopMode ? 'hover' : 'click'}
-          dropdownProps={{
-            placement: isRTL() ? 'bottom-end' : 'bottom-start',
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: isRTL() ? [300, 0] : [-300, 0] // [skid, distance]
-                }
-              }
-            ]
-          }}
-        >
-          <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{authItem.title}</MenuTitle>
-            {buildArrow()}
-          </MenuLink>
-          {MegaMenuSubAuth(items)}
-        </MenuItem>
-
-        <MenuItem
-          key="help"
-          toggle={desktopMode ? 'dropdown' : 'accordion'}
-          trigger={desktopMode ? 'hover' : 'click'}
-          dropdownProps={{
-            placement: isRTL() ? 'bottom-end' : 'bottom-start',
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: isRTL() ? [20, 0] : [-20, 0] // [skid, distance]
-                }
-              }
-            ]
-          }}
-        >
-          <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{helpItem.title}</MenuTitle>
-            {buildArrow()}
-          </MenuLink>
-          {MegaMenuSubHelp(items)}
+          {MegaMenuSubWithSubSets(items, 7)}
         </MenuItem>
       </Fragment>
     );

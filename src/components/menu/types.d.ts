@@ -2,6 +2,7 @@
 import { PopperProps } from '@mui/base';
 import { TooltipProps } from '@mui/material/Tooltip';
 import { HTMLAttributes, MouseEvent, ReactNode, RefAttributes, RefObject } from 'react';
+import { boolean, string } from 'yup';
 
 export type TMenuEventHandler = (e: MouseEvent<HTMLElement>) => void;
 
@@ -82,6 +83,7 @@ export interface IMenuLinkProps {
   handleToggle?: TMenuEventHandler;
   handleClick?: TMenuEventHandler;
   children?: ReactNode;
+  href?: string | undefined;
 }
 
 export interface IMenuLabelProps {
@@ -123,6 +125,7 @@ export interface IMenuSubProps {
   accordionIn?: boolean;
   children?: ReactNode;
 }
+
 export interface IMenuTitleProps {
   className?: string;
   children?: ReactNode;

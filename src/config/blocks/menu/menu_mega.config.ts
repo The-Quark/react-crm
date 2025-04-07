@@ -10,46 +10,87 @@ export const MENU_MEGA: TMenuConfig = [
     path: '/profile'
   },
   {
+    title: 'Global Parameters',
+    path: '/global-parameters'
+  },
+  {
+    title: 'Roles & Permissions',
+    children: [
+      {
+        title: 'Roles',
+        icon: 'briefcase',
+        path: '/roles-permissions/roles'
+      },
+      {
+        title: 'Permissions',
+        icon: 'data',
+        path: '/roles-permissions/permissions'
+      }
+    ]
+  },
+  {
+    title: 'Clients',
+    icon: 'badge',
+    path: '/clients'
+  },
+  {
+    title: 'HR Module',
+
+    children: [
+      {
+        title: 'Staff',
+        path: '/hr-module/staff',
+        icon: 'people'
+      },
+      {
+        title: 'Drivers',
+        path: '/hr-module/drivers',
+        icon: 'delivery'
+      },
+      {
+        title: 'Couriers',
+        path: '/hr-module/couriers',
+        icon: 'courier'
+      }
+    ]
+  },
+  {
+    title: 'Call Center',
+    children: [
+      {
+        title: 'Applications',
+        path: '/call-center/applications',
+        icon: 'parcel-tracking'
+      },
+      {
+        title: 'Orders',
+        path: '/call-center/orders',
+        icon: 'delivery-3'
+      }
+    ]
+  },
+  {
     title: 'CRM',
     children: [
       {
-        title: 'CRM',
-        children: [
-          {
-            children: [
-              {
-                title: 'Teams Starter',
-                icon: 'users',
-                path: '/crm/teams-starter'
-              },
-              {
-                title: 'Teams',
-                icon: 'people',
-                path: '/crm/teams'
-              },
-              {
-                title: 'Member Starter',
-                icon: 'user-edit',
-                path: '/crm/member-starter'
-              },
-              {
-                title: 'Members',
-                icon: 'user',
-                path: '/crm/members'
-              },
-              {
-                title: 'Roles',
-                icon: 'briefcase',
-                path: '/crm/roles'
-              },
-              {
-                title: 'Roles - Permissions',
-                icon: 'data',
-                path: '/crm/roles-permissions'
-              }
-            ]
-          }
-        ]
+        title: 'Teams Starter',
+        icon: 'users',
+        path: '/crm/teams-starter'
+      },
+      {
+        title: 'Teams',
+        icon: 'people',
+        path: '/crm/teams'
+      },
+      {
+        title: 'Member Starter',
+        icon: 'user-edit',
+        path: '/crm/member-starter'
+      },
+      {
+        title: 'Members',
+        icon: 'user',
+        path: '/crm/members'
       }
     ]
   },
