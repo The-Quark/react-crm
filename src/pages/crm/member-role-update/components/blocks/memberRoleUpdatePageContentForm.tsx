@@ -27,7 +27,7 @@ interface IGeneralSettingsProps {
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 const createUserSchema = Yup.object().shape({
-  role: Yup.number().required('Role is required')
+  role: Yup.string().required('Role is required')
 });
 export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
   title,
@@ -39,7 +39,7 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
 
   const initialValues: UpdateMemberRole = {
     user: user?.id || 0,
-    role: user?.roles?.[0]?.id || 0,
+    role: user?.roles?.[0]?.name || '',
     mode: 'give'
   };
 
@@ -89,7 +89,9 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
             <img
               className="size-9 rounded-full border-2 border-success"
               src={
-                user ? `${STORAGE_URL}/${user.avatar}` : toAbsoluteUrl('/media/avatars/blank.png')
+                user?.avatar
+                  ? `${STORAGE_URL}/${user.avatar}`
+                  : toAbsoluteUrl('/media/avatars/blank.png')
               }
               alt="avatar"
             />
@@ -115,14 +117,14 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
           <div className="flex columns-1 w-full flex-wrap">
             <Select
               value={formik.values.role?.toString()}
-              onValueChange={(value) => formik.setFieldValue('role', Number(value))}
+              onValueChange={(value) => formik.setFieldValue('role', String(value))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Role" />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => (
-                  <SelectItem key={role.id} value={role.id.toString()}>
+                  <SelectItem key={role.name} value={role.name.toString()}>
                     {role.name}
                   </SelectItem>
                 ))}

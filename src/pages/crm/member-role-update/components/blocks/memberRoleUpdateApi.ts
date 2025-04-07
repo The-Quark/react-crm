@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export interface UpdateMemberRole {
   user: number;
-  role: number;
+  role: string;
   mode: 'give' | 'revoke';
 }
 

@@ -172,7 +172,7 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/account/members/team-starter" element={<AccountTeamsStarterPage />} />
           <Route path="/account/members/teams" element={<AccountTeamsPage />} />
           <Route path="/account/members/team-info" element={<AccountTeamInfoPage />} />
-          <Route path="/account/members/members-starter" element={<AccountMembersStarterPage />} />
+          <Route path="/account/members/member-starter" element={<AccountMembersStarterPage />} />
           <Route path="/account/members/team-members" element={<AccountTeamMembersPage />} />
           <Route path="/account/members/import-members" element={<AccountImportMembersPage />} />
           <Route path="/account/members/roles" element={<AccountRolesPage />} />

@@ -23,7 +23,7 @@ export const MembersPage = () => {
               <ToolbarDescription>Overview of all members and roles.</ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <a href="/crm/members-starter" className="btn btn-sm btn-primary">
+              <a href="/crm/member-starter" className="btn btn-sm btn-primary">
                 Add Member
               </a>
             </ToolbarActions>

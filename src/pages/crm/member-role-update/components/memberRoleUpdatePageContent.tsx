@@ -20,8 +20,7 @@ const MemberRoleUpdatePageContent = () => {
         setLoading(true);
         const [userData, roleData] = await Promise.all([
           getMemberById(Number(id)),
-          // getRoles(currentUser ? Number(currentUser[0].result.id) : 0)
-          getRoles()
+          getRoles(currentUser ? Number(currentUser[0].result.id) : 0, true)
         ]);
         setUser(userData);
         setRoles(roleData);
