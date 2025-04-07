@@ -1,11 +1,13 @@
 import { toAbsoluteUrl } from '@/utils';
 import enMessages from './messages/en.json';
 import ruMessages from './messages/ru.json';
+import arMessages from './messages/ar.json';
 import { type TLanguage } from './types.d';
 
 const I18N_MESSAGES = {
   en: enMessages,
-  ru: ruMessages
+  ru: ruMessages,
+  ar: arMessages
 };
 
 const I18N_CONFIG_KEY = 'i18nConfig';
@@ -24,6 +26,13 @@ const I18N_LANGUAGES: readonly TLanguage[] = [
     direction: 'ltr',
     flag: toAbsoluteUrl('/media/flags/russia.svg'),
     messages: I18N_MESSAGES.ru
+  },
+  {
+    label: 'Arabic',
+    code: 'ar',
+    direction: 'rtl',
+    flag: toAbsoluteUrl('/media/flags/saudi-arabia.svg'),
+    messages: I18N_MESSAGES.ar
   }
 ];
 
