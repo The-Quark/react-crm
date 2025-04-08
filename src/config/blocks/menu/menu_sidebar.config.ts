@@ -2,92 +2,92 @@ import type { TMenuConfig } from '@/components';
 
 export const MENU_SIDEBAR: TMenuConfig = [
   {
-    title: 'Dashboard',
+    title: 'MENU.MEGAMENU.DASHBOARD',
     icon: 'element-11',
     path: '/'
   },
   {
-    heading: 'Features'
+    heading: 'MENU.MEGAMENU.SYSTEM'
   },
   {
-    title: 'Profile',
+    title: 'MENU.MEGAMENU.PROFILE',
     icon: 'profile-circle',
     path: '/profile'
   },
   {
-    title: 'Global Parameters',
+    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     path: '/global-parameters'
   },
   {
-    title: 'Clients',
+    title: 'MENU.MEGAMENU.CLIENTS',
     icon: 'badge',
     path: '/clients'
   },
   {
-    title: 'Roles & Permissions',
+    title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
     icon: 'clipboard',
     children: [
       {
-        title: 'Roles',
+        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
         path: '/roles-permissions/roles'
       },
       {
-        title: 'Permissions',
+        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
         path: '/roles-permissions/permissions'
       }
     ]
   },
   {
-    title: 'HR Module',
+    title: 'MENU.MEGAMENU.HR_MODULE',
     icon: 'address-book',
     children: [
       {
-        title: 'Staff',
+        title: 'MENU.MEGAMENU.STAFF',
         path: '/hr-module/staff'
       },
       {
-        title: 'Drivers',
+        title: 'MENU.MEGAMENU.DRIVERS',
         path: '/hr-module/drivers'
       },
       {
-        title: 'Couriers',
+        title: 'MENU.MEGAMENU.COURIERS',
         path: '/hr-module/couriers'
       }
     ]
   },
   {
-    title: 'Call Center',
+    title: 'MENU.MEGAMENU.CALL_CENTER',
     icon: 'satellite',
     children: [
       {
-        title: 'Applications',
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
         path: '/call-center/applications'
       },
       {
-        title: 'Orders',
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         path: '/call-center/orders'
       }
     ]
   },
   {
-    title: 'CRM',
+    title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
     children: [
       {
-        title: 'Teams Starter',
+        title: 'MENU.MEGAMENU.CRM.TEAMS_STARTER',
         path: '/crm/teams-starter'
       },
       {
-        title: 'Teams',
+        title: 'MENU.MEGAMENU.CRM.TEAMS',
         path: '/crm/teams'
       },
       {
-        title: 'Member Starter',
+        title: 'MENU.MEGAMENU.CRM.MEMBERS_STARTER',
         path: '/crm/member-starter'
       },
       {
-        title: 'Members',
+        title: 'MENU.MEGAMENU.CRM.MEMBERS',
         path: '/crm/members'
       }
     ]

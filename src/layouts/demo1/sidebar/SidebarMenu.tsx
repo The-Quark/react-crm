@@ -17,6 +17,7 @@ import {
   MenuTitle
 } from '@/components/menu';
 import { useMenus } from '@/providers';
+import { FormattedMessage } from 'react-intl';
 
 const SidebarMenu = () => {
   const linkPl = 'ps-[10px]';
@@ -85,7 +86,7 @@ const SidebarMenu = () => {
               {item.icon && <KeenIcon icon={item.icon} className={iconSize} />}
             </MenuIcon>
             <MenuTitle className="text-sm font-medium text-gray-800 menu-item-active:text-primary menu-link-hover:!text-primary">
-              {item.title}
+              <FormattedMessage id={item.title} />
             </MenuTitle>
             {buildMenuArrow()}
           </MenuLink>
@@ -123,7 +124,7 @@ const SidebarMenu = () => {
               {item.icon && <KeenIcon icon={item.icon} className={iconSize} />}
             </MenuIcon>
             <MenuTitle className="text-sm font-medium text-gray-800 menu-item-active:text-primary menu-link-hover:!text-primary">
-              {item.title}
+              <FormattedMessage id={item.title} />
             </MenuTitle>
           </MenuLink>
         </MenuItem>
@@ -140,7 +141,9 @@ const SidebarMenu = () => {
           <MenuIcon className={clsx('items-start text-gray-500 dark:text-gray-400', iconWidth)}>
             {item.icon && <KeenIcon icon={item.icon} className={iconSize} />}
           </MenuIcon>
-          <MenuTitle className="text-sm font-medium text-gray-800">{item.title}</MenuTitle>
+          <MenuTitle className="text-sm font-medium text-gray-800">
+            <FormattedMessage id={item.title} />
+          </MenuTitle>
 
           {item.disabled && buildMenuSoon()}
         </MenuLabel>
@@ -185,7 +188,7 @@ const SidebarMenu = () => {
               </MenuTitle>
             ) : (
               <MenuTitle className="text-2sm font-normal me-1 text-gray-800 menu-item-active:text-primary menu-item-active:font-medium menu-link-hover:!text-primary">
-                {item.title}
+                <FormattedMessage id={item.title} />
               </MenuTitle>
             )}
 
@@ -220,7 +223,7 @@ const SidebarMenu = () => {
           >
             {buildMenuBullet()}
             <MenuTitle className="text-2sm font-normal text-gray-800 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
-              {item.title}
+              <FormattedMessage id={item.title} />
             </MenuTitle>
           </MenuLink>
         </MenuItem>
@@ -241,7 +244,9 @@ const SidebarMenu = () => {
           )}
         >
           {buildMenuBullet()}
-          <MenuTitle className="text-2sm font-normal text-gray-800">{item.title}</MenuTitle>
+          <MenuTitle className="text-2sm font-normal text-gray-800">
+            <FormattedMessage id={item.title} />
+          </MenuTitle>
           {item.disabled && buildMenuSoon()}
         </MenuLabel>
       </MenuItem>
@@ -254,7 +259,7 @@ const SidebarMenu = () => {
         <MenuHeading
           className={clsx('uppercase text-2sm font-medium text-gray-500', linkPl, linkPr)}
         >
-          {item.heading}
+          <FormattedMessage id={item.heading} />
         </MenuHeading>
       </MenuItem>
     );

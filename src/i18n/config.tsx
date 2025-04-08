@@ -1,13 +1,13 @@
 import { toAbsoluteUrl } from '@/utils';
 import { type TLanguage } from './types.d';
-import arMessages from './locales/ar/ar.ts';
-import enMessages from './locales/en/en.ts';
-import ruMessages from './locales/ru/ru.ts';
+import ar from './locales/ar/ar.ts';
+import en from './locales/en/en.ts';
+import ru from './locales/ru/ru.ts';
 
 const I18N_MESSAGES = {
-  en: enMessages,
-  ru: ruMessages,
-  ar: arMessages
+  en: en,
+  ru: ru,
+  ar: ar
 };
 
 const I18N_CONFIG_KEY = 'i18nConfig';

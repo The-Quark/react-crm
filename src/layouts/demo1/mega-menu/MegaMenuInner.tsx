@@ -6,6 +6,7 @@ import { MegaMenuSubWithSubSets } from '@/partials/menu/mega-menu';
 import { useDemo1Layout } from '../Demo1LayoutProvider';
 import { MENU_MEGA } from '@/config';
 import { useLanguage } from '@/i18n';
+import { FormattedMessage } from 'react-intl';
 
 const MegaMenuInner = () => {
   const desktopMode = useResponsive('up', 'lg');
@@ -47,25 +48,33 @@ const MegaMenuInner = () => {
       <Fragment>
         <MenuItem key="home">
           <MenuLink path={homeItem.path} className={linkClass}>
-            <MenuTitle className={titleClass}>{homeItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={homeItem.title} />
+            </MenuTitle>
           </MenuLink>
         </MenuItem>
 
         <MenuItem key="profile">
           <MenuLink path={profileItem.path} className={linkClass}>
-            <MenuTitle className={titleClass}>{profileItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={profileItem.title} />
+            </MenuTitle>
           </MenuLink>
         </MenuItem>
 
         <MenuItem key="global parameters">
           <MenuLink path={globalItem.path} className={linkClass}>
-            <MenuTitle className={titleClass}>{globalItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={globalItem.title} />
+            </MenuTitle>
           </MenuLink>
         </MenuItem>
 
         <MenuItem key="clients">
           <MenuLink path={clientsItem.path} className={linkClass}>
-            <MenuTitle className={titleClass}>{clientsItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={clientsItem.title} />
+            </MenuTitle>
           </MenuLink>
         </MenuItem>
 
@@ -78,7 +87,9 @@ const MegaMenuInner = () => {
           }}
         >
           <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{rolesPermissionsItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={rolesPermissionsItem.title} />
+            </MenuTitle>
             {buildArrow()}
           </MenuLink>
           {MegaMenuSubWithSubSets(items, 4)}
@@ -93,7 +104,9 @@ const MegaMenuInner = () => {
           }}
         >
           <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{hrModuleItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={hrModuleItem.title} />
+            </MenuTitle>
             {buildArrow()}
           </MenuLink>
           {MegaMenuSubWithSubSets(items, 5)}
@@ -108,7 +121,9 @@ const MegaMenuInner = () => {
           }}
         >
           <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{callCenterItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={callCenterItem.title} />
+            </MenuTitle>
             {buildArrow()}
           </MenuLink>
           {MegaMenuSubWithSubSets(items, 6)}
@@ -123,7 +138,9 @@ const MegaMenuInner = () => {
           }}
         >
           <MenuLink className={linkClass}>
-            <MenuTitle className={titleClass}>{crmItem.title}</MenuTitle>
+            <MenuTitle className={titleClass}>
+              <FormattedMessage id={crmItem.title} />
+            </MenuTitle>
             {buildArrow()}
           </MenuLink>
           {MegaMenuSubWithSubSets(items, 7)}

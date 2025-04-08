@@ -13,7 +13,27 @@ const Menu = {
   'USER.MENU.DARK_MODE': 'Тёмная тема',
   'USER.MENU.LOGOUT': 'Выйти',
   'USER.MENU.LANGUAGE': 'Язык',
-  'USER.MENU.CURRENCY': 'Валюта'
+  'USER.MENU.CURRENCY': 'Валюта',
+  'MENU.MEGAMENU.DASHBOARD': 'Панель управления',
+  'MENU.MEGAMENU.SYSTEM': 'Система',
+  'MENU.MEGAMENU.PROFILE': 'Профиль',
+  'MENU.MEGAMENU.GLOBAL_PARAMETERS': 'Глобальные параметры',
+  'MENU.MEGAMENU.CLIENTS': 'Клиенты',
+  'MENU.MEGAMENU.ROLES_PERMISSIONS': 'Роли и разрешения',
+  'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES': 'Роли',
+  'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS': 'Разрешения',
+  'MENU.MEGAMENU.HR_MODULE': 'HR Модуль',
+  'MENU.MEGAMENU.STAFF': 'Персонал',
+  'MENU.MEGAMENU.DRIVERS': 'Водители',
+  'MENU.MEGAMENU.COURIERS': 'Курьеры',
+  'MENU.MEGAMENU.CALL_CENTER': 'Колл-центр',
+  'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS': 'Заявки',
+  'MENU.MEGAMENU.CALL_CENTER.ORDERS': 'Заказы',
+  'MENU.MEGAMENU.CRM': 'CRM',
+  'MENU.MEGAMENU.CRM.TEAMS_STARTER': 'Начало команд',
+  'MENU.MEGAMENU.CRM.TEAMS': 'Команды',
+  'MENU.MEGAMENU.CRM.MEMBERS_STARTER': 'Начало участников',
+  'MENU.MEGAMENU.CRM.MEMBERS': 'Участники'
 };
 
 export default Menu;

@@ -2,6 +2,7 @@ import { KeenIcon } from '@/components';
 import { TMenuConfig, MenuItem, MenuLink, MenuTitle, MenuIcon, MenuBadge } from '@/components/menu';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const MegaMenuSubDefault = (items: TMenuConfig) => {
   const buildItems = (items: TMenuConfig): ReactNode => {
@@ -10,7 +11,9 @@ const MegaMenuSubDefault = (items: TMenuConfig) => {
         return (
           <div key={index}>
             <MenuItem className="pt-1">
-              <span className="text-gray-600 font-medium text-2sm p-2.5">{item.title}</span>
+              <span className="text-gray-600 font-medium text-2sm p-2.5">
+                <FormattedMessage id={item.title} />
+              </span>
             </MenuItem>
             {buildItems(item.children)}
           </div>
@@ -25,7 +28,10 @@ const MegaMenuSubDefault = (items: TMenuConfig) => {
                 </MenuIcon>
               )}
 
-              <MenuTitle className={clsx('grow-0')}>{item.title}</MenuTitle>
+              <MenuTitle className={clsx('grow-0')}>
+                {' '}
+                <FormattedMessage id={item.title} />
+              </MenuTitle>
 
               {item.disabled && (
                 <MenuBadge>
