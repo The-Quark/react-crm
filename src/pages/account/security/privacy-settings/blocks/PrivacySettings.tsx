@@ -37,7 +37,7 @@ const PrivacySettings = () => {
           <span className="badge badge-xs badge-primary badge-outline">Pro</span>
         </Fragment>
       ),
-      description: 'Enable or disable read receipts for private messages.',
+      description: 'Enable or disable read receipts for private locales.',
       actions: (
         <div className="switch switch-sm">
           <input type="checkbox" name="param" value="1" readOnly />

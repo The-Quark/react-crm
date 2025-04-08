@@ -1,8 +1,8 @@
 import { toAbsoluteUrl } from '@/utils';
-import enMessages from './messages/en.json';
-import ruMessages from './messages/ru.json';
-import arMessages from './messages/ar.json';
 import { type TLanguage } from './types.d';
+import arMessages from './locales/ar/ar.ts';
+import enMessages from './locales/en/en.ts';
+import ruMessages from './locales/ru/ru.ts';
 
 const I18N_MESSAGES = {
   en: enMessages,

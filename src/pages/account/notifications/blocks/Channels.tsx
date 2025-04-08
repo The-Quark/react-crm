@@ -37,7 +37,7 @@ const Channels = () => {
     {
       icon: 'slack',
       title: 'Slack',
-      description: 'Receive instant alerts for messages and updates directly in Slack.',
+      description: 'Receive instant alerts for locales and updates directly in Slack.',
       actions: (
         <a href="#" className="btn btn-sm btn-light btn-outline text-center">
           Connect Slack

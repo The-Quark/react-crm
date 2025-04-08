@@ -1,4 +1,4 @@
-{
+const Menu = {
   "USER.MENU.PUBLIC_PROFILE": "الملف الشخصي العام",
   "USER.MENU.MY_PROFILE": "ملفي الشخصي",
   "USER.MENU.MY_ACCOUNT": "حسابي",
@@ -14,4 +14,6 @@
   "USER.MENU.LOGOUT": "تسجيل الخروج",
   "USER.MENU.LANGUAGE": "اللغة",
   "USER.MENU.CURRENCY": "العملة"
-}
+};
+
+export default Menu;
