@@ -33,8 +33,8 @@ const MegaMenuInner = () => {
     const homeItem = items[0];
     const profileItem = items[1];
     const globalItem = items[2];
-    const rolesPermissionsItem = items[3];
-    const clientsItem = items[4];
+    const clientsItem = items[3];
+    const rolesPermissionsItem = items[4];
     const hrModuleItem = items[5];
     const callCenterItem = items[6];
     const crmItem = items[7];
@@ -63,6 +63,12 @@ const MegaMenuInner = () => {
           </MenuLink>
         </MenuItem>
 
+        <MenuItem key="clients">
+          <MenuLink path={clientsItem.path} className={linkClass}>
+            <MenuTitle className={titleClass}>{clientsItem.title}</MenuTitle>
+          </MenuLink>
+        </MenuItem>
+
         <MenuItem
           key="roles-permissions"
           toggle={desktopMode ? 'dropdown' : 'accordion'}
@@ -75,13 +81,7 @@ const MegaMenuInner = () => {
             <MenuTitle className={titleClass}>{rolesPermissionsItem.title}</MenuTitle>
             {buildArrow()}
           </MenuLink>
-          {MegaMenuSubWithSubSets(items, 3)}
-        </MenuItem>
-
-        <MenuItem key="clients">
-          <MenuLink path={clientsItem.path} className={linkClass}>
-            <MenuTitle className={titleClass}>{clientsItem.title}</MenuTitle>
-          </MenuLink>
+          {MegaMenuSubWithSubSets(items, 4)}
         </MenuItem>
 
         <MenuItem

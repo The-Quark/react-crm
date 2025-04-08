@@ -20,6 +20,11 @@ export const MENU_SIDEBAR: TMenuConfig = [
     path: '/global-parameters'
   },
   {
+    title: 'Clients',
+    icon: 'badge',
+    path: '/clients'
+  },
+  {
     title: 'Roles & Permissions',
     icon: 'clipboard',
     children: [
@@ -32,11 +37,6 @@ export const MENU_SIDEBAR: TMenuConfig = [
         path: '/roles-permissions/permissions'
       }
     ]
-  },
-  {
-    title: 'Clients',
-    icon: 'badge',
-    path: '/clients'
   },
   {
     title: 'HR Module',

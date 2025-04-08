@@ -14,6 +14,11 @@ export const MENU_MEGA: TMenuConfig = [
     path: '/global-parameters'
   },
   {
+    title: 'Clients',
+    icon: 'badge',
+    path: '/clients'
+  },
+  {
     title: 'Roles & Permissions',
     children: [
       {
@@ -27,11 +32,6 @@ export const MENU_MEGA: TMenuConfig = [
         path: '/roles-permissions/permissions'
       }
     ]
-  },
-  {
-    title: 'Clients',
-    icon: 'badge',
-    path: '/clients'
   },
   {
     title: 'HR Module',
