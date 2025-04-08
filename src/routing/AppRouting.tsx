@@ -37,6 +37,7 @@ const AppRouting = (): ReactElement => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // in this case i would add many routes by checking tht role and permissions
   }, [location]);
 
   useEffect(() => {

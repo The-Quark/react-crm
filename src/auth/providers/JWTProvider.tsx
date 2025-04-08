@@ -10,6 +10,8 @@ import {
 
 import * as authHelper from '../_helpers';
 import { type AuthModel, type UserResponse } from '@/auth';
+import { useCurrentUser } from '@/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 export const LOGIN_URL = `${API_URL}/auth/login`;
@@ -24,7 +26,6 @@ interface AuthContextProps {
   auth: AuthModel | undefined;
   saveAuth: (auth: AuthModel | undefined) => void;
   currentUser: UserResponse | undefined;
-  setCurrentUser: Dispatch<SetStateAction<UserResponse | undefined>>;
   login: (login: string, password: string) => Promise<void>;
   loginWithGoogle?: () => Promise<void>;
   loginWithFacebook?: () => Promise<void>;
@@ -43,24 +44,23 @@ interface AuthContextProps {
 }
 
 const AuthContext = createContext<AuthContextProps | null>(null);
-
 const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
-  const [currentUser, setCurrentUser] = useState<UserResponse | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { data: currentUser } = useCurrentUser();
+  const queryClient = useQueryClient();
 
   const verify = async () => {
-    if (auth) {
-      try {
-        const { data: user } = await getUser();
-        setCurrentUser(user);
-      } catch {
+    try {
+      const token = authHelper.getAuth();
+      if (!token?.token) {
         saveAuth(undefined);
-        setCurrentUser(undefined);
+        return;
       }
+    } catch (error) {
+      saveAuth(undefined);
     }
   };
-
   const saveAuth = (auth: AuthModel | undefined) => {
     setAuth(auth);
     if (auth) {
@@ -71,18 +71,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const login = async (login: string, password: string) => {
-    try {
-      const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, {
-        login,
-        password
-      });
-      saveAuth(auth);
-      const { data: user } = await getUser();
-      setCurrentUser(user);
-    } catch (error) {
-      saveAuth(undefined);
-      throw new Error(`Error ${error}`);
-    }
+    const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, { login, password });
+    saveAuth(auth);
+    await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
   };
 
   const register = async (email: string, password: string, password_confirmation: string) => {
@@ -93,8 +84,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         password_confirmation
       });
       saveAuth(auth);
-      const { data: user } = await getUser();
-      setCurrentUser(user);
+      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
     } catch (error) {
       saveAuth(undefined);
       throw new Error(`Error ${error}`);
@@ -127,7 +117,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = () => {
     saveAuth(undefined);
-    setCurrentUser(undefined);
+    queryClient.invalidateQueries({ queryKey: ['currentUser'] });
   };
 
   return (
@@ -138,7 +128,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         auth,
         saveAuth,
         currentUser,
-        setCurrentUser,
         login,
         register,
         requestPasswordResetLink,
