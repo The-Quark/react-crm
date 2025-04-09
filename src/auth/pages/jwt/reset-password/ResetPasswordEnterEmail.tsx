@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { KeenIcon } from '@/components';
-import { useLayout } from '@/providers';
 
 const ResetPasswordEnterEmail = () => {
-  const { currentLayout } = useLayout();
   const [searchInput, setSearchInput] = useState('');
 
   return (
@@ -27,11 +25,7 @@ const ResetPasswordEnterEmail = () => {
         </div>
 
         <Link
-          to={
-            currentLayout?.name === 'auth-branded'
-              ? '/auth/reset-password/check-email'
-              : '/auth/classic/reset-password/check-email'
-          }
+          to="/auth/reset-password/check-email"
           className="btn btn-primary flex justify-center grow"
         >
           Continue

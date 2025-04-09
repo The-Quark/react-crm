@@ -5,7 +5,6 @@ import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
-import { useLayout } from '@/providers';
 import { AxiosError } from 'axios';
 
 const passwordSchema = Yup.object().shape({
@@ -18,7 +17,6 @@ const passwordSchema = Yup.object().shape({
 });
 
 const ResetPasswordChange = () => {
-  const { currentLayout } = useLayout();
   const { changePassword } = useAuthContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -50,11 +48,7 @@ const ResetPasswordChange = () => {
       try {
         await changePassword(email, token, values.newPassword, values.confirmPassword);
         setHasErrors(false);
-        navigate(
-          currentLayout?.name === 'auth-branded'
-            ? '/auth/reset-password/changed'
-            : '/auth/classic/reset-password/changed'
-        );
+        navigate('/auth/reset-password/changed');
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           setStatus(error.response.data.message);

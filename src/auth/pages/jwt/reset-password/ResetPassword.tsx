@@ -4,10 +4,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuthContext } from '@/auth/useAuthContext';
 import { Alert, KeenIcon } from '@/components';
-import { useLayout } from '@/providers';
 import { AxiosError } from 'axios';
 
 const initialValues = {
@@ -26,7 +24,6 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined);
   const { requestPasswordResetLink } = useAuthContext();
-  const { currentLayout } = useLayout();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -45,10 +42,7 @@ const ResetPassword = () => {
         const params = new URLSearchParams();
         params.append('email', values.email);
         navigate({
-          pathname:
-            currentLayout?.name === 'auth-branded'
-              ? '/auth/reset-password/check-email'
-              : '/auth/classic/reset-password/check-email',
+          pathname: '/auth/reset-password/check-email',
           search: params.toString()
         });
       } catch (error) {
@@ -119,7 +113,7 @@ const ResetPassword = () => {
           </button>
 
           <Link
-            to={currentLayout?.name === 'auth-branded' ? '/auth/login' : '/auth/classic/login'}
+            to="/auth/login"
             className="flex items-center justify-center text-sm gap-2 text-gray-700 hover:text-primary"
           >
             <KeenIcon icon="black-left" />
