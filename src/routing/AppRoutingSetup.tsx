@@ -8,6 +8,7 @@ import { ScreenLoader } from '@/components';
 import SuperAdminRoutesSetting from '@/routing/routingByRole/superAdminRoutesSetting.tsx';
 import { Demo1Layout } from '@/layouts/demo1';
 import ViewerRoutesSetting from '@/routing/routingByRole/viewerRoutesSetting.tsx';
+import { DefaultPage } from '@/pages/dashboards';
 
 const AppRoutingSetup = (): ReactElement => {
   const { isLoading, data: currentUser } = useCurrentUser();
@@ -18,6 +19,7 @@ const AppRoutingSetup = (): ReactElement => {
     <Routes>
       <Route element={<RequireAuth />}>
         <Route element={<Demo1Layout />}>
+          <Route path="/" element={<DefaultPage />} />
           {!isLoading && currentUser && currentUser.roles[0].name === 'superadmin' && (
             <Route path="/*" element={<SuperAdminRoutesSetting />} />
           )}
