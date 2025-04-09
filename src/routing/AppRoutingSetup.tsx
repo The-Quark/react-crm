@@ -106,7 +106,6 @@ const AppRoutingSetup = (): ReactElement => {
       <Route element={<RequireAuth />}>
         <Route element={<Demo1Layout />}>
           <Route path="/" element={<DefaultPage />} />
-          {/*<Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} />*/}
 
           <Route path="/profile" element={<ProfilePage />} />
 
