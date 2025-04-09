@@ -1,9 +1,9 @@
 import { KeenIcon } from '@/components';
 import { CrudAvatarUpload } from '@/partials/crud';
-import { useAuthContext } from '@/auth';
+import { useCurrentUser } from '@/api';
 
 const PersonalInfo = () => {
-  const { currentUser } = useAuthContext();
+  const { data: currentUser } = useCurrentUser();
   return (
     <div className="card min-w-full">
       <div className="card-header">
@@ -26,7 +26,7 @@ const PersonalInfo = () => {
             <tr>
               <td className="py-2 text-gray-600 font-normal">Name</td>
               <td className="py-2 text-gray-800 font-normaltext-sm">
-                {currentUser ? currentUser[0].result.name : 'Not Found'}
+                {currentUser ? currentUser.name : 'Not Found'}
               </td>
               <td className="py-2 text-center">
                 <a href="#" className="btn btn-sm btn-icon btn-clear btn-primary">

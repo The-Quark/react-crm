@@ -6,17 +6,17 @@ import { UserProfileHero } from '@/partials/heros';
 import { Navbar, NavbarActions, NavbarDropdown } from '@/partials/navbar';
 import { PageMenu } from '@/pages/public-profile';
 import { ProfilePageContent } from './components/profilePageContent';
-import { useAuthContext } from '@/auth';
+import { useCurrentUser } from '@/api';
 
 const STORAGE_AVATAR_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 export const ProfilePage = () => {
-  const { currentUser } = useAuthContext();
+  const { data: currentUser } = useCurrentUser();
   const image = (
     <img
       src={
         currentUser
-          ? `${STORAGE_AVATAR_URL}/${currentUser[0].result.avatar}`
+          ? `${STORAGE_AVATAR_URL}/${currentUser.avatar}`
           : toAbsoluteUrl('/media/avatars/blank.png')
       }
       className="rounded-full border-3 border-success size-[100px] shrink-0"
@@ -26,15 +26,15 @@ export const ProfilePage = () => {
   return (
     <Fragment>
       <UserProfileHero
-        name={currentUser ? currentUser[0].result.name : 'Not Found'}
+        name={currentUser ? currentUser.name : 'Not Found'}
         image={image}
         info={[
-          { email: currentUser ? currentUser[0].result.email : 'Not Found', icon: 'sms' },
+          { email: currentUser ? currentUser.email : 'Not Found', icon: 'sms' },
           {
             label: currentUser
-              ? currentUser[0]?.result?.roles?.[0]?.nicename
-                ? currentUser[0].result.roles[0].nicename
-                : `${currentUser[0].result.roles[0].name}`
+              ? currentUser.roles?.[0]?.nicename
+                ? currentUser.roles[0].nicename
+                : `${currentUser.roles[0].name}`
               : 'Not Found',
             icon: 'user'
           }

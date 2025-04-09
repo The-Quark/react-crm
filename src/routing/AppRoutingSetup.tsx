@@ -18,10 +18,10 @@ const AppRoutingSetup = (): ReactElement => {
     <Routes>
       <Route element={<RequireAuth />}>
         <Route element={<Demo1Layout />}>
-          {!isLoading && currentUser[0].result.roles[0].name === 'superadmin' && (
+          {!isLoading && currentUser && currentUser.roles[0].name === 'superadmin' && (
             <Route path="/*" element={<SuperAdminRoutesSetting />} />
           )}
-          {!isLoading && currentUser[0].result.roles[0].name === 'viewer' && (
+          {!isLoading && currentUser && currentUser.roles[0].name === 'viewer' && (
             <Route path="/*" element={<ViewerRoutesSetting />} />
           )}
         </Route>

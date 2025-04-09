@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import * as authHelper from '../_helpers';
-import { type AuthModel, type UserResponse } from '@/auth';
+import { type AuthModel, User, type UserResponse } from '@/auth';
 import { useCurrentUser } from '@/api';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -25,7 +25,7 @@ interface AuthContextProps {
   setLoading: Dispatch<SetStateAction<boolean>>;
   auth: AuthModel | undefined;
   saveAuth: (auth: AuthModel | undefined) => void;
-  currentUser: UserResponse | undefined;
+  currentUser: User | undefined;
   login: (login: string, password: string) => Promise<void>;
   loginWithGoogle?: () => Promise<void>;
   loginWithFacebook?: () => Promise<void>;
