@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
-import GlobalParametersPage from '@/pages/global-parameters/globalParametersPage.tsx';
+import { GlobalParameterPage } from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import ClientsPage from '@/pages/clients/clientsPage.tsx';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
@@ -15,13 +15,13 @@ import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 
-const AllRoutesSetting = () => {
+const ViewerRoutesSetting = () => {
   return (
     <Routes>
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/global-parameters" element={<GlobalParametersPage />} />
+        <Route path="/global-parameters" element={<GlobalParameterPage />} />
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
         <Route path="/clients" element={<ClientsPage />} />
@@ -40,4 +40,4 @@ const AllRoutesSetting = () => {
   );
 };
 
-export default AllRoutesSetting;
+export default ViewerRoutesSetting;

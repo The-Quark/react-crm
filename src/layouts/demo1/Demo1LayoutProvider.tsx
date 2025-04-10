@@ -8,6 +8,10 @@ import { useMenus } from '@/providers';
 import { ILayoutConfig, useLayout } from '@/providers';
 import { deepMerge } from '@/utils';
 import { demo1LayoutConfig } from './';
+import { useCurrentUser } from '@/api';
+import { AllMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/allMenuSideBar.ts';
+import { ViewerMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/viewerMenuSideBar.ts';
+import { CuttedMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/cuttedMenuSideBar.ts';
 
 // Interface defining the structure for layout provider properties
 export interface IDemo1LayoutProviderProps {
@@ -63,10 +67,20 @@ const useDemo1Layout = () => useContext(Demo1LayoutContext);
 const Demo1LayoutProvider = ({ children }: PropsWithChildren) => {
   const { pathname } = useLocation(); // Gets the current path
   const { setMenuConfig } = useMenus(); // Accesses menu configuration methods
-  const secondaryMenu = useMenuChildren(pathname, MENU_SIDEBAR, 0); // Retrieves the secondary menu
+  const { data: currentUser } = useCurrentUser();
+  const userRole: string | undefined = currentUser?.roles?.[0]?.name;
+
+  const roleToMenu: Record<string, typeof MENU_SIDEBAR> = {
+    superadmin: AllMenuSideBar,
+    viewer: ViewerMenuSideBar
+  };
+
+  const selectedMenu = userRole && roleToMenu[userRole] ? roleToMenu[userRole] : CuttedMenuSideBar;
+
+  const secondaryMenu = useMenuChildren(pathname, selectedMenu, 0); // Retrieves the secondary menu
 
   // Sets the primary and secondary menu configurations
-  setMenuConfig('primary', MENU_SIDEBAR);
+  setMenuConfig('primary', selectedMenu);
   setMenuConfig('secondary', secondaryMenu);
 
   const { getLayout, updateLayout, setCurrentLayout } = useLayout(); // Layout management methods

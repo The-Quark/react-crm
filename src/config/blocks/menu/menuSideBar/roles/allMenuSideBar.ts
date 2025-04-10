@@ -17,7 +17,16 @@ export const AllMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
-    path: '/global-parameters'
+    children: [
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS_STARTER',
+        path: '/global-parameters/starter-parameters'
+      },
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
+        path: '/global-parameters/parameters'
+      }
+    ]
   },
   {
     title: 'MENU.MEGAMENU.CLIENTS',
