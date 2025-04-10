@@ -183,8 +183,12 @@ const SidebarMenu = () => {
 
             {item.collapse ? (
               <MenuTitle className="text-2sm font-normal text-gray-600 dark:text-gray-500">
-                <span className="hidden menu-item-show:!flex">{item.collapseTitle}</span>
-                <span className="flex menu-item-show:hidden">{item.expandTitle}</span>
+                <span className="hidden menu-item-show:!flex">
+                  <FormattedMessage id={item.collapseTitle} />
+                </span>
+                <span className="flex menu-item-show:hidden">
+                  <FormattedMessage id={item.expandTitle} />
+                </span>
               </MenuTitle>
             ) : (
               <MenuTitle className="text-2sm font-normal me-1 text-gray-800 menu-item-active:text-primary menu-item-active:font-medium menu-link-hover:!text-primary">
