@@ -16,17 +16,23 @@ const getInitialLanguage = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const langParam = urlParams.get('lang');
 
-  // Check if langParam matches a supported language in I18N_LANGUAGES
+  const allLanguages = I18N_LANGUAGES;
+
   if (langParam) {
-    const matchedLanguage = I18N_LANGUAGES.find((lang) => lang.code === langParam);
-    if (matchedLanguage) {
-      setData(I18N_CONFIG_KEY, matchedLanguage);
-      return matchedLanguage;
+    const matched = allLanguages.find((lang) => lang.code === langParam);
+    if (matched) {
+      setData(I18N_CONFIG_KEY, { code: matched.code });
+      return matched;
     }
   }
 
-  const currentLanguage = getData(I18N_CONFIG_KEY) as TLanguage | undefined;
-  return currentLanguage ?? I18N_DEFAULT_LANGUAGE;
+  const savedConfig = getData(I18N_CONFIG_KEY);
+  if (savedConfig) {
+    const matched = allLanguages.find((lang) => lang.code === savedConfig);
+    if (matched) return matched;
+  }
+
+  return I18N_DEFAULT_LANGUAGE;
 };
 
 const initialProps: ITranslationProviderProps = {
@@ -56,7 +62,7 @@ const TranslationProvider = ({ children }: PropsWithChildren) => {
   const [currentLanguage, setCurrentLanguage] = useState(initialProps.currentLanguage);
 
   const changeLanguage = (language: TLanguage) => {
-    setData(I18N_CONFIG_KEY, language);
+    setData(I18N_CONFIG_KEY, language.code);
     setCurrentLanguage(language);
   };
 
