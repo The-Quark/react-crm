@@ -95,7 +95,7 @@ import {
   AuthenticationWelcomeMessagePage
 } from '@/pages/authentication';
 
-const SuperAdminRoutesSetting = () => {
+const AllRoutesSetting = () => {
   return (
     <Routes>
       <Route path="/" element={<DefaultPage />} />
@@ -204,4 +204,4 @@ const SuperAdminRoutesSetting = () => {
   );
 };
 
-export default SuperAdminRoutesSetting;
+export default AllRoutesSetting;
