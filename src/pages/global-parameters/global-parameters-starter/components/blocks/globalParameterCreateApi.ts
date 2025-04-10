@@ -1,33 +1,26 @@
 import axios from 'axios';
-import { IImageInputFile } from '@/components/image-input';
 
-interface UserModel {
-  name: string;
-  email: string;
-  avatar?: IImageInputFile | null;
-  password: string;
-  phone?: string;
-  location?: string;
-  position?: string;
+interface IParameterFormValues {
+  company_name: string;
+  timezone: string;
+  currency: string;
+  language: string;
+  legal_address: string;
+  warehouse_address: string;
+  airlines: string;
+  dimensions_per_place: string;
+  cost_per_airplace: number;
 }
 
 const api = import.meta.env.VITE_APP_API_URL;
-export const CREATE_USER_URL = `${api}/auth/register`;
+export const CREATE_GLOBAL_PARAMS_URL = `${api}/company-global-settings/manage`;
 
 export const postCreateGlobalParameter = async (
-  userData: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>
-): Promise<UserModel> => {
-  const formData = new FormData();
-
-  Object.entries(userData).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      formData.append(key, value instanceof Blob ? value : String(value));
-    }
-  });
-
+  paramsData: Omit<IParameterFormValues, 'id' | 'created_at' | 'updated_at'>
+): Promise<IParameterFormValues> => {
   return await axios
-    .post<UserModel>(CREATE_USER_URL, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+    .post<IParameterFormValues>(CREATE_GLOBAL_PARAMS_URL, paramsData, {
+      headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);
 };

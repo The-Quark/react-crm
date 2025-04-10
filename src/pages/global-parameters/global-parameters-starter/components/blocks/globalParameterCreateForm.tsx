@@ -9,26 +9,35 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { timeZonesNames } from '@vvo/tzdb';
 import { useLanguage } from '@/i18n';
-import { localesMock, curreniesMock } from '@/lib/mocks.ts';
-
+import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
+import { postCreateGlobalParameter } from '@/pages/global-parameters/global-parameters-starter/components/blocks/globalParameterCreateApi.ts';
 interface IGeneralSettingsProps {
   title: string;
 }
 
-const createUserSchema = Yup.object().shape({
-  company_name: Yup.string().min(1, 'Minimum 3 symbols').required('Name is required'),
+const createParameterSchema = Yup.object().shape({
+  company_name: Yup.string().required('Company name is required'),
   timezone: Yup.string().required('Timezone is required'),
   currency: Yup.string().required('Currency is required'),
-  language: Yup.string().required('Language is required')
+  language: Yup.string().required('Language is required'),
+  legal_address: Yup.string().required('Legal address is required'),
+  warehouse_address: Yup.string().required('Warehouse address is required'),
+  airlines: Yup.string().required('Airlines is required'),
+  dimensions_per_place: Yup.string().required('Dimensions per place is required'),
+  cost_per_airplace: Yup.number().required('Cost per airplace is required')
 });
 
-interface IUserFormValues {
+interface IParameterFormValues {
   company_name: string;
   timezone: string;
   currency: string;
   language: string;
+  legal_address: string;
+  warehouse_address: string;
+  airlines: string;
+  dimensions_per_place: string;
+  cost_per_airplace: number;
 }
 
 export const GlobalParameterCreateFrom = ({ title }: IGeneralSettingsProps) => {
@@ -36,30 +45,31 @@ export const GlobalParameterCreateFrom = ({ title }: IGeneralSettingsProps) => {
   const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const { currentLanguage } = useLanguage();
 
-  const initialValues: IUserFormValues = {
+  const initialValues: IParameterFormValues = {
     company_name: '',
     timezone: browserTimeZone || '',
     currency: localStorage.getItem('app_currency') || 'USD',
-    language: currentLanguage.code
+    language: currentLanguage.code,
+    legal_address: '',
+    warehouse_address: '',
+    airlines: '',
+    dimensions_per_place: '',
+    cost_per_airplace: 0
   };
 
   const formik = useFormik({
     initialValues,
-    validationSchema: createUserSchema,
+    validationSchema: createParameterSchema,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);
       try {
-        // const payload = {
-        //   ...values,
-        //   avatar: values.avatar?.file || null
-        // };
-        // await postCreateGlobalParameter(payload);
+        await postCreateGlobalParameter(values);
         resetForm();
-        setStatus('User created successfully!');
+        setStatus('Global Parameters created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
-        setStatus(error.response?.data?.message || 'Failed to create user');
+        setStatus(error.response?.data?.message || 'Failed to create global parameters');
       }
       setLoading(false);
       setSubmitting(false);
@@ -93,16 +103,16 @@ export const GlobalParameterCreateFrom = ({ title }: IGeneralSettingsProps) => {
           <label className="form-label max-w-56">Time zone</label>
           <div className="flex columns-1 w-full flex-wrap">
             <Select
-              value={formik.values.timezone?.toString()}
-              onValueChange={(value) => formik.setFieldValue('timezone', String(value))}
+              value={formik.values.timezone}
+              onValueChange={(value) => formik.setFieldValue('timezone', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Time Zone" />
               </SelectTrigger>
               <SelectContent className="max-h-60 overflow-y-auto">
-                {timeZonesNames.map((tz) => (
-                  <SelectItem key={tz} value={tz}>
-                    {tz}
+                {timezoneMock.map((tz) => (
+                  <SelectItem key={tz.key} value={tz.timezone}>
+                    {tz.timezone}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -162,6 +172,100 @@ export const GlobalParameterCreateFrom = ({ title }: IGeneralSettingsProps) => {
             {formik.touched.language && formik.errors.language && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.language}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Legal Address</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Legal Address"
+              {...formik.getFieldProps('legal_address')}
+            />
+            {formik.touched.legal_address && formik.errors.legal_address && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.legal_address}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Warehouse Address</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Warehouse Address"
+              {...formik.getFieldProps('warehouse_address')}
+            />
+            {formik.touched.warehouse_address && formik.errors.warehouse_address && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.warehouse_address}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Airlines</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <Select
+              value={formik.values.airlines?.toString()}
+              onValueChange={(value) => formik.setFieldValue('airlines', String(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Airlines" />
+              </SelectTrigger>
+              <SelectContent className="max-h-60 overflow-y-auto">
+                {airlinesMock.map((item) => (
+                  <SelectItem key={item.code} value={item.code}>
+                    {item.label} - {item.code}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {formik.touched.airlines && formik.errors.airlines && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.airlines}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Dimension Per Place</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="text"
+              placeholder="Dimension Per Place"
+              {...formik.getFieldProps('dimensions_per_place')}
+            />
+            {formik.touched.dimensions_per_place && formik.errors.dimensions_per_place && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.dimensions_per_place}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Cost Per Airplace</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <input
+              className="input w-full"
+              type="number"
+              placeholder="Cost Per Airplace"
+              {...formik.getFieldProps('cost_per_airplace')}
+            />
+            {formik.touched.cost_per_airplace && formik.errors.cost_per_airplace && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.cost_per_airplace}
               </span>
             )}
           </div>
