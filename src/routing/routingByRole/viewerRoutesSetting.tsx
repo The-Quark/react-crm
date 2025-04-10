@@ -1,0 +1,35 @@
+import React from 'react';
+import { Route, Routes } from 'react-router';
+import { DefaultPage } from '@/pages/dashboards';
+import { ProfilePage } from '@/pages/profile/profilePage.tsx';
+import GlobalParametersPage from '@/pages/global-parameters/globalParametersPage.tsx';
+import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
+import ClientsPage from '@/pages/clients/clientsPage.tsx';
+import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
+import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
+import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
+import ApplicationsPage from '@/pages/call-center/applications/applicationsPage.tsx';
+import OrdersPage from '@/pages/call-center/orders/ordersPage.tsx';
+import { MembersPage, TeamsPage } from '@/pages/crm';
+
+const AllRoutesSetting = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<DefaultPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/global-parameters" element={<GlobalParametersPage />} />
+      <Route path="/roles-permissions/roles" element={<RolesPage />} />
+      <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+      <Route path="/clients" element={<ClientsPage />} />
+      <Route path="/hr-module/staff" element={<StaffPage />} />
+      <Route path="/hr-module/drivers" element={<DriversPage />} />
+      <Route path="/hr-module/couriers" element={<CouriersPage />} />
+      <Route path="/call-center/applications" element={<ApplicationsPage />} />
+      <Route path="/call-center/orders" element={<OrdersPage />} />
+      <Route path="/crm/teams" element={<TeamsPage />} />
+      <Route path="/crm/members" element={<MembersPage />} />
+    </Routes>
+  );
+};
+
+export default AllRoutesSetting;
