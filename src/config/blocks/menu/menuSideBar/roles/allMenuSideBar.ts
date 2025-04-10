@@ -1,6 +1,6 @@
 import type { TMenuConfig } from '@/components';
 
-export const MENU_SIDEBAR: TMenuConfig = [
+export const AllMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.DASHBOARD',
     icon: 'element-11',

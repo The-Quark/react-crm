@@ -6,7 +6,6 @@ import { ErrorsRouting } from '@/errors';
 import { useCurrentUser } from '@/api';
 import { ScreenLoader } from '@/components';
 import AllRoutesSetting from '@/routing/routingByRole/allRoutesSetting.tsx';
-import { Demo1Layout } from '@/layouts/demo1';
 import ViewerRoutesSetting from '@/routing/routingByRole/viewerRoutesSetting.tsx';
 
 const AppRoutingSetup = (): ReactElement => {
@@ -18,18 +17,13 @@ const AppRoutingSetup = (): ReactElement => {
   return (
     <Routes>
       <Route element={<RequireAuth />}>
-        <Route element={<Demo1Layout />}>
-          {!auth && <Route path="/*" />}
-          {!isLoading &&
-            currentUser &&
-            (currentUser.roles[0].name === 'superadmin' ||
-              currentUser.roles[0].name === 'viewer') && (
-              <Route path="/*" element={<AllRoutesSetting />} />
-            )}
-          {!isLoading && currentUser && currentUser.roles[0].name === 'viewer' && (
-            <Route path="/*" element={<ViewerRoutesSetting />} />
-          )}
-        </Route>
+        {!auth && <Route path="/*" element={<ErrorsRouting />} />}
+        {!isLoading && currentUser && currentUser.roles[0].name === 'superadmin' && (
+          <Route path="/*" element={<AllRoutesSetting />} />
+        )}
+        {!isLoading && currentUser && currentUser.roles[0].name === 'viewer' && (
+          <Route path="/*" element={<ViewerRoutesSetting />} />
+        )}
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />

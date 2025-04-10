@@ -17,6 +17,6 @@ export const useCurrentUser = () => {
     queryFn: fetchCurrentUser,
     retry: false,
     enabled: !!authHelper.getAuth(),
-    staleTime: 5 * 60 * 1000
+    staleTime: Infinity
   });
 };

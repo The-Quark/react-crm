@@ -117,7 +117,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = () => {
     saveAuth(undefined);
-    queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+    queryClient.removeQueries({ queryKey: ['currentUser'] });
   };
 
   return (
