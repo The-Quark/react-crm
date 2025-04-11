@@ -10,7 +10,7 @@ import {
 import { useLayout } from '@/providers';
 import { GlobalParameterStarterContent } from '@/pages/global-parameters/global-parameter-starter/components/globalParameterStarterContent.tsx';
 
-export const GlobalParameterStarter = () => {
+export const GlobalParameterStarterPage = () => {
   const { currentLayout } = useLayout();
   return (
     <Fragment>

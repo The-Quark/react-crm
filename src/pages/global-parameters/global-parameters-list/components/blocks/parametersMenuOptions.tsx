@@ -41,7 +41,7 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/global-parameter-starter/${id}`}>
+        <MenuLink path={`/global-parameters/view-parameters/${id}`}>
           <MenuIcon>
             <KeenIcon icon="more-2" />
           </MenuIcon>
@@ -49,7 +49,7 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
         </MenuLink>
       </MenuItem>
       <MenuItem>
-        <MenuLink path={`/global-parameter-update/${id}`}>
+        <MenuLink path={`/global-parameters/update-parameters/${id}`}>
           <MenuIcon>
             <KeenIcon icon="setting-4" />
           </MenuIcon>
