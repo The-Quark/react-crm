@@ -7,6 +7,7 @@ import { useCurrentUser } from '@/api';
 import { ScreenLoader } from '@/components';
 import AllRoutesSetting from '@/routing/routingByRole/allRoutesSetting.tsx';
 import ViewerRoutesSetting from '@/routing/routingByRole/viewerRoutesSetting.tsx';
+import CuttedRoutesSetting from '@/routing/routingByRole/cuttedRoutesSetting.tsx';
 
 const AppRoutingSetup = (): ReactElement => {
   const { isLoading, data: currentUser } = useCurrentUser();
@@ -23,6 +24,9 @@ const AppRoutingSetup = (): ReactElement => {
         )}
         {!isLoading && currentUser && currentUser.roles[0].name === 'viewer' && (
           <Route path="/*" element={<ViewerRoutesSetting />} />
+        )}
+        {!isLoading && currentUser && currentUser.roles[0].name && (
+          <Route path="/*" element={<CuttedRoutesSetting />} />
         )}
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />

@@ -11,7 +11,7 @@ export const ViewerMenuMega: TMenuConfig = [
   },
   {
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
-    path: '/global-parameters'
+    path: '/global-parameters/parameters'
   },
   {
     title: 'MENU.MEGAMENU.CLIENTS',

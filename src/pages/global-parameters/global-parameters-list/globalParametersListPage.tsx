@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { Container } from '@/components/container';
 import {
   Toolbar,
@@ -23,8 +23,8 @@ export const GlobalParametersListPage = () => {
               <ToolbarDescription>Overview of all global parameters.</ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <a href="/crm/member-starter" className="btn btn-sm btn-primary">
-                Add Global Parameter
+              <a href="#" className="btn btn-sm btn-primary">
+                Test Button
               </a>
             </ToolbarActions>
           </Toolbar>

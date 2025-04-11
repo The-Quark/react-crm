@@ -10,6 +10,7 @@ import {
 import { FC } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useAuthContext } from '@/auth';
 
 interface ParameterMenuOptionsProps {
   id?: number;
@@ -27,6 +28,7 @@ const deleteParameter = async (id: number) => {
   }
 };
 const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+  const { currentUser } = useAuthContext();
   const handleDelete = () => {
     if (id) {
       deleteParameter(id);
@@ -48,23 +50,27 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
           <MenuTitle>View Parameter</MenuTitle>
         </MenuLink>
       </MenuItem>
-      <MenuItem>
-        <MenuLink path={`/global-parameters/update-parameters/${id}`}>
-          <MenuIcon>
-            <KeenIcon icon="setting-4" />
-          </MenuIcon>
-          <MenuTitle>Edit Parameter</MenuTitle>
-        </MenuLink>
-      </MenuItem>
-      <MenuSeparator />
-      <MenuItem onClick={handleDelete}>
-        <MenuLink>
-          <MenuIcon>
-            <KeenIcon icon="trash" className="text-danger !text-red-500" />
-          </MenuIcon>
-          <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
-        </MenuLink>
-      </MenuItem>
+      {currentUser?.roles[0].name === 'superadmin' && (
+        <>
+          <MenuItem>
+            <MenuLink path={`/global-parameters/update-parameters/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="setting-4" />
+              </MenuIcon>
+              <MenuTitle>Edit Parameter</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+          <MenuSeparator />
+          <MenuItem onClick={handleDelete}>
+            <MenuLink>
+              <MenuIcon>
+                <KeenIcon icon="trash" className="text-danger !text-red-500" />
+              </MenuIcon>
+              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+        </>
+      )}
     </MenuSub>
   );
 };

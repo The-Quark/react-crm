@@ -12,8 +12,10 @@ import {
 import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
 import { putCreateGlobalParameter } from './globalParameterPutApi';
 import { ParametersModel } from '@/api/getGlobalParameters/types.ts';
+import { useParams } from 'react-router';
 
 interface IParameterFormValues {
+  id: number;
   company_name: string;
   timezone: string;
   currency: string;
@@ -44,8 +46,10 @@ const createParameterSchema = Yup.object().shape({
 
 export const GlobalParameterUpdateForm: FC<IGeneralSettingsProps> = ({ title, parameter }) => {
   const [loading, setLoading] = useState(false);
+  const { id } = useParams<{ id: string }>();
 
   const initialValues: IParameterFormValues = {
+    id: Number(id),
     company_name: parameter?.company_name || '',
     timezone: parameter?.timezone || '',
     currency: parameter?.currency || 'USD',
@@ -60,12 +64,11 @@ export const GlobalParameterUpdateForm: FC<IGeneralSettingsProps> = ({ title, pa
   const formik = useFormik({
     initialValues,
     validationSchema: createParameterSchema,
-    onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true);
       setStatus(null);
       try {
         await putCreateGlobalParameter(values);
-        resetForm();
         setStatus('Global Parameters created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

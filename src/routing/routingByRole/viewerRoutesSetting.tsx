@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
-import { GlobalParameterViewPage } from '@/pages/global-parameters';
+import { GlobalParametersListPage, GlobalParameterViewPage } from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import ClientsPage from '@/pages/clients/clientsPage.tsx';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
@@ -21,7 +21,12 @@ const ViewerRoutesSetting = () => {
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/global-parameters" element={<GlobalParameterViewPage />} />
+
+        <Route path="/global-parameters/parameters" element={<GlobalParametersListPage />} />
+        <Route
+          path="/global-parameters/view-parameters/:id"
+          element={<GlobalParameterViewPage />}
+        />
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
         <Route path="/clients" element={<ClientsPage />} />
