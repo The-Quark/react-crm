@@ -12,6 +12,7 @@ import { useCurrentUser } from '@/api';
 import { AllMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/allMenuSideBar.ts';
 import { ViewerMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/viewerMenuSideBar.ts';
 import { CuttedMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/cuttedMenuSideBar.ts';
+import { controlAccessLogic } from '@/layouts/demo1/controlAccessLogic/controlAccessLogic.ts';
 
 // Interface defining the structure for layout provider properties
 export interface IDemo1LayoutProviderProps {
@@ -70,12 +71,7 @@ const Demo1LayoutProvider = ({ children }: PropsWithChildren) => {
   const { data: currentUser } = useCurrentUser();
   const userRole: string | undefined = currentUser?.roles?.[0]?.name;
 
-  const roleToMenu: Record<string, typeof MENU_SIDEBAR> = {
-    superadmin: AllMenuSideBar,
-    viewer: ViewerMenuSideBar
-  };
-
-  const selectedMenu = userRole && roleToMenu[userRole] ? roleToMenu[userRole] : CuttedMenuSideBar;
+  const selectedMenu = controlAccessLogic(userRole);
 
   const secondaryMenu = useMenuChildren(pathname, selectedMenu, 0); // Retrieves the secondary menu
 
