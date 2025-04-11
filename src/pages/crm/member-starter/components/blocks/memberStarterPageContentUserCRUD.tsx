@@ -1,5 +1,5 @@
 import { CrudAvatarUpload } from '@/partials/crud';
-import { type MouseEvent, useState } from 'react';
+import { type MouseEvent, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
@@ -8,6 +8,15 @@ import { AxiosError } from 'axios';
 import { KeenIcon } from '@/components';
 import clsx from 'clsx';
 import { IImageInputFile } from '@/components/image-input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select.tsx';
+import { Role } from '@/api/getRoles/types.ts';
+import { getRoles, useCurrentUser } from '@/api';
 
 interface IGeneralSettingsProps {
   title: string;
@@ -31,7 +40,8 @@ const createUserSchema = Yup.object().shape({
     .max(50, 'Maximum 50 symbols')
     .required('Name is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
-  position: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols')
+  position: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols'),
+  role: Yup.string().required('Role is required')
 });
 
 interface IUserFormValues {
@@ -42,6 +52,7 @@ interface IUserFormValues {
   location: string;
   position: string;
   avatar: IImageInputFile | null;
+  role: string;
 }
 
 const initialValues: IUserFormValues = {
@@ -51,12 +62,30 @@ const initialValues: IUserFormValues = {
   phone: '',
   location: '',
   position: '',
-  avatar: null
+  avatar: null,
+  role: ''
 };
 
 export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProps) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const { data: currentUser } = useCurrentUser();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const roleData = await getRoles(currentUser ? Number(currentUser.id) : 0, true);
+        setRoles(roleData.result);
+      } catch (err) {
+        console.error('Error fetching roleData:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const togglePassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -150,6 +179,32 @@ export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProp
             {formik.touched.phone && formik.errors.phone && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.phone}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+          <label className="form-label max-w-56">Role</label>
+          <div className="flex columns-1 w-full flex-wrap">
+            <Select
+              value={formik.values.role?.toString()}
+              onValueChange={(value) => formik.setFieldValue('role', String(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role.name} value={role.name.toString()}>
+                    {role.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {formik.touched.role && formik.errors.role && (
+              <span role="alert" className="text-danger text-xs mt-1">
+                {formik.errors.role}
               </span>
             )}
           </div>

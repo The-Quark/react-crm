@@ -5,7 +5,6 @@ import { CircularProgress } from '@mui/material';
 import { UserModel } from '@/api/getMemberById/types.ts';
 import { MemberRoleUpdatePageContentForm } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdatePageContentForm.tsx';
 import { RolePermissionsResponse } from '@/api/getRoles/types.ts';
-import { useAuthContext } from '@/auth';
 
 const MemberRoleUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();
