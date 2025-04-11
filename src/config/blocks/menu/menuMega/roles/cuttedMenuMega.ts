@@ -11,6 +11,6 @@ export const CuttedMenuMega: TMenuConfig = [
   },
   {
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
-    path: '/global-parameters/view-parameters'
+    path: '/global-parameters/view-parameters/1'
   }
 ];
