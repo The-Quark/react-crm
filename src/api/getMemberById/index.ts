@@ -9,7 +9,7 @@ export const getMemberById = async (id: number): Promise<UserModel> => {
     const response = await axios.get(USER_URL);
     return response.data[0].result;
   } catch (err) {
-    console.error('Ошибка запроса:', err);
+    console.error('Request error:', err);
     throw err;
   }
 };

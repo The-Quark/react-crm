@@ -15,9 +15,9 @@ import {
   MenuToggle
 } from '@/components';
 import { toast } from 'sonner';
-import { getParametersList } from './parametersApi.ts';
 import { CircularProgress } from '@mui/material';
 import { ParameterMenuOptions } from '@/pages/global-parameters/global-parameters-parameters/components/blocks/parametersMenuOptions.tsx';
+import { getGlobalParameters } from '@/api';
 
 interface ParametersModel {
   id: number;
@@ -47,7 +47,7 @@ export const ParametersDataGrid = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getParametersList()
+    getGlobalParameters()
       .then((parameters) => {
         const formattedData = parameters.result.map((parameter) => ({
           id: parameter.id,

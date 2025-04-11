@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-interface ParametersModel {
+export interface ParametersModel {
   id: number;
   company_name: string;
   timezone: string;
@@ -19,16 +17,7 @@ interface ParametersModel {
   created_at: string;
   updated_at: string;
 }
-interface ParametersListResponse {
+export interface ParametersListResponse {
   result: ParametersModel[];
   count: number;
 }
-
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const PARAMETERS_LIST_URL = `${API_URL}/company-global-settings/manage`;
-
-const getParametersList = async (): Promise<ParametersListResponse> => {
-  return await axios.get<ParametersListResponse>(PARAMETERS_LIST_URL).then((res) => res.data);
-};
-
-export { getParametersList };
