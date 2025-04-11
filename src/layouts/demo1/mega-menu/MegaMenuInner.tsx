@@ -7,12 +7,25 @@ import { useDemo1Layout } from '../Demo1LayoutProvider';
 import { MENU_MEGA } from '@/config';
 import { useLanguage } from '@/i18n';
 import { FormattedMessage } from 'react-intl';
+import { useCurrentUser } from '@/api';
+import { CuttedMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/cuttedMenuSideBar.ts';
+import { AllMenuMega } from '@/config/blocks/menu/menuMega/roles/allMenuMega.ts';
+import { ViewerMenuMega } from '@/config/blocks/menu/menuMega/roles/viewerMenuMega.ts';
 
 const MegaMenuInner = () => {
   const desktopMode = useResponsive('up', 'lg');
   const { isRTL } = useLanguage();
   const [disabled, setDisabled] = useState(true); // Initially set disabled to true
   const { layout, sidebarMouseLeave, setMegaMenuEnabled } = useDemo1Layout();
+  const { data: currentUser } = useCurrentUser();
+  const userRole: string | undefined = currentUser?.roles?.[0]?.name;
+
+  const roleToMenu: Record<string, typeof MENU_MEGA> = {
+    superadmin: AllMenuMega,
+    viewer: ViewerMenuMega
+  };
+
+  const selectedMenu = userRole && roleToMenu[userRole] ? roleToMenu[userRole] : CuttedMenuSideBar;
 
   // Change disabled state to false after a certain time (e.g., 5 seconds)
   useEffect(() => {
@@ -62,12 +75,21 @@ const MegaMenuInner = () => {
           </MenuLink>
         </MenuItem>
 
-        <MenuItem key="global parameters">
-          <MenuLink path={globalItem.path} className={linkClass}>
+        <MenuItem
+          key="global parameters"
+          toggle={desktopMode ? 'dropdown' : 'accordion'}
+          trigger={desktopMode ? 'hover' : 'click'}
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-end' : 'bottom-start'
+          }}
+        >
+          <MenuLink className={linkClass}>
             <MenuTitle className={titleClass}>
               <FormattedMessage id={globalItem.title} />
             </MenuTitle>
+            {buildArrow()}
           </MenuLink>
+          {MegaMenuSubWithSubSets(items, 2)}
         </MenuItem>
 
         <MenuItem key="clients">
@@ -165,7 +187,7 @@ const MegaMenuInner = () => {
       highlight={true}
       className="flex-col lg:flex-row gap-5 lg:gap-7.5 p-5 lg:p-0"
     >
-      {build(MENU_MEGA)}
+      {build(selectedMenu)}
     </Menu>
   );
 };
