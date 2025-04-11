@@ -8,9 +8,9 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { useLayout } from '@/providers';
-import { GlobalParameterStarterContent } from '@/pages/global-parameters/global-parameters-starter/components/globalParameterStarterContent.tsx';
+import { GlobalParameterStarterContent } from '@/pages/global-parameters/global-parameter-starter/components/globalParameterStarterContent.tsx';
 
-export const GlobalParametersStarter = () => {
+export const GlobalParameterStarter = () => {
   const { currentLayout } = useLayout();
   return (
     <Fragment>

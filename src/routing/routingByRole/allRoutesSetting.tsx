@@ -17,7 +17,7 @@ import {
   TeamsPage,
   TeamsStarterPage
 } from '@/pages/crm';
-import { GlobalParametersStarter, GlobalParametersParametersPage } from '@/pages/global-parameters';
+import { GlobalParameterStarter, GlobalParametersParametersPage } from '@/pages/global-parameters';
 import {
   CampaignsCardPage,
   CampaignsListPage,
@@ -106,7 +106,7 @@ const AllRoutesSetting = () => {
 
         <Route path="/profile" element={<ProfilePage />} />
 
-        <Route path="/global-parameters/starter-parameters" element={<GlobalParametersStarter />} />
+        <Route path="/global-parameters/starter-parameters" element={<GlobalParameterStarter />} />
         <Route path="/global-parameters/parameters" element={<GlobalParametersParametersPage />} />
 
         <Route path="/roles-permissions/roles" element={<RolesPage />} />

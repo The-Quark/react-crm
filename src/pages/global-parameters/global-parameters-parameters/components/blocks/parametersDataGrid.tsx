@@ -16,55 +16,60 @@ import {
 } from '@/components';
 import { toast } from 'sonner';
 import { getParametersList } from './parametersApi.ts';
-import { toAbsoluteUrl } from '@/utils/index.ts';
 import { CircularProgress } from '@mui/material';
 import { ParameterMenuOptions } from '@/pages/global-parameters/global-parameters-parameters/components/blocks/parametersMenuOptions.tsx';
 
-interface Member {
-  member: {
-    id?: number;
-    avatar?: string | null;
-    name: string;
-    position?: string | null;
-  };
-  role?: string;
-  location?: string | null;
-  recentlyActivity: string;
+interface ParametersModel {
+  id: number;
+  company_name: string;
+  timezone: string;
+  currency: string;
+  language: string;
+  legal_address: string;
+  warehouse_address: string;
+  airlines: string;
+  dimensions_per_place?: string;
+  cost_per_airplace?: string;
+  package_standard_box1?: string | null;
+  package_standard_box2?: string | null;
+  cost_package_box1?: string | null;
+  cost_package_box2?: string | null;
+  deleted_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
-const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 export const ParametersDataGrid = () => {
   const { isRTL } = useLanguage();
-  const [members, setMembers] = useState<Member[]>([]);
+  const [parameters, setParameters] = useState<ParametersModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     getParametersList()
-      .then((users) => {
-        const formattedData = users.result.map((user) => ({
-          member: {
-            id: user.id,
-            avatar: user.avatar,
-            name: user.name,
-            position: user.position ?? 'No position'
-          },
-          role: user.roles?.[0]?.name ?? 'No role',
-          location: user.location ?? 'No location',
-          recentlyActivity: new Date(user.updated_at).toLocaleString()
+      .then((parameters) => {
+        const formattedData = parameters.result.map((parameter) => ({
+          id: parameter.id,
+          company_name: parameter.company_name,
+          timezone: parameter.timezone,
+          currency: parameter.currency,
+          language: parameter.language,
+          legal_address: parameter.legal_address,
+          warehouse_address: parameter.warehouse_address,
+          airlines: parameter.airlines
         }));
-        setMembers(formattedData);
+        setParameters(formattedData);
       })
       .catch((error) => {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching global parameters:', error);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, [reload]);
 
-  const columns = useMemo<ColumnDef<Member>[]>(
+  const columns = useMemo<ColumnDef<ParametersModel>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -77,32 +82,21 @@ export const ParametersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.member.name,
-        id: 'member',
-        header: ({ column }) => <DataGridColumnHeader title="Member" column={column} />,
+        accessorFn: (row) => row.company_name,
+        id: 'company name',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
-            <div className="shrink-0">
-              <img
-                src={
-                  info.row.original.member.avatar
-                    ? `${STORAGE_URL}/${info.row.original.member.avatar}`
-                    : toAbsoluteUrl('/media/avatars/blank.png')
-                }
-                className="h-9 rounded-full"
-                alt="Avatar"
-              />
-            </div>
             <div className="flex flex-col gap-0.5">
               <a
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
                 href="#"
               >
-                {info.row.original.member.name}
+                {info.row.original.company_name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
-                {info.row.original.member.position}
+                {`Language: ${info.row.original.language}, Currency: ${info.row.original.currency}`}
               </span>
             </div>
           </div>
@@ -113,14 +107,14 @@ export const ParametersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.role,
-        id: 'roles',
-        header: ({ column }) => <DataGridColumnHeader title="Roles" column={column} />,
+        accessorFn: (row) => row.timezone,
+        id: 'timezone',
+        header: ({ column }) => <DataGridColumnHeader title="Timezone" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
             <span className="badge badge-sm badge-light badge-outline">
-              {info.row.original.role}
+              {info.row.original.timezone}
             </span>
           </div>
         ),
@@ -129,14 +123,14 @@ export const ParametersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.location,
-        id: 'location',
-        header: ({ column }) => <DataGridColumnHeader title="Location" column={column} />,
+        accessorFn: (row) => row.legal_address,
+        id: 'legal address',
+        header: ({ column }) => <DataGridColumnHeader title="Legal address" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.location}
+              {info.row.original.legal_address}
             </span>
           </div>
         ),
@@ -146,14 +140,35 @@ export const ParametersDataGrid = () => {
         }
       },
       {
-        accessorFn: (row) => row.recentlyActivity,
-        id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
+        accessorFn: (row) => row.warehouse_address,
+        id: 'warehouse address',
+        header: ({ column }) => <DataGridColumnHeader title="Warehouse address" column={column} />,
         enableSorting: true,
-        sortingFn: 'datetime',
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.warehouse_address}
+            </span>
+          </div>
+        ),
         meta: {
-          headerTitle: 'Recent activity',
+          headerClassName: 'min-w-[165px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.airlines,
+        id: 'airlines',
+        header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.airlines}
+            </span>
+          </div>
+        ),
+        meta: {
           headerClassName: 'min-w-[165px]',
           cellClassName: 'text-gray-700 font-normal'
         }
@@ -183,7 +198,7 @@ export const ParametersDataGrid = () => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {ParameterMenuOptions({
-                id: info.row.original.member.id,
+                id: info.row.original.id,
                 handleReload: () => setReload((prev) => !prev)
               })}
             </MenuItem>
@@ -216,7 +231,7 @@ export const ParametersDataGrid = () => {
 
     return (
       <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-        <h3 className="card-title">Members</h3>
+        <h3 className="card-title">Parameters</h3>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="relative">
@@ -226,10 +241,12 @@ export const ParametersDataGrid = () => {
             />
             <input
               type="text"
-              placeholder="Search Member"
+              placeholder="Search Company"
               className="input input-sm ps-8"
-              value={(table.getColumn('member')?.getFilterValue() as string) ?? ''}
-              onChange={(event) => table.getColumn('member')?.setFilterValue(event.target.value)}
+              value={(table.getColumn('company name')?.getFilterValue() as string) ?? ''}
+              onChange={(event) =>
+                table.getColumn('company name')?.setFilterValue(event.target.value)
+              }
             />
           </div>
           <DataGridColumnVisibility table={table} />
@@ -247,11 +264,11 @@ export const ParametersDataGrid = () => {
       ) : (
         <DataGrid
           columns={columns}
-          data={members}
+          data={parameters}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
-          sorting={[{ id: 'member', desc: false }]}
+          sorting={[{ id: 'id', desc: false }]}
           toolbar={<Toolbar />}
           layout={{ card: true }}
         />

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useLanguage } from '@/i18n';
 import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
-import { postCreateGlobalParameter } from '@/pages/global-parameters/global-parameters-starter/components/blocks/globalParameterCreateApi.ts';
+import { postCreateGlobalParameter } from '@/pages/global-parameters/global-parameter-starter/components/blocks/globalParameterCreateApi.ts';
 interface IGeneralSettingsProps {
   title: string;
 }

@@ -1,4 +1,4 @@
-import { GlobalParameterCreateFrom } from '@/pages/global-parameters/global-parameters-starter/components/blocks/globalParameterCreateForm.tsx';
+import { GlobalParameterCreateFrom } from '@/pages/global-parameters/global-parameter-starter/components/blocks/globalParameterCreateForm.tsx';
 
 const GlobalParameterStarterContent = () => {
   return (

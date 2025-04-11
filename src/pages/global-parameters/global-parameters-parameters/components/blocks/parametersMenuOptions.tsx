@@ -11,7 +11,7 @@ import { FC } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-interface MemberMenuOptionsProps {
+interface ParameterMenuOptionsProps {
   id?: number;
   handleReload: () => void;
 }
@@ -19,31 +19,39 @@ interface MemberMenuOptionsProps {
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const PARAMETER_DELETE_URL = `${API_URL}/company-global-settings/manage`;
 
-const deleteUser = async (id: number) => {
+const deleteParameter = async (id: number) => {
   try {
     await axios.delete(`${PARAMETER_DELETE_URL}/?id=${id}`);
   } catch (error) {
     console.error('Error deleting user:', error);
   }
 };
-const ParameterMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => {
+const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const handleDelete = () => {
     if (id) {
-      deleteUser(id);
+      deleteParameter(id);
       setTimeout(() => {
         handleReload();
       }, 500);
     } else {
-      toast.error('User ID not provided');
+      toast.error('Parameter ID not provided');
     }
   };
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/crm/member-update/${id}`}>
+        <MenuLink path={`/global-parameter-starter/${id}`}>
           <MenuIcon>
-            <KeenIcon icon="user-edit" />
+            <KeenIcon icon="more-2" />
+          </MenuIcon>
+          <MenuTitle>View Parameter</MenuTitle>
+        </MenuLink>
+      </MenuItem>
+      <MenuItem>
+        <MenuLink path={`/global-parameter-update/${id}`}>
+          <MenuIcon>
+            <KeenIcon icon="setting-4" />
           </MenuIcon>
           <MenuTitle>Edit Parameter</MenuTitle>
         </MenuLink>
