@@ -44,7 +44,6 @@ export const ProfilePage = () => {
       <Container>
         <Navbar>
           <PageMenu />
-
           <NavbarActions>
             <button type="button" className="btn btn-sm btn-primary">
               <KeenIcon icon="users" /> Connect

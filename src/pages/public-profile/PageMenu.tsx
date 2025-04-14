@@ -3,7 +3,7 @@ import { NavbarMenu } from '@/partials/menu/NavbarMenu';
 
 const PageMenu = () => {
   const { getMenuConfig } = useMenus();
-  const menuConfig = getMenuConfig('primary');
+  const menuConfig = getMenuConfig('sidebar');
   const accountMenuConfig = menuConfig?.['3']?.children;
 
   if (accountMenuConfig) {
