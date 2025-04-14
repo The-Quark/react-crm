@@ -25,9 +25,16 @@ const AppRoutingSetup = (): ReactElement => {
         {!isLoading && currentUser && currentUser.roles[0].name === 'viewer' && (
           <Route path="/*" element={<ViewerRoutesSetting />} />
         )}
-        {!isLoading && currentUser && currentUser.roles[0].name && (
-          <Route path="/*" element={<CuttedRoutesSetting />} />
-        )}
+        {!isLoading &&
+          currentUser &&
+          !['superadmin', 'viewer'].includes(currentUser.roles[0].name) && (
+            <Route
+              path="/*"
+              element={
+                <CuttedRoutesSetting permissions={currentUser.permissions.map((p) => p.name)} />
+              }
+            />
+          )}
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />
