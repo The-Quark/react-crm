@@ -16,8 +16,8 @@ import {
 } from '@/components';
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
-import { ParameterMenuOptions } from '@/pages/global-parameters/global-parameters-list/components/blocks/parametersMenuOptions.tsx';
 import { getGlobalParameters } from '@/api';
+import { ClientsListMenuOptions } from '@/pages/clients/clients-list/components/blocks/clientsListMenuOptions.tsx';
 
 interface ParametersModel {
   id: number;
@@ -39,7 +39,7 @@ interface ParametersModel {
   updated_at?: string;
 }
 
-export const ParametersDataGrid = () => {
+export const ClientsListContent = () => {
   const { isRTL } = useLanguage();
   const [parameters, setParameters] = useState<ParametersModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -197,7 +197,7 @@ export const ParametersDataGrid = () => {
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {ParameterMenuOptions({
+              {ClientsListMenuOptions({
                 id: info.row.original.id,
                 handleReload: () => setReload((prev) => !prev)
               })}
@@ -256,7 +256,7 @@ export const ParametersDataGrid = () => {
   };
 
   return (
-    <>
+    <div className="grid gap-5 lg:gap-7.5">
       {isLoading ? (
         <div className="card flex justify-center items-center p-5">
           <CircularProgress />
@@ -273,6 +273,6 @@ export const ParametersDataGrid = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </div>
   );
 };
