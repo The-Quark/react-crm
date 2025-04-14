@@ -11,6 +11,12 @@ import {
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
+import {
+  MemberRoleUpdatePage,
+  MembersPage,
+  MemberStarterPage,
+  MemberUpdatePage
+} from '@/pages/crm';
 
 interface Props {
   permissions: string[];
@@ -44,6 +50,19 @@ const routeConfig = [
     routes: [
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
     ]
+  },
+  {
+    permission: 'manage users',
+    routes: [
+      { path: '/crm/member-starter', element: <MemberStarterPage /> },
+      { path: '/crm/member-role-update/:id', element: <MemberRoleUpdatePage /> },
+      { path: '/crm/member-update/:id', element: <MemberUpdatePage /> },
+      { path: '/crm/members', element: <MembersPage /> }
+    ]
+  },
+  {
+    permission: 'view users',
+    routes: [{ path: '/crm/members', element: <MembersPage /> }]
   }
 ];
 

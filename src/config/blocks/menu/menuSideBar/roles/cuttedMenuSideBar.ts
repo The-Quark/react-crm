@@ -50,5 +50,28 @@ export const CuttedMenuSideBar: TMenuConfig = [
     icon: 'icon',
     path: '/global-parameters/view-parameters/:id',
     requiredPermissions: ['view global contexted settings']
+  },
+  //"manage users"
+  {
+    title: 'MENU.MEGAMENU.CRM',
+    icon: 'users',
+    requiredPermissions: ['manage users'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CRM.MEMBERS_STARTER',
+        path: '/crm/member-starter'
+      },
+      {
+        title: 'MENU.MEGAMENU.CRM.MEMBERS',
+        path: '/crm/members'
+      }
+    ]
+  },
+  //"view users"
+  {
+    title: 'MENU.MEGAMENU.CRM',
+    icon: 'users',
+    path: '/crm/members',
+    requiredPermissions: ['view users']
   }
 ];
