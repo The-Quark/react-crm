@@ -4,6 +4,23 @@ import { ViewerMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/viewer
 import { CuttedMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/cuttedMenuSideBar.ts';
 import { TMenuConfig } from '@/components';
 
+const permissionSuppressionMap: Record<string, string[]> = {
+  'manage global settings': ['manage global contexted settings'],
+  'view global settings': ['view global contexted settings']
+};
+
+const suppressLowerPermissions = (permissions: string[]): string[] => {
+  const permissionSet = new Set(permissions);
+
+  for (const [higher, suppressedList] of Object.entries(permissionSuppressionMap)) {
+    if (permissionSet.has(higher)) {
+      suppressedList.forEach((lower) => permissionSet.delete(lower));
+    }
+  }
+
+  return Array.from(permissionSet);
+};
+
 const filterMenuByPermissions = (menu: TMenuConfig, permissions: string[]): TMenuConfig => {
   return menu
     .map((item) => {
@@ -37,5 +54,6 @@ export const controlAccessLogic = (
   if (role && roleToMenu[role]) {
     return roleToMenu[role];
   }
-  return filterMenuByPermissions(CuttedMenuSideBar, permissions);
+  const finalPermissions = suppressLowerPermissions(permissions);
+  return filterMenuByPermissions(CuttedMenuSideBar, finalPermissions);
 };

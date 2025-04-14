@@ -32,21 +32,21 @@ export const CuttedMenuSideBar: TMenuConfig = [
   },
   //"view global settings"
   {
-    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
+    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     path: '/global-parameters/parameters',
     requiredPermissions: ['view global settings']
   },
   //"manage global contexted settings"
   {
-    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
+    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     path: '/global-parameters/view-parameters/:id',
     requiredPermissions: ['manage global contexted settings']
   },
   //"view global contexted settings"
   {
-    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
+    title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     path: '/global-parameters/view-parameters/:id',
     requiredPermissions: ['view global contexted settings']
