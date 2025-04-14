@@ -18,6 +18,7 @@ import {
   MemberStarterPage,
   MemberUpdatePage
 } from '@/pages/crm';
+import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 
 interface Props {
   permissions: string[];
@@ -68,6 +69,18 @@ const routeConfig = [
       { path: '/crm/members', element: <MembersPage /> },
       { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
     ]
+  },
+  {
+    permission: 'manage clients',
+    routes: [
+      { path: '/clients/starter-clients', element: <ClientStarterPage /> },
+      { path: '/clients', element: <ClientsListPage /> },
+      { path: '/clients/client-update/:id', element: <ClientUpdatePage /> }
+    ]
+  },
+  {
+    permission: 'view clients',
+    routes: [{ path: '/clients', element: <ClientsListPage /> }]
   }
 ];
 

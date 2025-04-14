@@ -20,7 +20,7 @@ export const ViewerMenuSideBar: TMenuConfig = [
     path: '/global-parameters/parameters'
   },
   {
-    title: 'MENU.MEGAMENU.CLIENTS',
+    title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
     icon: 'badge',
     path: '/clients'
   },

@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
-import ClientsPage from '@/pages/clients/clientsPage.tsx';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
@@ -103,6 +102,7 @@ import {
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
+import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 
 const AllRoutesSetting = () => {
   return (
@@ -129,7 +129,9 @@ const AllRoutesSetting = () => {
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
 
-        <Route path="/clients" element={<ClientsPage />} />
+        <Route path="/clients" element={<ClientsListPage />} />
+        <Route path="/clients/starter-clients" element={<ClientStarterPage />} />
+        <Route path="/clients/client-update/:id" element={<ClientUpdatePage />} />
 
         <Route path="/hr-module/staff" element={<StaffPage />} />
         <Route path="/hr-module/drivers" element={<DriversPage />} />

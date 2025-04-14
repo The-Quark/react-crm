@@ -73,5 +73,28 @@ export const CuttedMenuSideBar: TMenuConfig = [
     icon: 'users',
     path: '/crm/members',
     requiredPermissions: ['view users']
+  },
+  //"manage clients"
+  {
+    title: 'MENU.MEGAMENU.CLIENTS',
+    icon: 'badge',
+    requiredPermissions: ['manage clients'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS_STARTER',
+        path: '/clients/starter-clients'
+      },
+      {
+        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
+        path: '/clients'
+      }
+    ]
+  },
+  //"view clients"
+  {
+    title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
+    icon: 'badge',
+    path: '/clients',
+    requiredPermissions: ['view clients']
   }
 ];

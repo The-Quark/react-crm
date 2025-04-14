@@ -31,7 +31,16 @@ export const AllMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.CLIENTS',
     icon: 'badge',
-    path: '/clients'
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS_STARTER',
+        path: '/clients/starter-clients'
+      },
+      {
+        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
+        path: '/clients'
+      }
+    ]
   },
   {
     title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
