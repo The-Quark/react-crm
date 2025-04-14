@@ -95,12 +95,9 @@ export const MembersDataGrid = () => {
               />
             </div>
             <div className="flex flex-col gap-0.5">
-              <a
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                href="#"
-              >
+              <div className="leading-none font-medium text-sm text-gray-900">
                 {info.row.original.member.name}
-              </a>
+              </div>
               <span className="text-2sm text-gray-700 font-normal">
                 {info.row.original.member.position}
               </span>

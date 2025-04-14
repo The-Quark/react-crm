@@ -46,7 +46,7 @@ const MemberMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`#`}>
+        <MenuLink path={`/crm/member/profile/${id}`}>
           <MenuIcon>
             <KeenIcon icon="user" />
           </MenuIcon>

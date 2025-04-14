@@ -4,6 +4,7 @@ interface Role {
   guard_name: string;
   created_at: string;
   updated_at: string;
+  nicename?: string;
   pivot: {
     model_type: string;
     model_id: number;

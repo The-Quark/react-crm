@@ -12,6 +12,7 @@ import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import {
+  MemberPublicProfilePage,
   MemberRoleUpdatePage,
   MembersPage,
   MemberStarterPage,
@@ -57,12 +58,16 @@ const routeConfig = [
       { path: '/crm/member-starter', element: <MemberStarterPage /> },
       { path: '/crm/member-role-update/:id', element: <MemberRoleUpdatePage /> },
       { path: '/crm/member-update/:id', element: <MemberUpdatePage /> },
-      { path: '/crm/members', element: <MembersPage /> }
+      { path: '/crm/members', element: <MembersPage /> },
+      { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
     ]
   },
   {
     permission: 'view users',
-    routes: [{ path: '/crm/members', element: <MembersPage /> }]
+    routes: [
+      { path: '/crm/members', element: <MembersPage /> },
+      { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
+    ]
   }
 ];
 

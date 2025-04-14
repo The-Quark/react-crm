@@ -15,7 +15,8 @@ import {
   MemberStarterPage,
   MemberUpdatePage,
   TeamsPage,
-  TeamsStarterPage
+  TeamsStarterPage,
+  MemberPublicProfilePage
 } from '@/pages/crm';
 import {
   GlobalParameterStarterPage,
@@ -143,6 +144,7 @@ const AllRoutesSetting = () => {
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
         <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
         <Route path="/crm/members" element={<MembersPage />} />
+        <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
 
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
