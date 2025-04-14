@@ -9,10 +9,8 @@ import { ILayoutConfig, useLayout } from '@/providers';
 import { deepMerge } from '@/utils';
 import { demo1LayoutConfig } from './';
 import { useCurrentUser } from '@/api';
-import { AllMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/allMenuSideBar.ts';
-import { ViewerMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/viewerMenuSideBar.ts';
-import { CuttedMenuSideBar } from '@/config/blocks/menu/menuSideBar/roles/cuttedMenuSideBar.ts';
 import { controlAccessLogic } from '@/layouts/demo1/controlAccessLogic/controlAccessLogic.ts';
+import { useUserPermissions } from '@/hooks';
 
 // Interface defining the structure for layout provider properties
 export interface IDemo1LayoutProviderProps {
@@ -70,8 +68,9 @@ const Demo1LayoutProvider = ({ children }: PropsWithChildren) => {
   const { setMenuConfig } = useMenus(); // Accesses menu configuration methods
   const { data: currentUser } = useCurrentUser();
   const userRole: string | undefined = currentUser?.roles?.[0]?.name;
+  const { list: permissions } = useUserPermissions();
 
-  const selectedMenu = controlAccessLogic(userRole);
+  const selectedMenu = controlAccessLogic(userRole, permissions);
 
   const secondaryMenu = useMenuChildren(pathname, selectedMenu, 0); // Retrieves the secondary menu
 

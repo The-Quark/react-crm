@@ -8,8 +8,12 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 import { GlobalParameterViewContent } from '@/pages/global-parameters/global-parameter-view/components/globalParamaterViewContent.tsx';
+import { useUserPermissions } from '@/hooks';
 
 export const GlobalParameterViewPage = () => {
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || has('manage global contexted settings') || has('everything');
   return (
     <Fragment>
       <Container>
@@ -22,9 +26,14 @@ export const GlobalParameterViewPage = () => {
             <a href="#" className="btn btn-sm btn-light">
               Test Button
             </a>
-            <a href="#" className="btn btn-sm btn-primary">
-              Test Button
-            </a>
+            {canManageGlobalSettings && (
+              <a
+                href={`/global-parameters/update-parameters/${1}`}
+                className="btn btn-sm btn-primary"
+              >
+                Edit Global Parameters
+              </a>
+            )}
           </ToolbarActions>
         </Toolbar>
       </Container>

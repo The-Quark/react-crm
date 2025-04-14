@@ -11,6 +11,7 @@ import { FC } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface ParameterMenuOptionsProps {
   id?: number;
@@ -29,6 +30,10 @@ const deleteParameter = async (id: number) => {
 };
 const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+
   const handleDelete = () => {
     if (id) {
       deleteParameter(id);
@@ -50,7 +55,7 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
           <MenuTitle>View Parameter</MenuTitle>
         </MenuLink>
       </MenuItem>
-      {currentUser?.roles[0].name === 'superadmin' && (
+      {canManageGlobalSettings && (
         <>
           <MenuItem>
             <MenuLink path={`/global-parameters/update-parameters/${id}`}>

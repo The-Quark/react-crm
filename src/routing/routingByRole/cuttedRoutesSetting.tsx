@@ -28,6 +28,20 @@ const routeConfig = [
   {
     permission: 'view global settings',
     routes: [
+      { path: '/global-parameters/parameters', element: <GlobalParametersListPage /> },
+      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
+    ]
+  },
+  {
+    permission: 'manage global contexted settings',
+    routes: [
+      { path: '/global-parameters/update-parameters/:id', element: <GlobalParameterUpdatePage /> },
+      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
+    ]
+  },
+  {
+    permission: 'view global contexted settings',
+    routes: [
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
     ]
   }

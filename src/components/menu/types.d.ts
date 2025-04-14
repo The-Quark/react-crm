@@ -174,6 +174,7 @@ export interface IMenuItemConfig {
   trigger?: TMenuItemTrigger;
   children?: IMenuItemConfig[];
   childrenIndex?: number;
+  requiredPermissions?: string[];
 }
 
 export type TMenuConfig = IMenuItemConfig[];
