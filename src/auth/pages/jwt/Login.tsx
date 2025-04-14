@@ -1,5 +1,5 @@
 import { type MouseEvent, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -24,8 +24,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuthContext();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  const from = '/';
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
