@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useLocation } from 'react-router';
-
 import { KeenIcon } from '@/components';
 import { TMenuBreadcrumbs, useMenuBreadcrumbs } from '@/components/menu';
 import { useMenus } from '@/providers';
+import { FormattedMessage } from 'react-intl';
 
 const Breadcrumbs = () => {
   const { pathname } = useLocation();
@@ -22,7 +22,7 @@ const Breadcrumbs = () => {
             className={clsx(item.active ? 'text-gray-700' : 'text-gray-700')}
             key={`item-${index}`}
           >
-            {item.title}
+            <FormattedMessage id={item.title} />
           </span>
           {!last && (
             <KeenIcon icon="right" className="text-gray-500 text-3xs" key={`separator-${index}`} />
