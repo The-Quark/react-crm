@@ -7,30 +7,26 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { useLayout } from '@/providers';
 import { TeamsStarterPageContent } from './components/teamsStarterPageContent';
 
 export const TeamsStarterPage = () => {
-  const { currentLayout } = useLayout();
   return (
     <Fragment>
-      {currentLayout?.name === 'demo1-layout' && (
-        <Container>
-          <Toolbar>
-            <ToolbarHeading>
-              <ToolbarPageTitle />
-              <ToolbarDescription>
-                Efficient team organization with real-time updates
-              </ToolbarDescription>
-            </ToolbarHeading>
-            <ToolbarActions>
-              <a href="#" className="btn btn-sm btn-light">
-                Plans
-              </a>
-            </ToolbarActions>
-          </Toolbar>
-        </Container>
-      )}
+      <Container>
+        <Toolbar>
+          <ToolbarHeading>
+            <ToolbarPageTitle />
+            <ToolbarDescription>
+              Efficient team organization with real-time updates
+            </ToolbarDescription>
+          </ToolbarHeading>
+          <ToolbarActions>
+            <a href="#" className="btn btn-sm btn-light">
+              Plans
+            </a>
+          </ToolbarActions>
+        </Toolbar>
+      </Container>
 
       <Container>
         <TeamsStarterPageContent />

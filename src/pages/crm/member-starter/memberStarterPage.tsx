@@ -7,32 +7,27 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { useLayout } from '@/providers';
 import { MemberStarterPageContent } from './components/memberStarterPageContent.tsx';
 
 export const MemberStarterPage = () => {
-  const { currentLayout } = useLayout();
-
   return (
     <Fragment>
-      {currentLayout?.name === 'demo1-layout' && (
-        <Container>
-          <Toolbar>
-            <ToolbarHeading>
-              <ToolbarPageTitle />
-              <ToolbarDescription>Overview of all team members and roles.</ToolbarDescription>
-            </ToolbarHeading>
-            <ToolbarActions>
-              <a href="#" className="btn btn-sm btn-light">
-                Invite with Link
-              </a>
-              <a href="#" className="btn btn-sm btn-primary">
-                Invite People
-              </a>
-            </ToolbarActions>
-          </Toolbar>
-        </Container>
-      )}
+      <Container>
+        <Toolbar>
+          <ToolbarHeading>
+            <ToolbarPageTitle />
+            <ToolbarDescription>Overview of all team members and roles.</ToolbarDescription>
+          </ToolbarHeading>
+          <ToolbarActions>
+            <a href="#" className="btn btn-sm btn-light">
+              Invite with Link
+            </a>
+            <a href="#" className="btn btn-sm btn-primary">
+              Invite People
+            </a>
+          </ToolbarActions>
+        </Toolbar>
+      </Container>
 
       <Container>
         <MemberStarterPageContent />

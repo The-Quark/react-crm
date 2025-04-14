@@ -7,29 +7,24 @@ import {
   ToolbarHeading,
   ToolbarPageTitle
 } from '@/partials/toolbar';
-import { useLayout } from '@/providers';
-import { RolesPageContent } from './components/rolesPageContent';
+import { RolesPageContent } from './components/rolesPageContent.tsx';
 
 export const RolesPage = () => {
-  const { currentLayout } = useLayout();
-
   return (
     <Fragment>
-      {currentLayout?.name === 'demo1-layout' && (
-        <Container>
-          <Toolbar>
-            <ToolbarHeading>
-              <ToolbarPageTitle />
-              <ToolbarDescription>Overview of all team members and roles.</ToolbarDescription>
-            </ToolbarHeading>
-            <ToolbarActions>
-              <a href="#" className="btn btn-sm btn-light">
-                New Role
-              </a>
-            </ToolbarActions>
-          </Toolbar>
-        </Container>
-      )}
+      <Container>
+        <Toolbar>
+          <ToolbarHeading>
+            <ToolbarPageTitle />
+            <ToolbarDescription>Overview of all team members and roles.</ToolbarDescription>
+          </ToolbarHeading>
+          <ToolbarActions>
+            <a href="#" className="btn btn-sm btn-light">
+              Test Button
+            </a>
+          </ToolbarActions>
+        </Toolbar>
+      </Container>
 
       <Container>
         <RolesPageContent />
