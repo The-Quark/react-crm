@@ -34,7 +34,7 @@ const ResetPasswordCheckEmail = () => {
 
         <div className="flex items-center justify-center gap-1">
           <span className="text-xs text-gray-600">Didn’t receive an email?</span>
-          <Link to="/auth/reset-password_token" className="text-xs font-medium link">
+          <Link to="/auth/reset-password" className="text-xs font-medium link">
             Resend
           </Link>
         </div>

@@ -42,7 +42,7 @@ const ResetPassword = () => {
         const params = new URLSearchParams();
         params.append('email', values.email);
         navigate({
-          pathname: '/auth/reset-password_token/check-email',
+          pathname: '/auth/reset-password/check-email',
           search: params.toString()
         });
       } catch (error) {

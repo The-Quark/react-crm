@@ -25,7 +25,7 @@ const ResetPasswordEnterEmail = () => {
         </div>
 
         <Link
-          to="/auth/reset-password_token/check-email"
+          to="/auth/reset-password/check-email"
           className="btn btn-primary flex justify-center grow"
         >
           Continue

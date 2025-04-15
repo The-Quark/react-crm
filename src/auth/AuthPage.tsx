@@ -20,11 +20,11 @@ const AuthPage = () => (
       <Route path="/signup" element={<Signup />} />
       <Route path="/2fa" element={<TwoFactorAuth />} />
       <Route path="/check-email" element={<CheckEmail />} />
-      <Route path="/reset-password_token" element={<ResetPassword />} />
-      <Route path="/reset-password_token/enter-email" element={<ResetPasswordEnterEmail />} />
-      <Route path="/reset-password_token/check-email" element={<ResetPasswordCheckEmail />} />
-      <Route path="/password_recovery_change_token" element={<ResetPasswordChange />} />
-      <Route path="/reset-password_token/changed" element={<ResetPasswordChanged />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/reset-password/enter-email" element={<ResetPasswordEnterEmail />} />
+      <Route path="/reset-password/check-email" element={<ResetPasswordCheckEmail />} />
+      <Route path="/reset-password/password-change" element={<ResetPasswordChange />} />
+      <Route path="/reset-password/changed" element={<ResetPasswordChanged />} />
       <Route path="*" element={<Navigate to="/error/404" />} />
     </Route>
   </Routes>
