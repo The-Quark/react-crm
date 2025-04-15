@@ -497,19 +497,19 @@ export const AllMenuSideBar: TMenuConfig = [
             children: [
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.CLASSIC.RESET_PASSWORD.ENTER_EMAIL',
-                path: '/auth/classic/reset-password/enter-email'
+                path: '/auth/classic/reset-password_token/enter-email'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.CLASSIC.RESET_PASSWORD.CHECK_EMAIL',
-                path: '/auth/classic/reset-password/check-email'
+                path: '/auth/classic/reset-password_token/check-email'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.CLASSIC.RESET_PASSWORD.CHANGE',
-                path: '/auth/classic/reset-password/change'
+                path: '/auth/classic/reset-password_token/change'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.CLASSIC.RESET_PASSWORD.CHANGED',
-                path: '/auth/classic/reset-password/changed'
+                path: '/auth/classic/reset-password_token/changed'
               }
             ]
           }
@@ -539,19 +539,19 @@ export const AllMenuSideBar: TMenuConfig = [
             children: [
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.BRANDED.RESET_PASSWORD.ENTER_EMAIL',
-                path: '/auth/reset-password/enter-email'
+                path: '/auth/reset-password_token/enter-email'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.BRANDED.RESET_PASSWORD.CHECK_EMAIL',
-                path: '/auth/reset-password/check-email'
+                path: '/auth/reset-password_token/check-email'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.BRANDED.RESET_PASSWORD.CHANGE',
-                path: '/auth/reset-password/change'
+                path: '/auth/reset-password_token/change'
               },
               {
                 title: 'MENU.MEGAMENU.AUTHENTICATION.BRANDED.RESET_PASSWORD.CHANGED',
-                path: '/auth/reset-password/changed'
+                path: '/auth/reset-password_token/changed'
               }
             ]
           }

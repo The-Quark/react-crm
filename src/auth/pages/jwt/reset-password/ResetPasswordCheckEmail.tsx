@@ -16,12 +16,12 @@ const ResetPasswordCheckEmail = () => {
           <img
             src={toAbsoluteUrl('/media/illustrations/30.svg')}
             className="dark:hidden max-h-[130px]"
-            alt=""
+            alt="illustration"
           />
           <img
             src={toAbsoluteUrl('/media/illustrations/30-dark.svg')}
             className="light:hidden max-h-[130px]"
-            alt=""
+            alt="illustration-dark"
           />
         </div>
 
@@ -32,15 +32,9 @@ const ResetPasswordCheckEmail = () => {
           to reset your password. Thank you
         </div>
 
-        <div className="flex justify-center mb-5">
-          <Link to="/auth/reset-password/changed" className="btn btn-primary flex justify-center">
-            Skip for now
-          </Link>
-        </div>
-
         <div className="flex items-center justify-center gap-1">
           <span className="text-xs text-gray-600">Didn’t receive an email?</span>
-          <Link to="/auth/reset-password/enter-email" className="text-xs font-medium link">
+          <Link to="/auth/reset-password_token" className="text-xs font-medium link">
             Resend
           </Link>
         </div>

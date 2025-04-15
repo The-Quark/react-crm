@@ -48,7 +48,7 @@ const ResetPasswordChange = () => {
       try {
         await changePassword(email, token, values.newPassword);
         setHasErrors(false);
-        navigate('/auth/reset-password/changed');
+        navigate('/auth/reset-password_token/changed');
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           setStatus(error.response.data.message);

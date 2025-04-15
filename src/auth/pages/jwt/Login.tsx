@@ -129,7 +129,7 @@ const Login = () => {
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between gap-1">
             <label className="form-label text-gray-900">Password</label>
-            <Link to="/auth/reset-password" className="text-2sm link shrink-0">
+            <Link to="/auth/reset-password_token" className="text-2sm link shrink-0">
               Forgot Password?
             </Link>
           </div>

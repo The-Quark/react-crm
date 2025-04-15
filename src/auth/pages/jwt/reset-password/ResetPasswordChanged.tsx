@@ -9,12 +9,12 @@ const ResetPasswordChanged = () => {
           <img
             src={toAbsoluteUrl('/media/illustrations/32.svg')}
             className="dark:hidden max-h-[180px]"
-            alt=""
+            alt="illustration"
           />
           <img
             src={toAbsoluteUrl('/media/illustrations/32-dark.svg')}
             className="light:hidden max-h-[180px]"
-            alt=""
+            alt="illustrations-dark"
           />
         </div>
 

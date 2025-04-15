@@ -42,12 +42,12 @@ const ResetPassword = () => {
         const params = new URLSearchParams();
         params.append('email', values.email);
         navigate({
-          pathname: '/auth/reset-password/check-email',
+          pathname: '/auth/reset-password_token/check-email',
           search: params.toString()
         });
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
-          setStatus(error.response.data.message);
+          setStatus(error.response.data.message || error.response.data.result);
         } else {
           setStatus('Password reset failed. Please try again.');
         }
