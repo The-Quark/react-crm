@@ -93,11 +93,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const changePassword = async (email: string, token: string, password: string) => {
-    await axios.post(RESET_PASSWORD_URL, {
-      email,
-      token,
-      password
-    });
+    await axios.post(
+      RESET_PASSWORD_URL,
+      {
+        email,
+        token,
+        password
+      },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   };
 
   const getUser = async () => {
