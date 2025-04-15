@@ -46,7 +46,7 @@ const ResetPasswordChange = () => {
       }
 
       try {
-        await changePassword(email, token, values.newPassword, values.confirmPassword);
+        await changePassword(email, token, values.newPassword);
         setHasErrors(false);
         navigate('/auth/reset-password/changed');
       } catch (error) {
@@ -72,7 +72,9 @@ const ResetPasswordChange = () => {
       >
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900">Reset Password</h3>
-          <span className="text-2sm text-gray-700">Enter your new password</span>
+          <span className="text-2sm text-gray-700">
+            {new URLSearchParams(window.location.search).get('email') || 'Enter your new password'}
+          </span>
         </div>
 
         {hasErrors && <Alert variant="danger">{formik.status}</Alert>}

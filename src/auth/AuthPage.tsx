@@ -23,7 +23,7 @@ const AuthPage = () => (
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/reset-password/enter-email" element={<ResetPasswordEnterEmail />} />
       <Route path="/reset-password/check-email" element={<ResetPasswordCheckEmail />} />
-      <Route path="/reset-password/change" element={<ResetPasswordChange />} />
+      <Route path="/password_recovery_change" element={<ResetPasswordChange />} />
       <Route path="/reset-password/changed" element={<ResetPasswordChanged />} />
       <Route path="*" element={<Navigate to="/error/404" />} />
     </Route>

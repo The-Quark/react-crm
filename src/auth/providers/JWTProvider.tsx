@@ -16,8 +16,8 @@ import { useQueryClient } from '@tanstack/react-query';
 const API_URL = import.meta.env.VITE_APP_API_URL;
 export const LOGIN_URL = `${API_URL}/auth/login`;
 export const REGISTER_URL = `${API_URL}/register`;
-export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
-export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
+export const FORGOT_PASSWORD_URL = `${API_URL}/auth/password_recovery_send_token`;
+export const RESET_PASSWORD_URL = `${API_URL}/auth/password_recovery_change_token`;
 export const GET_USER_URL = `${API_URL}/users/manage`;
 
 interface AuthContextProps {
@@ -32,12 +32,7 @@ interface AuthContextProps {
   loginWithGithub?: () => Promise<void>;
   register: (email: string, password: string, password_confirmation: string) => Promise<void>;
   requestPasswordResetLink: (email: string) => Promise<void>;
-  changePassword: (
-    email: string,
-    token: string,
-    password: string,
-    password_confirmation: string
-  ) => Promise<void>;
+  changePassword: (email: string, token: string, password: string) => Promise<void>;
   getUser: () => Promise<AxiosResponse<any>>;
   logout: () => void;
   verify: () => Promise<void>;
@@ -97,17 +92,11 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     });
   };
 
-  const changePassword = async (
-    email: string,
-    token: string,
-    password: string,
-    password_confirmation: string
-  ) => {
+  const changePassword = async (email: string, token: string, password: string) => {
     await axios.post(RESET_PASSWORD_URL, {
       email,
       token,
-      password,
-      password_confirmation
+      password
     });
   };
 
