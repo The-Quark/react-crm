@@ -10,11 +10,11 @@ const ClientStarterContent = () => {
       <div className="card pb-2.5">
         <div className="card-header" id="general_settings">
           <div className="flex-col items-center gap-2.5">
-            <label className="form-label max-w-56 text-xl mb-2.5">Client type</label>
+            <label className="form-label max-w-56 text-base mb-2.5">Client type</label>
             <div className="flex items-center gap-5">
               <label className="radio-group">
                 <input
-                  className="radio"
+                  className="radio-sm"
                   name="clientType"
                   type="radio"
                   value="individual"
@@ -25,7 +25,7 @@ const ClientStarterContent = () => {
               </label>
               <label className="radio-group">
                 <input
-                  className="radio"
+                  className="radio-sm"
                   name="clientType"
                   type="radio"
                   value="legal"

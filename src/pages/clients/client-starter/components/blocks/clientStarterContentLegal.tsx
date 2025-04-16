@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -6,181 +6,264 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { airlinesMock, curreniesMock, localesMock, timezoneMock } from '@/lib/mocks.ts';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
+import { cn } from '@/lib/utils.ts';
+import { KeenIcon } from '@/components';
+import { CalendarDate } from '@/components/ui/calendarDate.tsx';
+import { Textarea } from '@/components/ui/textarea.tsx';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { fieldActivityOptions } from '@/lib/mocks.ts';
+
+const createClientLegalSchema = Yup.object().shape({
+  companyName: Yup.string().required('Company name is required'),
+  bin: Yup.number().max(12, 'Maximum 12 numbers').required('Company bin is required'),
+  fieldActivity: Yup.string().required('Company field of activity is required'),
+  legalAddress: Yup.string().required('Company legal address is required'),
+  representativeName: Yup.string().required('Company representative name is required'),
+  representativeSurname: Yup.string().required('Company representative surname is required'),
+  representativePatronymic: Yup.string().required('Company representative patronymic is required'),
+  representativePhone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
+  specialNotes: Yup.string().max(500, 'Maximum 500 symbols')
+});
+
+interface IClientLegalFormValues {
+  companyName: string;
+  bin: string;
+  fieldActivity: string;
+  legalAddress: string;
+  representativeName: string;
+  representativeSurname: string;
+  representativePatronymic: string;
+  representativePhone: string;
+  email: string;
+  specialNotes: string;
+}
 
 const ClientStarterContentLegal = () => {
+  const [loading, setLoading] = useState(false);
+
+  const initialValues: IClientLegalFormValues = {
+    companyName: '',
+    bin: '',
+    fieldActivity: '',
+    legalAddress: '',
+    representativeName: '',
+    representativeSurname: '',
+    representativePatronymic: '',
+    representativePhone: '',
+    email: '',
+    specialNotes: ''
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: createClientLegalSchema,
+    onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
+      setLoading(true);
+      setStatus(null);
+      console.log('Client Legal: ', values);
+      // try {
+      //   await postCreateGlobalParameter(values);
+      //   resetForm();
+      //   setStatus('Global Parameters created successfully!');
+      // } catch (err) {
+      //   const error = err as AxiosError<{ message?: string }>;
+      //   setStatus(error.response?.data?.message || 'Failed to create global parameters');
+      // }
+      setLoading(false);
+      setSubmitting(false);
+    }
+  });
   return (
-    <div className="card-body grid gap-5">
+    <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Company Name</label>
+        <label className="form-label max-w-56">Company name</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input className="input w-full" type="text" placeholder="Company Name" />
-          {/*{formik.touched.company_name && formik.errors.company_name && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.company_name}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="text"
+            placeholder="Company name"
+            {...formik.getFieldProps('companyName')}
+          />
+          {formik.touched.companyName && formik.errors.companyName && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.companyName}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Time zone</label>
+        <label className="form-label max-w-56">BIN</label>
+        <div className="flex columns-1 w-full flex-wrap">
+          <input
+            className="input w-full"
+            type="number"
+            placeholder="BIN"
+            {...formik.getFieldProps('bin')}
+          />
+          {formik.touched.bin && formik.errors.bin && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.bin}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+        <label className="form-label max-w-56">Field of activity</label>
         <div className="flex columns-1 w-full flex-wrap">
           <Select
-          // value={formik.values.timezone}
-          // onValueChange={(value) => formik.setFieldValue('timezone', value)}
+            value={formik.values.fieldActivity}
+            onValueChange={(value) => formik.setFieldValue('fieldActivity', value)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select Time Zone" />
+              <SelectValue placeholder="Select field activity" />
             </SelectTrigger>
             <SelectContent className="max-h-60 overflow-y-auto">
-              {timezoneMock.map((tz) => (
-                <SelectItem key={tz.key} value={tz.timezone}>
-                  {tz.timezone}
+              {fieldActivityOptions.map((field) => (
+                <SelectItem key={field.value} value={field.value}>
+                  {field.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {/*{formik.touched.timezone && formik.errors.timezone && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.timezone}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          {formik.touched.fieldActivity && formik.errors.fieldActivity && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.fieldActivity}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Currency</label>
+        <label className="form-label max-w-56">Legal address</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <Select
-          // value={formik.values.currency?.toString()}
-          // onValueChange={(value) => formik.setFieldValue('currency', String(value))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Currency" />
-            </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
-              {curreniesMock.map((currency) => (
-                <SelectItem key={currency.code} value={currency.code}>
-                  {currency.label} — {currency.code}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {/*{formik.touched.currency && formik.errors.currency && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.currency}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="text"
+            placeholder="Legal address"
+            {...formik.getFieldProps('legalAddress')}
+          />
+          {formik.touched.legalAddress && formik.errors.legalAddress && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.legalAddress}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Language</label>
+        <label className="form-label max-w-56">Representative name</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <Select
-          // value={formik.values.language?.toString()}
-          // onValueChange={(value) => formik.setFieldValue('language', String(value))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Language" />
-            </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
-              {localesMock.map((language) => (
-                <SelectItem key={language.code} value={language.code}>
-                  {language.label} - {language.code}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {/*{formik.touched.language && formik.errors.language && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.language}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="text"
+            placeholder="Name"
+            {...formik.getFieldProps('representativeName')}
+          />
+          {formik.touched.representativeName && formik.errors.representativeName && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.representativeName}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Legal Address</label>
+        <label className="form-label max-w-56">Representative surname</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input className="input w-full" type="text" placeholder="Legal Address" />
-          {/*{formik.touched.legal_address && formik.errors.legal_address && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.legal_address}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="text"
+            placeholder="Surname"
+            {...formik.getFieldProps('representativeSurname')}
+          />
+          {formik.touched.representativeSurname && formik.errors.representativeSurname && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.representativeSurname}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Warehouse Address</label>
+        <label className="form-label max-w-56">Representative patronymic</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input className="input w-full" type="text" placeholder="Warehouse Address" />
-          {/*{formik.touched.warehouse_address && formik.errors.warehouse_address && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.warehouse_address}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="text"
+            placeholder="Patronymic"
+            {...formik.getFieldProps('representativePatronymic')}
+          />
+          {formik.touched.representativePatronymic && formik.errors.representativePatronymic && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.representativePatronymic}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Airlines</label>
+        <label className="form-label max-w-56">Representative phone number</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <Select
-          // value={formik.values.airlines?.toString()}
-          // onValueChange={(value) => formik.setFieldValue('airlines', String(value))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Airlines" />
-            </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
-              {airlinesMock.map((item) => (
-                <SelectItem key={item.code} value={item.code}>
-                  {item.label} - {item.code}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {/*{formik.touched.airlines && formik.errors.airlines && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.airlines}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="tel"
+            placeholder="Phone number"
+            {...formik.getFieldProps('representativePhone')}
+          />
+          {formik.touched.representativePhone && formik.errors.representativePhone && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.representativePhone}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Dimension Per Place</label>
+        <label className="form-label max-w-56">Email</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input className="input w-full" type="text" placeholder="Dimension Per Place" />
-          {/*{formik.touched.dimensions_per_place && formik.errors.dimensions_per_place && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.dimensions_per_place}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <input
+            className="input w-full"
+            type="email"
+            placeholder="Email"
+            {...formik.getFieldProps('email')}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.email}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Cost Per Airplace</label>
+        <label className="form-label max-w-56">Special notes about the client</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input className="input w-full" type="number" placeholder="Cost Per Airplace" />
-          {/*{formik.touched.cost_per_airplace && formik.errors.cost_per_airplace && (*/}
-          {/*  <span role="alert" className="text-danger text-xs mt-1">*/}
-          {/*    {formik.errors.cost_per_airplace}*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          <Textarea
+            className="w-full textarea"
+            rows={4}
+            placeholder="Special notes"
+            {...formik.getFieldProps('specialNotes')}
+          />
+          {formik.touched.specialNotes && formik.errors.specialNotes && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.specialNotes}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex justify-end">
-        {/*<button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>*/}
-        {/*  {loading ? 'Please wait...' : 'Save'}*/}
-        {/*</button>*/}
+        <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>
+          {loading ? 'Please wait...' : 'Save'}
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 

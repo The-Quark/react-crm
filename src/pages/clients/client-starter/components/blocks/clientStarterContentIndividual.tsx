@@ -15,22 +15,22 @@ import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 
-const createClientSchema = Yup.object().shape({
+const createClientIndividualSchema = Yup.object().shape({
   name: Yup.string().required('Client name is required'),
   surname: Yup.string().required('Client surname is required'),
   patronymic: Yup.string().required('Client patronymic is required'),
-  birth_date: Yup.string().required('Client birth date is required'),
+  birthDate: Yup.string().required('Client birth date is required'),
   gender: Yup.string().required('Client gender date is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
   specialNotes: Yup.string().max(500, 'Maximum 500 symbols')
 });
 
-interface IClientFormValues {
+interface IClientIndividualFormValues {
   name: string;
   surname: string;
   patronymic: string;
-  birth_date: string;
+  birthDate: string;
   gender: 'male' | 'female';
   email: string;
   phone: string;
@@ -40,11 +40,11 @@ interface IClientFormValues {
 const ClientStarterContentIndividual = () => {
   const [loading, setLoading] = useState(false);
 
-  const initialValues: IClientFormValues = {
+  const initialValues: IClientIndividualFormValues = {
     name: '',
     surname: '',
     patronymic: '',
-    birth_date: '',
+    birthDate: '',
     gender: 'male',
     email: '',
     phone: '',
@@ -53,11 +53,11 @@ const ClientStarterContentIndividual = () => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: createClientSchema,
+    validationSchema: createClientIndividualSchema,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);
-      console.log('Values: ', values);
+      console.log('Client Individual: ', values);
       // try {
       //   await postCreateGlobalParameter(values);
       //   resetForm();
@@ -142,14 +142,14 @@ const ClientStarterContentIndividual = () => {
                   fromYear={1900}
                   toYear={new Date().getFullYear()}
                   defaultMonth={new Date(2000, 0)}
-                  selected={formik.getFieldProps('birth_date').value}
+                  selected={formik.getFieldProps('birthDate').value}
                   onSelect={(value) => formik.setFieldValue('birth_date', value)}
                 />
               </PopoverContent>
             </Popover>
-            {formik.touched.birth_date && formik.errors.birth_date && (
+            {formik.touched.birthDate && formik.errors.birthDate && (
               <span role="alert" className="text-danger text-xs mt-1">
-                {formik.errors.birth_date}
+                {formik.errors.birthDate}
               </span>
             )}
           </div>

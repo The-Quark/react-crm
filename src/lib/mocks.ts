@@ -118,3 +118,12 @@ export const timezoneMock = [
     key: 'KZ-Asia/Qyzylorda'
   }
 ];
+
+export const fieldActivityOptions = [
+  { value: 'it', label: 'Information Technology' },
+  { value: 'finance', label: 'Finance' },
+  { value: 'education', label: 'Education' },
+  { value: 'construction', label: 'Construction' },
+  { value: 'logistics', label: 'Logistics' },
+  { value: 'marketing', label: 'Marketing' }
+];
