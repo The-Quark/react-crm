@@ -245,7 +245,6 @@ const ClientStarterContentLegal = () => {
         <label className="form-label max-w-56">Special notes about the client</label>
         <div className="flex columns-1 w-full flex-wrap">
           <Textarea
-            className="w-full textarea"
             rows={4}
             placeholder="Special notes"
             {...formik.getFieldProps('specialNotes')}

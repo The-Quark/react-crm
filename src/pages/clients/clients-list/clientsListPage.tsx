@@ -19,9 +19,7 @@ export const ClientsListPage = () => {
             <ToolbarDescription>Overview of all clients.</ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
-            <a href="#" className="btn btn-sm btn-primary">
-              Test Button
-            </a>
+            <button className="btn btn-sm btn-primary">Future CSV Download</button>
           </ToolbarActions>
         </Toolbar>
       </Container>

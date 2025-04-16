@@ -5,71 +5,50 @@ import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import {
   DataGrid,
   DataGridColumnHeader,
-  DataGridColumnVisibility,
   DataGridRowSelect,
   DataGridRowSelectAll,
   KeenIcon,
-  useDataGrid,
   Menu,
   MenuItem,
   MenuToggle
 } from '@/components';
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
-import { getGlobalParameters } from '@/api';
 import { ClientsListMenuOptions } from '@/pages/clients/clients-list/components/blocks/clientsListMenuOptions.tsx';
+import { ClientsListToolbar } from '@/pages/clients/clients-list/components/blocks/clientsListToolbar.tsx';
+import {
+  fakeClientsIndividualMock,
+  FakeIndividualClient,
+  FakeLegalClient,
+  fakeLegalClientsMock
+} from '@/lib/mocks.ts';
 
-interface ParametersModel {
-  id: number;
-  company_name: string;
-  timezone: string;
-  currency: string;
-  language: string;
-  legal_address: string;
-  warehouse_address: string;
-  airlines: string;
-  dimensions_per_place?: string;
-  cost_per_airplace?: string;
-  package_standard_box1?: string | null;
-  package_standard_box2?: string | null;
-  cost_package_box1?: string | null;
-  cost_package_box2?: string | null;
-  deleted_at?: string | null;
-  created_at?: string;
-  updated_at?: string;
-}
+type ClientType = 'individual' | 'legal';
+type Client = FakeIndividualClient | FakeLegalClient;
 
 export const ClientsListContent = () => {
   const { isRTL } = useLanguage();
-  const [parameters, setParameters] = useState<ParametersModel[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
+  const [clientType, setClientType] = useState<ClientType>('individual');
 
   useEffect(() => {
     setIsLoading(true);
-    getGlobalParameters()
-      .then((parameters) => {
-        const formattedData = parameters.result.map((parameter) => ({
-          id: parameter.id,
-          company_name: parameter.company_name,
-          timezone: parameter.timezone,
-          currency: parameter.currency,
-          language: parameter.language,
-          legal_address: parameter.legal_address,
-          warehouse_address: parameter.warehouse_address,
-          airlines: parameter.airlines
-        }));
-        setParameters(formattedData);
-      })
-      .catch((error) => {
-        console.error('Error fetching global parameters:', error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [reload]);
+    const loadMockClients = () => {
+      if (clientType === 'individual') {
+        setClients(fakeClientsIndividualMock);
+      } else {
+        setClients(fakeLegalClientsMock);
+      }
+      setIsLoading(false);
+    };
 
-  const columns = useMemo<ColumnDef<ParametersModel>[]>(
+    const timeout = setTimeout(loadMockClients, 500);
+    return () => clearTimeout(timeout);
+  }, [reload, clientType]);
+
+  const columnsLegal = useMemo<ColumnDef<FakeLegalClient>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -82,7 +61,21 @@ export const ClientsListContent = () => {
         }
       },
       {
-        accessorFn: (row) => row.company_name,
+        accessorFn: (row) => row.id,
+        id: 'id',
+        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'w-0'
+        }
+      },
+      {
+        accessorFn: (row) => row.companyName,
         id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
         enableSorting: true,
@@ -93,10 +86,10 @@ export const ClientsListContent = () => {
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
                 href="#"
               >
-                {info.row.original.company_name}
+                {info.row.original.companyName}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
-                {`Language: ${info.row.original.language}, Currency: ${info.row.original.currency}`}
+                {`BIN: ${info.row.original.bin}`}
               </span>
             </div>
           </div>
@@ -107,14 +100,14 @@ export const ClientsListContent = () => {
         }
       },
       {
-        accessorFn: (row) => row.timezone,
-        id: 'timezone',
-        header: ({ column }) => <DataGridColumnHeader title="Timezone" column={column} />,
+        accessorFn: (row) => row.phone,
+        id: 'company phone',
+        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
             <span className="badge badge-sm badge-light badge-outline">
-              {info.row.original.timezone}
+              {info.row.original.phone}
             </span>
           </div>
         ),
@@ -123,14 +116,14 @@ export const ClientsListContent = () => {
         }
       },
       {
-        accessorFn: (row) => row.legal_address,
-        id: 'legal address',
-        header: ({ column }) => <DataGridColumnHeader title="Legal address" column={column} />,
+        accessorFn: (row) => row.orderCount,
+        id: 'orders',
+        header: ({ column }) => <DataGridColumnHeader title="Orders" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.legal_address}
+              {info.row.original.orderCount}
             </span>
           </div>
         ),
@@ -140,14 +133,14 @@ export const ClientsListContent = () => {
         }
       },
       {
-        accessorFn: (row) => row.warehouse_address,
-        id: 'warehouse address',
-        header: ({ column }) => <DataGridColumnHeader title="Warehouse address" column={column} />,
+        accessorFn: (row) => row.activeOrder,
+        id: 'active orders',
+        header: ({ column }) => <DataGridColumnHeader title="Active Orders" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.warehouse_address}
+              {info.row.original.activeOrder}
             </span>
           </div>
         ),
@@ -157,14 +150,134 @@ export const ClientsListContent = () => {
         }
       },
       {
-        accessorFn: (row) => row.airlines,
-        id: 'airlines',
-        header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
+        id: 'click',
+        header: () => '',
+        enableSorting: false,
+        cell: (info) => (
+          <Menu className="items-stretch">
+            <MenuItem
+              toggle="dropdown"
+              trigger="click"
+              dropdownProps={{
+                placement: isRTL() ? 'bottom-start' : 'bottom-end',
+                modifiers: [
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+                    }
+                  }
+                ]
+              }}
+            >
+              <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
+                <KeenIcon icon="dots-vertical" />
+              </MenuToggle>
+              {ClientsListMenuOptions({
+                id: info.row.original.id,
+                handleReload: () => setReload((prev) => !prev)
+              })}
+            </MenuItem>
+          </Menu>
+        ),
+        meta: {
+          headerClassName: 'w-[60px]'
+        }
+      }
+    ],
+    [isRTL]
+  );
+
+  const columnsIndividual = useMemo<ColumnDef<FakeIndividualClient>[]>(
+    () => [
+      {
+        accessorKey: 'id',
+        header: () => <DataGridRowSelectAll />,
+        cell: ({ row }) => <DataGridRowSelect row={row} />,
+        enableSorting: false,
+        enableHiding: false,
+        meta: {
+          headerClassName: 'w-0'
+        }
+      },
+      {
+        accessorFn: (row) => row.id,
+        id: 'id',
+        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'w-0'
+        }
+      },
+      {
+        accessorFn: (row) => row.name,
+        id: 'client name',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-2.5">
+            <div className="flex flex-col gap-0.5">
+              <a
+                href="#"
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+              >
+                {`${info.row.original.name} ${info.row.original.surname} ${info.row.original.patronymic}`}
+              </a>
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[300px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.phone,
+        id: 'client phone',
+        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-wrap gap-2.5 mb-2">
+            <span className="badge badge-sm badge-light badge-outline">
+              {info.row.original.phone}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[165px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.orderCount,
+        id: 'orders',
+        header: ({ column }) => <DataGridColumnHeader title="Orders" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.airlines}
+              {info.row.original.orderCount}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[165px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.activeOrder,
+        id: 'active orders',
+        header: ({ column }) => <DataGridColumnHeader title="Active Orders" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.activeOrder}
             </span>
           </div>
         ),
@@ -226,35 +339,6 @@ export const ClientsListContent = () => {
     }
   };
 
-  const Toolbar = () => {
-    const { table } = useDataGrid();
-
-    return (
-      <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-        <h3 className="card-title">Parameters</h3>
-
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div className="relative">
-            <KeenIcon
-              icon="magnifier"
-              className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
-            />
-            <input
-              type="text"
-              placeholder="Search Company"
-              className="input input-sm ps-8"
-              value={(table.getColumn('company name')?.getFilterValue() as string) ?? ''}
-              onChange={(event) =>
-                table.getColumn('company name')?.setFilterValue(event.target.value)
-              }
-            />
-          </div>
-          <DataGridColumnVisibility table={table} />
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="grid gap-5 lg:gap-7.5">
       {isLoading ? (
@@ -263,13 +347,13 @@ export const ClientsListContent = () => {
         </div>
       ) : (
         <DataGrid
-          columns={columns}
-          data={parameters}
+          columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
+          data={clients}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<Toolbar />}
+          toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
           layout={{ card: true }}
         />
       )}

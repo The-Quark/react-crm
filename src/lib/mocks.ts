@@ -127,3 +127,125 @@ export const fieldActivityOptions = [
   { value: 'logistics', label: 'Logistics' },
   { value: 'marketing', label: 'Marketing' }
 ];
+
+export interface FakeIndividualClient {
+  id: number;
+  name: string;
+  surname: string;
+  patronymic: string;
+  phone: string;
+  orderCount: number;
+  activeOrder: number;
+}
+
+export const fakeClientsIndividualMock: FakeIndividualClient[] = [
+  {
+    id: 1,
+    name: 'Ayan',
+    surname: 'Tulegenov',
+    patronymic: 'Serikovich',
+    phone: '+77011234567',
+    orderCount: 5,
+    activeOrder: 1
+  },
+  {
+    id: 2,
+    name: 'Dana',
+    surname: 'Nurpeisova',
+    patronymic: 'Bolatovna',
+    phone: '+77029876543',
+    orderCount: 3,
+    activeOrder: 0
+  },
+  {
+    id: 3,
+    name: 'Alikhan',
+    surname: 'Beketov',
+    patronymic: 'Zhanibekovich',
+    phone: '+77034567891',
+    orderCount: 8,
+    activeOrder: 2
+  },
+  {
+    id: 4,
+    name: 'Aruzhan',
+    surname: 'Kairatova',
+    patronymic: 'Muratovna',
+    phone: '+77041234567',
+    orderCount: 2,
+    activeOrder: 0
+  },
+  {
+    id: 5,
+    name: 'Yerassyl',
+    surname: 'Mukhan',
+    patronymic: 'Samatovich',
+    phone: '+77057894561',
+    orderCount: 4,
+    activeOrder: 1
+  }
+];
+
+export interface FakeLegalClient {
+  id: number;
+  companyName: string;
+  bin: number;
+  surname: string;
+  patronymic: string;
+  phone: string;
+  orderCount: number;
+  activeOrder: number;
+}
+
+export const fakeLegalClientsMock: FakeLegalClient[] = [
+  {
+    id: 1,
+    companyName: 'Tech Solutions LLP',
+    bin: 990840000123,
+    surname: 'Zhaksylykov',
+    patronymic: 'Nursultanovich',
+    phone: '+77012345678',
+    orderCount: 10,
+    activeOrder: 3
+  },
+  {
+    id: 2,
+    companyName: 'Astana Logistics',
+    bin: 990840005123,
+    surname: 'Ramazanov',
+    patronymic: 'Almasovich',
+    phone: '+77029873456',
+    orderCount: 7,
+    activeOrder: 1
+  },
+  {
+    id: 3,
+    companyName: 'Eurasia Group',
+    bin: 990846000123,
+    surname: 'Serikkali',
+    patronymic: 'Bauyrzhanovich',
+    phone: '+77034561234',
+    orderCount: 12,
+    activeOrder: 5
+  },
+  {
+    id: 4,
+    companyName: 'Nomad Trade',
+    bin: 990840060123,
+    surname: 'Tasmagambetov',
+    patronymic: 'Yerlanovich',
+    phone: '+77041239876',
+    orderCount: 4,
+    activeOrder: 0
+  },
+  {
+    id: 5,
+    companyName: 'KazTech Industries',
+    bin: 991220000789,
+    surname: 'Yermekov',
+    patronymic: 'Dauletovich',
+    phone: '+77058947321',
+    orderCount: 9,
+    activeOrder: 2
+  }
+];

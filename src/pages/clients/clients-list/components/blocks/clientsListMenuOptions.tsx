@@ -31,8 +31,8 @@ const deleteParameter = async (id: number) => {
 const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageGlobalSettings =
-    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const canManageClientsSettings =
+    has('manage clients') || currentUser?.roles[0].name === 'superadmin';
 
   const handleDelete = () => {
     if (id) {
@@ -48,25 +48,25 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReloa
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/global-parameters/view-parameters/${id}`}>
+        <MenuLink path={`#`}>
           <MenuIcon>
             <KeenIcon icon="more-2" />
           </MenuIcon>
-          <MenuTitle>View Parameter</MenuTitle>
+          <MenuTitle>View Client</MenuTitle>
         </MenuLink>
       </MenuItem>
-      {canManageGlobalSettings && (
+      {canManageClientsSettings && (
         <>
           <MenuItem>
-            <MenuLink path={`/global-parameters/update-parameters/${id}`}>
+            <MenuLink path={`#`}>
               <MenuIcon>
                 <KeenIcon icon="setting-4" />
               </MenuIcon>
-              <MenuTitle>Edit Parameter</MenuTitle>
+              <MenuTitle>Edit Client</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
-          <MenuItem onClick={handleDelete}>
+          <MenuItem>
             <MenuLink>
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />
