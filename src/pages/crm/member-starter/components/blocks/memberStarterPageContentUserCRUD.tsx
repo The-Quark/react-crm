@@ -23,11 +23,7 @@ interface IGeneralSettingsProps {
 }
 
 const createUserSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Wrong email format')
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Email is required'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
   password: Yup.string()
     .min(10, 'Minimum 10 symbols')
     .max(100, 'Maximum 100 symbols')
