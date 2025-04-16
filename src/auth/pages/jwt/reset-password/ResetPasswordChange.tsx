@@ -4,7 +4,7 @@ import { Alert, KeenIcon } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 const passwordSchema = Yup.object().shape({
@@ -23,6 +23,9 @@ const ResetPasswordChange = () => {
   const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showNewPasswordConfirmation, setShowNewPasswordConfirmation] = useState(false);
+  const { token } = useParams();
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get('email');
 
   const formik = useFormik({
     initialValues: {
@@ -33,9 +36,6 @@ const ResetPasswordChange = () => {
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true);
       setHasErrors(undefined);
-
-      const token = new URLSearchParams(window.location.search).get('token');
-      const email = new URLSearchParams(window.location.search).get('email');
 
       if (!token || !email) {
         setHasErrors(true);
