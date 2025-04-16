@@ -6,6 +6,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { useParams } from 'react-router-dom';
 
 const passwordSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -23,6 +24,8 @@ const ResetPasswordChange = () => {
   const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showNewPasswordConfirmation, setShowNewPasswordConfirmation] = useState(false);
+  const { token } = useParams<{ token: string }>();
+  const clicedToken = token?.slice(6);
 
   const formik = useFormik({
     initialValues: {
@@ -34,10 +37,9 @@ const ResetPasswordChange = () => {
       setLoading(true);
       setHasErrors(undefined);
 
-      const token = new URLSearchParams(window.location.search).get('token');
       const email = new URLSearchParams(window.location.search).get('email');
 
-      if (!token || !email) {
+      if (!clicedToken || !email) {
         setHasErrors(true);
         setStatus('Token and email properties are required');
         setLoading(false);
@@ -46,7 +48,7 @@ const ResetPasswordChange = () => {
       }
 
       try {
-        await changePassword(email, token, values.newPassword);
+        await changePassword(email, clicedToken, values.newPassword);
         setHasErrors(false);
         navigate('/auth/reset-password/changed');
       } catch (error) {
