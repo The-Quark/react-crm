@@ -14,6 +14,7 @@ import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import { ClientsListPage } from '@/pages/clients';
+import { GuidesCurrenciesPage, GuidesLanguagesPage } from '@/pages/guides';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -29,15 +30,22 @@ const ViewerRoutesSetting = () => {
         />
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+
         <Route path="/clients" element={<ClientsListPage />} />
+
         <Route path="/hr-module/staff" element={<StaffPage />} />
         <Route path="/hr-module/drivers" element={<DriversPage />} />
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
+
         <Route path="/call-center/applications" element={<ApplicationsPage />} />
         <Route path="/call-center/orders" element={<OrdersPage />} />
+
         <Route path="/crm/teams" element={<TeamsPage />} />
         <Route path="/crm/members" element={<MembersPage />} />
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
+
+        <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
+        <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />

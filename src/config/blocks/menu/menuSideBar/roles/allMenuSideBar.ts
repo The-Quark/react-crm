@@ -111,6 +111,20 @@ export const AllMenuSideBar: TMenuConfig = [
     ]
   },
   {
+    title: 'MENU.MEGAMENU.GUIDES',
+    icon: 'minus-folder',
+    children: [
+      {
+        title: 'MENU.MEGAMENU.GUIDES.CURRENCIES',
+        path: '/guides/currencies'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
+        path: '/guides/languages'
+      }
+    ]
+  },
+  {
     heading: 'MENU.MEGAMENU.DEMONSTRATION'
   },
   {

@@ -103,6 +103,7 @@ import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
+import { GuidesCurrenciesPage, GuidesLanguagesPage } from '@/pages/guides';
 
 const AllRoutesSetting = () => {
   return (
@@ -147,6 +148,9 @@ const AllRoutesSetting = () => {
         <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
         <Route path="/crm/members" element={<MembersPage />} />
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
+
+        <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
+        <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
 
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />

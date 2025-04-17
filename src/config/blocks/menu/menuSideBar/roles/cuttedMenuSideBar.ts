@@ -30,12 +30,42 @@ export const CuttedMenuSideBar: TMenuConfig = [
       }
     ]
   },
+  {
+    title: 'MENU.MEGAMENU.GUIDES',
+    icon: 'minus-folder',
+    requiredPermissions: ['manage global settings'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.GUIDES.CURRENCIES',
+        path: '/guides/currencies'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
+        path: '/guides/languages'
+      }
+    ]
+  },
   //"view global settings"
   {
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     path: '/global-parameters/parameters',
     requiredPermissions: ['view global settings']
+  },
+  {
+    title: 'MENU.MEGAMENU.GUIDES',
+    icon: 'minus-folder',
+    requiredPermissions: ['view global settings'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.GUIDES.CURRENCIES',
+        path: '/guides/currencies'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
+        path: '/guides/languages'
+      }
+    ]
   },
   //"manage global contexted settings"
   {
