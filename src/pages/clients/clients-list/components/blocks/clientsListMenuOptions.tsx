@@ -50,7 +50,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReloa
       <MenuItem>
         <MenuLink path={`#`}>
           <MenuIcon>
-            <KeenIcon icon="more-2" />
+            <KeenIcon icon="user" />
           </MenuIcon>
           <MenuTitle>View Client</MenuTitle>
         </MenuLink>
@@ -60,7 +60,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReloa
           <MenuItem>
             <MenuLink path={`#`}>
               <MenuIcon>
-                <KeenIcon icon="setting-4" />
+                <KeenIcon icon="user-edit" />
               </MenuIcon>
               <MenuTitle>Edit Client</MenuTitle>
             </MenuLink>

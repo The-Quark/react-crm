@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FakeIndividualClient } from '@/lib/mocks.ts';
+import { FakeLegalClient } from '@/lib/mocks.ts';
 import {
   DataGridColumnHeader,
   DataGridRowSelect,
@@ -16,11 +16,9 @@ interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const useClientsListIndividualColumns = ({
-  setReload
-}: Props): ColumnDef<FakeIndividualClient>[] => {
+export const useClientsListLegalColumns = ({ setReload }: Props): ColumnDef<FakeLegalClient>[] => {
   const { isRTL } = useLanguage();
-  const columnsIndividual = useMemo<ColumnDef<FakeIndividualClient>[]>(
+  const columnsLegal = useMemo<ColumnDef<FakeLegalClient>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -47,19 +45,22 @@ export const useClientsListIndividualColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.name,
-        id: 'client name',
+        accessorFn: (row) => row.companyName,
+        id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
               <a
-                href="#"
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                href="#"
               >
-                {`${info.row.original.name} ${info.row.original.surname} ${info.row.original.patronymic}`}
+                {info.row.original.companyName}
               </a>
+              <span className="text-2sm text-gray-700 font-normal">
+                {`BIN: ${info.row.original.bin}`}
+              </span>
             </div>
           </div>
         ),
@@ -70,7 +71,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'client phone',
+        id: 'company phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -156,5 +157,6 @@ export const useClientsListIndividualColumns = ({
     ],
     [isRTL]
   );
-  return columnsIndividual;
+
+  return columnsLegal;
 };
