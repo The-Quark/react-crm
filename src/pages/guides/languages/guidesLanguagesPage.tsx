@@ -19,7 +19,8 @@ export const GuidesLanguagesPage = () => {
             <ToolbarDescription>Overview of all languages.</ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
-            <button className="btn btn-sm btn-primary">Future CSV Download</button>
+            <button className="btn btn-sm btn-light">Future CSV Download</button>
+            <button className="btn btn-sm btn-primary">New Language</button>
           </ToolbarActions>
         </Toolbar>
       </Container>

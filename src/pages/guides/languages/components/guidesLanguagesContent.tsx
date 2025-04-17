@@ -44,24 +44,23 @@ export const GuidesLanguagesContent = () => {
   };
 
   return (
-    <div className="grid gap-5 lg:gap-7.5">
-      <DataGrid
-        columns={columns}
-        data={isLoading ? [] : languages}
-        rowSelection={true}
-        onRowSelectionChange={handleRowSelection}
-        pagination={{ size: 10 }}
-        sorting={[{ id: 'id', desc: false }]}
-        toolbar={<LanguagesToolbar />}
-        layout={{ card: true }}
-        messages={{
-          empty: (
-            <div className="flex justify-center items-center p-5">
-              <CircularProgress />
-            </div>
-          )
-        }}
-      />
-    </div>
+    <>
+      {isLoading ? (
+        <div className="card flex justify-center items-center p-5">
+          <CircularProgress />
+        </div>
+      ) : (
+        <DataGrid
+          columns={columns}
+          data={languages}
+          rowSelection={true}
+          onRowSelectionChange={handleRowSelection}
+          pagination={{ size: 10 }}
+          sorting={[{ id: 'id', desc: false }]}
+          toolbar={<LanguagesToolbar />}
+          layout={{ card: true }}
+        />
+      )}
+    </>
   );
 };
