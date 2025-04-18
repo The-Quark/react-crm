@@ -25,15 +25,21 @@ const currencySchema = Yup.object({
   code: Yup.string()
     .required('Currency code is required')
     .max(10, 'Maximum length is 10 characters'),
+
   name: Yup.string()
     .required('Currency name is required')
     .max(50, 'Maximum length is 50 characters'),
+
   symbol: Yup.string()
     .required('Currency symbol is required')
-    .max(5, 'Maximum length is 5 characters'),
+    .length(1, 'Symbol should be 1 character'),
+
   rate_to_base: Yup.number()
     .required('Exchange rate is required')
-    .min(0, 'Exchange rate cannot be negative'),
+    .min(0, 'Exchange rate cannot be negative')
+    .test('is-two-decimal', 'The rate to base field must have 2 decimal places.', (value) =>
+      /^[0-9]+(\.[0-9]{2})?$/.test(String(value))
+    ),
   is_base: Yup.boolean().required(),
   is_active: Yup.boolean().required()
 });

@@ -14,8 +14,8 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import LanguagesModal from '@/pages/guides/languages/components/blocks/languagesModal.tsx';
 import { useLanguage } from '@/providers';
+import CurrenciesModal from '@/pages/guides/currencies/components/blocks/currenciesModal.tsx';
 
 interface ParameterMenuOptionsProps {
   id?: number;
@@ -38,14 +38,14 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
   const { has } = useUserPermissions();
   const canManageCurrenciesSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const [languageModalOpen, setLanguageModalOpen] = useState(false);
+  const [currrencyModalOpen, setCurrencyModalOpen] = useState(false);
   const { isRTL } = useLanguage();
 
   const handleClose = () => {
-    setLanguageModalOpen(false);
+    setCurrencyModalOpen(false);
   };
   const handleOpen = () => {
-    setLanguageModalOpen(true);
+    setCurrencyModalOpen(true);
   };
 
   const handleDelete = () => {
@@ -79,7 +79,7 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
         <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
           <KeenIcon icon="dots-vertical" />
         </MenuToggle>
-        {!languageModalOpen && (
+        {!currrencyModalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
             {canManageCurrenciesSettings && (
               <>
@@ -105,9 +105,9 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
           </MenuSub>
         )}
       </MenuItem>
-      {languageModalOpen && (
-        <LanguagesModal
-          open={languageModalOpen}
+      {currrencyModalOpen && (
+        <CurrenciesModal
+          open={currrencyModalOpen}
           onOpenChange={handleClose}
           setReload={handleReload}
           id={id}
