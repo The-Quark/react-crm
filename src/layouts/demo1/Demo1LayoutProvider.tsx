@@ -8,7 +8,7 @@ import { useMenus } from '@/providers';
 import { ILayoutConfig, useLayout } from '@/providers';
 import { deepMerge } from '@/utils';
 import { demo1LayoutConfig } from './';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 import { controlAccessLogic } from '@/layouts/demo1/controlAccessLogic/controlAccessLogic.ts';
 import { useUserPermissions } from '@/hooks';
 

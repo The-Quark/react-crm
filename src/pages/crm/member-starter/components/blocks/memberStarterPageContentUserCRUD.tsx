@@ -15,8 +15,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { Role } from '@/api/getRoles/types.ts';
-import { getRoles, useCurrentUser } from '@/api';
+import { Role } from '@/api/get/getRoles/types.ts';
+import { getRoles, useCurrentUser } from '@/api/get';
 
 interface IGeneralSettingsProps {
   title: string;

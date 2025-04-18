@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ParametersListResponse } from '@/api/getGlobalParameters/types.ts';
+import { ParametersListResponse } from '@/api/get/getGlobalParameters/types.ts';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const PARAMETERS_LIST_URL = `${API_URL}/company-global-settings/manage`;

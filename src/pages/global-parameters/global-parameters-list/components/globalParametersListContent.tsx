@@ -17,7 +17,7 @@ import {
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
 import { ParameterMenuOptions } from '@/pages/global-parameters/global-parameters-list/components/blocks/parametersMenuOptions.tsx';
-import { getGlobalParameters } from '@/api';
+import { getGlobalParameters } from '@/api/get';
 
 interface ParametersModel {
   id: number;

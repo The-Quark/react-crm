@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ParametersModel } from '@/api/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 
 interface IGeneralSettingsProps {
   title: string;

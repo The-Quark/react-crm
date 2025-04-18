@@ -1,5 +1,2 @@
-export * from './getMemberById';
-export * from './getRoles';
-export * from './getCurrentUser';
-export * from './getPermissions';
-export * from './getGlobalParameters';
+export * from './get';
+export * from './post';

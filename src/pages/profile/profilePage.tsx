@@ -6,7 +6,7 @@ import { UserProfileHero } from '@/partials/heros';
 import { Navbar, NavbarActions, NavbarDropdown } from '@/partials/navbar';
 import { PageMenu } from '@/pages/public-profile';
 import { ProfilePageContent } from './components/profilePageContent';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 
 const STORAGE_AVATAR_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 

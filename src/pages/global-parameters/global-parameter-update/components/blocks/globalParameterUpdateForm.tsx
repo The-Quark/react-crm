@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
 import { putCreateGlobalParameter } from './globalParameterPutApi';
-import { ParametersModel } from '@/api/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 import { useParams } from 'react-router';
 
 interface IParameterFormValues {

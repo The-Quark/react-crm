@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
+import LanguagesModal from '@/pages/guides/languages/components/blocks/languagesModal.tsx';
 
-export const LanguagesToolbar = () => {
+interface Props {
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const LanguagesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-
+  const [languageModalOpen, setLanguageModalOpen] = useState(false);
+  const handleClose = () => {
+    setLanguageModalOpen(false);
+  };
+  const handleOpen = () => {
+    setLanguageModalOpen(true);
+  };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Languages</h3>
@@ -22,7 +33,11 @@ export const LanguagesToolbar = () => {
           />
         </div>
         <DataGridColumnVisibility table={table} />
+        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          New Language
+        </button>
       </div>
+      <LanguagesModal open={languageModalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

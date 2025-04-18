@@ -4,8 +4,8 @@ import { RowSelectionState } from '@tanstack/react-table';
 import { DataGrid } from '@/components';
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
-import { Language } from '@/api/getLanguages/types.ts';
-import { getLanguages } from '@/api/getLanguages';
+import { Language } from '@/api/get/getLanguages/types.ts';
+import { getLanguages } from '@/api/get/getLanguages';
 import { useLanguagesColumns } from '@/pages/guides/languages/components/blocks/languagesColumns.tsx';
 import { LanguagesToolbar } from '@/pages/guides/languages/components/blocks/languagesToolbar.tsx';
 
@@ -57,7 +57,7 @@ export const GuidesLanguagesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<LanguagesToolbar />}
+          toolbar={<LanguagesToolbar setReload={setReload} />}
           layout={{ card: true }}
         />
       )}

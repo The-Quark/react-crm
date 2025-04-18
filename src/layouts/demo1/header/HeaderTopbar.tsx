@@ -8,7 +8,7 @@ import { DropdownApps } from '@/partials/dropdowns/apps';
 import { DropdownChat } from '@/partials/dropdowns/chat';
 import { ModalSearch } from '@/partials/modals/search/ModalSearch';
 import { useLanguage } from '@/i18n';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 const HeaderTopbar = () => {

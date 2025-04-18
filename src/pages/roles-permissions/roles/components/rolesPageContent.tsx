@@ -1,7 +1,7 @@
 import { CardRole } from '@/partials/cards';
 import { useEffect, useState } from 'react';
-import { getRoles } from '@/api/getRoles';
-import { Role } from '@/api/getRoles/types.ts';
+import { getRoles } from '@/api/get/getRoles/';
+import { Role } from '@/api/get/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';
 import { KeenIcon } from '@/components';
 
@@ -52,14 +52,6 @@ export const RolesPageContent = () => {
       {roles.map((item, index) => {
         return renderItem(item, index);
       })}
-
-      {/*<CardAddNew*/}
-      {/*  path="/crm/roles"*/}
-      {/*  size="size-[60px]"*/}
-      {/*  iconSize="text-2xl"*/}
-      {/*  title="Add New Role"*/}
-      {/*  subTitle="Ignite Professional Adventures"*/}
-      {/*/>*/}
     </div>
   );
 };

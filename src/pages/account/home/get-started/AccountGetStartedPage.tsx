@@ -5,7 +5,7 @@ import { PageNavbar } from '@/pages/account';
 import { AccountGetStartedContent } from '.';
 import { useLayout } from '@/providers';
 import { Link } from 'react-router-dom';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 
 const AccountGetStartedPage = () => {
   const { currentLayout } = useLayout();

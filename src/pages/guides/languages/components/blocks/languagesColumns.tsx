@@ -10,7 +10,7 @@ import {
   MenuToggle
 } from '@/components';
 import { useLanguage } from '@/providers';
-import { Language } from '@/api/getLanguages/types.ts';
+import { Language } from '@/api/get/getLanguages/types.ts';
 import { LanguagesMenuOptions } from '@/pages/guides/languages/components/blocks/languagesMenuOptions.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;

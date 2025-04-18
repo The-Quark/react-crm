@@ -1,10 +1,10 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getMemberById, getRoles, useCurrentUser } from '@/api';
+import { getMemberById, getRoles, useCurrentUser } from '@/api/get';
 import { CircularProgress } from '@mui/material';
-import { UserModel } from '@/api/getMemberById/types.ts';
+import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { MemberRoleUpdatePageContentForm } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdatePageContentForm.tsx';
-import { RolePermissionsResponse } from '@/api/getRoles/types.ts';
+import { RolePermissionsResponse } from '@/api/get/getRoles/types.ts';
 
 const MemberRoleUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();

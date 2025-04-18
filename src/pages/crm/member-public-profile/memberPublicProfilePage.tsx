@@ -5,9 +5,9 @@ import { Container } from '@/components/container';
 import { UserProfileHero } from '@/partials/heros';
 import { Navbar, NavbarActions, NavbarDropdown } from '@/partials/navbar';
 import { PageMenu } from '@/pages/public-profile';
-import { getMemberById } from '@/api';
+import { getMemberById } from '@/api/get';
 import { useParams } from 'react-router';
-import { UserModel } from '@/api/getMemberById/types.ts';
+import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { CircularProgress } from '@mui/material';
 
 const STORAGE_AVATAR_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;

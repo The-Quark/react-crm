@@ -1,9 +1,9 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getGlobalParameters } from '@/api';
+import { getGlobalParameters } from '@/api/get';
 import { CircularProgress } from '@mui/material';
 import { GlobalParameterUpdateForm } from '@/pages/global-parameters/global-parameter-update/components/blocks/globalParameterUpdateForm.tsx';
-import { ParametersModel } from '@/api/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 
 const GlobalParameterUpdateContent = () => {
   const { id } = useParams<{ id: string }>();

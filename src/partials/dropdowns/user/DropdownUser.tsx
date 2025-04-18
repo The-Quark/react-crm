@@ -17,7 +17,7 @@ import {
   MenuIcon
 } from '@/components/menu';
 import { DropdownUserCurrency } from '@/partials/dropdowns/user/DropdownUserCurrency.tsx';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 
 interface IDropdownUserProps {
   menuItemRef: any;

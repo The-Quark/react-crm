@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router';
 import { AuthPage, useAuthContext } from '@/auth';
 import { RequireAuth } from '@/auth/RequireAuth';
 import { ErrorsRouting } from '@/errors';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 import { ScreenLoader } from '@/components';
 import AllRoutesSetting from '@/routing/routingByRole/allRoutesSetting.tsx';
 import ViewerRoutesSetting from '@/routing/routingByRole/viewerRoutesSetting.tsx';

@@ -10,7 +10,7 @@ import {
 
 import * as authHelper from '../_helpers';
 import { type AuthModel, User, type UserResponse } from '@/auth';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 import { useQueryClient } from '@tanstack/react-query';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;

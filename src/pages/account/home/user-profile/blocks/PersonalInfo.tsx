@@ -1,6 +1,6 @@
 import { KeenIcon } from '@/components';
 import { CrudAvatarUpload } from '@/partials/crud';
-import { useCurrentUser } from '@/api';
+import { useCurrentUser } from '@/api/get';
 
 const PersonalInfo = () => {
   const { data: currentUser } = useCurrentUser();

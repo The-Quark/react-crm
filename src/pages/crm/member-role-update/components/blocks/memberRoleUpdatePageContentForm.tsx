@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
-import { UserModel } from '@/api/getMemberById/types.ts';
+import { UserModel } from '@/api/get/getMemberById/types.ts';
 import {
   Select,
   SelectContent,
@@ -12,13 +12,13 @@ import {
 } from '@/components/ui/select';
 import { toAbsoluteUrl } from '@/utils';
 import { Link } from 'react-router-dom';
-import { Role } from '@/api/getRoles/types.ts';
+import { Role } from '@/api/get/getRoles/types.ts';
 import {
   putMemberRole,
   UpdateMemberRole
 } from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdateApi.ts';
-import { getPermissions } from '@/api/getPermissions';
-import { Permission } from '@/api/getPermissions/types.ts';
+import { getPermissions } from '@/api/get/getPermissions';
+import { Permission } from '@/api/get/getPermissions/types.ts';
 interface IGeneralSettingsProps {
   title: string;
   user: UserModel | null;

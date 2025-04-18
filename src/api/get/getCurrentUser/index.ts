@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import * as authHelper from '@/auth/_helpers.ts';
-import { UserResponse } from '@/api/getCurrentUser/types.ts';
+import { UserResponse } from '@/api/get/getCurrentUser/types.ts';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 const GET_USER_URL = `${API_URL}/users/manage`;

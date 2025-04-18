@@ -1,9 +1,9 @@
 import { MemberUpdatePageContentUserForm } from '@/pages/crm/member-update/components/blocks/memberUpdatePageContentUserForm.tsx';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getMemberById } from '@/api';
+import { getMemberById } from '@/api/get';
 import { CircularProgress } from '@mui/material';
-import { UserModel } from '@/api/getMemberById/types.ts';
+import { UserModel } from '@/api/get/getMemberById/types.ts';
 
 const MemberUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();

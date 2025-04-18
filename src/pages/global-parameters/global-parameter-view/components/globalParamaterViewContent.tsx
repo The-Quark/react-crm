@@ -1,8 +1,8 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { getGlobalParameters } from '@/api';
+import { getGlobalParameters } from '@/api/get';
 import { CircularProgress } from '@mui/material';
-import { ParametersModel } from '@/api/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 import { GlobalParameterViewContentCard } from '@/pages/global-parameters/global-parameter-view/components/blocks/globalParameterViewContentCard.tsx';
 
 const GlobalParameterViewContent = () => {

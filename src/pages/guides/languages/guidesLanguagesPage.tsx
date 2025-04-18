@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Container } from '@/components';
 import {
   Toolbar,
@@ -20,7 +20,6 @@ export const GuidesLanguagesPage = () => {
           </ToolbarHeading>
           <ToolbarActions>
             <button className="btn btn-sm btn-light">Future CSV Download</button>
-            <button className="btn btn-sm btn-primary">New Language</button>
           </ToolbarActions>
         </Toolbar>
       </Container>
