@@ -29,7 +29,7 @@ export const GlobalParameterStarterPage = () => {
         </Toolbar>
       </Container>
       <Container>
-        <GlobalParameterStarterContent />
+        <GlobalParameterStarterContent title="Create new Global Parameter" />
       </Container>
     </Fragment>
   );
