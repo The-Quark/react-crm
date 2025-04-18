@@ -28,8 +28,8 @@ export const LanguagesToolbar: FC<Props> = ({ setReload }) => {
             type="text"
             placeholder="Search language"
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('language name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('language name')?.setFilterValue(e.target.value)}
           />
         </div>
         <DataGridColumnVisibility table={table} />

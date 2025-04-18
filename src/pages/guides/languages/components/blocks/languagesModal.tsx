@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from 'react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -10,13 +10,16 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { ILanguageFormValues } from '@/api/post/postCreateLanguage/types.ts';
+import { ILanguageFormValues } from '@/api/post/postLanguage/types.ts';
 import { postLanguage } from '@/api';
+import { Language } from '@/api/get/getLanguages/types.ts';
+import { getLanguages } from '@/api/get/getLanguages';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
+  id?: number;
 }
 
 const createLanguageSchema = Yup.object().shape({
@@ -32,31 +35,59 @@ const createLanguageSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload }) => {
+const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   const [loading, setLoading] = useState(false);
-
-  const initialValues: ILanguageFormValues = {
+  const [language, setLanguage] = useState<Language>();
+  const [initialValues, setInitialValues] = useState<ILanguageFormValues>({
     code: '',
     name: '',
     native_name: '',
     locale: '',
     direction: 'ltr',
     is_active: true
-  };
+  });
+
+  useEffect(() => {
+    if (id) {
+      const fetchLanguage = async () => {
+        try {
+          setLoading(true);
+          const languageData = await getLanguages(Number(id));
+          const lang = languageData.result[0];
+
+          setLanguage(lang);
+          setInitialValues({
+            code: lang.code || '',
+            name: lang.name || '',
+            native_name: lang.native_name || '',
+            locale: lang.locale || '',
+            direction: lang.direction || 'ltr',
+            is_active: lang.is_active ?? true
+          });
+        } catch (err) {
+          console.error('Request error:', err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchLanguage();
+    }
+  }, [id]);
 
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     validationSchema: createLanguageSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
-      console.log(': ', values);
       try {
         await postLanguage(values);
         resetForm();
         onOpenChange();
         setReload((prev) => !prev);
       } catch (err) {
-        /* empty */
+        console.error('Error submitting:', err);
       }
       setLoading(false);
       setSubmitting(false);

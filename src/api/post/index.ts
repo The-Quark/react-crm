@@ -1,1 +1,1 @@
-export * from './postCreateLanguage';
+export * from './postLanguage';

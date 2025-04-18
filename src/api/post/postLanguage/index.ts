@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ILanguageFormValues } from '@/api/post/postCreateLanguage/types.ts';
+import { ILanguageFormValues } from '@/api/post/postLanguage/types.ts';
 
 const api = import.meta.env.VITE_APP_API_URL;
 export const CREATE_LANGUAGE_URL = `${api}/language/manage`;

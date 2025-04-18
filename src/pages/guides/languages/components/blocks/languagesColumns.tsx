@@ -1,14 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import {
-  DataGridColumnHeader,
-  DataGridRowSelect,
-  DataGridRowSelectAll,
-  KeenIcon,
-  Menu,
-  MenuItem,
-  MenuToggle
-} from '@/components';
+import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Language } from '@/api/get/getLanguages/types.ts';
 import { LanguagesMenuOptions } from '@/pages/guides/languages/components/blocks/languagesMenuOptions.tsx';
@@ -52,10 +44,7 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <a
-                href="#"
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-              >
+              <a href="#" className="leading-none text-gray-800 font-normal">
                 {info.row.original.name}
               </a>
             </div>
@@ -74,7 +63,7 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <div className="leading-none font-medium text-sm text-gray-900 hover:text-primary">
+              <div className="leading-none text-gray-800 font-normal">
                 {info.row.original.native_name}
               </div>
             </div>
@@ -154,33 +143,11 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) => (
-          <Menu className="items-stretch">
-            <MenuItem
-              toggle="dropdown"
-              trigger="click"
-              dropdownProps={{
-                placement: isRTL() ? 'bottom-start' : 'bottom-end',
-                modifiers: [
-                  {
-                    name: 'offset',
-                    options: {
-                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
-                    }
-                  }
-                ]
-              }}
-            >
-              <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
-                <KeenIcon icon="dots-vertical" />
-              </MenuToggle>
-              {LanguagesMenuOptions({
-                id: info.row.original.id,
-                handleReload: () => setReload((prev) => !prev)
-              })}
-            </MenuItem>
-          </Menu>
-        ),
+        cell: (info) =>
+          LanguagesMenuOptions({
+            id: info.row.original.id,
+            handleReload: () => setReload((prev) => !prev)
+          }),
         meta: {
           headerClassName: 'w-[60px]'
         }
