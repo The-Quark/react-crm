@@ -3,3 +3,5 @@ export * from './getRoles';
 export * from './getCurrentUser';
 export * from './getPermissions';
 export * from './getGlobalParameters';
+export * from './getLanguages';
+export * from './getCurrencies';

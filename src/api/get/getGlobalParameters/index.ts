@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { ParametersListResponse } from '@/api/get/getGlobalParameters/types.ts';
-
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const PARAMETERS_LIST_URL = `${API_URL}/company-global-settings/manage`;
+import { COMPANY_GLOBAL_SETTINGS_URL } from '@/api/url';
 
 const getGlobalParameters = async (id?: number): Promise<ParametersListResponse> => {
   return await axios
-    .get<ParametersListResponse>(id ? `${PARAMETERS_LIST_URL}?id=${id}` : PARAMETERS_LIST_URL)
+    .get<ParametersListResponse>(
+      id ? `${COMPANY_GLOBAL_SETTINGS_URL}?id=${id}` : COMPANY_GLOBAL_SETTINGS_URL
+    )
     .then((res) => res.data);
 };
 

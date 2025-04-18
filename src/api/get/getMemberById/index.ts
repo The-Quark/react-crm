@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { UserModel } from './types.ts';
-
-const API_URL = import.meta.env.VITE_APP_API_URL;
+import { USERS_URL } from '@/api/url';
 
 export const getMemberById = async (id: number): Promise<UserModel> => {
-  const USER_URL = `${API_URL}/users/manage?id=${id}`;
+  const USER_URL = `${USERS_URL}?id=${id}`;
   try {
     const response = await axios.get(USER_URL);
     return response.data[0].result;

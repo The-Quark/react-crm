@@ -23,19 +23,20 @@ interface ParameterMenuOptionsProps {
 }
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
-const LANGUAGE_DELETE_URL = `${API_URL}/language/manage`;
+const CURRENCY_DELETE_URL = `${API_URL}/currency/manage`;
 
-const deleteLanguage = async (id: number) => {
+const deleteCurrency = async (id: number) => {
   try {
-    await axios.delete(`${LANGUAGE_DELETE_URL}/?id=${id}`);
+    await axios.delete(`${CURRENCY_DELETE_URL}/?id=${id}`);
   } catch (error) {
-    console.error('Error deleting language:', error);
+    console.error('Error deleting currency:', error);
   }
 };
-const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+
+const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageLanguagesSettings =
+  const canManageCurrenciesSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
   const { isRTL } = useLanguage();
@@ -49,12 +50,12 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
 
   const handleDelete = () => {
     if (id) {
-      deleteLanguage(id);
+      deleteCurrency(id);
       setTimeout(() => {
         handleReload();
       }, 500);
     } else {
-      toast.error('Language ID not provided');
+      toast.error('Currency ID not provided');
     }
   };
 
@@ -80,14 +81,14 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
         </MenuToggle>
         {!languageModalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageLanguagesSettings && (
+            {canManageCurrenciesSettings && (
               <>
                 <MenuItem onClick={handleOpen}>
                   <MenuLink>
                     <MenuIcon>
                       <KeenIcon icon="setting-4" />
                     </MenuIcon>
-                    <MenuTitle>Edit Language</MenuTitle>
+                    <MenuTitle>Edit Currency</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -116,4 +117,4 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
   );
 };
 
-export { LanguagesMenuOptions };
+export { CurrenciesMenuOptions };
