@@ -57,7 +57,6 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
       toast.error('Parameter ID not provided');
     }
   };
-  console.log(languageModalOpen);
 
   return (
     <Menu className="items-stretch">
