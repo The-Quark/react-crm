@@ -14,6 +14,7 @@ import { ILanguageFormValues } from '@/api/post/postLanguage/types.ts';
 import { postLanguage } from '@/api';
 import { Language } from '@/api/get/getLanguages/types.ts';
 import { getLanguages } from '@/api/get/getLanguages';
+import { putLanguage } from '@/api/put';
 
 interface Props {
   open: boolean;
@@ -82,15 +83,20 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        await postLanguage(values);
+        if (id) {
+          await putLanguage(Number(id), values);
+        } else {
+          await postLanguage(values);
+        }
         resetForm();
         onOpenChange();
         setReload((prev) => !prev);
       } catch (err) {
         console.error('Error submitting:', err);
+      } finally {
+        setLoading(false);
+        setSubmitting(false);
       }
-      setLoading(false);
-      setSubmitting(false);
     }
   });
 
@@ -104,7 +110,9 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-            <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">New language</DialogTitle>
+            <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+              {id ? 'Update language' : 'New language'}
+            </DialogTitle>
             <DialogDescription></DialogDescription>
             <button
               className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
