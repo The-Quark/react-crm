@@ -1,33 +1,28 @@
 /* eslint-disable prettier/prettier */
-import { useEffect, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
 import { DataGrid } from '@/components';
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
-import { Language } from '@/api/get/getLanguages/types.ts';
 import { getLanguages } from '@/api/get/getLanguages';
 import { useLanguagesColumns } from '@/pages/guides/languages/components/blocks/languagesColumns.tsx';
 import { LanguagesToolbar } from '@/pages/guides/languages/components/blocks/languagesToolbar.tsx';
+import { useQuery } from '@tanstack/react-query';
 
 export const GuidesLanguagesContent = () => {
-  const [languages, setLanguages] = useState<Language[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [reload, setReload] = useState(false);
-  const columns = useLanguagesColumns({ setReload });
-
-  useEffect(() => {
-    setIsLoading(true);
-    getLanguages()
-      .then((languages) => {
-        setLanguages(languages.result);
-      })
-      .catch((error) => {
-        console.error('Error fetching languages:', error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [reload]);
+  const {
+    data: languages,
+    isLoading,
+    refetch,
+    isError,
+    error
+  } = useQuery({
+    queryKey: ['languages'],
+    queryFn: () => getLanguages(),
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
+  });
+  const columns = useLanguagesColumns({ setReload: () => refetch() });
 
   const handleRowSelection = (state: RowSelectionState) => {
     const selectedRowIds = Object.keys(state);
@@ -43,6 +38,24 @@ export const GuidesLanguagesContent = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="card flex justify-center items-center p-5">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="card flex justify-center items-center p-5 text-red-500">
+        <span>
+          Error loading languages: {error instanceof Error ? error.message : 'Unknown error'}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <>
       {isLoading ? (
@@ -52,12 +65,12 @@ export const GuidesLanguagesContent = () => {
       ) : (
         <DataGrid
           columns={columns}
-          data={languages}
+          data={languages?.result}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<LanguagesToolbar setReload={setReload} />}
+          toolbar={<LanguagesToolbar setReload={() => refetch()} />}
           layout={{ card: true }}
         />
       )}
