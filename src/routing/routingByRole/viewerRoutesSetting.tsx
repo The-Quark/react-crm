@@ -18,7 +18,8 @@ import {
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
   GuidesVehiclesPage,
-  GuidesSourcesPage
+  GuidesSourcesPage,
+  GuidesPackagesPage
 } from '@/pages/guides';
 
 const ViewerRoutesSetting = () => {
@@ -52,6 +53,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
+        <Route path="/guides/packages" element={<GuidesPackagesPage />} />
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />
