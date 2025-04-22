@@ -12,6 +12,11 @@ import * as authHelper from '../_helpers';
 import { type AuthModel, User, type UserResponse } from '@/auth';
 import { useCurrentUser } from '@/api/get';
 import { useQueryClient } from '@tanstack/react-query';
+import { paths } from '@/api/types';
+
+type LoginRequest =
+  paths['/auth/login']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
+type LoginResponse = AuthModel;
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 export const LOGIN_URL = `${API_URL}/auth/login`;
@@ -66,8 +71,13 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const login = async (login: string, password: string) => {
-    const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, { login, password });
-    saveAuth(auth);
+    const payload: LoginRequest = { login, password };
+    const { data } = await axios.post<LoginResponse>(LOGIN_URL, new URLSearchParams(payload), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    saveAuth(data);
     await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
   };
 

@@ -34,8 +34,6 @@ const Menu = {
   'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS': 'Заявки',
   'MENU.MEGAMENU.CALL_CENTER.ORDERS': 'Заказы',
   'MENU.MEGAMENU.CRM': 'CRM',
-  'MENU.MEGAMENU.CRM.TEAMS_STARTER': 'Начало команд',
-  'MENU.MEGAMENU.CRM.TEAMS': 'Команды',
   'MENU.MEGAMENU.CRM.MEMBERS_STARTER': 'Начало участников',
   'MENU.MEGAMENU.CRM.MEMBERS': 'Участники',
   'MENU.MEGAMENU.GUIDES': 'Руководства',

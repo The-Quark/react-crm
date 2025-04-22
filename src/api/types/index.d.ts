@@ -126,6 +126,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/currency/manage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET Currencies */
+        get: operations["5a513a867c6ff67f3fd8613bc35a1e8e"];
+        /** UPDATE Currencies */
+        put: operations["1457db89039eea0ff9b742ab6d413d0c"];
+        /** CREATE Currencies */
+        post: operations["3951c86b1830eab252768c9f0910cb3c"];
+        /** DELETE Currencies */
+        delete: operations["019827c75b05818693575d398be1149c"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/language/manage": {
         parameters: {
             query?: never;
@@ -264,6 +284,26 @@ export interface paths {
         put: operations["3b97f51ed3903ac7dbb58ff660126f18"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/source/manage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GET Sources */
+        get: operations["ca661d45778d4a93d392a0dc78184ae9"];
+        /** UPDATE Sources */
+        put: operations["ca11fbadf707361ea8517c705c9efb3b"];
+        /** CREATE Sources */
+        post: operations["0416c80c30fcf4ace10ed92c6d2a5253"];
+        /** DELETE Sources */
+        delete: operations["9739f64cee9b6fb0c685b29c97149c6a"];
         options?: never;
         head?: never;
         patch?: never;
@@ -436,6 +476,62 @@ export interface components {
             /** @description ID */
             id?: number;
         };
+        /** Currency GET */
+        Currency_get: {
+            /** @description ID */
+            id?: number;
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description is_active */
+            is_active?: boolean;
+            /** @description is_base */
+            is_base?: boolean;
+        };
+        /** Currency CREATE */
+        Currency_post: {
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description symbol */
+            symbol?: string;
+            /** @description is_active */
+            is_active?: boolean;
+            /** @description is_base */
+            is_base?: boolean;
+            /**
+             * Format: float
+             * @description rate_to_base
+             */
+            rate_to_base?: number;
+        };
+        /** Currency UPDATE */
+        Currency_put: {
+            /** @description ID */
+            id?: number;
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description name */
+            symbol?: string;
+            /** @description is_active */
+            is_active?: boolean;
+            /** @description name */
+            is_base?: boolean;
+            /**
+             * Format: float
+             * @description name
+             */
+            rate_to_base?: number;
+        };
+        /** Currency DELETE */
+        Currency_delete: {
+            /** @description ID */
+            id?: number;
+        };
         /** Language GET */
         language_get: {
             /** @description ID */
@@ -578,6 +674,42 @@ export interface components {
             user?: number;
             /** @description mode */
             mode?: string;
+        };
+        /** Source GET */
+        source_get: {
+            /** @description ID */
+            id?: number;
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description is_active */
+            is_active?: boolean;
+        };
+        /** Source CREATE */
+        source_post: {
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description is_active */
+            is_active?: boolean;
+        };
+        /** Source UPDATE */
+        source_put: {
+            /** @description ID */
+            id?: number;
+            /** @description code */
+            code?: string;
+            /** @description name */
+            name?: string;
+            /** @description is_active */
+            is_active?: boolean;
+        };
+        /** Source DELETE */
+        source_delete: {
+            /** @description ID */
+            id?: number;
         };
         /** Users GET */
         get_user: {
@@ -994,6 +1126,170 @@ export interface operations {
             };
             /** @description No ID provided */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "5a513a867c6ff67f3fd8613bc35a1e8e": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id?: number;
+                    /** @description code */
+                    code?: string;
+                    /** @description name */
+                    name?: string;
+                    /** @description is_active */
+                    is_active?: boolean;
+                    /** @description is_base */
+                    is_base?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "1457db89039eea0ff9b742ab6d413d0c": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id: number;
+                    /** @description code */
+                    code?: string;
+                    /** @description name */
+                    name?: string;
+                    /** @description name */
+                    symbol?: string;
+                    /** @description is_active */
+                    is_active?: boolean;
+                    /** @description name */
+                    is_base?: boolean;
+                    /**
+                     * Format: float
+                     * @description name
+                     */
+                    rate_to_base?: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "3951c86b1830eab252768c9f0910cb3c": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description code */
+                    code: string;
+                    /** @description name */
+                    name: string;
+                    /** @description symbol */
+                    symbol: string;
+                    /** @description is_active */
+                    is_active: boolean;
+                    /** @description is_base */
+                    is_base: boolean;
+                    /**
+                     * Format: float
+                     * @description rate_to_base
+                     */
+                    rate_to_base: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "019827c75b05818693575d398be1149c": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No ID provided */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1532,6 +1828,150 @@ export interface operations {
             };
             /** @description Not allowed {{mode}} role: various messages */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ca661d45778d4a93d392a0dc78184ae9: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id?: number;
+                    /** @description code */
+                    code?: string;
+                    /** @description name */
+                    name?: string;
+                    /** @description is_active */
+                    is_active?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ca11fbadf707361ea8517c705c9efb3b: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id: number;
+                    /** @description code */
+                    code?: string;
+                    /** @description name */
+                    name?: string;
+                    /** @description is_active */
+                    is_active?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "0416c80c30fcf4ace10ed92c6d2a5253": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description code */
+                    code: string;
+                    /** @description name */
+                    name: string;
+                    /** @description is_active */
+                    is_active: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    "9739f64cee9b6fb0c685b29c97149c6a": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    /** @description ID */
+                    id: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No ID provided */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Insufficient permissions */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

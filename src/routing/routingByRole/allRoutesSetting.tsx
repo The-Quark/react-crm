@@ -13,8 +13,6 @@ import {
   MembersPage,
   MemberStarterPage,
   MemberUpdatePage,
-  TeamsPage,
-  TeamsStarterPage,
   MemberPublicProfilePage
 } from '@/pages/crm';
 import {
@@ -141,8 +139,6 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/applications" element={<ApplicationsPage />} />
         <Route path="/call-center/orders" element={<OrdersPage />} />
 
-        <Route path="/crm/teams-starter" element={<TeamsStarterPage />} />
-        <Route path="/crm/teams" element={<TeamsPage />} />
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
         <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />

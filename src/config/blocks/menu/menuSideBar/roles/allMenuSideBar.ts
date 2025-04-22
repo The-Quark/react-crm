@@ -93,14 +93,6 @@ export const AllMenuSideBar: TMenuConfig = [
     icon: 'users',
     children: [
       {
-        title: 'MENU.MEGAMENU.CRM.TEAMS_STARTER',
-        path: '/crm/teams-starter'
-      },
-      {
-        title: 'MENU.MEGAMENU.CRM.TEAMS',
-        path: '/crm/teams'
-      },
-      {
         title: 'MENU.MEGAMENU.CRM.MEMBERS_STARTER',
         path: '/crm/member-starter'
       },

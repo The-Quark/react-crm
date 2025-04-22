@@ -75,10 +75,6 @@ export const ViewerMenuSideBar: TMenuConfig = [
     icon: 'users',
     children: [
       {
-        title: 'MENU.MEGAMENU.CRM.TEAMS',
-        path: '/crm/teams'
-      },
-      {
         title: 'MENU.MEGAMENU.CRM.MEMBERS',
         path: '/crm/members'
       }
