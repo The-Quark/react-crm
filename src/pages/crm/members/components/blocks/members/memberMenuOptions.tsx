@@ -8,26 +8,16 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { deleteUser } from '@/api';
 
 interface MemberMenuOptionsProps {
   id?: number;
   handleReload: () => void;
 }
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const USER_DELETE_URL = `${API_URL}/users/manage`;
-
-const deleteUser = async (id: number) => {
-  try {
-    await axios.delete(`${USER_DELETE_URL}/?id=${id}`);
-  } catch (error) {
-    console.error('Error deleting user:', error);
-  }
-};
 const MemberMenuOptions: FC<MemberMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();

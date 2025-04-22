@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export interface UpdateMemberRole {
+export interface UpdateUserRole {
   user: number;
   role: string;
   mode: 'give' | 'revoke';
@@ -9,11 +9,11 @@ export interface UpdateMemberRole {
 const api = import.meta.env.VITE_APP_API_URL;
 export const UPDATE_MEMBER_ROLE_URL = `${api}/roles/distribute`;
 
-export const putMemberRole = async (
-  userData: Omit<UpdateMemberRole, 'id' | 'created_at' | 'updated_at'>
-): Promise<UpdateMemberRole> => {
+export const putUserRole = async (
+  userData: Omit<UpdateUserRole, 'id' | 'created_at' | 'updated_at'>
+): Promise<UpdateUserRole> => {
   return await axios
-    .put<UpdateMemberRole>(UPDATE_MEMBER_ROLE_URL, userData, {
+    .put<UpdateUserRole>(UPDATE_MEMBER_ROLE_URL, userData, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

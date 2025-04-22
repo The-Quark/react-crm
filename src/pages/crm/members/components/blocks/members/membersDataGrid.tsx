@@ -15,7 +15,7 @@ import {
   MenuToggle
 } from '@/components';
 import { toast } from 'sonner';
-import { getUserList } from './membersApi.ts';
+import { getUserList } from '@/api/get';
 import { toAbsoluteUrl } from '@/utils/index.ts';
 import { CircularProgress } from '@mui/material';
 import { MemberMenuOptions } from '@/pages/crm/members/components/blocks/members/memberMenuOptions.tsx';

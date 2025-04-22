@@ -13,10 +13,7 @@ import {
 import { toAbsoluteUrl } from '@/utils';
 import { Link } from 'react-router-dom';
 import { Role } from '@/api/get/getRoles/types.ts';
-import {
-  putMemberRole,
-  UpdateMemberRole
-} from '@/pages/crm/member-role-update/components/blocks/memberRoleUpdateApi.ts';
+import { UpdateUserRole, putUserRole } from '@/api/put/';
 import { getPermissions } from '@/api/get/getPermissions';
 import { Permission } from '@/api/get/getPermissions/types.ts';
 interface IGeneralSettingsProps {
@@ -37,7 +34,7 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
-  const initialValues: UpdateMemberRole = {
+  const initialValues: UpdateUserRole = {
     user: user?.id || 0,
     role: user?.roles?.[0]?.name || '',
     mode: 'give'
@@ -66,7 +63,7 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
       setLoading(true);
       setStatus(null);
       try {
-        await putMemberRole(values);
+        await putUserRole(values);
         setStatus('Member role updated successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
