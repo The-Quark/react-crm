@@ -39,6 +39,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES': 'Руководства',
   'MENU.MEGAMENU.GUIDES.CURRENCIES': 'Валюты',
   'MENU.MEGAMENU.GUIDES.LANGUAGES': 'Языки',
+  'MENU.MEGAMENU.GUIDES.SOURCES': 'Источники',
   'MENU.MEGAMENU.DEMONSTRATION': 'Демонстрация',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'Публичный профиль',
   'MENU.MEGAMENU.PUBLIC_PROFILE.PROFILES': 'Профили',

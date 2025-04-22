@@ -11,3 +11,5 @@ export const COMPANY_GLOBAL_SETTINGS_URL = `${api}/company-global-settings/manag
 export const LANGUAGE_URL = `${api}/language/manage`;
 
 export const CURRENCY_URL = `${api}/currency/manage`;
+
+export const SOURCE_URL = `${api}/source/manage`;

@@ -13,38 +13,38 @@ import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import LanguagesModal from '@/pages/guides/languages/components/blocks/languagesModal.tsx';
 import { useLanguage } from '@/providers';
-import { deleteLanguage } from '@/api';
+import { deleteSource } from '@/api';
+import SourceModal from '@/pages/guides/sources/components/blocks/sourcesModal.tsx';
 
 interface ParameterMenuOptionsProps {
   id?: number;
   handleReload: () => void;
 }
 
-const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+const SourceMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageLanguagesSettings =
+  const canManageSourceSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const [languageModalOpen, setLanguageModalOpen] = useState(false);
+  const [sourceModalOpen, setSourceModalOpen] = useState(false);
   const { isRTL } = useLanguage();
 
   const handleClose = () => {
-    setLanguageModalOpen(false);
+    setSourceModalOpen(false);
   };
   const handleOpen = () => {
-    setLanguageModalOpen(true);
+    setSourceModalOpen(true);
   };
 
   const handleDelete = () => {
     if (id) {
-      deleteLanguage(id);
+      deleteSource(id);
       setTimeout(() => {
         handleReload();
       }, 500);
     } else {
-      toast.error('Language ID not provided');
+      toast.error('Source ID not provided');
     }
   };
 
@@ -68,16 +68,16 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
         <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
           <KeenIcon icon="dots-vertical" />
         </MenuToggle>
-        {!languageModalOpen && (
+        {!sourceModalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageLanguagesSettings && (
+            {canManageSourceSettings && (
               <>
                 <MenuItem onClick={handleOpen}>
                   <MenuLink>
                     <MenuIcon>
                       <KeenIcon icon="setting-4" />
                     </MenuIcon>
-                    <MenuTitle>Edit Language</MenuTitle>
+                    <MenuTitle>Edit Source</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -94,9 +94,9 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
           </MenuSub>
         )}
       </MenuItem>
-      {languageModalOpen && (
-        <LanguagesModal
-          open={languageModalOpen}
+      {sourceModalOpen && (
+        <SourceModal
+          open={sourceModalOpen}
           onOpenChange={handleClose}
           setReload={handleReload}
           id={id}
@@ -106,4 +106,4 @@ const LanguagesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
   );
 };
 
-export { LanguagesMenuOptions };
+export { SourceMenuOptions };

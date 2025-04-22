@@ -39,6 +39,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES': 'أدلة',
   'MENU.MEGAMENU.GUIDES.CURRENCIES': 'العملات',
   'MENU.MEGAMENU.GUIDES.LANGUAGES': 'اللغات',
+  'MENU.MEGAMENU.GUIDES.SOURCES': 'المصادر',
   'MENU.MEGAMENU.DEMONSTRATION': 'عرض توضيحي',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'الملف الشخصي العام',
   'MENU.MEGAMENU.PUBLIC_PROFILE.PROFILES': 'الملفات الشخصية',

@@ -15,6 +15,7 @@ import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import { ClientsListPage } from '@/pages/clients';
 import { GuidesCurrenciesPage, GuidesLanguagesPage } from '@/pages/guides';
+import { GuidesSourcesPage } from '@/pages/guides/sources/guidesSourcesPage.tsx';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -45,6 +46,7 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
+        <Route path="/guides/sources" element={<GuidesSourcesPage />} />
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />

@@ -6,3 +6,4 @@ export * from './getGlobalParameters';
 export * from './getLanguages';
 export * from './getCurrencies';
 export * from './getUsersList';
+export * from './getSources';

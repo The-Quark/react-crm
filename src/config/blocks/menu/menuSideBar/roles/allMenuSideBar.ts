@@ -113,6 +113,10 @@ export const AllMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
         path: '/guides/languages'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.SOURCES',
+        path: '/guides/sources'
       }
     ]
   },

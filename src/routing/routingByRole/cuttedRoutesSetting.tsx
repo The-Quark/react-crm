@@ -20,6 +20,7 @@ import {
 } from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 import { GuidesCurrenciesPage, GuidesLanguagesPage } from '@/pages/guides';
+import { GuidesSourcesPage } from '@/pages/guides/sources/guidesSourcesPage.tsx';
 
 interface Props {
   permissions: string[];
@@ -33,7 +34,8 @@ const routeConfig = [
       { path: '/global-parameters/update-parameters/:id', element: <GlobalParameterUpdatePage /> },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
-      { path: '/guides/languages', element: <GuidesLanguagesPage /> }
+      { path: '/guides/languages', element: <GuidesLanguagesPage /> },
+      { path: '/guides/sources', element: <GuidesSourcesPage /> }
     ]
   },
   {
@@ -42,7 +44,8 @@ const routeConfig = [
       { path: '/global-parameters/parameters', element: <GlobalParametersListPage /> },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
-      { path: '/guides/languages', element: <GuidesLanguagesPage /> }
+      { path: '/guides/languages', element: <GuidesLanguagesPage /> },
+      { path: '/guides/sources', element: <GuidesSourcesPage /> }
     ]
   },
   {

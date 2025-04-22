@@ -102,6 +102,7 @@ import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 import { GuidesCurrenciesPage, GuidesLanguagesPage } from '@/pages/guides';
+import { GuidesSourcesPage } from '@/pages/guides/sources/guidesSourcesPage.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -147,6 +148,7 @@ const AllRoutesSetting = () => {
 
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
+        <Route path="/guides/sources" element={<GuidesSourcesPage />} />
 
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
