@@ -10,7 +10,7 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
-import { putCreateGlobalParameter } from './globalParameterPutApi';
+import { putGlobalParameter } from '@/api';
 import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 import { useParams } from 'react-router';
 
@@ -68,7 +68,7 @@ export const GlobalParameterUpdateForm: FC<IGeneralSettingsProps> = ({ title, pa
       setLoading(true);
       setStatus(null);
       try {
-        await putCreateGlobalParameter(values);
+        await putGlobalParameter(values);
         setStatus('Global Parameters created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

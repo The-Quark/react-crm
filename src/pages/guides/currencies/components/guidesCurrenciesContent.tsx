@@ -6,7 +6,7 @@ import { CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { CurrenciesToolbar } from '@/pages/guides/currencies/components/blocks/currenciesToolbar.tsx';
 import { useCurrenciesColumns } from '@/pages/guides/currencies/components/blocks/currenciesColumns.tsx';
-import { getCurrencies } from '@/api/get/getCurrencies';
+import { getCurrencies } from '@/api';
 
 export const GuidesCurrenciesContent = () => {
   const {

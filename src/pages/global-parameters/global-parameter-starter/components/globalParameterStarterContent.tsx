@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useLanguage } from '@/i18n';
 import { localesMock, curreniesMock, airlinesMock, timezoneMock } from '@/lib/mocks.ts';
-import { postCreateGlobalParameter } from '@/pages/global-parameters/global-parameter-starter/components/globalParameterCreateApi.ts';
+import { postGlobalParameter } from '@/api';
 interface IGeneralSettingsProps {
   title: string;
 }
@@ -64,7 +64,7 @@ export const GlobalParameterStarterContent = ({ title }: IGeneralSettingsProps) 
       setLoading(true);
       setStatus(null);
       try {
-        await postCreateGlobalParameter(values);
+        await postGlobalParameter(values);
         resetForm();
         setStatus('Global Parameters created successfully!');
       } catch (err) {
