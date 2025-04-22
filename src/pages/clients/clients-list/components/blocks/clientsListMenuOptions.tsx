@@ -8,26 +8,16 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { deleteGlobalParameter } from '@/api';
 
 interface ParameterMenuOptionsProps {
   id?: number;
   handleReload: () => void;
 }
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const PARAMETER_DELETE_URL = `${API_URL}/company-global-settings/manage`;
-
-const deleteParameter = async (id: number) => {
-  try {
-    await axios.delete(`${PARAMETER_DELETE_URL}/?id=${id}`);
-  } catch (error) {
-    console.error('Error deleting user:', error);
-  }
-};
 const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -36,7 +26,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReloa
 
   const handleDelete = () => {
     if (id) {
-      deleteParameter(id);
+      deleteGlobalParameter(id);
       setTimeout(() => {
         handleReload();
       }, 500);
