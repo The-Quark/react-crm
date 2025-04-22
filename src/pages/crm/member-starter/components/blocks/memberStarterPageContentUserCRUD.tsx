@@ -3,7 +3,7 @@ import { type MouseEvent, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { postCreateUser } from './memberStarterCreateUserApi.ts';
+import { postCreateUser } from '@/api/post/postUser';
 import { AxiosError } from 'axios';
 import { KeenIcon } from '@/components';
 import clsx from 'clsx';
@@ -17,9 +17,24 @@ import {
 } from '@/components/ui/select.tsx';
 import { Role } from '@/api/get/getRoles/types.ts';
 import { getRoles, useCurrentUser } from '@/api/get';
+import { paths } from '@/api/types';
+
+type RegisterRequest =
+  paths['/auth/register']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
 
 interface IGeneralSettingsProps {
   title: string;
+}
+
+interface IUserFormValues {
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
+  location: string;
+  position: string;
+  avatar: IImageInputFile | null;
+  role: string;
 }
 
 const createUserSchema = Yup.object().shape({
@@ -32,24 +47,13 @@ const createUserSchema = Yup.object().shape({
     .matches(/[^a-zA-Z0-9]/, 'Must contain at least one special character')
     .required('Password is required'),
   name: Yup.string()
-    .min(3, 'Minimum 3 symbols')
+    .min(1, 'Minimum 1 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Name is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
   position: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols'),
   role: Yup.string().required('Role is required')
 });
-
-interface IUserFormValues {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  location: string;
-  position: string;
-  avatar: IImageInputFile | null;
-  role: string;
-}
 
 const initialValues: IUserFormValues = {
   email: '',
@@ -99,7 +103,7 @@ export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProp
           ...values,
           avatar: values.avatar?.file || null
         };
-        await postCreateUser(payload);
+        await postCreateUser(payload as unknown as RegisterRequest);
         resetForm();
         setStatus('User created successfully!');
       } catch (err) {

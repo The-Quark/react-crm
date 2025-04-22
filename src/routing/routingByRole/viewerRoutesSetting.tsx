@@ -9,7 +9,7 @@ import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import ApplicationsPage from '@/pages/call-center/applications/applicationsPage.tsx';
 import OrdersPage from '@/pages/call-center/orders/ordersPage.tsx';
-import { MemberPublicProfilePage, MembersPage, TeamsPage } from '@/pages/crm';
+import { MemberPublicProfilePage, MembersPage } from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
@@ -40,7 +40,6 @@ const ViewerRoutesSetting = () => {
         <Route path="/call-center/applications" element={<ApplicationsPage />} />
         <Route path="/call-center/orders" element={<OrdersPage />} />
 
-        <Route path="/crm/teams" element={<TeamsPage />} />
         <Route path="/crm/members" element={<MembersPage />} />
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
 
