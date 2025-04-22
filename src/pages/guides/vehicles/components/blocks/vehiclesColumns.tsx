@@ -2,15 +2,15 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
-import { Currency } from '@/api/get/getCurrencies/types.ts';
-import { CurrenciesMenuOptions } from '@/pages/guides/currencies/components/blocks/currenciesMenuOptions.tsx';
+import { Vehicle } from '@/api/get/getVehicles/types.ts';
+import { VehiclesMenuOptions } from '@/pages/guides/vehicles/components/blocks/vehiclesMenuOptions.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[] => {
+export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
-  const columnsCurrency = useMemo<ColumnDef<Currency>[]>(
+  const columnsVehicle = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -24,7 +24,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
       },
       {
         accessorFn: (row) => row.id,
-        id: 'currency id',
+        id: 'vehicle id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -37,15 +37,15 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         }
       },
       {
-        accessorFn: (row) => row.name,
-        id: 'currency name',
-        header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
+        accessorFn: (row) => row.plate_number,
+        id: 'plate number',
+        header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
               <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.name}
+                {info.row.original.plate_number}
               </a>
             </div>
           </div>
@@ -56,32 +56,13 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         }
       },
       {
-        accessorFn: (row) => row.symbol,
-        id: 'currency symbol',
-        header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <div className="leading-none text-gray-800 font-normal">
-                {info.row.original.symbol}
-              </div>
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.code,
-        id: 'currency code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        accessorFn: (row) => row.type,
+        id: 'vehicle type',
+        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
+            <span className="leading-none text-gray-800 font-normal">{info.row.original.type}</span>
           </div>
         ),
         meta: {
@@ -89,31 +70,14 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         }
       },
       {
-        accessorFn: (row) => row.is_base,
-        id: 'is base',
-        header: ({ column }) => <DataGridColumnHeader title="Base" column={column} />,
+        accessorFn: (row) => row.brand,
+        id: 'vehicle brand',
+        header: ({ column }) => <DataGridColumnHeader title="Brand" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_base ? 'Yes' : 'No'}
-            </span>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[165px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.rate_to_base,
-        id: 'rate to base',
-        header: ({ column }) => <DataGridColumnHeader title="Rate to base" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.rate_to_base}
+              {info.row.original.brand}
             </span>
           </div>
         ),
@@ -123,14 +87,50 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         }
       },
       {
-        accessorFn: (row) => row.is_active,
-        id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        accessorFn: (row) => row.model,
+        id: 'vehicle model',
+        header: ({ column }) => <DataGridColumnHeader title="Model" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
+              {info.row.original.model}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[80px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.status,
+        id: 'vehicle status',
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.status}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[80px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.avg_fuel_consumption,
+        id: 'vehicle avg_fuel_consumption',
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Average fuel consumption" column={column} />
+        ),
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.avg_fuel_consumption}
             </span>
           </div>
         ),
@@ -144,7 +144,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         header: () => '',
         enableSorting: false,
         cell: (info) =>
-          CurrenciesMenuOptions({
+          VehiclesMenuOptions({
             id: info.row.original.id,
             handleReload: () => setReload((prev) => !prev)
           }),
@@ -155,5 +155,5 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
     ],
     [isRTL]
   );
-  return columnsCurrency;
+  return columnsVehicle;
 };

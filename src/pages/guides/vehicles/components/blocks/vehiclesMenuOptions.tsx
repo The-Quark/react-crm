@@ -14,37 +14,37 @@ import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useLanguage } from '@/providers';
-import CurrenciesModal from '@/pages/guides/currencies/components/blocks/currenciesModal.tsx';
-import { deleteCurrency } from '@/api';
+import { deleteVehicle } from '@/api';
+import VehicleModal from '@/pages/guides/vehicles/components/blocks/vehiclesModal.tsx';
 
 interface ParameterMenuOptionsProps {
   id?: number;
   handleReload: () => void;
 }
 
-const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+const VehiclesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageCurrenciesSettings =
+  const canManageVehicleSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const [currrencyModalOpen, setCurrencyModalOpen] = useState(false);
+  const [vehicleModalOpen, setVehicleModalOpen] = useState(false);
   const { isRTL } = useLanguage();
 
   const handleClose = () => {
-    setCurrencyModalOpen(false);
+    setVehicleModalOpen(false);
   };
   const handleOpen = () => {
-    setCurrencyModalOpen(true);
+    setVehicleModalOpen(true);
   };
 
   const handleDelete = () => {
     if (id) {
-      deleteCurrency(id);
+      deleteVehicle(id);
       setTimeout(() => {
         handleReload();
       }, 500);
     } else {
-      toast.error('Currency ID not provided');
+      toast.error('Vehicle ID not provided');
     }
   };
 
@@ -68,16 +68,16 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
         <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
           <KeenIcon icon="dots-vertical" />
         </MenuToggle>
-        {!currrencyModalOpen && (
+        {!vehicleModalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageCurrenciesSettings && (
+            {canManageVehicleSettings && (
               <>
                 <MenuItem onClick={handleOpen}>
                   <MenuLink>
                     <MenuIcon>
                       <KeenIcon icon="setting-4" />
                     </MenuIcon>
-                    <MenuTitle>Edit Currency</MenuTitle>
+                    <MenuTitle>Edit Vehicle</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -94,9 +94,9 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
           </MenuSub>
         )}
       </MenuItem>
-      {currrencyModalOpen && (
-        <CurrenciesModal
-          open={currrencyModalOpen}
+      {vehicleModalOpen && (
+        <VehicleModal
+          open={vehicleModalOpen}
           onOpenChange={handleClose}
           setReload={handleReload}
           id={id}
@@ -106,4 +106,4 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
   );
 };
 
-export { CurrenciesMenuOptions };
+export { VehiclesMenuOptions };

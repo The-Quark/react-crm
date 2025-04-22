@@ -46,6 +46,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.SOURCES',
         path: '/guides/sources'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.VEHICLES',
+        path: '/guides/vehicles'
       }
     ]
   },

@@ -40,7 +40,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
 
   useEffect(() => {
     if (id) {
-      const fetchLanguage = async () => {
+      const fetchSource = async () => {
         setFormLoading(true);
         try {
           const sourceData = await getSources(Number(id));
@@ -58,7 +58,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
       };
 
-      fetchLanguage();
+      fetchSource();
     }
   }, [id]);
 

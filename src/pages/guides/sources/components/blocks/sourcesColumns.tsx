@@ -57,7 +57,7 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
       },
       {
         accessorFn: (row) => row.code,
-        id: 'language code',
+        id: 'source code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
         enableSorting: true,
         cell: (info) => (

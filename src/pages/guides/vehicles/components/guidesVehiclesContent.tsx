@@ -4,26 +4,25 @@ import { DataGrid } from '@/components';
 import { toast } from 'sonner';
 import { CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { CurrenciesToolbar } from '@/pages/guides/currencies/components/blocks/currenciesToolbar.tsx';
-import { useCurrenciesColumns } from '@/pages/guides/currencies/components/blocks/currenciesColumns.tsx';
-import { getCurrencies } from '@/api';
+import { useVehiclesColumns } from '@/pages/guides/vehicles/components/blocks/vehiclesColumns';
+import { VehiclesToolbar } from '@/pages/guides/vehicles/components/blocks/vehiclesToolbar.tsx';
+import { getVehicles } from '@/api';
 
-export const GuidesCurrenciesContent = () => {
+export const GuidesVehiclesContent = () => {
   const {
-    data: currencies,
+    data: vehicles,
     isLoading,
     refetch,
     isError,
     error
   } = useQuery({
-    queryKey: ['currencies'],
-    queryFn: () => getCurrencies(),
+    queryKey: ['vehicles'],
+    queryFn: () => getVehicles(),
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5
   });
-
-  const columns = useCurrenciesColumns({ setReload: () => refetch() });
+  const columns = useVehiclesColumns({ setReload: () => refetch() });
 
   const handleRowSelection = (state: RowSelectionState) => {
     const selectedRowIds = Object.keys(state);
@@ -51,7 +50,7 @@ export const GuidesCurrenciesContent = () => {
     return (
       <div className="card flex justify-center items-center p-5 text-red-500">
         <span>
-          Error loading currencies: {error instanceof Error ? error.message : 'Unknown error'}
+          Error loading vehicles: {error instanceof Error ? error.message : 'Unknown error'}
         </span>
       </div>
     );
@@ -66,12 +65,12 @@ export const GuidesCurrenciesContent = () => {
       ) : (
         <DataGrid
           columns={columns}
-          data={currencies?.result}
+          data={vehicles?.result}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<CurrenciesToolbar setReload={() => refetch()} />}
+          toolbar={<VehiclesToolbar setReload={() => refetch()} />}
           layout={{ card: true }}
         />
       )}
