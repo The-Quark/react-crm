@@ -4,6 +4,7 @@ import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@
 import { useLanguage } from '@/providers';
 import { LanguagesMenuOptions } from '@/pages/guides/languages/components/blocks/languagesMenuOptions.tsx';
 import { Currency } from '@/api/get/getCurrencies/types.ts';
+import { CurrenciesMenuOptions } from '@/pages/guides/currencies/components/blocks/currenciesMenuOptions.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -96,7 +97,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_base}
+              {info.row.original.is_base ? 'Yes' : 'No'}
             </span>
           </div>
         ),
@@ -144,7 +145,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         header: () => '',
         enableSorting: false,
         cell: (info) =>
-          LanguagesMenuOptions({
+          CurrenciesMenuOptions({
             id: info.row.original.id,
             handleReload: () => setReload((prev) => !prev)
           }),

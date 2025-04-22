@@ -37,8 +37,14 @@ const currencySchema = Yup.object({
   rate_to_base: Yup.number()
     .required('Exchange rate is required')
     .min(0, 'Exchange rate cannot be negative')
-    .test('is-two-decimal', 'The rate to base field must have 2 decimal places.', (value) =>
-      /^[0-9]+(\.[0-9]{2})?$/.test(String(value))
+    .test(
+      'is-two-decimal',
+      'The rate to base field must have exactly 2 decimal places.',
+      (value) => {
+        if (value === undefined || value === null) return false;
+        const decimalPart = value.toString().split('.')[1];
+        return decimalPart?.length === 2;
+      }
     ),
   is_base: Yup.boolean().required(),
   is_active: Yup.boolean().required()
@@ -118,7 +124,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update language' : 'New language'}
+              {id ? 'Update currency' : 'New currency'}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button
