@@ -1,25 +1,13 @@
 import axios from 'axios';
-
-interface IParameterFormValues {
-  company_name: string;
-  timezone: string;
-  currency: string;
-  language: string;
-  legal_address: string;
-  warehouse_address: string;
-  airlines: string;
-  dimensions_per_place: string;
-  cost_per_airplace: number;
-}
-
-const api = import.meta.env.VITE_APP_API_URL;
-export const CREATE_GLOBAL_PARAMS_URL = `${api}/company-global-settings/manage`;
+import { IGlobalParameterFormValues } from '@/api/post/postGlobalParameter/types.ts';
+import { COMPANY_GLOBAL_SETTINGS_URL } from '@/api/url';
 
 export const putGlobalParameter = async (
-  paramsData: Omit<IParameterFormValues, 'id' | 'created_at' | 'updated_at'>
-): Promise<IParameterFormValues> => {
+  id: number,
+  currencyData: Omit<IGlobalParameterFormValues, 'id' | 'created_at' | 'updated_at'>
+): Promise<IGlobalParameterFormValues> => {
   return await axios
-    .put<IParameterFormValues>(CREATE_GLOBAL_PARAMS_URL, paramsData, {
+    .put<IGlobalParameterFormValues>(`${COMPANY_GLOBAL_SETTINGS_URL}?id=${id}`, currencyData, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

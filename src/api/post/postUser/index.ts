@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { paths } from '@/api/types';
-
-const api = import.meta.env.VITE_APP_API_URL;
-export const CREATE_USER_URL = `${api}/auth/register`;
+import { USERS_URL } from '@/api/url';
 
 type RegisterRequest =
   paths['/auth/register']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
@@ -17,7 +15,7 @@ export const postCreateUser = async (userData: RegisterRequest): Promise<Registe
     }
   });
 
-  await axios.post(CREATE_USER_URL, formData, {
+  await axios.post(USERS_URL, formData, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   });
 

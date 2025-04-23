@@ -2,6 +2,8 @@ const api = import.meta.env.VITE_APP_API_URL;
 
 export const USERS_URL = `${api}/users/manage`;
 
+export const USERS_LIST_URL = `${api}/users/list`;
+
 export const PERMISSIONS_URL = `${api}/permissions/manage`;
 
 export const ROLES_URL = `${api}/roles/manage`;

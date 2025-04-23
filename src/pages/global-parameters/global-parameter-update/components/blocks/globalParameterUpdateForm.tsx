@@ -68,7 +68,7 @@ export const GlobalParameterUpdateForm: FC<IGeneralSettingsProps> = ({ title, pa
       setLoading(true);
       setStatus(null);
       try {
-        await putGlobalParameter(values);
+        await putGlobalParameter(Number(id), values);
         setStatus('Global Parameters created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

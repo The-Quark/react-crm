@@ -1,18 +1,6 @@
 import axios from 'axios';
-import { IImageInputFile } from '@/components/image-input';
-
-interface UserModel {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: IImageInputFile | null;
-  phone?: string;
-  location?: string;
-  position?: string;
-}
-
-const api = import.meta.env.VITE_APP_API_URL;
-export const UPDATE_USER_URL = `${api}/users/manage`;
+import { UserModel } from '@/api/post/postUpdateUser/types';
+import { USERS_URL } from '@/api/url';
 
 export const postUpdateUser = async (
   userData: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
@@ -25,7 +13,7 @@ export const postUpdateUser = async (
       formData.append(key, value instanceof Blob ? value : String(value));
     }
   });
-  const urlWithParam = removeAvatar ? `${UPDATE_USER_URL}?remove_avatar=true` : UPDATE_USER_URL;
+  const urlWithParam = removeAvatar ? `${USERS_URL}?remove_avatar=true` : USERS_URL;
 
   return await axios
     .post<UserModel>(urlWithParam, formData, {
