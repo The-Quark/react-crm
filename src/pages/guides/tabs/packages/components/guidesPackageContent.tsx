@@ -1,22 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { RowSelectionState } from '@tanstack/react-table';
 import { DataGrid } from '@/components';
-import { toast } from 'sonner';
-import { CircularProgress } from '@mui/material';
 import { getLanguages } from '@/api';
 import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/blocks/languagesColumns.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { PackagesToolbar } from '@/pages/guides/tabs/packages/components/blocks/packagesToolbar.tsx';
+import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import GuidesError from '@/pages/guides/components/guidesError.tsx';
+import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesPackagesContent = () => {
-  const {
-    data: languages,
-    isLoading,
-    refetch,
-    isError,
-    error
-  } = useQuery({
-    queryKey: ['languages'],
+  const { data, isLoading, refetch, isError, error } = useQuery({
+    queryKey: ['packages'],
     queryFn: () => getLanguages(),
     retry: false,
     refetchOnWindowFocus: false,
@@ -24,48 +18,18 @@ export const GuidesPackagesContent = () => {
   });
   const columns = useLanguagesColumns({ setReload: () => refetch() });
 
-  const handleRowSelection = (state: RowSelectionState) => {
-    const selectedRowIds = Object.keys(state);
-
-    if (selectedRowIds.length > 0) {
-      toast(`Total ${selectedRowIds.length} are selected.`, {
-        description: `Selected row IDs: ${selectedRowIds}`,
-        action: {
-          label: 'Undo',
-          onClick: () => console.log('Undo')
-        }
-      });
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="card flex justify-center items-center p-5">
-        <CircularProgress />
-      </div>
-    );
-  }
-
   if (isError) {
-    return (
-      <div className="card flex justify-center items-center p-5 text-red-500">
-        <span>
-          Error loading languages: {error instanceof Error ? error.message : 'Unknown error'}
-        </span>
-      </div>
-    );
+    return <GuidesError error={error} />;
   }
 
   return (
     <>
       {isLoading ? (
-        <div className="card flex justify-center items-center p-5">
-          <CircularProgress />
-        </div>
+        <GuidesLoading />
       ) : (
         <DataGrid
           columns={columns}
-          data={languages?.result}
+          data={data?.result}
           rowSelection={true}
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
