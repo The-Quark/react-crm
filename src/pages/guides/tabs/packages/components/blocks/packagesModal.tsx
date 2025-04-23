@@ -23,7 +23,7 @@ interface Props {
   id?: number;
 }
 
-const createLanguageSchema = Yup.object().shape({
+const validateSchema = Yup.object().shape({
   code: Yup.string()
     .required('Code is required')
     .matches(/^[a-z]{2}(-[A-Z]{2})?$/, 'Invalid code format (e.g., en or en-US)'),
@@ -50,18 +50,18 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
 
   useEffect(() => {
     if (id) {
-      const fetchLanguage = async () => {
+      const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const languageData = await getLanguages(Number(id));
-          const lang = languageData.result[0];
+          const reqData = await getLanguages(Number(id));
+          const req = reqData.result[0];
           setInitialValues({
-            code: lang.code,
-            name: lang.name,
-            native_name: lang.native_name,
-            locale: lang.locale,
-            direction: lang.direction,
-            is_active: lang.is_active
+            code: req.code,
+            name: req.name,
+            native_name: req.native_name,
+            locale: req.locale,
+            direction: req.direction,
+            is_active: req.is_active
           });
           setFormLoading(false);
         } catch (err) {
@@ -71,14 +71,14 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
       };
 
-      fetchLanguage();
+      fetchReq();
     }
   }, [id]);
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    validationSchema: createLanguageSchema,
+    validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
@@ -110,7 +110,7 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update language' : 'New language'}
+              {id ? 'Update' : 'Create'}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button

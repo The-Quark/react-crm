@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { getSources } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSourcesColumns } from '@/pages/guides/tabs/sources/components/blocks/sourcesColumns.tsx';
@@ -23,7 +23,7 @@ export const GuidesSourcesContent = () => {
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -38,6 +38,6 @@ export const GuidesSourcesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };

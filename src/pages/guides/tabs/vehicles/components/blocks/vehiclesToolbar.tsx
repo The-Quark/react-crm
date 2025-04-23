@@ -8,12 +8,12 @@ interface Props {
 
 export const VehiclesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-  const [vehicleModalOpen, setVehicleModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
-    setVehicleModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setVehicleModalOpen(true);
+    setModalOpen(true);
   };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -37,7 +37,7 @@ export const VehiclesToolbar: FC<Props> = ({ setReload }) => {
           New Vehicle
         </button>
       </div>
-      <VehicleModal open={vehicleModalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <VehicleModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

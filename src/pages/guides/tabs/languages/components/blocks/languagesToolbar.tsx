@@ -8,12 +8,12 @@ interface Props {
 
 export const LanguagesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-  const [languageModalOpen, setLanguageModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
-    setLanguageModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setLanguageModalOpen(true);
+    setModalOpen(true);
   };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -28,8 +28,8 @@ export const LanguagesToolbar: FC<Props> = ({ setReload }) => {
             type="text"
             placeholder="Search language"
             className="input input-sm ps-8"
-            value={(table.getColumn('language name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('language name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
         <DataGridColumnVisibility table={table} />
@@ -37,7 +37,7 @@ export const LanguagesToolbar: FC<Props> = ({ setReload }) => {
           New Language
         </button>
       </div>
-      <LanguagesModal open={languageModalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <LanguagesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

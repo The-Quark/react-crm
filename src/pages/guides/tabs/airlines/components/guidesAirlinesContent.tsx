@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getAirlines } from '@/api';
 import { useAirlinesColumns } from '@/pages/guides/tabs/airlines/components/blocks/airlinesColumns.tsx';
@@ -23,7 +23,7 @@ export const GuidesAirlinesContent = () => {
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -38,6 +38,6 @@ export const GuidesAirlinesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };

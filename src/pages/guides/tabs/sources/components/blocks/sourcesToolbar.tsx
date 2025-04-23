@@ -8,12 +8,12 @@ interface Props {
 
 export const SourcesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-  const [sourceModalOpen, setSourceModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
-    setSourceModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setSourceModalOpen(true);
+    setModalOpen(true);
   };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -28,8 +28,8 @@ export const SourcesToolbar: FC<Props> = ({ setReload }) => {
             type="text"
             placeholder="Search source"
             className="input input-sm ps-8"
-            value={(table.getColumn('source name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('source name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
         <DataGridColumnVisibility table={table} />
@@ -37,7 +37,7 @@ export const SourcesToolbar: FC<Props> = ({ setReload }) => {
           New Source
         </button>
       </div>
-      <SourceModal open={sourceModalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <SourceModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

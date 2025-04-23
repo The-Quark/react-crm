@@ -21,19 +21,10 @@ interface Props {
   id?: number;
 }
 
-const currencySchema = Yup.object({
-  code: Yup.string()
-    .required('Currency code is required')
-    .max(10, 'Maximum length is 10 characters'),
-
-  name: Yup.string()
-    .required('Currency name is required')
-    .max(50, 'Maximum length is 50 characters'),
-
-  symbol: Yup.string()
-    .required('Currency symbol is required')
-    .length(1, 'Symbol should be 1 character'),
-
+const validateSchema = Yup.object({
+  code: Yup.string().required('Code is required').max(10, 'Maximum length is 10 characters'),
+  name: Yup.string().required('Name is required').max(50, 'Maximum length is 50 characters'),
+  symbol: Yup.string().required('Symbol is required').length(1, 'Symbol should be 1 character'),
   rate_to_base: Yup.number()
     .required('Exchange rate is required')
     .min(0, 'Exchange rate cannot be negative')
@@ -64,18 +55,18 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
 
   useEffect(() => {
     if (id) {
-      const fetchCurrency = async () => {
+      const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const currencyData = await getCurrencies(Number(id));
-          const currency = currencyData.result[0];
+          const reqData = await getCurrencies(Number(id));
+          const req = reqData.result[0];
           setInitialValues({
-            code: currency.code,
-            name: currency.name,
-            symbol: currency.symbol,
-            rate_to_base: currency.rate_to_base,
-            is_base: currency.is_base,
-            is_active: currency.is_active
+            code: req.code,
+            name: req.name,
+            symbol: req.symbol,
+            rate_to_base: req.rate_to_base,
+            is_base: req.is_base,
+            is_active: req.is_active
           });
           setFormLoading(false);
         } catch (err) {
@@ -85,14 +76,14 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
       };
 
-      fetchCurrency();
+      fetchReq();
     }
   }, [id]);
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    validationSchema: currencySchema,
+    validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
@@ -124,7 +115,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update currency' : 'New currency'}
+              {id ? 'Update' : 'Create'}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button

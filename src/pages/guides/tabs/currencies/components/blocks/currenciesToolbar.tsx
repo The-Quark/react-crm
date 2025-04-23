@@ -8,13 +8,13 @@ interface Props {
 
 export const CurrenciesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-  const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleClose = () => {
-    setCurrencyModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setCurrencyModalOpen(true);
+    setModalOpen(true);
   };
 
   return (
@@ -30,8 +30,8 @@ export const CurrenciesToolbar: FC<Props> = ({ setReload }) => {
             type="text"
             placeholder="Search currency"
             className="input input-sm ps-8"
-            value={(table.getColumn('currency name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('currency name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
         <DataGridColumnVisibility table={table} />
@@ -39,7 +39,7 @@ export const CurrenciesToolbar: FC<Props> = ({ setReload }) => {
           New Currency
         </button>
       </div>
-      <CurrenciesModal open={currencyModalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <CurrenciesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

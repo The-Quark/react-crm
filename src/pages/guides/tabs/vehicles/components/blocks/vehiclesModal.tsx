@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import { mockTypes, mockStatus } from '@/lib/mocks.ts';
 
 interface Props {
   open: boolean;
@@ -28,41 +29,7 @@ interface Props {
   id?: number;
 }
 
-const mockTypes = [
-  {
-    id: 1,
-    name: 'car'
-  },
-  {
-    id: 2,
-    name: 'motorcycle'
-  },
-  {
-    id: 3,
-    name: 'truck'
-  },
-  {
-    id: 4,
-    name: 'bus'
-  }
-];
-
-const mockStatus = [
-  {
-    id: 1,
-    name: 'available'
-  },
-  {
-    id: 2,
-    name: 'rented'
-  },
-  {
-    id: 3,
-    name: 'maintenance'
-  }
-];
-
-const createVehicleSchema = Yup.object().shape({
+const validateSchema = Yup.object().shape({
   plate_number: Yup.string().required('Plate number is required'),
   type: Yup.mixed<'car' | 'motorcycle' | 'truck' | 'bus'>()
     .oneOf(['car', 'motorcycle', 'truck', 'bus'], 'Invalid vehicle type')
@@ -89,18 +56,18 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
 
   useEffect(() => {
     if (id) {
-      const fetchVehicle = async () => {
+      const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const vehicleData = await getVehicles(Number(id));
-          const vehicle = vehicleData.result[0];
+          const reqData = await getVehicles(Number(id));
+          const req = reqData.result[0];
           setInitialValues({
-            plate_number: vehicle.plate_number,
-            type: vehicle.type,
-            brand: vehicle.brand,
-            model: vehicle.model,
-            status: vehicle.status,
-            avg_fuel_consumption: vehicle.avg_fuel_consumption
+            plate_number: req.plate_number,
+            type: req.type,
+            brand: req.brand,
+            model: req.model,
+            status: req.status,
+            avg_fuel_consumption: req.avg_fuel_consumption
           });
           setFormLoading(false);
         } catch (err) {
@@ -110,14 +77,14 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
       };
 
-      fetchVehicle();
+      fetchReq();
     }
   }, [id]);
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    validationSchema: createVehicleSchema,
+    validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
@@ -149,7 +116,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update vehicle' : 'New vehicle'}
+              {id ? 'Update' : 'Create'}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button

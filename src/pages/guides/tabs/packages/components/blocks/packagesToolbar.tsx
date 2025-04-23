@@ -8,12 +8,12 @@ interface Props {
 
 export const PackagesToolbar: FC<Props> = ({ setReload }) => {
   const { table } = useDataGrid();
-  const [packageModalOpen, setPackageModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
-    setPackageModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setPackageModalOpen(true);
+    setModalOpen(true);
   };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -28,8 +28,8 @@ export const PackagesToolbar: FC<Props> = ({ setReload }) => {
             type="text"
             placeholder="Search package"
             className="input input-sm ps-8"
-            value={(table.getColumn('package name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('package name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
         <DataGridColumnVisibility table={table} />
@@ -37,7 +37,7 @@ export const PackagesToolbar: FC<Props> = ({ setReload }) => {
           New Package
         </button>
       </div>
-      <PackagesModal open={packageModalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <PackagesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
     </div>
   );
 };

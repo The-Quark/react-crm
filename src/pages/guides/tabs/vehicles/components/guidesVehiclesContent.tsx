@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { useVehiclesColumns } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesColumns.tsx';
 import { VehiclesToolbar } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesToolbar.tsx';
@@ -23,7 +23,7 @@ export const GuidesVehiclesContent = () => {
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -38,6 +38,6 @@ export const GuidesVehiclesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };

@@ -12,7 +12,7 @@ interface Props {
 
 export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => {
   const { isRTL } = useLanguage();
-  const columnsSource = useMemo<ColumnDef<Source>[]>(
+  const columns = useMemo<ColumnDef<Source>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -40,16 +40,12 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
       },
       {
         accessorFn: (row) => row.name,
-        id: 'source name',
+        id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.name}
-              </a>
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
           </div>
         ),
         meta: {
@@ -59,7 +55,7 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
       },
       {
         accessorFn: (row) => row.code,
-        id: 'source code',
+        id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -68,7 +64,7 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
@@ -78,13 +74,13 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.is_active ? 'Yes' : 'No'}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[10px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -114,5 +110,5 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
     ],
     [isRTL]
   );
-  return columnsSource;
+  return columns;
 };

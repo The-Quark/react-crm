@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { CurrenciesToolbar } from '@/pages/guides/tabs/currencies/components/blocks/currenciesToolbar.tsx';
 import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/blocks/currenciesColumns.tsx';
@@ -24,7 +24,7 @@ export const GuidesCurrenciesContent = () => {
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -39,6 +39,6 @@ export const GuidesCurrenciesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };

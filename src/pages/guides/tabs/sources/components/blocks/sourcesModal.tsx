@@ -23,7 +23,7 @@ interface Props {
   id?: number;
 }
 
-const createSourceSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   code: Yup.string().required('Code is required'),
   name: Yup.string().required('Name is required'),
   is_active: Yup.boolean().required('Active status is required')
@@ -40,15 +40,15 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
 
   useEffect(() => {
     if (id) {
-      const fetchSource = async () => {
+      const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const sourceData = await getSources(Number(id));
-          const source = sourceData.result[0];
+          const reqData = await getSources(Number(id));
+          const req = reqData.result[0];
           setInitialValues({
-            code: source.code,
-            name: source.name,
-            is_active: source.is_active
+            code: req.code,
+            name: req.name,
+            is_active: req.is_active
           });
           setFormLoading(false);
         } catch (err) {
@@ -58,14 +58,14 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
       };
 
-      fetchSource();
+      fetchReq();
     }
   }, [id]);
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    validationSchema: createSourceSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
@@ -97,7 +97,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update source' : 'New source'}
+              {id ? 'Update' : 'Create'}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button

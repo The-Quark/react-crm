@@ -249,3 +249,37 @@ export const fakeLegalClientsMock: FakeLegalClient[] = [
     activeOrder: 2
   }
 ];
+
+export const mockTypes = [
+  {
+    id: 1,
+    name: 'car'
+  },
+  {
+    id: 2,
+    name: 'motorcycle'
+  },
+  {
+    id: 3,
+    name: 'truck'
+  },
+  {
+    id: 4,
+    name: 'bus'
+  }
+];
+
+export const mockStatus = [
+  {
+    id: 1,
+    name: 'available'
+  },
+  {
+    id: 2,
+    name: 'rented'
+  },
+  {
+    id: 3,
+    name: 'maintenance'
+  }
+];

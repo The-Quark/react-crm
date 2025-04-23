@@ -13,7 +13,7 @@ interface Props {
 
 export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] => {
   const { isRTL } = useLanguage();
-  const columnsAirline = useMemo<ColumnDef<Airline>[]>(
+  const columns = useMemo<ColumnDef<Airline>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -32,7 +32,7 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -45,12 +45,8 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         header: ({ column }) => <DataGridColumnHeader title="Airline" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.name}
-              </a>
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
           </div>
         ),
         meta: {
@@ -65,11 +61,11 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
@@ -79,13 +75,13 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.country}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
@@ -95,13 +91,13 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.is_active ? 'Yes' : 'No'}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -131,5 +127,5 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
     ],
     [isRTL]
   );
-  return columnsAirline;
+  return columns;
 };

@@ -12,7 +12,7 @@ interface Props {
 
 export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
-  const columnsVehicle = useMemo<ColumnDef<Vehicle>[]>(
+  const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -31,7 +31,7 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -44,11 +44,9 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
         header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.plate_number}
-              </a>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.plate_number}
             </div>
           </div>
         ),
@@ -59,85 +57,79 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
       },
       {
         accessorFn: (row) => row.type,
-        id: 'vehicle type',
+        id: 'type',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.type}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.type}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
         accessorFn: (row) => row.brand,
-        id: 'vehicle brand',
+        id: 'brand',
         header: ({ column }) => <DataGridColumnHeader title="Brand" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.brand}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.brand}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
         accessorFn: (row) => row.model,
-        id: 'vehicle model',
+        id: 'model',
         header: ({ column }) => <DataGridColumnHeader title="Model" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.model}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.model}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
         accessorFn: (row) => row.status,
-        id: 'vehicle status',
+        id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.status}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
         accessorFn: (row) => row.avg_fuel_consumption,
-        id: 'vehicle avg_fuel_consumption',
+        id: 'avg fuel consumption',
         header: ({ column }) => (
           <DataGridColumnHeader title="Average fuel consumption" column={column} />
         ),
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.avg_fuel_consumption}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -167,5 +159,5 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
     ],
     [isRTL]
   );
-  return columnsVehicle;
+  return columns;
 };

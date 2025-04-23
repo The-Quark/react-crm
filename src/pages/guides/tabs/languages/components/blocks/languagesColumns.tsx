@@ -12,7 +12,7 @@ interface Props {
 
 export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[] => {
   const { isRTL } = useLanguage();
-  const columnsLanguage = useMemo<ColumnDef<Language>[]>(
+  const columns = useMemo<ColumnDef<Language>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -31,7 +31,7 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -40,16 +40,12 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
       },
       {
         accessorFn: (row) => row.name,
-        id: 'language name',
+        id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.name}
-              </a>
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
           </div>
         ),
         meta: {
@@ -59,15 +55,13 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
       },
       {
         accessorFn: (row) => row.native_name,
-        id: 'language native name',
+        id: 'native name',
         header: ({ column }) => <DataGridColumnHeader title="Language native" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <div className="leading-none text-gray-800 font-normal">
-                {info.row.original.native_name}
-              </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.native_name}
             </div>
           </div>
         ),
@@ -78,32 +72,32 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
       },
       {
         accessorFn: (row) => row.code,
-        id: 'language code',
+        id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
         accessorFn: (row) => row.direction,
-        id: 'orders',
+        id: 'direction',
         header: ({ column }) => <DataGridColumnHeader title="Direction" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.direction}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -114,13 +108,11 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.locale}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.locale}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -131,13 +123,13 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.is_active ? 'Yes' : 'No'}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -167,5 +159,5 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
     ],
     [isRTL]
   );
-  return columnsLanguage;
+  return columns;
 };

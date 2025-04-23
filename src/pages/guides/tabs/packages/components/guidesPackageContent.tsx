@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { getLanguages } from '@/api';
-import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/blocks/languagesColumns.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { PackagesToolbar } from '@/pages/guides/tabs/packages/components/blocks/packagesToolbar.tsx';
 import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
 import GuidesError from '@/pages/guides/components/guidesError.tsx';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
+import { usePackagesColumns } from '@/pages/guides/tabs/packages/components/blocks/packagesColumns.tsx';
 
 export const GuidesPackagesContent = () => {
   const { data, isLoading, refetch, isError, error } = useQuery({
@@ -16,14 +16,14 @@ export const GuidesPackagesContent = () => {
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5
   });
-  const columns = useLanguagesColumns({ setReload: () => refetch() });
+  const columns = usePackagesColumns({ setReload: () => refetch() });
 
   if (isError) {
     return <GuidesError error={error} />;
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -38,6 +38,6 @@ export const GuidesPackagesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };

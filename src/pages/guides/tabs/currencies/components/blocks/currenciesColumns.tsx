@@ -12,7 +12,7 @@ interface Props {
 
 export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[] => {
   const { isRTL } = useLanguage();
-  const columnsCurrency = useMemo<ColumnDef<Currency>[]>(
+  const columns = useMemo<ColumnDef<Currency>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -30,8 +30,8 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+          <div className="flex items-center gap-1.5 ">
+            <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -40,16 +40,12 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
       },
       {
         accessorFn: (row) => row.name,
-        id: 'currency name',
+        id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <a href="#" className="leading-none text-gray-800 font-normal">
-                {info.row.original.name}
-              </a>
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
           </div>
         ),
         meta: {
@@ -59,26 +55,22 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
       },
       {
         accessorFn: (row) => row.symbol,
-        id: 'currency symbol',
+        id: 'symbol',
         header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <div className="leading-none text-gray-800 font-normal">
-                {info.row.original.symbol}
-              </div>
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.symbol}</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[200px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
         accessorFn: (row) => row.code,
-        id: 'currency code',
+        id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -87,7 +79,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
@@ -97,13 +89,13 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
+            <div className="leading-none text-gray-800 font-normal">
               {info.row.original.is_base ? 'Yes' : 'No'}
-            </span>
+            </div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -120,7 +112,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -137,7 +129,7 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[80px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -167,5 +159,5 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
     ],
     [isRTL]
   );
-  return columnsCurrency;
+  return columns;
 };

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { DataGrid, Container } from '@/components';
 import { getLanguages } from '@/api';
 import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/blocks/languagesColumns.tsx';
 import { LanguagesToolbar } from '@/pages/guides/tabs/languages/components/blocks/languagesToolbar.tsx';
@@ -23,7 +23,7 @@ export const GuidesLanguagesContent = () => {
   }
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <GuidesLoading />
       ) : (
@@ -38,6 +38,6 @@ export const GuidesLanguagesContent = () => {
           layout={{ card: true }}
         />
       )}
-    </>
+    </Container>
   );
 };
