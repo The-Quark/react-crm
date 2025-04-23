@@ -14,37 +14,51 @@ import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useLanguage } from '@/providers';
-import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
-import { deleteCurrency } from '@/api';
 
-interface ParameterMenuOptionsProps {
+interface IMenuOptionsProps {
   id?: number;
   handleReload: () => void;
+  deleteRequest: (id: number) => Promise<void>;
+  renderModal: (props: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    setReload: () => void;
+    id?: number;
+  }) => React.ReactNode;
 }
 
-const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
+  id,
+  handleReload,
+  deleteRequest,
+  renderModal
+}) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageCurrenciesSettings =
+  const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const [currrencyModalOpen, setCurrencyModalOpen] = useState(false);
   const { isRTL } = useLanguage();
 
   const handleClose = () => {
-    setCurrencyModalOpen(false);
+    setModalOpen(false);
   };
   const handleOpen = () => {
-    setCurrencyModalOpen(true);
+    setModalOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (id) {
-      deleteCurrency(id);
-      setTimeout(() => {
-        handleReload();
-      }, 500);
+      try {
+        await deleteRequest(id);
+        setTimeout(() => {
+          handleReload();
+        }, 500);
+      } catch (error) {
+        toast.error('Failed to delete');
+      }
     } else {
-      toast.error('Currency ID not provided');
+      toast.error('ID not provided');
     }
   };
 
@@ -68,16 +82,16 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
         <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
           <KeenIcon icon="dots-vertical" />
         </MenuToggle>
-        {!currrencyModalOpen && (
+        {!modalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageCurrenciesSettings && (
+            {canManageSettings && (
               <>
                 <MenuItem onClick={handleOpen}>
                   <MenuLink>
                     <MenuIcon>
                       <KeenIcon icon="setting-4" />
                     </MenuIcon>
-                    <MenuTitle>Edit Currency</MenuTitle>
+                    <MenuTitle>Edit</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -94,16 +108,15 @@ const CurrenciesMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload
           </MenuSub>
         )}
       </MenuItem>
-      {currrencyModalOpen && (
-        <CurrenciesModal
-          open={currrencyModalOpen}
-          onOpenChange={handleClose}
-          setReload={handleReload}
-          id={id}
-        />
-      )}
+      {modalOpen &&
+        renderModal({
+          open: modalOpen,
+          onOpenChange: handleClose,
+          setReload: handleReload,
+          id
+        })}
     </Menu>
   );
 };
 
-export { CurrenciesMenuOptions };
+export { GuidesMenuOptions };

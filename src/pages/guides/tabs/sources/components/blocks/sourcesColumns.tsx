@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Source } from '@/api/get/getSources/types.ts';
-import { SourceMenuOptions } from '@/pages/guides/tabs/sources/components/blocks/sourcesMenuOptions.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+import { deleteSource } from '@/api';
+import SourcesModal from '@/pages/guides/tabs/sources/components/blocks/sourcesModal.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -90,11 +92,21 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) =>
-          SourceMenuOptions({
-            id: info.row.original.id,
-            handleReload: () => setReload((prev) => !prev)
-          }),
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            handleReload={() => setReload((prev) => !prev)}
+            deleteRequest={deleteSource}
+            renderModal={({ open, onOpenChange }) => (
+              <SourcesModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                setReload={() => setReload((prev) => !prev)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

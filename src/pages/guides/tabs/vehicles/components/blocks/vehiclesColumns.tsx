@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Vehicle } from '@/api/get/getVehicles/types.ts';
-import { VehiclesMenuOptions } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesMenuOptions.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+import { deleteVehicle } from '@/api';
+import VehiclesModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -143,11 +145,21 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) =>
-          VehiclesMenuOptions({
-            id: info.row.original.id,
-            handleReload: () => setReload((prev) => !prev)
-          }),
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            handleReload={() => setReload((prev) => !prev)}
+            deleteRequest={deleteVehicle}
+            renderModal={({ open, onOpenChange }) => (
+              <VehiclesModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                setReload={() => setReload((prev) => !prev)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

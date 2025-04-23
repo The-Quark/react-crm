@@ -28,7 +28,7 @@ const validateSchema = Yup.object({
   is_active: Yup.boolean().required()
 });
 
-const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const AirlineModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IAirlineFormValues>({
@@ -207,4 +207,4 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   );
 };
 
-export default CurrenciesModal;
+export default AirlineModal;

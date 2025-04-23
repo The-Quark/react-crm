@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Airline } from '@/api/get/getAirlines/types.ts';
-import { AirlinesMenuOptions } from '@/pages/guides/tabs/airlines/components/blocks/airlinesMenuOptions.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+import { deleteAirline } from '@/api';
+import AirlineModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
 
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
@@ -107,11 +109,21 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) =>
-          AirlinesMenuOptions({
-            id: info.row.original.id,
-            handleReload: () => setReload((prev) => !prev)
-          }),
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            handleReload={() => setReload((prev) => !prev)}
+            deleteRequest={deleteAirline}
+            renderModal={({ open, onOpenChange }) => (
+              <AirlineModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                setReload={() => setReload((prev) => !prev)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

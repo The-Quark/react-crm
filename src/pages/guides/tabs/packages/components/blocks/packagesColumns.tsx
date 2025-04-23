@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Language } from '@/api/get/getLanguages/types.ts';
-import { LanguagesMenuOptions } from '@/pages/guides/tabs/languages/components/blocks/languagesMenuOptions.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+import { deleteCurrency } from '@/api';
+import PackagesModal from '@/pages/guides/tabs/packages/components/blocks/packagesModal.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -143,11 +145,21 @@ export const usePackagesColumns = ({ setReload }: Props): ColumnDef<Language>[] 
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) =>
-          LanguagesMenuOptions({
-            id: info.row.original.id,
-            handleReload: () => setReload((prev) => !prev)
-          }),
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            handleReload={() => setReload((prev) => !prev)}
+            deleteRequest={deleteCurrency}
+            renderModal={({ open, onOpenChange }) => (
+              <PackagesModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                setReload={() => setReload((prev) => !prev)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

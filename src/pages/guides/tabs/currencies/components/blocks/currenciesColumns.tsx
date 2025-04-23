@@ -3,7 +3,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { Currency } from '@/api/get/getCurrencies/types.ts';
-import { CurrenciesMenuOptions } from '@/pages/guides/tabs/currencies/components/blocks/currenciesMenuOptions.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+import { deleteCurrency } from '@/api';
+import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -143,11 +145,21 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) =>
-          CurrenciesMenuOptions({
-            id: info.row.original.id,
-            handleReload: () => setReload((prev) => !prev)
-          }),
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            handleReload={() => setReload((prev) => !prev)}
+            deleteRequest={deleteCurrency}
+            renderModal={({ open, onOpenChange }) => (
+              <CurrenciesModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                setReload={() => setReload((prev) => !prev)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }
