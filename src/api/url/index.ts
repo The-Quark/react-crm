@@ -15,3 +15,5 @@ export const CURRENCY_URL = `${api}/currency/manage`;
 export const SOURCE_URL = `${api}/source/manage`;
 
 export const VEHICLE_URL = `${api}/vehicle/manage`;
+
+export const AIRLINE_URL = `${api}/airline/manage`;

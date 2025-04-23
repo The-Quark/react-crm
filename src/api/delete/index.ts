@@ -4,3 +4,4 @@ export * from './deleteSource';
 export * from './deleteGlobalParameter';
 export * from './deleteCurrency';
 export * from './deleteVehicle';
+export * from './deleteAirline';

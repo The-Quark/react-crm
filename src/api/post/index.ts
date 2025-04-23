@@ -5,3 +5,4 @@ export * from './postUser';
 export * from './postUpdateUser';
 export * from './postGlobalParameter';
 export * from './postVehicle';
+export * from './postAirline';

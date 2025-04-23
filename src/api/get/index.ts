@@ -8,3 +8,4 @@ export * from './getCurrencies';
 export * from './getUsersList';
 export * from './getSources';
 export * from './getVehicles';
+export * from './getAirlines';

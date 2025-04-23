@@ -42,6 +42,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.SOURCES': 'Источники',
   'MENU.MEGAMENU.GUIDES.VEHICLES': 'Транспорт',
   'MENU.MEGAMENU.GUIDES.PACKAGES': 'Пакеты',
+  'MENU.MEGAMENU.GUIDES.AIRLINES': 'Авиалинии',
   'MENU.MEGAMENU.DEMONSTRATION': 'Демонстрация',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'Публичный профиль',
   'MENU.MEGAMENU.PUBLIC_PROFILE.PROFILES': 'Профили',
