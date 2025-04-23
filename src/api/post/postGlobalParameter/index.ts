@@ -3,10 +3,10 @@ import { IGlobalParameterFormValues } from '@/api/post/postGlobalParameter/types
 import { COMPANY_GLOBAL_SETTINGS_URL } from '@/api/url';
 
 export const postGlobalParameter = async (
-  paramsData: Omit<IGlobalParameterFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: Omit<IGlobalParameterFormValues, 'id' | 'created_at' | 'updated_at'>
 ): Promise<IGlobalParameterFormValues> => {
   return await axios
-    .post<IGlobalParameterFormValues>(COMPANY_GLOBAL_SETTINGS_URL, paramsData, {
+    .post<IGlobalParameterFormValues>(COMPANY_GLOBAL_SETTINGS_URL, data, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

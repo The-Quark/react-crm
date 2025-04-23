@@ -107,6 +107,10 @@ export const ViewerMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',
         path: '/guides/airlines'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS',
+        path: '/guides/package-materials'
       }
     ]
   }

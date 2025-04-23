@@ -6,3 +6,5 @@ export * from './postUpdateUser';
 export * from './postGlobalParameter';
 export * from './postVehicle';
 export * from './postAirline';
+export * from './postPackage';
+export * from './postPackageMaterial';

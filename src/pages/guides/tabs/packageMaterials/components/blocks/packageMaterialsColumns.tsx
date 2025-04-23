@@ -10,7 +10,7 @@ interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const usePackagesColumns = ({ setReload }: Props): ColumnDef<Package>[] => {
+export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<Package>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Package>[]>(
     () => [

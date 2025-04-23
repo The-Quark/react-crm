@@ -5,3 +5,5 @@ export * from './putUserRole';
 export * from './putGlobalParameter';
 export * from './putVehicle';
 export * from './putAirline';
+export * from './putPackage';
+export * from './putPackageMaterial';

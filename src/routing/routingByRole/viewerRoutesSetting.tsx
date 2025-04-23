@@ -20,7 +20,8 @@ import {
   GuidesVehiclesPage,
   GuidesSourcesPage,
   GuidesPackagesPage,
-  GuidesAirlinesPage
+  GuidesAirlinesPage,
+  GuidesPackageMaterialsPage
 } from '@/pages/guides';
 
 const ViewerRoutesSetting = () => {
@@ -56,6 +57,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
         <Route path="/guides/packages" element={<GuidesPackagesPage />} />
         <Route path="/guides/airlines" element={<GuidesAirlinesPage />} />
+        <Route path="/guides/package-materials" element={<GuidesPackageMaterialsPage />} />
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />

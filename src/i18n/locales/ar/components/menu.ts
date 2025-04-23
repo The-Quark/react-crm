@@ -43,6 +43,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.VEHICLES': 'المركبات',
   'MENU.MEGAMENU.GUIDES.PACKAGES': 'الحزم',
   'MENU.MEGAMENU.GUIDES.AIRLINES': 'شركات الطيران',
+  'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS': 'مواد التغليف',
   'MENU.MEGAMENU.DEMONSTRATION': 'عرض توضيحي',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'الملف الشخصي العام',
   'MENU.MEGAMENU.PUBLIC_PROFILE.PROFILES': 'الملفات الشخصية',

@@ -107,7 +107,8 @@ import {
   GuidesVehiclesPage,
   GuidesSourcesPage,
   GuidesPackagesPage,
-  GuidesAirlinesPage
+  GuidesAirlinesPage,
+  GuidesPackageMaterialsPage
 } from '@/pages/guides';
 
 const AllRoutesSetting = () => {
@@ -158,6 +159,7 @@ const AllRoutesSetting = () => {
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
         <Route path="/guides/packages" element={<GuidesPackagesPage />} />
         <Route path="/guides/airlines" element={<GuidesAirlinesPage />} />
+        <Route path="/guides/package-materials" element={<GuidesPackageMaterialsPage />} />
 
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />

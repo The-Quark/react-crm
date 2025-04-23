@@ -4,10 +4,10 @@ import { AIRLINE_URL } from '@/api/url';
 
 export const putAirline = async (
   id: number,
-  currencyData: Omit<IAirlineFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: Omit<IAirlineFormValues, 'id' | 'created_at' | 'updated_at'>
 ): Promise<IAirlineFormValues> => {
   return await axios
-    .put<IAirlineFormValues>(`${AIRLINE_URL}?id=${id}`, currencyData, {
+    .put<IAirlineFormValues>(`${AIRLINE_URL}?id=${id}`, data, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

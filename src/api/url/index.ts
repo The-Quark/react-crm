@@ -19,3 +19,7 @@ export const SOURCE_URL = `${api}/source/manage`;
 export const VEHICLE_URL = `${api}/vehicle/manage`;
 
 export const AIRLINE_URL = `${api}/airline/manage`;
+
+export const PACKAGE_URL = `${api}/package/manage`;
+
+export const PACKAGE_MATERIALS_URL = `${api}/package-materials/manage`;

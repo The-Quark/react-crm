@@ -23,6 +23,7 @@ import {
   GuidesAirlinesPage,
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
+  GuidesPackageMaterialsPage,
   GuidesPackagesPage,
   GuidesSourcesPage,
   GuidesVehiclesPage
@@ -44,7 +45,8 @@ const routeConfig = [
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/packages', element: <GuidesPackagesPage /> },
-      { path: '/guides/airlines', element: <GuidesAirlinesPage /> }
+      { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
+      { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> }
     ]
   },
   {
@@ -57,7 +59,8 @@ const routeConfig = [
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/packages', element: <GuidesPackagesPage /> },
-      { path: '/guides/airlines', element: <GuidesAirlinesPage /> }
+      { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
+      { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> }
     ]
   },
   {

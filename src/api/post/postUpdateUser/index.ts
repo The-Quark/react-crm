@@ -3,12 +3,12 @@ import { UserModel } from '@/api/post/postUpdateUser/types';
 import { USERS_URL } from '@/api/url';
 
 export const postUpdateUser = async (
-  userData: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
+  data: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
   removeAvatar: boolean = false
 ): Promise<UserModel> => {
   const formData = new FormData();
 
-  Object.entries(userData).forEach(([key, value]) => {
+  Object.entries(data).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       formData.append(key, value instanceof Blob ? value : String(value));
     }

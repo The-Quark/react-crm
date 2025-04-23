@@ -10,9 +10,9 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { postPackage, putPackage, getPackages } from '@/api';
+import { postPackageMaterial, putPackageMaterial, getPackageMaterials } from '@/api';
 import { CircularProgress } from '@mui/material';
-import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
+import { IPackageMaterialFormValues } from '@/api/post/postPackageMaterial/types.ts';
 
 interface Props {
   open: boolean;
@@ -26,16 +26,20 @@ const validateSchema = Yup.object().shape({
     .required('Code is required')
     .matches(/^[a-z]{2}(-[A-Z]{2})?$/, 'Invalid code format (e.g., en or en-US)'),
   name: Yup.string().required('Name is required'),
-  is_active: Yup.boolean().required('Active status is required')
+  is_active: Yup.boolean().required('Active status is required'),
+  price: Yup.number().required('Price is required'),
+  unit_id: Yup.number().required('Unit is required')
 });
 
-const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<IPackageFormValues>({
+  const [initialValues, setInitialValues] = useState<IPackageMaterialFormValues>({
     code: '',
     name: '',
     description: '',
+    unit_id: 0,
+    price: 0,
     is_active: true
   });
 
@@ -44,12 +48,14 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
       const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const reqData = await getPackages(Number(id));
+          const reqData = await getPackageMaterials(Number(id));
           const req = reqData.result[0];
           setInitialValues({
             code: req.code,
             name: req.name,
             description: req.description,
+            unit_id: req.unit_id,
+            price: req.price,
             is_active: req.is_active
           });
           setFormLoading(false);
@@ -72,9 +78,9 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
       setLoading(true);
       try {
         if (id) {
-          await putPackage(Number(id), values);
+          await putPackageMaterial(Number(id), values);
         } else {
-          await postPackage(values);
+          await postPackageMaterial(values);
         }
         resetForm();
         onOpenChange();
@@ -152,6 +158,40 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
                 </div>
 
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                  <label className="form-label max-w-56">Unit</label>
+                  <div className="flex columns-1 w-full flex-wrap">
+                    <input
+                      className="input w-full"
+                      type="number"
+                      placeholder="Unit"
+                      {...formik.getFieldProps('unit_id')}
+                    />
+                    {formik.touched.unit_id && formik.errors.unit_id && (
+                      <span role="alert" className="text-danger text-xs mt-1">
+                        {formik.errors.unit_id}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                  <label className="form-label max-w-56">Price</label>
+                  <div className="flex columns-1 w-full flex-wrap">
+                    <input
+                      className="input w-full"
+                      type="number"
+                      placeholder="Price"
+                      {...formik.getFieldProps('price')}
+                    />
+                    {formik.touched.price && formik.errors.price && (
+                      <span role="alert" className="text-danger text-xs mt-1">
+                        {formik.errors.price}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Description</label>
                   <div className="flex columns-1 w-full flex-wrap">
                     <input
@@ -208,4 +248,4 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   );
 };
 
-export default PackagesModal;
+export default PackageMaterialsModal;
