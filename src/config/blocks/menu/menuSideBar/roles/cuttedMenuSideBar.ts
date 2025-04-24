@@ -52,12 +52,12 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/vehicles'
       },
       {
-        title: 'MENU.MEGAMENU.GUIDES.PACKAGES',
-        path: '/guides/packages'
-      },
-      {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',
         path: '/guides/airlines'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES',
+        path: '/guides/package-types'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS',
@@ -94,12 +94,12 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/vehicles'
       },
       {
-        title: 'MENU.MEGAMENU.GUIDES.PACKAGES',
-        path: '/guides/packages'
-      },
-      {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',
         path: '/guides/airlines'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES',
+        path: '/guides/package-types'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS',

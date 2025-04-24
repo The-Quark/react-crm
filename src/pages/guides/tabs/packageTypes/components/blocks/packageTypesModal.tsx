@@ -10,9 +10,9 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { postPackage, putPackage, getPackages } from '@/api';
+import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
-import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
+import { IPackageTypeFormValues } from '@/api/post/postPackageType/types.ts';
 
 interface Props {
   open: boolean;
@@ -23,18 +23,21 @@ interface Props {
 
 const validateSchema = Yup.object().shape({
   code: Yup.string()
-    .required('Code is required')
-    .matches(/^[a-z]{2}(-[A-Z]{2})?$/, 'Invalid code format (e.g., en or en-US)'),
+    .matches(/^[A-Za-z0-9_]+$/, 'Code can only contain letters, numbers, and underscores')
+    .required('Code is required'),
   name: Yup.string().required('Name is required'),
+  language_code: Yup.string().required('Language code is required'),
+  description: Yup.string().notRequired(),
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<IPackageFormValues>({
+  const [initialValues, setInitialValues] = useState<IPackageTypeFormValues>({
     code: '',
     name: '',
+    language_code: '',
     description: '',
     is_active: true
   });
@@ -44,12 +47,13 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
       const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const reqData = await getPackages(Number(id));
+          const reqData = await getPackageTypes(Number(id));
           const req = reqData.result[0];
           setInitialValues({
             code: req.code,
-            name: req.name,
-            description: req.description,
+            name: req.language[0].name,
+            language_code: req.language_code,
+            description: req.language[0].description,
             is_active: req.is_active
           });
           setFormLoading(false);
@@ -72,9 +76,9 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
       setLoading(true);
       try {
         if (id) {
-          await putPackage(Number(id), values);
+          await putPackageType(Number(id), values);
         } else {
-          await postPackage(values);
+          await postPackageType(values);
         }
         resetForm();
         onOpenChange();
@@ -208,4 +212,4 @@ const PackagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
   );
 };
 
-export default PackagesModal;
+export default PackageTypesModal;

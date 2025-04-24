@@ -1,8 +1,8 @@
 import React from 'react';
-import { GuidesPackagesContent } from '@/pages/guides/tabs/packages/components/guidesPackageContent.tsx';
+import { GuidesPackagesContent } from '@/pages/guides/tabs/packageTypes/components/guidesPackageTypesContent.tsx';
 import GuidesHeader from '@/pages/guides/components/guidesHeader.tsx';
 
-export const GuidesPackagesPage = () => {
+export const GuidesPackageTypesPage = () => {
   return (
     <>
       <GuidesHeader />

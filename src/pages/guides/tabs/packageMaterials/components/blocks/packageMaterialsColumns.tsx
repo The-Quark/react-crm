@@ -3,16 +3,16 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
-import { deletePackage } from '@/api';
-import PackagesModal from '@/pages/guides/tabs/packages/components/blocks/packagesModal.tsx';
-import { Package } from '@/api/get/getPackages/types.ts';
+import { deletePackageMaterial } from '@/api';
+import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
+import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<Package>[] => {
+export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<PackageMaterial>[] => {
   const { isRTL } = useLanguage();
-  const columns = useMemo<ColumnDef<Package>[]>(
+  const columns = useMemo<ColumnDef<PackageMaterial>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -109,9 +109,9 @@ export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<Pack
           <GuidesMenuOptions
             id={info.row.original.id}
             handleReload={() => setReload((prev) => !prev)}
-            deleteRequest={deletePackage}
+            deleteRequest={deletePackageMaterial}
             renderModal={({ open, onOpenChange }) => (
-              <PackagesModal
+              <PackageTypesModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
                 setReload={() => setReload((prev) => !prev)}

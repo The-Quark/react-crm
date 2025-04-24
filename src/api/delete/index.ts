@@ -5,5 +5,5 @@ export * from './deleteGlobalParameter';
 export * from './deleteCurrency';
 export * from './deleteVehicle';
 export * from './deleteAirline';
-export * from './deletePackage';
+export * from './deletePackageType';
 export * from './deletePackageMaterial';

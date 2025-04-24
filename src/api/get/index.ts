@@ -9,5 +9,5 @@ export * from './getUsersList';
 export * from './getSources';
 export * from './getVehicles';
 export * from './getAirlines';
-export * from './getPackages';
+export * from './getPackageTypes';
 export * from './getPackageMaterials';
