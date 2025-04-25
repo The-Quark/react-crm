@@ -6,13 +6,25 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deletePackageType } from '@/api';
 import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
 import { PackageType } from '@/api/get/getPackageTypes/types.ts';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
+
+interface Language {
+  id: number;
+  code: string;
+  name: string;
 }
 
-export const usePackageTypesColumns = ({ setReload }: Props): ColumnDef<PackageType>[] => {
-  const { isRTL } = useLanguage();
-  const { currentLanguage } = useLanguage();
+interface Props {
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
+  languages: Language[];
+  selectedLanguage: string;
+}
+
+export const usePackageTypesColumns = ({
+  setReload,
+  languages,
+  selectedLanguage
+}: Props): ColumnDef<PackageType>[] => {
+  const { isRTL, currentLanguage } = useLanguage();
   const columns = useMemo<ColumnDef<PackageType>[]>(
     () => [
       {
@@ -131,9 +143,11 @@ export const usePackageTypesColumns = ({ setReload }: Props): ColumnDef<PackageT
             renderModal={({ open, onOpenChange }) => (
               <PackageTypesModal
                 open={open}
-                onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
+                onOpenChange={onOpenChange}
+                setReload={setReload}
                 id={info.row.original.id}
+                languages={languages}
+                selectedLanguage={selectedLanguage}
               />
             )}
           />
@@ -143,7 +157,7 @@ export const usePackageTypesColumns = ({ setReload }: Props): ColumnDef<PackageT
         }
       }
     ],
-    [isRTL]
+    [isRTL, setReload, languages, selectedLanguage]
   );
   return columns;
 };

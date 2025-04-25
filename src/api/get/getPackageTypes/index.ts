@@ -7,7 +7,7 @@ const getPackageTypes = async (
   language_code?: string
 ): Promise<PackageTypesResponse> => {
   const url = id
-    ? `${PACKAGE_TYPES_URL}?id=${id}&language_code=${language_code}`
+    ? `${PACKAGE_TYPES_URL}?id=${id}`
     : `${PACKAGE_TYPES_URL}?language_code=${language_code}`;
 
   const res = await axios.get<PackageTypesResponse>(url);

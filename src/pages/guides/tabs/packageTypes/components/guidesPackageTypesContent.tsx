@@ -33,7 +33,11 @@ export const GuidesPackagesContent = () => {
     staleTime: 1000 * 60 * 60 // 1 hour
   });
 
-  const columns = usePackageTypesColumns({ setReload: () => refetch() });
+  const columns = usePackageTypesColumns({
+    setReload: () => refetch(),
+    languages: languagesData?.result || [],
+    selectedLanguage: selectedLanguage.code
+  });
 
   const handleLanguageChange = (languageCode: string) => {
     setSelectedLanguage((prev) => ({ ...prev, code: languageCode as TLanguageCode }));

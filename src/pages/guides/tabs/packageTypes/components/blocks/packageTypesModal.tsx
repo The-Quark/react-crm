@@ -13,12 +13,26 @@ import { useFormik } from 'formik';
 import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { IPackageTypeFormValues } from '@/api/post/postPackageType/types.ts';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select.tsx';
+
+interface Language {
+  code: string;
+  name: string;
+}
 
 interface Props {
   open: boolean;
-  onOpenChange: () => void;
+  onOpenChange: (open: boolean) => void;
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
+  languages: Language[];
+  selectedLanguage: string;
 }
 
 const validateSchema = Yup.object().shape({
@@ -31,7 +45,14 @@ const validateSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const PackageTypesModal: FC<Props> = ({
+  open,
+  onOpenChange,
+  setReload,
+  id,
+  languages,
+  selectedLanguage
+}) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IPackageTypeFormValues>({
@@ -47,13 +68,13 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => 
       const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const reqData = await getPackageTypes(Number(id));
+          const reqData = await getPackageTypes(Number(id), undefined);
           const req = reqData.result[0];
           setInitialValues({
             code: req.code,
             name: req.language[0].name,
-            language_code: req.language_code,
-            description: req.language[0].description,
+            language_code: req.language_code || selectedLanguage,
+            description: req.language[0].description || '',
             is_active: req.is_active
           });
           setFormLoading(false);
@@ -81,7 +102,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => 
           await postPackageType(values);
         }
         resetForm();
-        onOpenChange();
+        onOpenChange(false);
         setReload((prev) => !prev);
       } catch (err) {
         console.error('Error submitting:', err);
@@ -94,7 +115,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => 
 
   const handleClose = () => {
     formik.resetForm();
-    onOpenChange();
+    onOpenChange(false);
   };
 
   return (
@@ -153,6 +174,25 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => 
                       </span>
                     )}
                   </div>
+                </div>
+
+                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                  <label className="form-label max-w-56">Language code</label>
+                  <Select
+                    value={formik.values.language_code}
+                    onValueChange={(value) => formik.setFieldValue('language_code', String(value))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map((language) => (
+                        <SelectItem key={language.code} value={language.code}>
+                          {language.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

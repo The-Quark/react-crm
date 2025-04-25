@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select.tsx';
 
 interface Language {
+  id: number;
   code: string;
   name: string;
 }
@@ -77,7 +78,13 @@ export const PackageTypesToolbar: FC<Props> = ({
           New Package Type
         </button>
       </div>
-      <PackageTypesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <PackageTypesModal
+        open={modalOpen}
+        onOpenChange={handleClose}
+        setReload={setReload}
+        languages={languages}
+        selectedLanguage={currentLanguage}
+      />
     </div>
   );
 };
