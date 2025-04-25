@@ -21,6 +21,7 @@ import {
 import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 import {
   GuidesAirlinesPage,
+  GuidesCountriesPage,
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
   GuidesPackageMaterialsPage,
@@ -41,6 +42,7 @@ const routeConfig = [
       { path: '/global-parameters/update-parameters/:id', element: <GlobalParameterUpdatePage /> },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
+      { path: '/guides/countries', element: <GuidesCountriesPage /> },
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
@@ -55,6 +57,7 @@ const routeConfig = [
       { path: '/global-parameters/parameters', element: <GlobalParametersListPage /> },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
+      { path: '/guides/countries', element: <GuidesCountriesPage /> },
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },

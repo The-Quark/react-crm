@@ -21,7 +21,8 @@ import {
   GuidesSourcesPage,
   GuidesPackageTypesPage,
   GuidesAirlinesPage,
-  GuidesPackageMaterialsPage
+  GuidesPackageMaterialsPage,
+  GuidesCountriesPage
 } from '@/pages/guides';
 
 const ViewerRoutesSetting = () => {
@@ -52,6 +53,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
 
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
+        <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />

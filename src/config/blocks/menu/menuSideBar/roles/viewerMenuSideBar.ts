@@ -89,6 +89,10 @@ export const ViewerMenuSideBar: TMenuConfig = [
         path: '/guides/currencies'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.COUNTRIES',
+        path: '/guides/countries'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
         path: '/guides/languages'
       },

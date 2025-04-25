@@ -40,6 +40,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/currencies'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.COUNTRIES',
+        path: '/guides/countries'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
         path: '/guides/languages'
       },
@@ -80,6 +84,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.CURRENCIES',
         path: '/guides/currencies'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.COUNTRIES',
+        path: '/guides/countries'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
