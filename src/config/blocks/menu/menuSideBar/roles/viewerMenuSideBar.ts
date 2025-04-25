@@ -93,6 +93,10 @@ export const ViewerMenuSideBar: TMenuConfig = [
         path: '/guides/countries'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.CITIES',
+        path: '/guides/cities'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.LANGUAGES',
         path: '/guides/languages'
       },

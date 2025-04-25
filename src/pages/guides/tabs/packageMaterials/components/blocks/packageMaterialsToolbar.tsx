@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
-import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
 
 interface Props {

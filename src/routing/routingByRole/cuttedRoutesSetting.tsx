@@ -29,6 +29,7 @@ import {
   GuidesSourcesPage,
   GuidesVehiclesPage
 } from '@/pages/guides';
+import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 
 interface Props {
   permissions: string[];
@@ -43,6 +44,7 @@ const routeConfig = [
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
+      { path: '/guides/cities', element: <GuidesCitiesPage /> },
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
@@ -58,6 +60,7 @@ const routeConfig = [
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
+      { path: '/guides/cities', element: <GuidesCitiesPage /> },
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },

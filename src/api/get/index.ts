@@ -12,3 +12,4 @@ export * from './getAirlines';
 export * from './getPackageTypes';
 export * from './getPackageMaterials';
 export * from './getCountries';
+export * from './getCitiesByCountryCode';

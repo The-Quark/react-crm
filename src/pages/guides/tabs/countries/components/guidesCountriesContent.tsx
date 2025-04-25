@@ -11,7 +11,7 @@ import { useCountriesColumns } from '@/pages/guides/tabs/countries/components/bl
 export const GuidesCountriesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['countries'],
-    queryFn: () => getCountries(),
+    queryFn: () => getCountries('iso2,phone_code,currency,timezones'),
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5

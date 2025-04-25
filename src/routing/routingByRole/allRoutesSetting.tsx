@@ -111,6 +111,7 @@ import {
   GuidesPackageMaterialsPage,
   GuidesCountriesPage
 } from '@/pages/guides';
+import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -156,6 +157,7 @@ const AllRoutesSetting = () => {
 
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
+        <Route path="/guides/cities" element={<GuidesCitiesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />

@@ -2,14 +2,17 @@ import axios from 'axios';
 import { CitiesResponse } from '@/api/get/getCitiesByCountryCode/types.ts';
 import { COUNTRIES_URL } from '@/api/url';
 
-const getCountries = async (params: string): Promise<CitiesResponse> => {
+const getCitiesByCountryCode = async (countryCode: string): Promise<CitiesResponse> => {
   return await axios
     .get<CitiesResponse>(COUNTRIES_URL, {
       params: {
-        fields: params
+        fields: 'cities',
+        filters: {
+          iso2: countryCode
+        }
       }
     })
     .then((res) => res.data);
 };
 
-export { getCountries };
+export { getCitiesByCountryCode };
