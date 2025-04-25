@@ -2,8 +2,7 @@
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getCountries } from '@/api';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { CountriesToolbar } from '@/pages/guides/tabs/countries/components/blocks/countriesToolbar.tsx';
 import { useCountriesColumns } from '@/pages/guides/tabs/countries/components/blocks/countriesColumns.tsx';
@@ -20,13 +19,13 @@ export const GuidesCountriesContent = () => {
   const columns = useCountriesColumns();
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

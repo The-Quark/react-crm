@@ -283,3 +283,22 @@ export const mockStatus = [
     name: 'maintenance'
   }
 ];
+
+export const mockApplicationsStatus = [
+  {
+    id: 1,
+    name: 'new'
+  },
+  {
+    id: 2,
+    name: 'running'
+  },
+  {
+    id: 3,
+    name: 'completed'
+  },
+  {
+    id: 4,
+    name: 'declined'
+  }
+];

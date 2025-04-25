@@ -1,11 +1,11 @@
 import React from 'react';
-import GuidesHeader from '@/pages/guides/components/guidesHeader.tsx';
+import { SharedHeader } from '@/partials/sharedUI';
 import { GuidesPackageMaterialsContent } from '@/pages/guides/tabs/packageMaterials/components/guidesPackageMaterialsContent.tsx';
 
 export const GuidesPackageMaterialsPage = () => {
   return (
     <>
-      <GuidesHeader />
+      <SharedHeader />
       <GuidesPackageMaterialsContent />
     </>
   );

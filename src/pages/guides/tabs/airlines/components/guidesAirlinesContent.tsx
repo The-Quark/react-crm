@@ -4,8 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAirlines } from '@/api';
 import { useAirlinesColumns } from '@/pages/guides/tabs/airlines/components/blocks/airlinesColumns.tsx';
 import { AirlinesToolbar } from '@/pages/guides/tabs/airlines/components/blocks/airlinesToolbar.tsx';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesAirlinesContent = () => {
@@ -19,13 +18,13 @@ export const GuidesAirlinesContent = () => {
   const columns = useAirlinesColumns({ setReload: () => refetch() });
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

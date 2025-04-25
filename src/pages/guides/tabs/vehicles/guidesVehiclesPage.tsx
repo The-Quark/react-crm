@@ -1,11 +1,11 @@
 import React from 'react';
+import { SharedHeader } from '@/partials/sharedUI';
 import { GuidesVehiclesContent } from '@/pages/guides/tabs/vehicles/components/guidesVehiclesContent.tsx';
-import GuidesHeader from '@/pages/guides/components/guidesHeader.tsx';
 
 export const GuidesVehiclesPage = () => {
   return (
     <>
-      <GuidesHeader />
+      <SharedHeader />
       <GuidesVehiclesContent />
     </>
   );

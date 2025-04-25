@@ -4,8 +4,7 @@ import { getSources } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSourcesColumns } from '@/pages/guides/tabs/sources/components/blocks/sourcesColumns.tsx';
 import { SourcesToolbar } from '@/pages/guides/tabs/sources/components/blocks/sourcesToolbar.tsx';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesSourcesContent = () => {
@@ -19,13 +18,13 @@ export const GuidesSourcesContent = () => {
   const columns = useSourcesColumns({ setReload: () => refetch() });
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

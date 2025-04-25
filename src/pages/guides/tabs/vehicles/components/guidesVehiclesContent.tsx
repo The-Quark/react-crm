@@ -4,8 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useVehiclesColumns } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesColumns.tsx';
 import { VehiclesToolbar } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesToolbar.tsx';
 import { getVehicles } from '@/api';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesVehiclesContent = () => {
@@ -19,13 +18,13 @@ export const GuidesVehiclesContent = () => {
   const columns = useVehiclesColumns({ setReload: () => refetch() });
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

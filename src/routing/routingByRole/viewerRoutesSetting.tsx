@@ -47,6 +47,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
+        <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders" element={<OrdersPage />} />
 

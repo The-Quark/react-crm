@@ -1,11 +1,11 @@
 import React from 'react';
-import GuidesHeader from '@/pages/guides/components/guidesHeader.tsx';
+import { SharedHeader } from '@/partials/sharedUI';
 import { GuidesCitiesContent } from '@/pages/guides/tabs/cities/components/guidesCitiesContent.tsx';
 
 export const GuidesCitiesPage = () => {
   return (
     <>
-      <GuidesHeader />
+      <SharedHeader />
       <GuidesCitiesContent />
     </>
   );

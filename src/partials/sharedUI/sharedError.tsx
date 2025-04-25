@@ -5,7 +5,7 @@ interface IProps {
   error: Error | null;
 }
 
-const GuidesError: FC<IProps> = ({ error }) => {
+export const SharedError: FC<IProps> = ({ error }) => {
   return (
     <Container>
       <div className="card flex justify-center items-center p-5 text-red-500">
@@ -14,5 +14,3 @@ const GuidesError: FC<IProps> = ({ error }) => {
     </Container>
   );
 };
-
-export default GuidesError;

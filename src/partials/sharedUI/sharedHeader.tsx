@@ -8,7 +8,7 @@ import {
   ToolbarPageTitle
 } from '@/partials/toolbar';
 
-const GuidesHeader = () => {
+export const SharedHeader = () => {
   return (
     <Container>
       <Toolbar>
@@ -23,5 +23,3 @@ const GuidesHeader = () => {
     </Container>
   );
 };
-
-export default GuidesHeader;

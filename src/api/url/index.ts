@@ -25,3 +25,5 @@ export const PACKAGE_TYPES_URL = `${api}/package_type/manage`;
 export const PACKAGE_MATERIALS_URL = `${api}/package-materials/manage`;
 
 export const COUNTRIES_URL = `${api}/countries`;
+
+export const APPLICATION_URL = `${api}/application/manage`;

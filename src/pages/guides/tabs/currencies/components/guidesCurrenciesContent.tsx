@@ -4,8 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { CurrenciesToolbar } from '@/pages/guides/tabs/currencies/components/blocks/currenciesToolbar.tsx';
 import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/blocks/currenciesColumns.tsx';
 import { getCurrencies } from '@/api';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesCurrenciesContent = () => {
@@ -20,13 +19,13 @@ export const GuidesCurrenciesContent = () => {
   const columns = useCurrenciesColumns({ setReload: () => refetch() });
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

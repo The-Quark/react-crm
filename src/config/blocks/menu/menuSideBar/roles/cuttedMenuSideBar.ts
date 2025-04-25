@@ -215,17 +215,8 @@ export const CuttedMenuSideBar: TMenuConfig = [
     requiredPermissions: ['view applications'],
     children: [
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
-        children: [
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER',
-            path: '/call-center/applications/starter'
-          },
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
-            path: '/call-center/applications/list'
-          }
-        ]
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+        path: '/call-center/applications/list'
       },
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',

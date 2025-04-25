@@ -4,8 +4,7 @@ import { getLanguages } from '@/api';
 import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/blocks/languagesColumns.tsx';
 import { LanguagesToolbar } from '@/pages/guides/tabs/languages/components/blocks/languagesToolbar.tsx';
 import { useQuery } from '@tanstack/react-query';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesLanguagesContent = () => {
@@ -19,13 +18,13 @@ export const GuidesLanguagesContent = () => {
   const columns = useLanguagesColumns({ setReload: () => refetch() });
 
   if (isError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

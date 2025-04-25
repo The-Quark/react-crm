@@ -3,8 +3,7 @@ import { DataGrid, Container } from '@/components';
 import { getLanguages, getPackageTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { PackageTypesToolbar } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesToolbar.tsx';
-import GuidesLoading from '@/pages/guides/components/guidesLoading.tsx';
-import GuidesError from '@/pages/guides/components/guidesError.tsx';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { usePackageTypesColumns } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesColumns.tsx';
 import { useLanguage } from '@/providers';
@@ -45,13 +44,13 @@ export const GuidesPackagesContent = () => {
   };
 
   if (isError || isLanguageError) {
-    return <GuidesError error={error} />;
+    return <SharedError error={error} />;
   }
 
   return (
     <Container>
       {isLoading || isLanguagesLoading ? (
-        <GuidesLoading />
+        <SharedLoading />
       ) : (
         <DataGrid
           columns={columns}

@@ -117,6 +117,7 @@ const routeConfig = [
     permission: 'manage applications',
     routes: [
       { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
+      { path: '/call-center/applications/starter/:id', element: <ApplicationsStarterPage /> },
       { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
       { path: '/call-center/orders', element: <OrdersPage /> }
     ]
@@ -124,7 +125,6 @@ const routeConfig = [
   {
     permission: 'view applications',
     routes: [
-      { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
       { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
       { path: '/call-center/orders', element: <OrdersPage /> }
     ]
