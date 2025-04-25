@@ -30,6 +30,7 @@ import {
   GuidesVehiclesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
+import { ApplicationsListPage, ApplicationsStarterPage, OrdersPage } from '@/pages/call-center';
 
 interface Props {
   permissions: string[];
@@ -111,6 +112,22 @@ const routeConfig = [
   {
     permission: 'view clients',
     routes: [{ path: '/clients', element: <ClientsListPage /> }]
+  },
+  {
+    permission: 'manage applications',
+    routes: [
+      { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
+      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
+      { path: '/call-center/orders', element: <OrdersPage /> }
+    ]
+  },
+  {
+    permission: 'view applications',
+    routes: [
+      { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
+      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
+      { path: '/call-center/orders', element: <OrdersPage /> }
+    ]
   }
 ];
 

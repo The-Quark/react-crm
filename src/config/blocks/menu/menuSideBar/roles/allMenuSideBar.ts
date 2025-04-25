@@ -80,7 +80,16 @@ export const AllMenuSideBar: TMenuConfig = [
     children: [
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
-        path: '/call-center/applications'
+        children: [
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER',
+            path: '/call-center/applications/starter'
+          },
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+            path: '/call-center/applications/list'
+          }
+        ]
       },
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',

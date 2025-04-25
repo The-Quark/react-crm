@@ -6,8 +6,6 @@ import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
-import ApplicationsPage from '@/pages/call-center/applications/applicationsPage.tsx';
-import OrdersPage from '@/pages/call-center/orders/ordersPage.tsx';
 import {
   MemberRoleUpdatePage,
   MembersPage,
@@ -97,6 +95,8 @@ import {
   AuthenticationGetStartedPage,
   AuthenticationWelcomeMessagePage
 } from '@/pages/authentication';
+import { ApplicationsListPage, ApplicationsStarterPage, OrdersPage } from '@/pages/call-center';
+
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
@@ -146,7 +146,8 @@ const AllRoutesSetting = () => {
         <Route path="/hr-module/drivers" element={<DriversPage />} />
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
-        <Route path="/call-center/applications" element={<ApplicationsPage />} />
+        <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
+        <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders" element={<OrdersPage />} />
 
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />

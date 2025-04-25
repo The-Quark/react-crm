@@ -182,5 +182,55 @@ export const CuttedMenuSideBar: TMenuConfig = [
     icon: 'badge',
     path: '/clients',
     requiredPermissions: ['view clients']
+  },
+  //"manage applications"
+  {
+    title: 'MENU.MEGAMENU.CALL_CENTER',
+    icon: 'satellite',
+    requiredPermissions: ['manage applications'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
+        children: [
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER',
+            path: '/call-center/applications/starter'
+          },
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+            path: '/call-center/applications/list'
+          }
+        ]
+      },
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
+        path: '/call-center/orders'
+      }
+    ]
+  },
+  //"view applications"
+  {
+    title: 'MENU.MEGAMENU.CALL_CENTER',
+    icon: 'satellite',
+    requiredPermissions: ['view applications'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
+        children: [
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER',
+            path: '/call-center/applications/starter'
+          },
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+            path: '/call-center/applications/list'
+          }
+        ]
+      },
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
+        path: '/call-center/orders'
+      }
+    ]
   }
 ];

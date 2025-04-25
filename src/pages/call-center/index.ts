@@ -1,2 +1,2 @@
 export * from './orders/ordersPage';
-export * from './applications/applicationsPage';
+export * from './applications';
