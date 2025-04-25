@@ -4,8 +4,8 @@ import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deletePackageMaterial } from '@/api';
-import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
 import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
+import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
 interface Props {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -111,7 +111,7 @@ export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<Pack
             handleReload={() => setReload((prev) => !prev)}
             deleteRequest={deletePackageMaterial}
             renderModal={({ open, onOpenChange }) => (
-              <PackageTypesModal
+              <PackageMaterialsModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
                 setReload={() => setReload((prev) => !prev)}
