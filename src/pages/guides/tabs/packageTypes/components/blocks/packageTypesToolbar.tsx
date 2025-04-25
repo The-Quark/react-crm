@@ -41,7 +41,6 @@ export const PackageTypesToolbar: FC<Props> = ({
 
   const handleLanguageSelectChange = (value: string) => {
     onLanguageChange(value);
-    setReload((prev) => !prev);
   };
 
   return (
