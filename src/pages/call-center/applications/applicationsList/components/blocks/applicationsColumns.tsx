@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
@@ -13,6 +13,8 @@ export const useApplicationsColumns = (): ColumnDef<Application>[] => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
+  const [modal, setModal] = useState(false);
+
   const columns = useMemo<ColumnDef<Application>[]>(
     () => [
       {
@@ -36,7 +38,10 @@ export const useApplicationsColumns = (): ColumnDef<Application>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
+            <div
+              className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+              onClick={() => setModal(true)}
+            >
               {info.row.original.full_name}
             </div>
           </div>

@@ -14,11 +14,11 @@ import { useUserPermissions } from '@/hooks';
 import { deleteGlobalParameter } from '@/api';
 import { useQueryClient } from '@tanstack/react-query';
 
-interface ParameterMenuOptionsProps {
+interface MenuOptionsProps {
   id?: number;
 }
 
-const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
+const ParameterMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
   const queryClient = useQueryClient();
   const { has } = useUserPermissions();
@@ -28,9 +28,7 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
   const handleDelete = () => {
     if (id) {
       deleteGlobalParameter(id);
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
-      }, 500);
+      queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
     } else {
       toast.error('Parameter ID not provided');
     }

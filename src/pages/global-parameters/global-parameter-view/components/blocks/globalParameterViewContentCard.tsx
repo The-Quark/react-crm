@@ -7,7 +7,7 @@ interface IGeneralSettingsProps {
 
 export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ parameter }) => {
   return (
-    <form className="card pb-2.5" noValidate>
+    <div className="card pb-2.5">
       <div className="card-header" id="general_settings">
         <h3 className="card-title">Parameter</h3>
       </div>
@@ -57,6 +57,6 @@ export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ para
           <div className="flex columns-1 w-full flex-wrap">{parameter?.cost_per_airplace}</div>
         </div>
       </div>
-    </form>
+    </div>
   );
 };
