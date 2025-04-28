@@ -1,36 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Container } from '@/components';
-import {
-  Toolbar,
-  ToolbarActions,
-  ToolbarDescription,
-  ToolbarHeading,
-  ToolbarPageTitle
-} from '@/partials/toolbar';
 import { GlobalParameterStarterContent } from '@/pages/global-parameters/global-parameter-starter/components/globalParameterStarterContent.tsx';
 
 export const GlobalParameterStarterPage = () => {
   return (
-    <Fragment>
+    <>
       <Container>
-        <Toolbar>
-          <ToolbarHeading>
-            <ToolbarPageTitle />
-            <ToolbarDescription>Create new Global Parameter</ToolbarDescription>
-          </ToolbarHeading>
-          <ToolbarActions>
-            <a href="#" className="btn btn-sm btn-light">
-              Test Button
-            </a>
-            <a href="#" className="btn btn-sm btn-primary">
-              Test Button
-            </a>
-          </ToolbarActions>
-        </Toolbar>
+        <GlobalParameterStarterContent />
       </Container>
-      <Container>
-        <GlobalParameterStarterContent title="Create new Global Parameter" />
-      </Container>
-    </Fragment>
+    </>
   );
 };

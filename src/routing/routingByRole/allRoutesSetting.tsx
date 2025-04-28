@@ -16,8 +16,7 @@ import {
 import {
   GlobalParameterStarterPage,
   GlobalParametersListPage,
-  GlobalParameterViewPage,
-  GlobalParameterUpdatePage
+  GlobalParameterViewPage
 } from '@/pages/global-parameters';
 import {
   CampaignsCardPage,
@@ -131,14 +130,14 @@ const AllRoutesSetting = () => {
           element={<GlobalParameterStarterPage />}
         />
         <Route
-          path="/global-parameters/update-parameters/:id"
-          element={<GlobalParameterUpdatePage />}
+          path="/global-parameters/starter-parameters/:id"
+          element={<GlobalParameterStarterPage />}
         />
         <Route
           path="/global-parameters/view-parameters/:id"
           element={<GlobalParameterViewPage />}
         />
-        <Route path="/global-parameters/parameters" element={<GlobalParametersListPage />} />
+        <Route path="/global-parameters/list" element={<GlobalParametersListPage />} />
 
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />

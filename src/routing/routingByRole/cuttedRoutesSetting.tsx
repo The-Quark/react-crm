@@ -5,7 +5,6 @@ import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import {
   GlobalParametersListPage,
   GlobalParameterStarterPage,
-  GlobalParameterUpdatePage,
   GlobalParameterViewPage
 } from '@/pages/global-parameters';
 import { Demo1Layout } from '@/layouts/demo1';
@@ -44,9 +43,12 @@ const routeConfig = [
   {
     permission: 'manage global settings',
     routes: [
-      { path: '/global-parameters/parameters', element: <GlobalParametersListPage /> },
+      { path: '/global-parameters/list', element: <GlobalParametersListPage /> },
       { path: '/global-parameters/starter-parameters', element: <GlobalParameterStarterPage /> },
-      { path: '/global-parameters/update-parameters/:id', element: <GlobalParameterUpdatePage /> },
+      {
+        path: '/global-parameters/starter-parameters/:id',
+        element: <GlobalParameterStarterPage />
+      },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
@@ -62,7 +64,7 @@ const routeConfig = [
   {
     permission: 'view global settings',
     routes: [
-      { path: '/global-parameters/parameters', element: <GlobalParametersListPage /> },
+      { path: '/global-parameters/list', element: <GlobalParametersListPage /> },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
@@ -79,7 +81,10 @@ const routeConfig = [
   {
     permission: 'manage global contexted settings',
     routes: [
-      { path: '/global-parameters/update-parameters/:id', element: <GlobalParameterUpdatePage /> },
+      {
+        path: '/global-parameters/starter-parameters/:id',
+        element: <GlobalParameterStarterPage />
+      },
       { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
     ]
   },

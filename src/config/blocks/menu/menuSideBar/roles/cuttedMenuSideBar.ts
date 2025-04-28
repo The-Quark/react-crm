@@ -26,7 +26,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
       },
       {
         title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
-        path: '/global-parameters/parameters'
+        path: '/global-parameters/list'
       }
     ]
   },
@@ -77,7 +77,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
-    path: '/global-parameters/parameters',
+    path: '/global-parameters/list',
     requiredPermissions: ['view global settings']
   },
   {

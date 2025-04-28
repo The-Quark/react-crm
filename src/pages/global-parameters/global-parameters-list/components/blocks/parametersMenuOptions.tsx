@@ -8,37 +8,28 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import axios from 'axios';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { deleteGlobalParameter } from '@/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ParameterMenuOptionsProps {
   id?: number;
-  handleReload: () => void;
 }
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
-const PARAMETER_DELETE_URL = `${API_URL}/company-global-settings/manage`;
-
-const deleteParameter = async (id: number) => {
-  try {
-    await axios.delete(`${PARAMETER_DELETE_URL}/?id=${id}`);
-  } catch (error) {
-    console.error('Error deleting user:', error);
-  }
-};
-const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const { has } = useUserPermissions();
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
   const handleDelete = () => {
     if (id) {
-      deleteParameter(id);
+      deleteGlobalParameter(id);
       setTimeout(() => {
-        handleReload();
+        queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
       }, 500);
     } else {
       toast.error('Parameter ID not provided');
@@ -58,7 +49,7 @@ const ParameterMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload 
       {canManageGlobalSettings && (
         <>
           <MenuItem>
-            <MenuLink path={`/global-parameters/update-parameters/${id}`}>
+            <MenuLink path={`/global-parameters/starter-parameters/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="setting-4" />
               </MenuIcon>

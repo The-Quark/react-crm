@@ -2,15 +2,14 @@ import { FC } from 'react';
 import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
 
 interface IGeneralSettingsProps {
-  title: string;
   parameter: ParametersModel | null;
 }
 
-export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ title, parameter }) => {
+export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ parameter }) => {
   return (
     <form className="card pb-2.5" noValidate>
       <div className="card-header" id="general_settings">
-        <h3 className="card-title">{title}</h3>
+        <h3 className="card-title">Parameter</h3>
       </div>
       <div className="card-body grid gap-5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -61,5 +60,3 @@ export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ titl
     </form>
   );
 };
-
-export { type IGeneralSettingsProps };

@@ -24,7 +24,7 @@ export const AllMenuSideBar: TMenuConfig = [
       },
       {
         title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
-        path: '/global-parameters/parameters'
+        path: '/global-parameters/list'
       }
     ]
   },
