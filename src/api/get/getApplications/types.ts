@@ -7,11 +7,13 @@ interface Source {
   updated_at: string;
   deleted_at: string | null;
 }
+export interface ApplicationsStatus {
+  status: 'new' | 'running' | 'completed' | 'declined';
+}
 
-export interface Application {
+export interface Application extends ApplicationsStatus {
   id: number;
   source_id: number;
-  status: 'new' | 'running' | 'completed' | 'declined';
   full_name: string;
   phone: string;
   email: string | null;

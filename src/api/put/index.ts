@@ -7,3 +7,4 @@ export * from './putVehicle';
 export * from './putAirline';
 export * from './putPackageType';
 export * from './putPackageMaterial';
+export * from './putApplication';

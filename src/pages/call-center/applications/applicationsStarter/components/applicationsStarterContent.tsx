@@ -5,15 +5,17 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { postApplication, getSources } from '@/api';
-import { IApplicationFormValues } from '@/api/post/postApplication/types.ts';
+import { postApplication, getApplications, getSources, putApplication } from '@/api';
+import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useParams } from 'react-router';
+import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
 
 export const formSchema = Yup.object().shape({
   source: Yup.string().required('Source is required'),
@@ -21,11 +23,15 @@ export const formSchema = Yup.object().shape({
   phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
   client_id: Yup.number().optional(),
   email: Yup.string().email('Invalid email address').optional(),
-  message: Yup.string().optional()
+  message: Yup.string().optional(),
+  status: Yup.string().optional()
 });
 
 export const ApplicationsStarterContent = () => {
+  const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
+  const isEditMode = !!id;
+  const queryClient = useQueryClient();
 
   const {
     data: sourcesData,
@@ -40,23 +46,45 @@ export const ApplicationsStarterContent = () => {
     staleTime: 1000 * 60 * 5
   });
 
-  const initialValues: IApplicationFormValues = {
-    email: undefined,
+  const {
+    data: applicationData,
+    isLoading: applicationLoading,
+    isError: applicationIsError,
+    error: applicationError
+  } = useQuery({
+    queryKey: ['application', id],
+    queryFn: () => getApplications(id ? parseInt(id) : undefined),
+    enabled: isEditMode,
+    retry: false,
+    refetchOnWindowFocus: false
+  });
+
+  const initialValues: IApplicationPostFormValues & { status?: ApplicationsStatus } = {
+    email: '',
     phone: '',
-    message: undefined,
+    message: '',
     source: '',
     full_name: '',
-    client_id: undefined
+    client_id: '',
+    ...(isEditMode && { status: 'new' as unknown as ApplicationsStatus })
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema: formSchema,
+    enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        await postApplication(values);
-        resetForm();
+        if (isEditMode && id) {
+          const { status, ...putData } = values;
+          await putApplication(Number(id), { ...putData, status: status as ApplicationsStatus });
+          queryClient.invalidateQueries({ queryKey: ['application'] });
+        } else {
+          await postApplication(values);
+          queryClient.invalidateQueries({ queryKey: ['application'] });
+          resetForm();
+        }
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -66,17 +94,33 @@ export const ApplicationsStarterContent = () => {
     }
   });
 
-  if (sourcesIsError) {
-    return <SharedError error={sourcesError} />;
+  useEffect(() => {
+    if (applicationData && isEditMode) {
+      formik.setValues({
+        email: applicationData.result[0].email ?? '',
+        phone: applicationData.result[0].phone,
+        message: applicationData.result[0].message ?? '',
+        source: String(applicationData.result[0].source.code ?? 'insta'),
+        full_name: applicationData.result[0].full_name,
+        client_id: applicationData.result[0].client_id ?? '',
+        status: applicationData.result[0].status as unknown as ApplicationsStatus
+      });
+    }
+  }, [applicationData, isEditMode]);
+
+  if (sourcesIsError || applicationIsError) {
+    return <SharedError error={sourcesError || applicationError} />;
   }
 
-  return sourcesLoading ? (
-    <SharedLoading />
-  ) : (
+  if (sourcesLoading || (isEditMode && applicationLoading)) {
+    return <SharedLoading />;
+  }
+
+  return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">Application</h3>
+          <h3 className="card-title">{isEditMode ? 'Edit Application' : 'New Application'}</h3>
         </div>
 
         <div className="card-body grid gap-5">
@@ -190,6 +234,33 @@ export const ApplicationsStarterContent = () => {
               )}
             </div>
           </div>
+
+          {isEditMode && (
+            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+              <label className="form-label max-w-56">Status</label>
+              <div className="flex columns-1 w-full flex-wrap">
+                <Select
+                  value={(formik.values.status as unknown as string) || 'new'}
+                  onValueChange={(value) => formik.setFieldValue('status', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="running">Running</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="declined">Declined</SelectItem>
+                  </SelectContent>
+                </Select>
+                {formik.touched.status && formik.errors.status && (
+                  <span role="alert" className="text-danger text-xs mt-1">
+                    {formik.errors.status}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end">
             <button
