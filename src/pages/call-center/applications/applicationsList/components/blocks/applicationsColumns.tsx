@@ -6,6 +6,7 @@ import { Application } from '@/api/get/getApplications/types.ts';
 import { ApplicationsMenuOptions } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsMenuOptions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { DateRange } from 'react-day-picker';
 
 export const useApplicationsColumns = (): ColumnDef<Application>[] => {
   const { isRTL } = useLanguage();
@@ -86,6 +87,41 @@ export const useApplicationsColumns = (): ColumnDef<Application>[] => {
             <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
           </div>
         ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.created_at,
+        id: 'created at',
+        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        enableSorting: true,
+        filterFn: (row, columnId, filterValue: DateRange) => {
+          if (!filterValue) return true;
+          const date = new Date(row.getValue(columnId));
+          const { from, to } = filterValue;
+          if (from && to) {
+            return date >= from && date <= to;
+          }
+          if (from) {
+            return date >= from;
+          }
+          if (to) {
+            return date <= to;
+          }
+          return true;
+        },
+        cell: (info) => {
+          const date = new Date(info.row.original.created_at);
+          const formattedDate = date.toLocaleDateString('ru-RU');
+
+          return (
+            <div className="flex items-center gap-1.5">
+              <div className="leading-none text-gray-800 font-normal">{formattedDate}</div>
+            </div>
+          );
+        },
         meta: {
           headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
