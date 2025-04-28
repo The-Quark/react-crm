@@ -30,7 +30,12 @@ import {
   GuidesVehiclesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
-import { ApplicationsListPage, ApplicationsStarterPage, OrdersPage } from '@/pages/call-center';
+import {
+  ApplicationsListPage,
+  ApplicationsStarterPage,
+  OrdersListPage,
+  OrdersStarterPage
+} from '@/pages/call-center';
 
 interface Props {
   permissions: string[];
@@ -118,16 +123,24 @@ const routeConfig = [
     routes: [
       { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
       { path: '/call-center/applications/starter/:id', element: <ApplicationsStarterPage /> },
-      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
-      { path: '/call-center/orders', element: <OrdersPage /> }
+      { path: '/call-center/applications/list', element: <ApplicationsListPage /> }
     ]
   },
   {
     permission: 'view applications',
+    routes: [{ path: '/call-center/applications/list', element: <ApplicationsListPage /> }]
+  },
+  {
+    permission: 'manage orders',
     routes: [
-      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
-      { path: '/call-center/orders', element: <OrdersPage /> }
+      { path: '/call-center/orders/starter', element: <OrdersStarterPage /> },
+      { path: '/call-center/orders/starter/:id', element: <OrdersStarterPage /> },
+      { path: '/call-center/orders/list', element: <OrdersListPage /> }
     ]
+  },
+  {
+    permission: 'view orders',
+    routes: [{ path: '/call-center/orders/list', element: <OrdersListPage /> }]
   }
 ];
 

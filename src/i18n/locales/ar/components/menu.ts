@@ -35,6 +35,8 @@ const Menu = {
   'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER': 'طلبات البداية',
   'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST': 'قائمة الطلبات',
   'MENU.MEGAMENU.CALL_CENTER.ORDERS': 'الطلبات',
+  'MENU.MEGAMENU.CALL_CENTER.ORDERS.STARTER': 'طلبات المبتدئين',
+  'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST': 'قائمة الطلبات',
   'MENU.MEGAMENU.CRM': 'إدارة علاقات العملاء',
   'MENU.MEGAMENU.CRM.MEMBERS_STARTER': 'أعضاء البداية',
   'MENU.MEGAMENU.CRM.MEMBERS': 'الأعضاء',

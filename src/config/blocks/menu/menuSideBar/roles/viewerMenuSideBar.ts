@@ -65,8 +65,8 @@ export const ViewerMenuSideBar: TMenuConfig = [
         path: '/call-center/applications/list'
       },
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
-        path: '/call-center/orders'
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST',
+        path: '/call-center/orders/list'
       }
     ]
   },

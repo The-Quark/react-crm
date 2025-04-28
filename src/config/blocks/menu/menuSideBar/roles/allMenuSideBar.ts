@@ -93,7 +93,16 @@ export const AllMenuSideBar: TMenuConfig = [
       },
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
-        path: '/call-center/orders'
+        children: [
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.STARTER',
+            path: '/call-center/orders/starter'
+          },
+          {
+            title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST',
+            path: '/call-center/orders/list'
+          }
+        ]
       }
     ]
   },

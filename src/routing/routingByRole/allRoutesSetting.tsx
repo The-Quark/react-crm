@@ -95,7 +95,12 @@ import {
   AuthenticationGetStartedPage,
   AuthenticationWelcomeMessagePage
 } from '@/pages/authentication';
-import { ApplicationsListPage, ApplicationsStarterPage, OrdersPage } from '@/pages/call-center';
+import {
+  ApplicationsListPage,
+  ApplicationsStarterPage,
+  OrdersStarterPage,
+  OrdersListPage
+} from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
@@ -149,7 +154,9 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
-        <Route path="/call-center/orders" element={<OrdersPage />} />
+        <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
+        <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
+        <Route path="/call-center/orders/list" element={<OrdersListPage />} />
 
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />

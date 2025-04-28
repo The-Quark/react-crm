@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { ApplicationsStarterContent } from '@/pages/call-center/applications/applicationsStarter/components/applicationsStarterContent.tsx';
 import { Container } from '@/components';
 
