@@ -7,7 +7,7 @@ export const postAirline = async (
 ): Promise<IAirlineFormValues> => {
   return await axios
     .post<IAirlineFormValues>(AIRLINE_URL, data, {
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'applicWation/json' }
     })
     .then((res) => res.data);
 };

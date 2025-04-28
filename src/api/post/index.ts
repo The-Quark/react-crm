@@ -8,3 +8,4 @@ export * from './postVehicle';
 export * from './postAirline';
 export * from './postPackageType';
 export * from './postPackageMaterial';
+export * from './postApplication';
