@@ -14,24 +14,24 @@ import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useLanguage } from '@/providers';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IMenuOptionsProps {
   id?: number;
-  handleReload: () => void;
   deleteRequest: (id: number) => Promise<void>;
+  invalifateRequestKey: string;
   renderModal: (props: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    setReload: () => void;
     id?: number;
   }) => React.ReactNode;
 }
 
 const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
   id,
-  handleReload,
   deleteRequest,
-  renderModal
+  renderModal,
+  invalifateRequestKey
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
@@ -39,6 +39,7 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
   const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const { isRTL } = useLanguage();
+  const queryClient = useQueryClient();
 
   const handleClose = () => {
     setModalOpen(false);
@@ -51,6 +52,7 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
     if (id) {
       try {
         await deleteRequest(id);
+        queryClient.invalidateQueries({ queryKey: [invalifateRequestKey] });
       } catch (error) {
         toast.error('Failed to delete');
       }
@@ -109,7 +111,6 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
         renderModal({
           open: modalOpen,
           onOpenChange: handleClose,
-          setReload: handleReload,
           id
         })}
     </Menu>

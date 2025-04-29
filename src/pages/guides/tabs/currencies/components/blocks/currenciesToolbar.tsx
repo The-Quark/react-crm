@@ -2,11 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const CurrenciesToolbar: FC<Props> = ({ setReload }) => {
+export const CurrenciesToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -39,7 +35,7 @@ export const CurrenciesToolbar: FC<Props> = ({ setReload }) => {
           New Currency
         </button>
       </div>
-      <CurrenciesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <CurrenciesModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

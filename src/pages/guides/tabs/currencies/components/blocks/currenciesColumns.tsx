@@ -6,11 +6,8 @@ import { Currency } from '@/api/get/getCurrencies/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteCurrency } from '@/api';
 import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[] => {
+export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Currency>[]>(
     () => [
@@ -140,13 +137,12 @@ export const useCurrenciesColumns = ({ setReload }: Props): ColumnDef<Currency>[
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="currencies"
             deleteRequest={deleteCurrency}
             renderModal={({ open, onOpenChange }) => (
               <CurrenciesModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

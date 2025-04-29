@@ -15,11 +15,11 @@ import { postLanguage } from '@/api';
 import { getLanguages } from '@/api/get/getLanguages';
 import { putLanguage } from '@/api/put';
 import { CircularProgress } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -36,7 +36,7 @@ const validateSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<ILanguageFormValues>({
@@ -47,6 +47,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     direction: 'ltr',
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -89,7 +90,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['languages'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

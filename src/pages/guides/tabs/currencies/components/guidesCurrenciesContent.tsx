@@ -8,15 +8,12 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesCurrenciesContent = () => {
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['currencies'],
-    queryFn: () => getCurrencies(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getCurrencies()
   });
 
-  const columns = useCurrenciesColumns({ setReload: () => refetch() });
+  const columns = useCurrenciesColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -34,7 +31,7 @@ export const GuidesCurrenciesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<CurrenciesToolbar setReload={() => refetch()} />}
+          toolbar={<CurrenciesToolbar />}
           layout={{ card: true }}
         />
       )}

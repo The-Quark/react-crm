@@ -1,32 +1,19 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Language } from '@/api/get/getLanguages/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteLanguage } from '@/api';
 import LanguagesModal from '@/pages/guides/tabs/languages/components/blocks/languagesModal.tsx';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[] => {
+export const useLanguagesColumns = (): ColumnDef<Language>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Language>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'language id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -140,13 +127,12 @@ export const useLanguagesColumns = ({ setReload }: Props): ColumnDef<Language>[]
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="languages"
             deleteRequest={deleteLanguage}
             renderModal={({ open, onOpenChange }) => (
               <LanguagesModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

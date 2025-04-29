@@ -2,11 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import SourceModal from '@/pages/guides/tabs/sources/components/blocks/sourcesModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const SourcesToolbar: FC<Props> = ({ setReload }) => {
+export const SourcesToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
@@ -37,7 +33,7 @@ export const SourcesToolbar: FC<Props> = ({ setReload }) => {
           New Source
         </button>
       </div>
-      <SourceModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <SourceModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

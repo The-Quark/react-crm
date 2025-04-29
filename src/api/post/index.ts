@@ -9,3 +9,4 @@ export * from './postAirline';
 export * from './postPackageType';
 export * from './postPackageMaterial';
 export * from './postApplication';
+export * from './postDeliveryType';

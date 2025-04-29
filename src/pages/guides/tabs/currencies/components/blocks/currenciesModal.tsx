@@ -13,11 +13,11 @@ import { useFormik } from 'formik';
 import { CircularProgress } from '@mui/material';
 import { ICurrencyFormValues } from '@/api/post/postCurrency/types.ts';
 import { getCurrencies, postCurrency, putCurrency } from '@/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -41,7 +41,7 @@ const validateSchema = Yup.object({
   is_active: Yup.boolean().required()
 });
 
-const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<ICurrencyFormValues>({
@@ -52,6 +52,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     rate_to_base: 0,
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -94,7 +95,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['currencies'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

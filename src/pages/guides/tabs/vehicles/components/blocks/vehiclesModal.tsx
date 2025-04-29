@@ -21,11 +21,11 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { mockTypes, mockStatus } from '@/lib/mocks.ts';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -42,7 +42,7 @@ const validateSchema = Yup.object().shape({
   avg_fuel_consumption: Yup.string().required('Average fuel consumption is required')
 });
 
-const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IVehicleFormValues>({
@@ -53,6 +53,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     status: 'available',
     avg_fuel_consumption: ''
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -95,7 +96,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['vehicles'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

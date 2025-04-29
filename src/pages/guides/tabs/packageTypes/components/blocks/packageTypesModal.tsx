@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Language {
   code: string;
@@ -29,7 +30,6 @@ interface Language {
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
   languages: Language[];
   selectedLanguage: string;
@@ -45,23 +45,17 @@ const validateSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const PackageTypesModal: FC<Props> = ({
-  open,
-  onOpenChange,
-  setReload,
-  id,
-  languages,
-  selectedLanguage
-}) => {
+const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selectedLanguage }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IPackageTypeFormValues>({
     code: '',
     name: '',
-    language_code: '',
+    language_code: selectedLanguage,
     description: '',
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -103,7 +97,7 @@ const PackageTypesModal: FC<Props> = ({
         }
         resetForm();
         onOpenChange(false);
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['package-types'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

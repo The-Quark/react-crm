@@ -8,14 +8,11 @@ import { usePackageMaterialsColumns } from '@/pages/guides/tabs/packageMaterials
 import { PackageMaterialsToolbar } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsToolbar.tsx';
 
 export const GuidesPackageMaterialsContent = () => {
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageMaterials'],
-    queryFn: () => getPackageMaterials(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getPackageMaterials()
   });
-  const columns = usePackageMaterialsColumns({ setReload: () => refetch() });
+  const columns = usePackageMaterialsColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -33,7 +30,7 @@ export const GuidesPackageMaterialsContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<PackageMaterialsToolbar setReload={() => refetch()} />}
+          toolbar={<PackageMaterialsToolbar />}
           layout={{ card: true }}
         />
       )}

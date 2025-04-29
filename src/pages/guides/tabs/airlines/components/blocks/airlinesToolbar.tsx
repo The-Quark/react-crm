@@ -2,11 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import AirlinesModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const AirlinesToolbar: FC<Props> = ({ setReload }) => {
+export const AirlinesToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -39,7 +35,7 @@ export const AirlinesToolbar: FC<Props> = ({ setReload }) => {
           New Airline
         </button>
       </div>
-      <AirlinesModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <AirlinesModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

@@ -15,11 +15,11 @@ import { postSource } from '@/api';
 import { getSources } from '@/api/get';
 import { putSource } from '@/api/put';
 import { CircularProgress } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<ISourceFormValues>({
@@ -37,6 +37,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     name: '',
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -76,7 +77,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['sources'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

@@ -14,12 +14,9 @@ export const GuidesPackagesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['package-types', selectedLanguage.code],
-    queryFn: () => getPackageTypes(undefined, selectedLanguage.code),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getPackageTypes(undefined, selectedLanguage.code)
   });
 
   const {
@@ -28,12 +25,10 @@ export const GuidesPackagesContent = () => {
     error: isLanguageError
   } = useQuery({
     queryKey: ['languages'],
-    queryFn: () => getLanguages(),
-    staleTime: 1000 * 60 * 60 // 1 hour
+    queryFn: () => getLanguages()
   });
 
   const columns = usePackageTypesColumns({
-    setReload: () => refetch(),
     languages: languagesData?.result || [],
     selectedLanguage: selectedLanguage.code
   });
@@ -64,7 +59,6 @@ export const GuidesPackagesContent = () => {
               currentLanguage={selectedLanguage.code}
               languages={languagesData?.result || []}
               onLanguageChange={handleLanguageChange}
-              setReload={() => refetch()}
             />
           }
           layout={{ card: true }}

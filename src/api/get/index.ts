@@ -14,3 +14,4 @@ export * from './getPackageMaterials';
 export * from './getCountries';
 export * from './getCitiesByCountryCode';
 export * from './getApplications';
+export * from './getDeliveryTypes';

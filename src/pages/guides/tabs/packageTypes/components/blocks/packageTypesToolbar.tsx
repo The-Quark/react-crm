@@ -19,13 +19,11 @@ interface Props {
   currentLanguage: string;
   languages: Language[];
   onLanguageChange: (languageCode: string) => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const PackageTypesToolbar: FC<Props> = ({
   currentLanguage,
   onLanguageChange,
-  setReload,
   languages
 }) => {
   const { table } = useDataGrid();
@@ -80,7 +78,6 @@ export const PackageTypesToolbar: FC<Props> = ({
       <PackageTypesModal
         open={modalOpen}
         onOpenChange={handleClose}
-        setReload={setReload}
         languages={languages}
         selectedLanguage={currentLanguage}
       />

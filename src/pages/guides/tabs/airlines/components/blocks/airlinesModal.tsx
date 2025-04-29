@@ -13,11 +13,11 @@ import { useFormik } from 'formik';
 import { CircularProgress } from '@mui/material';
 import { IAirlineFormValues } from '@/api/post/postAirline/types.ts';
 import { getAirlines, putAirline, postAirline } from '@/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -28,7 +28,7 @@ const validateSchema = Yup.object({
   is_active: Yup.boolean().required()
 });
 
-const AirlineModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const AirlineModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IAirlineFormValues>({
@@ -37,6 +37,7 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
     country: '',
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -77,7 +78,7 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['airlines'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

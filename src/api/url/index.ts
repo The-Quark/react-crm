@@ -27,3 +27,5 @@ export const PACKAGE_MATERIALS_URL = `${api}/package-materials/manage`;
 export const COUNTRIES_URL = `${api}/countries`;
 
 export const APPLICATION_URL = `${api}/application/manage`;
+
+export const DELIVERY_TYPES_URL = `${api}/delivery_type/manage`;

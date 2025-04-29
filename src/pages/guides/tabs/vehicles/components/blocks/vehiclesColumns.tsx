@@ -6,11 +6,8 @@ import { Vehicle } from '@/api/get/getVehicles/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteVehicle } from '@/api';
 import VehiclesModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] => {
+export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
@@ -140,13 +137,12 @@ export const useVehiclesColumns = ({ setReload }: Props): ColumnDef<Vehicle>[] =
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="vehicles"
             deleteRequest={deleteVehicle}
             renderModal={({ open, onOpenChange }) => (
               <VehiclesModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

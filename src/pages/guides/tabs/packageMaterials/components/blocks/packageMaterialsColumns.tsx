@@ -6,11 +6,8 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deletePackageMaterial } from '@/api';
 import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<PackageMaterial>[] => {
+export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<PackageMaterial>[]>(
     () => [
@@ -108,13 +105,12 @@ export const usePackageMaterialsColumns = ({ setReload }: Props): ColumnDef<Pack
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="packageMaterials"
             deleteRequest={deletePackageMaterial}
             renderModal={({ open, onOpenChange }) => (
               <PackageMaterialsModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

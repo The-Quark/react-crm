@@ -2,11 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import VehicleModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const VehiclesToolbar: FC<Props> = ({ setReload }) => {
+export const VehiclesToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
@@ -37,7 +33,7 @@ export const VehiclesToolbar: FC<Props> = ({ setReload }) => {
           New Vehicle
         </button>
       </div>
-      <VehicleModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <VehicleModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

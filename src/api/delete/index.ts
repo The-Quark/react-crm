@@ -8,3 +8,4 @@ export * from './deleteAirline';
 export * from './deletePackageType';
 export * from './deletePackageMaterial';
 export * from './deleteApplication';
+export * from './deleteDeliveryType';

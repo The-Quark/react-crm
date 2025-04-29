@@ -8,14 +8,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesAirlinesContent = () => {
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['airlines'],
-    queryFn: () => getAirlines(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getAirlines()
   });
-  const columns = useAirlinesColumns({ setReload: () => refetch() });
+  const columns = useAirlinesColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -33,7 +30,7 @@ export const GuidesAirlinesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<AirlinesToolbar setReload={() => refetch()} />}
+          toolbar={<AirlinesToolbar />}
           layout={{ card: true }}
         />
       )}

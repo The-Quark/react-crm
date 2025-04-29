@@ -7,11 +7,7 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deleteAirline } from '@/api';
 import AirlineModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] => {
+export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Airline>[]>(
     () => [
@@ -108,13 +104,12 @@ export const useAirlinesColumns = ({ setReload }: Props): ColumnDef<Airline>[] =
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="airlines"
             deleteRequest={deleteAirline}
             renderModal={({ open, onOpenChange }) => (
               <AirlineModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

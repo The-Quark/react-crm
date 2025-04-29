@@ -13,11 +13,11 @@ import { useFormik } from 'formik';
 import { postPackageMaterial, putPackageMaterial, getPackageMaterials } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { IPackageMaterialFormValues } from '@/api/post/postPackageMaterial/types.ts';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
 }
 
@@ -31,7 +31,7 @@ const validateSchema = Yup.object().shape({
   unit_id: Yup.number().required('Unit is required')
 });
 
-const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, setReload, id }) => {
+const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IPackageMaterialFormValues>({
@@ -42,6 +42,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, setReload, id })
     price: 0,
     is_active: true
   });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -84,7 +85,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, setReload, id })
         }
         resetForm();
         onOpenChange();
-        setReload((prev) => !prev);
+        queryClient.invalidateQueries({ queryKey: ['packageMaterials'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {

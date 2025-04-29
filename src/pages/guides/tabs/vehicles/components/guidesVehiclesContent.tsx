@@ -8,14 +8,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesVehiclesContent = () => {
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['vehicles'],
-    queryFn: () => getVehicles(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getVehicles()
   });
-  const columns = useVehiclesColumns({ setReload: () => refetch() });
+  const columns = useVehiclesColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -33,7 +30,7 @@ export const GuidesVehiclesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<VehiclesToolbar setReload={() => refetch()} />}
+          toolbar={<VehiclesToolbar />}
           layout={{ card: true }}
         />
       )}

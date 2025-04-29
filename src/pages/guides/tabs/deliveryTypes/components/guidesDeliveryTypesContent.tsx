@@ -1,18 +1,18 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { getLanguages } from '@/api';
-import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/blocks/languagesColumns.tsx';
-import { LanguagesToolbar } from '@/pages/guides/tabs/languages/components/blocks/languagesToolbar.tsx';
+import { getDeliveryTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
+import { useDeliveryTypesColumns } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesColumns.tsx';
+import { DeliveryTypesToolbar } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesToolbar.tsx';
 
-export const GuidesLanguagesContent = () => {
+export const GuidesDeliveryTypesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['languages'],
-    queryFn: () => getLanguages()
+    queryKey: ['deliveryTypes'],
+    queryFn: () => getDeliveryTypes()
   });
-  const columns = useLanguagesColumns();
+  const columns = useDeliveryTypesColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -30,7 +30,7 @@ export const GuidesLanguagesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<LanguagesToolbar />}
+          toolbar={<DeliveryTypesToolbar />}
           layout={{ card: true }}
         />
       )}

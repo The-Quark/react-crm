@@ -14,13 +14,11 @@ interface Language {
 }
 
 interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
   languages: Language[];
   selectedLanguage: string;
 }
 
 export const usePackageTypesColumns = ({
-  setReload,
   languages,
   selectedLanguage
 }: Props): ColumnDef<PackageType>[] => {
@@ -138,13 +136,12 @@ export const usePackageTypesColumns = ({
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="package-types"
             deleteRequest={deletePackageType}
             renderModal={({ open, onOpenChange }) => (
               <PackageTypesModal
                 open={open}
                 onOpenChange={onOpenChange}
-                setReload={setReload}
                 id={info.row.original.id}
                 languages={languages}
                 selectedLanguage={selectedLanguage}
@@ -157,7 +154,7 @@ export const usePackageTypesColumns = ({
         }
       }
     ],
-    [isRTL, setReload, languages, selectedLanguage]
+    [isRTL, languages, selectedLanguage]
   );
   return columns;
 };

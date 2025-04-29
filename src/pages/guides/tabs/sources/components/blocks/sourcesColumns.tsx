@@ -1,32 +1,19 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Source } from '@/api/get/getSources/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteSource } from '@/api';
 import SourcesModal from '@/pages/guides/tabs/sources/components/blocks/sourcesModal.tsx';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => {
+export const useSourcesColumns = (): ColumnDef<Source>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Source>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'source id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -91,13 +78,12 @@ export const useSourcesColumns = ({ setReload }: Props): ColumnDef<Source>[] => 
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            handleReload={() => setReload((prev) => !prev)}
+            invalifateRequestKey="sources"
             deleteRequest={deleteSource}
             renderModal={({ open, onOpenChange }) => (
               <SourcesModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
-                setReload={() => setReload((prev) => !prev)}
                 id={info.row.original.id}
               />
             )}

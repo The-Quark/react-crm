@@ -2,11 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
 
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const PackageMaterialsToolbar: FC<Props> = ({ setReload }) => {
+export const PackageMaterialsToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const handleClose = () => {
@@ -37,7 +33,7 @@ export const PackageMaterialsToolbar: FC<Props> = ({ setReload }) => {
           New package material
         </button>
       </div>
-      <PackageMaterialsModal open={modalOpen} onOpenChange={handleClose} setReload={setReload} />
+      <PackageMaterialsModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

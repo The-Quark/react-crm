@@ -8,14 +8,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesSourcesContent = () => {
-  const { data, isLoading, refetch, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getSources()
   });
-  const columns = useSourcesColumns({ setReload: () => refetch() });
+  const columns = useSourcesColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -33,7 +30,7 @@ export const GuidesSourcesContent = () => {
           onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<SourcesToolbar setReload={() => refetch()} />}
+          toolbar={<SourcesToolbar />}
           layout={{ card: true }}
         />
       )}
