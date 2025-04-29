@@ -15,3 +15,5 @@ export * from './getCountries';
 export * from './getCitiesByCountryCode';
 export * from './getApplications';
 export * from './getDeliveryTypes';
+export * from './getOrderSenders';
+export * from './getOrderReceivers';

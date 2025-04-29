@@ -142,7 +142,10 @@ const routeConfig = [
     permission: 'manage orders',
     routes: [
       { path: '/call-center/orders/starter', element: <OrdersStarterPage /> },
-      { path: '/call-center/orders/starter/:id', element: <OrdersStarterPage /> },
+      {
+        path: '/call-center/orders/starter/:senderId?/:receiverId?/:applicationId?',
+        element: <OrdersStarterPage />
+      },
       { path: '/call-center/orders/list', element: <OrdersListPage /> }
     ]
   },

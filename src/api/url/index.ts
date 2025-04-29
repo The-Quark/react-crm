@@ -29,3 +29,7 @@ export const COUNTRIES_URL = `${api}/countries`;
 export const APPLICATION_URL = `${api}/application/manage`;
 
 export const DELIVERY_TYPES_URL = `${api}/delivery_type/manage`;
+
+export const ORDER_SENDER_URL = `${api}/order/sender/manage`;
+
+export const ORDER_RECEIVER_URL = `${api}/order/receiver/manage`;

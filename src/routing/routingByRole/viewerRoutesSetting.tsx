@@ -24,12 +24,7 @@ import {
   GuidesDeliveryTypesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
-import {
-  ApplicationsListPage,
-  ApplicationsStarterPage,
-  OrdersListPage,
-  OrdersStarterPage
-} from '@/pages/call-center';
+import { ApplicationsListPage, OrdersListPage } from '@/pages/call-center';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -52,11 +47,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/hr-module/drivers" element={<DriversPage />} />
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
-        <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
-        <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
-        <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
-        <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
 
         <Route path="/crm/members" element={<MembersPage />} />

@@ -25,6 +25,7 @@ export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
+  // eslint-disable-next-line no-undef
   let timeout: NodeJS.Timeout | null = null;
 
   return function (...args: Parameters<T>): void {
@@ -58,8 +59,10 @@ export function uniqueID(): string {
   return (Date.now() + Math.floor(Math.random() * 1000)).toString();
 }
 
-export const cleanValues = (values: any): any => {
+export const cleanValues = (values: Record<string, any>): Record<string, any> => {
   return Object.fromEntries(
-    Object.entries(values).map(([key, value]) => [key, value === '' ? undefined : value])
+    Object.entries(values).filter(
+      ([_, value]) => value !== undefined && value !== null && value !== '' && value !== 0
+    )
   );
 };

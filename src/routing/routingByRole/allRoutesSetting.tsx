@@ -152,10 +152,12 @@ const AllRoutesSetting = () => {
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
-        <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
-        <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
+        <Route
+          path="/call-center/orders/starter/:senderId?/:receiverId?/:applicationId?"
+          element={<OrdersStarterPage />}
+        />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
 
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />
