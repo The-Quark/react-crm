@@ -51,9 +51,6 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
     if (id) {
       try {
         await deleteRequest(id);
-        setTimeout(() => {
-          handleReload();
-        }, 500);
       } catch (error) {
         toast.error('Failed to delete');
       }

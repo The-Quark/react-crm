@@ -6,3 +6,4 @@ export * from './airlines/guidesAirlinesPage.tsx';
 export * from './packageTypes/guidesPackageTypesPage.tsx';
 export * from './packageMaterials/guidesPackageMaterialsPage.tsx';
 export * from './countries/guidesCountriesPage.tsx';
+export * from './deliveryTypes/guidesDeliveryTypesPage.tsx';
