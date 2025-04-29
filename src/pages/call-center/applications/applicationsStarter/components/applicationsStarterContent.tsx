@@ -21,7 +21,7 @@ export const formSchema = Yup.object().shape({
   source: Yup.string().required('Source is required'),
   full_name: Yup.string().required('Full name is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
-  client_id: Yup.number().optional(),
+  client_id: Yup.string().optional(),
   email: Yup.string().email('Invalid email address').optional(),
   message: Yup.string().optional(),
   status: Yup.string().optional()
@@ -41,9 +41,7 @@ export const ApplicationsStarterContent = () => {
   } = useQuery({
     queryKey: ['sources'],
     queryFn: () => getSources(),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: 60 * 60 * 1000
   });
 
   const {
@@ -54,9 +52,7 @@ export const ApplicationsStarterContent = () => {
   } = useQuery({
     queryKey: ['application', id],
     queryFn: () => getApplications(id ? parseInt(id) : undefined),
-    enabled: isEditMode,
-    retry: false,
-    refetchOnWindowFocus: false
+    enabled: isEditMode
   });
 
   const initialValues: IApplicationPostFormValues & { status?: ApplicationsStatus } = {
@@ -95,25 +91,33 @@ export const ApplicationsStarterContent = () => {
   });
 
   useEffect(() => {
+    formik.resetForm();
     if (applicationData && isEditMode) {
-      formik.setValues({
-        email: applicationData.result[0].email ?? '',
-        phone: applicationData.result[0].phone,
-        message: applicationData.result[0].message ?? '',
-        source: String(applicationData.result[0].source.code ?? 'insta'),
-        full_name: applicationData.result[0].full_name,
-        client_id: applicationData.result[0].client_id ?? '',
-        status: applicationData.result[0].status as unknown as ApplicationsStatus
-      });
+      formik.setValues(
+        {
+          email: applicationData.result[0].email ?? '',
+          phone: applicationData.result[0].phone,
+          message: applicationData.result[0].message ?? '',
+          source: String(applicationData.result[0].source.code ?? 'insta'),
+          full_name: applicationData.result[0].full_name,
+          client_id: applicationData.result[0].client_id ?? '',
+          status: applicationData.result[0].status as unknown as ApplicationsStatus
+        },
+        false
+      );
     }
-  }, [applicationData, isEditMode]);
-
-  if (sourcesIsError || applicationIsError) {
-    return <SharedError error={sourcesError || applicationError} />;
-  }
+  }, [isEditMode, applicationData]);
 
   if (sourcesLoading || (isEditMode && applicationLoading)) {
     return <SharedLoading />;
+  }
+
+  if (sourcesIsError) {
+    return <SharedError error={sourcesError} />;
+  }
+
+  if (isEditMode && applicationIsError) {
+    return <SharedError error={applicationError} />;
   }
 
   return (
