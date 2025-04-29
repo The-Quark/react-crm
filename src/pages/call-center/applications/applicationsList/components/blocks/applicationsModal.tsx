@@ -13,14 +13,14 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
-  id: number;
+  id: number | null;
   handleClose: () => void;
 }
 
 export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['application', id],
-    queryFn: () => getApplications(id)
+    queryFn: () => (id !== null ? getApplications(id) : Promise.reject('Invalid ID'))
   });
   return (
     <Dialog open={open} onOpenChange={handleClose}>

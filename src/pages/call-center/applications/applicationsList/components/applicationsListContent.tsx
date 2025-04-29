@@ -5,6 +5,8 @@ import { getApplications } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useApplicationsColumns } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsColumns.tsx';
 import { ApplicationsToolbar } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsToolbar.tsx';
+import { useState } from 'react';
+import { ApplicationsModal } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsModal.tsx';
 
 export const ApplicationListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -16,8 +18,15 @@ export const ApplicationListContent = () => {
     refetchInterval: 1000 * 60,
     refetchIntervalInBackground: true
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
 
-  const columns = useApplicationsColumns();
+  const columns = useApplicationsColumns({
+    onRowClick: (id) => {
+      setSelectedApplicationId(id);
+      setIsModalOpen(true);
+    }
+  });
 
   if (isError) {
     return <SharedError error={error} />;
@@ -38,6 +47,11 @@ export const ApplicationListContent = () => {
           layout={{ card: true }}
         />
       )}
+      <ApplicationsModal
+        open={isModalOpen}
+        id={selectedApplicationId}
+        handleClose={() => setIsModalOpen(false)}
+      />
     </Container>
   );
 };

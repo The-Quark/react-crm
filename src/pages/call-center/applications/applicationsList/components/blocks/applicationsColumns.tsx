@@ -8,12 +8,17 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 
-export const useApplicationsColumns = (): ColumnDef<Application>[] => {
+interface UseApplicationsColumnsProps {
+  onRowClick: (id: number) => void;
+}
+
+export const useApplicationsColumns = ({
+  onRowClick
+}: UseApplicationsColumnsProps): ColumnDef<Application>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
-  const [modal, setModal] = useState(false);
 
   const columns = useMemo<ColumnDef<Application>[]>(
     () => [
@@ -39,8 +44,8 @@ export const useApplicationsColumns = (): ColumnDef<Application>[] => {
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div
-              className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-              onClick={() => setModal(true)}
+              className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+              onClick={() => onRowClick(info.row.original.id)}
             >
               {info.row.original.full_name}
             </div>
@@ -167,7 +172,7 @@ export const useApplicationsColumns = (): ColumnDef<Application>[] => {
         }
       }
     ],
-    [isRTL, canManage]
+    [isRTL, canManage, onRowClick]
   );
   return canManage ? columns : columns.slice(0, -1);
 };
