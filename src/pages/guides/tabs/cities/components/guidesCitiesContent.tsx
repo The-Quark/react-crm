@@ -34,7 +34,7 @@ export const GuidesCitiesContent = () => {
     error: citiesError
   } = useQuery({
     queryKey: ['cities', selectedCountry],
-    queryFn: () => getCitiesByCountryCode(selectedCountry),
+    queryFn: () => getCitiesByCountryCode(selectedCountry, 'iso2'),
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5

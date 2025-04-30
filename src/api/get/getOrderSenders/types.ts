@@ -10,6 +10,7 @@ export interface OrderSender {
   id: number;
   contact_id: number | null;
   full_name: string;
+  country_id: number;
   city_id: number;
   phone: string;
   street: string;

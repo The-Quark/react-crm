@@ -2,14 +2,15 @@ import axios from 'axios';
 import { CitiesResponse } from '@/api/get/getCitiesByCountryCode/types.ts';
 import { COUNTRIES_URL } from '@/api/url';
 
-const getCitiesByCountryCode = async (countryCode: string): Promise<CitiesResponse> => {
+const getCitiesByCountryCode = async (
+  value: string | number,
+  type: 'id' | 'iso2' = 'id'
+): Promise<CitiesResponse> => {
   return await axios
     .get<CitiesResponse>(COUNTRIES_URL, {
       params: {
         fields: 'cities',
-        filters: {
-          iso2: countryCode
-        }
+        [`filters[${type}]`]: value
       }
     })
     .then((res) => res.data);
