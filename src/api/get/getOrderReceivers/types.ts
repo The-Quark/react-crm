@@ -1,15 +1,28 @@
+interface Country {
+  id: number;
+  iso2: string;
+  name: string;
+  status: number;
+  phone_code: string;
+  iso3: string;
+  region: string;
+  subregion: string;
+}
+
 interface City {
   id: number;
   country_id: number;
   state_id: number;
   name: string;
   country_code: string;
+  country: Country;
 }
 
-export interface OrderReceiver {
+export interface IOrderReceiver {
   id: number;
   contact_id: number | null;
   full_name: string;
+  country_id: number;
   city_id: number;
   phone: string;
   street: string;
@@ -23,7 +36,7 @@ export interface OrderReceiver {
   city: City;
 }
 
-export interface OrderReceiversResponse {
-  result: OrderReceiver[];
+export interface IOrderReceiversResponse {
+  result: IOrderReceiver[];
   count: number;
 }

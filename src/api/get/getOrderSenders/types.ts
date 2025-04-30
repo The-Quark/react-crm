@@ -1,12 +1,24 @@
+interface Country {
+  id: number;
+  iso2: string;
+  name: string;
+  status: number;
+  phone_code: string;
+  iso3: string;
+  region: string;
+  subregion: string;
+}
+
 interface City {
   id: number;
   country_id: number;
   state_id: number;
   name: string;
   country_code: string;
+  country: Country;
 }
 
-export interface OrderSender {
+export interface IOrderSender {
   id: number;
   contact_id: number | null;
   full_name: string;
@@ -24,7 +36,7 @@ export interface OrderSender {
   city: City;
 }
 
-export interface OrderSendersResponse {
-  result: OrderSender[];
+export interface IOrderSendersResponse {
+  result: IOrderSender[];
   count: number;
 }

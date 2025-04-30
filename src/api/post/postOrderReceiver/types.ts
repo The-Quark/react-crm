@@ -1,6 +1,7 @@
 export interface IReceiverOrderFormValues {
   full_name: string;
-  city_id: number;
+  country_id: number | string;
+  city_id: number | string;
   phone: string;
   street: string;
   house: string;

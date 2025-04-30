@@ -3,11 +3,18 @@ import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { ISenderOrderFormValues } from '@/api/post/postOrderSender/types.ts';
 import { useFormik } from 'formik';
-import { postOrderSender, putOrderSender, getCountries, getCitiesByCountryCode } from '@/api';
+import {
+  postOrderSender,
+  putOrderSender,
+  getCountries,
+  getCitiesByCountryCode,
+  getOrderSenders
+} from '@/api';
 import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
 
 interface Props {
   onNext: () => void;
@@ -26,17 +33,37 @@ const formSchema = Yup.object().shape({
   contact_id: Yup.number().optional()
 });
 
-const initialValues: ISenderOrderFormValues = {
-  full_name: '',
-  city_id: '',
-  phone: '',
-  street: '',
-  house: '',
-  apartment: '',
-  location_description: '',
-  notes: '',
-  contact_id: 0,
-  country_id: ''
+const getInitialValues = (
+  isEditMode: boolean,
+  senderData: IOrderSendersResponse
+): ISenderOrderFormValues => {
+  if (isEditMode && senderData?.result) {
+    return {
+      full_name: senderData.result[0].full_name || '',
+      city_id: senderData.result[0].city_id || '',
+      phone: senderData.result[0].phone || '',
+      street: senderData.result[0].street || '',
+      house: senderData.result[0].house || '',
+      apartment: senderData.result[0].apartment || '',
+      location_description: senderData.result[0].location_description || '',
+      notes: senderData.result[0].notes || '',
+      contact_id: senderData.result[0].contact_id || 0,
+      country_id: senderData.result[0].city.country_id || ''
+    };
+  }
+
+  return {
+    full_name: '',
+    city_id: '',
+    phone: '',
+    street: '',
+    house: '',
+    apartment: '',
+    location_description: '',
+    notes: '',
+    contact_id: 0,
+    country_id: ''
+  };
 };
 
 export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
@@ -46,8 +73,19 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
 
+  const {
+    data: senderData,
+    isLoading: senderLoading,
+    isError: senderIsError,
+    error: senderError
+  } = useQuery({
+    queryKey: ['sender'],
+    queryFn: () => getOrderSenders(Number(senderId)),
+    enabled: !!senderId
+  });
+
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(isEditMode, senderData as IOrderSendersResponse),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting }) => {
@@ -57,7 +95,9 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
           await putOrderSender(Number(senderId), values);
         } else {
           const { result: newSenderId } = await postOrderSender(values);
-          window.history.pushState({}, '', `/call-center/orders/starter/${newSenderId}`);
+          const currentPath = window.location.pathname;
+          const updatedPath = `${currentPath}/${newSenderId}`;
+          window.history.pushState({}, '', updatedPath);
         }
         onNext();
       } catch (err) {
@@ -91,12 +131,16 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
     staleTime: 1000 * 60 * 5
   });
 
-  if (countriesLoading) {
+  if (countriesLoading || (isEditMode && senderLoading)) {
     return <SharedLoading />;
   }
 
   if (countriesIsError) {
     return <SharedError error={countriesError} />;
+  }
+
+  if (senderIsError) {
+    return <SharedError error={senderError} />;
   }
 
   return (
