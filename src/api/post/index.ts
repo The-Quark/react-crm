@@ -12,3 +12,4 @@ export * from './postApplication';
 export * from './postDeliveryType';
 export * from './postOrderSender';
 export * from './postOrderReceiver';
+export * from './postOrder';
