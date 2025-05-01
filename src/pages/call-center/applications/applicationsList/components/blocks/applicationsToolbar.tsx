@@ -51,7 +51,7 @@ export const ApplicationsToolbar: FC = () => {
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             {mockApplicationsStatus.map((status) => (
-              <SelectItem key={status.id} value={status.name}>
+              <SelectItem key={status.id} value={status.value}>
                 {status.name}
               </SelectItem>
             ))}

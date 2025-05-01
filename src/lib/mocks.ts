@@ -287,18 +287,52 @@ export const mockStatus = [
 export const mockApplicationsStatus = [
   {
     id: 1,
-    name: 'new'
+    name: 'New',
+    value: 'new'
   },
   {
     id: 2,
-    name: 'running'
+    name: 'Running',
+    value: 'running'
   },
   {
     id: 3,
-    name: 'completed'
+    name: 'Completed',
+    value: 'completed'
   },
   {
     id: 4,
-    name: 'declined'
+    name: 'Declined',
+    value: 'declined'
   }
+];
+
+export const mockOrdersStatus = [
+  {
+    id: 1,
+    name: 'Package awaiting',
+    value: 'package_awaiting'
+  },
+  {
+    id: 2,
+    name: 'Buy for someone',
+    value: 'buy_for_someone'
+  },
+  {
+    id: 3,
+    name: 'Package received',
+    value: 'package_received'
+  },
+  {
+    id: 4,
+    name: 'Expired',
+    value: 'expired'
+  }
+];
+
+export const mockDeliveryCategories = [
+  { value: 'b2c', name: 'Business to Customer' },
+  { value: 'b2b', name: 'Business to Business' },
+  { value: 'c2b', name: 'Customer to Business' },
+  { value: 'c2c', name: 'Customer to Customer' }
 ];

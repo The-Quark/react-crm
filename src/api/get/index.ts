@@ -17,3 +17,4 @@ export * from './getApplications';
 export * from './getDeliveryTypes';
 export * from './getOrderSenders';
 export * from './getOrderReceivers';
+export * from './getOrder';
