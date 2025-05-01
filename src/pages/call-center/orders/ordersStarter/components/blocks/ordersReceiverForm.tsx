@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   getCitiesByCountryCode,
@@ -15,6 +14,7 @@ import { AxiosError } from 'axios';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
 import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
+import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 
 interface Props {
   onNext: () => void;
@@ -67,11 +67,11 @@ const getInitialValues = (
 };
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
-  const { receiverId } = useParams<{ receiverId?: string }>();
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!receiverId;
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
+  const { receiverId, setReceiverId } = useOrderCreation();
+  const isEditMode = !!receiverId;
 
   const {
     data: receiverData,
@@ -79,28 +79,28 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     isError: receiverIsError,
     error: receiverError
   } = useQuery({
-    queryKey: ['receiver'],
+    queryKey: ['receiver', receiverId],
     queryFn: () => getOrderReceivers(Number(receiverId)),
-    enabled: !!receiverId
+    enabled: isEditMode
   });
 
   const formik = useFormik({
     initialValues: getInitialValues(isEditMode, receiverData as IOrderReceiversResponse),
     validationSchema: formSchema,
     enableReinitialize: true,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
         if (isEditMode && receiverId) {
           await putOrderReceiver(Number(receiverId), values);
         } else {
           const { result: newReceiverId } = await postOrderReceiver(values);
-          const currentPath = window.location.pathname;
-          const updatedPath = `${currentPath}/${newReceiverId}`;
-
-          window.history.pushState({}, '', updatedPath);
+          setReceiverId(newReceiverId);
         }
         onNext();
+        resetForm();
+        setSearchTerm('');
+        setCitySearchTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);

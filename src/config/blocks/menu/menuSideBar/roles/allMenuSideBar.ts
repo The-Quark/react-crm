@@ -153,6 +153,10 @@ export const AllMenuSideBar: TMenuConfig = [
         path: '/guides/airlines'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.AIRLINE_RATES',
+        path: '/guides/airline-rates'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES',
         path: '/guides/delivery-types'
       },

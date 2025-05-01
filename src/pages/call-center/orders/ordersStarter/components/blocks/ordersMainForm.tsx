@@ -13,19 +13,12 @@ import { getApplications, getDeliveryTypes, getPackageTypes, postOrder } from '@
 import { AxiosError } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
+import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 
 interface Props {
   onBack: () => void;
+  onSubmitSuccess?: () => void;
 }
-
-const twoDecimalPlacesTest = (fieldName: string) =>
-  Yup.number()
-    .typeError(`${fieldName} must be a number`)
-    .test(
-      'decimal-places',
-      `${fieldName} must have 2 decimal places.`,
-      (value) => value === undefined || /^\d+(\.\d{1,2})?$/.test(String(value))
-    );
 
 const formSchema = Yup.object().shape({
   application_id: Yup.number()
@@ -64,8 +57,24 @@ const formSchema = Yup.object().shape({
       const decimalPart = value.toString().split('.')[1];
       return decimalPart?.length === 2;
     }),
-  volume: twoDecimalPlacesTest('Volume').optional(),
-  price: twoDecimalPlacesTest('Price').optional(),
+  volume: Yup.number()
+    .required('Volume is required')
+    .min(0, 'Volume cannot be negative')
+    .test('is-two-decimal', 'The volume field must have exactly 2 decimal places.', (value) => {
+      if (value === undefined || value === null) return false;
+      const decimalPart = value.toString().split('.')[1];
+      return decimalPart?.length === 2;
+    })
+    .optional(),
+  price: Yup.number()
+    .required('Price is required')
+    .min(0, 'Price cannot be negative')
+    .test('is-two-decimal', 'The price field must have exactly 2 decimal places.', (value) => {
+      if (value === undefined || value === null) return false;
+      const decimalPart = value.toString().split('.')[1];
+      return decimalPart?.length === 2;
+    })
+    .optional(),
   places_count: Yup.number().typeError('Places count must be a number').optional(),
   customs_clearance: Yup.boolean().required('Customs clearance is required'),
   is_international: Yup.boolean().required('Is international is required'),
@@ -73,18 +82,21 @@ const formSchema = Yup.object().shape({
   special_wishes: Yup.string().optional()
 });
 
-export const OrdersMainForm: FC<Props> = ({ onBack }) => {
-  const { receiverId } = useParams<{ receiverId?: string }>();
-  const { senderId } = useParams<{ senderId?: string }>();
+export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
+  const { senderId, receiverId, applicationId, setApplicationId, clearAll } = useOrderCreation();
   const [loading, setLoading] = useState(false);
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
 
+  console.log('applicationId', applicationId);
+  console.log('senderId', senderId);
+  console.log('receiverId', receiverId);
+
   const formik = useFormik({
     initialValues: {
-      application_id: '',
-      sender_id: senderId ? Number(senderId) : 0,
-      receiver_id: receiverId ? Number(receiverId) : 0,
+      application_id: applicationId || '',
+      sender_id: senderId || 0,
+      receiver_id: receiverId || 0,
       delivery_type: '',
       delivery_category: 'b2b',
       package_type: '',
@@ -100,16 +112,22 @@ export const OrdersMainForm: FC<Props> = ({ onBack }) => {
       special_wishes: ''
     },
     validationSchema: formSchema,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
         await postOrder({
           ...values,
-          delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b'
+          delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
+          delivery_type: Number(values.delivery_type)
         });
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
+        clearAll();
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
-        console.error(error.response?.data?.message || error.message);
+        const errorMessage = error.response?.data?.message || error.message;
+        console.error(errorMessage);
       } finally {
         setLoading(false);
         setSubmitting(false);
@@ -178,6 +196,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack }) => {
             searchPlaceholder="Search application"
             onChange={(val) => {
               formik.setFieldValue('application_id', val);
+              setApplicationId(Number(val));
             }}
             error={formik.errors.application_id as string}
             touched={formik.touched.application_id}

@@ -19,6 +19,7 @@ import {
 } from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
 import {
+  GuidesAirlineRatesPage,
   GuidesAirlinesPage,
   GuidesCountriesPage,
   GuidesCurrenciesPage,
@@ -58,6 +59,7 @@ const routeConfig = [
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
+      { path: '/guides/airlines', element: <GuidesAirlineRatesPage /> },
       { path: '/guides/delivery-types', element: <GuidesDeliveryTypesPage /> },
       { path: '/guides/package-types', element: <GuidesPackageTypesPage /> },
       { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> }
@@ -76,6 +78,7 @@ const routeConfig = [
       { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/packages', element: <GuidesPackageTypesPage /> },
       { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
+      { path: '/guides/airlines', element: <GuidesAirlineRatesPage /> },
       { path: '/guides/delivery-types', element: <GuidesDeliveryTypesPage /> },
       { path: '/guides/package-types', element: <GuidesPackageTypesPage /> },
       { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> }

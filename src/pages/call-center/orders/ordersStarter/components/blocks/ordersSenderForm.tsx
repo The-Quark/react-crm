@@ -11,10 +11,10 @@ import {
   getOrderSenders
 } from '@/api';
 import { AxiosError } from 'axios';
-import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
+import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 
 interface Props {
   onNext: () => void;
@@ -67,11 +67,11 @@ const getInitialValues = (
 };
 
 export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
-  const { senderId } = useParams<{ senderId?: string }>();
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!senderId;
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
+  const { senderId, setSenderId } = useOrderCreation();
+  const isEditMode = !!senderId;
 
   const {
     data: senderData,
@@ -79,27 +79,34 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
     isError: senderIsError,
     error: senderError
   } = useQuery({
-    queryKey: ['sender'],
+    queryKey: ['sender', senderId],
     queryFn: () => getOrderSenders(Number(senderId)),
-    enabled: !!senderId
+    enabled: isEditMode
   });
 
   const formik = useFormik({
     initialValues: getInitialValues(isEditMode, senderData as IOrderSendersResponse),
     validationSchema: formSchema,
     enableReinitialize: true,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
         if (isEditMode && senderId) {
-          await putOrderSender(Number(senderId), values);
+          await putOrderSender(senderId, values);
         } else {
-          const { result: newSenderId } = await postOrderSender(values);
-          const currentPath = window.location.pathname;
-          const updatedPath = `${currentPath}/${newSenderId}`;
-          window.history.pushState({}, '', updatedPath);
+          const response = await postOrderSender(values);
+          console.log('API Response:', response); //
+          if (response?.result) {
+            setSenderId(response.result);
+            console.log('Sender ID saved to context:', response.result);
+          } else {
+            throw new Error('Failed to get sender ID from response');
+          }
         }
         onNext();
+        resetForm();
+        setSearchTerm('');
+        setCitySearchTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
