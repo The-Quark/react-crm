@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
@@ -10,16 +10,17 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useLanguage } from '@/i18n';
-import { airlinesMock, timezoneMock } from '@/lib/mocks.ts';
+import { timezoneMock } from '@/lib/mocks.ts';
 import {
   getCurrencies,
   getLanguages,
   postGlobalParameter,
   putGlobalParameter,
-  getGlobalParameters
+  getGlobalParameters,
+  getAirlines
 } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { SharedAutocomplete, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 
 const createParameterSchema = Yup.object().shape({
@@ -47,8 +48,9 @@ interface IParameterFormValues {
 }
 
 export const GlobalParameterStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
   const { currentLanguage } = useLanguage();
 
@@ -91,6 +93,16 @@ export const GlobalParameterStarterContent = () => {
     refetchOnWindowFocus: false
   });
 
+  const {
+    data: airlinesData,
+    isLoading: airlinesLoading,
+    isError: airlinesIsError,
+    error: airlinesError
+  } = useQuery({
+    queryKey: ['globalParameterAirlines'],
+    queryFn: () => getAirlines()
+  });
+
   const initialValues: IParameterFormValues = {
     company_name: '',
     timezone: '',
@@ -112,10 +124,11 @@ export const GlobalParameterStarterContent = () => {
       try {
         if (isEditMode && id) {
           await putGlobalParameter(Number(id), {
-            ...values
+            ...values,
+            airlines: String(values.airlines)
           });
         } else {
-          await postGlobalParameter(values);
+          await postGlobalParameter({ ...values, airlines: String(values.airlines) });
           resetForm();
         }
       } catch (err) {
@@ -154,10 +167,13 @@ export const GlobalParameterStarterContent = () => {
   if (isCurrenciesError) {
     return <SharedError error={currenciesErrorMessage} />;
   }
+  if (airlinesIsError) {
+    return <SharedError error={airlinesError} />;
+  }
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      {loadingCurrencies || loadingLanguages || loadingParameter ? (
+      {loadingCurrencies || loadingLanguages || loadingParameter || airlinesLoading ? (
         <SharedLoading />
       ) : (
         <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
@@ -294,31 +310,20 @@ export const GlobalParameterStarterContent = () => {
               </div>
             </div>
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Airlines</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={formik.values.airlines?.toString()}
-                  onValueChange={(value) => formik.setFieldValue('airlines', String(value))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Airlines" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60 overflow-y-auto">
-                    {airlinesMock.map((item) => (
-                      <SelectItem key={item.code} value={item.code}>
-                        {item.label} - {item.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.airlines && formik.errors.airlines && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.airlines}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedAutocomplete
+              label="Airlines"
+              value={formik.values.airlines}
+              options={airlinesData?.result ?? []}
+              placeholder="Select airline"
+              searchPlaceholder="Search airline"
+              onChange={(val) => {
+                formik.setFieldValue('airlines', val);
+              }}
+              error={formik.errors.airlines as string}
+              touched={formik.touched.airlines}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+            />
 
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
               <label className="form-label max-w-56">Dimension Per Place</label>

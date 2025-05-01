@@ -48,7 +48,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.SOURCES': 'Источники',
   'MENU.MEGAMENU.GUIDES.VEHICLES': 'Транспорт',
   'MENU.MEGAMENU.GUIDES.AIRLINES': 'Авиалинии',
-  'MENU.MEGAMENU.GUIDES.AIRLINE_RATE': 'Тарифы авиалиний',
+  'MENU.MEGAMENU.GUIDES.AIRLINE_RATES': 'Тарифы авиалиний',
   'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES': 'Типы доставки',
   'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES': 'Типы посылок',
   'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS': 'Упаковочные материалы',
