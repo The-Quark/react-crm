@@ -117,7 +117,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
               <input
                 type="text"
                 placeholder={searchPlaceholder}
-                className="w-full p-2 border rounded text-sm"
+                className="input w-full"
                 value={searchTerm}
                 onChange={handleSearchChange}
                 disabled={disabled}
