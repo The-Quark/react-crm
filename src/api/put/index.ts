@@ -11,3 +11,4 @@ export * from './putApplication';
 export * from './putDeliveryType';
 export * from './putOrderSender';
 export * from './putOrderReceiver';
+export * from './putUser';

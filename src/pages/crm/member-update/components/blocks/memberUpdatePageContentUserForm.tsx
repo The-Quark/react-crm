@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { AxiosError } from 'axios';
 import { IImageInputFile } from '@/components/image-input';
-import { postUpdateUser } from '@/api/post';
+import { updateUser } from '@/api/put';
 import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 
@@ -61,7 +61,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
           ...values,
           avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
-        await postUpdateUser(payload, removeAvatar);
+        await updateUser(payload, removeAvatar);
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

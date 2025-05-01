@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { paths } from '@/api/types';
-import { USERS_URL } from '@/api/url';
+import { USERS_REGISTER_URL } from '@/api/url';
 
 type RegisterRequest =
   paths['/auth/register']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
@@ -15,7 +15,7 @@ export const postCreateUser = async (userData: RegisterRequest): Promise<Registe
     }
   });
 
-  await axios.post(USERS_URL, formData, {
+  await axios.post(USERS_REGISTER_URL, formData, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   });
 

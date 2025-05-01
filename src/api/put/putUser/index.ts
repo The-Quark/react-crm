@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { UserModel } from '@/api/post/postUpdateUser/types';
+import { UserModel } from '@/api/put/putUser/types.ts';
 import { USERS_URL } from '@/api/url';
 
-export const postUpdateUser = async (
+export const updateUser = async (
   data: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
   removeAvatar: boolean = false
 ): Promise<UserModel> => {
