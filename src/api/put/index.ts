@@ -12,3 +12,4 @@ export * from './putDeliveryType';
 export * from './putOrderSender';
 export * from './putOrderReceiver';
 export * from './putUser';
+export * from './putAirlineRate';

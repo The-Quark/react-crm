@@ -22,6 +22,8 @@ export const VEHICLE_URL = `${api}/vehicle/manage`;
 
 export const AIRLINE_URL = `${api}/airline/manage`;
 
+export const AIRLINE_RATE_URL = `${api}/airline_rate/manage`;
+
 export const PACKAGE_TYPES_URL = `${api}/package_type/manage`;
 
 export const PACKAGE_MATERIALS_URL = `${api}/package-materials/manage`;

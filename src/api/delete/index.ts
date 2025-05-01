@@ -10,3 +10,4 @@ export * from './deletePackageMaterial';
 export * from './deleteApplication';
 export * from './deleteDeliveryType';
 export * from './deleteOrder';
+export * from './deleteAirlineRate';
