@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Airline } from '@/api/get/getAirlines/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
@@ -12,18 +12,8 @@ export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
   const columns = useMemo<ColumnDef<Airline>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'airline id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -72,7 +62,7 @@ export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.country}
+              {info.row.original.country.name}
             </div>
           </div>
         ),
@@ -104,7 +94,7 @@ export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="airlines"
+            invalifateRequestKey="guidesAirlines"
             deleteRequest={deleteAirline}
             renderModal={({ open, onOpenChange }) => (
               <AirlineModal

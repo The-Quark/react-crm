@@ -9,7 +9,7 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 
 export const GuidesAirlinesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['airlines'],
+    queryKey: ['guidesAirlines'],
     queryFn: () => getAirlines()
   });
   const columns = useAirlinesColumns();
