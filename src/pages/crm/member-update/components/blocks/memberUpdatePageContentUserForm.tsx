@@ -7,6 +7,7 @@ import { IImageInputFile } from '@/components/image-input';
 import { updateUser } from '@/api/put';
 import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IGeneralSettingsProps {
   title: string;
@@ -39,6 +40,7 @@ interface IUserFormValues {
 export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ title, user }) => {
   const [loading, setLoading] = useState(false);
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(user?.avatar ? false : true);
+  const queryClient = useQueryClient();
 
   const initialValues: IUserFormValues = {
     id: user?.id || 0,
@@ -62,6 +64,8 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
           avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
         await updateUser(payload, removeAvatar);
+        setRemoveAvatar(false);
+        queryClient.invalidateQueries({ queryKey: ['member-update-user'] });
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

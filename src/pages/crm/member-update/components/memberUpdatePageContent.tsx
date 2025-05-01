@@ -1,50 +1,33 @@
 import { MemberUpdatePageContentUserForm } from '@/pages/crm/member-update/components/blocks/memberUpdatePageContentUserForm.tsx';
 import { useParams } from 'react-router';
-import { useEffect, useState } from 'react';
 import { getMemberById } from '@/api/get';
-import { CircularProgress } from '@mui/material';
-import { UserModel } from '@/api/get/getMemberById/types.ts';
+import { useQuery } from '@tanstack/react-query';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 const MemberUpdatePageContent = () => {
   const { id } = useParams<{ id: string }>();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<UserModel | null>(null);
+  const {
+    data: userData,
+    isLoading: userLoading,
+    isError: userIsError,
+    error: userError
+  } = useQuery({
+    queryKey: ['member-update-user', id],
+    queryFn: () => getMemberById(Number(id)),
+    enabled: !!id
+  });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoading(true);
-        const userData = await getMemberById(Number(id));
-        setUser(userData);
-      } catch (err) {
-        console.error('Ошибка получения данных пользователя:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="card flex justify-center items-center p-5">
-        <CircularProgress />
-      </div>
-    );
+  if (userLoading) {
+    return <SharedLoading />;
   }
 
-  if (!user) {
-    return (
-      <div className="card flex justify-center items-center p-5 text-danger">
-        Пользователь не найден или произошла ошибка загрузки данных.
-      </div>
-    );
+  if (userIsError) {
+    return <SharedError error={userError} />;
   }
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <MemberUpdatePageContentUserForm title="Update User" user={user} />
+      <MemberUpdatePageContentUserForm title="Update User" user={userData ?? null} />
     </div>
   );
 };

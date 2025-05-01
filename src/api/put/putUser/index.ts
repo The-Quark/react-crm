@@ -13,7 +13,7 @@ export const updateUser = async (
       formData.append(key, value instanceof Blob ? value : String(value));
     }
   });
-  const urlWithParam = removeAvatar ? `${USERS_URL}?remove_avatar=true` : USERS_URL;
+  const urlWithParam = removeAvatar ? `${USERS_URL}?remove_avatar=1` : `${USERS_URL}`;
 
   return await axios
     .post<UserModel>(urlWithParam, formData, {
