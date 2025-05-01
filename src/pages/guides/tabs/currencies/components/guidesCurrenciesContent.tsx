@@ -9,7 +9,7 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 
 export const GuidesCurrenciesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['currencies'],
+    queryKey: ['guidesCurrencies'],
     queryFn: () => getCurrencies()
   });
 

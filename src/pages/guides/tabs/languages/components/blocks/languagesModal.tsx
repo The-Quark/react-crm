@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -14,8 +14,9 @@ import { ILanguageFormValues } from '@/api/post/postLanguage/types.ts';
 import { postLanguage } from '@/api';
 import { getLanguages } from '@/api/get/getLanguages';
 import { putLanguage } from '@/api/put';
-import { CircularProgress } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { LanguageResponse } from '@/api/get/getLanguages/types.ts';
+import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -36,48 +37,44 @@ const validateSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<ILanguageFormValues>({
+const getInitialValues = (isEditMode: boolean, data: LanguageResponse): ILanguageFormValues => {
+  if (isEditMode && data?.result) {
+    return {
+      code: data.result[0].code || '',
+      name: data.result[0].name || '',
+      native_name: data.result[0].native_name || '',
+      locale: data.result[0].locale || '',
+      direction: data.result[0].direction || 'ltr',
+      is_active: data.result[0].is_active || false
+    };
+  }
+  return {
     code: '',
     name: '',
     native_name: '',
     locale: '',
     direction: 'ltr',
     is_active: true
-  });
+  };
+};
+
+const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (id) {
-      const fetchReq = async () => {
-        setFormLoading(true);
-        try {
-          const reqData = await getLanguages(Number(id));
-          const req = reqData.result[0];
-          setInitialValues({
-            code: req.code,
-            name: req.name,
-            native_name: req.native_name,
-            locale: req.locale,
-            direction: req.direction,
-            is_active: req.is_active
-          });
-          setFormLoading(false);
-        } catch (err) {
-          console.error('Request error:', err);
-        } finally {
-          setFormLoading(false);
-        }
-      };
-
-      fetchReq();
-    }
-  }, [id]);
+  const {
+    data: languageData,
+    isLoading: languageLoading,
+    isError: languageIsError,
+    error: languageError
+  } = useQuery({
+    queryKey: ['formLanguage', id],
+    queryFn: () => getLanguages(Number(id)),
+    enabled: !!id
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(!!id, languageData as LanguageResponse),
     enableReinitialize: true,
     validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -90,7 +87,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['languages'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesLanguages'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -102,173 +99,108 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    queryClient.removeQueries({ queryKey: ['formLanguage'] });
     onOpenChange();
   };
 
   return (
-    <Fragment>
-      <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
-          <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-            <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update' : 'Create'}
-            </DialogTitle>
-            <DialogDescription></DialogDescription>
-            <button
-              className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
-              data-modal-dismiss="true"
-              onClick={handleClose}
-            >
-              <KeenIcon icon="cross" />
-            </button>
-          </DialogHeader>
-          <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-            {formLoading ? (
-              <div className="flex justify-center items-center p-5">
-                <CircularProgress />
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
+        <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
+          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+            {id ? 'Update' : 'Create'}
+          </DialogTitle>
+          <DialogDescription></DialogDescription>
+          <button
+            className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
+            data-modal-dismiss="true"
+            onClick={handleClose}
+          >
+            <KeenIcon icon="cross" />
+          </button>
+        </DialogHeader>
+        <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
+          {id && languageIsError && <SharedError error={languageError} />}
+          {id && languageLoading ? (
+            <SharedLoading />
+          ) : (
+            <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+              <SharedInput name="name" label="Name" formik={formik} />
+              <SharedInput name="native_name" label="Native name" formik={formik} />
+              <SharedInput name="code" label="Language code" formik={formik} />
+              <SharedInput name="locale" label="Locale" formik={formik} />
+
+              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
+                <label className="form-label max-w-56">Direction</label>
+                <div className="flex columns-1 w-full flex-wrap">
+                  <div className="flex items-center gap-5">
+                    <label className="radio-group">
+                      <input
+                        className="radio-sm"
+                        type="radio"
+                        name="direction"
+                        value="ltr"
+                        checked={formik.values.direction === 'ltr'}
+                        onChange={formik.handleChange}
+                      />
+                      <span className="radio-label">LTR</span>
+                    </label>
+                    <label className="radio-group">
+                      <input
+                        className="radio-sm"
+                        type="radio"
+                        name="direction"
+                        value="rtl"
+                        checked={formik.values.direction === 'rtl'}
+                        onChange={formik.handleChange}
+                      />
+                      <span className="radio-label">RTL</span>
+                    </label>
+                  </div>
+                  {formik.touched.direction && formik.errors.direction && (
+                    <span role="alert" className="text-danger text-xs mt-1">
+                      {formik.errors.direction}
+                    </span>
+                  )}
+                </div>
               </div>
-            ) : (
-              <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Name</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Name"
-                      {...formik.getFieldProps('name')}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.name}
-                      </span>
-                    )}
-                  </div>
-                </div>
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Native name</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Native name"
-                      {...formik.getFieldProps('native_name')}
-                    />
-                    {formik.touched.native_name && formik.errors.native_name && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.native_name}
-                      </span>
-                    )}
+              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
+                <label className="form-label max-w-56">Active</label>
+                <div className="flex columns-1 w-full flex-wrap">
+                  <div className="flex items-center gap-5">
+                    <label className="checkbox-group flex items-center gap-2">
+                      <input
+                        className="checkbox"
+                        type="checkbox"
+                        name="is_active"
+                        checked={formik.values.is_active}
+                        onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
+                      />
+                    </label>
                   </div>
+                  {formik.touched.is_active && formik.errors.is_active && (
+                    <span role="alert" className="text-danger text-xs mt-1">
+                      {formik.errors.is_active}
+                    </span>
+                  )}
                 </div>
+              </div>
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Language code</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Language code"
-                      {...formik.getFieldProps('code')}
-                    />
-                    {formik.touched.code && formik.errors.code && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.code}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Locale</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Locale"
-                      {...formik.getFieldProps('locale')}
-                    />
-                    {formik.touched.locale && formik.errors.locale && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.locale}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Direction</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <div className="flex items-center gap-5">
-                      <label className="radio-group">
-                        <input
-                          className="radio-sm"
-                          type="radio"
-                          name="direction"
-                          value="ltr"
-                          checked={formik.values.direction === 'ltr'}
-                          onChange={formik.handleChange}
-                        />
-                        <span className="radio-label">LTR</span>
-                      </label>
-                      <label className="radio-group">
-                        <input
-                          className="radio-sm"
-                          type="radio"
-                          name="direction"
-                          value="rtl"
-                          checked={formik.values.direction === 'rtl'}
-                          onChange={formik.handleChange}
-                        />
-                        <span className="radio-label">RTL</span>
-                      </label>
-                    </div>
-                    {formik.touched.direction && formik.errors.direction && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.direction}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Active</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <div className="flex items-center gap-5">
-                      <label className="checkbox-group flex items-center gap-2">
-                        <input
-                          className="checkbox"
-                          type="checkbox"
-                          name="is_active"
-                          checked={formik.values.is_active}
-                          onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                        />
-                      </label>
-                    </div>
-                    {formik.touched.is_active && formik.errors.is_active && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.is_active}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={loading || formik.isSubmitting}
-                  >
-                    {loading ? 'Please wait...' : 'Save'}
-                  </button>
-                </div>
-              </form>
-            )}
-          </DialogBody>
-        </DialogContent>
-      </Dialog>
-    </Fragment>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading || formik.isSubmitting}
+                >
+                  {loading ? 'Please wait...' : 'Save'}
+                </button>
+              </div>
+            </form>
+          )}
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   );
 };
 

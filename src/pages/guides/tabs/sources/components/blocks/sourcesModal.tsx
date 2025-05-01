@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -14,8 +14,9 @@ import { ISourceFormValues } from '@/api/post/postSource/types.ts';
 import { postSource } from '@/api';
 import { getSources } from '@/api/get';
 import { putSource } from '@/api/put';
-import { CircularProgress } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { SourceResponse } from '@/api/get/getSources/types.ts';
+import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -29,42 +30,38 @@ const validationSchema = Yup.object().shape({
   is_active: Yup.boolean().required('Active status is required')
 });
 
-const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<ISourceFormValues>({
+const getInitialValues = (isEditMode: boolean, data: SourceResponse): ISourceFormValues => {
+  if (isEditMode && data?.result) {
+    return {
+      name: data.result[0].name || '',
+      code: data.result[0].code || '',
+      is_active: data.result[0].is_active || false
+    };
+  }
+  return {
     code: '',
     name: '',
-    is_active: true
-  });
+    is_active: false
+  };
+};
+
+const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (id) {
-      const fetchReq = async () => {
-        setFormLoading(true);
-        try {
-          const reqData = await getSources(Number(id));
-          const req = reqData.result[0];
-          setInitialValues({
-            code: req.code,
-            name: req.name,
-            is_active: req.is_active
-          });
-          setFormLoading(false);
-        } catch (err) {
-          console.error('Request error:', err);
-        } finally {
-          setFormLoading(false);
-        }
-      };
-
-      fetchReq();
-    }
-  }, [id]);
+  const {
+    data: sourcesData,
+    isLoading: sourcesLoading,
+    isError: sourcesIsError,
+    error: sourcesError
+  } = useQuery({
+    queryKey: ['formSources', id],
+    queryFn: () => getSources(Number(id)),
+    enabled: !!id
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(!!id, sourcesData as SourceResponse),
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -77,7 +74,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['sources'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesSources'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -89,6 +86,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    queryClient.removeQueries({ queryKey: ['formSources'] });
     onOpenChange();
   };
 
@@ -110,45 +108,13 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
             </button>
           </DialogHeader>
           <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-            {formLoading ? (
-              <div className="flex justify-center items-center p-5">
-                <CircularProgress />
-              </div>
+            {id && sourcesIsError && <SharedError error={sourcesError} />}
+            {sourcesLoading ? (
+              <SharedLoading />
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Name</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Name"
-                      {...formik.getFieldProps('name')}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.name}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Source code</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Source code"
-                      {...formik.getFieldProps('code')}
-                    />
-                    {formik.touched.code && formik.errors.code && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.code}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput name="name" label="Name" formik={formik} />
+                <SharedInput name="code" label="Source code" formik={formik} />
 
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Active</label>

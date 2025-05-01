@@ -9,7 +9,7 @@ import { useCountriesColumns } from '@/pages/guides/tabs/countries/components/bl
 
 export const GuidesCountriesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['countries'],
+    queryKey: ['guidesCountries'],
     queryFn: () => getCountries('iso2,phone_code,currency,timezones'),
     retry: false,
     refetchOnWindowFocus: false,

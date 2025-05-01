@@ -78,7 +78,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="sources"
+            invalifateRequestKey="guidesSources"
             deleteRequest={deleteSource}
             renderModal={({ open, onOpenChange }) => (
               <SourcesModal

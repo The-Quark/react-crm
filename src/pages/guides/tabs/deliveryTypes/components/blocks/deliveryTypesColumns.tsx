@@ -65,7 +65,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="deliveryTypes"
+            invalifateRequestKey="guidesDeliveryTypes"
             deleteRequest={deleteDeliveryType}
             renderModal={({ open, onOpenChange }) => (
               <DeliveryTypesModal

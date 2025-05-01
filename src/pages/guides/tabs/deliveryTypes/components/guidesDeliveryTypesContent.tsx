@@ -9,7 +9,7 @@ import { DeliveryTypesToolbar } from '@/pages/guides/tabs/deliveryTypes/componen
 
 export const GuidesDeliveryTypesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['deliveryTypes'],
+    queryKey: ['guidesDeliveryTypes'],
     queryFn: () => getDeliveryTypes()
   });
   const columns = useDeliveryTypesColumns();

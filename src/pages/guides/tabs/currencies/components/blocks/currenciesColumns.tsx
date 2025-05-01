@@ -137,7 +137,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="currencies"
+            invalifateRequestKey="guidesCurrencies"
             deleteRequest={deleteCurrency}
             renderModal={({ open, onOpenChange }) => (
               <CurrenciesModal

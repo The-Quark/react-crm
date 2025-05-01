@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -10,10 +10,11 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { CircularProgress } from '@mui/material';
 import { ICurrencyFormValues } from '@/api/post/postCurrency/types.ts';
 import { getCurrencies, postCurrency, putCurrency } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { CurrencyResponse } from '@/api/get/getCurrencies/types.ts';
+import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -41,48 +42,47 @@ const validateSchema = Yup.object({
   is_active: Yup.boolean().required()
 });
 
-const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<ICurrencyFormValues>({
+const getInitialValues = (
+  isEditMode: boolean,
+  currencyData: CurrencyResponse
+): ICurrencyFormValues => {
+  if (isEditMode && currencyData?.result) {
+    return {
+      code: currencyData.result[0].code || '',
+      name: currencyData.result[0].name || '',
+      symbol: currencyData.result[0].symbol || '',
+      is_base: currencyData.result[0].is_base || false,
+      rate_to_base: currencyData.result[0].rate_to_base || 0,
+      is_active: currencyData.result[0].is_active || false
+    };
+  }
+  return {
     code: '',
     name: '',
     symbol: '',
     is_base: false,
     rate_to_base: 0,
-    is_active: true
-  });
+    is_active: false
+  };
+};
+
+const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (id) {
-      const fetchReq = async () => {
-        setFormLoading(true);
-        try {
-          const reqData = await getCurrencies(Number(id));
-          const req = reqData.result[0];
-          setInitialValues({
-            code: req.code,
-            name: req.name,
-            symbol: req.symbol,
-            rate_to_base: req.rate_to_base,
-            is_base: req.is_base,
-            is_active: req.is_active
-          });
-          setFormLoading(false);
-        } catch (err) {
-          console.error('Request error:', err);
-        } finally {
-          setFormLoading(false);
-        }
-      };
-
-      fetchReq();
-    }
-  }, [id]);
+  const {
+    data: currencyData,
+    isLoading: currencyLoading,
+    isError: currencyIsError,
+    error: currencyError
+  } = useQuery({
+    queryKey: ['formCurrency', id],
+    queryFn: () => getCurrencies(Number(id)),
+    enabled: !!id
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(!!id, currencyData as CurrencyResponse),
     enableReinitialize: true,
     validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -95,7 +95,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['currencies'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesCurrencies'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -107,6 +107,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    queryClient.removeQueries({ queryKey: ['formCurrency'] });
     onOpenChange();
   };
 
@@ -128,79 +129,20 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
             </button>
           </DialogHeader>
           <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-            {formLoading ? (
-              <div className="flex justify-center items-center p-5">
-                <CircularProgress />
-              </div>
+            {id && currencyIsError && <SharedError error={currencyError} />}
+            {id && currencyLoading ? (
+              <SharedLoading />
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Name</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Name"
-                      {...formik.getFieldProps('name')}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.name}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Symbol</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Symbol"
-                      {...formik.getFieldProps('symbol')}
-                    />
-                    {formik.touched.symbol && formik.errors.symbol && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.symbol}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Code</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Code"
-                      {...formik.getFieldProps('code')}
-                    />
-                    {formik.touched.code && formik.errors.code && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.code}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Rate to base</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="number"
-                      placeholder="Rate to base"
-                      {...formik.getFieldProps('rate_to_base')}
-                    />
-                    {formik.touched.rate_to_base && formik.errors.rate_to_base && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.rate_to_base}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput name="name" label="Name" formik={formik} />
+                <SharedInput name="symbol" label="Symbol" formik={formik} />
+                <SharedInput name="code" label="Code" formik={formik} />
+                <SharedInput
+                  name="rate_to_base"
+                  label="Rate to base"
+                  type="number"
+                  formik={formik}
+                />
 
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Base</label>

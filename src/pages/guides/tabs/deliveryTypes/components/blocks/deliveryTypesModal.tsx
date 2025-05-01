@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -11,9 +11,10 @@ import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { postDeliveryType, putDeliveryType, getDeliveryTypes } from '@/api';
-import { CircularProgress } from '@mui/material';
 import { IDeliveryTypeFormValues } from '@/api/post/postDeliveryType/types.ts';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { DeliveryTypesResponse } from '@/api/get/getDeliveryTypes/types.ts';
+import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -26,40 +27,39 @@ const validateSchema = Yup.object().shape({
   description: Yup.string().optional()
 });
 
-export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<IDeliveryTypeFormValues>({
+const getInitialValues = (
+  isEditMode: boolean,
+  data: DeliveryTypesResponse
+): IDeliveryTypeFormValues => {
+  if (isEditMode && data?.result) {
+    return {
+      name: data.result[0].name || '',
+      description: data.result[0].description || ''
+    };
+  }
+  return {
     name: '',
     description: ''
-  });
+  };
+};
+
+export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (id) {
-      const fetchReq = async () => {
-        setFormLoading(true);
-        try {
-          const reqData = await getDeliveryTypes(Number(id));
-          const req = reqData.result[0];
-          setInitialValues({
-            name: req.name,
-            description: req.description
-          });
-          setFormLoading(false);
-        } catch (err) {
-          console.error('Request error:', err);
-        } finally {
-          setFormLoading(false);
-        }
-      };
-
-      fetchReq();
-    }
-  }, [id]);
+  const {
+    data: deliveryTypesData,
+    isLoading: deliveryTypesLoading,
+    isError: deliveryTypesIsError,
+    error: deliveryTypesError
+  } = useQuery({
+    queryKey: ['formDeliveryTypes', id],
+    queryFn: () => getDeliveryTypes(Number(id)),
+    enabled: !!id
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(!!id, deliveryTypesData as DeliveryTypesResponse),
     enableReinitialize: true,
     validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -72,7 +72,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['deliveryTypes'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesDeliveryTypes'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -84,6 +84,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    queryClient.removeQueries({ queryKey: ['formDeliveryTypes'] });
     onOpenChange();
   };
 
@@ -104,45 +105,13 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
           </button>
         </DialogHeader>
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-          {formLoading ? (
-            <div className="flex justify-center items-center p-5">
-              <CircularProgress />
-            </div>
+          {id && deliveryTypesIsError && <SharedError error={deliveryTypesError} />}
+          {id && deliveryTypesLoading ? (
+            <SharedLoading />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Name</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <input
-                    className="input w-full"
-                    type="text"
-                    placeholder="Name"
-                    {...formik.getFieldProps('name')}
-                  />
-                  {formik.touched.name && formik.errors.name && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.name}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Description</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <input
-                    className="input w-full"
-                    type="text"
-                    placeholder="Description"
-                    {...formik.getFieldProps('description')}
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.description}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedInput name="name" label="Name" formik={formik} />
+              <SharedInput name="description" label="Description" formik={formik} />
 
               <div className="flex justify-end">
                 <button
