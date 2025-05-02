@@ -10,8 +10,11 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 export const GuidesSourcesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['guidesSources'],
-    queryFn: () => getSources()
+    queryFn: () => getSources(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
+
   const columns = useSourcesColumns();
 
   if (isError) {

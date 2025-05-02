@@ -70,7 +70,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formLanguage', id],
     queryFn: () => getLanguages(Number(id)),
-    enabled: !!id
+    enabled: !!id && open
   });
 
   const formik = useFormik({

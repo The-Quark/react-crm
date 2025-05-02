@@ -26,18 +26,8 @@ export const usePackageTypesColumns = ({
   const columns = useMemo<ColumnDef<PackageType>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'package type id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (

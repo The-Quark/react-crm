@@ -25,7 +25,9 @@ export const GuidesPackagesContent = () => {
     error: isLanguageError
   } = useQuery({
     queryKey: ['languages'],
-    queryFn: () => getLanguages()
+    queryFn: () => getLanguages(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
 
   const columns = usePackageTypesColumns({

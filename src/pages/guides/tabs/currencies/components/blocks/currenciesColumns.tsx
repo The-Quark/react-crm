@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Currency } from '@/api/get/getCurrencies/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
@@ -12,18 +12,8 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
   const columns = useMemo<ColumnDef<Currency>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'currency id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (

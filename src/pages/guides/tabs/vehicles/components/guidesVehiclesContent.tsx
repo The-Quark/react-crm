@@ -9,8 +9,10 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 
 export const GuidesVehiclesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['vehicles'],
-    queryFn: () => getVehicles()
+    queryKey: ['guidesVehicles'],
+    queryFn: () => getVehicles(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
   const columns = useVehiclesColumns();
 

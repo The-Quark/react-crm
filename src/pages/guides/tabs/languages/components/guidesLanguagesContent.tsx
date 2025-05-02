@@ -10,7 +10,9 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 export const GuidesLanguagesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['guidesLanguages'],
-    queryFn: () => getLanguages()
+    queryFn: () => getLanguages(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
   const columns = useLanguagesColumns();
 

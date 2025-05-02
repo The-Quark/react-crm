@@ -61,7 +61,7 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formAirline', id],
     queryFn: () => getAirlines(Number(id)),
-    enabled: !!id
+    enabled: !!id && open
   });
 
   const {
@@ -71,7 +71,9 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: countriesError
   } = useQuery({
     queryKey: ['guidesAirlinesCountries'],
-    queryFn: () => getCountries('id,iso2,name')
+    queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false
   });
 
   const formik = useFormik({

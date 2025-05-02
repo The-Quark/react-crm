@@ -57,7 +57,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formSources', id],
     queryFn: () => getSources(Number(id)),
-    enabled: !!id
+    enabled: !!id && open
   });
 
   const formik = useFormik({

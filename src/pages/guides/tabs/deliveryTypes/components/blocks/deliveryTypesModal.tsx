@@ -55,7 +55,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formDeliveryTypes', id],
     queryFn: () => getDeliveryTypes(Number(id)),
-    enabled: !!id
+    enabled: !!id && open
   });
 
   const formik = useFormik({

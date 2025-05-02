@@ -47,13 +47,14 @@ const getInitialValues = (
   currencyData: CurrencyResponse
 ): ICurrencyFormValues => {
   if (isEditMode && currencyData?.result) {
+    const data = currencyData.result[0];
     return {
-      code: currencyData.result[0].code || '',
-      name: currencyData.result[0].name || '',
-      symbol: currencyData.result[0].symbol || '',
-      is_base: currencyData.result[0].is_base || false,
-      rate_to_base: currencyData.result[0].rate_to_base || 0,
-      is_active: currencyData.result[0].is_active || false
+      code: data.code || '',
+      name: data.name || '',
+      symbol: data.symbol || '',
+      is_base: data.is_base || false,
+      rate_to_base: data.rate_to_base || 0,
+      is_active: data.is_active || false
     };
   }
   return {
@@ -78,7 +79,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formCurrency', id],
     queryFn: () => getCurrencies(Number(id)),
-    enabled: !!id
+    enabled: !!id && open
   });
 
   const formik = useFormik({

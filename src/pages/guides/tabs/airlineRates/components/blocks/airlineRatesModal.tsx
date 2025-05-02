@@ -137,6 +137,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['airlineRatesAirline'],
     queryFn: () => getAirlines(),
+    staleTime: 1000 * 60 * 2,
     enabled: open
   });
 
@@ -148,6 +149,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['guidesAirlineRatesCountries'],
     queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity,
     enabled: open
   });
 
@@ -159,6 +161,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['airlineRatesCurrencies'],
     queryFn: () => getCurrencies(),
+    staleTime: 1000 * 60 * 2,
     enabled: open
   });
 

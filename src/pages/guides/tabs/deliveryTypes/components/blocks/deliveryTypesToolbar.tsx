@@ -15,6 +15,10 @@ export const DeliveryTypesToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Delivery Types</h3>
       <div className="flex flex-wrap items-center gap-2.5">
+        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          New delivery type
+        </button>
+        <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -28,10 +32,6 @@ export const DeliveryTypesToolbar: FC = () => {
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
-        <DataGridColumnVisibility table={table} />
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New delivery type
-        </button>
       </div>
       <DeliveryTypesModal open={modalOpen} onOpenChange={handleClose} />
     </div>

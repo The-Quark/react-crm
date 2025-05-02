@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Vehicle } from '@/api/get/getVehicles/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
@@ -12,18 +12,8 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
   const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'vehicle id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -137,7 +127,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="vehicles"
+            invalifateRequestKey="guidesVehicles"
             deleteRequest={deleteVehicle}
             renderModal={({ open, onOpenChange }) => (
               <VehiclesModal

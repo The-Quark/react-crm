@@ -10,7 +10,9 @@ import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts'
 export const GuidesCurrenciesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['guidesCurrencies'],
-    queryFn: () => getCurrencies()
+    queryFn: () => getCurrencies(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
 
   const columns = useCurrenciesColumns();

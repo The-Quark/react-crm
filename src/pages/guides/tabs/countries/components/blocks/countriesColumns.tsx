@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Country } from '@/api/get/getCountries/types.ts';
 
@@ -8,16 +8,6 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<Country>[]>(
     () => [
-      {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
       {
         accessorFn: (row) => row.id,
         id: 'country id',

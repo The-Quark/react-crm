@@ -13,7 +13,7 @@ export const GuidesCountriesContent = () => {
     queryFn: () => getCountries('iso2,phone_code,currency,timezones'),
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: Infinity
   });
 
   const columns = useCountriesColumns();
