@@ -1,20 +1,17 @@
 /* eslint-disable prettier/prettier */
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '@/i18n';
-import { ColumnDef, RowSelectionState } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import {
   DataGrid,
   DataGridColumnHeader,
   DataGridColumnVisibility,
-  DataGridRowSelect,
-  DataGridRowSelectAll,
   KeenIcon,
   useDataGrid,
   Menu,
   MenuItem,
   MenuToggle
 } from '@/components';
-import { toast } from 'sonner';
 import { getUserList } from '@/api/get';
 import { toAbsoluteUrl } from '@/utils/index.ts';
 import { CircularProgress } from '@mui/material';
@@ -67,11 +64,17 @@ export const MembersDataGrid = () => {
   const columns = useMemo<ColumnDef<Member>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
+        accessorFn: (row) => row.member.id,
+        id: 'id',
+        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-wrap gap-2.5 mb-2">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.member.id}
+            </span>
+          </div>
+        ),
         meta: {
           headerClassName: 'w-0'
         }
@@ -194,20 +197,6 @@ export const MembersDataGrid = () => {
     [isRTL]
   );
 
-  const handleRowSelection = (state: RowSelectionState) => {
-    const selectedRowIds = Object.keys(state);
-
-    if (selectedRowIds.length > 0) {
-      toast(`Total ${selectedRowIds.length} are selected.`, {
-        description: `Selected row IDs: ${selectedRowIds}`,
-        action: {
-          label: 'Undo',
-          onClick: () => console.log('Undo')
-        }
-      });
-    }
-  };
-
   const Toolbar = () => {
     const { table } = useDataGrid();
 
@@ -216,6 +205,10 @@ export const MembersDataGrid = () => {
         <h3 className="card-title">Members</h3>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <a href="/crm/member-starter" className="btn btn-sm btn-primary">
+            New member
+          </a>
+          <DataGridColumnVisibility table={table} />
           <div className="relative">
             <KeenIcon
               icon="magnifier"
@@ -229,7 +222,6 @@ export const MembersDataGrid = () => {
               onChange={(event) => table.getColumn('member')?.setFilterValue(event.target.value)}
             />
           </div>
-          <DataGridColumnVisibility table={table} />
         </div>
       </div>
     );
@@ -246,7 +238,6 @@ export const MembersDataGrid = () => {
           columns={columns}
           data={members}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
           pagination={{ size: 10 }}
           sorting={[{ id: 'member', desc: false }]}
           toolbar={<Toolbar />}

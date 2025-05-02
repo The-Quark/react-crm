@@ -8,6 +8,7 @@ import { updateUser } from '@/api/put';
 import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 interface IGeneralSettingsProps {
   title: string;
@@ -41,6 +42,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
   const [loading, setLoading] = useState(false);
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(user?.avatar ? false : true);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const initialValues: IUserFormValues = {
     id: user?.id || 0,
@@ -66,6 +68,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
         await updateUser(payload, removeAvatar);
         setRemoveAvatar(false);
         queryClient.invalidateQueries({ queryKey: ['member-update-user'] });
+        navigate('/crm/members');
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

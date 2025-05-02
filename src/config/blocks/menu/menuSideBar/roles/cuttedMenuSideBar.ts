@@ -149,16 +149,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
     requiredPermissions: ['manage users'],
-    children: [
-      {
-        title: 'MENU.MEGAMENU.CRM.MEMBERS_STARTER',
-        path: '/crm/member-starter'
-      },
-      {
-        title: 'MENU.MEGAMENU.CRM.MEMBERS',
-        path: '/crm/members'
-      }
-    ]
+    path: '/crm/members'
   },
   //"view users"
   {
@@ -190,30 +181,12 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
         requiredPermissions: ['manage applications'],
-        children: [
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.STARTER',
-            path: '/call-center/applications/starter'
-          },
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
-            path: '/call-center/applications/list'
-          }
-        ]
+        path: '/call-center/applications/list'
       },
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         requiredPermissions: ['manage orders'],
-        children: [
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.STARTER',
-            path: '/call-center/orders/starter'
-          },
-          {
-            title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST',
-            path: '/call-center/orders/list'
-          }
-        ]
+        path: '/call-center/orders/list'
       }
     ]
   },
@@ -224,11 +197,11 @@ export const CuttedMenuSideBar: TMenuConfig = [
     requiredPermissions: ['view applications', 'view orders'],
     children: [
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
         path: '/call-center/applications/list'
       },
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST',
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         path: '/call-center/orders/list'
       }
     ]

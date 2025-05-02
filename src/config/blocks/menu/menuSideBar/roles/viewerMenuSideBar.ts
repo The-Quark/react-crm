@@ -61,11 +61,11 @@ export const ViewerMenuSideBar: TMenuConfig = [
     icon: 'satellite',
     children: [
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS.LIST',
+        title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
         path: '/call-center/applications/list'
       },
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS.LIST',
+        title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         path: '/call-center/orders/list'
       }
     ]

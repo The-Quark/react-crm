@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
+import { useNavigate } from 'react-router-dom';
 
 export const formSchema = Yup.object().shape({
   source: Yup.string().required('Source is required'),
@@ -32,6 +33,7 @@ export const ApplicationsStarterContent = () => {
   const [loading, setLoading] = useState(false);
   const isEditMode = !!id;
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     data: sourcesData,
@@ -75,10 +77,13 @@ export const ApplicationsStarterContent = () => {
         if (isEditMode && id) {
           const { status, ...putData } = values;
           await putApplication(Number(id), { ...putData, status: status as ApplicationsStatus });
-          queryClient.invalidateQueries({ queryKey: ['application'] });
+          queryClient.invalidateQueries({ queryKey: ['applications'] });
+          navigate('/call-center/applications/list');
+          resetForm();
         } else {
           await postApplication(values);
-          queryClient.invalidateQueries({ queryKey: ['application'] });
+          queryClient.invalidateQueries({ queryKey: ['applications'] });
+          navigate('/call-center/applications/list');
           resetForm();
         }
       } catch (err) {

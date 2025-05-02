@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
-import { useParams } from 'react-router-dom';
 import {
   SharedAutocomplete,
   SharedError,
@@ -14,6 +13,7 @@ import { AxiosError } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
+import { useNavigate } from 'react-router';
 
 interface Props {
   onBack: () => void;
@@ -87,6 +87,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
   const [loading, setLoading] = useState(false);
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   console.log('applicationId', applicationId);
   console.log('senderId', senderId);
@@ -120,6 +121,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
           delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
           delivery_type: Number(values.delivery_type)
         });
+        navigate('/call-center/orders/list');
         if (onSubmitSuccess) {
           onSubmitSuccess();
         }

@@ -12,11 +12,7 @@ export const ApplicationListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['applications'],
     queryFn: () => getApplications(),
-    retry: false,
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 30,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: true
+    retry: false
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);

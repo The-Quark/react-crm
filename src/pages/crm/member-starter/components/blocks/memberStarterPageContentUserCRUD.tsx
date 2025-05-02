@@ -18,6 +18,7 @@ import {
 import { Role } from '@/api/get/getRoles/types.ts';
 import { getRoles, useCurrentUser } from '@/api/get';
 import { paths } from '@/api/types';
+import { useNavigate } from 'react-router-dom';
 
 type RegisterRequest =
   paths['/auth/register']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
@@ -71,6 +72,7 @@ export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProp
   const [showPassword, setShowPassword] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
   const { data: currentUser } = useCurrentUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,6 +107,7 @@ export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProp
         };
         await postCreateUser(payload as unknown as RegisterRequest);
         resetForm();
+        navigate('/crm/members');
         setStatus('User created successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

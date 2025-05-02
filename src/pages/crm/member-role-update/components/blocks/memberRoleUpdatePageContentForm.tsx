@@ -11,7 +11,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { toAbsoluteUrl } from '@/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Role } from '@/api/get/getRoles/types.ts';
 import { UpdateUserRole, putUserRole } from '@/api/put/';
 import { getPermissions } from '@/api/get/getPermissions';
@@ -33,6 +33,7 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const navigate = useNavigate();
 
   const initialValues: UpdateUserRole = {
     user: user?.id || 0,
@@ -64,6 +65,7 @@ export const MemberRoleUpdatePageContentForm: FC<IGeneralSettingsProps> = ({
       setStatus(null);
       try {
         await putUserRole(values);
+        navigate('/crm/members');
         setStatus('Member role updated successfully!');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;

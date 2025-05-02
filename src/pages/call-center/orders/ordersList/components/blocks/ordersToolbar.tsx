@@ -26,19 +26,9 @@ export const OrdersToolbar: FC = () => {
       <h3 className="card-title">Orders</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {/*search by id search by client full name select status date created time*/}
-        <div className="relative">
-          <KeenIcon
-            icon="magnifier"
-            className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
-          />
-          <input
-            type="text"
-            placeholder="Search sender"
-            className="input input-sm ps-8"
-            value={(table.getColumn('sender full name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('sender full name')?.setFilterValue(e.target.value)}
-          />
-        </div>
+        <a href="/call-center/orders/starter" className="btn btn-sm btn-primary">
+          New order
+        </a>
         <Select
           value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {
@@ -110,6 +100,19 @@ export const OrdersToolbar: FC = () => {
           </PopoverContent>
         </Popover>
         <DataGridColumnVisibility table={table} />
+        <div className="relative">
+          <KeenIcon
+            icon="magnifier"
+            className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
+          />
+          <input
+            type="text"
+            placeholder="Search sender"
+            className="input input-sm ps-8"
+            value={(table.getColumn('sender full name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('sender full name')?.setFilterValue(e.target.value)}
+          />
+        </div>
       </div>
     </div>
   );

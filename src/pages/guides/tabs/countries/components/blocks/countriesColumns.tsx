@@ -10,7 +10,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'country id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (

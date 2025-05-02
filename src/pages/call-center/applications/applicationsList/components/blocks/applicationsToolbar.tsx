@@ -25,20 +25,9 @@ export const ApplicationsToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Applications</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <div className="relative">
-          <KeenIcon
-            icon="magnifier"
-            className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
-          />
-          {/*search by id search by client full name select status date created time*/}
-          <input
-            type="text"
-            placeholder="Search application"
-            className="input input-sm ps-8"
-            value={(table.getColumn('full name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('full name')?.setFilterValue(e.target.value)}
-          />
-        </div>
+        <a href="/call-center/applications/starter" className="btn btn-sm btn-primary">
+          New application
+        </a>
         <Select
           value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {
@@ -92,6 +81,20 @@ export const ApplicationsToolbar: FC = () => {
           </PopoverContent>
         </Popover>
         <DataGridColumnVisibility table={table} />
+        <div className="relative">
+          <KeenIcon
+            icon="magnifier"
+            className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
+          />
+          {/*search by id search by client full name select status date created time*/}
+          <input
+            type="text"
+            placeholder="Search application"
+            className="input input-sm ps-8"
+            value={(table.getColumn('full name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('full name')?.setFilterValue(e.target.value)}
+          />
+        </div>
       </div>
     </div>
   );
