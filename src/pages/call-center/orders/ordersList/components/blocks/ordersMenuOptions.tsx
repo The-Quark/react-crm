@@ -32,8 +32,9 @@ export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
     try {
       await deleteOrder(id);
       await queryClient.invalidateQueries({ queryKey: ['orders'] });
-    } catch (error) {
-      /* empty */
+      toast.success('Order deleted');
+    } catch {
+      toast.error('Failed to delete order');
     }
   };
 

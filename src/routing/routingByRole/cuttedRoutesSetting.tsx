@@ -146,7 +146,7 @@ const routeConfig = [
     routes: [
       { path: '/call-center/orders/starter', element: <OrdersStarterPage /> },
       {
-        path: '/call-center/orders/starter/:senderId?/:receiverId?/:applicationId?',
+        path: '/call-center/orders/starter/:id',
         element: <OrdersStarterPage />
       },
       { path: '/call-center/orders/list', element: <OrdersListPage /> }

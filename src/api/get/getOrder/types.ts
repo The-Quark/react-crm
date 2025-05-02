@@ -89,6 +89,7 @@ export interface Order {
   status_changed_at: string;
   client_id: number | null;
   created_by: User;
+  is_international: boolean;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;

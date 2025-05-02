@@ -11,7 +11,7 @@ import {
   getOrderSenders
 } from '@/api';
 import { AxiosError } from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
@@ -40,6 +40,7 @@ const getInitialValues = (
   if (isEditMode && senderData?.result) {
     return {
       full_name: senderData.result[0].full_name || '',
+      country_id: senderData.result[0].city.country_id || '',
       city_id: senderData.result[0].city_id || '',
       phone: senderData.result[0].phone || '',
       street: senderData.result[0].street || '',
@@ -47,8 +48,7 @@ const getInitialValues = (
       apartment: senderData.result[0].apartment || '',
       location_description: senderData.result[0].location_description || '',
       notes: senderData.result[0].notes || '',
-      contact_id: senderData.result[0].contact_id || 0,
-      country_id: senderData.result[0].city.country_id || ''
+      contact_id: senderData.result[0].contact_id || 0
     };
   }
 
@@ -72,6 +72,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const { senderId, setSenderId } = useOrderCreation();
   const isEditMode = !!senderId;
+  const queryClient = useQueryClient();
 
   const {
     data: senderData,
@@ -79,7 +80,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
     isError: senderIsError,
     error: senderError
   } = useQuery({
-    queryKey: ['sender', senderId],
+    queryKey: ['orderSender', senderId],
     queryFn: () => getOrderSenders(Number(senderId)),
     enabled: isEditMode
   });
@@ -123,33 +124,53 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
     isError: countriesIsError,
     error: countriesError
   } = useQuery({
-    queryKey: ['countries'],
-    queryFn: () => getCountries('id,iso2,name')
+    queryKey: ['orderCountries'],
+    queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity
   });
 
   const {
     data: citiesData,
     isLoading: citiesLoading,
-    isError: citiesIsError
+    isError: citiesIsError,
+    error: citiesError
   } = useQuery({
-    queryKey: ['cities', formik.values.country_id],
-    queryFn: () => getCitiesByCountryCode(formik.values.country_id.toString(), 'id'),
-    enabled: !!formik.values.country_id,
+    queryKey: ['orderCities', formik.values.country_id || senderData?.result[0]?.city.country_id],
+    queryFn: () =>
+      getCitiesByCountryCode(
+        (formik.values.country_id || String(senderData?.result[0]?.city.country_id)).toString(),
+        'id'
+      ),
+    enabled: !!formik.values.country_id || !!senderData?.result[0]?.city.country_id,
     staleTime: 1000 * 60 * 5
   });
 
-  if (countriesLoading || (isEditMode && senderLoading)) {
+  const isFormLoading = countriesLoading || (isEditMode && (senderLoading || citiesLoading));
+  const isFormError = countriesIsError || (isEditMode && (senderIsError || citiesIsError));
+  const formErrors = [countriesError, senderError, citiesError].filter((error) => error !== null);
+  if (isFormLoading) {
     return <SharedLoading />;
   }
 
-  if (countriesIsError) {
-    return <SharedError error={countriesError} />;
+  if (isFormError) {
+    return (
+      <div>
+        {formErrors.map((error, index) => (
+          <SharedError key={index} error={error} />
+        ))}
+        <button
+          className="btn btn-primary"
+          onClick={() =>
+            queryClient.invalidateQueries({
+              queryKey: ['orderCountries', 'orderCities', 'orderSender']
+            })
+          }
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
-
-  if (senderIsError) {
-    return <SharedError error={senderError} />;
-  }
-
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>

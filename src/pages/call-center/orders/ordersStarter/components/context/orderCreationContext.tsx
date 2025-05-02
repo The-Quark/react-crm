@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface OrderCreationContextType {
   senderId: number | null;
@@ -21,28 +21,65 @@ const OrderCreationContext = createContext<OrderCreationContextType>({
 });
 
 export const OrderCreationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, setState] = useState({
-    senderId: null as number | null,
-    receiverId: null as number | null,
-    applicationId: null as number | null
+  // Load initial from localStorage
+  const [senderId, setSenderIdState] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('senderId');
+      return stored ? parseInt(stored, 10) : null;
+    }
+    return null;
   });
 
-  const setSenderId = useCallback((id: number) => {
-    console.log('Setting senderId:', id);
-    setState((prev) => ({ ...prev, senderId: id }));
-  }, []);
+  const [receiverId, setReceiverIdState] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('receiverId');
+      return stored ? parseInt(stored, 10) : null;
+    }
+    return null;
+  });
 
-  const clearAll = useCallback(() => {
-    setState({ senderId: null, receiverId: null, applicationId: null });
-  }, []);
+  const [applicationId, setApplicationIdState] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('applicationId');
+      return stored ? parseInt(stored, 10) : null;
+    }
+    return null;
+  });
+
+  // Sync to localStorage when these change
+  useEffect(() => {
+    if (senderId !== null) localStorage.setItem('senderId', String(senderId));
+    else localStorage.removeItem('senderId');
+  }, [senderId]);
+
+  useEffect(() => {
+    if (receiverId !== null) localStorage.setItem('receiverId', String(receiverId));
+    else localStorage.removeItem('receiverId');
+  }, [receiverId]);
+
+  useEffect(() => {
+    if (applicationId !== null) localStorage.setItem('applicationId', String(applicationId));
+    else localStorage.removeItem('applicationId');
+  }, [applicationId]);
+
+  const clearAll = () => {
+    setSenderIdState(null);
+    setReceiverIdState(null);
+    setApplicationIdState(null);
+    localStorage.removeItem('senderId');
+    localStorage.removeItem('receiverId');
+    localStorage.removeItem('applicationId');
+  };
 
   return (
     <OrderCreationContext.Provider
       value={{
-        ...state,
-        setSenderId,
-        setReceiverId: (id: number) => setState((prev) => ({ ...prev, receiverId: id })),
-        setApplicationId: (id: number) => setState((prev) => ({ ...prev, applicationId: id })),
+        senderId,
+        receiverId,
+        applicationId,
+        setSenderId: setSenderIdState,
+        setReceiverId: setReceiverIdState,
+        setApplicationId: setApplicationIdState,
         clearAll
       }}
     >

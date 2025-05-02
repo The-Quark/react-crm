@@ -4,10 +4,8 @@ import { OrdersStarterContent } from '@/pages/call-center/orders/ordersStarter/c
 
 export const OrdersStarterPage = () => {
   return (
-    <>
-      <Container>
-        <OrdersStarterContent />
-      </Container>
-    </>
+    <Container>
+      <OrdersStarterContent />
+    </Container>
   );
 };

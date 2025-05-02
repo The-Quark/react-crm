@@ -4,7 +4,7 @@ import { ORDER_URL } from '@/api/url';
 import { cleanValues } from '@/lib/helpers.ts';
 
 export const postOrder = async (
-  data: Omit<IOrderFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: Omit<IOrderFormValues, 'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'status'>
 ): Promise<IOrderFormValues> => {
   console.log('postOrder', data);
   const cleanData = cleanValues(data);

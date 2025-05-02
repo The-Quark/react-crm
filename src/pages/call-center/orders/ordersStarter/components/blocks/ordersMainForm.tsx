@@ -8,16 +8,26 @@ import {
   SharedSelect
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import { getApplications, getDeliveryTypes, getPackageTypes, postOrder } from '@/api';
+import { getApplications, getDeliveryTypes, getPackageTypes, postOrder, putOrder } from '@/api';
 import { AxiosError } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { useNavigate } from 'react-router';
+import { Order } from '@/api/get/getOrder/types.ts';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select.tsx';
+import { mockOrdersStatus } from '@/lib/mocks.ts';
 
 interface Props {
   onBack: () => void;
   onSubmitSuccess?: () => void;
+  orderData?: Order;
 }
 
 const formSchema = Yup.object().shape({
@@ -82,46 +92,58 @@ const formSchema = Yup.object().shape({
   special_wishes: Yup.string().optional()
 });
 
-export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
+export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }) => {
   const { senderId, receiverId, applicationId, setApplicationId, clearAll } = useOrderCreation();
   const [loading, setLoading] = useState(false);
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  console.log('applicationId', applicationId);
-  console.log('senderId', senderId);
-  console.log('receiverId', receiverId);
-
   const formik = useFormik({
     initialValues: {
+      id: orderData?.id || 0,
+      status: orderData?.status || ('package_awaiting' as const),
       application_id: applicationId || '',
       sender_id: senderId || 0,
       receiver_id: receiverId || 0,
-      delivery_type: '',
-      delivery_category: 'b2b',
-      package_type: '',
-      weight: '',
-      width: '',
-      length: '',
-      volume: '',
-      places_count: 0,
-      customs_clearance: false,
-      is_international: false,
-      price: 0,
-      package_description: '',
-      special_wishes: ''
+      delivery_type: orderData?.delivery_type.id || '',
+      delivery_category: orderData?.delivery_category || 'b2b',
+      package_type: orderData?.package_type.id || '',
+      weight: orderData?.weight || '',
+      width: orderData?.width || '',
+      length: orderData?.length || '',
+      volume: orderData?.volume || '',
+      places_count: orderData?.places_count || 0,
+      customs_clearance: orderData?.customs_clearance || false,
+      is_international: orderData?.is_international || false,
+      price: orderData?.price || 0,
+      package_description: orderData?.package_description || '',
+      special_wishes: orderData?.special_wishes || ''
     },
     validationSchema: formSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        await postOrder({
-          ...values,
-          delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
-          delivery_type: Number(values.delivery_type)
-        });
+        if (orderData) {
+          await putOrder(orderData.id, {
+            ...values,
+            status: values.status as
+              | 'package_awaiting'
+              | 'buy_for_someone'
+              | 'package_received'
+              | 'expired',
+            delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
+            delivery_type: Number(values.delivery_type)
+          });
+        } else {
+          await postOrder({
+            ...values,
+            delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
+            delivery_type: Number(values.delivery_type)
+          });
+        }
         navigate('/call-center/orders/list');
+        resetForm();
         if (onSubmitSuccess) {
           onSubmitSuccess();
         }
@@ -144,7 +166,8 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
     error: applicationsError
   } = useQuery({
     queryKey: ['applications'],
-    queryFn: () => getApplications()
+    queryFn: () => getApplications(),
+    staleTime: 1000 * 60 * 5
   });
 
   const {
@@ -154,7 +177,8 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
     error: deliveryTypesError
   } = useQuery({
     queryKey: ['deliveryTypes'],
-    queryFn: () => getDeliveryTypes()
+    queryFn: () => getDeliveryTypes(),
+    staleTime: 1000 * 60 * 5
   });
 
   const {
@@ -164,7 +188,8 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
     error: packageTypesError
   } = useQuery({
     queryKey: ['packageTypes'],
-    queryFn: () => getPackageTypes(undefined, currentLanguage.code)
+    queryFn: () => getPackageTypes(undefined, currentLanguage.code),
+    staleTime: 1000 * 60 * 5
   });
 
   if (deliveryTypesLoading || packageTypesLoading || applicationsLoading) {
@@ -285,6 +310,35 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
               )}
             </div>
           </div>
+          {orderData?.id && (
+            <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
+              <label className="form-label max-w-56">Custom Clearance</label>
+              <div className="flex columns-1 w-full flex-wrap">
+                <Select
+                  value={formik.values.status}
+                  onValueChange={(value) =>
+                    formik.setFieldValue('status', value as typeof formik.values.status)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mockOrdersStatus.map((status) => (
+                      <SelectItem key={status.id} value={status.value}>
+                        {status.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {formik.touched.status && formik.errors.status && (
+                  <span role="alert" className="text-danger text-xs mt-1">
+                    {formik.errors.status}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
           <SharedInput name="package_description" label="Package Description" formik={formik} />
           <SharedInput name="special_wishes" label="Special Wishes" formik={formik} />
 
@@ -297,7 +351,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess }) => {
               className="btn btn-primary"
               disabled={loading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Submit'}
+              {loading ? 'Please wait...' : orderData?.id ? 'Update' : 'Submit'}
             </button>
           </div>
         </div>

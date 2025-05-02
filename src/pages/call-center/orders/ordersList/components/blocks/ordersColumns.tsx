@@ -3,10 +3,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
 import { Order } from '@/api/get/getOrder/types.ts';
-import { ApplicationsMenuOptions } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsMenuOptions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
+import { OrdersMenuOptions } from '@/pages/call-center/orders/ordersList/components/blocks/ordersMenuOptions.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -178,7 +178,7 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {ApplicationsMenuOptions({
+              {OrdersMenuOptions({
                 id: info.row.original.id
               })}
             </MenuItem>

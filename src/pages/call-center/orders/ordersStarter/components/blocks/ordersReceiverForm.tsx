@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getCitiesByCountryCode,
   getCountries,
@@ -13,8 +13,9 @@ import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
-import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
+import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
+import { ISenderOrderFormValues } from '@/api/post/postOrderSender/types.ts';
 
 interface Props {
   onNext: () => void;
@@ -35,20 +36,20 @@ const formSchema = Yup.object().shape({
 
 const getInitialValues = (
   isEditMode: boolean,
-  receiverData: IOrderReceiversResponse
-): IReceiverOrderFormValues => {
-  if (isEditMode && receiverData?.result) {
+  senderData: IOrderSendersResponse
+): ISenderOrderFormValues => {
+  if (isEditMode && senderData?.result) {
     return {
-      full_name: receiverData.result[0].full_name || '',
-      city_id: receiverData.result[0].city_id || '',
-      phone: receiverData.result[0].phone || '',
-      street: receiverData.result[0].street || '',
-      house: receiverData.result[0].house || '',
-      apartment: receiverData.result[0].apartment || '',
-      location_description: receiverData.result[0].location_description || '',
-      notes: receiverData.result[0].notes || '',
-      contact_id: receiverData.result[0].contact_id || 0,
-      country_id: receiverData.result[0].city.country_id || ''
+      full_name: senderData.result[0].full_name || '',
+      country_id: senderData.result[0].city.country_id || '',
+      city_id: senderData.result[0].city_id || '',
+      phone: senderData.result[0].phone || '',
+      street: senderData.result[0].street || '',
+      house: senderData.result[0].house || '',
+      apartment: senderData.result[0].apartment || '',
+      location_description: senderData.result[0].location_description || '',
+      notes: senderData.result[0].notes || '',
+      contact_id: senderData.result[0].contact_id || 0
     };
   }
 
@@ -72,6 +73,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const { receiverId, setReceiverId } = useOrderCreation();
   const isEditMode = !!receiverId;
+  const queryClient = useQueryClient();
 
   const {
     data: receiverData,
@@ -79,7 +81,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     isError: receiverIsError,
     error: receiverError
   } = useQuery({
-    queryKey: ['receiver', receiverId],
+    queryKey: ['orderReceiver', receiverId],
     queryFn: () => getOrderReceivers(Number(receiverId)),
     enabled: isEditMode
   });
@@ -117,31 +119,52 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     isError: countriesIsError,
     error: countriesError
   } = useQuery({
-    queryKey: ['countries'],
-    queryFn: () => getCountries('id,iso2,name')
+    queryKey: ['orderCountries'],
+    queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity
   });
 
   const {
     data: citiesData,
     isLoading: citiesLoading,
-    isError: citiesIsError
+    isError: citiesIsError,
+    error: citiesError
   } = useQuery({
-    queryKey: ['cities', formik.values.country_id],
-    queryFn: () => getCitiesByCountryCode(formik.values.country_id.toString(), 'id'),
-    enabled: !!formik.values.country_id,
+    queryKey: ['orderCities', formik.values.country_id || receiverData?.result[0]?.city.country_id],
+    queryFn: () =>
+      getCitiesByCountryCode(
+        (formik.values.country_id || String(receiverData?.result[0]?.city.country_id)).toString(),
+        'id'
+      ),
+    enabled: !!formik.values.country_id || !!receiverData?.result[0]?.city.country_id,
     staleTime: 1000 * 60 * 5
   });
 
-  if (countriesLoading || (isEditMode && receiverIsLoading)) {
+  const isFormLoading = countriesLoading || (isEditMode && (receiverIsLoading || citiesLoading));
+  const isFormError = countriesIsError || (isEditMode && (receiverIsError || citiesIsError));
+  const formErrors = [countriesError, receiverError, citiesError].filter((error) => error !== null);
+  if (isFormLoading) {
     return <SharedLoading />;
   }
 
-  if (countriesIsError) {
-    return <SharedError error={countriesError} />;
-  }
-
-  if (receiverIsError) {
-    return <SharedError error={receiverError} />;
+  if (isFormError) {
+    return (
+      <div>
+        {formErrors.map((error, index) => (
+          <SharedError key={index} error={error} />
+        ))}
+        <button
+          className="btn btn-primary"
+          onClick={() =>
+            queryClient.invalidateQueries({
+              queryKey: ['orderCountries', 'orderCities', 'orderReceiver']
+            })
+          }
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   return (
