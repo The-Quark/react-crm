@@ -41,7 +41,7 @@ const ParameterMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
           <MenuIcon>
             <KeenIcon icon="more-2" />
           </MenuIcon>
-          <MenuTitle>View Parameter</MenuTitle>
+          <MenuTitle>View</MenuTitle>
         </MenuLink>
       </MenuItem>
       {canManageGlobalSettings && (
@@ -51,7 +51,7 @@ const ParameterMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuIcon>
                 <KeenIcon icon="setting-4" />
               </MenuIcon>
-              <MenuTitle>Edit Parameter</MenuTitle>
+              <MenuTitle>Edit</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />

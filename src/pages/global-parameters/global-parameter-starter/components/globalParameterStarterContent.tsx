@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
@@ -20,8 +20,9 @@ import {
   getAirlines
 } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { SharedAutocomplete, SharedError, SharedLoading } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
+import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { useParams, useNavigate } from 'react-router';
+import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
 
 const createParameterSchema = Yup.object().shape({
   company_name: Yup.string().required('Company name is required'),
@@ -30,7 +31,10 @@ const createParameterSchema = Yup.object().shape({
   language: Yup.string().required('Language is required'),
   legal_address: Yup.string().required('Legal address is required'),
   warehouse_address: Yup.string().required('Warehouse address is required'),
-  airlines: Yup.string().required('Airlines is required'),
+  airlines: Yup.array()
+    .of(Yup.string().required())
+    .min(1, 'At least one airline must be selected')
+    .required('Airlines is required'),
   dimensions_per_place: Yup.string().required('Dimensions per place is required'),
   cost_per_airplace: Yup.number().required('Cost per airplace is required')
 });
@@ -42,18 +46,17 @@ interface IParameterFormValues {
   language: string;
   legal_address: string;
   warehouse_address: string;
-  airlines: string;
+  airlines: string[];
   dimensions_per_place: string;
   cost_per_airplace: number;
 }
 
 export const GlobalParameterStarterContent = () => {
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { currentLanguage } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const { currentLanguage } = useLanguage();
-
+  const navigate = useNavigate();
   const {
     data: cuurencyData,
     isLoading: loadingCurrencies,
@@ -100,8 +103,28 @@ export const GlobalParameterStarterContent = () => {
     error: airlinesError
   } = useQuery({
     queryKey: ['globalParameterAirlines'],
-    queryFn: () => getAirlines()
+    queryFn: () => getAirlines(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
+
+  const selectedAirlines = useMemo(() => {
+    if (!parameterData || !isEditMode) return [];
+    return parameterData.result[0]?.airlines || [];
+  }, [parameterData, isEditMode]);
+
+  const airlineOptions = useMemo(() => {
+    return (
+      airlinesData?.result?.map((airline) => ({
+        id: airline.id.toString(),
+        name: airline.name
+      })) || []
+    );
+  }, [airlinesData]);
+
+  const selectedAirlineIds = useMemo(() => {
+    return selectedAirlines.map((airline) => airline.id.toString());
+  }, [selectedAirlines]);
 
   const initialValues: IParameterFormValues = {
     company_name: '',
@@ -110,7 +133,7 @@ export const GlobalParameterStarterContent = () => {
     language: currentLanguage.code,
     legal_address: '',
     warehouse_address: '',
-    airlines: '',
+    airlines: [],
     dimensions_per_place: '',
     cost_per_airplace: 0
   };
@@ -125,11 +148,13 @@ export const GlobalParameterStarterContent = () => {
         if (isEditMode && id) {
           await putGlobalParameter(Number(id), {
             ...values,
-            airlines: String(values.airlines)
+            airlines: values.airlines
           });
+          navigate('/global-parameters/list');
         } else {
-          await postGlobalParameter({ ...values, airlines: String(values.airlines) });
+          await postGlobalParameter(values);
           resetForm();
+          navigate('/global-parameters/list');
         }
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -149,12 +174,12 @@ export const GlobalParameterStarterContent = () => {
         language: parameterData.result[0].language ?? '',
         legal_address: parameterData.result[0].legal_address ?? '',
         warehouse_address: parameterData.result[0].warehouse_address ?? '',
-        airlines: parameterData.result[0].airlines ?? '',
+        airlines: selectedAirlineIds,
         dimensions_per_place: parameterData.result[0].dimensions_per_place ?? '',
         cost_per_airplace: parseFloat(parameterData.result[0].cost_per_airplace) ?? 0
       });
     }
-  }, [parameterData, isEditMode]);
+  }, [parameterData, isEditMode, selectedAirlineIds]);
 
   if (isParameterError) {
     return <SharedError error={parameterErrorMessage} />;
@@ -178,25 +203,10 @@ export const GlobalParameterStarterContent = () => {
       ) : (
         <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
           <div className="card-header" id="general_settings">
-            <h3 className="card-title">Parameter</h3>
+            <h3 className="card-title">Global Parameter</h3>
           </div>
           <div className="card-body grid gap-5">
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Company Name</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  type="text"
-                  placeholder="Company Name"
-                  {...formik.getFieldProps('company_name')}
-                />
-                {formik.touched.company_name && formik.errors.company_name && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.company_name}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedInput name="company_name" label="Company Name" formik={formik} />
 
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
               <label className="form-label max-w-56">Time zone</label>
@@ -276,88 +286,25 @@ export const GlobalParameterStarterContent = () => {
               </div>
             </div>
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Legal Address</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  type="text"
-                  placeholder="Legal Address"
-                  {...formik.getFieldProps('legal_address')}
-                />
-                {formik.touched.legal_address && formik.errors.legal_address && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.legal_address}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedInput name="legal_address" label="Legal Address" formik={formik} />
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Warehouse Address</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  type="text"
-                  placeholder="Warehouse Address"
-                  {...formik.getFieldProps('warehouse_address')}
-                />
-                {formik.touched.warehouse_address && formik.errors.warehouse_address && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.warehouse_address}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
 
-            <SharedAutocomplete
+            <SharedMultipleSelect
               label="Airlines"
               value={formik.values.airlines}
-              options={airlinesData?.result ?? []}
-              placeholder="Select airline"
-              searchPlaceholder="Search airline"
-              onChange={(val) => {
-                formik.setFieldValue('airlines', val);
-              }}
+              options={airlineOptions}
+              onChange={(values) => formik.setFieldValue('airlines', values)}
+              placeholder="Select airlines..."
+              searchPlaceholder="Search airlines..."
+              loading={airlinesLoading}
               error={formik.errors.airlines as string}
               touched={formik.touched.airlines}
-              searchTerm={searchTerm}
-              onSearchTermChange={setSearchTerm}
             />
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Dimension Per Place</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  type="text"
-                  placeholder="Dimension Per Place"
-                  {...formik.getFieldProps('dimensions_per_place')}
-                />
-                {formik.touched.dimensions_per_place && formik.errors.dimensions_per_place && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.dimensions_per_place}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedInput name="dimensions_per_place" label="Dimension Per Place" formik={formik} />
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Cost Per Airplace</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  type="number"
-                  placeholder="Cost Per Airplace"
-                  {...formik.getFieldProps('cost_per_airplace')}
-                />
-                {formik.touched.cost_per_airplace && formik.errors.cost_per_airplace && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.cost_per_airplace}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedInput name="cost_per_airplace" label="Cost Per Airplace" formik={formik} />
 
             <div className="flex justify-end">
               <button

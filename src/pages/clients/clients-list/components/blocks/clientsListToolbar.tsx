@@ -40,6 +40,10 @@ export const ClientsListToolbar: FC<Props> = ({ clientType, setClientType }) => 
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
+        <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
+          New global parameter
+        </a>
+        <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -66,7 +70,6 @@ export const ClientsListToolbar: FC<Props> = ({ clientType, setClientType }) => 
             onChange={(e) => table.getColumn(phoneColumn)?.setFilterValue(e.target.value)}
           />
         </div>
-        <DataGridColumnVisibility table={table} />
       </div>
     </div>
   );

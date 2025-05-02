@@ -19,16 +19,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     requiredPermissions: ['manage global settings'],
-    children: [
-      {
-        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS_STARTER',
-        path: '/global-parameters/starter-parameters'
-      },
-      {
-        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.PARAMETERS',
-        path: '/global-parameters/list'
-      }
-    ]
+    path: '/global-parameters/list'
   },
   {
     title: 'MENU.MEGAMENU.GUIDES',
@@ -181,16 +172,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
     title: 'MENU.MEGAMENU.CLIENTS',
     icon: 'badge',
     requiredPermissions: ['manage clients'],
-    children: [
-      {
-        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS_STARTER',
-        path: '/clients/starter-clients'
-      },
-      {
-        title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
-        path: '/clients'
-      }
-    ]
+    path: '/clients'
   },
   //"view clients"
   {

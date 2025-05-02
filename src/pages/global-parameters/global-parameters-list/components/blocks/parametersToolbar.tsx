@@ -5,9 +5,12 @@ export const ParametersToolbar = () => {
   const { table } = useDataGrid();
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Parameters</h3>
-
+      <h3 className="card-title">Global parameters</h3>
       <div className="flex flex-wrap items-center gap-2.5">
+        <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
+          New global parameter
+        </a>
+        <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -23,7 +26,6 @@ export const ParametersToolbar = () => {
             }
           />
         </div>
-        <DataGridColumnVisibility table={table} />
       </div>
     </div>
   );

@@ -1,3 +1,8 @@
+interface Airline {
+  id: number;
+  name: string;
+  code: string;
+}
 export interface ParametersModel {
   id: number;
   company_name: string;
@@ -6,7 +11,7 @@ export interface ParametersModel {
   language: string;
   legal_address: string;
   warehouse_address: string;
-  airlines: string;
+  airlines: Airline[];
   dimensions_per_place: string;
   cost_per_airplace: string;
   package_standard_box1: string | null;

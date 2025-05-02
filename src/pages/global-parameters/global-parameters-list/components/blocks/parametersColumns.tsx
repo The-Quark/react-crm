@@ -103,13 +103,14 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         id: 'airlines',
         header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.airlines}
-            </span>
-          </div>
-        ),
+        cell: (info) => {
+          const airlines = info.row.original.airlines;
+          return (
+            <div className="text-gray-800 font-normal leading-none">
+              {airlines.map((airline) => airline.name).join(', ')}
+            </div>
+          );
+        },
         meta: {
           headerClassName: 'min-w-[165px]',
           cellClassName: 'text-gray-700 font-normal'

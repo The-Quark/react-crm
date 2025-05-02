@@ -44,7 +44,9 @@ export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ para
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <label className="form-label max-w-56">Airlines</label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.airlines}</div>
+          <div className="flex columns-1 w-full flex-wrap">
+            {parameter?.airlines.map((airline) => airline.name).join(', ')}
+          </div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
