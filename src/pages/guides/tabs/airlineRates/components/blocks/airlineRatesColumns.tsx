@@ -5,7 +5,7 @@ import { useLanguage } from '@/providers';
 import { AirlineRate } from '@/api/get/getAirlineRates/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteAirlineRate } from '@/api';
-import AirlineRatesModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
+import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesModal.tsx';
 
 export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
   const { isRTL } = useLanguage();

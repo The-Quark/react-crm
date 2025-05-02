@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
-import AirlinesModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
+import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesModal.tsx';
 
 export const AirlineRatesToolbar: FC = () => {
   const { table } = useDataGrid();
@@ -17,6 +17,10 @@ export const AirlineRatesToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Airline Rates</h3>
       <div className="flex flex-wrap items-center gap-2.5">
+        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          New Airline rate
+        </button>
+        <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -24,18 +28,14 @@ export const AirlineRatesToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search airline rate"
+            placeholder="Search airline"
             className="input input-sm ps-8"
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
-        <DataGridColumnVisibility table={table} />
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New Airline rate
-        </button>
       </div>
-      <AirlinesModal open={modalOpen} onOpenChange={handleClose} />
+      <AirlineRatesModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

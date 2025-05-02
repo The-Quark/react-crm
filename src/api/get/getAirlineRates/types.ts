@@ -48,6 +48,17 @@ interface DeliveryType {
   pivot: DeliveryTypePivot;
 }
 
+interface Currency {
+  id: number;
+  code: string;
+  name: string;
+  symbol: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface AirlineRate {
   id: number;
   airline_id: number;
@@ -57,7 +68,7 @@ export interface AirlineRate {
   min_weight: string;
   max_weight: string;
   price_per_kg: string;
-  currency: string | null;
+  currency: Currency | null;
   delivery_type: string | null;
   is_active: boolean;
   deleted_at: string | null;
