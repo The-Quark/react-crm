@@ -1,15 +1,22 @@
 import React from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const ParametersToolbar = () => {
   const { table } = useDataGrid();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Global parameters</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
-          New global parameter
-        </a>
+        {canManage && (
+          <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
+            New global parameter
+          </a>
+        )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon

@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Props {
   clientType: 'individual' | 'legal';
@@ -9,6 +11,9 @@ interface Props {
 export const ClientsListToolbar: FC<Props> = ({ clientType, setClientType }) => {
   const { table } = useDataGrid();
   const nameColumn = clientType === 'individual' ? 'client name' : 'company name';
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -39,9 +44,11 @@ export const ClientsListToolbar: FC<Props> = ({ clientType, setClientType }) => 
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/clients/starter-clients" className="btn btn-sm btn-primary">
-          New client
-        </a>
+        {canManage && (
+          <a href="/clients/starter-clients" className="btn btn-sm btn-primary">
+            New client
+          </a>
+        )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon

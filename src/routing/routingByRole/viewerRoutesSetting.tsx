@@ -34,7 +34,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
-        <Route path="/global-parameters/parameters/list" element={<GlobalParametersListPage />} />
+        <Route path="/global-parameters/list" element={<GlobalParametersListPage />} />
         <Route
           path="/global-parameters/view-parameters/:id"
           element={<GlobalParameterViewPage />}

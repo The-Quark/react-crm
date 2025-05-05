@@ -4,9 +4,14 @@ import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/co
 import { useLanguage } from '@/providers';
 import { ParameterMenuOptions } from '@/pages/global-parameters/global-parameters-list/components/blocks/parametersMenuOptions.tsx';
 import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<ParametersModel>[]>(
     () => [
       {
@@ -33,7 +38,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
             <div className="flex flex-col gap-0.5">
               <a
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                href="#"
+                href={`/global-parameters/view-parameters/${info.row.original.id}`}
               >
                 {info.row.original.company_name}
               </a>
@@ -151,7 +156,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         }
       }
     ],
-    [isRTL]
+    [isRTL, canManage]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };
