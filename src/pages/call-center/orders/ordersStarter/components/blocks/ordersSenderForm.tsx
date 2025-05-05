@@ -8,7 +8,8 @@ import {
   putOrderSender,
   getCountries,
   getCitiesByCountryCode,
-  getOrderSenders
+  getOrderSenders,
+  getClients
 } from '@/api';
 import { AxiosError } from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -61,7 +62,7 @@ const getInitialValues = (
     apartment: '',
     location_description: '',
     notes: '',
-    contact_id: 0,
+    contact_id: '',
     country_id: ''
   };
 };
@@ -70,9 +71,21 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
+  const [clientSearchTerm, setClientSearchTerm] = useState('');
   const { senderId, setSenderId } = useOrderCreation();
   const isEditMode = !!senderId;
   const queryClient = useQueryClient();
+
+  const {
+    data: clientsData,
+    isLoading: clientsLoading,
+    isError: clientsIsError,
+    error: clientsError
+  } = useQuery({
+    queryKey: ['orderSenderClients'],
+    queryFn: () => getClients(),
+    staleTime: 60 * 60 * 1000
+  });
 
   const {
     data: senderData,
@@ -96,7 +109,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
           await putOrderSender(senderId, values);
         } else {
           const response = await postOrderSender(values);
-          console.log('API Response:', response); //
+          console.log('API Response:', response);
           if (response?.result) {
             setSenderId(response.result);
             console.log('Sender ID saved to context:', response.result);
@@ -108,6 +121,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
         resetForm();
         setSearchTerm('');
         setCitySearchTerm('');
+        setClientSearchTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -145,9 +159,13 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
     staleTime: 1000 * 60 * 5
   });
 
-  const isFormLoading = countriesLoading || (isEditMode && (senderLoading || citiesLoading));
-  const isFormError = countriesIsError || (isEditMode && (senderIsError || citiesIsError));
-  const formErrors = [countriesError, senderError, citiesError].filter((error) => error !== null);
+  const isFormLoading =
+    countriesLoading || clientsLoading || (isEditMode && (senderLoading || citiesLoading));
+  const isFormError =
+    countriesIsError || clientsIsError || (isEditMode && (senderIsError || citiesIsError));
+  const formErrors = [countriesError, clientsError, senderError, citiesError].filter(
+    (error) => error !== null
+  );
   if (isFormLoading) {
     return <SharedLoading />;
   }
@@ -216,7 +234,25 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
           <SharedInput name="apartment" label="Apartment" formik={formik} />
           <SharedInput name="location_description" label="Location description" formik={formik} />
           <SharedInput name="notes" label="Notes" formik={formik} />
-          <SharedInput name="contact_id" label="Contact ID" formik={formik} />
+          <SharedAutocomplete
+            label="Contact"
+            value={formik.values.contact_id ?? ''}
+            options={
+              clientsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.first_name || app.company_name
+              })) ?? []
+            }
+            placeholder="Select contact"
+            searchPlaceholder="Search contact"
+            onChange={(val) => {
+              formik.setFieldValue('contact_id', val);
+            }}
+            error={formik.errors.contact_id as string}
+            touched={formik.touched.contact_id}
+            searchTerm={clientSearchTerm}
+            onSearchTermChange={setClientSearchTerm}
+          />
 
           <div className="flex justify-end">
             <button

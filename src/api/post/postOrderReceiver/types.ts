@@ -8,5 +8,5 @@ export interface IReceiverOrderFormValues {
   apartment: string;
   location_description?: string;
   notes?: string;
-  contact_id?: number | null;
+  contact_id?: number | null | string;
 }

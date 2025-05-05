@@ -181,7 +181,7 @@ export const ApplicationsStarterContent = () => {
               })) ?? []
             }
             placeholder="Select client"
-            searchPlaceholder="Search application"
+            searchPlaceholder="Search client"
             onChange={(val) => {
               formik.setFieldValue('client_id', val);
             }}

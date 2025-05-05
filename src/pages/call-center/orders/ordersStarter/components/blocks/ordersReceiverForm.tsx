@@ -4,6 +4,7 @@ import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getCitiesByCountryCode,
+  getClients,
   getCountries,
   getOrderReceivers,
   postOrderReceiver,
@@ -14,8 +15,7 @@ import { AxiosError } from 'axios';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
-import { ISenderOrderFormValues } from '@/api/post/postOrderSender/types.ts';
+import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
 
 interface Props {
   onNext: () => void;
@@ -36,20 +36,20 @@ const formSchema = Yup.object().shape({
 
 const getInitialValues = (
   isEditMode: boolean,
-  senderData: IOrderSendersResponse
-): ISenderOrderFormValues => {
-  if (isEditMode && senderData?.result) {
+  receiverData: IOrderReceiversResponse
+): IReceiverOrderFormValues => {
+  if (isEditMode && receiverData?.result) {
     return {
-      full_name: senderData.result[0].full_name || '',
-      country_id: senderData.result[0].city.country_id || '',
-      city_id: senderData.result[0].city_id || '',
-      phone: senderData.result[0].phone || '',
-      street: senderData.result[0].street || '',
-      house: senderData.result[0].house || '',
-      apartment: senderData.result[0].apartment || '',
-      location_description: senderData.result[0].location_description || '',
-      notes: senderData.result[0].notes || '',
-      contact_id: senderData.result[0].contact_id || 0
+      full_name: receiverData.result[0].full_name || '',
+      country_id: receiverData.result[0].city.country_id || '',
+      city_id: receiverData.result[0].city_id || '',
+      phone: receiverData.result[0].phone || '',
+      street: receiverData.result[0].street || '',
+      house: receiverData.result[0].house || '',
+      apartment: receiverData.result[0].apartment || '',
+      location_description: receiverData.result[0].location_description || '',
+      notes: receiverData.result[0].notes || '',
+      contact_id: receiverData.result[0].contact_id || 0
     };
   }
 
@@ -62,7 +62,7 @@ const getInitialValues = (
     apartment: '',
     location_description: '',
     notes: '',
-    contact_id: 0,
+    contact_id: '',
     country_id: ''
   };
 };
@@ -71,6 +71,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
+  const [clientSearchTerm, setClientSearchTerm] = useState('');
   const { receiverId, setReceiverId } = useOrderCreation();
   const isEditMode = !!receiverId;
   const queryClient = useQueryClient();
@@ -84,6 +85,17 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     queryKey: ['orderReceiver', receiverId],
     queryFn: () => getOrderReceivers(Number(receiverId)),
     enabled: isEditMode
+  });
+
+  const {
+    data: clientsData,
+    isLoading: clientsLoading,
+    isError: clientsIsError,
+    error: clientsError
+  } = useQuery({
+    queryKey: ['orderReceiverClients'],
+    queryFn: () => getClients(),
+    staleTime: 60 * 60 * 1000
   });
 
   const formik = useFormik({
@@ -103,6 +115,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
         resetForm();
         setSearchTerm('');
         setCitySearchTerm('');
+        setClientSearchTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -140,9 +153,13 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     staleTime: 1000 * 60 * 5
   });
 
-  const isFormLoading = countriesLoading || (isEditMode && (receiverIsLoading || citiesLoading));
-  const isFormError = countriesIsError || (isEditMode && (receiverIsError || citiesIsError));
-  const formErrors = [countriesError, receiverError, citiesError].filter((error) => error !== null);
+  const isFormLoading =
+    countriesLoading || clientsLoading || (isEditMode && (receiverIsLoading || citiesLoading));
+  const isFormError =
+    countriesIsError || clientsIsError || (isEditMode && (receiverIsError || citiesIsError));
+  const formErrors = [countriesError, clientsError, receiverError, citiesError].filter(
+    (error) => error !== null
+  );
   if (isFormLoading) {
     return <SharedLoading />;
   }
@@ -214,7 +231,25 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
           <SharedInput name="apartment" label="Apartment" formik={formik} />
           <SharedInput name="location_description" label="Location description" formik={formik} />
           <SharedInput name="notes" label="Notes" formik={formik} />
-          <SharedInput name="contact_id" label="Contact ID" formik={formik} />
+          <SharedAutocomplete
+            label="Contact"
+            value={formik.values.contact_id ?? ''}
+            options={
+              clientsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.first_name || app.company_name
+              })) ?? []
+            }
+            placeholder="Select client"
+            searchPlaceholder="Search application"
+            onChange={(val) => {
+              formik.setFieldValue('contact_id', val);
+            }}
+            error={formik.errors.contact_id as string}
+            touched={formik.touched.contact_id}
+            searchTerm={clientSearchTerm}
+            onSearchTermChange={setClientSearchTerm}
+          />
 
           <div className="flex justify-between">
             <button className="btn btn-primary" onClick={onBack}>
