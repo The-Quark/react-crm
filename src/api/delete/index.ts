@@ -11,3 +11,4 @@ export * from './deleteApplication';
 export * from './deleteDeliveryType';
 export * from './deleteOrder';
 export * from './deleteAirlineRate';
+export * from './deleteClient';

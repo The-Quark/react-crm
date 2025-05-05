@@ -11,27 +11,22 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteGlobalParameter } from '@/api';
+import { deleteClient } from '@/api';
 
 interface ParameterMenuOptionsProps {
   id?: number;
-  handleReload: () => void;
 }
 
-const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReload }) => {
+const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageClientsSettings =
-    has('manage clients') || currentUser?.roles[0].name === 'superadmin';
+  const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
 
   const handleDelete = () => {
     if (id) {
-      deleteGlobalParameter(id);
-      setTimeout(() => {
-        handleReload();
-      }, 500);
+      deleteClient(id);
     } else {
-      toast.error('Parameter ID not provided');
+      toast.error('ID not provided');
     }
   };
 
@@ -42,21 +37,21 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, handleReloa
           <MenuIcon>
             <KeenIcon icon="user" />
           </MenuIcon>
-          <MenuTitle>View Client</MenuTitle>
+          <MenuTitle>View</MenuTitle>
         </MenuLink>
       </MenuItem>
-      {canManageClientsSettings && (
+      {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`#`}>
+            <MenuLink path={`/call-center/orders/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>
-              <MenuTitle>Edit Client</MenuTitle>
+              <MenuTitle>Edit</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
-          <MenuItem>
+          <MenuItem onClick={handleDelete}>
             <MenuLink>
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />

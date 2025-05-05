@@ -1,45 +1,22 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FakeIndividualClient } from '@/lib/mocks.ts';
-import {
-  DataGridColumnHeader,
-  DataGridRowSelect,
-  DataGridRowSelectAll,
-  KeenIcon,
-  Menu,
-  MenuItem,
-  MenuToggle
-} from '@/components';
+import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { ClientsListMenuOptions } from '@/pages/clients/clients-list/components/blocks/clientsListMenuOptions.tsx';
 import { useLanguage } from '@/providers';
-interface Props {
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { Client } from '@/api/get/getClients/types.ts';
 
-export const useClientsListIndividualColumns = ({
-  setReload
-}: Props): ColumnDef<FakeIndividualClient>[] => {
+export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
-  const columnsIndividual = useMemo<ColumnDef<FakeIndividualClient>[]>(
+  const columnsIndividual = useMemo<ColumnDef<Client>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'client id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -47,19 +24,16 @@ export const useClientsListIndividualColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.name,
+        accessorFn: (row) => row.first_name,
         id: 'client name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <a
-                href="#"
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-              >
-                {`${info.row.original.name} ${info.row.original.surname} ${info.row.original.patronymic}`}
-              </a>
+              <div className="leading-none font-medium text-sm text-gray-900 hover:text-primary">
+                {`${info.row.original.first_name} ${info.row.original.last_name} ${info.row.original.patronymic}`}
+              </div>
             </div>
           </div>
         ),
@@ -81,40 +55,36 @@ export const useClientsListIndividualColumns = ({
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]'
+          headerClassName: 'min-w-[200px]'
         }
       },
       {
-        accessorFn: (row) => row.orderCount,
+        accessorFn: (row) => row,
         id: 'orders',
         header: ({ column }) => <DataGridColumnHeader title="Orders" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.orderCount}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">mock</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
-        accessorFn: (row) => row.activeOrder,
+        accessorFn: (row) => row,
         id: 'active orders',
         header: ({ column }) => <DataGridColumnHeader title="Active Orders" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.activeOrder}
-            </span>
+            <div className="leading-none text-gray-800 font-normal">mock</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -143,8 +113,7 @@ export const useClientsListIndividualColumns = ({
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {ClientsListMenuOptions({
-                id: info.row.original.id,
-                handleReload: () => setReload((prev) => !prev)
+                id: info.row.original.id
               })}
             </MenuItem>
           </Menu>

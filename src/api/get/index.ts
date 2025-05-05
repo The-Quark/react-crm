@@ -19,3 +19,4 @@ export * from './getOrderSenders';
 export * from './getOrderReceivers';
 export * from './getOrder';
 export * from './getAirlineRates';
+export * from './getClients';

@@ -17,7 +17,7 @@ import {
   MemberStarterPage,
   MemberUpdatePage
 } from '@/pages/crm';
-import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
+import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
   GuidesAirlineRatesPage,
   GuidesAirlinesPage,
@@ -122,7 +122,7 @@ const routeConfig = [
     routes: [
       { path: '/clients/starter-clients', element: <ClientStarterPage /> },
       { path: '/clients', element: <ClientsListPage /> },
-      { path: '/clients/client-update/:id', element: <ClientUpdatePage /> }
+      { path: '/clients/starter-clients/:id', element: <ClientStarterPage /> }
     ]
   },
   {

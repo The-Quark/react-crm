@@ -104,7 +104,7 @@ import {
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
-import { ClientsListPage, ClientStarterPage, ClientUpdatePage } from '@/pages/clients';
+import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
@@ -146,7 +146,7 @@ const AllRoutesSetting = () => {
 
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/starter-clients" element={<ClientStarterPage />} />
-        <Route path="/clients/client-update/:id" element={<ClientUpdatePage />} />
+        <Route path="/clients/starter-clients/:id" element={<ClientStarterPage />} />
 
         <Route path="/hr-module/staff" element={<StaffPage />} />
         <Route path="/hr-module/drivers" element={<DriversPage />} />
