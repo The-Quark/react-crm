@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { deleteClient } from '@/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ParameterMenuOptionsProps {
   id?: number;
@@ -21,11 +22,17 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
+  const queryClient = useQueryClient();
 
-  const handleDelete = () => {
-    if (id) {
-      deleteClient(id);
-    } else {
+  const handleDelete = async () => {
+    if (!id) {
+      toast.error('ID not provided');
+      return;
+    }
+    try {
+      await deleteClient(id);
+      await queryClient.invalidateQueries({ queryKey: ['clients'] });
+    } catch {
       toast.error('ID not provided');
     }
   };
@@ -43,7 +50,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
       {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/call-center/orders/starter/${id}`}>
+            <MenuLink path={`/clients/starter-clients/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>

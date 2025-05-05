@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -14,114 +14,78 @@ import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
+import { IClientFormValues } from '@/api/post/postClient/types.ts';
+import { postClient, putClient } from '@/api';
+import { AxiosError } from 'axios';
+import { SharedInput } from '@/partials/sharedUI';
+import { useNavigate } from 'react-router-dom';
+import { Client } from '@/api/get/getClients/types.ts';
+import { Source } from '@/api/get/getSources/types.ts';
 
-const createClientIndividualSchema = Yup.object().shape({
-  name: Yup.string().required('Client name is required'),
-  surname: Yup.string().required('Client surname is required'),
-  patronymic: Yup.string().required('Client patronymic is required'),
-  birthDate: Yup.string().required('Client birth date is required'),
-  gender: Yup.string().required('Client gender date is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
-  specialNotes: Yup.string().max(500, 'Maximum 500 symbols')
-});
-
-interface IClientIndividualFormValues {
-  name: string;
-  surname: string;
-  patronymic: string;
-  birthDate: string;
-  gender: 'male' | 'female';
-  email: string;
-  phone: string;
-  specialNotes?: string;
+interface Props {
+  clientData?: Client;
+  sourcesData?: Source[];
 }
 
-const ClientStarterContentIndividual = () => {
-  const [loading, setLoading] = useState(false);
+const validateSchema = Yup.object().shape({
+  first_name: Yup.string().required('First name is required'),
+  last_name: Yup.string().required('Last name is required'),
+  patronymic: Yup.string().required('Patronymic is required'),
+  birth_date: Yup.string().required('Birth date is required'),
+  gender: Yup.string().required('Gender date is required'),
+  email: Yup.string().email('Invalid email address').optional().nullable(),
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'Phone number is not valid')
+    .required('Phone is required'),
+  notes: Yup.string().max(500, 'Maximum 500 symbols').nullable(),
+  source_id: Yup.string().required('Source is required')
+});
 
-  const initialValues: IClientIndividualFormValues = {
-    name: '',
-    surname: '',
-    patronymic: '',
-    birthDate: '',
-    gender: 'male',
-    email: '',
-    phone: '',
-    specialNotes: ''
+const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const initialValues: IClientFormValues = {
+    type: 'individual',
+    first_name: clientData ? clientData.first_name : '',
+    last_name: clientData ? clientData.last_name : '',
+    patronymic: clientData ? clientData.patronymic : '',
+    birth_date: clientData ? clientData.birth_date : '',
+    gender: clientData ? clientData.gender : 'male',
+    email: clientData ? clientData.email : '',
+    phone: clientData ? clientData.phone : '',
+    notes: clientData ? clientData.notes : '',
+    source_id: clientData ? clientData.source_id.toString() : ''
   };
 
   const formik = useFormik({
     initialValues,
-    validationSchema: createClientIndividualSchema,
+    validationSchema: validateSchema,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);
-      console.log('Client Individual: ', values);
-      // try {
-      //   await postCreateGlobalParameter(values);
-      //   resetForm();
-      //   setStatus('Global Parameters created successfully!');
-      // } catch (err) {
-      //   const error = err as AxiosError<{ message?: string }>;
-      //   setStatus(error.response?.data?.message || 'Failed to create global parameters');
-      // }
+      try {
+        if (clientData) {
+          await putClient(clientData.id, values);
+        } else {
+          await postClient(values);
+        }
+        resetForm();
+        navigate('/clients');
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        setStatus(error.response?.data?.message || 'Failed to create client');
+      }
       setLoading(false);
       setSubmitting(false);
     }
   });
+
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Name</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Name"
-            {...formik.getFieldProps('name')}
-          />
-          {formik.touched.name && formik.errors.name && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.name}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Surname</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Surname"
-            {...formik.getFieldProps('surname')}
-          />
-          {formik.touched.surname && formik.errors.surname && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.surname}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Patronymic</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Patronymic"
-            {...formik.getFieldProps('patronymic')}
-          />
-          {formik.touched.patronymic && formik.errors.patronymic && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.patronymic}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedInput name="first_name" label="First name" formik={formik} />
+      <SharedInput name="last_name" label="Last name" formik={formik} />
+      <SharedInput name="patronymic" label="Patronymic" formik={formik} />
 
       <div className="w-full">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -131,7 +95,11 @@ const ClientStarterContentIndividual = () => {
               <PopoverTrigger asChild>
                 <button id="date" className={cn('input data-[state=open]:border-primary')}>
                   <KeenIcon icon="calendar" className="-ms-0.5" />
-                  <span>Pick a date</span>
+                  <span>
+                    {formik.values.birth_date
+                      ? new Date(formik.values.birth_date).toLocaleDateString()
+                      : 'Pick a date'}
+                  </span>
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -142,14 +110,14 @@ const ClientStarterContentIndividual = () => {
                   fromYear={1900}
                   toYear={new Date().getFullYear()}
                   defaultMonth={new Date(2000, 0)}
-                  selected={formik.getFieldProps('birthDate').value}
+                  selected={formik.getFieldProps('birth_date').value}
                   onSelect={(value) => formik.setFieldValue('birth_date', value)}
                 />
               </PopoverContent>
             </Popover>
-            {formik.touched.birthDate && formik.errors.birthDate && (
+            {formik.touched.birth_date && formik.errors.birth_date && (
               <span role="alert" className="text-danger text-xs mt-1">
-                {formik.errors.birthDate}
+                {formik.errors.birth_date}
               </span>
             )}
           </div>
@@ -167,7 +135,7 @@ const ClientStarterContentIndividual = () => {
               <SelectValue placeholder="Select gender" />
             </SelectTrigger>
             <SelectContent className="max-h-60 overflow-y-auto">
-              {['male', 'female'].map((gender) => (
+              {['male', 'female', 'other'].map((gender) => (
                 <SelectItem key={gender} value={gender}>
                   {gender}
                 </SelectItem>
@@ -183,50 +151,41 @@ const ClientStarterContentIndividual = () => {
       </div>
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Email</label>
+        <label className="form-label max-w-56">Source</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="email"
-            placeholder="Email"
-            {...formik.getFieldProps('email')}
-          />
-          {formik.touched.email && formik.errors.email && (
+          <Select
+            value={formik.values.source_id}
+            onValueChange={(value) => formik.setFieldValue('source_id', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Source" />
+            </SelectTrigger>
+            <SelectContent>
+              {sourcesData?.map((source) => (
+                <SelectItem key={source.id} value={source.id.toString()}>
+                  {source.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {formik.touched.source_id && formik.errors.source_id && (
             <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.email}
+              {formik.errors.source_id}
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Phone number</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="tel"
-            placeholder="Phone number"
-            {...formik.getFieldProps('phone')}
-          />
-          {formik.touched.phone && formik.errors.phone && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.phone}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedInput name="email" label="Email" formik={formik} type="email" />
+      <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Special notes about the client</label>
+        <label className="form-label max-w-56">Notes</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <Textarea
-            rows={4}
-            placeholder="Special notes"
-            {...formik.getFieldProps('specialNotes')}
-          />
-          {formik.touched.specialNotes && formik.errors.specialNotes && (
+          <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
+          {formik.touched.notes && formik.errors.notes && (
             <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.specialNotes}
+              {formik.errors.notes}
             </span>
           )}
         </div>

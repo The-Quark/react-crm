@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useState } from 'react';
 import { Container, DataGrid } from '@/components';
-import { CircularProgress } from '@mui/material';
 import { ClientsListToolbar } from '@/pages/clients/clients-list/components/blocks/clientsListToolbar.tsx';
 import { useClientsListIndividualColumns } from '@/pages/clients/clients-list/components/blocks/clientsListIndividualColumns.tsx';
 import { useClientsListLegalColumns } from '@/pages/clients/clients-list/components/blocks/clientsListLegalColumns.tsx';
@@ -18,7 +17,7 @@ export const ClientsListContent = () => {
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['clients', clientType],
-    queryFn: () => getClients(clientType),
+    queryFn: () => getClients({ type: clientType }),
     retry: false,
     refetchOnWindowFocus: true,
     staleTime: 1000 * 30,
@@ -44,13 +43,6 @@ export const ClientsListContent = () => {
             sorting={[{ id: 'id', desc: false }]}
             toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
             layout={{ card: true }}
-            messages={{
-              empty: (
-                <div className="flex justify-center items-center p-5">
-                  <CircularProgress />
-                </div>
-              )
-            }}
           />
         </div>
       )}

@@ -4,10 +4,8 @@ import { Container } from '@/components';
 
 export const ApplicationsStarterPage = () => {
   return (
-    <>
-      <Container>
-        <ApplicationsStarterContent />
-      </Container>
-    </>
+    <Container>
+      <ApplicationsStarterContent />
+    </Container>
   );
 };

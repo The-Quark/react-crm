@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { CircularProgress } from '@mui/material';
 
-export const SharedLoading = () => {
+interface Props {
+  simple?: boolean;
+}
+
+export const SharedLoading: FC<Props> = ({ simple }) => {
   return (
-    <div className="card flex justify-center items-center p-5">
-      <CircularProgress />
-    </div>
+    <>
+      {simple ? (
+        <div className="flex items-center justify-center h-full">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="card flex justify-center items-center p-5">
+          <CircularProgress />
+        </div>
+      )}
+    </>
   );
 };

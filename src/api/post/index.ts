@@ -13,3 +13,4 @@ export * from './postOrderSender';
 export * from './postOrderReceiver';
 export * from './postOrder';
 export * from './postAirlineRate';
+export * from './postClient';

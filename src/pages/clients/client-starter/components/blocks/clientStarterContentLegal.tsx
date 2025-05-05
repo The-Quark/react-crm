@@ -1,4 +1,13 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
+import { Textarea } from '@/components/ui/textarea.tsx';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { IClientFormValues } from '@/api/post/postClient/types.ts';
+import { postClient } from '@/api';
+import { AxiosError } from 'axios';
+import { SharedInput } from '@/partials/sharedUI';
+import { useNavigate } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -6,252 +15,137 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/lib/utils.ts';
-import { KeenIcon } from '@/components';
-import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { Textarea } from '@/components/ui/textarea.tsx';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
-import { fieldActivityOptions } from '@/lib/mocks.ts';
+import { Client } from '@/api/get/getClients/types.ts';
+import { Source } from '@/api/get/getSources/types.ts';
 
-const createClientLegalSchema = Yup.object().shape({
-  companyName: Yup.string().required('Company name is required'),
-  bin: Yup.number().max(12, 'Maximum 12 numbers').required('Company bin is required'),
-  fieldActivity: Yup.string().required('Company field of activity is required'),
-  legalAddress: Yup.string().required('Company legal address is required'),
-  representativeName: Yup.string().required('Company representative name is required'),
-  representativeSurname: Yup.string().required('Company representative surname is required'),
-  representativePatronymic: Yup.string().required('Company representative patronymic is required'),
-  representativePhone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  specialNotes: Yup.string().max(500, 'Maximum 500 symbols')
-});
-
-interface IClientLegalFormValues {
-  companyName: string;
-  bin: string;
-  fieldActivity: string;
-  legalAddress: string;
-  representativeName: string;
-  representativeSurname: string;
-  representativePatronymic: string;
-  representativePhone: string;
-  email: string;
-  specialNotes: string;
+interface Props {
+  clientData?: Client;
+  sourcesData?: Source[];
 }
 
-const ClientStarterContentLegal = () => {
-  const [loading, setLoading] = useState(false);
+const validateSchema = Yup.object().shape({
+  company_name: Yup.string().required('Company name is required'),
+  bin: Yup.string().min(12, 'Minimum 12 numbers').required('Company bin is required'),
+  business_type: Yup.string().required('Company field of activity is required'),
+  legal_address: Yup.string().required('Company legal address is required'),
+  representative_first_name: Yup.string().required('Representative name is required'),
+  representative_last_name: Yup.string().required('Representative surname is required'),
+  representative_patronymic: Yup.string().required('Representative patronymic is required'),
+  representative_phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
+  representative_email: Yup.string().email('Invalid email address').optional(),
+  notes: Yup.string().max(500, 'Maximum 500 symbols'),
+  source_id: Yup.string().required('Source is required'),
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'Phone number is not valid')
+    .required('Phone is required'),
+  email: Yup.string().email('Invalid email address').optional()
+});
 
-  const initialValues: IClientLegalFormValues = {
-    companyName: '',
-    bin: '',
-    fieldActivity: '',
-    legalAddress: '',
-    representativeName: '',
-    representativeSurname: '',
-    representativePatronymic: '',
-    representativePhone: '',
-    email: '',
-    specialNotes: ''
+const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const initialValues: IClientFormValues = {
+    type: 'legal',
+    company_name: clientData?.company_name || '',
+    bin: clientData?.bin || '',
+    business_type: clientData?.business_type || '',
+    legal_address: clientData?.legal_address || '',
+    representative_first_name: clientData?.representative_first_name || '',
+    representative_last_name: clientData?.representative_last_name || '',
+    representative_patronymic: clientData?.representative_patronymic || '',
+    representative_phone: clientData?.representative_phone || '',
+    representative_email: clientData?.representative_email || '',
+    notes: clientData?.notes || '',
+    source_id: clientData ? clientData.source_id.toString() : '',
+    phone: clientData?.phone || '',
+    email: clientData?.email || ''
   };
 
   const formik = useFormik({
     initialValues,
-    validationSchema: createClientLegalSchema,
+    validationSchema: validateSchema,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);
-      console.log('Client Legal: ', values);
-      // try {
-      //   await postCreateGlobalParameter(values);
-      //   resetForm();
-      //   setStatus('Global Parameters created successfully!');
-      // } catch (err) {
-      //   const error = err as AxiosError<{ message?: string }>;
-      //   setStatus(error.response?.data?.message || 'Failed to create global parameters');
-      // }
+      try {
+        await postClient({
+          ...values,
+          bin: String(values.bin)
+        });
+        resetForm();
+        navigate('/clients');
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        setStatus(error.response?.data?.message || 'Failed to create client');
+      }
       setLoading(false);
       setSubmitting(false);
     }
   });
+
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+      <SharedInput name="company_name" label="Company name" formik={formik} />
+      <SharedInput name="bin" label="BIN" formik={formik} type="number" />
+      <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+      <SharedInput name="email" label="Email" formik={formik} type="email" />
+      <SharedInput name="business_type" label="Business type" formik={formik} />
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Company name</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Company name"
-            {...formik.getFieldProps('companyName')}
-          />
-          {formik.touched.companyName && formik.errors.companyName && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.companyName}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">BIN</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="number"
-            placeholder="BIN"
-            {...formik.getFieldProps('bin')}
-          />
-          {formik.touched.bin && formik.errors.bin && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.bin}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Field of activity</label>
+        <label className="form-label max-w-56">Source</label>
         <div className="flex columns-1 w-full flex-wrap">
           <Select
-            value={formik.values.fieldActivity}
-            onValueChange={(value) => formik.setFieldValue('fieldActivity', value)}
+            value={formik.values.source_id}
+            onValueChange={(value) => formik.setFieldValue('source_id', value)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select field activity" />
+              <SelectValue placeholder="Select Source" />
             </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
-              {fieldActivityOptions.map((field) => (
-                <SelectItem key={field.value} value={field.value}>
-                  {field.label}
+            <SelectContent>
+              {sourcesData?.map((source) => (
+                <SelectItem key={source.id} value={source.id.toString()}>
+                  {source.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {formik.touched.fieldActivity && formik.errors.fieldActivity && (
+          {formik.touched.source_id && formik.errors.source_id && (
             <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.fieldActivity}
+              {formik.errors.source_id}
             </span>
           )}
         </div>
       </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Legal address</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Legal address"
-            {...formik.getFieldProps('legalAddress')}
-          />
-          {formik.touched.legalAddress && formik.errors.legalAddress && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.legalAddress}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Representative name</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Name"
-            {...formik.getFieldProps('representativeName')}
-          />
-          {formik.touched.representativeName && formik.errors.representativeName && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.representativeName}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Representative surname</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Surname"
-            {...formik.getFieldProps('representativeSurname')}
-          />
-          {formik.touched.representativeSurname && formik.errors.representativeSurname && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.representativeSurname}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Representative patronymic</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="text"
-            placeholder="Patronymic"
-            {...formik.getFieldProps('representativePatronymic')}
-          />
-          {formik.touched.representativePatronymic && formik.errors.representativePatronymic && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.representativePatronymic}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Representative phone number</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="tel"
-            placeholder="Phone number"
-            {...formik.getFieldProps('representativePhone')}
-          />
-          {formik.touched.representativePhone && formik.errors.representativePhone && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.representativePhone}
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Email</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <input
-            className="input w-full"
-            type="email"
-            placeholder="Email"
-            {...formik.getFieldProps('email')}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.email}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedInput name="legal_address" label="Legal address" formik={formik} />
+      <SharedInput
+        name="representative_first_name"
+        label="Representative first name"
+        formik={formik}
+      />
+      <SharedInput
+        name="representative_last_name"
+        label="Representative last name"
+        formik={formik}
+      />
+      <SharedInput
+        name="representative_patronymic"
+        label="Representative patronymic"
+        formik={formik}
+      />
+      <SharedInput
+        name="representative_phone"
+        label="Representative phone number"
+        formik={formik}
+      />
+      <SharedInput name="representative_email" label="Representative email" formik={formik} />
 
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
         <label className="form-label max-w-56">Special notes about the client</label>
         <div className="flex columns-1 w-full flex-wrap">
-          <Textarea
-            rows={4}
-            placeholder="Special notes"
-            {...formik.getFieldProps('specialNotes')}
-          />
-          {formik.touched.specialNotes && formik.errors.specialNotes && (
+          <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
+          {formik.touched.notes && formik.errors.notes && (
             <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.specialNotes}
+              {formik.errors.notes}
             </span>
           )}
         </div>
