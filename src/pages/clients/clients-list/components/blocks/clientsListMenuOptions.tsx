@@ -39,14 +39,6 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-      <MenuItem>
-        <MenuLink path={`#`}>
-          <MenuIcon>
-            <KeenIcon icon="user" />
-          </MenuIcon>
-          <MenuTitle>View</MenuTitle>
-        </MenuLink>
-      </MenuItem>
       {canManage && (
         <>
           <MenuItem>

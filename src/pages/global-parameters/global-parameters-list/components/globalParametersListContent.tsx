@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid } from '@/components';
+import { Container, DataGrid } from '@/components';
 import { getGlobalParameters } from '@/api/get';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
@@ -9,7 +9,9 @@ import { useParametersColumns } from '@/pages/global-parameters/global-parameter
 export const GlobalParametersListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['global-parameters'],
-    queryFn: () => getGlobalParameters()
+    queryFn: () => getGlobalParameters(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
   const columns = useParametersColumns();
 
@@ -18,20 +20,22 @@ export const GlobalParametersListContent = () => {
   }
 
   return (
-    <div className="grid gap-5 lg:gap-7.5">
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 10 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<ParametersToolbar />}
-          layout={{ card: true }}
-        />
-      )}
-    </div>
+    <Container>
+      <div className="grid gap-5 lg:gap-7.5">
+        {isLoading ? (
+          <SharedLoading />
+        ) : (
+          <DataGrid
+            columns={columns}
+            data={data?.result}
+            rowSelection={true}
+            pagination={{ size: 15 }}
+            sorting={[{ id: 'id', desc: false }]}
+            toolbar={<ParametersToolbar />}
+            layout={{ card: true }}
+          />
+        )}
+      </div>
+    </Container>
   );
 };

@@ -41,7 +41,7 @@ export const OrdersListContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<OrdersToolbar />}
           layout={{ card: true }}

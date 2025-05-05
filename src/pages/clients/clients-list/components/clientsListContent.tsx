@@ -39,7 +39,7 @@ export const ClientsListContent = () => {
             columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
             data={isLoading ? [] : data?.result}
             rowSelection={true}
-            pagination={{ size: 10 }}
+            pagination={{ size: 15 }}
             sorting={[{ id: 'id', desc: false }]}
             toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
             layout={{ card: true }}

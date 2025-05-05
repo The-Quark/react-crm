@@ -4,9 +4,14 @@ import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/co
 import { ClientsListMenuOptions } from '@/pages/clients/clients-list/components/blocks/clientsListMenuOptions.tsx';
 import { useLanguage } from '@/providers';
 import { Client } from '@/api/get/getClients/types.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
   const columnsIndividual = useMemo<ColumnDef<Client>[]>(
     () => [
       {
@@ -125,5 +130,5 @@ export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
     ],
     [isRTL]
   );
-  return columnsIndividual;
+  return canManage ? columnsIndividual : columnsIndividual.slice(0, -1);
 };

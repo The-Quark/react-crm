@@ -12,7 +12,11 @@ export const ApplicationListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['applications'],
     queryFn: () => getApplications(),
-    retry: false
+    retry: false,
+    refetchOnWindowFocus: true,
+    staleTime: 1000 * 30,
+    refetchInterval: 1000 * 60,
+    refetchIntervalInBackground: true
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
@@ -37,7 +41,7 @@ export const ApplicationListContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<ApplicationsToolbar />}
           layout={{ card: true }}

@@ -105,7 +105,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="packageMaterials"
+            invalidateRequestKey="packageMaterials"
             deleteRequest={deletePackageMaterial}
             renderModal={({ open, onOpenChange }) => (
               <PackageMaterialsModal
