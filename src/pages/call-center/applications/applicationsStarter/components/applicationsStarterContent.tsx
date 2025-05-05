@@ -5,15 +5,21 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { postApplication, getApplications, getSources, putApplication } from '@/api';
+import { postApplication, getApplications, getSources, putApplication, getClients } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import React, { useState, useEffect } from 'react';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +40,7 @@ export const ApplicationsStarterContent = () => {
   const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const {
     data: sourcesData,
@@ -43,6 +50,17 @@ export const ApplicationsStarterContent = () => {
   } = useQuery({
     queryKey: ['sources'],
     queryFn: () => getSources(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: clientsData,
+    isLoading: clientsLoading,
+    isError: clientsIsError,
+    error: clientsError
+  } = useQuery({
+    queryKey: ['applicationClients'],
+    queryFn: () => getClients(),
     staleTime: 60 * 60 * 1000
   });
 
@@ -80,11 +98,13 @@ export const ApplicationsStarterContent = () => {
           queryClient.invalidateQueries({ queryKey: ['applications'] });
           navigate('/call-center/applications/list');
           resetForm();
+          setSearchTerm('');
         } else {
           await postApplication(values);
           queryClient.invalidateQueries({ queryKey: ['applications'] });
           navigate('/call-center/applications/list');
           resetForm();
+          setSearchTerm('');
         }
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -113,12 +133,16 @@ export const ApplicationsStarterContent = () => {
     }
   }, [isEditMode, applicationData]);
 
-  if (sourcesLoading || (isEditMode && applicationLoading)) {
+  if (sourcesLoading || clientsLoading || (isEditMode && applicationLoading)) {
     return <SharedLoading />;
   }
 
   if (sourcesIsError) {
     return <SharedError error={sourcesError} />;
+  }
+
+  if (clientsIsError) {
+    return <SharedError error={clientsError} />;
   }
 
   if (isEditMode && applicationIsError) {
@@ -133,116 +157,39 @@ export const ApplicationsStarterContent = () => {
         </div>
 
         <div className="card-body grid gap-5">
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Full name</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <input
-                className="input w-full"
-                type="text"
-                placeholder="Full name"
-                {...formik.getFieldProps('full_name')}
-              />
-              {formik.touched.full_name && formik.errors.full_name && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.full_name}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedInput name="full_name" label="Full name" formik={formik} />
+          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+          <SharedSelect
+            name="source"
+            label="Source"
+            formik={formik}
+            options={
+              sourcesData?.result?.map((source) => ({ label: source.name, value: source.code })) ||
+              []
+            }
+          />
 
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Phone number</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <input
-                className="input w-full"
-                type="tel"
-                placeholder="Phone number"
-                {...formik.getFieldProps('phone')}
-              />
-              {formik.touched.phone && formik.errors.phone && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.phone}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Source</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <Select
-                value={formik.values.source}
-                onValueChange={(value) => formik.setFieldValue('source', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Source" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sourcesData?.result.map((source) => (
-                    <SelectItem key={source.id} value={source.code}>
-                      {source.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {formik.touched.source && formik.errors.source && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.source}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Email</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <input
-                className="input w-full"
-                type="email"
-                placeholder="Email"
-                {...formik.getFieldProps('email')}
-              />
-              {formik.touched.email && formik.errors.email && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.email}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Message</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <input
-                className="input w-full"
-                type="text"
-                placeholder="Message"
-                {...formik.getFieldProps('message')}
-              />
-              {formik.touched.message && formik.errors.message && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.message}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Client</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <input
-                className="input w-full"
-                type="text"
-                placeholder="Client"
-                {...formik.getFieldProps('client_id')}
-              />
-              {formik.touched.client_id && formik.errors.client_id && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.client_id}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedInput name="email" label="Email" formik={formik} type="email" />
+          <SharedInput name="message" label="Message" formik={formik} />
+          <SharedAutocomplete
+            label="Client"
+            value={formik.values.client_id ?? ''}
+            options={
+              clientsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.first_name || app.company_name
+              })) ?? []
+            }
+            placeholder="Select client"
+            searchPlaceholder="Search application"
+            onChange={(val) => {
+              formik.setFieldValue('client_id', val);
+            }}
+            error={formik.errors.client_id as string}
+            touched={formik.touched.client_id}
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+          />
 
           {isEditMode && (
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

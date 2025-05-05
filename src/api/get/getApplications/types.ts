@@ -7,11 +7,14 @@ interface Source {
   updated_at: string;
   deleted_at: string | null;
 }
-export interface ApplicationsStatus {
-  status: 'new' | 'running' | 'completed' | 'declined';
+export enum ApplicationsStatus {
+  NEW = 'new',
+  RUNNING = 'running',
+  COMPLETED = 'completed',
+  DECLINED = 'declined'
 }
 
-export interface Application extends ApplicationsStatus {
+export interface Application {
   id: number;
   source_id: number;
   full_name: string;
@@ -27,6 +30,7 @@ export interface Application extends ApplicationsStatus {
   updated_at: string;
   deleted_at: string | null;
   source: Source;
+  status: ApplicationsStatus;
 }
 
 export interface ApplicationsResponse {
