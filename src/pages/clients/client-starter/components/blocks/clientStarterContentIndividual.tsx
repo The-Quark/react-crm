@@ -61,6 +61,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
   const formik = useFormik({
     initialValues,
     validationSchema: validateSchema,
+    enableReinitialize: true,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);

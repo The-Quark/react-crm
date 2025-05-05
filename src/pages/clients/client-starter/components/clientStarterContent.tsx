@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClientStarterContentIndividual from '@/pages/clients/client-starter/components/blocks/clientStarterContentIndividual.tsx';
 import ClientStarterContentLegal from '@/pages/clients/client-starter/components/blocks/clientStarterContentLegal.tsx';
 import { Container } from '@/components';
@@ -33,6 +33,11 @@ const ClientStarterContent = () => {
     queryFn: () => getSources(),
     staleTime: 60 * 60 * 1000
   });
+  useEffect(() => {
+    if (clientData?.result?.[0]?.type && clientType !== clientData.result[0].type) {
+      setClientType(clientData.result[0].type);
+    }
+  }, [clientData]);
 
   if (isEditMode && clientIsError) {
     return <SharedError error={clientError} />;
