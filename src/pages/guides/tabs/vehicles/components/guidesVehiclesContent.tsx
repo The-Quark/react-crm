@@ -5,7 +5,6 @@ import { useVehiclesColumns } from '@/pages/guides/tabs/vehicles/components/bloc
 import { VehiclesToolbar } from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesToolbar.tsx';
 import { getVehicles } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesVehiclesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -29,8 +28,7 @@ export const GuidesVehiclesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<VehiclesToolbar />}
           layout={{ card: true }}

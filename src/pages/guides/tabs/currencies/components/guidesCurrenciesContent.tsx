@@ -5,7 +5,6 @@ import { CurrenciesToolbar } from '@/pages/guides/tabs/currencies/components/blo
 import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/blocks/currenciesColumns.tsx';
 import { getCurrencies } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesCurrenciesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -30,8 +29,7 @@ export const GuidesCurrenciesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<CurrenciesToolbar />}
           layout={{ card: true }}

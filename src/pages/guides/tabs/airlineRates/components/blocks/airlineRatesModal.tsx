@@ -298,7 +298,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
           {isFormError &&
             formErrors.map((error, index) => <SharedError key={index} error={error} />)}
           {isFormLoading ? (
-            <SharedLoading />
+            <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedAutocomplete

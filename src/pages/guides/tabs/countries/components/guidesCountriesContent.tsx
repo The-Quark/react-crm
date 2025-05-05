@@ -3,7 +3,6 @@ import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getCountries } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { CountriesToolbar } from '@/pages/guides/tabs/countries/components/blocks/countriesToolbar.tsx';
 import { useCountriesColumns } from '@/pages/guides/tabs/countries/components/blocks/countriesColumns.tsx';
 
@@ -31,8 +30,7 @@ export const GuidesCountriesContent = () => {
           columns={columns}
           data={data?.data}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<CountriesToolbar />}
           layout={{ card: true }}

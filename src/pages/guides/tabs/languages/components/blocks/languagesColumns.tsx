@@ -127,7 +127,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="guidesLanguages"
+            invalidateRequestKey="guidesLanguages"
             deleteRequest={deleteLanguage}
             renderModal={({ open, onOpenChange }) => (
               <LanguagesModal

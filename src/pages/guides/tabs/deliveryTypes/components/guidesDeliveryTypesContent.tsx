@@ -3,14 +3,15 @@ import { DataGrid, Container } from '@/components';
 import { getDeliveryTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { useDeliveryTypesColumns } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesColumns.tsx';
 import { DeliveryTypesToolbar } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesToolbar.tsx';
 
 export const GuidesDeliveryTypesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['guidesDeliveryTypes'],
-    queryFn: () => getDeliveryTypes()
+    queryFn: () => getDeliveryTypes(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
   const columns = useDeliveryTypesColumns();
 
@@ -27,8 +28,7 @@ export const GuidesDeliveryTypesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<DeliveryTypesToolbar />}
           layout={{ card: true }}

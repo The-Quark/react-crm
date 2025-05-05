@@ -67,7 +67,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]',
+          headerClassName: 'min-w-[150px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -82,7 +82,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]',
+          headerClassName: 'min-w-[150px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -127,7 +127,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="guidesVehicles"
+            invalidateRequestKey="guidesVehicles"
             deleteRequest={deleteVehicle}
             renderModal={({ open, onOpenChange }) => (
               <VehiclesModal

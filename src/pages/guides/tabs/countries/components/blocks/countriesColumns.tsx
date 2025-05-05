@@ -81,7 +81,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]',
+          headerClassName: 'min-w-[150px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },

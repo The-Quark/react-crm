@@ -21,6 +21,7 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useQueryClient } from '@tanstack/react-query';
+import { SharedInput } from '@/partials/sharedUI';
 
 interface Language {
   code: string;
@@ -136,39 +137,8 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
               </div>
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Name</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Name"
-                      {...formik.getFieldProps('name')}
-                    />
-                    {formik.touched.name && formik.errors.name && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.name}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Code</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Code"
-                      {...formik.getFieldProps('code')}
-                    />
-                    {formik.touched.code && formik.errors.code && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.code}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput name="name" label="Name" formik={formik} />
+                <SharedInput name="code" label="Code" formik={formik} />
 
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Language code</label>
@@ -189,22 +159,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
                   </Select>
                 </div>
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Description</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Description"
-                      {...formik.getFieldProps('description')}
-                    />
-                    {formik.touched.description && formik.errors.description && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.description}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput name="description" label="Description" formik={formik} />
 
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Active</label>

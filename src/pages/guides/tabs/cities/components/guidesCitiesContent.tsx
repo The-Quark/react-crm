@@ -3,7 +3,6 @@ import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getCitiesByCountryCode, getCountries } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { CitiesToolbar } from '@/pages/guides/tabs/cities/components/blocks/citiesToolbar.tsx';
 import { useState } from 'react';
 import { useCitiesColumns } from '@/pages/guides/tabs/cities/components/blocks/citiesColumns.tsx';
@@ -61,8 +60,7 @@ export const GuidesCitiesContent = () => {
           columns={columns}
           data={citiesData?.data[0].cities || []}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={
             <CitiesToolbar

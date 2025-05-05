@@ -1,8 +1,10 @@
+import { VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
+
 export interface IVehicleFormValues {
   plate_number: string;
-  type: 'car' | 'motorcycle' | 'truck' | 'bus';
+  type: VehicleType;
   brand: string;
   model: string;
-  status: 'available' | 'rented' | 'maintenance';
+  status: VehicleStatus;
   avg_fuel_consumption: string;
 }

@@ -115,7 +115,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="guidesAirlineRates"
+            invalidateRequestKey="guidesAirlineRates"
             deleteRequest={deleteAirlineRate}
             renderModal={({ open, onOpenChange }) => (
               <AirlineRatesModal

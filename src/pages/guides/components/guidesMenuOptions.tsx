@@ -19,7 +19,7 @@ import { useQueryClient } from '@tanstack/react-query';
 interface IMenuOptionsProps {
   id?: number;
   deleteRequest: (id: number) => Promise<void>;
-  invalifateRequestKey: string;
+  invalidateRequestKey: string;
   renderModal: (props: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -31,7 +31,7 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
   id,
   deleteRequest,
   renderModal,
-  invalifateRequestKey
+  invalidateRequestKey
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
@@ -52,7 +52,7 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
     if (id) {
       try {
         await deleteRequest(id);
-        queryClient.invalidateQueries({ queryKey: [invalifateRequestKey] });
+        queryClient.invalidateQueries({ queryKey: [invalidateRequestKey] });
       } catch (error) {
         toast.error('Failed to delete');
       }

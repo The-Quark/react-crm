@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deletePackageType } from '@/api';
@@ -126,7 +126,7 @@ export const usePackageTypesColumns = ({
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalifateRequestKey="package-types"
+            invalidateRequestKey="package-types"
             deleteRequest={deletePackageType}
             renderModal={({ open, onOpenChange }) => (
               <PackageTypesModal

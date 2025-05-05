@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useSourcesColumns } from '@/pages/guides/tabs/sources/components/blocks/sourcesColumns.tsx';
 import { SourcesToolbar } from '@/pages/guides/tabs/sources/components/blocks/sourcesToolbar.tsx';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesSourcesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -30,8 +29,7 @@ export const GuidesSourcesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<SourcesToolbar />}
           layout={{ card: true }}

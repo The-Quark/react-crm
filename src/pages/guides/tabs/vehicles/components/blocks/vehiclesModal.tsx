@@ -11,8 +11,7 @@ import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { IVehicleFormValues } from '@/api/post/postVehicle/types.ts';
-import { postVehicle, putVehicle, getVehicles } from '@/api';
-import { CircularProgress } from '@mui/material';
+import { getVehicles, postVehicle, putVehicle } from '@/api';
 import {
   Select,
   SelectContent,
@@ -20,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { mockTypes, mockStatus } from '@/lib/mocks.ts';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { VehiclesResponse, VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -29,61 +29,69 @@ interface Props {
   id?: number;
 }
 
+const vehiclesTypes = [
+  { id: 1, name: VehicleType.AUTO },
+  { id: 2, name: VehicleType.VAN },
+  { id: 3, name: VehicleType.MOTORBIKE }
+];
+
+const vehiclesStatus = [
+  { id: 1, name: VehicleStatus.ONLINE },
+  { id: 2, name: VehicleStatus.SERVICE }
+];
+
 const validateSchema = Yup.object().shape({
   plate_number: Yup.string().required('Plate number is required'),
-  type: Yup.mixed<'car' | 'motorcycle' | 'truck' | 'bus'>()
-    .oneOf(['car', 'motorcycle', 'truck', 'bus'], 'Invalid vehicle type')
+  type: Yup.mixed<VehicleType>()
+    .oneOf(Object.values(VehicleType), 'Invalid vehicle type')
     .required('Vehicle type is required'),
   brand: Yup.string().required('Brand is required'),
   model: Yup.string().required('Model is required'),
-  status: Yup.mixed<'available' | 'rented' | 'maintenance'>()
-    .oneOf(['available', 'rented', 'maintenance'], 'Invalid status')
+  status: Yup.mixed<VehicleStatus>()
+    .oneOf(Object.values(VehicleStatus), 'Invalid status')
     .required('Status is required'),
   avg_fuel_consumption: Yup.string().required('Average fuel consumption is required')
 });
 
-const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState<IVehicleFormValues>({
+const getInitialValues = (isEditMode: boolean, data: VehiclesResponse): IVehicleFormValues => {
+  if (isEditMode && data?.result) {
+    const vehicle = data.result[0];
+    return {
+      plate_number: vehicle.plate_number,
+      type: vehicle.type,
+      brand: vehicle.brand,
+      model: vehicle.model,
+      status: vehicle.status,
+      avg_fuel_consumption: vehicle.avg_fuel_consumption
+    };
+  }
+  return {
     plate_number: '',
-    type: 'car',
+    type: VehicleType.AUTO,
     brand: '',
     model: '',
-    status: 'available',
+    status: VehicleStatus.ONLINE,
     avg_fuel_consumption: ''
-  });
+  };
+};
+
+const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (id) {
-      const fetchReq = async () => {
-        setFormLoading(true);
-        try {
-          const reqData = await getVehicles(Number(id));
-          const req = reqData.result[0];
-          setInitialValues({
-            plate_number: req.plate_number,
-            type: req.type,
-            brand: req.brand,
-            model: req.model,
-            status: req.status,
-            avg_fuel_consumption: req.avg_fuel_consumption
-          });
-          setFormLoading(false);
-        } catch (err) {
-          console.error('Request error:', err);
-        } finally {
-          setFormLoading(false);
-        }
-      };
-
-      fetchReq();
-    }
-  }, [id]);
+  const {
+    data: vehicleData,
+    isLoading: vehicleLoading,
+    isError: vehicleIsError,
+    error: vehicleError
+  } = useQuery({
+    queryKey: ['formVehicles', id],
+    queryFn: () => getVehicles(Number(id)),
+    enabled: !!id && open
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(!!id, vehicleData as VehiclesResponse),
     enableReinitialize: true,
     validationSchema: validateSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -96,7 +104,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesVehicles'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -108,6 +116,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
+    queryClient.removeQueries({ queryKey: ['formVehicles'] });
     onOpenChange();
   };
 
@@ -129,10 +138,9 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
             </button>
           </DialogHeader>
           <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-            {formLoading ? (
-              <div className="flex justify-center items-center p-5">
-                <CircularProgress />
-              </div>
+            {id && vehicleIsError && <SharedError error={vehicleError} />}
+            {vehicleLoading ? (
+              <SharedLoading simple />
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -163,7 +171,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockTypes.map((role) => (
+                        {vehiclesTypes.map((role) => (
                           <SelectItem key={role.id} value={role.name.toString()}>
                             {role.name}
                           </SelectItem>
@@ -223,7 +231,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockStatus.map((role) => (
+                        {vehiclesStatus.map((role) => (
                           <SelectItem key={role.id} value={role.name.toString()}>
                             {role.name}
                           </SelectItem>

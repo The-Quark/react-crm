@@ -4,7 +4,6 @@ import { getLanguages, getPackageTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { PackageTypesToolbar } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesToolbar.tsx';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 import { usePackageTypesColumns } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesColumns.tsx';
 import { useLanguage } from '@/providers';
 import { useState } from 'react';
@@ -24,7 +23,7 @@ export const GuidesPackagesContent = () => {
     isLoading: isLanguagesLoading,
     error: isLanguageError
   } = useQuery({
-    queryKey: ['languages'],
+    queryKey: ['guidesPackageTypeLanguages'],
     queryFn: () => getLanguages(),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5
@@ -53,8 +52,7 @@ export const GuidesPackagesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={
             <PackageTypesToolbar

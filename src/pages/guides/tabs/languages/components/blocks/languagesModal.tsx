@@ -122,7 +122,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
           {id && languageIsError && <SharedError error={languageError} />}
           {id && languageLoading ? (
-            <SharedLoading />
+            <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />

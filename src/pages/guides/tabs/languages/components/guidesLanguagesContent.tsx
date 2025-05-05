@@ -5,7 +5,6 @@ import { useLanguagesColumns } from '@/pages/guides/tabs/languages/components/bl
 import { LanguagesToolbar } from '@/pages/guides/tabs/languages/components/blocks/languagesToolbar.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { handleRowSelection } from '@/pages/guides/components/guidesHandlers.ts';
 
 export const GuidesLanguagesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
@@ -29,8 +28,7 @@ export const GuidesLanguagesContent = () => {
           columns={columns}
           data={data?.result}
           rowSelection={true}
-          onRowSelectionChange={handleRowSelection}
-          pagination={{ size: 10 }}
+          pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<LanguagesToolbar />}
           layout={{ card: true }}

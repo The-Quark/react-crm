@@ -127,7 +127,7 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, id }) => {
           {countriesIsError && <SharedError error={countriesError} />}
           {id && airlinesIsError && <SharedError error={airlinesError} />}
           {countriesLoading || (id && airlinesLoading) ? (
-            <SharedLoading />
+            <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
