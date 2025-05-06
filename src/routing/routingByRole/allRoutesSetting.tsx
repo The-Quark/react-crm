@@ -98,7 +98,11 @@ import {
   ApplicationsListPage,
   ApplicationsStarterPage,
   OrdersStarterPage,
-  OrdersListPage
+  OrdersListPage,
+  CargoStarterPage,
+  PackagesStarterPage,
+  CargoListPage,
+  PackagesListPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -118,7 +122,6 @@ import {
   GuidesAirlineRatesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
-import { CargoListPage, CargoStarterPage } from '@/pages/call-center/cargo';
 
 const AllRoutesSetting = () => {
   return (
@@ -159,6 +162,9 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/packages/starter" element={<PackagesStarterPage />} />
+        <Route path="/call-center/packages/starter/:id" element={<PackagesStarterPage />} />
+        <Route path="/call-center/packages/list" element={<PackagesListPage />} />
         <Route path="/call-center/cargo/starter" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />

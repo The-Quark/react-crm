@@ -29,6 +29,7 @@ const Menu = {
   'MENU.MEGAMENU.CALL_CENTER': 'مركز الاتصال',
   'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS': 'التطبيقات',
   'MENU.MEGAMENU.CALL_CENTER.ORDERS': 'الطلبات',
+  'MENU.MEGAMENU.CALL_CENTER.PACKAGES': 'الطرود',
   'MENU.MEGAMENU.CALL_CENTER.CARGO': 'شحن',
   'MENU.MEGAMENU.CRM': 'إدارة علاقات العملاء',
   'MENU.MEGAMENU.CRM.MEMBERS': 'الأعضاء',

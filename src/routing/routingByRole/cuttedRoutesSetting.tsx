@@ -35,9 +35,12 @@ import {
   ApplicationsListPage,
   ApplicationsStarterPage,
   OrdersListPage,
-  OrdersStarterPage
+  OrdersStarterPage,
+  PackagesListPage,
+  PackagesStarterPage,
+  CargoStarterPage,
+  CargoListPage
 } from '@/pages/call-center';
-import { CargoListPage, CargoStarterPage } from '@/pages/call-center/cargo';
 
 interface Props {
   permissions: string[];
@@ -150,16 +153,13 @@ const routeConfig = [
         path: '/call-center/orders/starter/:id',
         element: <OrdersStarterPage />
       },
-      { path: '/call-center/orders/list', element: <OrdersListPage /> }
-    ]
-  },
-  {
-    permission: 'view orders',
-    routes: [{ path: '/call-center/orders/list', element: <OrdersListPage /> }]
-  },
-  {
-    permission: 'manage cargo',
-    routes: [
+      { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/packages/starter', element: <PackagesStarterPage /> },
+      {
+        path: '/call-center/packages/starter/:id',
+        element: <PackagesStarterPage />
+      },
+      { path: '/call-center/packages/list', element: <PackagesListPage /> },
       { path: '/call-center/cargo/starter', element: <CargoStarterPage /> },
       {
         path: '/call-center/cargo/starter/:id',
@@ -169,8 +169,12 @@ const routeConfig = [
     ]
   },
   {
-    permission: 'view cargo',
-    routes: [{ path: '/call-center/cargo/list', element: <CargoListPage /> }]
+    permission: 'view orders',
+    routes: [
+      { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/packages/list', element: <PackagesListPage /> },
+      { path: '/call-center/cargo/list', element: <CargoListPage /> }
+    ]
   }
 ];
 

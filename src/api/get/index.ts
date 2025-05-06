@@ -20,3 +20,5 @@ export * from './getOrderReceivers';
 export * from './getOrder';
 export * from './getAirlineRates';
 export * from './getClients';
+export * from './getPackages';
+export * from './getCargo';

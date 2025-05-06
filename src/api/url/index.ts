@@ -41,3 +41,7 @@ export const ORDER_RECEIVER_URL = `${api}/order/receiver/manage`;
 export const ORDER_URL = `${api}/order/manage`;
 
 export const CLIENT_URL = `${api}/client/manage`;
+
+export const PACKAGE_URL = `${api}/package/manage`;
+
+export const CARGO_URL = `${api}/cargo/manage`;
