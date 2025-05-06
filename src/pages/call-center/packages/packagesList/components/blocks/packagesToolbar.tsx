@@ -7,18 +7,18 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { mockDeliveryCategories, cargoStatusOptions } from '@/lib/mocks.ts';
+import { mockDeliveryCategories, packageStatusOptions } from '@/lib/mocks.ts';
 
-export const CargoToolbar: FC = () => {
+export const PackagesToolbar: FC = () => {
   const { table } = useDataGrid();
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Orders</h3>
+      <h3 className="card-title">Packages</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {/*search by id search by client full name select status date created time*/}
-        <a href="/call-center/cargo/starter" className="btn btn-sm btn-primary">
-          New Cargo
+        <a href="/call-center/packages/starter" className="btn btn-sm btn-primary">
+          New Package
         </a>
         <Select
           value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
@@ -49,7 +49,7 @@ export const CargoToolbar: FC = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
-            {cargoStatusOptions.map((status) => (
+            {packageStatusOptions.map((status) => (
               <SelectItem key={status.id} value={status.value}>
                 {status.name}
               </SelectItem>

@@ -14,11 +14,18 @@ interface Company {
   airlines: any | null;
 }
 
+export enum CargoStatus {
+  FORMED = 'formed',
+  ARRIVED_AIRPORT_SENDER = 'arrived_airport_sender',
+  ACCEPTED_AIRPORT_SENDER = 'accepted_airport_sender',
+  ARRIVED_AIRPORT_RECEIVER = 'arrived_airport_receiver'
+}
+
 export interface Cargo {
   id: number;
   code: string;
   airline: number;
-  status: 'formed' | string;
+  status: CargoStatus;
   departure_date: string;
   arrival_date: string;
   from_airport: string;

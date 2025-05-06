@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
-import { getCargo } from '@/api';
+import { getPackages } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { CargoToolbar } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoToolbar.tsx';
-import { useCargoColumns } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoColumns.tsx';
-import { CargoModal } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoModal.tsx';
+import { usePackagesColumns } from '@/pages/call-center/packages/packagesList/components/blocks/packagesColumns.tsx';
+import { PackagesToolbar } from '@/pages/call-center/packages/packagesList/components/blocks/packagesToolbar.tsx';
+import { PackagesModal } from '@/pages/call-center/packages/packagesList/components/blocks/packagesModal.tsx';
 
-export const CargoListContent = () => {
+export const PackagesListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['cargo'],
-    queryFn: () => getCargo(),
+    queryKey: ['packages'],
+    queryFn: () => getPackages(),
     retry: false,
     refetchOnWindowFocus: true,
     staleTime: 1000 * 30,
@@ -21,7 +21,7 @@ export const CargoListContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const columns = useCargoColumns({
+  const columns = usePackagesColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
@@ -43,11 +43,11 @@ export const CargoListContent = () => {
           rowSelection={true}
           pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<CargoToolbar />}
+          toolbar={<PackagesToolbar />}
           layout={{ card: true }}
         />
       )}
-      <CargoModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
+      <PackagesModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
     </Container>
   );
 };

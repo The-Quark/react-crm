@@ -1,3 +1,5 @@
+import { PackageStatus } from '@/api/get/getPackages/types.ts';
+import { CargoStatus } from '@/api/get/getCargo/types.ts';
 export const localesMock = [
   {
     code: 'en',
@@ -328,6 +330,35 @@ export const mockOrdersStatus = [
     name: 'Expired',
     value: 'expired'
   }
+];
+
+export const packageStatusOptions = [
+  { id: 1, name: 'Awaiting Airport', value: PackageStatus.AWAITING_AIRPORT },
+  { id: 2, name: 'Ready to Send', value: PackageStatus.READY_SEND },
+  { id: 3, name: 'Ready for Delivery', value: PackageStatus.READY_DELIVERY },
+  { id: 4, name: 'Heading to Client', value: PackageStatus.HEADING_CLIENT },
+  { id: 5, name: 'Done Packaging', value: PackageStatus.DONE_PACKAGING },
+  { id: 6, name: 'In Cargo', value: PackageStatus.IN_CARGO },
+  { id: 7, name: 'Awaiting Customs', value: PackageStatus.AWAITING_CUSTOMS },
+  { id: 8, name: 'Ready Odd', value: PackageStatus.READY_ODD },
+  { id: 9, name: 'Heading Odd', value: PackageStatus.HEADING_ODD },
+  { id: 10, name: 'Arrived Odd', value: PackageStatus.ARRIVED_ODD },
+  { id: 11, name: 'Arrived Airport', value: PackageStatus.ARRIVED_AIRPORT },
+  { id: 12, name: 'Arrived Warehouse', value: PackageStatus.ARRIVED_WAREHOUSE },
+  { id: 13, name: 'Accepted Warehouse', value: PackageStatus.ACCEPTED_WAREHOUSE },
+  { id: 14, name: 'Passed Customs', value: PackageStatus.PASSED_CUSTOMS },
+  { id: 15, name: 'Transferred to Courier', value: PackageStatus.TRANSFERED_COURIER },
+  { id: 16, name: 'Delivered', value: PackageStatus.DELIVERED },
+  { id: 17, name: 'Rejected (Damaged)', value: PackageStatus.REJECT_DAMAGED },
+  { id: 18, name: 'Rejected by Client', value: PackageStatus.REJECTED_CLIENT },
+  { id: 19, name: 'Rejected (Other)', value: PackageStatus.REJECT_OTHER }
+];
+
+export const cargoStatusOptions = [
+  { id: 1, name: 'Formed', value: CargoStatus.FORMED },
+  { id: 2, name: 'Arrived at Sender Airport', value: CargoStatus.ARRIVED_AIRPORT_SENDER },
+  { id: 3, name: 'Accepted at Sender Airport', value: CargoStatus.ACCEPTED_AIRPORT_SENDER },
+  { id: 4, name: 'Arrived at Receiver Airport', value: CargoStatus.ARRIVED_AIRPORT_RECEIVER }
 ];
 
 export const mockDeliveryCategories = [
