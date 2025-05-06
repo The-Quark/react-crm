@@ -176,7 +176,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.CALL_CENTER',
     icon: 'satellite',
-    requiredPermissions: ['manage applications', 'manage orders'],
+    requiredPermissions: ['manage applications', 'manage orders', 'view cargo'],
     children: [
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
@@ -187,22 +187,34 @@ export const CuttedMenuSideBar: TMenuConfig = [
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         requiredPermissions: ['manage orders'],
         path: '/call-center/orders/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.CARGO',
+        requiredPermissions: ['manage cargo'],
+        path: '/call-center/cargo/list'
       }
     ]
   },
-  //"view applications"
+  //"view applications and view orders"
   {
     title: 'MENU.MEGAMENU.CALL_CENTER',
     icon: 'satellite',
-    requiredPermissions: ['view applications', 'view orders'],
+    requiredPermissions: ['view applications', 'view orders', 'view cargo'],
     children: [
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.APPLICATIONS',
+        requiredPermissions: ['view applications'],
         path: '/call-center/applications/list'
       },
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
+        requiredPermissions: ['view orders'],
         path: '/call-center/orders/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.CALL_CENTER.CARGO',
+        requiredPermissions: ['view cargo'],
+        path: '/call-center/cargo/list'
       }
     ]
   }

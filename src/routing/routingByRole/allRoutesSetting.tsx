@@ -118,6 +118,7 @@ import {
   GuidesAirlineRatesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
+import { CargoListPage, CargoStarterPage } from '@/pages/call-center/cargo';
 
 const AllRoutesSetting = () => {
   return (
@@ -158,6 +159,9 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/cargo/starter" element={<CargoStarterPage />} />
+        <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
+        <Route path="/call-center/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />

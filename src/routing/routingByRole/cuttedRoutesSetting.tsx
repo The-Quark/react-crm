@@ -37,6 +37,7 @@ import {
   OrdersListPage,
   OrdersStarterPage
 } from '@/pages/call-center';
+import { CargoListPage, CargoStarterPage } from '@/pages/call-center/cargo';
 
 interface Props {
   permissions: string[];
@@ -155,6 +156,21 @@ const routeConfig = [
   {
     permission: 'view orders',
     routes: [{ path: '/call-center/orders/list', element: <OrdersListPage /> }]
+  },
+  {
+    permission: 'manage cargo',
+    routes: [
+      { path: '/call-center/cargo/starter', element: <CargoStarterPage /> },
+      {
+        path: '/call-center/cargo/starter/:id',
+        element: <CargoStarterPage />
+      },
+      { path: '/call-center/cargo/list', element: <CargoListPage /> }
+    ]
+  },
+  {
+    permission: 'view cargo',
+    routes: [{ path: '/call-center/cargo/list', element: <CargoListPage /> }]
   }
 ];
 

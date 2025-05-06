@@ -26,6 +26,7 @@ import {
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { ApplicationsListPage, OrdersListPage } from '@/pages/call-center';
+import { CargoListPage } from '@/pages/call-center/cargo';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -50,6 +51,7 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/members" element={<MembersPage />} />
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
