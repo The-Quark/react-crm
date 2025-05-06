@@ -64,13 +64,15 @@ export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
         }
       },
       {
-        accessorFn: (row) => row,
-        id: 'orders',
-        header: ({ column }) => <DataGridColumnHeader title="Orders" column={column} />,
+        accessorFn: (row) => row.application_count,
+        id: 'applications',
+        header: ({ column }) => <DataGridColumnHeader title="Applications" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">mock</div>
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.application_count}
+            </div>
           </div>
         ),
         meta: {
@@ -79,13 +81,17 @@ export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
         }
       },
       {
-        accessorFn: (row) => row,
-        id: 'active orders',
-        header: ({ column }) => <DataGridColumnHeader title="Active Orders" column={column} />,
+        accessorFn: (row) => row.applications_packages_count,
+        id: 'applications packages',
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Applications packages" column={column} />
+        ),
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">mock</div>
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.applications_packages_count}
+            </div>
           </div>
         ),
         meta: {

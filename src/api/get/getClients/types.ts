@@ -36,6 +36,8 @@ export interface Client {
   created_at: string;
   updated_at: string;
   source: Source;
+  application_count: number;
+  applications_packages_count: number;
 }
 
 export interface IClientResponse {
