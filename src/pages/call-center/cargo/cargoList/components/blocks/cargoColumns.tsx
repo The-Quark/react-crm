@@ -34,54 +34,43 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
           headerClassName: 'w-0'
         }
       },
-      // {
-      //   accessorFn: (row) => row.hawb,
-      //   id: 'hawb',
-      //   header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
-      //   enableSorting: true,
-      //   cell: (info) => (
-      //     <div className="flex flex-col gap-0.5">
-      //       <div
-      //         className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
-      //         onClick={() => onRowClick(info.row.original.id)}
-      //       >
-      //         {info.row.original.hawb}
-      //       </div>
-      //     </div>
-      //   ),
-      //   meta: {
-      //     headerClassName: 'min-w-[200px]',
-      //     cellClassName: 'text-gray-700 font-normal'
-      //   }
-      // },
-      // {
-      //   accessorFn: (row) => {
-      //     const client = row.client;
-      //     return client.type === 'individual'
-      //       ? `${client.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
-      //       : client.company_name || '';
-      //   },
-      //   id: 'client full name',
-      //   header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
-      //   enableSorting: true,
-      //   cell: (info) => {
-      //     const client = info.row.original.client;
-      //     const fullName =
-      //       client.type === 'individual'
-      //         ? `${client.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
-      //         : client.company_name;
-      //
-      //     return (
-      //       <div className="flex flex-col gap-0.5">
-      //         <div className="leading-none text-gray-800 font-normal">{fullName}</div>
-      //       </div>
-      //     );
-      //   },
-      //   meta: {
-      //     headerClassName: 'min-w-[100px]',
-      //     cellClassName: 'text-gray-700 font-normal'
-      //   }
-      // },
+      {
+        accessorFn: (row) => row.code,
+        id: 'code',
+        header: ({ column }) => <DataGridColumnHeader title="MAWB" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div
+              className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+              onClick={() => onRowClick(info.row.original.id)}
+            >
+              {info.row.original.code}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[200px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.packages[0].hawb,
+        id: 'hawb',
+        header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.packages[0].hawb}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
       {
         accessorFn: (row) => row.status,
         id: 'status',
@@ -97,22 +86,6 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
           cellClassName: 'text-gray-700 font-normal'
         }
       },
-      // {
-      //   accessorFn: (row) => row.order.delivery_category,
-      //   id: 'delivery category',
-      //   header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
-      //   enableSorting: true,
-      //   cell: (info) => (
-      //     <div className="flex items-center gap-1.5">
-      //       <span className="leading-none text-gray-800 font-normal">
-      //         {info.row.original.order.delivery_category}
-      //       </span>
-      //     </div>
-      //   ),
-      //   meta: {
-      //     headerClassName: 'min-w-[100px]'
-      //   }
-      // },
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',

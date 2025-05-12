@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { mockDeliveryCategories, cargoStatusOptions } from '@/lib/mocks.ts';
+import { cargoStatusOptions } from '@/lib/mocks.ts';
 
 export const CargoToolbar: FC = () => {
   const { table } = useDataGrid();
@@ -20,25 +20,6 @@ export const CargoToolbar: FC = () => {
         <a href="/call-center/cargo/starter" className="btn btn-sm btn-primary">
           New Cargo
         </a>
-        <Select
-          value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('delivery category')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
-          <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            {mockDeliveryCategories.map((category) => (
-              <SelectItem key={category.value} value={category.value}>
-                {category.name}
-              </SelectItem>
-            ))}
-            W
-          </SelectContent>
-        </Select>
         <Select
           value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {

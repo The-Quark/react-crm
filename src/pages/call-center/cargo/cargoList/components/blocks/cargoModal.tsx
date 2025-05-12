@@ -44,139 +44,66 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
           {cargo && (
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
-                {/* Sender Block */}
-                {/*<div className="border-b pb-4">*/}
-                {/*  <h4 className="text-lg font-semibold mb-3">Sender Information</h4>*/}
-                {/*  <div className="grid gap-2.5">*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Full Name</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.sender.full_name || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Phone</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.sender.phone || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Address</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {`${order.sender.street || ''}, ${order.sender.house || ''}, Apt ${*/}
-                {/*          order.sender.apartment || ''*/}
-                {/*        }, City ID: ${order.sender.city_id || '-'}`}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Notes</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.sender.notes || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
-
-                {/* Receiver Block */}
-                {/*<div className="border-b pb-4">*/}
-                {/*  <h4 className="text-lg font-semibold mb-3">Receiver Information</h4>*/}
-                {/*  <div className="grid gap-2.5">*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Full Name</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.receiver.full_name || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Phone</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.receiver.phone || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex
-
-                -wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Address</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {`${order.receiver.street || ''}, ${order.receiver.house || ''}, Apt ${*/}
-                {/*          order.receiver.apartment || ''*/}
-                {/*        }, City ID: ${order.receiver.city_id || '-'}`}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Notes</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.receiver.notes || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
-
-                {/* Application Block */}
-                {/*<div className="border-b pb-4">*/}
-                {/*  <h4 className="text-lg font-semibold mb-3">Application Information</h4>*/}
-                {/*  <div className="grid gap-2.5">*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Full Name</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {order.application.full_name || '-'}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Phone</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.application.phone || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Status</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.application.status || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Created At</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {order.application.created_at*/}
-                {/*          ? new Date(order.application.created_at).toLocaleDateString('ru-RU')*/}
-                {/*          : '-'}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
-
-                {/* Order Block */}
-                {/*<div>*/}
-                {/*  <h4 className="text-lg font-semibold mb-3">Order Information</h4>*/}
-                {/*  <div className="grid gap-2.5">*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Order Code</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.order_code || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Delivery Type</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.delivery_type.name || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Package Type</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.package_type.code || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Status</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.status || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Weight</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.weight || '-'} kg</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Dimensions</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {`${order.width || '-'} x ${order.length || '-'} x ${order.volume || '-'} cm`}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Price</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.price || '-'} USD</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Created At</label>*/}
-                {/*      <div className="flex columns-1 w-full">*/}
-                {/*        {order.created_at*/}
-                {/*          ? new Date(order.created_at).toLocaleDateString('ru-RU')*/}
-                {/*          : '-'}*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">*/}
-                {/*      <label className="form-label max-w-56 text-gray-600">Delivery Category</label>*/}
-                {/*      <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>*/}
-                {/*    </div>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
+                <div className="border-b pb-4">
+                  <h4 className="text-lg font-semibold mb-3">Base</h4>
+                  <div className="grid gap-2.5">
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Code</label>
+                      <div className="flex columns-1 w-full">{cargo.code || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Status</label>
+                      <div className="flex columns-1 w-full">{cargo.status || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <div className="flex columns-1 w-full">{cargo.airline || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <div className="flex columns-1 w-full">{cargo.departure_date || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <div className="flex columns-1 w-full">{cargo.arrival_date || '-'}</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="border-b pb-4">
+                  <h4 className="text-lg font-semibold mb-3">Company</h4>
+                  <div className="grid gap-2.5">
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Name</label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.company.company_name || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">TimeZone</label>
+                      <div className="flex columns-1 w-full">{cargo.company.timezone || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Currency</label>
+                      <div className="flex columns-1 w-full">{cargo.company.currency || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Language</label>
+                      <div className="flex columns-1 w-full">{cargo.company.language || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Legal address</label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.company.legal_address || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Warehouse address</label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.company.warehouse_address || '-'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
