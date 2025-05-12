@@ -1,11 +1,19 @@
-import { getClients, getOrders, getPackages, putPackage, postPackage } from '@/api';
+import {
+  getAirlines,
+  getGlobalParameters,
+  getCargo,
+  postCargo,
+  putCargo,
+  getPackages
+} from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   SharedAutocomplete,
+  SharedDateTimePicker,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -13,23 +21,28 @@ import {
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
-import { PackageStatus } from '@/api/get/getPackages/types.ts';
+import { ICargoPostFormValues } from '@/api/post/postCargo/types.ts';
+import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { cargoStatusOptions } from '@/lib/mocks.ts';
+import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
+import { Textarea } from '@/components/ui/textarea.tsx';
 
 export const formSchema = Yup.object().shape({
-  client_id: Yup.string().required('Client is required'),
-  order_id: Yup.string().required('Order is required'),
-  weight: Yup.number()
-    .min(0, 'Weight cannot be negative')
-    .test('is-two-decimal', 'The weight field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return true;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    })
-    .optional(),
-  dimensions: Yup.string().optional(),
-  status: Yup.string().optional()
+  code: Yup.string()
+    .required('Code is required')
+    .matches(/^[0-9]{3}-[0-9]{8}$/, 'Code must be in format XXX-XXXXXXXX'),
+  airline: Yup.string().required('Airline is required'),
+  company_id: Yup.string().required('Company is required'),
+  packages: Yup.array()
+    .of(Yup.string().required())
+    .min(1, 'At least one package must be selected')
+    .required('Packages is required'),
+  departure_date: Yup.string().required('Departure date is required'),
+  arrival_date: Yup.string().required('Arrival date is required'),
+  from_airport: Yup.string().required('From airport date is required'),
+  to_airport: Yup.string().required('To airport is required'),
+  is_international: Yup.boolean().required('Is international is required'),
+  notes: Yup.string().required('Is notes is required')
 });
 
 export const CargoStarterContent = () => {
@@ -38,50 +51,88 @@ export const CargoStarterContent = () => {
   const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchOrderTerm, setSearchOrderTerm] = useState('');
+  const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
+  const [searchCompanyOrderTerm, setSearchCompanyOrderTerm] = useState('');
 
   const {
-    data: ordersData,
-    isLoading: ordersLoading,
-    isError: ordersIsError,
-    error: ordersError
+    data: airlinesData,
+    isLoading: airlinesLoading,
+    isError: airlinesIsError,
+    error: airlinesError
   } = useQuery({
-    queryKey: ['packageOrders'],
-    queryFn: () => getOrders(),
+    queryKey: ['cargoAirlines'],
+    queryFn: () => getAirlines(),
     staleTime: 60 * 60 * 1000
   });
 
   const {
-    data: clientsData,
-    isLoading: clientsLoading,
-    isError: clientsIsError,
-    error: clientsError
+    data: companiesData,
+    isLoading: companiesLoading,
+    isError: companiesIsError,
+    error: companiesError
   } = useQuery({
-    queryKey: ['packageClients'],
-    queryFn: () => getClients(),
+    queryKey: ['cargoCompanies'],
+    queryFn: () => getGlobalParameters(),
     staleTime: 60 * 60 * 1000
   });
 
   const {
-    data: packageData,
-    isLoading: packageLoading,
-    isError: packageIsError,
-    error: packageError
+    data: packagesData,
+    isLoading: packagesLoading,
+    isError: packagesIsError,
+    error: packagesError
   } = useQuery({
-    queryKey: ['package', id],
-    queryFn: () => getPackages(id ? parseInt(id) : undefined),
+    queryKey: ['cargoPackages'],
+    queryFn: () => getPackages(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: cargoData,
+    isLoading: cargoLoading,
+    isError: cargoIsError,
+    error: cargoError
+  } = useQuery({
+    queryKey: ['cargo', id],
+    queryFn: () => getCargo(id ? parseInt(id) : undefined),
     enabled: isEditMode
   });
 
-  const initialValues: IPackageFormValues & { status?: PackageStatus } = {
-    client_id: '',
-    order_id: '',
-    weight: '',
-    dimensions: '',
-    ...(isEditMode && { status: 'ready_send' as unknown as PackageStatus })
-  };
+  const packageOptions = useMemo(() => {
+    const allPackages = [
+      ...(packagesData?.result || []),
+      ...(isEditMode && cargoData ? cargoData.result[0].packages : [])
+    ];
 
+    const uniquePackages = allPackages.reduce(
+      (acc: typeof allPackages, current: (typeof allPackages)[number]) => {
+        if (!acc.find((item) => item.id === current.id)) {
+          acc.push(current);
+        }
+        return acc;
+      },
+      [] as typeof allPackages
+    );
+
+    return uniquePackages.map((pack) => ({
+      id: pack.id.toString(),
+      name: pack.hawb
+    }));
+  }, [packagesData, cargoData, isEditMode]);
+
+  const initialValues: ICargoPostFormValues & { status?: string } = {
+    airline: '',
+    arrival_date: '',
+    code: '',
+    notes: '',
+    from_airport: '',
+    to_airport: '',
+    departure_date: '',
+    packages: [],
+    is_international: false,
+    company_id: '',
+    status: 'formed'
+  };
   const formik = useFormik({
     initialValues,
     validationSchema: formSchema,
@@ -91,19 +142,19 @@ export const CargoStarterContent = () => {
       try {
         if (isEditMode && id) {
           const { status, ...putData } = values;
-          await putPackage(Number(id), { ...putData, status: status as PackageStatus });
-          queryClient.invalidateQueries({ queryKey: ['package'] });
-          navigate('/call-center/packages/list');
+          await putCargo(Number(id), { ...putData, status: status as CargoStatus });
+          queryClient.invalidateQueries({ queryKey: ['cargo'] });
+          navigate('/call-center/cargo/list');
           resetForm();
-          setSearchTerm('');
-          setSearchOrderTerm('');
+          setSearchAirlineTerm('');
+          setSearchCompanyOrderTerm('');
         } else {
-          await postPackage(values);
-          queryClient.invalidateQueries({ queryKey: ['package'] });
-          navigate('/call-center/packages/list');
+          await postCargo(values);
+          queryClient.invalidateQueries({ queryKey: ['cargo'] });
+          navigate('/call-center/cargo/list');
           resetForm();
-          setSearchTerm('');
-          setSearchOrderTerm('');
+          setSearchAirlineTerm('');
+          setSearchCompanyOrderTerm('');
         }
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -116,34 +167,46 @@ export const CargoStarterContent = () => {
 
   useEffect(() => {
     formik.resetForm();
-    if (packageData && isEditMode) {
+    if (cargoData && isEditMode) {
+      const packageIds = cargoData.result[0].packages.map((pkg) => pkg.id.toString());
+
       formik.setValues(
         {
-          client_id: packageData.result[0].client_id ?? '',
-          order_id: packageData.result[0].order_id ?? '',
-          weight: parseFloat(packageData.result[0].weight) ?? 0,
-          dimensions: packageData.result[0].dimensions ?? '',
-          status: packageData.result[0].status as unknown as PackageStatus
+          arrival_date: cargoData.result[0].arrival_date,
+          company_id: cargoData.result[0].company_id.toString(),
+          departure_date: cargoData.result[0].departure_date,
+          from_airport: cargoData.result[0].from_airport,
+          is_international: cargoData.result[0].is_international,
+          notes: cargoData.result[0].notes,
+          packages: packageIds, // Use the transformed package IDs
+          to_airport: cargoData.result[0].to_airport,
+          code: cargoData.result[0].code,
+          airline: cargoData.result[0].airline.toString(),
+          status: cargoData.result[0].status as unknown as CargoStatus
         },
         false
       );
     }
-  }, [isEditMode, packageData]);
+  }, [isEditMode, cargoData]);
 
-  if (ordersLoading || clientsLoading || (isEditMode && packageLoading)) {
+  if (airlinesLoading || companiesLoading || packagesLoading || (isEditMode && cargoLoading)) {
     return <SharedLoading />;
   }
 
-  if (ordersIsError) {
-    return <SharedError error={ordersError} />;
+  if (airlinesIsError) {
+    return <SharedError error={airlinesError} />;
   }
 
-  if (clientsIsError) {
-    return <SharedError error={clientsError} />;
+  if (companiesIsError) {
+    return <SharedError error={companiesError} />;
   }
 
-  if (isEditMode && packageIsError) {
-    return <SharedError error={packageError} />;
+  if (packagesIsError) {
+    return <SharedError error={packagesError} />;
+  }
+
+  if (isEditMode && cargoIsError) {
+    return <SharedError error={cargoError} />;
   }
 
   return (
@@ -154,46 +217,66 @@ export const CargoStarterContent = () => {
         </div>
 
         <div className="card-body grid gap-5">
+          <SharedInput name="code" label="Code" formik={formik} />
+
           <SharedAutocomplete
-            label="Client"
-            value={formik.values.client_id ?? ''}
+            label="Company"
+            value={formik.values.company_id ?? ''}
             options={
-              clientsData?.result?.map((app) => ({
+              companiesData?.result?.map((app) => ({
                 id: app.id,
-                name: app.first_name || app.company_name
+                name: app.company_name
               })) ?? []
             }
-            placeholder="Select client"
-            searchPlaceholder="Search client"
+            placeholder="Select company"
+            searchPlaceholder="Search company"
             onChange={(val) => {
-              formik.setFieldValue('client_id', val);
+              formik.setFieldValue('company_id', val);
             }}
-            error={formik.errors.client_id as string}
-            touched={formik.touched.client_id}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
+            error={formik.errors.company_id as string}
+            touched={formik.touched.company_id}
+            searchTerm={searchCompanyOrderTerm}
+            onSearchTermChange={setSearchCompanyOrderTerm}
           />
           <SharedAutocomplete
-            label="Order"
-            value={formik.values.order_id ?? ''}
+            label="Airline"
+            value={formik.values.airline ?? ''}
             options={
-              ordersData?.result?.map((app) => ({
+              airlinesData?.result?.map((app) => ({
                 id: app.id,
-                name: String(app.order_code || app.id)
+                name: app.name
               })) ?? []
             }
-            placeholder="Select order"
-            searchPlaceholder="Search order"
+            placeholder="Select airline"
+            searchPlaceholder="Search airline"
             onChange={(val) => {
-              formik.setFieldValue('order_id', val);
+              formik.setFieldValue('airline', val);
             }}
-            error={formik.errors.order_id as string}
-            touched={formik.touched.order_id}
-            searchTerm={searchOrderTerm}
-            onSearchTermChange={setSearchOrderTerm}
+            error={formik.errors.airline as string}
+            touched={formik.touched.airline}
+            searchTerm={searchAirlineTerm}
+            onSearchTermChange={setSearchAirlineTerm}
           />
 
-          <SharedInput name="weight" label="Weight" formik={formik} type="number" />
+          <SharedDateTimePicker name="departure_date" label="Departure date" formik={formik} />
+
+          <SharedInput name="from_airport" label="From Airport" formik={formik} />
+
+          <SharedDateTimePicker name="arrival_date" label="Arrival date" formik={formik} />
+
+          <SharedInput name="to_airport" label="To Airport" formik={formik} />
+
+          <SharedMultipleSelect
+            label="Packages"
+            value={formik.values.packages}
+            options={packageOptions}
+            onChange={(values) => formik.setFieldValue('packages', values)}
+            placeholder="Select packages..."
+            searchPlaceholder="Search packages..."
+            loading={packagesLoading}
+            error={formik.errors.packages as string}
+            touched={formik.touched.packages}
+          />
 
           <SharedSelect
             name="status"
@@ -204,6 +287,18 @@ export const CargoStarterContent = () => {
               value: status.value
             }))}
           />
+
+          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label className="form-label max-w-56">Notes</label>
+            <div className="flex columns-1 w-full flex-wrap">
+              <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
+              {formik.touched.notes && formik.errors.notes && (
+                <span role="alert" className="text-danger text-xs mt-1">
+                  {formik.errors.notes}
+                </span>
+              )}
+            </div>
+          </div>
 
           <div className="flex justify-end">
             <button

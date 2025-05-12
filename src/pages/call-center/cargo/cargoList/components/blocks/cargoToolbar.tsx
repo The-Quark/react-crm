@@ -46,10 +46,10 @@ export const CargoToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search client"
+            placeholder="Search mawb"
             className="input input-sm ps-8"
-            value={(table.getColumn('client full name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('client full name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('code')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('code')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>
