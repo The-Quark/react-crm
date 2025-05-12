@@ -44,4 +44,6 @@ export const CLIENT_URL = `${api}/client/manage`;
 
 export const PACKAGE_URL = `${api}/package/manage`;
 
+export const PACKAGE_UPLOAD_URL = `${api}/package/upload`;
+
 export const CARGO_URL = `${api}/cargo/manage`;
