@@ -14,7 +14,7 @@ export const CargoToolbar: FC = () => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Orders</h3>
+      <h3 className="card-title">Cargo</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {/*search by id search by client full name select status date created time*/}
         <a href="/call-center/cargo/starter" className="btn btn-sm btn-primary">
@@ -36,6 +36,7 @@ export const CargoToolbar: FC = () => {
                 {category.name}
               </SelectItem>
             ))}
+            W
           </SelectContent>
         </Select>
         <Select

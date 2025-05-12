@@ -1,17 +1,16 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { getClients, getOrders, getPackages, putPackage, postPackage } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
@@ -195,34 +194,20 @@ export const PackageStarterContent = () => {
           />
 
           <SharedInput name="weight" label="Weight" formik={formik} type="number" />
-          <SharedInput name="dimensions" label="Dimensions" formik={formik} />
 
           {isEditMode && (
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Status</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={(formik.values.status as unknown as string) || 'new'}
-                  onValueChange={(value) => formik.setFieldValue('status', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {packageStatusOptions.map((status) => (
-                      <SelectItem key={status.id} value={status.value}>
-                        {status.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.status && formik.errors.status && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.status}
-                  </span>
-                )}
-              </div>
-            </div>
+            <>
+              <SharedInput name="dimensions" label="Dimensions" formik={formik} />
+              <SharedSelect
+                name="status"
+                label="Status"
+                formik={formik}
+                options={packageStatusOptions.map((status) => ({
+                  label: status.name,
+                  value: status.value
+                }))}
+              />
+            </>
           )}
 
           <div className="flex justify-end">
