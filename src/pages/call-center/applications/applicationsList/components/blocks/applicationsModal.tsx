@@ -10,6 +10,7 @@ import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getApplications } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -22,6 +23,13 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
     queryKey: ['application', id],
     queryFn: () => (id !== null ? getApplications(id) : Promise.reject('Invalid ID'))
   });
+
+  const handleCreateOrder = (applicationId: number | null) => {
+    if (applicationId !== null) {
+      localStorage.setItem('applicationId', applicationId.toString());
+      window.location.href = '/call-center/orders/starter';
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
@@ -88,6 +96,15 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
+        <DialogActions>
+          <button
+            className="btn btn-md btn-primary m-3"
+            onClick={() => handleCreateOrder(id)}
+            disabled={id === null}
+          >
+            Create Order
+          </button>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );
