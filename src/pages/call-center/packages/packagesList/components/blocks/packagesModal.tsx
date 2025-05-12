@@ -10,6 +10,7 @@ import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getPackages } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -148,6 +149,14 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
+        <DialogActions>
+          <a
+            className="btn btn-md btn-light mr-3 mb-3"
+            href={`/call-center/packages/starter/${id}`}
+          >
+            Update Package
+          </a>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );

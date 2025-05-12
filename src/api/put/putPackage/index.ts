@@ -7,6 +7,7 @@ import { cleanValues } from '@/lib/helpers.ts';
 export interface IPackagePutFormValues extends IPackageFormValues {
   id: number;
   status: PackageStatus;
+  cargo_id: number | string;
 }
 
 export const putPackage = async (

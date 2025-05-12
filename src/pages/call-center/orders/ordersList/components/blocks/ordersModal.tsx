@@ -10,6 +10,7 @@ import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getOrders } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -179,6 +180,11 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
+        <DialogActions>
+          <a className="btn btn-md btn-light mr-3 mb-3" href={`/call-center/orders/starter/${id}`}>
+            Update Order
+          </a>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );

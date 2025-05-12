@@ -1,4 +1,4 @@
-import { getClients, getOrders, getPackages, putPackage, postPackage } from '@/api';
+import { getClients, getOrders, getPackages, putPackage, postPackage, getCargo } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -29,7 +29,8 @@ export const formSchema = Yup.object().shape({
     })
     .optional(),
   dimensions: Yup.string().optional(),
-  status: Yup.string().optional()
+  status: Yup.string().optional(),
+  cargo_id: Yup.string().optional()
 });
 
 export const PackageStarterContent = () => {
@@ -40,6 +41,7 @@ export const PackageStarterContent = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
+  const [searchCargoTerm, setSearchCargoTerm] = useState('');
 
   const {
     data: ordersData,
@@ -64,6 +66,18 @@ export const PackageStarterContent = () => {
   });
 
   const {
+    data: cargoData,
+    isLoading: cargoLoading,
+    isError: cargoIsError,
+    error: cargoError
+  } = useQuery({
+    queryKey: ['packageCargo', id],
+    queryFn: () => getCargo(id ? parseInt(id) : undefined),
+    staleTime: 60 * 60 * 1000,
+    enabled: isEditMode
+  });
+
+  const {
     data: packageData,
     isLoading: packageLoading,
     isError: packageIsError,
@@ -74,12 +88,12 @@ export const PackageStarterContent = () => {
     enabled: isEditMode
   });
 
-  const initialValues: IPackageFormValues & { status?: PackageStatus } = {
+  const initialValues: IPackageFormValues & { status?: PackageStatus; cargo_id?: string } = {
     client_id: '',
     order_id: '',
     weight: '',
     dimensions: '',
-    ...(isEditMode && { status: 'ready_send' as unknown as PackageStatus })
+    ...(isEditMode && { status: 'ready_send' as unknown as PackageStatus, cargo_id: '' })
   };
 
   const formik = useFormik({
@@ -90,13 +104,20 @@ export const PackageStarterContent = () => {
       setLoading(true);
       try {
         if (isEditMode && id) {
-          const { status, ...putData } = values;
-          await putPackage(Number(id), { ...putData, status: status as PackageStatus });
+          const { status, cargo_id, ...putData } = values;
+          await putPackage(Number(id), {
+            ...putData,
+            status: status as PackageStatus,
+            cargo_id: cargo_id !== undefined ? String(cargo_id) : '',
+            client_id: Number(putData.client_id),
+            order_id: Number(putData.order_id)
+          });
           queryClient.invalidateQueries({ queryKey: ['package'] });
           navigate('/call-center/packages/list');
           resetForm();
           setSearchTerm('');
           setSearchOrderTerm('');
+          setSearchCargoTerm('');
         } else {
           await postPackage(values);
           queryClient.invalidateQueries({ queryKey: ['package'] });
@@ -104,6 +125,7 @@ export const PackageStarterContent = () => {
           resetForm();
           setSearchTerm('');
           setSearchOrderTerm('');
+          setSearchCargoTerm('');
         }
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -123,14 +145,15 @@ export const PackageStarterContent = () => {
           order_id: packageData.result[0].order_id ?? '',
           weight: parseFloat(packageData.result[0].weight) ?? 0,
           dimensions: packageData.result[0].dimensions ?? '',
-          status: packageData.result[0].status as unknown as PackageStatus
+          status: packageData.result[0].status as unknown as PackageStatus,
+          cargo_id: packageData.result[0].cargo_id?.toString() ?? ''
         },
         false
       );
     }
   }, [isEditMode, packageData]);
 
-  if (ordersLoading || clientsLoading || (isEditMode && packageLoading)) {
+  if (ordersLoading || clientsLoading || (isEditMode && packageLoading && cargoLoading)) {
     return <SharedLoading />;
   }
 
@@ -144,6 +167,10 @@ export const PackageStarterContent = () => {
 
   if (isEditMode && packageIsError) {
     return <SharedError error={packageError} />;
+  }
+
+  if (isEditMode && cargoIsError) {
+    return <SharedError error={cargoError} />;
   }
 
   return (
@@ -198,6 +225,25 @@ export const PackageStarterContent = () => {
           {isEditMode && (
             <>
               <SharedInput name="dimensions" label="Dimensions" formik={formik} />
+              <SharedAutocomplete
+                label="Cargo"
+                value={formik.values.cargo_id ?? ''}
+                options={
+                  cargoData?.result?.map((app) => ({
+                    id: app.id,
+                    name: app.code
+                  })) ?? []
+                }
+                placeholder="Select cargo"
+                searchPlaceholder="Search cargo"
+                onChange={(val) => {
+                  formik.setFieldValue('cargo_id', val);
+                }}
+                error={formik.errors.cargo_id as string}
+                touched={formik.touched.cargo_id}
+                searchTerm={searchCargoTerm}
+                onSearchTermChange={setSearchCargoTerm}
+              />
               <SharedSelect
                 name="status"
                 label="Status"

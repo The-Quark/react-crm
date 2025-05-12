@@ -97,6 +97,9 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
           )}
         </DialogBody>
         <DialogActions>
+          <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
+            Update Application
+          </a>
           <button
             className="btn btn-md btn-primary m-3"
             onClick={() => handleCreateOrder(id)}

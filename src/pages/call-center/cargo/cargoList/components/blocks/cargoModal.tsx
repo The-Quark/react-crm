@@ -10,6 +10,7 @@ import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getCargo } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -108,6 +109,11 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
+        <DialogActions>
+          <a className="btn btn-md btn-light mr-3 mb-3" href={`/call-center/cargo/starter/${id}`}>
+            Update Cargo
+          </a>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );
