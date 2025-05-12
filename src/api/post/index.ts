@@ -15,3 +15,4 @@ export * from './postOrder';
 export * from './postAirlineRate';
 export * from './postClient';
 export * from './postPackage';
+export * from './postCargo';

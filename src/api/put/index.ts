@@ -16,3 +16,4 @@ export * from './putAirlineRate';
 export * from './putOrder';
 export * from './putClient';
 export * from './putPackage';
+export * from './putCargo';
