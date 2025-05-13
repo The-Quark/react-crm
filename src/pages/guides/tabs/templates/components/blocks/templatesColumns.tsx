@@ -54,6 +54,22 @@ export const useTemplatesColumns = ({
         }
       },
       {
+        accessorFn: (row) => row.language[0].title,
+        id: 'title',
+        header: ({ column }) => <DataGridColumnHeader title="Title" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.language[0].title}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
         accessorFn: (row) => row.type,
         id: 'type',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
@@ -95,7 +111,12 @@ export const useTemplatesColumns = ({
             invalidateRequestKey="guidesTemplates"
             deleteRequest={deleteTemplate}
             renderModal={({ open, onOpenChange }) => (
-              <TemplatesModal open={open} onOpenChange={onOpenChange} id={info.row.original.id} />
+              <TemplatesModal
+                open={open}
+                onOpenChange={onOpenChange}
+                id={info.row.original.id}
+                selectedLanguage={selectedLanguage}
+              />
             )}
           />
         ),

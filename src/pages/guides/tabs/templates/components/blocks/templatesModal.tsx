@@ -19,21 +19,25 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { ITemplatesResponse } from '@/api/get/getTemplates/types.ts';
+import { ITemplatesResponse, TemplateType } from '@/api/get/getTemplates/types.ts';
 import { ITemplatesFormValues } from '@/api/post/postTemplate/types.ts';
 import { templateTypesOptions } from '@/lib/mocks.ts';
+import { Textarea } from '@/components/ui/textarea.tsx';
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   id?: number;
+  selectedLanguage: string;
 }
 
 const validateSchema = Yup.object({
   company_id: Yup.string().required('Company is required'),
   language_code: Yup.string().required('Language code is required'),
-  code: Yup.string().required('Code is required'),
-  type: Yup.string().required('Type is required'),
+  code: Yup.string()
+    .matches(/^[A-Za-z0-9_]+$/, 'Code can only contain letters, numbers, and underscores')
+    .required('Code is required'),
+  type: Yup.string().oneOf(Object.values(TemplateType), 'Invalid template type'),
   title: Yup.string().required('Title is required'),
   subject: Yup.string().required('Subject is required'),
   content: Yup.string().required('Content is required')
@@ -47,26 +51,26 @@ const getInitialValues = (
     const data = templaTtesData.result[0];
     return {
       company_id: String(data.company_id) || '',
-      language_code: String(data.language) || '',
+      language_code: String(data.language[0].crm_language.code) || '',
       code: data.code || '',
       type: data.type || '',
-      content: data.type || '',
-      subject: data.type || '',
-      title: data.type || ''
+      content: data.language[0].content || '',
+      subject: data.language[0].subject || '',
+      title: data.language[0].title || ''
     };
   }
   return {
     company_id: '',
     language_code: '',
     code: '',
-    type: '',
+    type: TemplateType.EMAIL,
     content: '',
     subject: '',
     title: ''
   };
 };
 
-export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
+export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLanguage }) => {
   const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
 
@@ -79,7 +83,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: templateError
   } = useQuery({
     queryKey: ['formTemplate', id],
-    queryFn: () => getTemplates(Number(id)),
+    queryFn: () => getTemplates({ id: Number(id), language_code: selectedLanguage }),
     enabled: !!id && open
   });
 
@@ -208,7 +212,18 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
               <SharedInput name="code" label="Code" formik={formik} />
               <SharedInput name="title" label="Title" formik={formik} />
               <SharedInput name="subject" label="Subject" formik={formik} />
-              <SharedInput name="content" label="Contrent" formik={formik} />
+
+              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                <label className="form-label max-w-56">Content</label>
+                <div className="flex columns-1 w-full flex-wrap">
+                  <Textarea rows={4} placeholder="Content" {...formik.getFieldProps('content')} />
+                  {formik.touched.content && formik.errors.content && (
+                    <span role="alert" className="text-danger text-xs mt-1">
+                      {formik.errors.content}
+                    </span>
+                  )}
+                </div>
+              </div>
 
               <div className="flex justify-end">
                 <button

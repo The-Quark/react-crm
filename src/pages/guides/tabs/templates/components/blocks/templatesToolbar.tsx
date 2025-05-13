@@ -71,7 +71,11 @@ export const TemplatesToolbar: FC<Props> = ({ currentLanguage, onLanguageChange,
           />
         </div>
       </div>
-      <TemplatesModal open={modalOpen} onOpenChange={handleClose} />
+      <TemplatesModal
+        open={modalOpen}
+        onOpenChange={handleClose}
+        selectedLanguage={currentLanguage}
+      />
     </div>
   );
 };
