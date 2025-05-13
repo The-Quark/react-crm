@@ -21,7 +21,6 @@ const OrderCreationContext = createContext<OrderCreationContextType>({
 });
 
 export const OrderCreationProvider = ({ children }: { children: React.ReactNode }) => {
-  // Load initial from localStorage
   const [senderId, setSenderIdState] = useState<number | null>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('senderId');
@@ -46,7 +45,6 @@ export const OrderCreationProvider = ({ children }: { children: React.ReactNode 
     return null;
   });
 
-  // Sync to localStorage when these change
   useEffect(() => {
     if (senderId !== null) localStorage.setItem('senderId', String(senderId));
     else localStorage.removeItem('senderId');

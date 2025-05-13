@@ -1,5 +1,5 @@
 export interface IOrderFormValues {
-  application_id: number | string;
+  application_id?: number | string;
   sender_id: number;
   receiver_id: number;
   delivery_type: number | string;

@@ -31,9 +31,7 @@ interface Props {
 }
 
 const formSchema = Yup.object().shape({
-  application_id: Yup.number()
-    .typeError('Application is required')
-    .required('Application is required'),
+  application_id: Yup.number().optional(),
   delivery_type: Yup.number()
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
@@ -102,7 +100,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
   const formik = useFormik({
     initialValues: {
       id: orderData?.id || 0,
-      status: orderData?.status || ('package_awaiting' as const),
+      status: orderData?.status || undefined,
       application_id: applicationId || '',
       sender_id: senderId || 0,
       receiver_id: receiverId || 0,
