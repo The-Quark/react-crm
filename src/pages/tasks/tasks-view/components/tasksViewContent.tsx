@@ -8,7 +8,8 @@ const TasksViewContent = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['task-id', id],
-    queryFn: () => getTask(Number(id))
+    queryFn: () => getTask(Number(id)),
+    staleTime: 1000 * 60 * 60
   });
 
   if (isLoading) {

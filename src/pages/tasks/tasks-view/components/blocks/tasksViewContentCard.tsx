@@ -1,21 +1,129 @@
 import { FC } from 'react';
 import { Task } from '@/api/get/getTask/types.ts';
+import { formatDate } from '@/lib/utils';
 
 interface IGeneralSettingsProps {
   task: Task | null;
 }
 
 export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
+  if (!task) return <div className="card bg-card text-card-foreground">No task data available</div>;
+
+  const renderUserInfo = (user: { name: string; email: string; phone: string }) => (
+    <div className="bg-muted p-3 rounded-md">
+      <p className="font-medium">{user.name}</p>
+      <p className="text-sm text-muted-foreground">{user.email}</p>
+      <p className="text-sm text-muted-foreground">{user.phone}</p>
+    </div>
+  );
+
   return (
-    <div className="card pb-2.5">
-      <div className="card-header" id="general_settings">
-        <h3 className="card-title">Task</h3>
+    <div className="card bg-card text-card-foreground pb-4 shadow-sm">
+      <div className="card-header p-4 border-b" id="general_settings">
+        <h3 className="card-title text-lg font-semibold">Task Details</h3>
       </div>
-      <div className="card-body grid gap-5">
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">Company Name</label>
-          <div className="flex columns-1 w-full flex-wrap">{task?.title}</div>
+      <div className="card-body p-4 space-y-6">
+        {/* Основная информация */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Title:</label>
+              <div className="font-medium">{task.title}</div>
+            </div>
+
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Status:</label>
+              <div className="capitalize">{task.status.replace('_', ' ')}</div>
+            </div>
+
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Priority:</label>
+              <div className="capitalize">{task.priority}</div>
+            </div>
+
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Type:</label>
+              <div className="capitalize">{task.type}</div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Due Date:</label>
+              <div>{formatDate(task.due_date)}</div>
+            </div>
+
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Created:</label>
+              <div>{formatDate(task.created_at)}</div>
+            </div>
+
+            <div className="flex items-baseline gap-2.5">
+              <label className="text-sm font-medium min-w-32">Last Updated:</label>
+              <div>{formatDate(task.updated_at)}</div>
+            </div>
+          </div>
         </div>
+
+        {/* Описание */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Description:</label>
+          <div className="bg-muted p-3 rounded-md">
+            {task.description || 'No description provided'}
+          </div>
+        </div>
+
+        {/* Назначение */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Assigned By:</label>
+            {renderUserInfo(task.assigned_by)}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Assigned To:</label>
+            {renderUserInfo(task.assigned_to)}
+          </div>
+        </div>
+
+        {/* Связанные объекты */}
+        {task.order && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Related Order:</label>
+            <div className="bg-muted p-3 rounded-md space-y-1">
+              <p className="font-medium">{task.order.order_code}</p>
+              <p>Status: {task.order.status}</p>
+              <p>Delivery: {task.order.delivery_category}</p>
+              <p>Created: {formatDate(task.order.created_at)}</p>
+            </div>
+          </div>
+        )}
+
+        {task.client && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Related Client:</label>
+            <div className="bg-muted p-3 rounded-md space-y-1">
+              <p className="font-medium">
+                {task.client.first_name} {task.client.last_name}
+                {task.client.company_name && ` (${task.client.company_name})`}
+              </p>
+              <p>{task.client.phone}</p>
+              <p>{task.client.email}</p>
+            </div>
+          </div>
+        )}
+
+        {task.package && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Related Package:</label>
+            <div className="bg-muted p-3 rounded-md space-y-1">
+              <p className="font-medium">HAWB: {task.package.hawb}</p>
+              <p>Weight: {task.package.weight}</p>
+              <p>Dimensions: {task.package.dimensions}</p>
+              <p>Status: {task.package.status}</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
