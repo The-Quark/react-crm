@@ -20,6 +20,11 @@ export const AllMenuSideBar: TMenuConfig = [
     path: '/global-parameters/list'
   },
   {
+    title: 'MENU.MEGAMENU.TASKS',
+    icon: 'coffee',
+    path: '/tasks/list'
+  },
+  {
     title: 'MENU.MEGAMENU.CLIENTS',
     icon: 'badge',
     path: '/clients'

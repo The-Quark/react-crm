@@ -18,3 +18,4 @@ export * from './putClient';
 export * from './putPackage';
 export * from './putCargo';
 export * from './putTemplate';
+export * from './putTask';

@@ -15,3 +15,4 @@ export * from './deleteClient';
 export * from './deleteCargo';
 export * from './deletePackage';
 export * from './deleteTemplate';
+export * from './deleteTask';

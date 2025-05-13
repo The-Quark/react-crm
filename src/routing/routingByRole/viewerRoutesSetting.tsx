@@ -32,6 +32,7 @@ import {
   CargoListPage,
   PackagesListPage
 } from '@/pages/call-center';
+import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -47,6 +48,9 @@ const ViewerRoutesSetting = () => {
         />
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+
+        <Route path="/tasks/list" element={<TasksListPage />} />
+        <Route path="/tasks/view/:id" element={<TasksViewPage />} />
 
         <Route path="/clients" element={<ClientsListPage />} />
 

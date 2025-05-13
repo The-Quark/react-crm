@@ -18,6 +18,7 @@ const Menu = {
   'MENU.MEGAMENU.SYSTEM': 'System',
   'MENU.MEGAMENU.PROFILE': 'Profile',
   'MENU.MEGAMENU.GLOBAL_PARAMETERS': 'Global Parameters',
+  'MENU.MEGAMENU.TASKS': 'Tasks',
   'MENU.MEGAMENU.CLIENTS': 'Clients',
   'MENU.MEGAMENU.ROLES_PERMISSIONS': 'Roles & Permissions',
   'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES': 'Roles',

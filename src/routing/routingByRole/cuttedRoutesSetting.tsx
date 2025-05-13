@@ -42,6 +42,7 @@ import {
   CargoStarterPage,
   CargoListPage
 } from '@/pages/call-center';
+import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 
 interface Props {
   permissions: string[];
@@ -122,6 +123,22 @@ const routeConfig = [
     routes: [
       { path: '/crm/members', element: <MembersPage /> },
       { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
+    ]
+  },
+  {
+    permission: 'manage tasks',
+    routes: [
+      { path: '/tasks/starter', element: <TasksStarterPage /> },
+      { path: '/tasks/list', element: <TasksListPage /> },
+      { path: '/tasks/starter/:id', element: <TasksStarterPage /> },
+      { path: '/tasks/view/:id', element: <TasksViewPage /> }
+    ]
+  },
+  {
+    permission: 'view tasks',
+    routes: [
+      { path: '/tasks/list', element: <TasksListPage /> },
+      { path: '/tasks/view/:id', element: <TasksViewPage /> }
     ]
   },
   {

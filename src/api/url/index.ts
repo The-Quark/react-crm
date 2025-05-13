@@ -49,3 +49,5 @@ export const PACKAGE_UPLOAD_URL = `${api}/package/upload`;
 export const CARGO_URL = `${api}/cargo/manage`;
 
 export const TEMPLATE_URL = `${api}/template/manage`;
+
+export const TASK_URL = `${api}/task/manage`;

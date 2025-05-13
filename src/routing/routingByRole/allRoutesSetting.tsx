@@ -123,6 +123,7 @@ import {
   GuidesTemplatesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
+import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 
 const AllRoutesSetting = () => {
   return (
@@ -148,6 +149,11 @@ const AllRoutesSetting = () => {
 
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+
+        <Route path="/tasks/list" element={<TasksListPage />} />
+        <Route path="/tasks/starter" element={<TasksStarterPage />} />
+        <Route path="/tasks/starter/:id" element={<TasksStarterPage />} />
+        <Route path="/tasks/view/:id" element={<TasksViewPage />} />
 
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/starter-clients" element={<ClientStarterPage />} />

@@ -166,6 +166,13 @@ export const CuttedMenuSideBar: TMenuConfig = [
     path: '/crm/members',
     requiredPermissions: ['view users']
   },
+  //tasks
+  {
+    title: 'MENU.MEGAMENU.TASKS',
+    icon: 'coffee',
+    requiredPermissions: ['manage tasks', 'view tasks'],
+    path: '/tasks/list'
+  },
   //"manage clients"
   {
     title: 'MENU.MEGAMENU.CLIENTS',

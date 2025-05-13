@@ -23,3 +23,4 @@ export * from './getClients';
 export * from './getPackages';
 export * from './getCargo';
 export * from './getTemplates';
+export * from './getTask';

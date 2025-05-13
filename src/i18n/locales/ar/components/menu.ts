@@ -18,6 +18,7 @@ const Menu = {
   'MENU.MEGAMENU.SYSTEM': 'النظام',
   'MENU.MEGAMENU.PROFILE': 'الملف الشخصي',
   'MENU.MEGAMENU.GLOBAL_PARAMETERS': 'المعلمات العالمية',
+  'MENU.MEGAMENU.TASKS': 'المهام',
   'MENU.MEGAMENU.CLIENTS': 'العملاء',
   'MENU.MEGAMENU.ROLES_PERMISSIONS': 'الأدوار والأذونات',
   'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES': 'الأدوار',
