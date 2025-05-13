@@ -14,3 +14,4 @@ export * from './deleteAirlineRate';
 export * from './deleteClient';
 export * from './deleteCargo';
 export * from './deletePackage';
+export * from './deleteTemplate';

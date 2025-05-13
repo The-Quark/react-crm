@@ -1,5 +1,6 @@
 import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
+import { TemplateType } from '@/api/get/getTemplates/types.ts';
 export const localesMock = [
   {
     code: 'en',
@@ -359,6 +360,12 @@ export const cargoStatusOptions = [
   { id: 2, name: 'Arrived at Sender Airport', value: CargoStatus.ARRIVED_AIRPORT_SENDER },
   { id: 3, name: 'Accepted at Sender Airport', value: CargoStatus.ACCEPTED_AIRPORT_SENDER },
   { id: 4, name: 'Arrived at Receiver Airport', value: CargoStatus.ARRIVED_AIRPORT_RECEIVER }
+];
+
+export const templateTypesOptions = [
+  { id: 1, name: 'Email', value: TemplateType.EMAIL },
+  { id: 2, name: 'SMS', value: TemplateType.SMS },
+  { id: 3, name: 'Print form', value: TemplateType.PRINT_FORM }
 ];
 
 export const mockDeliveryCategories = [

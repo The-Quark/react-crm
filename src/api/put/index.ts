@@ -17,3 +17,4 @@ export * from './putOrder';
 export * from './putClient';
 export * from './putPackage';
 export * from './putCargo';
+export * from './putTemplate';

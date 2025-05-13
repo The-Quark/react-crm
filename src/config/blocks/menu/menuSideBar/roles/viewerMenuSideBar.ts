@@ -135,6 +135,10 @@ export const ViewerMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS',
         path: '/guides/package-materials'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.TEMPLATES',
+        path: '/guides/templates'
       }
     ]
   }

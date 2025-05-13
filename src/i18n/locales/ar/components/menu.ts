@@ -45,6 +45,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES': 'أنواع التوصيل',
   'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES': 'أنواع الطرود',
   'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS': 'مواد التغليف',
+  'MENU.MEGAMENU.GUIDES.TEMPLATES': 'قوالب',
   'MENU.MEGAMENU.DEMONSTRATION': 'عرض توضيحي',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'الملف الشخصي العام',
   'MENU.MEGAMENU.PUBLIC_PROFILE.PROFILES': 'الملفات الشخصية',

@@ -17,3 +17,4 @@ export * from './postClient';
 export * from './postPackage';
 export * from './postCargo';
 export * from './postPackageUpload';
+export * from './postTemplate';

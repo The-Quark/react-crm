@@ -1,21 +1,21 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { getLanguages, getPackageTypes } from '@/api';
+import { getLanguages, getTemplates } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { PackageTypesToolbar } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesToolbar.tsx';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { usePackageTypesColumns } from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesColumns.tsx';
 import { useLanguage } from '@/providers';
 import { useState } from 'react';
 import { TLanguageCode } from '@/i18n';
+import { useTemplatesColumns } from '@/pages/guides/tabs/templates/components/blocks/templatesColumns.tsx';
+import { TemplatesToolbar } from '@/pages/guides/tabs/templates/components/blocks/templatesToolbar.tsx';
 
-export const GuidesPackagesContent = () => {
+export const GuidesTemplatesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['package-types', selectedLanguage.code],
-    queryFn: () => getPackageTypes(undefined, selectedLanguage.code)
+    queryKey: ['guidesTemplates', selectedLanguage.code],
+    queryFn: () => getTemplates({ language_code: selectedLanguage.code })
   });
 
   const {
@@ -23,13 +23,13 @@ export const GuidesPackagesContent = () => {
     isLoading: isLanguagesLoading,
     error: isLanguageError
   } = useQuery({
-    queryKey: ['guidesPackageTypeLanguages'],
+    queryKey: ['guidesTemplatesLanguages'],
     queryFn: () => getLanguages(),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5
   });
 
-  const columns = usePackageTypesColumns({
+  const columns = useTemplatesColumns({
     languages: languagesData?.result || [],
     selectedLanguage: selectedLanguage.code
   });
@@ -54,7 +54,7 @@ export const GuidesPackagesContent = () => {
           pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
           toolbar={
-            <PackageTypesToolbar
+            <TemplatesToolbar
               currentLanguage={selectedLanguage.code}
               languages={languagesData?.result || []}
               onLanguageChange={handleLanguageChange}
