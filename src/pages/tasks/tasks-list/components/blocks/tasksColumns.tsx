@@ -51,7 +51,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) => row.order.order_code,
+        accessorFn: (row) => row.order?.order_code,
         id: 'order',
         header: ({ column }) => <DataGridColumnHeader title="Order" column={column} />,
         enableSorting: true,
@@ -62,7 +62,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
                 href={`/call-center/orders/list`}
               >
-                {info.row.original.order.order_code}
+                {info.row.original.order?.order_code}
               </a>
             </div>
           </div>

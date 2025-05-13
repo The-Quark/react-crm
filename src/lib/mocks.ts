@@ -1,6 +1,7 @@
 import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { TemplateType } from '@/api/get/getTemplates/types.ts';
+import { TaskType, TaskPriority, TaskStatus } from '@/api/get/getTask/types.ts';
 export const localesMock = [
   {
     code: 'en',
@@ -366,6 +367,30 @@ export const templateTypesOptions = [
   { id: 1, name: 'Email', value: TemplateType.EMAIL },
   { id: 2, name: 'SMS', value: TemplateType.SMS },
   { id: 3, name: 'Print form', value: TemplateType.PRINT_FORM }
+];
+
+export const taskPriorityOptions = [
+  { id: 1, name: 'Low', value: TaskPriority.LOW },
+  { id: 2, name: 'Normal', value: TaskPriority.NORMAL },
+  { id: 3, name: 'High', value: TaskPriority.HIGH },
+  { id: 4, name: 'Urgent', value: TaskPriority.URGENT }
+];
+
+export const taskStatusOptions = [
+  { id: 1, name: 'To Do', value: TaskStatus.TODO },
+  { id: 2, name: 'In Progress', value: TaskStatus.PROGRESS },
+  { id: 3, name: 'Outdated', value: TaskStatus.OUTDATED },
+  { id: 4, name: 'Blocked', value: TaskStatus.BLOCKED },
+  { id: 5, name: 'Cancelled', value: TaskStatus.CANCELLED },
+  { id: 6, name: 'Completed', value: TaskStatus.COMPLETED }
+];
+
+export const taskTypeOptions = [
+  { id: 1, name: 'Inner', value: TaskType.INNER },
+  { id: 2, name: 'Orders', value: TaskType.ORDERS },
+  { id: 3, name: 'Applications', value: TaskType.APPLICATIONS },
+  { id: 4, name: 'Packages', value: TaskType.PACKAGES },
+  { id: 5, name: 'Users', value: TaskType.USERS }
 ];
 
 export const mockDeliveryCategories = [

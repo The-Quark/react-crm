@@ -121,17 +121,17 @@ export interface Task {
   status: TaskStatus;
   assigned_by: User;
   assigned_to: User;
-  order_id: number;
-  client_id: number;
-  package_id: number;
-  company_id: number | null;
+  order_id?: number;
+  client_id?: number;
+  package_id?: number;
+  company_id?: number | null;
   due_date: string;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
-  order: Order;
-  client: Client;
-  package: Package;
+  order?: Order;
+  client?: Client;
+  package?: Package;
 }
 
 export interface ITasksResponse {

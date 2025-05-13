@@ -5,12 +5,12 @@ export interface ITaskFormValues {
   description: string;
   type: TaskType;
   priority: TaskPriority;
-  status: TaskStatus;
-  assigned_by: number;
-  assigned_to: number;
-  order_id?: number;
-  client_id?: number;
-  package_id?: number;
-  company_id?: number;
+  status?: TaskStatus;
+  assigned_by: number | string;
+  assigned_to: number | string;
+  order_id?: number | string;
+  client_id?: number | string;
+  package_id?: number | string;
+  company_id?: number | string;
   due_date: string;
 }
