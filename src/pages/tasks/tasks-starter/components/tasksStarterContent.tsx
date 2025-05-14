@@ -31,6 +31,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
+import { getData } from '@/utils/include/LocalStorage';
 
 export const formSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -60,6 +61,7 @@ export const TasksStarterContent = () => {
   const [searchPackageTerm, setSearchPackageTerm] = useState('');
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchUserTerm, setSearchUserTerm] = useState('');
+  const orderIdFromOrders = getData('orderIdFromOrders');
   const { data: currentUser } = useCurrentUser();
 
   const {
@@ -134,7 +136,7 @@ export const TasksStarterContent = () => {
     client_id: '',
     description: '',
     due_date: '',
-    order_id: '',
+    order_id: String(orderIdFromOrders) || '',
     package_id: '',
     priority: TaskPriority.LOW,
     title: '',

@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getOrders } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { setData } from '@/utils/include/LocalStorage';
 
 interface Props {
   open: boolean;
@@ -23,8 +25,13 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
     queryKey: ['order', id],
     queryFn: () => (id !== null ? getOrders(id) : Promise.reject('Invalid ID'))
   });
-
+  const navigate = useNavigate();
   const order = data?.result?.[0];
+
+  const handleClick = (orderId: number) => {
+    setData('orderIdFromOrders', orderId);
+    navigate('/tasks/starter');
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -184,6 +191,12 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
           <a className="btn btn-md btn-light mr-3 mb-3" href={`/call-center/orders/starter/${id}`}>
             Update Order
           </a>
+          <button
+            className="btn btn-md btn-primary mr-3 mb-3"
+            onClick={() => id !== null && handleClick(id)}
+          >
+            Create Task
+          </button>
         </DialogActions>
       </DialogContent>
     </Dialog>
