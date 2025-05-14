@@ -103,7 +103,8 @@ import {
   PackagesStarterPage,
   CargoListPage,
   PackagesListPage,
-  PackagesUploadPage
+  PackagesUploadPage,
+  CargoUploadPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -126,6 +127,7 @@ import {
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
+import { CargoUploadContent } from '@/pages/call-center/cargo/cargoUpload/components/cargoUploadContent.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -177,6 +179,7 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/packages/list" element={<PackagesListPage />} />
         <Route path="/call-center/cargo/starter" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
+        <Route path="/call-center/cargo/upload/:id" element={<CargoUploadPage />} />
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />

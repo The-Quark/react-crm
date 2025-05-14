@@ -20,3 +20,5 @@ export * from './postPackageUpload';
 export * from './postTemplate';
 export * from './postTask';
 export * from './postUnit';
+export * from './postCargoUpload';
+export * from './postTemplateUpload';

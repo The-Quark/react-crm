@@ -21,7 +21,7 @@ interface MenuOptionsProps {
 export const CargoMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManage = has('manage cargo') || currentUser?.roles[0].name === 'superadmin';
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
@@ -42,6 +42,15 @@ export const CargoMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       {canManage && (
         <>
+          <MenuItem>
+            <MenuLink path={`/call-center/cargo/upload/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="file-up" />
+              </MenuIcon>
+              <MenuTitle>Upload file</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+          <MenuSeparator />
           <MenuItem>
             <MenuLink path={`/call-center/cargo/starter/${id}`}>
               <MenuIcon>

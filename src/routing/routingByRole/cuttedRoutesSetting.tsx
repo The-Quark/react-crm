@@ -42,7 +42,8 @@ import {
   PackagesStarterPage,
   CargoStarterPage,
   CargoListPage,
-  PackagesUploadPage
+  PackagesUploadPage,
+  CargoUploadPage
 } from '@/pages/call-center';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 
@@ -192,6 +193,10 @@ const routeConfig = [
       {
         path: '/call-center/cargo/starter/:id',
         element: <CargoStarterPage />
+      },
+      {
+        path: '/call-center/cargo/upload/:id',
+        element: <CargoUploadPage />
       },
       { path: '/call-center/cargo/list', element: <CargoListPage /> }
     ]

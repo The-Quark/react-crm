@@ -1,3 +1,30 @@
+interface Media {
+  id: number;
+  model_type: string;
+  model_id: number;
+  uuid: string;
+  collection_name: string;
+  name: string;
+  file_name: string;
+  mime_type: string;
+  disk: string;
+  conversions_disk: string;
+  size: number;
+  manipulations: any[];
+  custom_properties: any[];
+  generated_conversions: any[];
+  responsive_images: any[];
+  order_column: number;
+  created_at: string;
+  updated_at: string;
+  original_url: string;
+  preview_url: string;
+  pivot?: {
+    package_id: number;
+    model_type: number;
+  };
+}
+
 interface Company {
   id: number;
   company_name: string;
@@ -39,8 +66,8 @@ export interface Cargo {
   updated_at: string;
   deleted_at: string | null;
   is_international: boolean;
-  medias: any[];
-  media: any[];
+  medias: Media[];
+  media: Media[];
   company: Company;
   packages: any[];
 }
