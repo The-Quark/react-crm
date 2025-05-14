@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
 import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { packageStatusOptions } from '@/lib/mocks.ts';
-import Dropzone from 'shadcn-dropzone';
 
 export const formSchema = Yup.object().shape({
   client_id: Yup.string().required('Client is required'),
@@ -256,17 +255,6 @@ export const PackageStarterContent = () => {
               />
             </>
           )}
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Photo</label>
-            <div className="flex columns-1 w-full flex-wrap ">
-              <Dropzone
-                containerClassName="w-full h-full"
-                dropZoneClassName="w-full h-40"
-                multiple
-              />
-            </div>
-          </div>
 
           <div className="flex justify-end">
             <button

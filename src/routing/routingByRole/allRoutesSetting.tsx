@@ -102,7 +102,8 @@ import {
   CargoStarterPage,
   PackagesStarterPage,
   CargoListPage,
-  PackagesListPage
+  PackagesListPage,
+  PackagesUploadPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -172,6 +173,7 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
         <Route path="/call-center/packages/starter" element={<PackagesStarterPage />} />
         <Route path="/call-center/packages/starter/:id" element={<PackagesStarterPage />} />
+        <Route path="/call-center/packages/upload/:id" element={<PackagesUploadPage />} />
         <Route path="/call-center/packages/list" element={<PackagesListPage />} />
         <Route path="/call-center/cargo/starter" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
