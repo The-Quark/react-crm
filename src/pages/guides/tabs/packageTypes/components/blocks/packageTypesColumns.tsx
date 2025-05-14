@@ -22,7 +22,7 @@ export const usePackageTypesColumns = ({
   languages,
   selectedLanguage
 }: Props): ColumnDef<PackageType>[] => {
-  const { isRTL, currentLanguage } = useLanguage();
+  const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<PackageType>[]>(
     () => [
       {
@@ -40,23 +40,6 @@ export const usePackageTypesColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.language[0].name,
-        id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Package type" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.language[0].name}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
@@ -71,32 +54,73 @@ export const usePackageTypesColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.language[0].description,
+        accessorFn: (row) => {
+          const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
+          return lang?.name || '';
+        },
+        id: 'name',
+        header: ({ column }) => <DataGridColumnHeader title="Package type" column={column} />,
+        enableSorting: true,
+        cell: (info) => {
+          const lang = info.row.original.language.find(
+            (l) => l.crm_language?.code === selectedLanguage
+          );
+          return (
+            <div className="flex flex-col gap-0.5">
+              <div className="leading-none text-gray-800 font-normal">{lang?.name || ''}</div>
+            </div>
+          );
+        },
+        meta: {
+          headerClassName: 'min-w-[200px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => {
+          const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
+          return lang?.description || '';
+        },
         id: 'description',
         header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.language[0].description}
+        cell: (info) => {
+          const lang = info.row.original.language.find(
+            (l) => l.crm_language?.code === selectedLanguage
+          );
+          return (
+            <div className="flex items-center gap-1.5">
+              <div className="leading-none text-gray-800 font-normal">
+                {lang?.description || ''}
+              </div>
             </div>
-          </div>
-        ),
+          );
+        },
         meta: {
           headerClassName: 'min-w-[80px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
-        accessorFn: (row) => row.language_code,
-        id: 'language code',
-        header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
+        accessorFn: (row) =>
+          row.language
+            .map((lang) => lang.crm_language?.code)
+            .filter(Boolean)
+            .join(', '),
+        id: 'language_code',
+        header: ({ column }) => <DataGridColumnHeader title="Language Codes" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{currentLanguage.code}</div>
-          </div>
-        ),
+        cell: (info) => {
+          const languageCodes = info.row.original.language
+            .map((lang) => lang.crm_language?.code)
+            .filter(Boolean)
+            .join(', ');
+          return (
+            <div className="flex items-center gap-1.5">
+              <div className="leading-none text-gray-800 font-normal">{languageCodes}</div>
+            </div>
+          );
+        },
         meta: {
           headerClassName: 'min-w-[80px]',
           cellClassName: 'text-gray-700 font-normal'

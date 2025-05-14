@@ -13,15 +13,8 @@ import { useFormik } from 'formik';
 import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { IPackageTypeFormValues } from '@/api/post/postPackageType/types.ts';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { useQueryClient } from '@tanstack/react-query';
-import { SharedInput } from '@/partials/sharedUI';
+import { SharedInput, SharedSelect } from '@/partials/sharedUI';
 
 interface Language {
   code: string;
@@ -68,7 +61,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
           setInitialValues({
             code: req.code,
             name: req.language[0].name,
-            language_code: req.language_code || selectedLanguage,
+            language_code: selectedLanguage,
             description: req.language[0].description || '',
             is_active: req.is_active
           });
@@ -140,24 +133,15 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
                 <SharedInput name="name" label="Name" formik={formik} />
                 <SharedInput name="code" label="Code" formik={formik} />
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Language code</label>
-                  <Select
-                    value={formik.values.language_code}
-                    onValueChange={(value) => formik.setFieldValue('language_code', String(value))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {languages.map((language) => (
-                        <SelectItem key={language.code} value={language.code}>
-                          {language.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <SharedSelect
+                  name="language_code"
+                  label="Language code"
+                  formik={formik}
+                  options={languages.map((language) => ({
+                    label: language.name,
+                    value: language.code
+                  }))}
+                />
 
                 <SharedInput name="description" label="Description" formik={formik} />
 

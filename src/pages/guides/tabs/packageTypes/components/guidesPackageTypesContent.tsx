@@ -15,7 +15,8 @@ export const GuidesPackagesContent = () => {
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['package-types', selectedLanguage.code],
-    queryFn: () => getPackageTypes(undefined, selectedLanguage.code)
+    queryFn: () => getPackageTypes(undefined, selectedLanguage.code),
+    staleTime: 1000 * 60 * 60
   });
 
   const {
