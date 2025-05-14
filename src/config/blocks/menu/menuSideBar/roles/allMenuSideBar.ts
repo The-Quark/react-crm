@@ -137,6 +137,10 @@ export const AllMenuSideBar: TMenuConfig = [
         path: '/guides/package-materials'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.UNITS',
+        path: '/guides/units'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.TEMPLATES',
         path: '/guides/templates'
       }

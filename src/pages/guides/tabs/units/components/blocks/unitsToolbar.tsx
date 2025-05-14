@@ -1,31 +1,29 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
-import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesModal.tsx';
+import UnitModal from '@/pages/guides/tabs/units/components/blocks/unitsModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 
-export const AirlineRatesToolbar: FC = () => {
+export const UnitsToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-
   const handleClose = () => {
     setModalOpen(false);
   };
   const handleOpen = () => {
     setModalOpen(true);
   };
-
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Airline Rates</h3>
+      <h3 className="card-title">Units</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-            New Airline rate
+            New Unit
           </button>
         )}
         <DataGridColumnVisibility table={table} />
@@ -36,14 +34,14 @@ export const AirlineRatesToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search airline"
+            placeholder="Search unit"
             className="input input-sm ps-8"
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>
-      <AirlineRatesModal open={modalOpen} onOpenChange={handleClose} />
+      <UnitModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

@@ -1,18 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { getPackageMaterials } from '@/api';
+import { getUnits } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { usePackageMaterialsColumns } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsColumns.tsx';
-import { PackageMaterialsToolbar } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsToolbar.tsx';
+import { useUnitsColumns } from '@/pages/guides/tabs/units/components/blocks/unitsColumns.tsx';
+import { UnitsToolbar } from '@/pages/guides/tabs/units/components/blocks/unitsToolbar.tsx';
 
-export const GuidesPackageMaterialsContent = () => {
+export const GuidesUnitsContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['packageMaterials'],
-    queryFn: () => getPackageMaterials(),
-    staleTime: 1000 * 60 * 60
+    queryKey: ['guidesUnits'],
+    queryFn: () => getUnits(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
   });
-  const columns = usePackageMaterialsColumns();
+
+  const columns = useUnitsColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -29,7 +31,7 @@ export const GuidesPackageMaterialsContent = () => {
           rowSelection={true}
           pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<PackageMaterialsToolbar />}
+          toolbar={<UnitsToolbar />}
           layout={{ card: true }}
         />
       )}

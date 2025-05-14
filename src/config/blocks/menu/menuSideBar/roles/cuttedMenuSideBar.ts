@@ -71,6 +71,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/package-materials'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.UNITS',
+        path: '/guides/units'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.TEMPLATES',
         path: '/guides/templates'
       }
@@ -131,6 +135,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS',
         path: '/guides/package-materials'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.UNITS',
+        path: '/guides/units'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.TEMPLATES',

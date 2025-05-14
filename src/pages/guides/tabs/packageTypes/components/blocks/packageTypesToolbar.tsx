@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Language {
   id: number;
@@ -28,6 +30,10 @@ export const PackageTypesToolbar: FC<Props> = ({
 }) => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
   const handleClose = () => {
     setModalOpen(false);
@@ -45,9 +51,11 @@ export const PackageTypesToolbar: FC<Props> = ({
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Package Types</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New Package Type
-        </button>
+        {canManageGlobalSettings && (
+          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+            New Package Type
+          </button>
+        )}
         <Select value={currentLanguage} onValueChange={handleLanguageSelectChange}>
           <SelectTrigger className="w-28" size="sm">
             <SelectValue placeholder="Select language" />

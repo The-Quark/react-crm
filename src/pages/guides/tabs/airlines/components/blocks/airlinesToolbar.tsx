@@ -1,10 +1,16 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import AirlinesModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const AirlinesToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
   const handleClose = () => {
     setModalOpen(false);
@@ -17,9 +23,11 @@ export const AirlinesToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Airlines</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New Airline
-        </button>
+        {canManageGlobalSettings && (
+          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+            New Airline
+          </button>
+        )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon

@@ -26,7 +26,7 @@ export const AIRLINE_RATE_URL = `${api}/airline_rate/manage`;
 
 export const PACKAGE_TYPES_URL = `${api}/package_type/manage`;
 
-export const PACKAGE_MATERIALS_URL = `${api}/package-materials/manage`;
+export const PACKAGE_MATERIAL_URL = `${api}/package_material/manage`;
 
 export const COUNTRIES_URL = `${api}/countries`;
 
@@ -51,3 +51,5 @@ export const CARGO_URL = `${api}/cargo/manage`;
 export const TEMPLATE_URL = `${api}/template/manage`;
 
 export const TASK_URL = `${api}/task/manage`;
+
+export const UNIT_URL = `${api}/package_material/unit/manage`;

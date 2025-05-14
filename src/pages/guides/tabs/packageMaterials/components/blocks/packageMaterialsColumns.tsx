@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deletePackageMaterial } from '@/api';
@@ -12,18 +12,8 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
   const columns = useMemo<ColumnDef<PackageMaterial>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'package id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -33,21 +23,6 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         ),
         meta: {
           headerClassName: 'w-0'
-        }
-      },
-      {
-        accessorFn: (row) => row.name,
-        id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[200px]',
-          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
@@ -65,19 +40,69 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         }
       },
       {
-        accessorFn: (row) => row.description,
-        id: 'description',
-        header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
+        accessorFn: (row) => row.name,
+        id: 'name',
+        header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.price,
+        id: 'price',
+        header: ({ column }) => <DataGridColumnHeader title="Price" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.price}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[80px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.unit.name,
+        id: 'unit name',
+        header: ({ column }) => <DataGridColumnHeader title="Unit" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.description}
+              {info.row.original.unit.name}
             </div>
           </div>
         ),
         meta: {
           headerClassName: 'min-w-[80px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.company.map((c) => c.company_name).join(', '),
+        id: 'company_name',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        enableSorting: true,
+        cell: (info) => {
+          const companyNames = info.row.original.company.map((c) => c.company_name);
+          return (
+            <div className="flex items-center gap-1.5">
+              <div className="leading-none text-gray-800 font-normal">
+                {companyNames.join(', ')}
+              </div>
+            </div>
+          );
+        },
+        meta: {
+          headerClassName: 'min-w-[150px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },

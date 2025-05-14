@@ -29,6 +29,7 @@ import {
   GuidesPackageTypesPage,
   GuidesSourcesPage,
   GuidesTemplatesPage,
+  GuidesUnitsPage,
   GuidesVehiclesPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
@@ -69,6 +70,7 @@ const routeConfig = [
       { path: '/guides/delivery-types', element: <GuidesDeliveryTypesPage /> },
       { path: '/guides/package-types', element: <GuidesPackageTypesPage /> },
       { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> },
+      { path: '/guides/units', element: <GuidesUnitsPage /> },
       { path: '/guides/templates', element: <GuidesTemplatesPage /> }
     ]
   },
@@ -89,6 +91,7 @@ const routeConfig = [
       { path: '/guides/delivery-types', element: <GuidesDeliveryTypesPage /> },
       { path: '/guides/package-types', element: <GuidesPackageTypesPage /> },
       { path: '/guides/package-materials', element: <GuidesPackageMaterialsPage /> },
+      { path: '/guides/units', element: <GuidesUnitsPage /> },
       { path: '/guides/templates', element: <GuidesTemplatesPage /> }
     ]
   },

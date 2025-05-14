@@ -14,6 +14,7 @@ interface Props<T> {
   formik: FormikProps<T>;
   options: { label: string; value: string | number }[];
   placeholder?: string;
+  isClearable?: boolean;
 }
 
 export const SharedSelect = <T,>({
@@ -21,22 +22,38 @@ export const SharedSelect = <T,>({
   label,
   formik,
   options,
-  placeholder = 'Select...'
+  placeholder = 'Select...',
+  isClearable = false
 }: Props<T>) => {
   const fieldName = name.toString();
+  const currentValue = formik.values[name];
+
+  const CLEAR_OPTION_VALUE = '__CLEAR__';
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <Select
-          value={formik.values[name]?.toString() || ''}
-          onValueChange={(value) => formik.setFieldValue(fieldName, String(value))}
+          value={currentValue === null || currentValue === undefined ? '' : String(currentValue)}
+          onValueChange={(value) => {
+            if (isClearable && value === CLEAR_OPTION_VALUE) {
+              formik.setFieldValue(fieldName, null);
+            } else {
+              const finalValue = isNaN(Number(value)) ? value : Number(value);
+              formik.setFieldValue(fieldName, finalValue);
+            }
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent>
+            {isClearable && currentValue !== null && currentValue !== undefined && (
+              <SelectItem value={CLEAR_OPTION_VALUE}>
+                <span className="text-muted-foreground">Clear selection</span>
+              </SelectItem>
+            )}
             {options.map((option) => (
               <SelectItem key={option.value} value={String(option.value)}>
                 {option.label}

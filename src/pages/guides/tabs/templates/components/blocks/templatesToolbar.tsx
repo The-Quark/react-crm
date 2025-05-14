@@ -8,6 +8,8 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { TemplatesModal } from '@/pages/guides/tabs/templates/components/blocks/templatesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Language {
   id: number;
@@ -24,6 +26,10 @@ interface Props {
 export const TemplatesToolbar: FC<Props> = ({ currentLanguage, onLanguageChange, languages }) => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
   const handleClose = () => {
     setModalOpen(false);
@@ -41,9 +47,11 @@ export const TemplatesToolbar: FC<Props> = ({ currentLanguage, onLanguageChange,
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Templates</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New Template
-        </button>
+        {canManageGlobalSettings && (
+          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+            New Template
+          </button>
+        )}
         <Select value={currentLanguage} onValueChange={handleLanguageSelectChange}>
           <SelectTrigger className="w-28" size="sm">
             <SelectValue placeholder="Select language" />

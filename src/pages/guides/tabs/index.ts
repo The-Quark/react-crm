@@ -9,3 +9,4 @@ export * from './countries/guidesCountriesPage.tsx';
 export * from './deliveryTypes/guidesDeliveryTypesPage.tsx';
 export * from './airlineRates/guidesAirlineRatesPage.tsx';
 export * from './templates/guidesTemplatesPage.tsx';
+export * from './units/guidesUnitsPage.tsx';

@@ -120,7 +120,8 @@ import {
   GuidesCountriesPage,
   GuidesDeliveryTypesPage,
   GuidesAirlineRatesPage,
-  GuidesTemplatesPage
+  GuidesTemplatesPage,
+  GuidesUnitsPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
@@ -193,6 +194,7 @@ const AllRoutesSetting = () => {
         <Route path="/guides/delivery-types" element={<GuidesDeliveryTypesPage />} />
         <Route path="/guides/package-types" element={<GuidesPackageTypesPage />} />
         <Route path="/guides/package-materials" element={<GuidesPackageMaterialsPage />} />
+        <Route path="/guides/units" element={<GuidesUnitsPage />} />
         <Route path="/guides/templates" element={<GuidesTemplatesPage />} />
 
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />

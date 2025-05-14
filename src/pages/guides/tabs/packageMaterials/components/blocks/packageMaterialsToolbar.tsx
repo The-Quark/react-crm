@@ -1,10 +1,16 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const PackageMaterialsToolbar: FC = () => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const handleClose = () => {
     setModalOpen(false);
   };
@@ -15,6 +21,12 @@ export const PackageMaterialsToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Package Materials</h3>
       <div className="flex flex-wrap items-center gap-2.5">
+        {canManageGlobalSettings && (
+          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+            New package material
+          </button>
+        )}
+        <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -28,10 +40,6 @@ export const PackageMaterialsToolbar: FC = () => {
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
-        <DataGridColumnVisibility table={table} />
-        <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-          New package material
-        </button>
       </div>
       <PackageMaterialsModal open={modalOpen} onOpenChange={handleClose} />
     </div>
