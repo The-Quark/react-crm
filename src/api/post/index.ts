@@ -22,3 +22,4 @@ export * from './postTask';
 export * from './postUnit';
 export * from './postCargoUpload';
 export * from './postTemplateUpload';
+export * from './postGlobalParamsPosition';

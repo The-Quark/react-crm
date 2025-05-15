@@ -252,7 +252,6 @@ const routeConfig = [
 const CuttedRoutesSetting: FC<Props> = ({ permissions }) => {
   const hasPermission = (perm: string) =>
     permissions.includes(perm) || permissions.includes('everything');
-  console.log('CuttedRoutesSetting');
   return (
     <Routes>
       <Route element={<Demo1Layout />}>

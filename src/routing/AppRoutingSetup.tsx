@@ -15,9 +15,6 @@ const AppRoutingSetup = (): ReactElement => {
   if (isLoading) {
     return <ScreenLoader />;
   }
-  console.log('Auth: ', !auth);
-  console.log('IsLoading: ', !isLoading);
-  console.log('CurrentUser: ', currentUser);
   return (
     <Routes>
       <Route element={<RequireAuth />}>

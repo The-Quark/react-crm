@@ -6,7 +6,6 @@ import { USERS_URL } from '@/api/url';
 
 const fetchCurrentUser = async () => {
   const { data } = await axios.get<UserResponse>(USERS_URL);
-  console.log(data.result[0]);
   return data.result[0];
 };
 

@@ -20,3 +20,4 @@ export * from './putCargo';
 export * from './putTemplate';
 export * from './putTask';
 export * from './putUnit';
+export * from './putGlobalParamsPosition';

@@ -45,7 +45,6 @@ import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversViewPage } from '@/pages/hr-module/drivers';
 
 const ViewerRoutesSetting = () => {
-  console.log('ViewerRoutesSetting');
   return (
     <Routes>
       <Route element={<Demo1Layout />}>
