@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { DepartmentsModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsModal.tsx';
 
-export const DepartmentsToolbar = () => {
+export const DepartmentsToolbar: FC = () => {
   const { table } = useDataGrid();
+  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const canManageGlobalSettings =
+    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Global parameters</h3>
+      <h3 className="card-title">Departments</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        {canManage && (
-          <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
-            New global parameter
-          </a>
+        {canManageGlobalSettings && (
+          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+            New Department
+          </button>
         )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
@@ -25,15 +34,14 @@ export const DepartmentsToolbar = () => {
           />
           <input
             type="text"
-            placeholder="Search Company"
+            placeholder="Search department"
             className="input input-sm ps-8"
-            value={(table.getColumn('company name')?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn('company name')?.setFilterValue(event.target.value)
-            }
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>
+      <DepartmentsModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

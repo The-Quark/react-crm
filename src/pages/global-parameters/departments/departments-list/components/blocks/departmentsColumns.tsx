@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { ParameterMenuOptions } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesMenuOptions.tsx';
-import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
+import { Department } from '@/api/get/getGlobalParamsDepartments/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { DepartmentsMenuOptions } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsMenuOptions.tsx';
 
-export const useDepartmentsColumns = (): ColumnDef<ParametersModel>[] => {
+export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const columns = useMemo<ColumnDef<ParametersModel>[]>(
+  const columns = useMemo<ColumnDef<Department>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
@@ -29,22 +29,14 @@ export const useDepartmentsColumns = (): ColumnDef<ParametersModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.company_name,
-        id: 'company name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        accessorFn: (row) => row.name,
+        id: 'name',
+        header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <a
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                href={`/global-parameters/view-parameters/${info.row.original.id}`}
-              >
-                {info.row.original.company_name}
-              </a>
-              <span className="text-2sm text-gray-700 font-normal">
-                {`Language: ${info.row.original.language}, Currency: ${info.row.original.currency}`}
-              </span>
+              <div className="leading-none font-medium text-sm ">{info.row.original.name}</div>
             </div>
           </div>
         ),
@@ -54,103 +46,26 @@ export const useDepartmentsColumns = (): ColumnDef<ParametersModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.timezone,
-        id: 'timezone',
-        header: ({ column }) => <DataGridColumnHeader title="Timezone" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <span className="badge badge-sm badge-light badge-outline">
-              {info.row.original.timezone}
-            </span>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[165px]'
-        }
-      },
-      {
-        accessorFn: (row) => row.legal_address,
-        id: 'legal address',
-        header: ({ column }) => <DataGridColumnHeader title="Legal address" column={column} />,
+        accessorFn: (row) => row.company?.company_name,
+        id: 'company',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.legal_address}
+              {info.row.original.company?.company_name}
             </span>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[165px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.warehouse_address,
-        id: 'warehouse address',
-        header: ({ column }) => <DataGridColumnHeader title="Warehouse address" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.warehouse_address}
-            </span>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[165px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.airlines,
-        id: 'airlines',
-        header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
-        enableSorting: true,
-        cell: (info) => {
-          const airlines = info.row.original.airlines;
-          return (
-            <div className="text-gray-800 font-normal leading-none">
-              {airlines.map((airline) => airline.name).join(', ')}
-            </div>
-          );
-        },
-        meta: {
-          headerClassName: 'min-w-[165px]',
-          cellClassName: 'text-gray-700 font-normal'
+          headerClassName: 'min-w-[100px]'
         }
       },
       {
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) => (
-          <Menu className="items-stretch">
-            <MenuItem
-              toggle="dropdown"
-              trigger="click"
-              dropdownProps={{
-                placement: isRTL() ? 'bottom-start' : 'bottom-end',
-                modifiers: [
-                  {
-                    name: 'offset',
-                    options: {
-                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
-                    }
-                  }
-                ]
-              }}
-            >
-              <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
-                <KeenIcon icon="dots-vertical" />
-              </MenuToggle>
-              {ParameterMenuOptions({
-                id: info.row.original.id
-              })}
-            </MenuItem>
-          </Menu>
-        ),
+        cell: (info) => <DepartmentsMenuOptions id={info.row.original.id} />,
         meta: {
           headerClassName: 'w-[60px]'
         }

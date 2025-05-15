@@ -6,7 +6,6 @@ import {
   CompaniesListPage,
   CompaniesViewPage,
   DepartmentsListPage,
-  DepartmentsViewPage,
   PositionsListPage,
   SubdivisionsListPage
 } from '@/pages/global-parameters';
@@ -52,7 +51,6 @@ const ViewerRoutesSetting = () => {
         <Route path="/global-parameters/view-parameters/:id" element={<CompaniesViewPage />} />
         <Route path="/global-parameters/list" element={<CompaniesListPage />} />
 
-        <Route path="/global-parameters/departments/view/:id" element={<DepartmentsViewPage />} />
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
 
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />

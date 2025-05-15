@@ -14,10 +14,10 @@ interface Company {
   airlines: any | null;
 }
 
-export interface Position {
+export interface Department {
   id: number;
   company_id: number;
-  title: string;
+  name: string;
   description: string | null;
   is_active: boolean;
   deleted_at: string | null;
@@ -26,7 +26,7 @@ export interface Position {
   company: Company | null;
 }
 
-export interface IGlobalParamsPositionModel {
-  result: Position[];
+export interface IGlobalParamsDepartments {
+  result: Department[];
   count: number;
 }

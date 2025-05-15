@@ -17,8 +17,6 @@ import {
   CompaniesStarterPage,
   CompaniesViewPage,
   DepartmentsListPage,
-  DepartmentsStaterPage,
-  DepartmentsViewPage,
   PositionsListPage,
   SubdivisionsListPage
 } from '@/pages/global-parameters';
@@ -149,12 +147,6 @@ const AllRoutesSetting = () => {
         <Route path="/global-parameters/view-parameters/:id" element={<CompaniesViewPage />} />
         <Route path="/global-parameters/list" element={<CompaniesListPage />} />
 
-        <Route path="/global-parameters/departments/starter" element={<DepartmentsStaterPage />} />
-        <Route
-          path="/global-parameters/departments/starter/:id"
-          element={<CompaniesStarterPage />}
-        />
-        <Route path="/global-parameters/departments/view/:id" element={<DepartmentsViewPage />} />
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
 
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />

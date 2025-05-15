@@ -19,3 +19,4 @@ export * from './deleteTask';
 export * from './deleteUnit';
 export * from './deleteGlobalParamsPosition';
 export * from './deleteGlobalParamsSubdivision';
+export * from './deleteGlobalParamsDepartments';

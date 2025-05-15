@@ -7,8 +7,6 @@ import {
   CompaniesStarterPage,
   CompaniesViewPage,
   DepartmentsListPage,
-  DepartmentsStaterPage,
-  DepartmentsViewPage,
   PositionsListPage,
   SubdivisionsListPage
 } from '@/pages/global-parameters';
@@ -68,12 +66,6 @@ const routeConfig = [
       { path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> },
 
       { path: '/global-parameters/departments/list', element: <DepartmentsListPage /> },
-      { path: '/global-parameters/departments/starter', element: <DepartmentsStaterPage /> },
-      {
-        path: '/global-parameters/departments/starter/:id',
-        element: <DepartmentsStaterPage />
-      },
-      { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
 
       { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
 
@@ -100,7 +92,6 @@ const routeConfig = [
       { path: '/global-parameters/list', element: <CompaniesListPage /> },
       { path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> },
       { path: '/global-parameters/departments/list', element: <DepartmentsListPage /> },
-      { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
       { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
       { path: '/global-parameters/positions/list', element: <PositionsListPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },

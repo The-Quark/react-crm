@@ -5,66 +5,101 @@ import {
   MenuLink,
   MenuSeparator,
   MenuSub,
-  MenuTitle
+  MenuTitle,
+  MenuToggle,
+  Menu
 } from '@/components';
-import { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteGlobalParameter } from '@/api';
+import { deleteGlobalParamsDepartments } from '@/api';
 import { useQueryClient } from '@tanstack/react-query';
+import { useLanguage } from '@/providers';
+import { DepartmentsModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsModal.tsx';
 
 interface MenuOptionsProps {
   id?: number;
 }
 
 export const DepartmentsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+  const [activeModal, setActiveModal] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
-  const queryClient = useQueryClient();
   const { has } = useUserPermissions();
-  const canManageGlobalSettings =
+  const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const queryClient = useQueryClient();
+  const { isRTL } = useLanguage();
 
-  const handleDelete = () => {
-    if (id) {
-      deleteGlobalParameter(id);
-      queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
-    } else {
-      toast.error('Parameter ID not provided');
+  const handleOpen = () => {
+    setActiveModal(true);
+  };
+
+  const handleClose = () => {
+    setActiveModal(false);
+  };
+
+  const handleDelete = async () => {
+    if (!id) {
+      toast.error('ID not provided');
+      return;
+    }
+    try {
+      await deleteGlobalParamsDepartments(id);
+      await queryClient.invalidateQueries({ queryKey: ['globalParamsDepartments'] });
+      toast.success('Department deleted');
+    } catch {
+      toast.error('Failed to delete department');
     }
   };
 
   return (
-    <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-      <MenuItem>
-        <MenuLink path={`/global-parameters/view-parameters/${id}`}>
-          <MenuIcon>
-            <KeenIcon icon="more-2" />
-          </MenuIcon>
-          <MenuTitle>View</MenuTitle>
-        </MenuLink>
+    <Menu className="items-stretch">
+      <MenuItem
+        toggle="dropdown"
+        trigger="click"
+        dropdownProps={{
+          placement: isRTL() ? 'bottom-start' : 'bottom-end',
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset: isRTL() ? [0, -10] : [0, 10]
+              }
+            }
+          ]
+        }}
+      >
+        <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
+          <KeenIcon icon="dots-vertical" />
+        </MenuToggle>
+        {!activeModal && (
+          <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
+            {canManageSettings && (
+              <>
+                <MenuItem onClick={handleOpen}>
+                  <MenuLink>
+                    <MenuIcon>
+                      <KeenIcon icon="pencil" />
+                    </MenuIcon>
+                    <MenuTitle>Edit</MenuTitle>
+                  </MenuLink>
+                </MenuItem>
+                <MenuSeparator />
+                <MenuItem onClick={handleDelete}>
+                  <MenuLink>
+                    <MenuIcon>
+                      <KeenIcon icon="trash" className="text-danger !text-red-500" />
+                    </MenuIcon>
+                    <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+                  </MenuLink>
+                </MenuItem>
+              </>
+            )}
+          </MenuSub>
+        )}
+        {activeModal && <DepartmentsModal open={activeModal} onOpenChange={handleClose} id={id} />}
       </MenuItem>
-      {canManageGlobalSettings && (
-        <>
-          <MenuItem>
-            <MenuLink path={`/global-parameters/starter-parameters/${id}`}>
-              <MenuIcon>
-                <KeenIcon icon="setting-4" />
-              </MenuIcon>
-              <MenuTitle>Edit</MenuTitle>
-            </MenuLink>
-          </MenuItem>
-          <MenuSeparator />
-          <MenuItem onClick={handleDelete}>
-            <MenuLink>
-              <MenuIcon>
-                <KeenIcon icon="trash" className="text-danger !text-red-500" />
-              </MenuIcon>
-              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
-            </MenuLink>
-          </MenuItem>
-        </>
-      )}
-    </MenuSub>
+    </Menu>
   );
 };
