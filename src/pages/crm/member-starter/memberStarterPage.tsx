@@ -11,7 +11,7 @@ import { MemberStarterPageContent } from './components/memberStarterPageContent.
 
 export const MemberStarterPage = () => {
   return (
-    <Fragment>
+    <>
       <Container>
         <Toolbar>
           <ToolbarHeading>
@@ -32,6 +32,6 @@ export const MemberStarterPage = () => {
       <Container>
         <MemberStarterPageContent />
       </Container>
-    </Fragment>
+    </>
   );
 };

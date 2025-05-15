@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Container, DataGrid } from '@/components';
-import { getGlobalParameters } from '@/api/get';
+import { getUsers } from '@/api/get';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useDriversColumns } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversColumns.tsx';
@@ -8,8 +8,8 @@ import { DriversToolbar } from '@/pages/hr-module/drivers/drivers-list/component
 
 export const DriversListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['global-parameters'],
-    queryFn: () => getGlobalParameters(),
+    queryKey: ['users-drivers'],
+    queryFn: () => getUsers(),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5
   });

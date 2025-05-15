@@ -28,3 +28,4 @@ export * from './getUnits';
 export * from './getGlobalParamsPositions';
 export * from './getGlobalParamsSubdivisions';
 export * from './getGlobalParamsDepartments';
+export * from './getUsers';
