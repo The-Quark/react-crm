@@ -53,7 +53,7 @@ export const AllMenuSideBar: TMenuConfig = [
       },
       {
         title: 'MENU.MEGAMENU.DRIVERS',
-        path: '/hr-module/drivers'
+        path: '/hr-module/drivers/list'
       },
       {
         title: 'MENU.MEGAMENU.COURIERS',

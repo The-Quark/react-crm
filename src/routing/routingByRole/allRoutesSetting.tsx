@@ -4,7 +4,6 @@ import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
-import DriversPage from '@/pages/hr-module/drivers/driversPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import {
   MemberRoleUpdatePage,
@@ -127,7 +126,7 @@ import {
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
-import { CargoUploadContent } from '@/pages/call-center/cargo/cargoUpload/components/cargoUploadContent.tsx';
+import { DriversListPage, DriversStarterPage, DriversViewPage } from '@/pages/hr-module/drivers';
 
 const AllRoutesSetting = () => {
   return (
@@ -164,7 +163,10 @@ const AllRoutesSetting = () => {
         <Route path="/clients/starter-clients/:id" element={<ClientStarterPage />} />
 
         <Route path="/hr-module/staff" element={<StaffPage />} />
-        <Route path="/hr-module/drivers" element={<DriversPage />} />
+        <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
+        <Route path="/hr-module/drivers/starter" element={<DriversStarterPage />} />
+        <Route path="/hr-module/drivers/starter/:id" element={<DriversStarterPage />} />
+        <Route path="/hr-module/drivers/view/:id" element={<DriversViewPage />} />
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
 
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
