@@ -10,17 +10,18 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { IGlobalParamsPositionFormValues } from '@/api/post/postGlobalParamsPosition/types.ts';
+import { IGlobalParamsSubdivisionFormValues } from '@/api/post/postGlobalParamsSubdivision/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { IGlobalParamsPositionModel } from '@/api/get/getGlobalParamsPositions/types.ts';
+import { ISubdivisionResponse } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import {
+  getCurrencies,
   getGlobalParameters,
-  getGlobalParamsPositions,
-  postGlobalParamsPosition,
-  putGlobalParamsPosition
+  getGlobalParamsSubdivisions,
+  getLanguages,
+  postGlobalParamsSubdivision,
+  putGlobalParamsSubdivisions
 } from '@/api';
-import { Textarea } from '@/components/ui/textarea.tsx';
 
 interface Props {
   open: boolean;
@@ -29,45 +30,56 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
+  name: Yup.string().required('Name is required'),
   company_id: Yup.string().required('Company is required'),
-  description: Yup.string().optional(),
+  language_id: Yup.string().required('Language is required'),
+  currency_id: Yup.string().required('Currency is required'),
   is_active: Yup.boolean().required('Active status is required')
 });
 
 const getInitialValues = (
   isEditMode: boolean,
-  data: IGlobalParamsPositionModel
-): IGlobalParamsPositionFormValues => {
+  data: ISubdivisionResponse
+): IGlobalParamsSubdivisionFormValues => {
   if (isEditMode && data?.result) {
     return {
-      title: data.result[0].title || '',
+      name: data.result[0].name || '',
+      timezone: data.result[0].timezone || '',
+      warehouse_address: data.result[0].warehouse_address || '',
+      legal_address: data.result[0].legal_address || '',
       company_id: data.result[0].company_id || '',
-      description: data.result[0].description || '',
+      language_id: data.result[0].language_id || '',
+      currency_id: data.result[0].currency_id || '',
       is_active: data.result[0].is_active || true
     };
   }
   return {
-    title: '',
+    name: '',
+    timezone: '',
+    warehouse_address: '',
+    legal_address: '',
     company_id: '',
-    description: '',
+    language_id: '',
+    currency_id: '',
     is_active: true
   };
 };
 
-export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
+export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
+  const [searchLanguageTerm, setSearchLanguageTerm] = useState('');
+  const [searchCurrencyTerm, setSearchCurrencyTerm] = useState('');
   const queryClient = useQueryClient();
 
   const {
-    data: positionsData,
-    isLoading: positionsLoading,
-    isError: positionsIsError,
-    error: positionsError
+    data: subdivisionsData,
+    isLoading: subdivisionsLoading,
+    isError: subdivisionsIsError,
+    error: subdivisionsError
   } = useQuery({
-    queryKey: ['formPositions', id],
-    queryFn: () => getGlobalParamsPositions(Number(id)),
+    queryKey: ['formSubdivisions', id],
+    queryFn: () => getGlobalParamsSubdivisions(Number(id)),
     enabled: !!id && open
   });
 
@@ -77,28 +89,54 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
     isError: companyIsError,
     error: companyError
   } = useQuery({
-    queryKey: ['positionsCompany'],
+    queryKey: ['subdivisionsCompany'],
     queryFn: () => getGlobalParameters(),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });
 
+  const {
+    data: currencyData,
+    isLoading: currencyLoading,
+    isError: currencyIsError,
+    error: currencyError
+  } = useQuery({
+    queryKey: ['subdivisionsCurrency'],
+    queryFn: () => getCurrencies(),
+    staleTime: 1000 * 60 * 2,
+    enabled: open
+  });
+
+  const {
+    data: languageData,
+    isLoading: languageLoading,
+    isError: languageIsError,
+    error: languageError
+  } = useQuery({
+    queryKey: ['subdivisionsLanguage'],
+    queryFn: () => getLanguages(),
+    staleTime: 1000 * 60 * 2,
+    enabled: open
+  });
+
   const formik = useFormik({
-    initialValues: getInitialValues(!!id, positionsData as IGlobalParamsPositionModel),
+    initialValues: getInitialValues(!!id, subdivisionsData as ISubdivisionResponse),
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
         if (id) {
-          await putGlobalParamsPosition(Number(id), values);
+          await putGlobalParamsSubdivisions(Number(id), values);
         } else {
-          await postGlobalParamsPosition(values);
+          await postGlobalParamsSubdivision(values);
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['globalParamsPositions'] });
+        queryClient.invalidateQueries({ queryKey: ['globalParamsSubdivisions'] });
         setSearchCompanyTerm('');
+        setSearchLanguageTerm('');
+        setSearchCurrencyTerm('');
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -110,7 +148,7 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
-    queryClient.removeQueries({ queryKey: ['formPositions'] });
+    queryClient.removeQueries({ queryKey: ['formSubdivisions'] });
     onOpenChange();
   };
 
@@ -132,8 +170,10 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
         </DialogHeader>
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
           {companyIsError && <SharedError error={companyError} />}
-          {id && positionsIsError && <SharedError error={positionsError} />}
-          {positionsLoading || companyLoading ? (
+          {languageIsError && <SharedError error={languageError} />}
+          {currencyIsError && <SharedError error={currencyError} />}
+          {id && subdivisionsIsError && <SharedError error={subdivisionsError} />}
+          {subdivisionsLoading || companyLoading || languageLoading || currencyLoading ? (
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
@@ -153,23 +193,40 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCompanyTerm}
                 onSearchTermChange={setSearchCompanyTerm}
               />
-              <SharedInput name="title" label="Title" formik={formik} />
+              <SharedInput name="name" label="Name" formik={formik} />
 
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Description</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <Textarea
-                    rows={4}
-                    placeholder="Description"
-                    {...formik.getFieldProps('description')}
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.description}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedAutocomplete
+                label="Language"
+                value={formik.values.language_id}
+                options={languageData?.result.map((item) => ({ ...item, name: item.name })) ?? []}
+                placeholder="Select language"
+                searchPlaceholder="Search language"
+                onChange={(val) => {
+                  formik.setFieldValue('language_id', val);
+                }}
+                error={formik.errors.language_id as string}
+                touched={formik.touched.language_id}
+                searchTerm={searchLanguageTerm}
+                onSearchTermChange={setSearchLanguageTerm}
+              />
+
+              <SharedAutocomplete
+                label="Currency"
+                value={formik.values.currency_id}
+                options={currencyData?.result.map((item) => ({ ...item, name: item.name })) ?? []}
+                placeholder="Select currency"
+                searchPlaceholder="Search currency"
+                onChange={(val) => {
+                  formik.setFieldValue('currency_id', val);
+                }}
+                error={formik.errors.currency_id as string}
+                touched={formik.touched.currency_id}
+                searchTerm={searchCurrencyTerm}
+                onSearchTermChange={setSearchCurrencyTerm}
+              />
+
+              <SharedInput name="legal_address" label="Legal Address" formik={formik} />
+              <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
 
               {!!id && (
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">

@@ -20,11 +20,7 @@ import {
   DepartmentsStaterPage,
   DepartmentsViewPage,
   PositionsListPage,
-  PositionsStarterPage,
-  PositionsViewPage,
-  SubdivisionsListPage,
-  SubdivisionsStarterPage,
-  SubdivisionsViewPage
+  SubdivisionsListPage
 } from '@/pages/global-parameters';
 import {
   CampaignsCardPage,
@@ -161,20 +157,8 @@ const AllRoutesSetting = () => {
         <Route path="/global-parameters/departments/view/:id" element={<DepartmentsViewPage />} />
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
 
-        <Route
-          path="/global-parameters/subdivisions/starter"
-          element={<SubdivisionsStarterPage />}
-        />
-        <Route
-          path="/global-parameters/subdivisions/starter/:id"
-          element={<SubdivisionsStarterPage />}
-        />
-        <Route path="/global-parameters/subdivisions/view/:id" element={<SubdivisionsViewPage />} />
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
 
-        <Route path="/global-parameters/positions/starter" element={<PositionsStarterPage />} />
-        <Route path="/global-parameters/positions/starter/:id" element={<PositionsStarterPage />} />
-        <Route path="/global-parameters/positions/view/:id" element={<PositionsViewPage />} />
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
 
         <Route path="/roles-permissions/roles" element={<RolesPage />} />

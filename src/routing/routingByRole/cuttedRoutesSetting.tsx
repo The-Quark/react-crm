@@ -10,11 +10,7 @@ import {
   DepartmentsStaterPage,
   DepartmentsViewPage,
   PositionsListPage,
-  PositionsStarterPage,
-  PositionsViewPage,
-  SubdivisionsListPage,
-  SubdivisionsStarterPage,
-  SubdivisionsViewPage
+  SubdivisionsListPage
 } from '@/pages/global-parameters';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
@@ -80,20 +76,8 @@ const routeConfig = [
       { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
 
       { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
-      { path: '/global-parameters/subdivisions/starter', element: <SubdivisionsStarterPage /> },
-      {
-        path: '/global-parameters/subdivisions/starter/:id',
-        element: <SubdivisionsStarterPage />
-      },
-      { path: '/global-parameters/subdivisions/view/:id', element: <SubdivisionsViewPage /> },
 
       { path: '/global-parameters/positions/list', element: <PositionsListPage /> },
-      { path: '/global-parameters/positions/starter', element: <PositionsStarterPage /> },
-      {
-        path: '/global-parameters/positions/starter/:id',
-        element: <PositionsStarterPage />
-      },
-      { path: '/global-parameters/positions/view/:id', element: <PositionsViewPage /> },
 
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
@@ -118,9 +102,7 @@ const routeConfig = [
       { path: '/global-parameters/departments/list', element: <DepartmentsListPage /> },
       { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
       { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
-      { path: '/global-parameters/subdivisions/view/:id', element: <SubdivisionsViewPage /> },
       { path: '/global-parameters/positions/list', element: <PositionsListPage /> },
-      { path: '/global-parameters/positions/view/:id', element: <PositionsViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
       { path: '/guides/cities', element: <GuidesCitiesPage /> },

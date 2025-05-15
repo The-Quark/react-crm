@@ -8,9 +8,7 @@ import {
   DepartmentsListPage,
   DepartmentsViewPage,
   PositionsListPage,
-  PositionsViewPage,
-  SubdivisionsListPage,
-  SubdivisionsViewPage
+  SubdivisionsListPage
 } from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
@@ -57,10 +55,8 @@ const ViewerRoutesSetting = () => {
         <Route path="/global-parameters/departments/view/:id" element={<DepartmentsViewPage />} />
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
 
-        <Route path="/global-parameters/subdivisions/view/:id" element={<SubdivisionsViewPage />} />
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
 
-        <Route path="/global-parameters/positions/view/:id" element={<PositionsViewPage />} />
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
 
         <Route path="/roles-permissions/roles" element={<RolesPage />} />

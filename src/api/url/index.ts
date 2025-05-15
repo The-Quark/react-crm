@@ -59,3 +59,5 @@ export const TASK_URL = `${api}/task/manage`;
 export const UNIT_URL = `${api}/package_material/unit/manage`;
 
 export const GLOBAL_PARAMS_POSITIONS = `${api}/company-global-settings/position/manage`;
+
+export const GLOBAL_PARAMS_SUBDIVISIONS = `${api}/company-global-settings/subdivision/manage`;

@@ -26,3 +26,4 @@ export * from './getTemplates';
 export * from './getTask';
 export * from './getUnits';
 export * from './getGlobalParamsPositions';
+export * from './getGlobalParamsSubdivisions';
