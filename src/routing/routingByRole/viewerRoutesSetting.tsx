@@ -4,16 +4,12 @@ import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import {
   CompaniesListPage,
-  CompaniesStarterPage,
   CompaniesViewPage,
   DepartmentsListPage,
-  DepartmentsStaterPage,
   DepartmentsViewPage,
   PositionsListPage,
-  PositionsStarterPage,
   PositionsViewPage,
   SubdivisionsListPage,
-  SubdivisionsStarterPage,
   SubdivisionsViewPage
 } from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
@@ -49,6 +45,7 @@ import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversViewPage } from '@/pages/hr-module/drivers';
 
 const ViewerRoutesSetting = () => {
+  console.log('ViewerRoutesSetting');
   return (
     <Routes>
       <Route element={<Demo1Layout />}>

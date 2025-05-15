@@ -41,16 +41,39 @@ export interface User {
   created_at: string;
   updated_at: string;
   phone: string;
-  position: string;
-  location: string;
-  avatar: string;
+  position: string | null;
+  location: string | null;
+  avatar: string | null;
   last_login: string;
   last_ip: string;
+  deleted_at: string | null;
+  last_seen: string;
+  first_name: string;
+  last_name: string;
+  patronymic: string | null;
+  birth_date: string | null;
+  gender: string | null;
+  status: string;
+  login: string;
+  company_id: number | null;
+  subdivision_id: number | null;
+  department_id: number | null;
+  position_id: number | null;
+  license_category: string | null;
+  vehicle_id: number | null;
+  language_id: number | null;
+  driver_status: string | null;
+  courier_type: string | null;
+  driver_details: any | null;
   roles: Role[];
   permissions: Permission[];
   can_register: boolean;
   language?: TLanguageCode;
   auth?: AuthModel;
+  company: any | null;
+  department: any | null;
+  subdivision: any | null;
+  vehicle: any | null;
 }
 
 export interface UserModel {

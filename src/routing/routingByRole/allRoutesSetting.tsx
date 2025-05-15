@@ -138,6 +138,7 @@ import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversStarterPage, DriversViewPage } from '@/pages/hr-module/drivers';
 
 const AllRoutesSetting = () => {
+  console.log('AllRoutesSetting');
   return (
     <Routes>
       <Route element={<Demo1Layout />}>
