@@ -1,4 +1,4 @@
-interface Media {
+export interface Media {
   id: number;
   model_type: string;
   model_id: number;

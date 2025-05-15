@@ -2,10 +2,8 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
-import { deleteTemplate } from '@/api';
 import { Template } from '@/api/get/getTemplates/types.ts';
-import { TemplatesModal } from '@/pages/guides/tabs/templates/components/blocks/templatesModal.tsx';
+import { TemplatesMenuOptions } from '@/pages/guides/tabs/templates/components/blocks/templatesMenuOptions.tsx';
 
 interface Language {
   id: number;
@@ -32,7 +30,7 @@ export const useTemplatesColumns = ({
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
           </div>
         ),
         meta: {
@@ -106,19 +104,7 @@ export const useTemplatesColumns = ({
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <GuidesMenuOptions
-            id={info.row.original.id}
-            invalidateRequestKey="guidesTemplates"
-            deleteRequest={deleteTemplate}
-            renderModal={({ open, onOpenChange }) => (
-              <TemplatesModal
-                open={open}
-                onOpenChange={onOpenChange}
-                id={info.row.original.id}
-                selectedLanguage={selectedLanguage}
-              />
-            )}
-          />
+          <TemplatesMenuOptions id={info.row.original.id} selectedLanguage={selectedLanguage} />
         ),
         meta: {
           headerClassName: 'w-[60px]'

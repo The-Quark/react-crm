@@ -9,7 +9,7 @@ export const postTemplateUpload = async (
   language_code: string
 ): Promise<ITemplateUploadResponse> => {
   const formData = new FormData();
-  formData.append('id', id.toString());
+  formData.append('template_id', id.toString());
   formData.append('type', type);
   formData.append('language_code', language_code);
   files.forEach((file) => {

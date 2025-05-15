@@ -14,6 +14,7 @@ import { getTemplates, getLanguages, postTemplateUpload } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
 import { UploadType } from '@/api/post/postCargoUpload/types.ts';
+import { Media } from '@/api/get/getTemplates/types.ts';
 import { AxiosError } from 'axios';
 import Dropzone from 'shadcn-dropzone';
 
@@ -216,28 +217,28 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                 <div className="grid gap-2">
                   <h4 className="font-medium">Uploaded files</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {/*<SharedFileCard*/}
-                    {/*  key={*/}
-                    {/*    templateData.result[0].language.find(*/}
-                    {/*      (l) => l.crm_language.code === selectedLanguage*/}
-                    {/*    )?.file.id*/}
-                    {/*  }*/}
-                    {/*  file={*/}
-                    {/*    templateData.result[0].language.find(*/}
-                    {/*      (l) => l.crm_language.code === selectedLanguage*/}
-                    {/*    )?.file*/}
-                    {/*  }*/}
-                    {/*  onClick={() =>*/}
-                    {/*    handleOpenFile(*/}
-                    {/*      templateData.result[0].language.find(*/}
-                    {/*        (l) => l.crm_language.code === selectedLanguage*/}
-                    {/*      )?.file.original_url,*/}
-                    {/*      templateData.result[0].language.find(*/}
-                    {/*        (l) => l.crm_language.code === selectedLanguage*/}
-                    {/*      )?.file.mime_type*/}
-                    {/*    )*/}
-                    {/*  }*/}
-                    {/*/>*/}
+                    <SharedFileCard
+                      key={
+                        templateData.result[0].language.find(
+                          (l) => l.crm_language.code === selectedLanguage
+                        )?.file.id
+                      }
+                      file={
+                        templateData.result[0].language.find(
+                          (l) => l.crm_language.code === selectedLanguage
+                        )?.file as Media
+                      }
+                      onClick={() =>
+                        handleOpenFile(
+                          templateData.result[0].language.find(
+                            (l) => l.crm_language.code === selectedLanguage
+                          )?.file.original_url ?? '',
+                          templateData.result[0].language.find(
+                            (l) => l.crm_language.code === selectedLanguage
+                          )?.file.mime_type ?? ''
+                        )
+                      }
+                    />
                   </div>
                 </div>
               )}
