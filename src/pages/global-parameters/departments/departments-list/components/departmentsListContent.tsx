@@ -3,10 +3,10 @@ import { Container, DataGrid } from '@/components';
 import { getGlobalParameters } from '@/api/get';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { ParametersToolbar } from '@/pages/global-parameters/global-parameters-list/components/blocks/parametersToolbar.tsx';
-import { useParametersColumns } from '@/pages/global-parameters/global-parameters-list/components/blocks/parametersColumns.tsx';
+import { CompaniesToolbar } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesToolbar.tsx';
+import { useParametersColumns } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesColumns.tsx';
 
-export const GlobalParametersListContent = () => {
+export const DepartmentsListContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['global-parameters'],
     queryFn: () => getGlobalParameters(),
@@ -31,7 +31,7 @@ export const GlobalParametersListContent = () => {
             rowSelection={true}
             pagination={{ size: 15 }}
             sorting={[{ id: 'id', desc: false }]}
-            toolbar={<ParametersToolbar />}
+            toolbar={<CompaniesToolbar />}
             layout={{ card: true }}
           />
         )}

@@ -5,7 +5,7 @@ interface IGeneralSettingsProps {
   parameter: ParametersModel | null;
 }
 
-export const GlobalParameterViewContentCard: FC<IGeneralSettingsProps> = ({ parameter }) => {
+export const CompaniesViewContentCard: FC<IGeneralSettingsProps> = ({ parameter }) => {
   return (
     <div className="card pb-2.5">
       <div className="card-header" id="general_settings">

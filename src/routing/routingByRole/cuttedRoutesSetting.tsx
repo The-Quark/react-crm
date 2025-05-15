@@ -3,9 +3,18 @@ import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import {
-  GlobalParametersListPage,
-  GlobalParameterStarterPage,
-  GlobalParameterViewPage
+  CompaniesListPage,
+  CompaniesStarterPage,
+  CompaniesViewPage,
+  DepartmentsListPage,
+  DepartmentsStaterPage,
+  DepartmentsViewPage,
+  PositionsListPage,
+  PositionsStarterPage,
+  PositionsViewPage,
+  SubdivisionsListPage,
+  SubdivisionsStarterPage,
+  SubdivisionsViewPage
 } from '@/pages/global-parameters';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
@@ -54,13 +63,38 @@ const routeConfig = [
   {
     permission: 'manage global settings',
     routes: [
-      { path: '/global-parameters/list', element: <GlobalParametersListPage /> },
-      { path: '/global-parameters/starter-parameters', element: <GlobalParameterStarterPage /> },
+      { path: '/global-parameters/list', element: <CompaniesListPage /> },
+      { path: '/global-parameters/starter-parameters', element: <CompaniesStarterPage /> },
       {
         path: '/global-parameters/starter-parameters/:id',
-        element: <GlobalParameterStarterPage />
+        element: <CompaniesStarterPage />
       },
-      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
+      { path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> },
+
+      { path: '/global-parameters/departments/list', element: <DepartmentsListPage /> },
+      { path: '/global-parameters/departments/starter', element: <DepartmentsStaterPage /> },
+      {
+        path: '/global-parameters/departments/starter/:id',
+        element: <DepartmentsStaterPage />
+      },
+      { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
+
+      { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
+      { path: '/global-parameters/subdivisions/starter', element: <SubdivisionsStarterPage /> },
+      {
+        path: '/global-parameters/subdivisions/starter/:id',
+        element: <SubdivisionsStarterPage />
+      },
+      { path: '/global-parameters/subdivisions/view/:id', element: <SubdivisionsViewPage /> },
+
+      { path: '/global-parameters/positions/list', element: <PositionsListPage /> },
+      { path: '/global-parameters/positions/starter', element: <PositionsStarterPage /> },
+      {
+        path: '/global-parameters/positions/starter/:id',
+        element: <PositionsStarterPage />
+      },
+      { path: '/global-parameters/positions/view/:id', element: <PositionsViewPage /> },
+
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
       { path: '/guides/cities', element: <GuidesCitiesPage /> },
@@ -79,8 +113,14 @@ const routeConfig = [
   {
     permission: 'view global settings',
     routes: [
-      { path: '/global-parameters/list', element: <GlobalParametersListPage /> },
-      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> },
+      { path: '/global-parameters/list', element: <CompaniesListPage /> },
+      { path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> },
+      { path: '/global-parameters/departments/list', element: <DepartmentsListPage /> },
+      { path: '/global-parameters/departments/view/:id', element: <DepartmentsViewPage /> },
+      { path: '/global-parameters/subdivisions/list', element: <SubdivisionsListPage /> },
+      { path: '/global-parameters/subdivisions/view/:id', element: <SubdivisionsViewPage /> },
+      { path: '/global-parameters/positions/list', element: <PositionsListPage /> },
+      { path: '/global-parameters/positions/view/:id', element: <PositionsViewPage /> },
       { path: '/guides/currencies', element: <GuidesCurrenciesPage /> },
       { path: '/guides/countries', element: <GuidesCountriesPage /> },
       { path: '/guides/cities', element: <GuidesCitiesPage /> },
@@ -102,16 +142,14 @@ const routeConfig = [
     routes: [
       {
         path: '/global-parameters/starter-parameters/:id',
-        element: <GlobalParameterStarterPage />
+        element: <CompaniesStarterPage />
       },
-      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
+      { path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> }
     ]
   },
   {
     permission: 'view global contexted settings',
-    routes: [
-      { path: '/global-parameters/view-parameters/:id', element: <GlobalParameterViewPage /> }
-    ]
+    routes: [{ path: '/global-parameters/view-parameters/:id', element: <CompaniesViewPage /> }]
   },
   {
     permission: 'manage users',

@@ -19,7 +19,24 @@ export const CuttedMenuSideBar: TMenuConfig = [
     title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS',
     icon: 'icon',
     requiredPermissions: ['manage global settings'],
-    path: '/global-parameters/list'
+    children: [
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.COMPANIES',
+        path: '/global-parameters/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.DEPARTMENTS',
+        path: '/global-parameters/departments/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.SUBDIVISIONS',
+        path: '/global-parameters/subdivisions/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.GLOBAL_PARAMETERS.POSITIONS',
+        path: '/global-parameters/positions/list'
+      }
+    ]
   },
   {
     title: 'MENU.MEGAMENU.GUIDES',

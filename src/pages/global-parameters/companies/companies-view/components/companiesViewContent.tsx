@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { getGlobalParameters } from '@/api/get';
-import { GlobalParameterViewContentCard } from '@/pages/global-parameters/global-parameter-view/components/blocks/globalParameterViewContentCard.tsx';
+import { CompaniesViewContentCard } from '@/pages/global-parameters/companies/companies-view/components/blocks/companiesViewContentCard.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
@@ -21,7 +21,7 @@ const GlobalParameterViewContent = () => {
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <GlobalParameterViewContentCard parameter={data?.result[0] ?? null} />
+      <CompaniesViewContentCard parameter={data?.result[0] ?? null} />
     </div>
   );
 };

@@ -51,7 +51,7 @@ interface IParameterFormValues {
   cost_per_airplace: number;
 }
 
-export const GlobalParameterStarterContent = () => {
+export const CompaniesStarterContent = () => {
   const [loading, setLoading] = useState(false);
   const { currentLanguage } = useLanguage();
   const { id } = useParams<{ id: string }>();

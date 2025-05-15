@@ -2,7 +2,20 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
-import { GlobalParametersListPage, GlobalParameterViewPage } from '@/pages/global-parameters';
+import {
+  CompaniesListPage,
+  CompaniesStarterPage,
+  CompaniesViewPage,
+  DepartmentsListPage,
+  DepartmentsStaterPage,
+  DepartmentsViewPage,
+  PositionsListPage,
+  PositionsStarterPage,
+  PositionsViewPage,
+  SubdivisionsListPage,
+  SubdivisionsStarterPage,
+  SubdivisionsViewPage
+} from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
@@ -42,11 +55,18 @@ const ViewerRoutesSetting = () => {
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
-        <Route path="/global-parameters/list" element={<GlobalParametersListPage />} />
-        <Route
-          path="/global-parameters/view-parameters/:id"
-          element={<GlobalParameterViewPage />}
-        />
+        <Route path="/global-parameters/view-parameters/:id" element={<CompaniesViewPage />} />
+        <Route path="/global-parameters/list" element={<CompaniesListPage />} />
+
+        <Route path="/global-parameters/departments/view/:id" element={<DepartmentsViewPage />} />
+        <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
+
+        <Route path="/global-parameters/subdivisions/view/:id" element={<SubdivisionsViewPage />} />
+        <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
+
+        <Route path="/global-parameters/positions/view/:id" element={<PositionsViewPage />} />
+        <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
+
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
 
