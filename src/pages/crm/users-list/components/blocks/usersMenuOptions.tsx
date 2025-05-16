@@ -54,7 +54,7 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
             </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink path={`/crm/member-update/${id}`}>
+            <MenuLink path={`/crm/users/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>

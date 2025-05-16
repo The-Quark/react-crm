@@ -12,12 +12,7 @@ import {
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
-import {
-  MemberPublicProfilePage,
-  MembersPage,
-  UsersListPage,
-  UsersPublicProfilePage
-} from '@/pages/crm';
+import { UsersListPage, UsersPublicProfilePage } from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';

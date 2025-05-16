@@ -10,11 +10,11 @@ export const CompaniesToolbar = () => {
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Global parameters</h3>
+      <h3 className="card-title">Companies</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
-            New global parameter
+            New company
           </a>
         )}
         <DataGridColumnVisibility table={table} />

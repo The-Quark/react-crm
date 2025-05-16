@@ -203,7 +203,7 @@ export const CompaniesStarterContent = () => {
       ) : (
         <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
           <div className="card-header" id="general_settings">
-            <h3 className="card-title">Global Parameter</h3>
+            <h3 className="card-title">Company</h3>
           </div>
           <div className="card-body grid gap-5">
             <SharedInput name="company_name" label="Company Name" formik={formik} />

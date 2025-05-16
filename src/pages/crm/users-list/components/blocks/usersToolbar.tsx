@@ -8,7 +8,7 @@ export const UsersToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Users</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/crm/member-starter" className="btn btn-sm btn-primary">
+        <a href="/crm/users/starter" className="btn btn-sm btn-primary">
           New user
         </a>
         <DataGridColumnVisibility table={table} />

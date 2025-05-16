@@ -9,7 +9,7 @@ export const CompaniesViewContentCard: FC<IGeneralSettingsProps> = ({ parameter 
   return (
     <div className="card pb-2.5">
       <div className="card-header" id="general_settings">
-        <h3 className="card-title">Parameter</h3>
+        <h3 className="card-title">Company</h3>
       </div>
       <div className="card-body grid gap-5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

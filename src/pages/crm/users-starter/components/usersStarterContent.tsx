@@ -316,6 +316,26 @@ export const UsersStarterContent = () => {
           />
 
           <SharedAutocomplete
+            label="Subdivision"
+            value={formik.values.position_id ?? ''}
+            options={
+              positionsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.title
+              })) ?? []
+            }
+            placeholder="Select position"
+            searchPlaceholder="Search position"
+            onChange={(val) => {
+              formik.setFieldValue('position_id', val);
+            }}
+            error={formik.errors.position_id as string}
+            touched={formik.touched.position_id}
+            searchTerm={searchPositionTerm}
+            onSearchTermChange={setSearchPositionTerm}
+          />
+
+          <SharedAutocomplete
             label="Position"
             value={formik.values.position_id ?? ''}
             options={

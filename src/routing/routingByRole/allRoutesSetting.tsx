@@ -7,12 +7,11 @@ import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import {
   MemberRoleUpdatePage,
-  MembersPage,
   MemberStarterPage,
   MemberUpdatePage,
-  MemberPublicProfilePage,
   UsersListPage,
-  UsersPublicProfilePage
+  UsersPublicProfilePage,
+  UsersStarterPage
 } from '@/pages/crm';
 import {
   CompaniesListPage,
@@ -178,9 +177,9 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/upload/:id" element={<CargoUploadPage />} />
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />
-        <Route path="/crm/member-starter" element={<MemberStarterPage />} />
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
-        <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
+        <Route path="/crm/users/starter" element={<UsersStarterPage />} />
+        <Route path="/crm/users/starter/:id" element={<UsersStarterPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />,
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />

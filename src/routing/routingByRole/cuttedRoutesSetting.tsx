@@ -14,13 +14,10 @@ import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
 import {
-  MemberPublicProfilePage,
   MemberRoleUpdatePage,
-  MembersPage,
-  MemberStarterPage,
-  MemberUpdatePage,
   UsersListPage,
-  UsersPublicProfilePage
+  UsersPublicProfilePage,
+  UsersStarterPage
 } from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
@@ -129,9 +126,9 @@ const routeConfig = [
   {
     permission: 'manage users',
     routes: [
-      { path: '/crm/member-starter', element: <MemberStarterPage /> },
       { path: '/crm/member-role-update/:id', element: <MemberRoleUpdatePage /> },
-      { path: '/crm/member-update/:id', element: <MemberUpdatePage /> },
+      { path: '/crm/users/starter', element: <UsersStarterPage /> },
+      { path: '/crm/users/starter/:id', element: <UsersStarterPage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> }
     ]
