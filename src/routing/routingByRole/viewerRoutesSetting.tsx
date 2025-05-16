@@ -12,7 +12,12 @@ import {
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
-import { MemberPublicProfilePage, MembersPage, UsersListPage } from '@/pages/crm';
+import {
+  MemberPublicProfilePage,
+  MembersPage,
+  UsersListPage,
+  UsersPublicProfilePage
+} from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
@@ -76,7 +81,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/users/list" element={<UsersListPage />} />
-        <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
+        <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
 
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />

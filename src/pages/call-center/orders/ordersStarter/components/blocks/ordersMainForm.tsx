@@ -8,7 +8,14 @@ import {
   SharedSelect
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import { getApplications, getDeliveryTypes, getPackageTypes, postOrder, putOrder } from '@/api';
+import {
+  getApplications,
+  getDeliveryTypes,
+  getPackageTypes,
+  getSources,
+  postOrder,
+  putOrder
+} from '@/api';
 import { AxiosError } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
@@ -32,6 +39,11 @@ interface Props {
 
 const formSchema = Yup.object().shape({
   application_id: Yup.number().optional(),
+  source_id: Yup.string().when('application_id', {
+    is: (application_id: number) => !application_id,
+    then: (schema) => schema.required('Source is required when application is not selected'),
+    otherwise: (schema) => schema.optional()
+  }),
   delivery_type: Yup.number()
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
@@ -116,7 +128,8 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
       is_international: orderData?.is_international || false,
       price: orderData?.price || 0,
       package_description: orderData?.package_description || '',
-      special_wishes: orderData?.special_wishes || ''
+      special_wishes: orderData?.special_wishes || '',
+      source_id: orderData?.source?.id || ''
     },
     validationSchema: formSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -169,6 +182,17 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
   });
 
   const {
+    data: sourcesData,
+    isLoading: sourcesLoading,
+    isError: sourcesIsError,
+    error: sourcesError
+  } = useQuery({
+    queryKey: ['sources'],
+    queryFn: () => getSources(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
     data: deliveryTypesData,
     isLoading: deliveryTypesLoading,
     isError: deliveryTypesIsError,
@@ -190,7 +214,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
     staleTime: 1000 * 60 * 5
   });
 
-  if (deliveryTypesLoading || packageTypesLoading || applicationsLoading) {
+  if (deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading) {
     return <SharedLoading />;
   }
 
@@ -202,6 +226,10 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
   }
   if (applicationsIsError) {
     return <SharedError error={applicationsError} />;
+  }
+
+  if (sourcesIsError) {
+    return <SharedError error={sourcesError} />;
   }
 
   return (
@@ -221,6 +249,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             searchPlaceholder="Search application"
             onChange={(val) => {
               formik.setFieldValue('application_id', val);
+              formik.setFieldValue('source_id', '');
               setApplicationId(Number(val));
             }}
             error={formik.errors.application_id as string}
@@ -228,6 +257,19 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
+          {!formik.values.application_id && (
+            <SharedSelect
+              name="source_id"
+              label="Source"
+              formik={formik}
+              options={
+                sourcesData?.result?.map((source) => ({
+                  label: source.name,
+                  value: source.id
+                })) || []
+              }
+            />
+          )}
           <SharedSelect
             name="delivery_type"
             label="Delivery type"

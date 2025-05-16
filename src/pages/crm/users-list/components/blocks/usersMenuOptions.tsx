@@ -36,7 +36,7 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/crm/member/profile/${id}`}>
+        <MenuLink path={`/crm/users/public-profile/${id}`}>
           <MenuIcon>
             <KeenIcon icon="user" />
           </MenuIcon>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserListResponse } from '@/api/get/getUsers/types.ts';
+import { UsersResponse } from '@/api/get/getUsers/types.ts';
 import { USERS_URL } from '@/api/url';
 
 export interface UsersFilterParams {
@@ -28,7 +28,7 @@ export interface UsersFilterParams {
   language_code?: string;
 }
 
-export const getUsers = async (filters?: UsersFilterParams): Promise<UserListResponse> => {
+export const getUsers = async (filters?: UsersFilterParams): Promise<UsersResponse> => {
   const params = new URLSearchParams();
 
   if (filters) {
@@ -82,5 +82,5 @@ export const getUsers = async (filters?: UsersFilterParams): Promise<UserListRes
     }
   }
 
-  return await axios.get<UserListResponse>(USERS_URL, { params }).then((res) => res.data);
+  return await axios.get<UsersResponse>(USERS_URL, { params }).then((res) => res.data);
 };

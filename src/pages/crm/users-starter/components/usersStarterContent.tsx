@@ -1,0 +1,351 @@
+import {
+  getGlobalParameters,
+  getGlobalParamsDepartments,
+  getGlobalParamsPositions,
+  getGlobalParamsSubdivisions,
+  getUsers,
+  postCreateUser
+} from '@/api';
+import { IUserFormValues } from '@/api/post/postUser/types.ts';
+import { useFormik } from 'formik';
+import { AxiosError } from 'axios';
+import * as Yup from 'yup';
+import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { UserStatus } from '@/api/get/getUsers/types.ts';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
+import { cn } from '@/lib/utils.ts';
+import { KeenIcon } from '@/components';
+import { CalendarDate } from '@/components/ui/calendarDate.tsx';
+
+export const formSchema = Yup.object().shape({
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'Phone number is not valid')
+    .required('Phone number is required'),
+  first_name: Yup.string().required('First name is required'),
+  last_name: Yup.string().required('Last name is required'),
+  patronymic: Yup.string().required('Patronymic is required'),
+  birth_date: Yup.string().required('Birth date is required'),
+  location: Yup.string().required('Location is required'),
+  company_id: Yup.string().required('Company is required'),
+  subdivision_id: Yup.string().required('Subdivision is required'),
+  department_id: Yup.string().required('Department is required'),
+  position_id: Yup.string().required('Position is required'),
+  email: Yup.string().email('Invalid email address').optional()
+});
+
+export const UsersStarterContent = () => {
+  const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(false);
+  const isEditMode = !!id;
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
+  const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
+  const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
+  const [searchPositionTerm, setSearchPositionTerm] = useState('');
+
+  const {
+    data: companiesData,
+    isLoading: companiesLoading,
+    isError: companiesIsError,
+    error: companiesError
+  } = useQuery({
+    queryKey: ['users-companies'],
+    queryFn: () => getGlobalParameters(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: departmentsData,
+    isLoading: departmentsLoading,
+    isError: departmentsIsError,
+    error: departmentsError
+  } = useQuery({
+    queryKey: ['users-departments'],
+    queryFn: () => getGlobalParamsDepartments(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: subdivisionsData,
+    isLoading: subdivisionsLoading,
+    isError: subdivisionsIsError,
+    error: subdivisionsError
+  } = useQuery({
+    queryKey: ['users-subdivisions'],
+    queryFn: () => getGlobalParamsSubdivisions(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: positionsData,
+    isLoading: positionsLoading,
+    isError: positionsIsError,
+    error: positionsError
+  } = useQuery({
+    queryKey: ['users-positions'],
+    queryFn: () => getGlobalParamsPositions(),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: usersData,
+    isLoading: usersLoading,
+    isError: usersIsError,
+    error: usersError
+  } = useQuery({
+    queryKey: ['usersID', id],
+    queryFn: () => getUsers({ id: id ? Number(id) : undefined }),
+    enabled: isEditMode
+  });
+
+  const initialValues: IUserFormValues = {
+    email: '',
+    status: UserStatus.ACTIVE,
+    avatar: '',
+    birth_date: '',
+    company_id: '',
+    first_name: '',
+    last_name: '',
+    patronymic: '',
+    phone: '',
+    position_id: '',
+    department_id: '',
+    subdivision_id: '',
+    location: '',
+    gender: 'male'
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: formSchema,
+    enableReinitialize: true,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      setLoading(true);
+      try {
+        if (isEditMode && id) {
+          await postCreateUser(values);
+          queryClient.invalidateQueries({ queryKey: ['applications'] });
+          navigate('/call-center/applications/list');
+          resetForm();
+        } else {
+          await postCreateUser(values);
+          queryClient.invalidateQueries({ queryKey: ['applications'] });
+          navigate('/call-center/applications/list');
+          resetForm();
+        }
+        setSearchCompanyTerm('');
+        setSearchDepartmentTerm('');
+        setSearchSubdivisionTerm('');
+        setSearchPositionTerm('');
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        console.error(error.response?.data?.message || error.message);
+      }
+      setLoading(false);
+      setSubmitting(false);
+    }
+  });
+
+  useEffect(() => {
+    formik.resetForm();
+    if (usersData && isEditMode) {
+      formik.setValues(
+        {
+          email: usersData.result[0].email || '',
+          status: usersData.result[0].status || UserStatus.ACTIVE,
+          avatar: usersData.result[0].avatar || '',
+          birth_date: usersData.result[0].birth_date || '',
+          company_id: usersData.result[0].company_id || '',
+          first_name: usersData.result[0].first_name || '',
+          last_name: usersData.result[0].last_name || '',
+          patronymic: usersData.result[0].patronymic || '',
+          phone: usersData.result[0].phone || '',
+          position_id: usersData.result[0].position_id || '',
+          department_id: usersData.result[0].department_id || '',
+          subdivision_id: usersData.result[0].subdivision_id || '',
+          location: usersData.result[0].location || '',
+          gender: usersData.result[0].gender || 'male'
+        },
+        false
+      );
+    }
+  }, [isEditMode, usersData]);
+
+  if (
+    companiesLoading ||
+    subdivisionsLoading ||
+    departmentsLoading ||
+    positionsLoading ||
+    (isEditMode && usersLoading)
+  ) {
+    return <SharedLoading />;
+  }
+
+  if (companiesIsError) {
+    return <SharedError error={companiesError} />;
+  }
+
+  if (departmentsIsError) {
+    return <SharedError error={departmentsError} />;
+  }
+
+  if (positionsIsError) {
+    return <SharedError error={positionsError} />;
+  }
+
+  if (subdivisionsIsError) {
+    return <SharedError error={subdivisionsError} />;
+  }
+
+  if (isEditMode && usersIsError) {
+    return <SharedError error={usersError} />;
+  }
+
+  return (
+    <div className="grid gap-5 lg:gap-7.5">
+      <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
+        <div className="card-header" id="general_settings">
+          <h3 className="card-title">{isEditMode ? 'Edit User' : 'New User'}</h3>
+        </div>
+
+        <div className="card-body grid gap-5">
+          <SharedInput name="first_name" label="First name" formik={formik} />
+          <SharedInput name="last_name" label="Last name" formik={formik} />
+          <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+          <div className="w-full">
+            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+              <label className="form-label flex- items-center gap-1 max-w-56">Birth Date</label>
+              <div className="w-full flex columns-1 flex-wrap">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button id="date" className={cn('input data-[state=open]:border-primary')}>
+                      <KeenIcon icon="calendar" className="-ms-0.5" />
+                      <span>
+                        {formik.values.birth_date
+                          ? new Date(formik.values.birth_date).toLocaleDateString()
+                          : 'Pick a date'}
+                      </span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <CalendarDate
+                      initialFocus
+                      mode="single"
+                      captionLayout="dropdown"
+                      fromYear={1900}
+                      toYear={new Date().getFullYear()}
+                      defaultMonth={new Date(2000, 0)}
+                      selected={formik.getFieldProps('birth_date').value}
+                      onSelect={(value) => formik.setFieldValue('birth_date', value)}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {formik.touched.birth_date && formik.errors.birth_date && (
+                  <span role="alert" className="text-danger text-xs mt-1">
+                    {formik.errors.birth_date}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+          <SharedInput name="email" label="Email" formik={formik} type="email" />
+          <SharedAutocomplete
+            label="Company"
+            value={formik.values.company_id ?? ''}
+            options={
+              companiesData?.result?.map((app) => ({
+                id: app.id,
+                name: app.company_name
+              })) ?? []
+            }
+            placeholder="Select company"
+            searchPlaceholder="Search company"
+            onChange={(val) => {
+              formik.setFieldValue('company_id', val);
+            }}
+            error={formik.errors.company_id as string}
+            touched={formik.touched.company_id}
+            searchTerm={searchCompanyTerm}
+            onSearchTermChange={setSearchCompanyTerm}
+          />
+          <SharedAutocomplete
+            label="Department"
+            value={formik.values.department_id ?? ''}
+            options={
+              departmentsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.name
+              })) ?? []
+            }
+            placeholder="Select department"
+            searchPlaceholder="Search department"
+            onChange={(val) => {
+              formik.setFieldValue('department_id', val);
+            }}
+            error={formik.errors.department_id as string}
+            touched={formik.touched.department_id}
+            searchTerm={searchDepartmentTerm}
+            onSearchTermChange={setSearchDepartmentTerm}
+          />
+
+          <SharedAutocomplete
+            label="Subdivision"
+            value={formik.values.subdivision_id ?? ''}
+            options={
+              subdivisionsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.name
+              })) ?? []
+            }
+            placeholder="Select subdivision"
+            searchPlaceholder="Search subdivision"
+            onChange={(val) => {
+              formik.setFieldValue('subdivision_id', val);
+            }}
+            error={formik.errors.subdivision_id as string}
+            touched={formik.touched.subdivision_id}
+            searchTerm={searchSubdivisionTerm}
+            onSearchTermChange={setSearchSubdivisionTerm}
+          />
+
+          <SharedAutocomplete
+            label="Position"
+            value={formik.values.position_id ?? ''}
+            options={
+              positionsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.title
+              })) ?? []
+            }
+            placeholder="Select position"
+            searchPlaceholder="Search position"
+            onChange={(val) => {
+              formik.setFieldValue('position_id', val);
+            }}
+            error={formik.errors.position_id as string}
+            touched={formik.touched.position_id}
+            searchTerm={searchPositionTerm}
+            onSearchTermChange={setSearchPositionTerm}
+          />
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading || formik.isSubmitting}
+            >
+              {loading ? 'Please wait...' : 'Save'}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};

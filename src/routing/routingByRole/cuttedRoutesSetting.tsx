@@ -19,7 +19,8 @@ import {
   MembersPage,
   MemberStarterPage,
   MemberUpdatePage,
-  UsersListPage
+  UsersListPage,
+  UsersPublicProfilePage
 } from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
@@ -132,14 +133,14 @@ const routeConfig = [
       { path: '/crm/member-role-update/:id', element: <MemberRoleUpdatePage /> },
       { path: '/crm/member-update/:id', element: <MemberUpdatePage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
-      { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
+      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> }
     ]
   },
   {
     permission: 'view users',
     routes: [
       { path: '/crm/users/list', element: <UsersListPage /> },
-      { path: '/crm/member/profile/:id', element: <MemberPublicProfilePage /> }
+      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> }
     ]
   },
   {

@@ -1,0 +1,30 @@
+import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/get/getUsers/types.ts';
+
+export interface IUserFormValues {
+  name?: string;
+  password?: string;
+  email: string;
+  phone: string;
+  avatar?: string;
+  first_name: string;
+  last_name: string;
+  patronymic: string;
+  birth_date: string;
+  gender: 'male' | 'female' | 'other';
+  status: UserStatus;
+  login?: string;
+  location: string;
+  company_id: number | string;
+  position_id: number | string;
+  subdivision_id: number | string;
+  department_id: number | string;
+  license_category?: string;
+  vehicle_id?: number | string;
+  driver_status?: UserDriverStatus;
+  courier_type?: UserCourierType;
+  driver_details?: string;
+}
+
+export interface IUserFormValuesResult {
+  result: number;
+}

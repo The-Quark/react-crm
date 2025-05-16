@@ -11,7 +11,8 @@ import {
   MemberStarterPage,
   MemberUpdatePage,
   MemberPublicProfilePage,
-  UsersListPage
+  UsersListPage,
+  UsersPublicProfilePage
 } from '@/pages/crm';
 import {
   CompaniesListPage,
@@ -181,7 +182,7 @@ const AllRoutesSetting = () => {
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
         <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />,
-        <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
+        <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />

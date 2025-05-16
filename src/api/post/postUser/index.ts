@@ -1,23 +1,25 @@
 import axios from 'axios';
-import { paths } from '@/api/types';
+import { IUserFormValues, IUserFormValuesResult } from '@/api/post/postUser/types.ts';
 import { USERS_REGISTER_URL } from '@/api/url';
 
-type RegisterRequest =
-  paths['/auth/register']['post']['requestBody']['content']['application/x-www-form-urlencoded'];
-type RegisterResponse = void;
-
-export const postCreateUser = async (userData: RegisterRequest): Promise<RegisterResponse> => {
+export const postCreateUser = async (userData: IUserFormValues): Promise<IUserFormValuesResult> => {
   const formData = new FormData();
 
   Object.entries(userData).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
-      formData.append(key, value instanceof Blob ? value : String(value));
+      if (typeof value === 'object' && !(value instanceof Blob)) {
+        formData.append(key, String(value));
+      } else {
+        formData.append(key, value instanceof Blob ? value : String(value));
+      }
     }
   });
 
-  await axios.post(USERS_REGISTER_URL, formData, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  const response = await axios.post<IUserFormValuesResult>(USERS_REGISTER_URL, formData, {
+    headers: {
+      Accept: 'application/json'
+    }
   });
 
-  return;
+  return response.data;
 };

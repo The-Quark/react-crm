@@ -8,6 +8,16 @@ interface DeliveryType {
   deleted_at: string | null;
 }
 
+interface Source {
+  id: number;
+  code: string;
+  name: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface PackageType {
   id: number;
   code: string;
@@ -97,6 +107,7 @@ export interface Order {
   application: Application;
   sender: Person;
   receiver: Person;
+  source: Source | null;
 }
 
 export interface IOrdersResponse {

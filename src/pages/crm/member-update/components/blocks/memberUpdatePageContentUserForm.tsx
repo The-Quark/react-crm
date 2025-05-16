@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { AxiosError } from 'axios';
 import { IImageInputFile } from '@/components/image-input';
-import { updateUser } from '@/api/put';
+import { putUser } from '@/api/put';
 import { UserModel } from '@/api/get/getMemberById/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 import { useQueryClient } from '@tanstack/react-query';
@@ -65,7 +65,7 @@ export const MemberUpdatePageContentUserForm: FC<IGeneralSettingsProps> = ({ tit
           ...values,
           avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
-        await updateUser(payload, removeAvatar);
+        await putUser(payload, removeAvatar);
         setRemoveAvatar(false);
         queryClient.invalidateQueries({ queryKey: ['member-update-user'] });
         navigate('/crm/members');
