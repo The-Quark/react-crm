@@ -77,7 +77,7 @@ export interface User {
 }
 
 export interface UserModel {
-  result: User[];
+  result: User;
   count: number;
 }
 
