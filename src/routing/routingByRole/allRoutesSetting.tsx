@@ -10,7 +10,8 @@ import {
   MembersPage,
   MemberStarterPage,
   MemberUpdatePage,
-  MemberPublicProfilePage
+  MemberPublicProfilePage,
+  UsersListPage
 } from '@/pages/crm';
 import {
   CompaniesListPage,
@@ -136,9 +137,7 @@ const AllRoutesSetting = () => {
     <Routes>
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
-
         <Route path="/profile" element={<ProfilePage />} />
-
         <Route path="/global-parameters/starter-parameters" element={<CompaniesStarterPage />} />
         <Route
           path="/global-parameters/starter-parameters/:id"
@@ -146,32 +145,24 @@ const AllRoutesSetting = () => {
         />
         <Route path="/global-parameters/view-parameters/:id" element={<CompaniesViewPage />} />
         <Route path="/global-parameters/list" element={<CompaniesListPage />} />
-
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
-
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
-
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
-
         <Route path="/roles-permissions/roles" element={<RolesPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
-
         <Route path="/tasks/list" element={<TasksListPage />} />
         <Route path="/tasks/starter" element={<TasksStarterPage />} />
         <Route path="/tasks/starter/:id" element={<TasksStarterPage />} />
         <Route path="/tasks/view/:id" element={<TasksViewPage />} />
-
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/starter-clients" element={<ClientStarterPage />} />
         <Route path="/clients/starter-clients/:id" element={<ClientStarterPage />} />
-
         <Route path="/hr-module/staff" element={<StaffPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/drivers/starter" element={<DriversStarterPage />} />
         <Route path="/hr-module/drivers/starter/:id" element={<DriversStarterPage />} />
         <Route path="/hr-module/drivers/view/:id" element={<DriversViewPage />} />
         <Route path="/hr-module/couriers" element={<CouriersPage />} />
-
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
@@ -186,13 +177,11 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/upload/:id" element={<CargoUploadPage />} />
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />
-
         <Route path="/crm/member-starter" element={<MemberStarterPage />} />
         <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
         <Route path="/crm/member-update/:id" element={<MemberUpdatePage />} />
-        <Route path="/crm/members" element={<MembersPage />} />
+        <Route path="/crm/users/list" element={<UsersListPage />} />,
         <Route path="/crm/member/profile/:id" element={<MemberPublicProfilePage />} />
-
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
@@ -206,7 +195,6 @@ const AllRoutesSetting = () => {
         <Route path="/guides/package-materials" element={<GuidesPackageMaterialsPage />} />
         <Route path="/guides/units" element={<GuidesUnitsPage />} />
         <Route path="/guides/templates" element={<GuidesTemplatesPage />} />
-
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
         <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />

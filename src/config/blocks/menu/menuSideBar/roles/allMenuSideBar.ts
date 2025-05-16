@@ -103,7 +103,7 @@ export const AllMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
-    path: '/crm/members'
+    path: '/crm/users/list'
   },
   {
     title: 'MENU.MEGAMENU.GUIDES',

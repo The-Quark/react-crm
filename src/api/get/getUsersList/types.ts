@@ -105,7 +105,7 @@ interface Vehicle {
   updated_at: string;
 }
 
-interface UserModel {
+export interface UserModel {
   id: number;
   name: string;
   email: string;
