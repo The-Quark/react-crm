@@ -105,6 +105,7 @@ export const MemberStarterPageContentUserCRUD = ({ title }: IGeneralSettingsProp
           ...values,
           avatar: values.avatar?.file || null
         };
+        // @ts-ignore
         await postCreateUser(payload as unknown as RegisterRequest);
         resetForm();
         navigate('/crm/members');

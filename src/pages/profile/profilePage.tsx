@@ -26,7 +26,7 @@ export const ProfilePage = () => {
   return (
     <Fragment>
       <UserProfileHero
-        name={currentUser ? currentUser.name : 'Not Found'}
+        name={currentUser ? currentUser.first_name : 'Not Found'}
         image={image}
         info={[
           { email: currentUser ? currentUser.email : 'Not Found', icon: 'sms' },

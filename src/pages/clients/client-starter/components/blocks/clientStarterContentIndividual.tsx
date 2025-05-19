@@ -21,6 +21,7 @@ import { SharedInput } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getSources/types.ts';
+import { format } from 'date-fns';
 
 interface Props {
   clientData?: Client;
@@ -66,10 +67,17 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       setLoading(true);
       setStatus(null);
       try {
+        const payload = {
+          ...values,
+          birth_date: values.birth_date
+            ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
+            : ''
+        };
+
         if (clientData) {
-          await putClient(clientData.id, values);
+          await putClient(clientData.id, payload);
         } else {
-          await postClient(values);
+          await postClient(payload);
         }
         resetForm();
         navigate('/clients');

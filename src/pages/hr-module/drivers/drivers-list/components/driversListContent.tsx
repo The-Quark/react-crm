@@ -21,21 +21,21 @@ export const DriversListContent = () => {
 
   return (
     <Container>
-      <div className="grid gap-5 lg:gap-7.5">
-        {isLoading ? (
-          <SharedLoading />
-        ) : (
-          <DataGrid
-            columns={columns}
-            data={data?.result}
-            rowSelection={true}
-            pagination={{ size: 15 }}
-            sorting={[{ id: 'id', desc: false }]}
-            toolbar={<DriversToolbar />}
-            layout={{ card: true }}
-          />
-        )}
-      </div>
+      {/*<div className="grid gap-5 lg:gap-7.5">*/}
+      {/*  {isLoading ? (*/}
+      {/*    <SharedLoading />*/}
+      {/*  ) : (*/}
+      {/*    <DataGrid*/}
+      {/*      columns={columns}*/}
+      {/*      data={data?.result}*/}
+      {/*      rowSelection={true}*/}
+      {/*      pagination={{ size: 15 }}*/}
+      {/*      sorting={[{ id: 'id', desc: false }]}*/}
+      {/*      toolbar={<DriversToolbar />}*/}
+      {/*      layout={{ card: true }}*/}
+      {/*    />*/}
+      {/*  )}*/}
+      {/*</div>*/}
     </Container>
   );
 };

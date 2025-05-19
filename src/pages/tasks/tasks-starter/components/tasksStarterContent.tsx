@@ -324,7 +324,7 @@ export const TasksStarterContent = () => {
             options={
               usersData?.result?.map((app) => ({
                 id: app.id,
-                name: app.name
+                name: app.first_name
               })) ?? []
             }
             placeholder="Select users"

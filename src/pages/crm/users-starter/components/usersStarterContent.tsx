@@ -29,6 +29,7 @@ import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Gender } from '@/api/enums';
 import { mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
+import { format } from 'date-fns';
 
 export const formSchema = Yup.object().shape({
   phone: Yup.string()
@@ -63,8 +64,6 @@ export const UsersStarterContent = () => {
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
   const [searchPositionTerm, setSearchPositionTerm] = useState('');
-
-  console.log('id: ', id);
 
   const {
     data: companiesData,
@@ -145,13 +144,19 @@ export const UsersStarterContent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
+        const payload = {
+          ...values,
+          birth_date: values.birth_date
+            ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
+            : ''
+        };
         if (isEditMode && id) {
-          await postCreateUser(values);
+          await postCreateUser(payload);
           queryClient.invalidateQueries({ queryKey: ['users'] });
           navigate('/crm/users/list');
           resetForm();
         } else {
-          await postCreateUser(values);
+          await postCreateUser(payload);
           queryClient.invalidateQueries({ queryKey: ['users'] });
           navigate('/crm/users/list');
           resetForm();
@@ -170,29 +175,29 @@ export const UsersStarterContent = () => {
   });
 
   useEffect(() => {
-    formik.resetForm();
-    if (usersData && isEditMode) {
-      formik.setValues(
-        {
+    if (isEditMode && id) {
+      if (usersData?.result) {
+        formik.setValues({
           email: usersData.result.email || '',
           status: usersData.result.status || UserStatus.ACTIVE,
           birth_date: usersData.result.birth_date || '',
-          company_id: usersData.result.company_id || '',
+          company_id: String(usersData.result.company_id) || '',
           first_name: usersData.result.first_name || '',
           last_name: usersData.result.last_name || '',
           patronymic: usersData.result.patronymic || '',
           phone: usersData.result.phone || '',
-          position_id: usersData.result.position_id || '',
-          department_id: usersData.result.department_id || '',
-          subdivision_id: usersData.result.subdivision_id || '',
-          location: usersData.result.location || '',
-          gender: usersData.result.gender || 'male',
+          position_id: String(usersData.result.position_id) || '',
+          department_id: String(usersData.result.department_id) || '',
+          subdivision_id: String(usersData.result.subdivision_id) || '',
+          location: String(usersData.result.location) || '',
+          gender: usersData.result.gender || Gender.MALE,
           password: ''
-        },
-        false
-      );
+        });
+      }
+    } else {
+      formik.resetForm();
     }
-  }, [isEditMode]);
+  }, [usersData, isEditMode, id]);
 
   if (
     companiesLoading ||

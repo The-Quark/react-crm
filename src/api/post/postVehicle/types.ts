@@ -1,4 +1,4 @@
-import { VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
+import { VehicleStatus, VehicleType } from '@/api/enums';
 
 export interface IVehicleFormValues {
   plate_number: string;
