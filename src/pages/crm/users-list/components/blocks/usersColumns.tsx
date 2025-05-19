@@ -28,33 +28,38 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.name,
+        accessorFn: (row) =>
+          `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'user',
         header: ({ column }) => <DataGridColumnHeader title="User" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="shrink-0">
-              <img
-                src={
-                  info.row.original.avatar
-                    ? `${STORAGE_URL}/${info.row.original.avatar}`
-                    : toAbsoluteUrl('/media/avatars/blank.png')
-                }
-                className="h-9 rounded-full"
-                alt="Avatar"
-              />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <div className="leading-none font-medium text-sm text-gray-900">
-                {info.row.original.name}
+        cell: (info) => {
+          const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
+            info.row.original.patronymic ? ` ${info.row.original.patronymic}` : ''
+          }`;
+
+          return (
+            <div className="flex items-center gap-2.5">
+              <div className="shrink-0">
+                <img
+                  src={
+                    info.row.original.avatar
+                      ? `${STORAGE_URL}/${info.row.original.avatar}`
+                      : toAbsoluteUrl('/media/avatars/blank.png')
+                  }
+                  className="h-9 rounded-full"
+                  alt="Avatar"
+                />
               </div>
-              <span className="text-2sm text-gray-700 font-normal">
-                {info.row.original.position}
-              </span>
+              <div className="flex flex-col gap-0.5">
+                <div className="leading-none font-medium text-sm text-gray-900">{fullName}</div>
+                <span className="text-2sm text-gray-700 font-normal">
+                  {info.row.original.position?.title || ''}
+                </span>
+              </div>
             </div>
-          </div>
-        ),
+          );
+        },
         meta: {
           headerClassName: 'min-w-[300px]',
           cellClassName: 'text-gray-700 font-normal'

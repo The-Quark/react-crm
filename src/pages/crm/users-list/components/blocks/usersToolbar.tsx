@@ -21,8 +21,8 @@ export const UsersToolbar: FC = () => {
             type="text"
             placeholder="Search user"
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('user')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('user')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>

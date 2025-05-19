@@ -1,24 +1,5 @@
-import { VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
-
-export enum UserCourierType {
-  PEDESTRIAN = 'pedestrian',
-  MOTORBIKE = 'motorbike',
-  AUTO = 'auto'
-}
-
-export enum UserDriverStatus {
-  AVAILABLE = 'available',
-  UNAVAILABLE = 'unavailable'
-}
-
-export enum UserStatus {
-  ACTIVE = 'active',
-  VACATION = 'vacation',
-  FIRED = 'fired',
-  STAGING = 'staging',
-  DECREE = 'decree',
-  UNAVAILABLE = 'unavailable'
-}
+import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
+import { Vehicle } from '@/api/get/getVehicles/types.ts';
 
 interface Role {
   id: number;
@@ -112,22 +93,9 @@ interface Subdivision {
   language: Language;
   currency: any;
 }
-interface Vehicle {
-  id: number;
-  plate_number: string;
-  type: VehicleType;
-  brand: string;
-  model: string;
-  status: VehicleStatus;
-  avg_fuel_consumption: string;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
 
 interface UserModel {
   id: number;
-  name: string;
   email: string;
   email_verified_at: string | null;
   created_at: string;
@@ -168,6 +136,6 @@ interface UserModel {
 }
 
 export interface UsersResponse {
-  result: UserModel[];
+  result: UserModel;
   count: number;
 }

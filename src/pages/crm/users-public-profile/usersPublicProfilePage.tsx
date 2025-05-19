@@ -37,8 +37,8 @@ export const UsersPublicProfilePage = () => {
   const image = (
     <img
       src={
-        data.result
-          ? `${STORAGE_AVATAR_URL}/${data.result[0].avatar}`
+        data.result.avatar
+          ? `${STORAGE_AVATAR_URL}/${data.result.avatar}`
           : toAbsoluteUrl('/media/avatars/blank.png')
       }
       className="rounded-full border-3 border-success size-[100px] shrink-0"
@@ -48,15 +48,13 @@ export const UsersPublicProfilePage = () => {
   return (
     <Fragment>
       <UserProfileHero
-        name={data.result[0] ? data.result[0].name : 'Not Found'}
+        name={data.result ? `${data.result.first_name}` : 'Not Found'}
         image={image}
         info={[
-          { email: data.result[0] ? data.result[0].email : 'Not Found', icon: 'sms' },
+          { email: data.result ? data.result.email : 'Not Found', icon: 'sms' },
           {
             label:
-              data.result[0]?.roles?.[0]?.nicename ??
-              data.result[0]?.roles?.[0]?.name ??
-              'Not Found',
+              data.result?.roles?.[0]?.nicename ?? data.result?.roles?.[0]?.name ?? 'Not Found',
             icon: 'user'
           }
         ]}

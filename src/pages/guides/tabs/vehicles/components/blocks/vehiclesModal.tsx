@@ -20,7 +20,8 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { VehiclesResponse, VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
+import { VehiclesResponse } from '@/api/get/getVehicles/types.ts';
+import { VehicleStatus, VehicleType } from '@/api/enums';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {

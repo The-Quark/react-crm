@@ -44,7 +44,7 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
           <img
             className="size-9 rounded-full border-2 border-success"
             src={
-              currentUser
+              currentUser?.avatar
                 ? `${STORAGE_URL}/${currentUser.avatar}`
                 : toAbsoluteUrl('/media/avatars/blank.png')
             }
@@ -52,10 +52,12 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
           />
           <div className="flex flex-col gap-1.5">
             <Link
-              to="/account/home/user-profile"
+              to={`/crm/users/public-profile/${currentUser?.id}`}
               className="text-sm text-gray-800 hover:text-primary font-semibold leading-none"
             >
-              {currentUser ? currentUser.name : 'Not Found'}
+              {currentUser
+                ? `${currentUser.last_name} ${currentUser.first_name} ${currentUser.patronymic}`
+                : 'Not Found'}
             </Link>
             <a
               href="#"

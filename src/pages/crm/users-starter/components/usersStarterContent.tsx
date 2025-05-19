@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { UserStatus } from '@/api/get/getUsers/types.ts';
+import { UserStatus } from '@/api/enums';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
@@ -157,20 +157,20 @@ export const UsersStarterContent = () => {
     if (usersData && isEditMode) {
       formik.setValues(
         {
-          email: usersData.result[0].email || '',
-          status: usersData.result[0].status || UserStatus.ACTIVE,
-          avatar: usersData.result[0].avatar || '',
-          birth_date: usersData.result[0].birth_date || '',
-          company_id: usersData.result[0].company_id || '',
-          first_name: usersData.result[0].first_name || '',
-          last_name: usersData.result[0].last_name || '',
-          patronymic: usersData.result[0].patronymic || '',
-          phone: usersData.result[0].phone || '',
-          position_id: usersData.result[0].position_id || '',
-          department_id: usersData.result[0].department_id || '',
-          subdivision_id: usersData.result[0].subdivision_id || '',
-          location: usersData.result[0].location || '',
-          gender: usersData.result[0].gender || 'male'
+          email: usersData.result.email || '',
+          status: usersData.result.status || UserStatus.ACTIVE,
+          avatar: usersData.result.avatar || '',
+          birth_date: usersData.result.birth_date || '',
+          company_id: usersData.result.company_id || '',
+          first_name: usersData.result.first_name || '',
+          last_name: usersData.result.last_name || '',
+          patronymic: usersData.result.patronymic || '',
+          phone: usersData.result.phone || '',
+          position_id: usersData.result.position_id || '',
+          department_id: usersData.result.department_id || '',
+          subdivision_id: usersData.result.subdivision_id || '',
+          location: usersData.result.location || '',
+          gender: usersData.result.gender || 'male'
         },
         false
       );

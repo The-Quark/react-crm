@@ -1,12 +1,5 @@
-export enum VehicleType {
-  AUTO = 'auto',
-  VAN = 'van',
-  MOTORBIKE = 'motorbike'
-}
-export enum VehicleStatus {
-  ONLINE = 'on_line',
-  SERVICE = 'on_service'
-}
+import { VehicleStatus, VehicleType } from '@/api/enums';
+
 export interface Vehicle {
   id: number;
   plate_number: string;

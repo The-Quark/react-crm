@@ -1,4 +1,4 @@
-import { VehicleStatus, VehicleType } from '@/api/get/getVehicles/types.ts';
+import { Vehicle } from '@/api/get/getVehicles/types.ts';
 
 interface Role {
   id: number;
@@ -30,6 +30,17 @@ interface Permission {
   };
 }
 
+interface Position {
+  id: number;
+  company_id: number;
+  title: string;
+  description: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Company {
   id: number;
   company_name: string;
@@ -38,28 +49,38 @@ interface Company {
   language: string;
   legal_address: string;
   warehouse_address: string;
-  airlines: any[];
   dimensions_per_place: string;
   cost_per_airplace: string;
-  package_standard_box1: string | null;
-  package_standard_box2: string | null;
-  cost_package_box1: string | null;
-  cost_package_box2: string | null;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
+  airlines: any | null;
 }
 
 interface Department {
   id: number;
   company_id: number;
   name: string;
-  description: string | null;
+  description: string;
   is_active: boolean;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
-  company: Company | null;
+}
+
+interface Subdivision {
+  id: number;
+  company_id: number;
+  language_id: number;
+  currency_id: number;
+  name: string;
+  legal_address: string;
+  warehouse_address: string;
+  timezone: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Language {
@@ -75,45 +96,14 @@ interface Language {
   deleted_at: string | null;
 }
 
-interface Subdivision {
-  id: number;
-  company_id: number;
-  language_id: number;
-  currency_id: number;
-  name: string;
-  legal_address: string;
-  warehouse_address: string;
-  timezone: string | null;
-  is_active: boolean;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  company: Company;
-  language: Language;
-  currency: any;
-}
-interface Vehicle {
-  id: number;
-  plate_number: string;
-  type: VehicleType;
-  brand: string;
-  model: string;
-  status: VehicleStatus;
-  avg_fuel_consumption: string;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface UserModel {
   id: number;
-  name: string;
   email: string;
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
   phone: string | null;
-  position: string | null;
+  position: Position | null;
   location: string | null;
   avatar: string | null;
   last_login?: string | null;

@@ -135,7 +135,7 @@ const HeaderTopbar = () => {
             <img
               className="size-9 rounded-full border-2 border-success shrink-0"
               src={
-                currentUser
+                currentUser?.avatar
                   ? `${STORAGE_URL}/${currentUser.avatar}`
                   : toAbsoluteUrl('/media/avatars/blank.png')
               }
