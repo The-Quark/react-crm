@@ -3,7 +3,7 @@ import { useAuthContext } from '@/auth';
 
 export const useUserPermissions = () => {
   const { currentUser } = useAuthContext();
-  const permissions: string[] = currentUser.permissions.map((p) => p.name) || [];
+  const permissions: string[] = currentUser?.permissions.map((p) => p.name) || [];
 
   const hasPermission = (perm: string | string[]): boolean => {
     if (Array.isArray(perm)) {
