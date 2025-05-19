@@ -13,7 +13,13 @@ import { useFormik } from 'formik';
 import { IGlobalParamsSubdivisionFormValues } from '@/api/post/postGlobalParamsSubdivision/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ISubdivisionResponse } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedSelect
+} from '@/partials/sharedUI';
 import {
   getCurrencies,
   getGlobalParameters,
@@ -22,6 +28,7 @@ import {
   postGlobalParamsSubdivision,
   putGlobalParamsSubdivisions
 } from '@/api';
+import { timezoneMock } from '@/lib/mocks.ts';
 
 interface Props {
   open: boolean;
@@ -223,6 +230,13 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 touched={formik.touched.currency_id}
                 searchTerm={searchCurrencyTerm}
                 onSearchTermChange={setSearchCurrencyTerm}
+              />
+
+              <SharedSelect
+                name="timezone"
+                label="Time zone"
+                formik={formik}
+                options={timezoneMock.map((tz) => ({ label: tz.timezone, value: tz.timezone }))}
               />
 
               <SharedInput name="legal_address" label="Legal Address" formik={formik} />

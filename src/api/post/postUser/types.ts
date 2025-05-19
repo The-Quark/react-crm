@@ -1,8 +1,7 @@
-import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/get/getUsers/types.ts';
+import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
 
 export interface IUserFormValues {
-  name?: string;
-  password?: string;
+  password: string;
   email: string;
   phone: string;
   avatar?: string;

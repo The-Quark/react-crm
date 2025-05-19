@@ -13,7 +13,13 @@ import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { UserStatus } from '@/api/enums';
@@ -21,6 +27,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
+import { Gender } from '@/api/enums';
+import { mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
 
 export const formSchema = Yup.object().shape({
   phone: Yup.string()
@@ -35,7 +43,14 @@ export const formSchema = Yup.object().shape({
   subdivision_id: Yup.string().required('Subdivision is required'),
   department_id: Yup.string().required('Department is required'),
   position_id: Yup.string().required('Position is required'),
-  email: Yup.string().email('Invalid email address').optional()
+  email: Yup.string().email('Invalid email address').required('Email is required'),
+  password: Yup.string()
+    .min(10, 'Minimum 10 symbols')
+    .max(100, 'Maximum 100 symbols')
+    .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
+    .matches(/\d/, 'Must contain at least one number')
+    .matches(/[^a-zA-Z0-9]/, 'Must contain at least one special character')
+    .required('Password is required')
 });
 
 export const UsersStarterContent = () => {
@@ -48,6 +63,8 @@ export const UsersStarterContent = () => {
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
   const [searchPositionTerm, setSearchPositionTerm] = useState('');
+
+  console.log('id: ', id);
 
   const {
     data: companiesData,
@@ -107,7 +124,6 @@ export const UsersStarterContent = () => {
   const initialValues: IUserFormValues = {
     email: '',
     status: UserStatus.ACTIVE,
-    avatar: '',
     birth_date: '',
     company_id: '',
     first_name: '',
@@ -118,7 +134,8 @@ export const UsersStarterContent = () => {
     department_id: '',
     subdivision_id: '',
     location: '',
-    gender: 'male'
+    gender: Gender.MALE,
+    password: ''
   };
 
   const formik = useFormik({
@@ -130,13 +147,13 @@ export const UsersStarterContent = () => {
       try {
         if (isEditMode && id) {
           await postCreateUser(values);
-          queryClient.invalidateQueries({ queryKey: ['applications'] });
-          navigate('/call-center/applications/list');
+          queryClient.invalidateQueries({ queryKey: ['users'] });
+          navigate('/crm/users/list');
           resetForm();
         } else {
           await postCreateUser(values);
-          queryClient.invalidateQueries({ queryKey: ['applications'] });
-          navigate('/call-center/applications/list');
+          queryClient.invalidateQueries({ queryKey: ['users'] });
+          navigate('/crm/users/list');
           resetForm();
         }
         setSearchCompanyTerm('');
@@ -159,7 +176,6 @@ export const UsersStarterContent = () => {
         {
           email: usersData.result.email || '',
           status: usersData.result.status || UserStatus.ACTIVE,
-          avatar: usersData.result.avatar || '',
           birth_date: usersData.result.birth_date || '',
           company_id: usersData.result.company_id || '',
           first_name: usersData.result.first_name || '',
@@ -170,12 +186,13 @@ export const UsersStarterContent = () => {
           department_id: usersData.result.department_id || '',
           subdivision_id: usersData.result.subdivision_id || '',
           location: usersData.result.location || '',
-          gender: usersData.result.gender || 'male'
+          gender: usersData.result.gender || 'male',
+          password: ''
         },
         false
       );
     }
-  }, [isEditMode, usersData]);
+  }, [isEditMode]);
 
   if (
     companiesLoading ||
@@ -218,6 +235,27 @@ export const UsersStarterContent = () => {
           <SharedInput name="first_name" label="First name" formik={formik} />
           <SharedInput name="last_name" label="Last name" formik={formik} />
           <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+          <SharedInput name="location" label="Location" formik={formik} />
+          <SharedSelect
+            name="gender"
+            label="Gender"
+            formik={formik}
+            options={mockGenderOptions.map((opt) => ({
+              label: opt.name,
+              value: opt.value
+            }))}
+          />
+          {isEditMode && (
+            <SharedSelect
+              name="status"
+              label="Status"
+              formik={formik}
+              options={mockUserStatusOptions.map((opt) => ({
+                label: opt.name,
+                value: opt.value
+              }))}
+            />
+          )}
           <div className="w-full">
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
               <label className="form-label flex- items-center gap-1 max-w-56">Birth Date</label>
@@ -316,26 +354,6 @@ export const UsersStarterContent = () => {
           />
 
           <SharedAutocomplete
-            label="Subdivision"
-            value={formik.values.position_id ?? ''}
-            options={
-              positionsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.title
-              })) ?? []
-            }
-            placeholder="Select position"
-            searchPlaceholder="Search position"
-            onChange={(val) => {
-              formik.setFieldValue('position_id', val);
-            }}
-            error={formik.errors.position_id as string}
-            touched={formik.touched.position_id}
-            searchTerm={searchPositionTerm}
-            onSearchTermChange={setSearchPositionTerm}
-          />
-
-          <SharedAutocomplete
             label="Position"
             value={formik.values.position_id ?? ''}
             options={
@@ -354,7 +372,9 @@ export const UsersStarterContent = () => {
             searchTerm={searchPositionTerm}
             onSearchTermChange={setSearchPositionTerm}
           />
-
+          {!isEditMode && (
+            <SharedInput name="password" label="Password" formik={formik} type="password" />
+          )}
           <div className="flex justify-end">
             <button
               type="submit"

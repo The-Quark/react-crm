@@ -2,13 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { useLanguage } from '@/i18n';
 import { timezoneMock } from '@/lib/mocks.ts';
 import {
@@ -20,7 +13,7 @@ import {
   getAirlines
 } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { SharedError, SharedInput, SharedLoading, SharedSelect } from '@/partials/sharedUI';
 import { useParams, useNavigate } from 'react-router';
 import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
 
@@ -208,83 +201,25 @@ export const CompaniesStarterContent = () => {
           <div className="card-body grid gap-5">
             <SharedInput name="company_name" label="Company Name" formik={formik} />
 
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Time zone</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={formik.values.timezone}
-                  onValueChange={(value) => formik.setFieldValue('timezone', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Time Zone" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60 overflow-y-auto">
-                    {timezoneMock.map((tz) => (
-                      <SelectItem key={tz.key} value={tz.timezone}>
-                        {tz.timezone}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.timezone && formik.errors.timezone && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.timezone}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Currency</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={formik.values.currency?.toString()}
-                  onValueChange={(value) => formik.setFieldValue('currency', String(value))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Currency" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60 overflow-y-auto">
-                    {cuurencyData?.result.map((currency) => (
-                      <SelectItem key={currency.id} value={currency.code}>
-                        {currency.name} — {currency.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.currency && formik.errors.currency && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.currency}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Language</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={formik.values.language?.toString()}
-                  onValueChange={(value) => formik.setFieldValue('language', String(value))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Language" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60 overflow-y-auto">
-                    {languagesData?.result.map((language) => (
-                      <SelectItem key={language.id} value={language.code}>
-                        {language.name} - {language.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.language && formik.errors.language && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.language}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedSelect
+              name="currency"
+              label="Currency"
+              formik={formik}
+              options={
+                cuurencyData?.result?.map((currency) => ({
+                  label: currency.name,
+                  value: currency.code
+                })) || []
+              }
+            />
+            <SharedSelect
+              name="language"
+              label="Language"
+              formik={formik}
+              options={
+                languagesData?.result?.map((lang) => ({ label: lang.name, value: lang.code })) || []
+              }
+            />
 
             <SharedInput name="legal_address" label="Legal Address" formik={formik} />
 

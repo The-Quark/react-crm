@@ -27,3 +27,9 @@ export enum VehicleStatus {
   ONLINE = 'on_line',
   SERVICE = 'on_service'
 }
+
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other'
+}

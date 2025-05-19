@@ -50,7 +50,7 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuIcon>
                 <KeenIcon icon="briefcase" />
               </MenuIcon>
-              <MenuTitle>Edit Member Role</MenuTitle>
+              <MenuTitle>Edit role</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuItem>
@@ -58,7 +58,7 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>
-              <MenuTitle>Edit Member</MenuTitle>
+              <MenuTitle>Edit user</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />

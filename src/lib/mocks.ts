@@ -2,6 +2,7 @@ import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { TemplateType } from '@/api/get/getTemplates/types.ts';
 import { TaskType, TaskPriority, TaskStatus } from '@/api/get/getTask/types.ts';
+import { Gender, UserStatus } from '@/api/enums';
 export const localesMock = [
   {
     code: 'en',
@@ -398,4 +399,19 @@ export const mockDeliveryCategories = [
   { value: 'b2b', name: 'Business to Business' },
   { value: 'c2b', name: 'Customer to Business' },
   { value: 'c2c', name: 'Customer to Customer' }
+];
+
+export const mockGenderOptions = [
+  { id: 1, name: 'Male', value: Gender.MALE },
+  { id: 2, name: 'Female', value: Gender.FEMALE },
+  { id: 3, name: 'Other', value: Gender.OTHER }
+];
+
+export const mockUserStatusOptions = [
+  { id: 1, name: 'Active', value: UserStatus.ACTIVE },
+  { id: 2, name: 'Vacation', value: UserStatus.VACATION },
+  { id: 3, name: 'Fired', value: UserStatus.FIRED },
+  { id: 1, name: 'Staging', value: UserStatus.STAGING },
+  { id: 2, name: 'Decree', value: UserStatus.DECREE },
+  { id: 3, name: 'Unavailable', value: UserStatus.UNAVAILABLE }
 ];
