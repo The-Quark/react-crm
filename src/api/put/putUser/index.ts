@@ -3,7 +3,7 @@ import { UserModel } from '@/api/put/putUser/types.ts';
 import { USERS_URL } from '@/api/url';
 
 export const putUser = async (
-  data: Omit<UserModel, 'id' | 'created_at' | 'updated_at'>,
+  data: UserModel,
   removeAvatar: boolean = false
 ): Promise<UserModel> => {
   const formData = new FormData();

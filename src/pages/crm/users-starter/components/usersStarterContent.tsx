@@ -1,10 +1,12 @@
 import {
+  getCitiesByCountryCode,
+  getCountries,
   getGlobalParameters,
   getGlobalParamsDepartments,
   getGlobalParamsPositions,
   getGlobalParamsSubdivisions,
-  getUsers,
-  postCreateUser
+  postCreateUser,
+  putUser
 } from '@/api';
 import { IUserFormValues } from '@/api/post/postUser/types.ts';
 import { useFormik } from 'formik';
@@ -12,7 +14,7 @@ import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
@@ -20,7 +22,6 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { UserStatus } from '@/api/enums';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
@@ -30,8 +31,16 @@ import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Gender } from '@/api/enums';
 import { mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
 import { format } from 'date-fns';
+import { IGetUserByID } from '@/api/get/getUserByID/types.ts';
+import { CrudAvatarUpload } from '@/partials/crud';
 
-export const formSchema = Yup.object().shape({
+interface Props {
+  isEditMode: boolean;
+  usersData?: IGetUserByID;
+  userId?: number;
+}
+
+export const formSchemaPost = Yup.object().shape({
   phone: Yup.string()
     .matches(PHONE_REG_EXP, 'Phone number is not valid')
     .required('Phone number is required'),
@@ -39,12 +48,13 @@ export const formSchema = Yup.object().shape({
   last_name: Yup.string().required('Last name is required'),
   patronymic: Yup.string().required('Patronymic is required'),
   birth_date: Yup.string().required('Birth date is required'),
-  location: Yup.string().required('Location is required'),
   company_id: Yup.string().required('Company is required'),
   subdivision_id: Yup.string().required('Subdivision is required'),
   department_id: Yup.string().required('Department is required'),
   position_id: Yup.string().required('Position is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
+  country_id: Yup.string().required('Country is required'),
+  city_id: Yup.string().required('City is required'),
   password: Yup.string()
     .min(10, 'Minimum 10 symbols')
     .max(100, 'Maximum 100 symbols')
@@ -54,16 +64,78 @@ export const formSchema = Yup.object().shape({
     .required('Password is required')
 });
 
-export const UsersStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
+export const formSchemaPut = Yup.object().shape({
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'Phone number is not valid')
+    .required('Phone number is required'),
+  first_name: Yup.string().required('First name is required'),
+  last_name: Yup.string().required('Last name is required'),
+  patronymic: Yup.string().required('Patronymic is required'),
+  birth_date: Yup.string().required('Birth date is required'),
+  company_id: Yup.string().required('Company is required'),
+  subdivision_id: Yup.string().required('Subdivision is required'),
+  department_id: Yup.string().required('Department is required'),
+  position_id: Yup.string().required('Position is required'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
+  country_id: Yup.string().required('Country is required'),
+  city_id: Yup.string().required('City is required')
+});
+
+const getInitialValues = (isEditMode: boolean, userData: IGetUserByID): IUserFormValues => {
+  if (isEditMode && userData?.result) {
+    const data = userData.result[0];
+    return {
+      avatar: data.avatar || null,
+      email: data.email || '',
+      status: data.status || UserStatus.ACTIVE,
+      birth_date: data.birth_date || '',
+      company_id: data.company_id || '',
+      first_name: data.first_name || '',
+      last_name: data.last_name || '',
+      patronymic: data.patronymic || '',
+      phone: data.phone || '',
+      position_id: data.position_id || '',
+      department_id: data.department_id || '',
+      subdivision_id: data.subdivision_id || '',
+      gender: data.gender || Gender.MALE,
+      location: String(data.location?.id) || '',
+      password: '',
+      city_id: String(data.location?.id) || '',
+      country_id: String(data.location?.country_id) || ''
+    };
+  }
+  return {
+    avatar: null,
+    email: '',
+    status: UserStatus.ACTIVE,
+    birth_date: '',
+    company_id: '',
+    first_name: '',
+    last_name: '',
+    patronymic: '',
+    phone: '',
+    position_id: '',
+    department_id: '',
+    subdivision_id: '',
+    location: '',
+    gender: Gender.MALE,
+    password: '',
+    city_id: '',
+    country_id: ''
+  };
+};
+
+export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
   const [searchPositionTerm, setSearchPositionTerm] = useState('');
+  const [searchCountryTerm, setSearchCountryTerm] = useState('');
+  const [searchCityTerm, setSearchCityTerm] = useState('');
+  const [removeAvatar, setRemoveAvatar] = useState<boolean>(false);
 
   const {
     data: companiesData,
@@ -109,54 +181,42 @@ export const UsersStarterContent = () => {
     staleTime: 60 * 60 * 1000
   });
 
-  const {
-    data: usersData,
-    isLoading: usersLoading,
-    isError: usersIsError,
-    error: usersError
-  } = useQuery({
-    queryKey: ['usersID', id],
-    queryFn: () => getUsers({ id: id ? Number(id) : undefined }),
-    enabled: isEditMode
-  });
-
-  const initialValues: IUserFormValues = {
-    email: '',
-    status: UserStatus.ACTIVE,
-    birth_date: '',
-    company_id: '',
-    first_name: '',
-    last_name: '',
-    patronymic: '',
-    phone: '',
-    position_id: '',
-    department_id: '',
-    subdivision_id: '',
-    location: '',
-    gender: Gender.MALE,
-    password: ''
-  };
-
   const formik = useFormik({
-    initialValues,
-    validationSchema: formSchema,
+    initialValues: getInitialValues(isEditMode, usersData as IGetUserByID),
+    validationSchema: isEditMode ? formSchemaPut : formSchemaPost,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        const payload = {
+        const payloadPost = {
           ...values,
+          location: values.city_id,
           birth_date: values.birth_date
             ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
-            : ''
+            : '',
+          avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null
         };
-        if (isEditMode && id) {
-          await postCreateUser(payload);
+        const payloadPut = {
+          ...values,
+          location: values.city_id,
+          birth_date: values.birth_date
+            ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
+            : '',
+          avatar: typeof values.avatar === 'string' ? null : values.avatar?.file || null,
+          id: Number(userId)
+        };
+        delete (payloadPost as Partial<typeof payloadPost>).city_id;
+        delete (payloadPost as Partial<typeof payloadPost>).country_id;
+        delete (payloadPut as Partial<typeof payloadPut>).city_id;
+        delete (payloadPut as Partial<typeof payloadPut>).country_id;
+        delete (payloadPut as Partial<typeof payloadPut>).password;
+        if (isEditMode) {
+          await putUser(payloadPut, removeAvatar);
           queryClient.invalidateQueries({ queryKey: ['users'] });
           navigate('/crm/users/list');
           resetForm();
         } else {
-          await postCreateUser(payload);
+          await postCreateUser(payloadPost);
           queryClient.invalidateQueries({ queryKey: ['users'] });
           navigate('/crm/users/list');
           resetForm();
@@ -174,39 +234,44 @@ export const UsersStarterContent = () => {
     }
   });
 
-  useEffect(() => {
-    if (isEditMode && id) {
-      if (usersData?.result) {
-        formik.setValues({
-          email: usersData.result.email || '',
-          status: usersData.result.status || UserStatus.ACTIVE,
-          birth_date: usersData.result.birth_date || '',
-          company_id: String(usersData.result.company_id) || '',
-          first_name: usersData.result.first_name || '',
-          last_name: usersData.result.last_name || '',
-          patronymic: usersData.result.patronymic || '',
-          phone: usersData.result.phone || '',
-          position_id: String(usersData.result.position_id) || '',
-          department_id: String(usersData.result.department_id) || '',
-          subdivision_id: String(usersData.result.subdivision_id) || '',
-          location: String(usersData.result.location) || '',
-          gender: usersData.result.gender || Gender.MALE,
-          password: ''
-        });
-      }
-    } else {
-      formik.resetForm();
-    }
-  }, [usersData, isEditMode, id]);
+  const {
+    data: countriesData,
+    isLoading: countriesLoading,
+    isError: countriesIsError,
+    error: countriesError
+  } = useQuery({
+    queryKey: ['countries'],
+    queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity
+  });
 
-  if (
-    companiesLoading ||
-    subdivisionsLoading ||
-    departmentsLoading ||
-    positionsLoading ||
-    (isEditMode && usersLoading)
-  ) {
+  const {
+    data: citiesData,
+    isLoading: citiesLoading,
+    isError: citiesIsError,
+    error: citiesError
+  } = useQuery({
+    queryKey: [
+      'users-cities',
+      formik.values.country_id || usersData?.result[0]?.location?.country_id
+    ],
+    queryFn: () =>
+      getCitiesByCountryCode(
+        (formik.values.country_id || String(usersData?.result[0]?.location?.country_id)).toString(),
+        'id'
+      ),
+    enabled: !!formik.values.country_id || !!usersData?.result[0]?.location?.country_id
+  });
+
+  if (companiesLoading || subdivisionsLoading || departmentsLoading || positionsLoading) {
     return <SharedLoading />;
+  }
+
+  if (countriesIsError) {
+    return <SharedError error={countriesError} />;
+  }
+  if (citiesIsError) {
+    return <SharedError error={citiesError} />;
   }
 
   if (companiesIsError) {
@@ -225,10 +290,6 @@ export const UsersStarterContent = () => {
     return <SharedError error={subdivisionsError} />;
   }
 
-  if (isEditMode && usersIsError) {
-    return <SharedError error={usersError} />;
-  }
-
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
@@ -237,10 +298,55 @@ export const UsersStarterContent = () => {
         </div>
 
         <div className="card-body grid gap-5">
+          <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
+            <label className="form-label max-w-56">Photo</label>
+            <div className="flex items-center justify-between flex-wrap grow gap-2.5">
+              <span className="text-2sm font-medium text-gray-600">150x150px JPEG, PNG Image</span>
+              <CrudAvatarUpload
+                avatarUser={formik.values.avatar}
+                onChange={(newAvatar) => formik.setFieldValue('avatar', newAvatar)}
+                onChangeRemoveAvatar={() => {
+                  formik.setFieldValue('avatar', null);
+                  setRemoveAvatar(true);
+                }}
+              />
+            </div>
+          </div>
           <SharedInput name="first_name" label="First name" formik={formik} />
           <SharedInput name="last_name" label="Last name" formik={formik} />
           <SharedInput name="patronymic" label="Patronymic" formik={formik} />
-          <SharedInput name="location" label="Location" formik={formik} />
+          <SharedAutocomplete
+            label="Country"
+            value={formik.values.country_id}
+            options={countriesData?.data ?? []}
+            placeholder="Select country"
+            searchPlaceholder="Search country"
+            onChange={(val) => {
+              formik.setFieldValue('country_id', val);
+              formik.setFieldValue('city_id', '');
+            }}
+            error={formik.errors.country_id as string}
+            touched={formik.touched.country_id}
+            searchTerm={searchCountryTerm}
+            onSearchTermChange={setSearchCountryTerm}
+            loading={countriesLoading}
+          />
+          <SharedAutocomplete
+            label="From City"
+            value={formik.values.city_id}
+            options={citiesData?.data[0]?.cities ?? []}
+            placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
+            searchPlaceholder="Search city"
+            onChange={(val) => formik.setFieldValue('city_id', val)}
+            error={formik.errors.city_id as string}
+            touched={formik.touched.city_id}
+            searchTerm={searchCityTerm}
+            onSearchTermChange={setSearchCityTerm}
+            disabled={!formik.values.country_id}
+            loading={citiesLoading}
+            errorText={citiesIsError ? 'Failed to load cities' : undefined}
+            emptyText="No cities available"
+          />
           <SharedSelect
             name="gender"
             label="Gender"

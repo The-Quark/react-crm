@@ -31,7 +31,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { getData } from '@/utils/include/LocalStorage';
+import { getData, setData } from '@/utils/include/LocalStorage';
 
 export const formSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -61,7 +61,7 @@ export const TasksStarterContent = () => {
   const [searchPackageTerm, setSearchPackageTerm] = useState('');
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchUserTerm, setSearchUserTerm] = useState('');
-  const orderIdFromOrders = getData('orderIdFromOrders');
+  const orderIdFromOrders = getData('orderIdFromOrders') ? getData('orderIdFromOrders') : '';
   const { data: currentUser } = useCurrentUser();
 
   const {
@@ -153,8 +153,7 @@ export const TasksStarterContent = () => {
       setLoading(true);
       try {
         if (isEditMode && id) {
-          const { status, ...putData } = values;
-          await putTask(Number(id), { ...putData });
+          await putTask(Number(id), values);
           queryClient.invalidateQueries({ queryKey: ['tasks'] });
           navigate('/tasks/list');
           resetForm();
@@ -164,6 +163,7 @@ export const TasksStarterContent = () => {
           navigate('/tasks/list');
           resetForm();
         }
+        setData('orderIdFromOrders', '');
         setSearchUserTerm('');
         setSearchClientTerm('');
         setSearchUserTerm('');
@@ -324,7 +324,7 @@ export const TasksStarterContent = () => {
             options={
               usersData?.result?.map((app) => ({
                 id: app.id,
-                name: app.first_name
+                name: `${app.first_name} ${app.last_name} ${app.patronymic}`
               })) ?? []
             }
             placeholder="Select users"

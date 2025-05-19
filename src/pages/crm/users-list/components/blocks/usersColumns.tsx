@@ -52,7 +52,12 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
                 />
               </div>
               <div className="flex flex-col gap-0.5">
-                <div className="leading-none font-medium text-sm text-gray-900">{fullName}</div>
+                <a
+                  className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                  href={`/tasks/view/${info.row.original.id}`}
+                >
+                  {fullName}
+                </a>
                 <span className="text-2sm text-gray-700 font-normal">
                   {info.row.original.position?.title || ''}
                 </span>

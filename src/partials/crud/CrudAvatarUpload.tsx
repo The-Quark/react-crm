@@ -29,9 +29,6 @@ const CrudAvatarUpload: FC<CrudAvatarUploadProps> = ({
     setAvatar(selectedAvatar);
     if (onChange) {
       onChange(selectedAvatar.length > 0 ? selectedAvatar[0] : null);
-      if (onChangeRemoveAvatar) {
-        onChangeRemoveAvatar();
-      }
     }
   };
 

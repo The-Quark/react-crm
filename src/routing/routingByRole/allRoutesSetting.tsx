@@ -7,8 +7,6 @@ import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import {
   MemberRoleUpdatePage,
-  MemberStarterPage,
-  MemberUpdatePage,
   UsersListPage,
   UsersPublicProfilePage,
   UsersStarterPage

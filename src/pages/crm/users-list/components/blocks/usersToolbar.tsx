@@ -3,6 +3,7 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 
 export const UsersToolbar: FC = () => {
   const { table } = useDataGrid();
+  const storageHiddenColumnsId = 'users-hidden-columns';
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">

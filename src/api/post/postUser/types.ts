@@ -1,14 +1,17 @@
 import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
+import { IImageInputFile } from '@/components/image-input';
 
 export interface IUserFormValues {
   password: string;
   email: string;
   phone: string;
-  avatar?: string;
+  avatar: IImageInputFile | null | string;
   first_name: string;
   last_name: string;
   patronymic: string;
   birth_date: string;
+  country_id: string;
+  city_id: string;
   gender: 'male' | 'female' | 'other';
   status: UserStatus;
   login?: string;

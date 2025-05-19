@@ -9,9 +9,15 @@ interface IGeneralSettingsProps {
 export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
   if (!task) return <div className="card bg-card text-card-foreground">No task data available</div>;
 
-  const renderUserInfo = (user: { name: string; email: string; phone: string }) => (
+  const renderUserInfo = (user: {
+    first_name: string;
+    last_name: string;
+    patronymic: string;
+    email: string;
+    phone: string;
+  }) => (
     <div className="bg-muted p-3 rounded-md">
-      <p className="font-medium">{user.name}</p>
+      <p className="font-medium">{`${user.first_name} ${user.last_name} ${user.patronymic}`}</p>
       <p className="text-sm text-muted-foreground">{user.email}</p>
       <p className="text-sm text-muted-foreground">{user.phone}</p>
     </div>
@@ -23,7 +29,6 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
         <h3 className="card-title text-lg font-semibold">Task Details</h3>
       </div>
       <div className="card-body p-4 space-y-6">
-        {/* Основная информация */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-baseline gap-2.5">
@@ -73,7 +78,6 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
           </div>
         </div>
 
-        {/* Назначение */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-sm font-medium">Assigned By:</label>
@@ -86,7 +90,6 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
           </div>
         </div>
 
-        {/* Связанные объекты */}
         {task.order && (
           <div className="space-y-2">
             <label className="text-sm font-medium">Related Order:</label>

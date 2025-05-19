@@ -119,14 +119,15 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) => row.assigned_by.name,
+        accessorFn: (row) =>
+          `${row.assigned_by.first_name} ${row.assigned_by.last_name}${row.assigned_by.patronymic}`,
         id: 'assigned_by',
         header: ({ column }) => <DataGridColumnHeader title="Assigned by" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.assigned_by.name}
+              {`${info.row.original.assigned_by.first_name} ${info.row.original.assigned_by.last_name} ${info.row.original.assigned_by.patronymic}`}
             </div>
           </div>
         ),
@@ -136,14 +137,15 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) => row.assigned_to.name,
+        accessorFn: (row) =>
+          `${row.assigned_to.first_name} ${row.assigned_to.last_name}${row.assigned_to.patronymic}`,
         id: 'assigned_to',
         header: ({ column }) => <DataGridColumnHeader title="Assigned to" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.assigned_to.name}
+              {`${info.row.original.assigned_to.first_name} ${info.row.original.assigned_to.last_name} ${info.row.original.assigned_to.patronymic}`}
             </div>
           </div>
         ),

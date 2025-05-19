@@ -46,19 +46,19 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
       {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/crm/member-role-update/${id}`}>
-              <MenuIcon>
-                <KeenIcon icon="briefcase" />
-              </MenuIcon>
-              <MenuTitle>Edit role</MenuTitle>
-            </MenuLink>
-          </MenuItem>
-          <MenuItem>
             <MenuLink path={`/crm/users/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>
               <MenuTitle>Edit user</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+          <MenuItem>
+            <MenuLink path={`/crm/member-role-update/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="briefcase" />
+              </MenuIcon>
+              <MenuTitle>Edit role</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />

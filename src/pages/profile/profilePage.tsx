@@ -15,7 +15,7 @@ export const ProfilePage = () => {
   const image = (
     <img
       src={
-        currentUser
+        currentUser?.avatar
           ? `${STORAGE_AVATAR_URL}/${currentUser.avatar}`
           : toAbsoluteUrl('/media/avatars/blank.png')
       }
@@ -26,7 +26,11 @@ export const ProfilePage = () => {
   return (
     <Fragment>
       <UserProfileHero
-        name={currentUser ? currentUser.first_name : 'Not Found'}
+        name={
+          currentUser
+            ? `${currentUser.first_name} ${currentUser.last_name} ${currentUser.patronymic}`
+            : 'Not Found'
+        }
         image={image}
         info={[
           { email: currentUser ? currentUser.email : 'Not Found', icon: 'sms' },
