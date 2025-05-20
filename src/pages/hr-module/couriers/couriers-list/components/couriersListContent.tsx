@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserByParams } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
-import { useDriversColumns } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversColumns.tsx';
-import { DriversToolbar } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversToolbar.tsx';
+import { useCouriersColumns } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersColumns.tsx';
+import { CouriersToolbar } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersToolbar.tsx';
 
-export const DriversListContent = () => {
+export const CouriersListContent = () => {
   const { currentUser } = useAuthContext();
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['drivers'],
-    queryFn: () => getUserByParams({ companyId: Number(currentUser?.company_id), role: 'driver' }),
+    queryKey: ['couriers'],
+    queryFn: () => getUserByParams({ companyId: Number(currentUser?.company_id), role: 'courier' }),
     retry: false,
     refetchOnWindowFocus: true,
     staleTime: 1000 * 30,
@@ -19,7 +19,7 @@ export const DriversListContent = () => {
     refetchIntervalInBackground: true
   });
 
-  const columns = useDriversColumns();
+  const columns = useCouriersColumns();
 
   if (isError) {
     return <SharedError error={error} />;
@@ -36,7 +36,7 @@ export const DriversListContent = () => {
           rowSelection={true}
           pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<DriversToolbar />}
+          toolbar={<CouriersToolbar />}
           layout={{ card: true }}
         />
       )}

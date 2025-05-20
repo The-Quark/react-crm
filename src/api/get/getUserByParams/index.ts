@@ -5,6 +5,7 @@ import { USERS_URL } from '@/api/url';
 type GetUserParams = {
   id?: number;
   companyId?: number;
+  role?: string;
 };
 
 export const getUserByParams = async (params: GetUserParams): Promise<IGetUserByParams> => {
@@ -16,6 +17,10 @@ export const getUserByParams = async (params: GetUserParams): Promise<IGetUserBy
 
   if (params.companyId !== undefined) {
     queryParams.append('company_id', params.companyId.toString());
+  }
+
+  if (params.role !== undefined) {
+    queryParams.append('role', params.role);
   }
 
   const url = `${USERS_URL}?${queryParams.toString()}`;

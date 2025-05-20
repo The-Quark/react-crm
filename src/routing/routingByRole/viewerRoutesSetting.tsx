@@ -10,7 +10,6 @@ import {
   SubdivisionsListPage
 } from '@/pages/global-parameters';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
-import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import { UsersListPage, UsersPublicProfilePage } from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
@@ -38,8 +37,9 @@ import {
   PackagesListPage
 } from '@/pages/call-center';
 import { TasksListPage, TasksViewPage } from '@/pages/tasks';
-import { DriversListPage, DriversViewPage } from '@/pages/hr-module/drivers';
+import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
+import { CouriersListPage } from '@/pages/hr-module';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -67,8 +67,7 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
-        <Route path="/hr-module/drivers/view/:id" element={<DriversViewPage />} />
-        <Route path="/hr-module/couriers" element={<CouriersPage />} />
+        <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
 
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />

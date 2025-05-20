@@ -4,11 +4,11 @@ import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/co
 import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
-import { DriversMenuOptions } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversMenuOptions.tsx';
+import { CouriersMenuOptions } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersMenuOptions.tsx';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
-export const useDriversColumns = (): ColumnDef<UserModel>[] => {
+export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
@@ -29,8 +29,8 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'driver',
-        header: ({ column }) => <DataGridColumnHeader title="Driver" column={column} />,
+        id: 'staff',
+        header: ({ column }) => <DataGridColumnHeader title="Staff" column={column} />,
         enableSorting: true,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -70,23 +70,6 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row?.license_category,
-        id: 'license category',
-        header: ({ column }) => <DataGridColumnHeader title="License category" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original?.license_category}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
@@ -94,21 +77,6 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.email,
-        id: 'email',
-        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
           </div>
         ),
         meta: {
@@ -133,29 +101,28 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
+        accessorFn: (row) => row.email,
+        id: 'email',
+        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.status,
-        id: 'user status',
-        header: ({ column }) => <DataGridColumnHeader title="User status" column={column} />,
+        id: 'status',
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
-        accessorFn: (row) => row?.driver_status,
-        id: 'driver status',
-        header: ({ column }) => <DataGridColumnHeader title="Driver status" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original?.driver_status}
-            </div>
           </div>
         ),
         meta: {
@@ -205,7 +172,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {DriversMenuOptions({
+              {CouriersMenuOptions({
                 id: info.row.original.id
               })}
             </MenuItem>

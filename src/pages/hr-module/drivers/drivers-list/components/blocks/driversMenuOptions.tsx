@@ -11,45 +11,44 @@ import { FC } from 'react';
 import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteGlobalParameter } from '@/api';
+import { deleteUser } from '@/api';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface MenuOptionsProps {
   id?: number;
 }
 
-const DriversMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+export const DriversMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
-  const queryClient = useQueryClient();
   const { has } = useUserPermissions();
-  const canManageGlobalSettings =
-    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
+  const queryClient = useQueryClient();
 
   const handleDelete = () => {
     if (id) {
-      deleteGlobalParameter(id);
-      queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
+      deleteUser(id);
+      queryClient.invalidateQueries({ queryKey: ['drivers'] });
     } else {
-      toast.error('Parameter ID not provided');
+      toast.error('Driver ID not provided');
     }
   };
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/global-parameters/view-parameters/${id}`}>
+        <MenuLink path={`/crm/users/public-profile/${id}`}>
           <MenuIcon>
-            <KeenIcon icon="more-2" />
+            <KeenIcon icon="user" />
           </MenuIcon>
-          <MenuTitle>View</MenuTitle>
+          <MenuTitle>View Profile</MenuTitle>
         </MenuLink>
       </MenuItem>
-      {canManageGlobalSettings && (
+      {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/global-parameters/starter-parameters/${id}`}>
+            <MenuLink path={`/hr-module/drivers/starter/${id}`}>
               <MenuIcon>
-                <KeenIcon icon="setting-4" />
+                <KeenIcon icon="user-edit" />
               </MenuIcon>
               <MenuTitle>Edit</MenuTitle>
             </MenuLink>
@@ -68,5 +67,3 @@ const DriversMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
     </MenuSub>
   );
 };
-
-export { DriversMenuOptions };

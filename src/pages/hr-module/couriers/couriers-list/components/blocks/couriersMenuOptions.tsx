@@ -18,7 +18,7 @@ interface MenuOptionsProps {
   id?: number;
 }
 
-export const StaffMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
@@ -27,7 +27,7 @@ export const StaffMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const handleDelete = () => {
     if (id) {
       deleteUser(id);
-      queryClient.invalidateQueries({ queryKey: ['staff'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     } else {
       toast.error('Staff ID not provided');
     }

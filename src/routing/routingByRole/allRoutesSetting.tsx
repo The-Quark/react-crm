@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
-import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
 import {
   CompaniesListPage,
@@ -122,8 +121,9 @@ import {
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
-import { DriversListPage, DriversStarterPage, DriversViewPage } from '@/pages/hr-module/drivers';
+import { DriversListPage, DriversStarterPage } from '@/pages/hr-module/drivers';
 import { StaffListPage, StaffStarterPage } from '@/pages/hr-module/staff';
+import { CouriersListPage, CouriersStarterPage } from '@/pages/hr-module';
 
 const AllRoutesSetting = () => {
   return (
@@ -156,8 +156,9 @@ const AllRoutesSetting = () => {
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/drivers/starter" element={<DriversStarterPage />} />
         <Route path="/hr-module/drivers/starter/:id" element={<DriversStarterPage />} />
-        <Route path="/hr-module/drivers/view/:id" element={<DriversViewPage />} />
-        <Route path="/hr-module/couriers" element={<CouriersPage />} />
+        <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
+        <Route path="/hr-module/couriers/starter" element={<CouriersStarterPage />} />
+        <Route path="/hr-module/couriers/starter/:id" element={<CouriersStarterPage />} />
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />

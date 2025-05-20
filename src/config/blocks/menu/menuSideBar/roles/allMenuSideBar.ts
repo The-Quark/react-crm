@@ -74,7 +74,7 @@ export const AllMenuSideBar: TMenuConfig = [
       },
       {
         title: 'MENU.MEGAMENU.COURIERS',
-        path: '/hr-module/couriers'
+        path: '/hr-module/couriers/list'
       }
     ]
   },
