@@ -102,13 +102,15 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.email,
-        id: 'email',
-        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'plate number',
+        header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.vehicle?.plate_number}
+            </div>
           </div>
         ),
         meta: {

@@ -16,7 +16,7 @@ export const StaffStarterPage = () => {
     isError: usersIsError,
     error: usersError
   } = useQuery({
-    queryKey: ['usersID', id],
+    queryKey: ['staffID', id],
     queryFn: () => getUserByParams({ id: Number(id) }),
     enabled: isEditMode
   });

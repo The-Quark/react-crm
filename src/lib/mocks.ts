@@ -2,7 +2,7 @@ import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { TemplateType } from '@/api/get/getTemplates/types.ts';
 import { TaskType, TaskPriority, TaskStatus } from '@/api/get/getTask/types.ts';
-import { Gender, UserStatus } from '@/api/enums';
+import { Gender, UserDriverStatus, UserStatus } from '@/api/enums';
 export const localesMock = [
   {
     code: 'en',
@@ -414,4 +414,9 @@ export const mockUserStatusOptions = [
   { id: 1, name: 'Staging', value: UserStatus.STAGING },
   { id: 2, name: 'Decree', value: UserStatus.DECREE },
   { id: 3, name: 'Unavailable', value: UserStatus.UNAVAILABLE }
+];
+
+export const mockDriverStatusOptions = [
+  { id: 1, name: 'Available', value: UserDriverStatus.AVAILABLE },
+  { id: 2, name: 'Unavailable', value: UserDriverStatus.UNAVAILABLE }
 ];
