@@ -3,7 +3,7 @@ import { Container } from '@/components';
 import { UsersStarterContent } from '@/pages/crm/users-starter/components/usersStarterContent.tsx';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { getUserByID } from '@/api';
+import { getUserByParams } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 export const UsersStarterPage = () => {
@@ -17,7 +17,7 @@ export const UsersStarterPage = () => {
     error: usersError
   } = useQuery({
     queryKey: ['usersID', id],
-    queryFn: () => getUserByID(Number(id)),
+    queryFn: () => getUserByParams({ id: Number(id) }),
     enabled: isEditMode
   });
 

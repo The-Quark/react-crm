@@ -154,7 +154,7 @@ interface UserModel {
   vehicle: Vehicle | null;
 }
 
-export interface IGetUserByID {
+export interface IGetUserByParams {
   result: UserModel[];
   count: number;
 }

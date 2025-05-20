@@ -31,12 +31,12 @@ import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Gender } from '@/api/enums';
 import { mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
 import { format } from 'date-fns';
-import { IGetUserByID } from '@/api/get/getUserByID/types.ts';
+import { IGetUserByParams } from '@/api/get/getUserByParams/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 
 interface Props {
   isEditMode: boolean;
-  usersData?: IGetUserByID;
+  usersData?: IGetUserByParams;
   userId?: number;
 }
 
@@ -81,7 +81,7 @@ export const formSchemaPut = Yup.object().shape({
   city_id: Yup.string().required('City is required')
 });
 
-const getInitialValues = (isEditMode: boolean, userData: IGetUserByID): IUserFormValues => {
+const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUserFormValues => {
   if (isEditMode && userData?.result) {
     const data = userData.result[0];
     return {
@@ -182,7 +182,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, usersData as IGetUserByID),
+    initialValues: getInitialValues(isEditMode, usersData as IGetUserByParams),
     validationSchema: isEditMode ? formSchemaPut : formSchemaPost,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {

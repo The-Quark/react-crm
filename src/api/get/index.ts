@@ -29,4 +29,4 @@ export * from './getGlobalParamsPositions';
 export * from './getGlobalParamsSubdivisions';
 export * from './getGlobalParamsDepartments';
 export * from './getUsers';
-export * from './getUserByID';
+export * from './getUserByParams';

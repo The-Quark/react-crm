@@ -1,3 +1,3 @@
-export * from './staff/staffPage';
+export * from './staff';
 export * from './drivers';
 export * from './couriers/couriersPage';
