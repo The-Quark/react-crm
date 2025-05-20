@@ -36,7 +36,7 @@ export const StaffMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
-        <MenuLink path={`/crm/staff/public-profile/${id}`}>
+        <MenuLink path={`/crm/users/public-profile/${id}`}>
           <MenuIcon>
             <KeenIcon icon="user" />
           </MenuIcon>
@@ -46,7 +46,7 @@ export const StaffMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
       {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/crm/staff/starter/${id}`}>
+            <MenuLink path={`/hr-module/staff/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>

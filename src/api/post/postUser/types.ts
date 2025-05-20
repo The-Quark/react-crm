@@ -25,6 +25,7 @@ export interface IUserFormValues {
   driver_status?: UserDriverStatus;
   courier_type?: UserCourierType;
   driver_details?: string;
+  role: string;
 }
 
 export interface IUserFormValuesResult {

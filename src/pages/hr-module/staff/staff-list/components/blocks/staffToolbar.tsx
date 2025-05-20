@@ -9,7 +9,7 @@ export const StaffToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Staff</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/crm/staff/starter" className="btn btn-sm btn-primary">
+        <a href="/hr-module/staff/starter" className="btn btn-sm btn-primary">
           New staff
         </a>
         <DataGridColumnVisibility table={table} />

@@ -4,6 +4,9 @@ import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/co
 import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
 import { StaffMenuOptions } from '@/pages/hr-module/staff/staff-list/components/blocks/staffMenuOptions.tsx';
+import { toAbsoluteUrl } from '@/utils';
+
+const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 export const useStaffColumns = (): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
@@ -36,6 +39,17 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
 
           return (
             <div className="flex items-center gap-2.5">
+              <div className="shrink-0">
+                <img
+                  src={
+                    info.row.original.avatar
+                      ? `${STORAGE_URL}/${info.row.original.avatar}`
+                      : toAbsoluteUrl('/media/avatars/blank.png')
+                  }
+                  className="h-9 rounded-full"
+                  alt="Avatar"
+                />
+              </div>
               <div className="flex flex-col gap-0.5">
                 <a
                   className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
@@ -56,6 +70,21 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
+        accessorFn: (row) => row.phone,
+        id: 'phone',
+        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.roles[0].name,
         id: 'role',
         header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
@@ -72,15 +101,13 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.company?.company_name,
-        id: 'company name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        accessorFn: (row) => row.email,
+        id: 'email',
+        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.company?.company_name}
-            </div>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
           </div>
         ),
         meta: {

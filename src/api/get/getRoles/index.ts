@@ -13,7 +13,7 @@ export const getRoles = async (
   }
 
   if (allowed !== undefined) {
-    params.append('allowed', allowed.toString());
+    params.append('allowed', allowed ? '1' : '0');
   }
 
   const url = `${ROLES_URL}?${params.toString()}`;

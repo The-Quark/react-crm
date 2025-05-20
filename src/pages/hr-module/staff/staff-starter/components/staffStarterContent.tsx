@@ -1,7 +1,6 @@
 import {
   getCitiesByCountryCode,
   getCountries,
-  getGlobalParameters,
   getGlobalParamsDepartments,
   getGlobalParamsPositions,
   getGlobalParamsSubdivisions,
@@ -51,7 +50,6 @@ export const formSchemaPost = Yup.object().shape({
   last_name: Yup.string().required('Last name is required'),
   patronymic: Yup.string().required('Patronymic is required'),
   birth_date: Yup.string().required('Birth date is required'),
-  company_id: Yup.string().required('Company is required'),
   subdivision_id: Yup.string().required('Subdivision is required'),
   department_id: Yup.string().required('Department is required'),
   position_id: Yup.string().required('Position is required'),
@@ -75,7 +73,6 @@ export const formSchemaPut = Yup.object().shape({
   last_name: Yup.string().required('Last name is required'),
   patronymic: Yup.string().required('Patronymic is required'),
   birth_date: Yup.string().required('Birth date is required'),
-  company_id: Yup.string().required('Company is required'),
   subdivision_id: Yup.string().required('Subdivision is required'),
   department_id: Yup.string().required('Department is required'),
   position_id: Yup.string().required('Position is required'),
@@ -130,12 +127,11 @@ const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUse
   };
 };
 
-export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
+export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
   const [searchPositionTerm, setSearchPositionTerm] = useState('');
@@ -144,23 +140,12 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(false);
 
   const {
-    data: companiesData,
-    isLoading: companiesLoading,
-    isError: companiesIsError,
-    error: companiesError
-  } = useQuery({
-    queryKey: ['users-companies'],
-    queryFn: () => getGlobalParameters(),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
     data: rolesData,
     isLoading: rolesLoading,
     isError: rolesIsError,
     error: rolesError
   } = useQuery({
-    queryKey: ['users-roles'],
+    queryKey: ['staff-roles'],
     queryFn: () => getRoles(currentUser ? Number(currentUser.id) : 0, true),
     staleTime: 60 * 60 * 1000
   });
@@ -171,7 +156,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: departmentsIsError,
     error: departmentsError
   } = useQuery({
-    queryKey: ['users-departments'],
+    queryKey: ['staff-departments'],
     queryFn: () => getGlobalParamsDepartments(),
     staleTime: 60 * 60 * 1000
   });
@@ -182,7 +167,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: subdivisionsIsError,
     error: subdivisionsError
   } = useQuery({
-    queryKey: ['users-subdivisions'],
+    queryKey: ['staff-subdivisions'],
     queryFn: () => getGlobalParamsSubdivisions(),
     staleTime: 60 * 60 * 1000
   });
@@ -193,7 +178,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: positionsIsError,
     error: positionsError
   } = useQuery({
-    queryKey: ['users-positions'],
+    queryKey: ['staff-positions'],
     queryFn: () => getGlobalParamsPositions(),
     staleTime: 60 * 60 * 1000
   });
@@ -208,6 +193,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
         const payloadPost = {
           ...values,
           location: values.city_id,
+          company_id: Number(currentUser?.company_id) || 0,
           birth_date: values.birth_date
             ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
             : '',
@@ -216,6 +202,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
         const payloadPut = {
           ...values,
           location: values.city_id,
+          company_id: Number(currentUser?.company_id) || 0,
           birth_date: values.birth_date
             ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
             : '',
@@ -235,16 +222,15 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
         if (isEditMode) {
           await putUser(payloadPut, removeAvatar);
           await putUserRole(payloadRoleUpdate);
-          queryClient.invalidateQueries({ queryKey: ['users'] });
-          navigate('/crm/users/list');
+          queryClient.invalidateQueries({ queryKey: ['staff'] });
+          navigate('/hr-module/staff/list');
           resetForm();
         } else {
           await postCreateUser(payloadPost);
-          queryClient.invalidateQueries({ queryKey: ['users'] });
-          navigate('/crm/users/list');
+          queryClient.invalidateQueries({ queryKey: ['staff'] });
+          navigate('/hr-module/staff/list');
           resetForm();
         }
-        setSearchCompanyTerm('');
         setSearchDepartmentTerm('');
         setSearchSubdivisionTerm('');
         setSearchPositionTerm('');
@@ -275,7 +261,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     error: citiesError
   } = useQuery({
     queryKey: [
-      'users-cities',
+      'staff-cities',
       formik.values.country_id || usersData?.result[0]?.location?.country_id
     ],
     queryFn: () =>
@@ -286,13 +272,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     enabled: !!formik.values.country_id || !!usersData?.result[0]?.location?.country_id
   });
 
-  if (
-    companiesLoading ||
-    subdivisionsLoading ||
-    departmentsLoading ||
-    positionsLoading ||
-    rolesLoading
-  ) {
+  if (subdivisionsLoading || departmentsLoading || positionsLoading || rolesLoading) {
     return <SharedLoading />;
   }
 
@@ -305,10 +285,6 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
   }
   if (citiesIsError) {
     return <SharedError error={citiesError} />;
-  }
-
-  if (companiesIsError) {
-    return <SharedError error={companiesError} />;
   }
 
   if (departmentsIsError) {
@@ -327,7 +303,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit User' : 'New User'}</h3>
+          <h3 className="card-title">{isEditMode ? 'Edit Staff' : 'New Staff'}</h3>
         </div>
 
         <div className="card-body grid gap-5">
@@ -451,25 +427,6 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
           </div>
           <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
           <SharedInput name="email" label="Email" formik={formik} type="email" />
-          <SharedAutocomplete
-            label="Company"
-            value={formik.values.company_id ?? ''}
-            options={
-              companiesData?.result?.map((app) => ({
-                id: app.id,
-                name: app.company_name
-              })) ?? []
-            }
-            placeholder="Select company"
-            searchPlaceholder="Search company"
-            onChange={(val) => {
-              formik.setFieldValue('company_id', val);
-            }}
-            error={formik.errors.company_id as string}
-            touched={formik.touched.company_id}
-            searchTerm={searchCompanyTerm}
-            onSearchTermChange={setSearchCompanyTerm}
-          />
           <SharedAutocomplete
             label="Department"
             value={formik.values.department_id ?? ''}

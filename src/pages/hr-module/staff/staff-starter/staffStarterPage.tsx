@@ -1,10 +1,10 @@
 import React from 'react';
 import { Container } from '@/components';
-import { UsersStarterContent } from '@/pages/crm/users-starter/components/usersStarterContent.tsx';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByParams } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { StaffStarterContent } from '@/pages/hr-module/staff/staff-starter/components/staffStarterContent.tsx';
 
 export const StaffStarterPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +29,7 @@ export const StaffStarterPage = () => {
       {isEditMode && usersLoading ? (
         <SharedLoading />
       ) : (
-        <UsersStarterContent usersData={usersData} isEditMode={isEditMode} userId={Number(id)} />
+        <StaffStarterContent usersData={usersData} isEditMode={isEditMode} userId={Number(id)} />
       )}
     </Container>
   );
