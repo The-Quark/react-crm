@@ -4,12 +4,7 @@ import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
-import {
-  MemberRoleUpdatePage,
-  UsersListPage,
-  UsersPublicProfilePage,
-  UsersStarterPage
-} from '@/pages/crm';
+import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
 import {
   CompaniesListPage,
   CompaniesStarterPage,
@@ -177,7 +172,6 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
         <Route path="/call-center/cargo/upload/:id" element={<CargoUploadPage />} />
         <Route path="/call-center/cargo/list" element={<CargoListPage />} />
-        <Route path="/crm/member-role-update/:id" element={<MemberRoleUpdatePage />} />
         <Route path="/crm/users/starter" element={<UsersStarterPage />} />
         <Route path="/crm/users/starter/:id" element={<UsersStarterPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />,

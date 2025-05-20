@@ -53,14 +53,6 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuTitle>Edit user</MenuTitle>
             </MenuLink>
           </MenuItem>
-          <MenuItem>
-            <MenuLink path={`/crm/member-role-update/${id}`}>
-              <MenuIcon>
-                <KeenIcon icon="briefcase" />
-              </MenuIcon>
-              <MenuTitle>Edit role</MenuTitle>
-            </MenuLink>
-          </MenuItem>
           <MenuSeparator />
           <MenuItem onClick={handleDelete}>
             <MenuLink>

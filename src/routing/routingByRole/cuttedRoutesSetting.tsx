@@ -13,12 +13,7 @@ import {
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
-import {
-  MemberRoleUpdatePage,
-  UsersListPage,
-  UsersPublicProfilePage,
-  UsersStarterPage
-} from '@/pages/crm';
+import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
   GuidesAirlineRatesPage,
@@ -126,7 +121,6 @@ const routeConfig = [
   {
     permission: 'manage users',
     routes: [
-      { path: '/crm/member-role-update/:id', element: <MemberRoleUpdatePage /> },
       { path: '/crm/users/starter', element: <UsersStarterPage /> },
       { path: '/crm/users/starter/:id', element: <UsersStarterPage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
