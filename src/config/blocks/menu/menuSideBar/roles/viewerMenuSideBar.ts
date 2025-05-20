@@ -66,7 +66,7 @@ export const ViewerMenuSideBar: TMenuConfig = [
     children: [
       {
         title: 'MENU.MEGAMENU.STAFF',
-        path: '/hr-module/staff'
+        path: '/hr-module/staff/list'
       },
       {
         title: 'MENU.MEGAMENU.DRIVERS',

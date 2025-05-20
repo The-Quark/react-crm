@@ -16,8 +16,8 @@ export const UsersPublicProfilePage = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => getUsers({}),
+    queryKey: ['users-id'],
+    queryFn: () => getUsers({ id: id ? Number(id) : undefined }),
     retry: false,
     refetchOnWindowFocus: true,
     staleTime: 1000 * 30,

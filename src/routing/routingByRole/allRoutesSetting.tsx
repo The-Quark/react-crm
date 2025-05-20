@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
-import StaffPage from '@/pages/hr-module/staff/staffPage.tsx';
 import CouriersPage from '@/pages/hr-module/couriers/couriersPage.tsx';
 import {
   MemberRoleUpdatePage,
@@ -129,6 +128,7 @@ import {
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversStarterPage, DriversViewPage } from '@/pages/hr-module/drivers';
+import { StaffListPage, StaffStarterPage } from '@/pages/hr-module/staff';
 
 const AllRoutesSetting = () => {
   return (
@@ -155,7 +155,9 @@ const AllRoutesSetting = () => {
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/starter-clients" element={<ClientStarterPage />} />
         <Route path="/clients/starter-clients/:id" element={<ClientStarterPage />} />
-        <Route path="/hr-module/staff" element={<StaffPage />} />
+        <Route path="/hr-module/staff/list" element={<StaffListPage />} />
+        <Route path="/hr-module/staff/starter" element={<StaffStarterPage />} />
+        <Route path="/hr-module/staff/starter/:id" element={<StaffStarterPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/drivers/starter" element={<DriversStarterPage />} />
         <Route path="/hr-module/drivers/starter/:id" element={<DriversStarterPage />} />

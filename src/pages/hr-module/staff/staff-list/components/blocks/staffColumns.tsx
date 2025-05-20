@@ -3,14 +3,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
-import { UsersMenuOptions } from '@/pages/crm/users-list/components/blocks/usersMenuOptions.tsx';
-import { toAbsoluteUrl } from '@/utils';
+import { StaffMenuOptions } from '@/pages/hr-module/staff/staff-list/components/blocks/staffMenuOptions.tsx';
 
-const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
-
-export const useUsersColumns = (): ColumnDef<UserModel>[] => {
+export const useStaffColumns = (): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
-
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
       {
@@ -30,8 +26,8 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'user',
-        header: ({ column }) => <DataGridColumnHeader title="User" column={column} />,
+        id: 'staff',
+        header: ({ column }) => <DataGridColumnHeader title="Staff" column={column} />,
         enableSorting: true,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -40,17 +36,6 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
 
           return (
             <div className="flex items-center gap-2.5">
-              <div className="shrink-0">
-                <img
-                  src={
-                    info.row.original.avatar
-                      ? `${STORAGE_URL}/${info.row.original.avatar}`
-                      : toAbsoluteUrl('/media/avatars/blank.png')
-                  }
-                  className="h-9 rounded-full"
-                  alt="Avatar"
-                />
-              </div>
               <div className="flex flex-col gap-0.5">
                 <a
                   className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
@@ -160,7 +145,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {UsersMenuOptions({
+              {StaffMenuOptions({
                 id: info.row.original.id
               })}
             </MenuItem>
