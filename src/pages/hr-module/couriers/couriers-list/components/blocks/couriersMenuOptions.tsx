@@ -27,9 +27,9 @@ export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
   const handleDelete = () => {
     if (id) {
       deleteUser(id);
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['couriers'] });
     } else {
-      toast.error('Staff ID not provided');
+      toast.error('Courier ID not provided');
     }
   };
 
@@ -46,7 +46,7 @@ export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
       {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/hr-module/staff/starter/${id}`}>
+            <MenuLink path={`/hr-module/couriers/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>

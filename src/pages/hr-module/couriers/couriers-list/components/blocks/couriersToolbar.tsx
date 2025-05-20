@@ -3,14 +3,13 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 
 export const CouriersToolbar: FC = () => {
   const { table } = useDataGrid();
-  const storageHiddenColumnsId = 'drivers-hidden-columns';
-
+  const storageHiddenColumnsId = 'couriers-hidden-columns';
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Staff</h3>
+      <h3 className="card-title">Couriers</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/hr-module/staff/starter" className="btn btn-sm btn-primary">
-          New staff
+        <a href="/hr-module/couriers/starter" className="btn btn-sm btn-primary">
+          New courier
         </a>
         <DataGridColumnVisibility table={table} />
         <div className="relative">
@@ -20,10 +19,10 @@ export const CouriersToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search staff"
+            placeholder="Search courier"
             className="input input-sm ps-8"
-            value={(table.getColumn('staff')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('staff')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('courier')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('courier')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>

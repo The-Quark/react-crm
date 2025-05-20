@@ -60,9 +60,9 @@ export const ProfilePage = () => {
         </Navbar>
       </Container>
 
-      <Container>
-        <ProfilePageContent />
-      </Container>
+      {/*<Container>*/}
+      {/*  <ProfilePageContent />*/}
+      {/*</Container>*/}
     </Fragment>
   );
 };

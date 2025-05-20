@@ -21,7 +21,8 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { Gender, UserDriverStatus, UserStatus } from '@/api/enums';
@@ -55,9 +56,9 @@ export const formSchemaPost = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('Email is required'),
   country_id: Yup.string().required('Country is required'),
   city_id: Yup.string().required('City is required'),
-  license_category: Yup.string().required('License category is required'),
-  vehicle_id: Yup.string().required('Vehicle is required'),
-  driver_status: Yup.string().required('Driver status is required'),
+  license_category: Yup.string().optional(),
+  vehicle_id: Yup.string().optional(),
+  driver_status: Yup.string().optional(),
   password: Yup.string()
     .min(10, 'Minimum 10 symbols')
     .max(100, 'Maximum 100 symbols')
@@ -81,9 +82,10 @@ export const formSchemaPut = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('Email is required'),
   country_id: Yup.string().required('Country is required'),
   city_id: Yup.string().required('City is required'),
-  license_category: Yup.string().required('License category is required'),
-  vehicle_id: Yup.string().required('Vehicle is required'),
-  driver_status: Yup.string().required('Driver status is required')
+  license_category: Yup.string().optional(),
+  vehicle_id: Yup.string().optional(),
+  driver_status: Yup.string().optional(),
+  driver_details: Yup.string().optional()
 });
 
 const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUserFormValues => {
@@ -110,7 +112,8 @@ const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUse
       role: 'driver',
       license_category: data.license_category || '',
       vehicle_id: data.vehicle_id || '',
-      driver_status: data.driver_status || UserDriverStatus.AVAILABLE
+      driver_status: data.driver_status || UserDriverStatus.AVAILABLE,
+      driver_details: data.driver_details || ''
     };
   }
   return {
@@ -134,7 +137,8 @@ const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUse
     role: 'driver',
     license_category: '',
     vehicle_id: '',
-    driver_status: UserDriverStatus.AVAILABLE
+    driver_status: UserDriverStatus.AVAILABLE,
+    driver_details: ''
   };
 };
 
@@ -517,6 +521,7 @@ export const DriversStarterContent: FC<Props> = ({ isEditMode, usersData, userId
           />
 
           <SharedInput name="license_category" label="License category" formik={formik} />
+          <SharedTextArea name="driver_details" label="Details" formik={formik} />
           {!isEditMode && (
             <SharedInput name="password" label="Password" formik={formik} type="password" />
           )}

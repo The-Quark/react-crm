@@ -29,8 +29,8 @@ export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'staff',
-        header: ({ column }) => <DataGridColumnHeader title="Staff" column={column} />,
+        id: 'courier',
+        header: ({ column }) => <DataGridColumnHeader title="Courier" column={column} />,
         enableSorting: true,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -85,6 +85,23 @@ export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
+        accessorFn: (row) => row?.courier_type,
+        id: 'courier type',
+        header: ({ column }) => <DataGridColumnHeader title="Courier type" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.courier_type}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.roles[0].name,
         id: 'role',
         header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
@@ -98,21 +115,6 @@ export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
         ),
         meta: {
           headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
-        accessorFn: (row) => row.email,
-        id: 'email',
-        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
