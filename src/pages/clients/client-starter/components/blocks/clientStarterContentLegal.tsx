@@ -90,6 +90,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
       <SharedInput name="bin" label="BIN" formik={formik} type="number" />
       <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
       <SharedInput name="email" label="Email" formik={formik} type="email" />
+
       <SharedInput name="business_type" label="Business type" formik={formik} />
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
         <label className="form-label max-w-56">Source</label>
@@ -136,6 +137,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         name="representative_phone"
         label="Representative phone number"
         formik={formik}
+        type="tel"
       />
       <SharedInput name="representative_email" label="Representative email" formik={formik} />
 

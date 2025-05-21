@@ -45,20 +45,20 @@ export const ProfilePage = () => {
         ]}
       />
 
-      <Container>
-        <Navbar>
-          <PageMenu />
-          <NavbarActions>
-            <button type="button" className="btn btn-sm btn-primary">
-              <KeenIcon icon="users" /> Connect
-            </button>
-            <button className="btn btn-sm btn-icon btn-light">
-              <KeenIcon icon="messages" />
-            </button>
-            <NavbarDropdown />
-          </NavbarActions>
-        </Navbar>
-      </Container>
+      {/*<Container>*/}
+      {/*  <Navbar>*/}
+      {/*    <PageMenu />*/}
+      {/*    <NavbarActions>*/}
+      {/*      <button type="button" className="btn btn-sm btn-primary">*/}
+      {/*        <KeenIcon icon="users" /> Connect*/}
+      {/*      </button>*/}
+      {/*      <button className="btn btn-sm btn-icon btn-light">*/}
+      {/*        <KeenIcon icon="messages" />*/}
+      {/*      </button>*/}
+      {/*      <NavbarDropdown />*/}
+      {/*    </NavbarActions>*/}
+      {/*  </Navbar>*/}
+      {/*</Container>*/}
 
       {/*<Container>*/}
       {/*  <ProfilePageContent />*/}

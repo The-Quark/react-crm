@@ -301,9 +301,9 @@ export const TasksStarterContent = () => {
                       initialFocus
                       mode="single"
                       captionLayout="dropdown"
-                      fromYear={2020}
-                      toYear={new Date().getFullYear()}
-                      defaultMonth={new Date(2000, 0)}
+                      fromYear={new Date().getFullYear()}
+                      toYear={new Date().getFullYear() + 1}
+                      defaultMonth={new Date()}
                       selected={formik.getFieldProps('due_date').value}
                       onSelect={(value) => formik.setFieldValue('due_date', value)}
                     />

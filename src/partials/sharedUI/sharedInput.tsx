@@ -69,7 +69,7 @@ export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedIn
   };
 
   return (
-    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
+    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         {type === 'password' ? (
