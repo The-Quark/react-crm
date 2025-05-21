@@ -17,6 +17,7 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedMultiSelect,
   SharedSelect
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
@@ -116,8 +117,8 @@ export const CargoStarterContent = () => {
     );
 
     return uniquePackages.map((pack) => ({
-      id: pack.id.toString(),
-      name: pack.hawb
+      value: pack.id.toString(),
+      label: pack.hawb
     }));
   }, [packagesData, cargoData, isEditMode]);
 
@@ -276,14 +277,13 @@ export const CargoStarterContent = () => {
 
           <SharedInput name="to_airport" label="To Airport" formik={formik} />
 
-          <SharedMultipleSelect
-            label="Packages"
-            value={formik.values.packages}
+          <SharedMultiSelect
             options={packageOptions}
+            selectedValues={formik.values.packages.map(String)}
             onChange={(values) => formik.setFieldValue('packages', values)}
             placeholder="Select packages..."
             searchPlaceholder="Search packages..."
-            loading={packagesLoading}
+            label="Packages"
             error={formik.errors.packages as string}
             touched={formik.touched.packages}
           />

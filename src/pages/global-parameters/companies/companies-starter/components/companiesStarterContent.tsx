@@ -21,9 +21,6 @@ import {
   SharedSelect
 } from '@/partials/sharedUI';
 import { useParams, useNavigate } from 'react-router';
-import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
-import Select from 'react-select/base';
-import { Autocomplete, TextField } from '@mui/material';
 
 const createParameterSchema = Yup.object().shape({
   company_name: Yup.string().required('Company name is required'),

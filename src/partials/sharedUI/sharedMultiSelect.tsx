@@ -89,7 +89,7 @@ export function SharedMultiSelect({
                       <Badge
                         key={value}
                         variant="secondary"
-                        className="flex items-center gap-1 pr-1"
+                        className="flex items-center gap-1 pr-1 bg-gray-500 dark:bg-gray-300"
                       >
                         {option?.label}
                         <X

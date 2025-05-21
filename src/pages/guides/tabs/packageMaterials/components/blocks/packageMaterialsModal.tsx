@@ -18,11 +18,17 @@ import {
   putPackageMaterial
 } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { SharedError, SharedInput, SharedLoading, SharedSelect } from '@/partials/sharedUI';
+import {
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedMultiSelect,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { PackageMaterialResponse } from '@/api/get/getPackageMaterials/types.ts';
 import { IPackageMaterialFormValues } from '@/api/post/postPackageMaterial/types.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
-import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
+import { decimalValidation } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -40,15 +46,7 @@ const validateSchema = Yup.object({
     .required('Code is required')
     .max(10, 'Maximum length is 10 characters'),
   name: Yup.string().required('Name is required'),
-  price: Yup.number()
-    .typeError('Price must be a number')
-    .positive('Price must be positive')
-    .test(
-      'decimal',
-      'Price must have exactly 2 decimal places',
-      (value) => value === undefined || /^\d+(\.\d{1,2})?$/.test(value.toString())
-    )
-    .required('Price is required'),
+  price: decimalValidation.required('Price is required'),
   description: Yup.string().nullable(),
   is_active: Yup.boolean().required('Active status is required')
 });
@@ -177,7 +175,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="code" label="Code" formik={formik} />
-              <SharedInput name="price" label="Price" formik={formik} type="number" />
+              <SharedInput name="price" label="Price" formik={formik} type="decimal" />
               <SharedSelect
                 name="unit_id"
                 label="Select unit"
@@ -191,21 +189,20 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 placeholder="Select unit"
               />
 
-              <SharedMultipleSelect
-                label="Company"
-                value={formik.values.company_id}
-                options={
-                  companiesData?.result?.map((app) => ({
-                    id: app.id,
-                    name: app.company_name
-                  })) ?? []
-                }
+              <SharedMultiSelect
+                selectedValues={formik.values.company_id.map(String)}
                 onChange={(values) => formik.setFieldValue('company_id', values)}
                 placeholder="Select company..."
                 searchPlaceholder="Search company..."
-                loading={companiesLoading}
+                label="Company"
                 error={formik.errors.company_id as string}
                 touched={formik.touched.company_id}
+                options={
+                  companiesData?.result?.map((app) => ({
+                    value: String(app.id),
+                    label: app.company_name
+                  })) ?? []
+                }
               />
 
               <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

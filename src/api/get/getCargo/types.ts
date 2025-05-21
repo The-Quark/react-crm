@@ -59,7 +59,7 @@ export interface Cargo {
   to_airport: string;
   notes: string;
   company_id: number;
-  documents_count: number | null;
+  document_count: number | null;
   has_scan: boolean;
   has_signed_act: boolean;
   created_at: string;
