@@ -72,6 +72,23 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
         }
       },
       {
+        accessorFn: (row) => row.documents_count,
+        id: 'documents count',
+        header: ({ column }) => <DataGridColumnHeader title="Documents count" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.documents_count}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,

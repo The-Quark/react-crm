@@ -53,11 +53,11 @@ export const AllMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
         path: '/roles-permissions/roles'
-      },
-      {
-        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
-        path: '/roles-permissions/permissions'
       }
+      // {
+      //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
+      //   path: '/roles-permissions/permissions'
+      // }
     ]
   },
   {

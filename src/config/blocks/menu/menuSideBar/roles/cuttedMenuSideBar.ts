@@ -184,12 +184,50 @@ export const CuttedMenuSideBar: TMenuConfig = [
     requiredPermissions: ['manage users'],
     path: '/crm/users/list'
   },
+  {
+    title: 'MENU.MEGAMENU.HR_MODULE',
+    icon: 'address-book',
+    requiredPermissions: ['manage users'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.STAFF',
+        path: '/hr-module/staff/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.DRIVERS',
+        path: '/hr-module/drivers/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.COURIERS',
+        path: '/hr-module/couriers/list'
+      }
+    ]
+  },
   //"view users"
   {
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
     path: '/crm/users/list',
     requiredPermissions: ['view users']
+  },
+  {
+    title: 'MENU.MEGAMENU.HR_MODULE',
+    icon: 'address-book',
+    requiredPermissions: ['view users'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.STAFF',
+        path: '/hr-module/staff/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.DRIVERS',
+        path: '/hr-module/drivers/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.COURIERS',
+        path: '/hr-module/couriers/list'
+      }
+    ]
   },
   //tasks
   {

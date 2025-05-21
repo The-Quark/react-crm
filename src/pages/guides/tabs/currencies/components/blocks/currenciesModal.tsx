@@ -15,6 +15,7 @@ import { getCurrencies, postCurrency, putCurrency } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CurrencyResponse } from '@/api/get/getCurrencies/types.ts';
 import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { decimalValidation } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -26,18 +27,7 @@ const validateSchema = Yup.object({
   code: Yup.string().required('Code is required'),
   name: Yup.string().required('Name is required'),
   symbol: Yup.string().required('Symbol is required').length(1, 'Symbol should be 1 character'),
-  rate_to_base: Yup.number()
-    .required('Exchange rate is required')
-    .min(0, 'Exchange rate cannot be negative')
-    .test(
-      'is-two-decimal',
-      'The rate to base field must have exactly 2 decimal places.',
-      (value) => {
-        if (value === undefined || value === null) return false;
-        const decimalPart = value.toString().split('.')[1];
-        return decimalPart?.length === 2;
-      }
-    ),
+  rate_to_base: decimalValidation.required('Rate to base is required'),
   is_base: Yup.boolean().required(),
   is_active: Yup.boolean().required()
 });
@@ -137,7 +127,12 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="symbol" label="Symbol" formik={formik} />
               <SharedInput name="code" label="Code" formik={formik} />
-              <SharedInput name="rate_to_base" label="Rate to base" type="number" formik={formik} />
+              <SharedInput
+                name="rate_to_base"
+                label="Rate to base"
+                type="decimal"
+                formik={formik}
+              />
 
               <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                 <label className="form-label max-w-56">Base</label>

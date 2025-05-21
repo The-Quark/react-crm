@@ -27,7 +27,7 @@ const App = () => {
       <PathnameProvider>
         <AppRouting />
       </PathnameProvider>
-      <Toaster />
+      <Toaster richColors />
     </BrowserRouter>
   );
 };

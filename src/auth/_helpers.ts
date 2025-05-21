@@ -75,7 +75,6 @@ export function setupAxios(axios: any) {
       } else {
         toast.error('Network error');
       }
-
       return Promise.reject(error);
     }
   );

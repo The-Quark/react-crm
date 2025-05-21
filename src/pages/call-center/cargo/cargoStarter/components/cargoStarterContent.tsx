@@ -26,6 +26,7 @@ import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { cargoStatusOptions } from '@/lib/mocks.ts';
 import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
+import { format } from 'date-fns';
 
 export const formSchema = Yup.object().shape({
   code: Yup.string()
@@ -140,8 +141,17 @@ export const CargoStarterContent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
+        const payload = {
+          ...values,
+          arrival_date: values.arrival_date
+            ? format(new Date(values.arrival_date), 'dd.MM.yyyy HH:mm:ss')
+            : '',
+          departure_date: values.departure_date
+            ? format(new Date(values.departure_date), 'dd.MM.yyyy HH:mm:ss')
+            : ''
+        };
         if (isEditMode && id) {
-          const { status, ...putData } = values;
+          const { status, ...putData } = payload;
           await putCargo(Number(id), { ...putData, status: status as CargoStatus });
           queryClient.invalidateQueries({ queryKey: ['cargo'] });
           navigate('/call-center/cargo/list');
@@ -149,7 +159,7 @@ export const CargoStarterContent = () => {
           setSearchAirlineTerm('');
           setSearchCompanyOrderTerm('');
         } else {
-          await postCargo(values);
+          await postCargo(payload);
           queryClient.invalidateQueries({ queryKey: ['cargo'] });
           navigate('/call-center/cargo/list');
           resetForm();

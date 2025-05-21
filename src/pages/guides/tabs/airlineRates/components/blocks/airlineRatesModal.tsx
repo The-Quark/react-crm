@@ -23,6 +23,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { IAirlineRatesResponse } from '@/api/get/getAirlineRates/types.ts';
 import { IAirlineRateFormValues } from '@/api/post/postAirlineRate/types.ts';
+import { decimalValidation } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -37,41 +38,15 @@ const validateSchema = Yup.object({
   from_city_id: Yup.string().required('Departure city is required'),
   to_city_id: Yup.string().required('Destination city is required'),
   currency: Yup.string().required('Currency is required'),
-  price_per_kg: Yup.number()
-    .required('Price is required')
-    .min(0, 'Price cannot be negative')
-    .test('is-two-decimal', 'The price field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    }),
-  min_weight: Yup.number()
-    .required('Minimum weight is required')
-    .typeError('Minimum weight must be a number')
-    .min(0, 'Minimum weight cannot be negative')
-    .test(
-      'is-two-decimal',
-      'The minimum weight field must have exactly 2 decimal places.',
-      (value) => {
-        if (value === undefined || value === null) return false;
-        const decimalPart = value.toString().split('.')[1];
-        return decimalPart?.length === 2;
-      }
-    ),
-  max_weight: Yup.number()
-    .required('Maximum weight is required')
-    .typeError('Maximum weight must be a number')
-    .moreThan(Yup.ref('min_weight'), 'Maximum weight must be greater than minimum weight')
-    .min(0, 'Maximum weight cannot be negative')
-    .test(
-      'is-two-decimal',
-      'The maximum weight field must have exactly 2 decimal places.',
-      (value) => {
-        if (value === undefined || value === null) return false;
-        const decimalPart = value.toString().split('.')[1];
-        return decimalPart?.length === 2;
-      }
-    ),
+  price_per_kg: decimalValidation.required('Price per kg is required'),
+  min_weight: decimalValidation.required('Minimum weight is required'),
+  max_weight: decimalValidation
+    .test('moreThan', 'Maximum weight must be greater than minimum weight', function (value) {
+      const { min_weight } = this.parent;
+      if (value === undefined || min_weight === undefined) return true;
+      return Number(value) > Number(min_weight);
+    })
+    .required('Maximum weight is required'),
   is_active: Yup.boolean()
 });
 
@@ -391,9 +366,14 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCurrencyTerm}
                 onSearchTermChange={setSearchCurrencyTerm}
               />
-              <SharedInput name="price_per_kg" label="Price per kg" type="number" formik={formik} />
-              <SharedInput name="min_weight" label="Min weight" type="number" formik={formik} />
-              <SharedInput name="max_weight" label="Max weight" type="number" formik={formik} />
+              <SharedInput
+                name="price_per_kg"
+                label="Price per kg"
+                type="decimal"
+                formik={formik}
+              />
+              <SharedInput name="min_weight" label="Min weight" type="decimal" formik={formik} />
+              <SharedInput name="max_weight" label="Max weight" type="decimal" formik={formik} />
 
               <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                 <label className="form-label max-w-56">Active</label>
