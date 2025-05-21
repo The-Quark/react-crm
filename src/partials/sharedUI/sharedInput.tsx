@@ -8,17 +8,26 @@ interface SharedInputProps<T> {
   label: string;
   type?: string;
   formik: FormikProps<T>;
+  maxlength?: number;
+  disabled?: boolean;
 }
 
-export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedInputProps<T>) => {
+export const SharedInput = <T,>({
+  name,
+  label,
+  type = 'text',
+  formik,
+  maxlength,
+  disabled
+}: SharedInputProps<T>) => {
   const fieldName = name.toString();
   const [showPassword, setShowPassword] = useState(false);
   const [phoneDisplay, setPhoneDisplay] = useState('');
+  const [numberDisplay, setNumberDisplay] = useState('');
+  const [decimalDisplay, setDecimalDisplay] = useState('');
 
-  // Форматирование телефона для отображения
   const formatPhoneDisplay = useCallback((value: string): string => {
     const digits = value.replace(/\D/g, '');
-
     if (digits.length === 0) return '';
     if (digits.length === 1) return '+7';
     if (digits.length <= 4) return `+7 (${digits.slice(1)}`;
@@ -28,38 +37,78 @@ export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedIn
     return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`;
   }, []);
 
-  // Инициализация отображаемого значения телефона
+  const formatDecimalDisplay = useCallback((value: string): string => {
+    if (!value) return '';
+    let cleaned = value.replace(/[^\d.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts[0]) {
+      parts[0] = parts[0].replace(/^0+/, '') || '0';
+    } else {
+      parts[0] = '0';
+    }
+    if (parts.length > 1) {
+      parts[1] = parts[1].slice(0, 2);
+      return `${parts[0]}.${parts[1]}`;
+    }
+    return parts[0];
+  }, []);
+
+  const handleDecimalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (!/^[\d.]*$/.test(inputValue)) {
+      return;
+    }
+    const dotCount = (inputValue.match(/\./g) || []).length;
+    if (dotCount > 1) {
+      return;
+    }
+    const parts = inputValue.split('.');
+    if (parts.length > 1 && parts[1].length > 2) {
+      return;
+    }
+    const formattedValue = formatDecimalDisplay(inputValue);
+    setDecimalDisplay(formattedValue);
+    formik.setFieldValue(fieldName, formattedValue || '');
+  };
+
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const digits = inputValue.replace(/\D/g, '');
+    const limitedDigits = maxlength ? digits.slice(0, maxlength) : digits;
+    setNumberDisplay(limitedDigits);
+    formik.setFieldValue(fieldName, limitedDigits);
+  };
+
   useEffect(() => {
+    const currentValue = (formik.values[name] as string) || '';
+
     if (type === 'tel') {
-      const currentValue = (formik.values[name] as string) || '';
-      console.log('SharedInput tel useEffect:', { name, currentValue, type });
       if (currentValue) {
-        const formatted = formatPhoneDisplay(currentValue);
-        console.log('Formatted phone:', formatted);
-        setPhoneDisplay(formatted);
+        setPhoneDisplay(formatPhoneDisplay(currentValue));
       } else {
         setPhoneDisplay('');
       }
+    } else if (type === 'number' && currentValue) {
+      setNumberDisplay(currentValue.toString());
+    } else if (type === 'decimal') {
+      if (currentValue) {
+        const formatted = formatDecimalDisplay(currentValue);
+        setDecimalDisplay(formatted);
+      } else {
+        setDecimalDisplay('');
+      }
     }
-  }, [formik.values[name], type, name, formatPhoneDisplay]);
+  }, [formik.values[name], type, name, formatPhoneDisplay, formatDecimalDisplay]);
 
-  // Обработчик изменений для телефона
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     const digits = inputValue.replace(/\D/g, '');
-
-    // Ограничиваем до 11 цифр (7 + 10)
     const limitedDigits = digits.slice(0, 11);
-
-    // Форматируем для отображения
     const formatted = formatPhoneDisplay(limitedDigits);
     setPhoneDisplay(formatted);
-
-    // Сохраняем в formik только если введен полный номер
     if (limitedDigits.length === 11) {
       formik.setFieldValue(fieldName, `+${limitedDigits}`);
     } else {
-      // Очищаем значение в formik если номер неполный
       formik.setFieldValue(fieldName, '');
     }
   };
@@ -80,6 +129,7 @@ export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedIn
               type={showPassword ? 'text' : 'password'}
               placeholder={label}
               {...formik.getFieldProps(fieldName)}
+              disabled={disabled}
             />
             <button type="button" className="btn btn-icon" onClick={togglePassword}>
               <KeenIcon icon="eye" className={clsx('text-gray-500', { hidden: showPassword })} />
@@ -97,6 +147,31 @@ export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedIn
             value={phoneDisplay}
             onChange={handlePhoneChange}
             onBlur={() => formik.setFieldTouched(fieldName, true)}
+            disabled={disabled}
+          />
+        ) : type === 'decimal' ? (
+          <input
+            className="input w-full"
+            type="text"
+            inputMode="decimal"
+            placeholder="0.00"
+            value={decimalDisplay}
+            onChange={handleDecimalChange}
+            onBlur={() => formik.setFieldTouched(fieldName, true)}
+            disabled={disabled}
+          />
+        ) : type === 'number' && maxlength ? (
+          <input
+            className="input w-full"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder={label}
+            value={numberDisplay}
+            onChange={handleNumberChange}
+            onBlur={() => formik.setFieldTouched(fieldName, true)}
+            maxLength={maxlength}
+            disabled={disabled}
           />
         ) : (
           <input
@@ -104,6 +179,7 @@ export const SharedInput = <T,>({ name, label, type = 'text', formik }: SharedIn
             type={type}
             placeholder={label}
             {...formik.getFieldProps(fieldName)}
+            disabled={disabled}
           />
         )}
 

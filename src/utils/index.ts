@@ -6,3 +6,4 @@ export * from './include/LocalStorage.ts';
 export * from './include/Router.ts';
 export * from './include/String.ts';
 export * from './include/Common.ts';
+export * from './validations/validations.ts';

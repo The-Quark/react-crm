@@ -60,9 +60,9 @@ const Demo1LightSidebarPage = () => {
         </Toolbar>
       </Container>
 
-      <Container>
-        <Demo1LightSidebarContent />
-      </Container>
+      {/*<Container>*/}
+      {/*  <Demo1LightSidebarContent />*/}
+      {/*</Container>*/}
     </Fragment>
   );
 };

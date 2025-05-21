@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { postClient, putClient } from '@/api';

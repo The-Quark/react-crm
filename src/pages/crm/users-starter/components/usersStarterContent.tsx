@@ -14,7 +14,7 @@ import { IUserFormValues } from '@/api/post/postUser/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
 import {

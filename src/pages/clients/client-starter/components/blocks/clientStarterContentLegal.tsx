@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { postClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -25,7 +25,10 @@ interface Props {
 
 const validateSchema = Yup.object().shape({
   company_name: Yup.string().required('Company name is required'),
-  bin: Yup.string().min(12, 'Minimum 12 numbers').required('Company bin is required'),
+  bin: Yup.string()
+    .length(12, 'BIN must be exactly 12 digits')
+    .matches(/^\d+$/, 'BIN must contain only digits')
+    .required('Company bin is required'),
   business_type: Yup.string().required('Company field of activity is required'),
   legal_address: Yup.string().required('Company legal address is required'),
   representative_first_name: Yup.string().required('Representative name is required'),
@@ -87,7 +90,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
       <SharedInput name="company_name" label="Company name" formik={formik} />
-      <SharedInput name="bin" label="BIN" formik={formik} type="number" />
+      <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
       <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
       <SharedInput name="email" label="Email" formik={formik} type="email" />
 

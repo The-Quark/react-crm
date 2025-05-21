@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/include/phone.ts';
+import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { ISenderOrderFormValues } from '@/api/post/postOrderSender/types.ts';
 import { useFormik } from 'formik';
 import {
@@ -228,7 +228,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
             errorText={citiesIsError ? 'Failed to load cities' : undefined}
             emptyText="No cities available"
           />
-          <SharedInput name="phone" label="Phone" formik={formik} />
+          <SharedInput name="phone" label="Phone" formik={formik} type="tel" />
           <SharedInput name="street" label="Street" formik={formik} />
           <SharedInput name="house" label="House" formik={formik} />
           <SharedInput name="apartment" label="Apartment" formik={formik} />

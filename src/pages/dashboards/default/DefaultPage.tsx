@@ -3,6 +3,7 @@ import { Demo1LightSidebarPage, Demo2Page, Demo3Page, Demo4Page, Demo5Page } fro
 
 const DefaultPage = () => {
   const { currentLayout } = useLayout();
+  console.log(currentLayout);
 
   if (currentLayout?.name === 'demo1-layout') {
     return <Demo1LightSidebarPage />;

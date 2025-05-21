@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import {
   SharedAutocomplete,
@@ -30,6 +30,7 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { mockOrdersStatus } from '@/lib/mocks.ts';
+import { decimalValidation } from '@/utils';
 
 interface Props {
   onBack: () => void;
@@ -53,53 +54,16 @@ const formSchema = Yup.object().shape({
   package_type: Yup.number()
     .typeError('Package type is required')
     .required('Package type is required'),
-  weight: Yup.number()
-    .required('Weight is required')
-    .min(0, 'Weight cannot be negative')
-    .test('is-two-decimal', 'The weight field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    }),
-  width: Yup.number()
-    .required('Width is required')
-    .min(0, 'Width cannot be negative')
-    .test('is-two-decimal', 'The width field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    }),
-  length: Yup.number()
-    .required('Length is required')
-    .min(0, 'Length cannot be negative')
-    .test('is-two-decimal', 'The length field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    }),
-  volume: Yup.number()
-    .required('Volume is required')
-    .min(0, 'Volume cannot be negative')
-    .test('is-two-decimal', 'The volume field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    })
-    .optional(),
-  price: Yup.number()
-    .required('Price is required')
-    .min(0, 'Price cannot be negative')
-    .test('is-two-decimal', 'The price field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return false;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    })
-    .optional(),
+  weight: decimalValidation.required('Weight is required'),
+  width: decimalValidation.required('Width is required'),
+  length: decimalValidation.required('Length is required'),
+  price: Yup.string().optional(),
   places_count: Yup.number().typeError('Places count must be a number').optional(),
   customs_clearance: Yup.boolean().required('Customs clearance is required'),
   is_international: Yup.boolean().required('Is international is required'),
   package_description: Yup.string().optional(),
-  special_wishes: Yup.string().optional()
+  special_wishes: Yup.string().optional(),
+  order_content: Yup.string().optional()
 });
 
 export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }) => {
@@ -126,18 +90,25 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
       places_count: orderData?.places_count || 0,
       customs_clearance: orderData?.customs_clearance || false,
       is_international: orderData?.is_international || false,
-      price: orderData?.price || 0,
+      price: orderData?.price || '',
       package_description: orderData?.package_description || '',
       special_wishes: orderData?.special_wishes || '',
-      source_id: orderData?.source?.id || ''
+      source_id: orderData?.source?.id || '',
+      order_content: orderData?.order_content || ''
     },
     validationSchema: formSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
+        const { ...submitValues } = values;
+        console.log('V: ', values);
+        const formattedValues = {
+          ...submitValues
+        };
+        console.log('F: ', formattedValues);
         if (orderData) {
           await putOrder(orderData.id, {
-            ...values,
+            ...formattedValues,
             status: values.status as
               | 'package_awaiting'
               | 'buy_for_someone'
@@ -148,7 +119,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           });
         } else {
           await postOrder({
-            ...values,
+            ...formattedValues,
             delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
             delivery_type: Number(values.delivery_type)
           });
@@ -213,6 +184,16 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
     queryFn: () => getPackageTypes(undefined, currentLanguage.code),
     staleTime: 1000 * 60 * 5
   });
+
+  useEffect(() => {
+    const { width, length, weight } = formik.values;
+    if (width && length && weight) {
+      const volume = Number(width) * Number(length) * Number(weight);
+      formik.setFieldValue('volume', volume.toFixed(2));
+    } else {
+      formik.setFieldValue('volume', '');
+    }
+  }, [formik.values.width, formik.values.length, formik.values.weight]);
 
   if (deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading) {
     return <SharedLoading />;
@@ -324,12 +305,15 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
               })) || []
             }
           />
-          <SharedInput name="weight" label="Weight" type="number" formik={formik} />
-          <SharedInput name="width" label="Width" type="number" formik={formik} />
-          <SharedInput name="length" label="Length" type="number" formik={formik} />
-          <SharedInput name="volume" label="Volume" type="number" formik={formik} />
+          <SharedInput name="order_content" label="Order content" formik={formik} />
+          <SharedInput name="weight" label="Weight" type="decimal" formik={formik} />
+          <SharedInput name="width" label="Width" type="decimal" formik={formik} />
+          <SharedInput name="length" label="Length" type="decimal" formik={formik} />
+          <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
           <SharedInput name="places_count" label="Places Count" type="number" formik={formik} />
-          <SharedInput name="price" label="Price" formik={formik} type="number" />
+          {applicationId && (
+            <SharedInput name="price" label="Price" formik={formik} type="decimal" disabled />
+          )}
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
             <label className="form-label max-w-56">Custom Clearance</label>
             <div className="flex columns-1 w-full flex-wrap">

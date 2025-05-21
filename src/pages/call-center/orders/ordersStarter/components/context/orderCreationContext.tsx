@@ -67,6 +67,7 @@ export const OrderCreationProvider = ({ children }: { children: React.ReactNode 
     localStorage.removeItem('senderId');
     localStorage.removeItem('receiverId');
     localStorage.removeItem('applicationId');
+    console.log('Cleared all order creation data');
   };
 
   return (
