@@ -13,9 +13,17 @@ import {
   getAirlines
 } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedInput, SharedLoading, SharedSelect } from '@/partials/sharedUI';
+import {
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedMultiSelect,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { useParams, useNavigate } from 'react-router';
 import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
+import Select from 'react-select/base';
+import { Autocomplete, TextField } from '@mui/material';
 
 const createParameterSchema = Yup.object().shape({
   company_name: Yup.string().required('Company name is required'),
@@ -237,14 +245,16 @@ export const CompaniesStarterContent = () => {
 
             <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
 
-            <SharedMultipleSelect
-              label="Airlines"
-              value={formik.values.airlines}
-              options={airlineOptions}
+            <SharedMultiSelect
+              options={airlineOptions.map((airline) => ({
+                value: airline.id,
+                label: airline.name
+              }))}
+              selectedValues={formik.values.airlines}
               onChange={(values) => formik.setFieldValue('airlines', values)}
               placeholder="Select airlines..."
               searchPlaceholder="Search airlines..."
-              loading={airlinesLoading}
+              label="Airlines"
               error={formik.errors.airlines as string}
               touched={formik.touched.airlines}
             />
