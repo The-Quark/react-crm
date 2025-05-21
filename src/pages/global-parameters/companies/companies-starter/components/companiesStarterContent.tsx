@@ -164,7 +164,7 @@ export const CompaniesStarterContent = () => {
         company_name: parameterData.result[0].company_name ?? '',
         timezone: parameterData.result[0].timezone ?? '',
         currency: parameterData.result[0].currency ?? '',
-        language: parameterData.result[0].language ?? '',
+        language: parameterData.result[0].language.code ?? '',
         legal_address: parameterData.result[0].legal_address ?? '',
         warehouse_address: parameterData.result[0].warehouse_address ?? '',
         airlines: selectedAirlineIds,
@@ -218,6 +218,18 @@ export const CompaniesStarterContent = () => {
               formik={formik}
               options={
                 languagesData?.result?.map((lang) => ({ label: lang.name, value: lang.code })) || []
+              }
+            />
+
+            <SharedSelect
+              name="timezone"
+              label="Timezone"
+              formik={formik}
+              options={
+                timezoneMock.map((time) => ({
+                  label: time.timezone,
+                  value: time.timezone
+                })) || []
               }
             />
 

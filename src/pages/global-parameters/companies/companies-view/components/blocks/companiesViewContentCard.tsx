@@ -29,7 +29,7 @@ export const CompaniesViewContentCard: FC<IGeneralSettingsProps> = ({ parameter 
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <label className="form-label max-w-56">Language</label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.language}</div>
+          <div className="flex columns-1 w-full flex-wrap">{parameter?.language.name}</div>
         </div>
 
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

@@ -3,12 +3,22 @@ interface Airline {
   name: string;
   code: string;
 }
+
+interface Language {
+  id: number;
+  name: string;
+  code: string;
+  native_name: string;
+  locale: string;
+  direction: string;
+  is_active: boolean;
+}
 export interface ParametersModel {
   id: number;
   company_name: string;
   timezone: string;
   currency: string;
-  language: string;
+  language: Language;
   legal_address: string;
   warehouse_address: string;
   airlines: Airline[];

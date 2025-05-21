@@ -1,1 +1,1 @@
-export const PHONE_REG_EXP = /^\+\d{10}$/;
+export const PHONE_REG_EXP = /^\+7\d{10}$/;

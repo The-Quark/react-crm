@@ -43,7 +43,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
                 {info.row.original.company_name}
               </a>
               <span className="text-2sm text-gray-700 font-normal">
-                {`Language: ${info.row.original.language}, Currency: ${info.row.original.currency}`}
+                {`Language: ${info.row.original.language.name}, Currency: ${info.row.original.currency}`}
               </span>
             </div>
           </div>
