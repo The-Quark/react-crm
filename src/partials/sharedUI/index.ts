@@ -7,3 +7,4 @@ export * from './sharedSelect';
 export * from './sharedDateTimePicker';
 export * from './sharedFileCard.tsx';
 export * from './sharedTextArea.tsx';
+export * from './sharedConfirmModal.tsx';
