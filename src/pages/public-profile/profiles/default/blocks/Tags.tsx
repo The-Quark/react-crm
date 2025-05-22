@@ -15,7 +15,6 @@ interface ITagsProps {
 const Tags = ({ title, className }: ITagsProps) => {
   const { data: currentUser } = useCurrentUser();
 
-  // Transform permissions data into ITagsItem format
   const permissionItems: ITagsItem[] =
     currentUser?.permissions?.map((permission) => ({
       label: permission.nicename || permission.name || 'Unnamed Permission',
@@ -23,7 +22,6 @@ const Tags = ({ title, className }: ITagsProps) => {
       nicename: permission.nicename
     })) || [];
 
-  // Transform roles data into ITagsItem format
   const roleItems: ITagsItem[] =
     currentUser?.roles?.map((role) => ({
       label: role.nicename || role.name || 'Unnamed Role',
@@ -36,7 +34,7 @@ const Tags = ({ title, className }: ITagsProps) => {
       <span
         key={`${item.name}-${index}`}
         className="badge badge-sm badge-gray-200 mr-2 mb-2"
-        title={item.name} // Show the technical name on hover
+        title={item.name}
       >
         {item.label}
       </span>

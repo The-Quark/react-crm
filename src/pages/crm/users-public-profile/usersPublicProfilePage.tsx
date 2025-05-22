@@ -88,7 +88,7 @@ export const UsersPublicProfilePage = () => {
           />
           <UsersPublicProfileACL
             roles={data.result[0]?.roles || []}
-            permissions={data.result[0]?.roles[0].permissions || []}
+            permissions={data.result[0]?.permissions || []}
           />
         </div>
       </Container>
