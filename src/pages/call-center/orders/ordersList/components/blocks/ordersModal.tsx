@@ -33,6 +33,8 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const navigate = useNavigate();
   const order = data?.result?.[0];
 
+  const url = order?.hawb_pdf.startsWith('http') ? order.hawb_pdf : `https://${order?.hawb_pdf}`;
+
   const handleClick = (orderId: number) => {
     setData('orderIdFromOrders', orderId);
     navigate('/tasks/starter');
@@ -169,6 +171,12 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Weight</label>
                       <div className="flex columns-1 w-full">{order.weight || '-'} kg</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Document</label>
+                      <a className="link" href={url} target="_blank" rel="noopener noreferrer">
+                        hawb.pdf
+                      </a>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Dimensions</label>

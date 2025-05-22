@@ -31,6 +31,10 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
 
   const packageData = data?.result?.[0];
 
+  const url = packageData?.hawb_pdf.startsWith('http')
+    ? packageData.hawb_pdf
+    : `https://${packageData?.hawb_pdf}`;
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
@@ -64,6 +68,12 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Weight</label>
                       <div className="flex columns-1 w-full">{packageData.weight || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Document</label>
+                      <a className="link" href={url} target="_blank" rel="noopener noreferrer">
+                        hawb.pdf
+                      </a>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Dimensions</label>
