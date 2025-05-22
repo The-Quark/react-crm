@@ -1,27 +1,22 @@
 import { CardRole } from '@/partials/cards';
-import { useEffect, useState } from 'react';
 import { getRoles } from '@/api/get/getRoles/';
 import { Role } from '@/api/get/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';
 import { KeenIcon } from '@/components';
+import { useQuery } from '@tanstack/react-query';
+import { SharedError } from '@/partials/sharedUI';
 
 export const RolesPageContent = () => {
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['roles'],
+    queryFn: () => getRoles(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5
+  });
 
-  useEffect(() => {
-    setLoading(true);
-    getRoles()
-      .then((roles) => {
-        setRoles(roles.result);
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  if (isError) {
+    <SharedError error={error} />;
+  }
 
   const renderItem = (item: Role, index: number) => {
     return (
@@ -39,17 +34,18 @@ export const RolesPageContent = () => {
           fill: 'fill-success-light',
           stroke: 'stroke-success-clarity'
         }}
+        disableMenu
       />
     );
   };
 
-  return loading ? (
+  return isLoading ? (
     <div className="flex justify-center items-center p-5">
       <CircularProgress />
     </div>
   ) : (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
-      {roles.map((item, index) => {
+      {data?.result.map((item, index) => {
         return renderItem(item, index);
       })}
     </div>

@@ -20,9 +20,10 @@ interface IRoleProps {
   description?: string;
   team?: string;
   path?: string;
+  disableMenu?: boolean;
 }
 
-const CardRole = ({ path, title, subTitle, description, team, badge }: IRoleProps) => {
+const CardRole = ({ path, title, subTitle, description, team, badge, disableMenu }: IRoleProps) => {
   const { isRTL } = useLanguage();
 
   return (
@@ -42,28 +43,30 @@ const CardRole = ({ path, title, subTitle, description, team, badge }: IRoleProp
           </div>
         </div>
 
-        <Menu className="inline-flex">
-          <MenuItem
-            toggle="dropdown"
-            trigger="click"
-            dropdownProps={{
-              placement: isRTL() ? 'bottom-start' : 'bottom-end',
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+        {!disableMenu && (
+          <Menu className="inline-flex">
+            <MenuItem
+              toggle="dropdown"
+              trigger="click"
+              dropdownProps={{
+                placement: isRTL() ? 'bottom-start' : 'bottom-end',
+                modifiers: [
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+                    }
                   }
-                }
-              ]
-            }}
-          >
-            <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
-              <KeenIcon icon="dots-vertical" />
-            </MenuToggle>
-            {DropdownCardItem1()}
-          </MenuItem>
-        </Menu>
+                ]
+              }}
+            >
+              <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
+                <KeenIcon icon="dots-vertical" />
+              </MenuToggle>
+              {DropdownCardItem1()}
+            </MenuItem>
+          </Menu>
+        )}
       </div>
 
       <p className="text-2sm text-gray-700">{description}</p>
