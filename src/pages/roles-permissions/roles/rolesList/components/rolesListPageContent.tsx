@@ -34,7 +34,7 @@ export const RolesListPageContent = () => {
         subTitle={`${item.users_count} users`}
         path={
           canManage
-            ? `/roles-permissions/roles/starter/${item.id}`
+            ? `/roles-permissions/roles/starter/${item.name}`
             : '/roles-permissions/roles/list'
         }
         badge={{

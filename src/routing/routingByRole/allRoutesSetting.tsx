@@ -142,7 +142,7 @@ const AllRoutesSetting = () => {
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
         <Route path="/roles-permissions/roles/list" element={<RolesListPage />} />
-        <Route path="/roles-permissions/roles/starter/:id" element={<RolesStarterPage />} />
+        <Route path="/roles-permissions/roles/starter/:role" element={<RolesStarterPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
         <Route path="/tasks/list" element={<TasksListPage />} />
         <Route path="/tasks/starter" element={<TasksStarterPage />} />

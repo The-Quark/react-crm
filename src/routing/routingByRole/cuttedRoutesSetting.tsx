@@ -135,7 +135,7 @@ const routeConfig = [
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
       { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
-      { path: '/roles-permissions/roles/starter/:id', element: <RolesStarterPage /> },
+      { path: '/roles-permissions/roles/starter/:role', element: <RolesStarterPage /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/staff/starter', element: <StaffStarterPage /> },
       { path: '/hr-module/staff/starter/:id', element: <StaffStarterPage /> },

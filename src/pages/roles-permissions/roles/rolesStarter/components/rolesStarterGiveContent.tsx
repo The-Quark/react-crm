@@ -2,13 +2,17 @@ import React, { FC } from 'react';
 import { Permission } from '@/api/get/getPermissionsMap/types.ts';
 import { useFormik } from 'formik';
 import { putPermissionsDistribute } from '@/api';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   data?: Permission[];
-  roleId?: number;
+  role?: string;
 }
 
-export const RolesStarterGiveContent: FC<Props> = ({ data = [], roleId }) => {
+export const RolesStarterGiveContent: FC<Props> = ({ data = [], role }) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const formik = useFormik({
     initialValues: {
       permissions: data.map((permission) => ({
@@ -21,12 +25,13 @@ export const RolesStarterGiveContent: FC<Props> = ({ data = [], roleId }) => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const permissionNames = values.permissions.filter((p) => p.user_has).map((p) => p.name);
-
         await putPermissionsDistribute({
           mode: 'give',
           permissions: permissionNames,
-          role_id: roleId ? Number(roleId) : undefined
+          role: role ? role : undefined
         });
+        navigate('/roles-permissions/roles/list');
+        queryClient.invalidateQueries({ queryKey: ['roles'] });
       } catch (error) {
         console.error('Error updating permissions:', error);
       } finally {
@@ -45,8 +50,8 @@ export const RolesStarterGiveContent: FC<Props> = ({ data = [], roleId }) => {
         <div className="card">
           <div className="card-header gap-2">
             <h3 className="card-title">
-              <span className="link">123</span>
-              &nbsp;Role Permissions
+              <span className="link">{role?.toUpperCase()}</span>
+              &nbsp; Role Permissions
             </h3>
           </div>
 

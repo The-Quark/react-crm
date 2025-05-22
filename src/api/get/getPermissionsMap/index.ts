@@ -3,13 +3,13 @@ import { IPermissionsMapResponse } from './types';
 import { PERMISSSIONS_MAP } from '@/api/url';
 
 export const getPermissionsMap = async (params?: {
-  role_id?: number;
+  role?: string;
   user_id?: number;
 }): Promise<IPermissionsMapResponse> => {
   const queryParams = new URLSearchParams();
 
-  if (params?.role_id) {
-    queryParams.append('role_id', params.role_id.toString());
+  if (params?.role) {
+    queryParams.append('role', params.role.toString());
   }
 
   if (params?.user_id) {

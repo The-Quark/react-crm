@@ -9,8 +9,8 @@ import { RolesStarterRevokeContent } from '@/pages/roles-permissions/roles/roles
 
 export const RolesStarterPage = () => {
   const [modeType, setModeType] = useState<'give' | 'revoke'>('give');
-  const { id } = useParams<{ id: string }>();
-  const isEditMode = !!id;
+  const { role } = useParams<{ role: string }>();
+  const isEditMode = !!role;
 
   const {
     data: permissionsData,
@@ -18,8 +18,8 @@ export const RolesStarterPage = () => {
     isError: permissionsIsError,
     error: permissionsError
   } = useQuery({
-    queryKey: ['permissions map', id],
-    queryFn: () => getPermissionsMap({ role_id: Number(id) }),
+    queryKey: ['permissions map', role],
+    queryFn: () => getPermissionsMap({ role: role }),
     enabled: isEditMode
   });
 
@@ -66,9 +66,9 @@ export const RolesStarterPage = () => {
             </div>
 
             {isEditMode && !permissionsData ? null : modeType === 'give' ? (
-              <RolesStarterGiveContent data={permissionsData?.result.give} roleId={Number(id)} />
+              <RolesStarterGiveContent data={permissionsData?.result.give} role={role} />
             ) : (
-              <RolesStarterRevokeContent />
+              <RolesStarterRevokeContent data={permissionsData?.result.revoke} role={role} />
             )}
           </div>
         </div>

@@ -4,7 +4,7 @@ import { PERMISSIONS_DISTRIBUTE } from '@/api/url';
 interface IPermissionsDistributePayload {
   mode: 'give' | 'revoke';
   permissions: string[];
-  role_id?: number;
+  role?: string;
   user_id?: number;
 }
 
