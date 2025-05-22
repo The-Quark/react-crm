@@ -30,3 +30,4 @@ export * from './getGlobalParamsSubdivisions';
 export * from './getGlobalParamsDepartments';
 export * from './getUsers';
 export * from './getUserByParams';
+export * from './getPermissionsMap';

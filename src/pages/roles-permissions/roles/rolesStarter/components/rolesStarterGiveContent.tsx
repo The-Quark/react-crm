@@ -1,0 +1,103 @@
+import React, { FC } from 'react';
+import { Permission } from '@/api/get/getPermissionsMap/types.ts';
+import { useFormik } from 'formik';
+import { putPermissionsDistribute } from '@/api';
+
+interface Props {
+  data?: Permission[];
+  roleId?: number;
+}
+
+export const RolesStarterGiveContent: FC<Props> = ({ data = [], roleId }) => {
+  const formik = useFormik({
+    initialValues: {
+      permissions: data.map((permission) => ({
+        id: permission.id,
+        name: permission.name,
+        user_has: permission.user_has
+      }))
+    },
+    enableReinitialize: true,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const permissionNames = values.permissions.filter((p) => p.user_has).map((p) => p.name);
+
+        await putPermissionsDistribute({
+          mode: 'give',
+          permissions: permissionNames,
+          role_id: roleId ? Number(roleId) : undefined
+        });
+      } catch (error) {
+        console.error('Error updating permissions:', error);
+      } finally {
+        setSubmitting(false);
+      }
+    }
+  });
+
+  const handleRestoreDefaults = () => {
+    formik.resetForm();
+  };
+
+  return (
+    <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+      <div className="flex w-full flex-col gap-5">
+        <div className="card">
+          <div className="card-header gap-2">
+            <h3 className="card-title">
+              <span className="link">123</span>
+              &nbsp;Role Permissions
+            </h3>
+          </div>
+
+          <div className="card-table scrollable-x-auto">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th className="text-start text-gray-300 font-normal min-w-[300px]">Permission</th>
+                  <th className="min-w-24 text-gray-700 font-normal text-center">Enabled</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-900 font-medium">
+                {formik.values.permissions.map((permission, index) => (
+                  <tr key={permission.id}>
+                    <td className="!py-5.5">
+                      {data.find((p) => p.id === permission.id)?.nice_name || permission.name}
+                    </td>
+                    <td className="!py-5.5 text-center">
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-sm"
+                        name={`permissions[${index}].user_has`}
+                        checked={permission.user_has}
+                        onChange={() => {
+                          const newPermissions = [...formik.values.permissions];
+                          newPermissions[index].user_has = !newPermissions[index].user_has;
+                          formik.setFieldValue('permissions', newPermissions);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="card-footer justify-end py-7.5 gap-2.5">
+            <button
+              type="button"
+              className="btn btn-light btn-outline"
+              onClick={handleRestoreDefaults}
+              disabled={formik.isSubmitting}
+            >
+              Restore Defaults
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+              {formik.isSubmitting ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+};

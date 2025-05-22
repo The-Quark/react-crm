@@ -24,3 +24,4 @@ export * from './putGlobalParamsPosition';
 export * from './putGlobalParamsSubdivisions';
 export * from './putGlobalParamsDepartment';
 export * from './putSimpleUser';
+export * from './putPermissionsDestribute';

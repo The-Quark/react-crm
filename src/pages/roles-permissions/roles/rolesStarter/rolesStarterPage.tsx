@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Container } from '@/components';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { getClients } from '@/api';
+import { getPermissionsMap } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { RolesStarterGiveContent } from '@/pages/roles-permissions/roles/rolesStarter/components/rolesStarterGiveContent.tsx';
+import { RolesStarterRevokeContent } from '@/pages/roles-permissions/roles/rolesStarter/components/rolesStarterRevokeContent.tsx';
 
 export const RolesStarterPage = () => {
   const [modeType, setModeType] = useState<'give' | 'revoke'>('give');
@@ -11,23 +13,23 @@ export const RolesStarterPage = () => {
   const isEditMode = !!id;
 
   const {
-    data: clientData,
-    isLoading: clientLoading,
-    isError: clientIsError,
-    error: clientError
+    data: permissionsData,
+    isLoading: permissionsLoading,
+    isError: permissionsIsError,
+    error: permissionsError
   } = useQuery({
-    queryKey: ['client', id],
-    queryFn: () => getClients({ id: id as string }),
+    queryKey: ['permissions map', id],
+    queryFn: () => getPermissionsMap({ role_id: Number(id) }),
     enabled: isEditMode
   });
 
-  if (isEditMode && clientIsError) {
-    return <SharedError error={clientError} />;
+  if (isEditMode && permissionsIsError) {
+    return <SharedError error={permissionsError} />;
   }
 
   return (
     <Container>
-      {clientLoading ? (
+      {permissionsLoading ? (
         <SharedLoading />
       ) : (
         <div className="grid gap-5 lg:gap-7.5">
@@ -40,30 +42,34 @@ export const RolesStarterPage = () => {
                   <label className="radio-group">
                     <input
                       className="radio-sm"
-                      name="clientType"
+                      name="Give"
                       type="radio"
-                      value="individual"
+                      value="give"
                       checked={modeType === 'give'}
                       onChange={() => setModeType('give')}
                     />
-                    <span className="radio-label">Individual</span>
+                    <span className="radio-label">Give</span>
                   </label>
                   <label className="radio-group">
                     <input
                       className="radio-sm"
-                      name="clientType"
+                      name="Revoke"
                       type="radio"
-                      value="legal"
+                      value="revoke"
                       checked={modeType === 'revoke'}
                       onChange={() => setModeType('revoke')}
                     />
-                    <span className="radio-label">Legal</span>
+                    <span className="radio-label">Revoke</span>
                   </label>
                 </div>
               </div>
             </div>
 
-            {isEditMode && !clientData ? null : modeType === 'give' ? <>give</> : <>revoke</>}
+            {isEditMode && !permissionsData ? null : modeType === 'give' ? (
+              <RolesStarterGiveContent data={permissionsData?.result.give} roleId={Number(id)} />
+            ) : (
+              <RolesStarterRevokeContent />
+            )}
           </div>
         </div>
       )}

@@ -65,7 +65,7 @@ const SharedInputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
               </Badge>
             ))}
             <input
-              className="flex-1 outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
+              className="flex-1 bg-transparent  outline-none placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
               value={pendingDataPoint}
               placeholder={label || '...'}
               onChange={(e) => setPendingDataPoint(e.target.value)}

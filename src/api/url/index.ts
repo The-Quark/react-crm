@@ -65,3 +65,7 @@ export const GLOBAL_PARAMS_POSITIONS = `${api}/company-global-settings/position/
 export const GLOBAL_PARAMS_SUBDIVISIONS = `${api}/company-global-settings/subdivision/manage`;
 
 export const GLOBAL_PARAMS_DEPARTMENTS = `${api}/company-global-settings/department/manage`;
+
+export const PERMISSSIONS_MAP = `${api}/permissions/map`;
+
+export const PERMISSIONS_DISTRIBUTE = `${api}/permissions/distribute`;
