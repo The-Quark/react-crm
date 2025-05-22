@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { SharedError } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { RolesListCard } from '@/pages/roles-permissions/roles/rolesList/components/rolesListCard.tsx';
 
 export const RolesListPageContent = () => {
   const { currentUser } = useAuthContext();
@@ -25,7 +26,7 @@ export const RolesListPageContent = () => {
 
   const renderItem = (item: Role, index: number) => {
     return (
-      <CardRole
+      <RolesListCard
         key={index}
         title={item.nicename ? item.nicename : `${item.name[0].toUpperCase()}${item.name.slice(1)}`}
         description={
@@ -43,7 +44,8 @@ export const RolesListPageContent = () => {
           fill: 'fill-success-light',
           stroke: 'stroke-success-clarity'
         }}
-        disableMenu
+        disableMenu={!canManage}
+        roleName={item.name}
       />
     );
   };

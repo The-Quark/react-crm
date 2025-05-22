@@ -1,12 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/i18n';
-import { KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-
-import { DropdownCardItem1 } from '../dropdowns/general';
-import { CommonHexagonBadge } from '../common';
-import { ReactNode } from 'react';
-import { useAuthContext } from '@/auth';
-import { useUserPermissions } from '@/hooks';
+import {
+  KeenIcon,
+  Menu,
+  MenuIcon,
+  MenuItem,
+  MenuLink,
+  MenuSub,
+  MenuTitle,
+  MenuToggle
+} from '@/components';
+import { CommonHexagonBadge } from '@/partials/common';
+import React, { ReactNode } from 'react';
 
 interface Badge {
   size: string;
@@ -23,10 +28,22 @@ interface IRoleProps {
   team?: string;
   path?: string;
   disableMenu?: boolean;
+  roleName: string;
 }
 
-const CardRole = ({ path, title, subTitle, description, team, badge, disableMenu }: IRoleProps) => {
+export const RolesListCard = ({
+  path,
+  title,
+  subTitle,
+  description,
+  team,
+  badge,
+  disableMenu,
+  roleName
+}: IRoleProps) => {
   const { isRTL } = useLanguage();
+  const navigate = useNavigate();
+
   return (
     <div className="card flex flex-col gap-5 p-5 lg:p-7.5">
       <div className="flex items-center flex-wrap justify-between gap-1">
@@ -55,7 +72,7 @@ const CardRole = ({ path, title, subTitle, description, team, badge, disableMenu
                   {
                     name: 'offset',
                     options: {
-                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+                      offset: isRTL() ? [0, -10] : [0, 10]
                     }
                   }
                 ]
@@ -64,7 +81,16 @@ const CardRole = ({ path, title, subTitle, description, team, badge, disableMenu
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {DropdownCardItem1()}
+              <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
+                <MenuItem onClick={() => navigate(`/roles-permissions/roles/starter/${roleName}`)}>
+                  <MenuLink>
+                    <MenuIcon>
+                      <KeenIcon icon="setting-4" />
+                    </MenuIcon>
+                    <MenuTitle>Edit Permissions</MenuTitle>
+                  </MenuLink>
+                </MenuItem>
+              </MenuSub>
             </MenuItem>
           </Menu>
         )}
@@ -76,5 +102,3 @@ const CardRole = ({ path, title, subTitle, description, team, badge, disableMenu
     </div>
   );
 };
-
-export { CardRole, type IRoleProps };

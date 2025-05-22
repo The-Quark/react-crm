@@ -18,7 +18,7 @@ export const RolesStarterPage = () => {
     isError: permissionsIsError,
     error: permissionsError
   } = useQuery({
-    queryKey: ['permissions map', role],
+    queryKey: ['permissions-map', role],
     queryFn: () => getPermissionsMap({ role: role }),
     enabled: isEditMode
   });
