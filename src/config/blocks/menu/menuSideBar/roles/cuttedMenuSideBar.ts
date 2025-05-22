@@ -181,7 +181,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
-    requiredPermissions: ['manage users'],
+    requiredPermissions: ['everything'],
     path: '/crm/users/list'
   },
   {
@@ -208,7 +208,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
     path: '/crm/users/list',
-    requiredPermissions: ['view users']
+    requiredPermissions: ['view everything']
   },
   {
     title: 'MENU.MEGAMENU.HR_MODULE',

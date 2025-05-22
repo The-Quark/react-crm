@@ -1,3 +1,5 @@
+import { useCurrentUser } from '@/api';
+
 interface IGeneralInfoItem {
   label: string;
   info: string;
@@ -6,17 +8,22 @@ interface IGeneralInfoItem {
 interface IGeneralInfoItems extends Array<IGeneralInfoItem> {}
 
 const ProfilePageContentGeneralInfo = () => {
+  const { data: currentUser } = useCurrentUser();
   const items: IGeneralInfoItems = [
-    { label: 'Phone:', info: '+31 6 12345678', type: 1 },
-    { label: 'Email:', info: 'jenny@studio.com', type: 2 },
+    { label: 'Phone:', info: String(currentUser?.phone), type: 1 },
+    { label: 'Email:', info: String(currentUser?.email), type: 2 },
     {
       label: 'Status:',
-      info: '<span class="badge badge-sm badge-success badge-outline">Subscribed</span>'
+      info: `<span class="badge badge-sm badge-success badge-outline">${String(currentUser?.status)}</span>`
     },
-    { label: 'Type:', info: 'Wholesale' },
-    { label: 'Encryption:', info: 'Strong' },
-    { label: 'Last Order:', info: 'Today at 13:06' },
-    { label: 'Signed Up:', info: '2 months ago' }
+    { label: 'Role:', info: String(currentUser?.roles[0].name) },
+    { label: 'Company:', info: String(currentUser?.company?.company_name) },
+    { label: 'Department:', info: String(currentUser?.department?.name) },
+    { label: 'Subdivision:', info: String(currentUser?.subdivision?.name) },
+    { label: 'Position:', info: String(currentUser?.position?.title) },
+    { label: 'Gender:', info: String(currentUser?.gender) },
+    { label: 'Country:', info: String(currentUser?.location?.country.name) },
+    { label: 'City:', info: String(currentUser?.location?.name) }
   ];
 
   const renderItems = (item: IGeneralInfoItem, index: number) => {

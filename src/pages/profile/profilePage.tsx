@@ -1,17 +1,14 @@
 import { Fragment } from 'react';
 import { toAbsoluteUrl } from '@/utils/include/Assets.ts';
-import { KeenIcon } from '@/components';
 import { Container } from '@/components/container';
 import { UserProfileHero } from '@/partials/heros';
-import { Navbar, NavbarActions, NavbarDropdown } from '@/partials/navbar';
-import { PageMenu } from '@/pages/public-profile';
 import { ProfilePageContent } from './components/profilePageContent';
-import { useCurrentUser } from '@/api/get';
+import { useAuthContext } from '@/auth';
 
 const STORAGE_AVATAR_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 export const ProfilePage = () => {
-  const { data: currentUser } = useCurrentUser();
+  const { currentUser } = useAuthContext();
   const image = (
     <img
       src={
@@ -60,9 +57,9 @@ export const ProfilePage = () => {
       {/*  </Navbar>*/}
       {/*</Container>*/}
 
-      {/*<Container>*/}
-      {/*  <ProfilePageContent />*/}
-      {/*</Container>*/}
+      <Container>
+        <ProfilePageContent />
+      </Container>
     </Fragment>
   );
 };

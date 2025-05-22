@@ -43,6 +43,14 @@ import {
   CargoUploadPage
 } from '@/pages/call-center';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
+import {
+  CouriersListPage,
+  CouriersStarterPage,
+  DriversListPage,
+  DriversStarterPage,
+  StaffListPage,
+  StaffStarterPage
+} from '@/pages/hr-module';
 
 interface Props {
   permissions: string[];
@@ -124,14 +132,26 @@ const routeConfig = [
       { path: '/crm/users/starter', element: <UsersStarterPage /> },
       { path: '/crm/users/starter/:id', element: <UsersStarterPage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
-      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> }
+      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
+      { path: '/hr-module/staff/list', element: <StaffListPage /> },
+      { path: '/hr-module/staff/starter', element: <StaffStarterPage /> },
+      { path: '/hr-module/staff/starter/:id', element: <StaffStarterPage /> },
+      { path: '/hr-module/drivers/list', element: <DriversListPage /> },
+      { path: '/hr-module/drivers/starter', element: <DriversStarterPage /> },
+      { path: '/hr-module/drivers/starter/:id', element: <DriversStarterPage /> },
+      { path: '/hr-module/couriers/list', element: <CouriersListPage /> },
+      { path: '/hr-module/couriers/starter', element: <CouriersStarterPage /> },
+      { path: '/hr-module/couriers/starter/:id', element: <CouriersStarterPage /> }
     ]
   },
   {
     permission: 'view users',
     routes: [
       { path: '/crm/users/list', element: <UsersListPage /> },
-      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> }
+      { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
+      { path: '/hr-module/staff/list', element: <StaffListPage /> },
+      { path: '/hr-module/drivers/list', element: <DriversListPage /> },
+      { path: '/hr-module/couriers/list', element: <CouriersListPage /> }
     ]
   },
   {

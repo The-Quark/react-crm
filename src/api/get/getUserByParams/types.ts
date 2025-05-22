@@ -1,6 +1,22 @@
 import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
 import { Vehicle } from '@/api/get/getVehicles/types.ts';
 
+interface Permission {
+  id: number;
+  name: string;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
+  description: string | null;
+  nicename: string | null;
+  pivot: {
+    role_id?: number;
+    model_type?: string;
+    model_id?: number;
+    permission_id?: number;
+  };
+}
+
 interface Role {
   id: number;
   name: string;
@@ -14,24 +30,65 @@ interface Role {
     model_id: number;
     role_id: number;
   };
+  permissions?: Permission[];
 }
 
-interface Permission {
+export interface Country {
   id: number;
+  iso2: string;
   name: string;
-  guard_name: string;
+  status: number;
+  phone_code: string;
+  iso3: string;
+  region: string;
+  subregion: string;
+}
+export interface Location {
+  id: number;
+  country_id: number;
+  state_id: number;
+  name: string;
+  country_code: string;
+  country: Country;
+}
+export interface Position {
+  id: number;
+  company_id: number;
+  title: string;
+  description: string;
+  is_active: boolean;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
-  description: string | null;
-  nicename: string | null;
-  pivot: {
-    model_type: string;
-    model_id: number;
-    permission_id: number;
-  };
 }
 
-interface Company {
+export interface Department {
+  id: number;
+  company_id: number;
+  name: string;
+  description: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Subdivision {
+  id: number;
+  company_id: number;
+  language_id: number | null;
+  currency_id: number | null;
+  name: string;
+  legal_address: string;
+  warehouse_address: string;
+  timezone: string;
+  is_active: boolean;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Company {
   id: number;
   company_name: string;
   timezone: string;
@@ -39,28 +96,12 @@ interface Company {
   language: string;
   legal_address: string;
   warehouse_address: string;
-  airlines: any[];
   dimensions_per_place: string;
   cost_per_airplace: string;
-  package_standard_box1: string | null;
-  package_standard_box2: string | null;
-  cost_package_box1: string | null;
-  cost_package_box2: string | null;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
-}
-
-interface Department {
-  id: number;
-  company_id: number;
-  name: string;
-  description: string | null;
-  is_active: boolean;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  company: Company | null;
+  airlines: any | null;
 }
 
 interface Language {
@@ -76,43 +117,6 @@ interface Language {
   deleted_at: string | null;
 }
 
-interface Subdivision {
-  id: number;
-  company_id: number;
-  language_id: number;
-  currency_id: number;
-  name: string;
-  legal_address: string;
-  warehouse_address: string;
-  timezone: string | null;
-  is_active: boolean;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  company: Company;
-  language: Language;
-  currency: any;
-}
-interface Country {
-  id: number;
-  iso2: string;
-  name: string;
-  status: number;
-  phone_code: string;
-  iso3: string;
-  region: string;
-  subregion: string;
-}
-
-interface Location {
-  id: number;
-  country_id: number;
-  state_id: number;
-  name: string;
-  country_code: string;
-  country: Country;
-}
-
 interface UserModel {
   id: number;
   email: string;
@@ -120,7 +124,7 @@ interface UserModel {
   created_at: string;
   updated_at: string;
   phone: string | null;
-  position: string | null;
+  position: Position | null;
   location: Location | null;
   avatar: string | null;
   last_login?: string | null;
@@ -143,15 +147,21 @@ interface UserModel {
   language_id: number | null;
   driver_status: UserDriverStatus | null;
   courier_type: UserCourierType | null;
+  role_nicanames: Array<Record<string, string>>;
+  permission_nicenames: Array<Record<string, string>>;
+  status_nicename: string;
+  gender_nicename: string;
+  courier_type_nicename: string;
+  driver_status_nicename: string;
   driver_details: any | null;
-  roles: Role[];
   permissions: Permission[];
-  can_register: boolean;
   company: Company | null;
   department: Department | null;
   subdivision: Subdivision | null;
   language: Language | null;
   vehicle: Vehicle | null;
+  roles: Role[];
+  can_register?: boolean;
 }
 
 export interface IGetUserByParams {
