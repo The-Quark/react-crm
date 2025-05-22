@@ -4,6 +4,7 @@ import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
+  SharedInputTags,
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
@@ -22,13 +23,6 @@ import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { useNavigate } from 'react-router';
 import { Order } from '@/api/get/getOrder/types.ts';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
 
@@ -63,7 +57,7 @@ const formSchema = Yup.object().shape({
   is_international: Yup.boolean().required('Is international is required'),
   package_description: Yup.string().optional(),
   special_wishes: Yup.string().optional(),
-  order_content: Yup.string().optional()
+  order_content: Yup.array().of(Yup.string()).optional()
 });
 
 export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }) => {
@@ -94,21 +88,18 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
       package_description: orderData?.package_description || '',
       special_wishes: orderData?.special_wishes || '',
       source_id: orderData?.source?.id || '',
-      order_content: orderData?.order_content || ''
+      order_content: orderData?.order_content || []
     },
     validationSchema: formSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        const { ...submitValues } = values;
+        const { price, ...submitValues } = values;
         console.log('V: ', values);
-        const formattedValues = {
-          ...submitValues
-        };
-        console.log('F: ', formattedValues);
+        console.log('F: ', submitValues);
         if (orderData) {
           await putOrder(orderData.id, {
-            ...formattedValues,
+            ...submitValues,
             status: values.status as
               | 'package_awaiting'
               | 'buy_for_someone'
@@ -119,7 +110,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           });
         } else {
           await postOrder({
-            ...formattedValues,
+            ...submitValues,
             delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
             delivery_type: Number(values.delivery_type)
           });
@@ -253,7 +244,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           )}
           <SharedSelect
             name="delivery_type"
-            label="Delivery type"
+            label="Delivery Type"
             placeholder="Select delivery type"
             formik={formik}
             options={
@@ -305,14 +296,26 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
               })) || []
             }
           />
-          <SharedInput name="order_content" label="Order content" formik={formik} />
+          <SharedInputTags
+            value={
+              Array.isArray(formik.values.order_content)
+                ? formik.values.order_content
+                : [formik.values.order_content]
+            }
+            onChange={(value) =>
+              formik.setFieldValue('order_content', value as typeof formik.values.order_content)
+            }
+            label="Order Content"
+            error={formik.errors.order_content as string}
+            touched={formik.touched.order_content}
+          />
           <SharedInput name="weight" label="Weight" type="decimal" formik={formik} />
           <SharedInput name="width" label="Width" type="decimal" formik={formik} />
           <SharedInput name="length" label="Length" type="decimal" formik={formik} />
           <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
           <SharedInput name="places_count" label="Places Count" type="number" formik={formik} />
-          {applicationId && (
-            <SharedInput name="price" label="Price" formik={formik} type="decimal" disabled />
+          {orderData?.price && (
+            <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
           )}
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
             <label className="form-label max-w-56">Custom Clearance</label>
@@ -335,33 +338,15 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             </div>
           </div>
           {orderData?.id && (
-            <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Custom Clearance</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={formik.values.status}
-                  onValueChange={(value) =>
-                    formik.setFieldValue('status', value as typeof formik.values.status)
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockOrdersStatus.map((status) => (
-                      <SelectItem key={status.id} value={status.value}>
-                        {status.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formik.touched.status && formik.errors.status && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.status}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedSelect
+              name="status"
+              label="Custom Clearance"
+              formik={formik}
+              options={mockOrdersStatus.map((status) => ({
+                label: status.name,
+                value: status.value
+              }))}
+            />
           )}
           <SharedInput name="package_description" label="Package Description" formik={formik} />
           <SharedInput name="special_wishes" label="Special Wishes" formik={formik} />

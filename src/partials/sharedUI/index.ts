@@ -9,3 +9,4 @@ export * from './sharedFileCard.tsx';
 export * from './sharedTextArea.tsx';
 export * from './sharedConfirmModal.tsx';
 export * from './sharedMultiSelect.tsx';
+export * from './sharedInputTags.tsx';

@@ -25,7 +25,6 @@ import { useNavigate } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postCargo/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { cargoStatusOptions } from '@/lib/mocks.ts';
-import { SharedMultipleSelect } from '@/partials/sharedUI/sharedMultipleSelect.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { format } from 'date-fns';
 
@@ -44,7 +43,7 @@ export const formSchema = Yup.object().shape({
   from_airport: Yup.string().required('From airport date is required'),
   to_airport: Yup.string().required('To airport is required'),
   is_international: Yup.boolean().required('Is international is required'),
-  notes: Yup.string().required('Is notes is required')
+  notes: Yup.string().required('Notes is required')
 });
 
 export const CargoStarterContent = () => {

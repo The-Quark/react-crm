@@ -108,7 +108,7 @@ export interface Order {
   sender: Person;
   receiver: Person;
   source: Source | null;
-  order_content: string | null;
+  order_content: string[] | null;
 }
 
 export interface IOrdersResponse {
