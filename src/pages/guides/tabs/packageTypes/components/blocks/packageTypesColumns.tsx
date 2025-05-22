@@ -6,6 +6,8 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deletePackageType } from '@/api';
 import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
 import { PackageType } from '@/api/get/getPackageTypes/types.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Language {
   id: number;
@@ -23,6 +25,9 @@ export const usePackageTypesColumns = ({
   selectedLanguage
 }: Props): ColumnDef<PackageType>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<PackageType>[]>(
     () => [
       {
@@ -170,5 +175,5 @@ export const usePackageTypesColumns = ({
     ],
     [isRTL, languages, selectedLanguage]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

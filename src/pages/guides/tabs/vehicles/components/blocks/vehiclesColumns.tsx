@@ -6,9 +6,14 @@ import { Vehicle } from '@/api/get/getVehicles/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteVehicle } from '@/api';
 import VehiclesModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
@@ -145,5 +150,5 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

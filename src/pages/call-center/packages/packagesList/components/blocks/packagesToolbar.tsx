@@ -8,18 +8,24 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { mockDeliveryCategories, packageStatusOptions } from '@/lib/mocks.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const PackagesToolbar: FC = () => {
   const { table } = useDataGrid();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Packages</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        {/*search by id search by client full name select status date created time*/}
-        <a href="/call-center/packages/starter" className="btn btn-sm btn-primary">
-          New Package
-        </a>
+        {canManage && (
+          <a href="/call-center/packages/starter" className="btn btn-sm btn-primary">
+            New Package
+          </a>
+        )}
         <Select
           value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {

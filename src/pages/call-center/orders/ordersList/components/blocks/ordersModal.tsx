@@ -13,6 +13,8 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { setData } from '@/utils/include/LocalStorage';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Props {
   open: boolean;
@@ -21,6 +23,9 @@ interface Props {
 }
 
 export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['order', id],
     queryFn: () => (id !== null ? getOrders(id) : Promise.reject('Invalid ID'))
@@ -187,17 +192,22 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
-        <DialogActions>
-          <a className="btn btn-md btn-light mr-3 mb-3" href={`/call-center/orders/starter/${id}`}>
-            Update Order
-          </a>
-          <button
-            className="btn btn-md btn-primary mr-3 mb-3"
-            onClick={() => id !== null && handleClick(id)}
-          >
-            Create Task
-          </button>
-        </DialogActions>
+        {canManage && (
+          <DialogActions>
+            <a
+              className="btn btn-md btn-light mr-3 mb-3"
+              href={`/call-center/orders/starter/${id}`}
+            >
+              Update Order
+            </a>
+            <button
+              className="btn btn-md btn-primary mr-3 mb-3"
+              onClick={() => id !== null && handleClick(id)}
+            >
+              Create Task
+            </button>
+          </DialogActions>
+        )}
       </DialogContent>
     </Dialog>
   );

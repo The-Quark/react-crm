@@ -9,7 +9,7 @@ import {
   PositionsListPage,
   SubdivisionsListPage
 } from '@/pages/global-parameters';
-import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
+import { PermissionPage, RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
 import { UsersListPage, UsersPublicProfilePage } from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
@@ -57,8 +57,8 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
 
-        <Route path="/roles-permissions/roles" element={<RolesPage />} />
-        <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
+        <Route path="/roles-permissions/roles/list" element={<RolesListPage />} />
+        <Route path="/roles-permissions/roles/starter/:id" element={<RolesStarterPage />} />
 
         <Route path="/tasks/list" element={<TasksListPage />} />
         <Route path="/tasks/view/:id" element={<TasksViewPage />} />

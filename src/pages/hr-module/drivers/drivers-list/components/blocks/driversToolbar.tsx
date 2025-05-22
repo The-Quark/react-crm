@@ -1,17 +1,24 @@
 import React, { FC } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const DriversToolbar: FC = () => {
   const { table } = useDataGrid();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManageSettings = has('manage users') || currentUser?.roles[0].name === 'superadmin';
   const storageHiddenColumnsId = 'drivers-hidden-columns';
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Drivers</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        <a href="/hr-module/drivers/starter" className="btn btn-sm btn-primary">
-          New driver
-        </a>
+        {canManageSettings && (
+          <a href="/hr-module/drivers/starter" className="btn btn-sm btn-primary">
+            New driver
+          </a>
+        )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
           <KeenIcon

@@ -6,9 +6,14 @@ import { Airline } from '@/api/get/getAirlines/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteAirline } from '@/api';
 import AirlineModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Airline>[]>(
     () => [
       {
@@ -112,5 +117,5 @@ export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

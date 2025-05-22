@@ -4,9 +4,14 @@ import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Position } from '@/api/get/getGlobalParamsPositions/types.ts';
 import { PositionsMenuOptions } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsMenuOprions.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const usePositionsColumns = (): ColumnDef<Position>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Position>[]>(
     () => [
       {
@@ -83,5 +88,5 @@ export const usePositionsColumns = (): ColumnDef<Position>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

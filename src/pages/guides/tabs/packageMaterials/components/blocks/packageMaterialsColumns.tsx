@@ -6,9 +6,14 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deletePackageMaterial } from '@/api';
 import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<PackageMaterial>[]>(
     () => [
       {
@@ -148,5 +153,5 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

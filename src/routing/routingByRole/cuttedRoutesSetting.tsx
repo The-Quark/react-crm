@@ -51,6 +51,7 @@ import {
   StaffListPage,
   StaffStarterPage
 } from '@/pages/hr-module';
+import { RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
 
 interface Props {
   permissions: string[];
@@ -133,6 +134,8 @@ const routeConfig = [
       { path: '/crm/users/starter/:id', element: <UsersStarterPage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
+      { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
+      { path: '/roles-permissions/roles/starter/:id', element: <RolesStarterPage /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/staff/starter', element: <StaffStarterPage /> },
       { path: '/hr-module/staff/starter/:id', element: <StaffStarterPage /> },
@@ -149,6 +152,7 @@ const routeConfig = [
     routes: [
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
+      { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/drivers/list', element: <DriversListPage /> },
       { path: '/hr-module/couriers/list', element: <CouriersListPage /> }

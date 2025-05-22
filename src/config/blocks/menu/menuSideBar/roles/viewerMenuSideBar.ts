@@ -52,12 +52,12 @@ export const ViewerMenuSideBar: TMenuConfig = [
     children: [
       {
         title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
-        path: '/roles-permissions/roles'
-      },
-      {
-        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
-        path: '/roles-permissions/permissions'
+        path: '/roles-permissions/roles/list'
       }
+      // {
+      //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
+      //   path: '/roles-permissions/permissions'
+      // }
     ]
   },
   {
@@ -103,12 +103,7 @@ export const ViewerMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.CRM',
     icon: 'users',
-    children: [
-      {
-        title: 'MENU.MEGAMENU.CRM.MEMBERS',
-        path: '/crm/users/list'
-      }
-    ]
+    path: '/crm/users/list'
   },
   {
     title: 'MENU.MEGAMENU.GUIDES',

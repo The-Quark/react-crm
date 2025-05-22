@@ -13,9 +13,14 @@ import { format } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { cn } from '@/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const OrdersToolbar: FC = () => {
   const { table } = useDataGrid();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const date = table.getColumn('created at')?.getFilterValue() as DateRange | undefined;
   const handleDateChange = (range: DateRange | undefined) => {
     table.getColumn('created at')?.setFilterValue(range);
@@ -25,10 +30,11 @@ export const OrdersToolbar: FC = () => {
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Orders</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        {/*search by id search by client full name select status date created time*/}
-        <a href="/call-center/orders/starter" className="btn btn-sm btn-primary">
-          New order
-        </a>
+        {canManage && (
+          <a href="/call-center/orders/starter" className="btn btn-sm btn-primary">
+            New order
+          </a>
+        )}
         <Select
           value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {

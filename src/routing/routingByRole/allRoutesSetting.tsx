@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
-import { PermissionPage, RolesPage } from '@/pages/roles-permissions';
+import { PermissionPage, RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
 import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
 import {
   CompaniesListPage,
@@ -141,7 +141,8 @@ const AllRoutesSetting = () => {
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
-        <Route path="/roles-permissions/roles" element={<RolesPage />} />
+        <Route path="/roles-permissions/roles/list" element={<RolesListPage />} />
+        <Route path="/roles-permissions/roles/starter/:id" element={<RolesStarterPage />} />
         <Route path="/roles-permissions/permissions" element={<PermissionPage />} />
         <Route path="/tasks/list" element={<TasksListPage />} />
         <Route path="/tasks/starter" element={<TasksStarterPage />} />

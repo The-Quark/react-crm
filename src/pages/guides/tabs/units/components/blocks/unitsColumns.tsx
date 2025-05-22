@@ -6,9 +6,14 @@ import { Unit } from '@/api/get/getUnits/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteUnit } from '@/api';
 import UnitModal from '@/pages/guides/tabs/units/components/blocks/unitsModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useUnitsColumns = (): ColumnDef<Unit>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Unit>[]>(
     () => [
       {
@@ -79,5 +84,5 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

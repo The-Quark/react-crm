@@ -6,9 +6,14 @@ import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.t
 import { deleteDeliveryType } from '@/api';
 import { DeliveryType } from '@/api/get/getDeliveryTypes/types.ts';
 import { DeliveryTypesModal } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<DeliveryType>[]>(
     () => [
       {
@@ -83,5 +88,5 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

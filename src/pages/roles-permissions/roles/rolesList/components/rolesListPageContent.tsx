@@ -1,12 +1,17 @@
 import { CardRole } from '@/partials/cards';
-import { getRoles } from '@/api/get/getRoles/';
+import { getRoles } from '@/api/get/getRoles';
 import { Role } from '@/api/get/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';
 import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError } from '@/partials/sharedUI';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
-export const RolesPageContent = () => {
+export const RolesListPageContent = () => {
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage role') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['roles'],
     queryFn: () => getRoles(),
@@ -27,7 +32,11 @@ export const RolesPageContent = () => {
           item.description ? item.description : item.permissions.map((perm) => perm.name).join(', ')
         }
         subTitle={`${item.users_count} users`}
-        path="/crm/roles"
+        path={
+          canManage
+            ? `/roles-permissions/roles/starter/${item.id}`
+            : '/roles-permissions/roles/list'
+        }
         badge={{
           size: 'size-[44px]',
           badge: <KeenIcon icon="face-id" className="text-1.5xl text-success" />,

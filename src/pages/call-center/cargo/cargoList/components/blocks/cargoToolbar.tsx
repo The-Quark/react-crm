@@ -8,18 +8,24 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { cargoStatusOptions } from '@/lib/mocks.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const CargoToolbar: FC = () => {
   const { table } = useDataGrid();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Cargo</h3>
       <div className="flex flex-wrap items-center gap-2.5">
-        {/*search by id search by client full name select status date created time*/}
-        <a href="/call-center/cargo/starter" className="btn btn-sm btn-primary">
-          New Cargo
-        </a>
+        {canManage && (
+          <a href="/call-center/cargo/starter" className="btn btn-sm btn-primary">
+            New Cargo
+          </a>
+        )}
         <Select
           value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
           onValueChange={(value) => {

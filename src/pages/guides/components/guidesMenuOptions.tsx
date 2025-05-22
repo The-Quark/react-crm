@@ -11,8 +11,6 @@ import {
 } from '@/components';
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
-import { useAuthContext } from '@/auth';
-import { useUserPermissions } from '@/hooks';
 import { useLanguage } from '@/providers';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -34,10 +32,6 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
   invalidateRequestKey
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { currentUser } = useAuthContext();
-  const { has } = useUserPermissions();
-  const canManageSettings =
-    has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const { isRTL } = useLanguage();
   const queryClient = useQueryClient();
 
@@ -83,27 +77,25 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
         </MenuToggle>
         {!modalOpen && (
           <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageSettings && (
-              <>
-                <MenuItem onClick={handleOpen}>
-                  <MenuLink>
-                    <MenuIcon>
-                      <KeenIcon icon="setting-4" />
-                    </MenuIcon>
-                    <MenuTitle>Edit</MenuTitle>
-                  </MenuLink>
-                </MenuItem>
-                <MenuSeparator />
-                <MenuItem onClick={handleDelete}>
-                  <MenuLink>
-                    <MenuIcon>
-                      <KeenIcon icon="trash" className="text-danger !text-red-500" />
-                    </MenuIcon>
-                    <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
-                  </MenuLink>
-                </MenuItem>
-              </>
-            )}
+            <>
+              <MenuItem onClick={handleOpen}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="setting-4" />
+                  </MenuIcon>
+                  <MenuTitle>Edit</MenuTitle>
+                </MenuLink>
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem onClick={handleDelete}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="trash" className="text-danger !text-red-500" />
+                  </MenuIcon>
+                  <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+                </MenuLink>
+              </MenuItem>
+            </>
           </MenuSub>
         )}
       </MenuItem>

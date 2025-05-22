@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getPackages } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Props {
   open: boolean;
@@ -19,6 +21,9 @@ interface Props {
 }
 
 export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageID', id],
     queryFn: () => (id !== null ? getPackages(id) : Promise.reject('Invalid ID'))
@@ -149,14 +154,19 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
-        <DialogActions>
-          <a
-            className="btn btn-md btn-light mr-3 mb-3"
-            href={`/call-center/packages/starter/${id}`}
-          >
-            Update Package
-          </a>
-        </DialogActions>
+        {canManage && (
+          <DialogActions>
+            <a
+              className="btn btn-md btn-light mr-3 mb-3"
+              href={`/call-center/packages/starter/${id}`}
+            >
+              Update Package
+            </a>
+            <a className="btn btn-md btn-primary mr-3 mb-3" href={`/call-center/packages/starter/`}>
+              Create Package
+            </a>
+          </DialogActions>
+        )}
       </DialogContent>
     </Dialog>
   );

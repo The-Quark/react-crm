@@ -6,9 +6,14 @@ import { Source } from '@/api/get/getSources/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteSource } from '@/api';
 import SourcesModal from '@/pages/guides/tabs/sources/components/blocks/sourcesModal.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useSourcesColumns = (): ColumnDef<Source>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Source>[]>(
     () => [
       {
@@ -96,5 +101,5 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

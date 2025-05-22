@@ -52,7 +52,7 @@ export const AllMenuSideBar: TMenuConfig = [
     children: [
       {
         title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
-        path: '/roles-permissions/roles'
+        path: '/roles-permissions/roles/list'
       }
       // {
       //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',

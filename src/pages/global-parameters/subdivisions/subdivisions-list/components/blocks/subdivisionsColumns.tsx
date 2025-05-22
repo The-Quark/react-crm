@@ -4,9 +4,14 @@ import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Subdivision } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
 import { SubdivisionsMenuOptions } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsMenuOprions.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Subdivision>[]>(
     () => [
       {
@@ -115,5 +120,5 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
     ],
     [isRTL]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

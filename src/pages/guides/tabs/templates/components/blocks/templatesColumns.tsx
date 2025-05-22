@@ -4,6 +4,8 @@ import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Template } from '@/api/get/getTemplates/types.ts';
 import { TemplatesMenuOptions } from '@/pages/guides/tabs/templates/components/blocks/templatesMenuOptions.tsx';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Language {
   id: number;
@@ -21,6 +23,9 @@ export const useTemplatesColumns = ({
   selectedLanguage
 }: Props): ColumnDef<Template>[] => {
   const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Template>[]>(
     () => [
       {
@@ -113,5 +118,5 @@ export const useTemplatesColumns = ({
     ],
     [isRTL, languages, selectedLanguage]
   );
-  return columns;
+  return canManage ? columns : columns.slice(0, -1);
 };

@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getApplications } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 interface Props {
   open: boolean;
@@ -19,6 +21,9 @@ interface Props {
 }
 
 export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['application', id],
     queryFn: () => (id !== null ? getApplications(id) : Promise.reject('Invalid ID'))
@@ -96,18 +101,20 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
             </div>
           )}
         </DialogBody>
-        <DialogActions>
-          <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
-            Update Application
-          </a>
-          <button
-            className="btn btn-md btn-primary m-3"
-            onClick={() => handleCreateOrder(id)}
-            disabled={id === null}
-          >
-            Create Order
-          </button>
-        </DialogActions>
+        {canManage && (
+          <DialogActions>
+            <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
+              Update Application
+            </a>
+            <button
+              className="btn btn-md btn-primary m-3"
+              onClick={() => handleCreateOrder(id)}
+              disabled={id === null}
+            >
+              Create Order
+            </button>
+          </DialogActions>
+        )}
       </DialogContent>
     </Dialog>
   );
