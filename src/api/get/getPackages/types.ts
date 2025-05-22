@@ -121,6 +121,7 @@ export interface Package {
   client: Client;
   media: Media[];
   medias: Media[];
+  hawb_pdf: string;
 }
 export interface PackagesResponse {
   result: Package[];

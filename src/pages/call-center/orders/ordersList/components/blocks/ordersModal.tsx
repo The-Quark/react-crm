@@ -161,6 +161,12 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <div className="flex columns-1 w-full">{order.status || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Order content</label>
+                      <div className="flex columns-1 w-full">
+                        {order.order_content?.map((index) => index) || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Weight</label>
                       <div className="flex columns-1 w-full">{order.weight || '-'} kg</div>
                     </div>

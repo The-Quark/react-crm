@@ -105,6 +105,28 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
         }
       },
       {
+        accessorFn: (row) => row.hawb_pdf,
+        id: 'hawb pdf',
+        header: ({ column }) => <DataGridColumnHeader title="HAWB doc" column={column} />,
+        enableSorting: true,
+        cell: (info) => {
+          const url = info.row.original.hawb_pdf.startsWith('http')
+            ? info.row.original.hawb_pdf
+            : `https://${info.row.original.hawb_pdf}`;
+
+          return (
+            <div className="flex items-center gap-1.5">
+              <a className="link" href={url} target="_blank" rel="noopener noreferrer">
+                hawb.pdf
+              </a>
+            </div>
+          );
+        },
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,

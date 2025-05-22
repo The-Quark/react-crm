@@ -7,6 +7,7 @@ export interface Permission {
   description: string | null;
   nicename: string | null;
   user_has: boolean;
+  role_has: boolean;
   nice_name: string;
 }
 

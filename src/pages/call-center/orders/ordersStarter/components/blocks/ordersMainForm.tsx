@@ -94,12 +94,15 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        const { price, ...submitValues } = values;
-        console.log('V: ', values);
-        console.log('F: ', submitValues);
+        const submitValues = { ...values };
+        if (Array.isArray(submitValues.order_content) && submitValues.order_content.length === 0) {
+          (submitValues as { order_content?: string[] }).order_content &&
+            delete (submitValues as { order_content?: string[] }).order_content;
+        }
+        const { price, ...finalValues } = submitValues;
         if (orderData) {
           await putOrder(orderData.id, {
-            ...submitValues,
+            ...finalValues,
             status: values.status as
               | 'package_awaiting'
               | 'buy_for_someone'
@@ -110,7 +113,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           });
         } else {
           await postOrder({
-            ...submitValues,
+            ...finalValues,
             delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
             delivery_type: Number(values.delivery_type)
           });

@@ -18,13 +18,13 @@ export const RolesStarterGiveContent: FC<Props> = ({ data = [], role }) => {
       permissions: data.map((permission) => ({
         id: permission.id,
         name: permission.name,
-        user_has: permission.user_has
+        role_has: permission.role_has
       }))
     },
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const permissionNames = values.permissions.filter((p) => p.user_has).map((p) => p.name);
+        const permissionNames = values.permissions.filter((p) => p.role_has).map((p) => p.name);
         await putPermissionsDistribute({
           mode: 'give',
           permissions: permissionNames,
@@ -73,11 +73,11 @@ export const RolesStarterGiveContent: FC<Props> = ({ data = [], role }) => {
                       <input
                         type="checkbox"
                         className="checkbox checkbox-sm"
-                        name={`permissions[${index}].user_has`}
-                        checked={permission.user_has}
+                        name={`permissions[${index}].role_has`}
+                        checked={permission.role_has}
                         onChange={() => {
                           const newPermissions = [...formik.values.permissions];
-                          newPermissions[index].user_has = !newPermissions[index].user_has;
+                          newPermissions[index].role_has = !newPermissions[index].role_has;
                           formik.setFieldValue('permissions', newPermissions);
                         }}
                       />

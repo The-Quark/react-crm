@@ -109,6 +109,7 @@ export interface Order {
   receiver: Person;
   source: Source | null;
   order_content: string[] | null;
+  hawb_pdf: string;
 }
 
 export interface IOrdersResponse {
