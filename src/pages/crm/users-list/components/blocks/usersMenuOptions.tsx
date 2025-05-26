@@ -53,6 +53,14 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuTitle>Edit user</MenuTitle>
             </MenuLink>
           </MenuItem>
+          <MenuItem>
+            <MenuLink path={`/crm/users/users-permissions/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="key" />
+              </MenuIcon>
+              <MenuTitle>Edit permissions</MenuTitle>
+            </MenuLink>
+          </MenuItem>
           <MenuSeparator />
           <MenuItem onClick={handleDelete}>
             <MenuLink>

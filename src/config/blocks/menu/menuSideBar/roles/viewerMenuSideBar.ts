@@ -49,16 +49,7 @@ export const ViewerMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
     icon: 'clipboard',
-    children: [
-      {
-        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
-        path: '/roles-permissions/roles/list'
-      }
-      // {
-      //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
-      //   path: '/roles-permissions/permissions'
-      // }
-    ]
+    path: '/roles-permissions/roles/list'
   },
   {
     title: 'MENU.MEGAMENU.HR_MODULE',

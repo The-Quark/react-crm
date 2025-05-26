@@ -13,7 +13,12 @@ import {
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
-import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
+import {
+  UsersListPage,
+  UsersPermissionsStarter,
+  UsersPublicProfilePage,
+  UsersStarterPage
+} from '@/pages/crm';
 import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
   GuidesAirlineRatesPage,
@@ -134,8 +139,7 @@ const routeConfig = [
       { path: '/crm/users/starter/:id', element: <UsersStarterPage /> },
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
-      { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
-      { path: '/roles-permissions/roles/starter/:role', element: <RolesStarterPage /> },
+      { path: '/crm/users/users-permissions/:id', element: <UsersPermissionsStarter /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/staff/starter', element: <StaffStarterPage /> },
       { path: '/hr-module/staff/starter/:id', element: <StaffStarterPage /> },
@@ -152,11 +156,21 @@ const routeConfig = [
     routes: [
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
-      { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/drivers/list', element: <DriversListPage /> },
       { path: '/hr-module/couriers/list', element: <CouriersListPage /> }
     ]
+  },
+  {
+    permission: 'manage roles',
+    routes: [
+      { path: '/roles-permissions/roles/list', element: <RolesListPage /> },
+      { path: '/roles-permissions/roles/starter/:role', element: <RolesStarterPage /> }
+    ]
+  },
+  {
+    permission: 'view roles',
+    routes: [{ path: '/roles-permissions/roles/list', element: <RolesListPage /> }]
   },
   {
     permission: 'manage tasks',

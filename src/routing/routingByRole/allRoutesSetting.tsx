@@ -3,7 +3,12 @@ import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage } from '@/pages/dashboards';
 import { ProfilePage } from '@/pages/profile/profilePage.tsx';
 import { PermissionPage, RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
-import { UsersListPage, UsersPublicProfilePage, UsersStarterPage } from '@/pages/crm';
+import {
+  UsersListPage,
+  UsersPermissionsStarter,
+  UsersPublicProfilePage,
+  UsersStarterPage
+} from '@/pages/crm';
 import {
   CompaniesListPage,
   CompaniesStarterPage,
@@ -178,6 +183,7 @@ const AllRoutesSetting = () => {
         <Route path="/crm/users/starter/:id" element={<UsersStarterPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />,
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
+        <Route path="/crm/users/users-permissions/:id" element={<UsersPermissionsStarter />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />

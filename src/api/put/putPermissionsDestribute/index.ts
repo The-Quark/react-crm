@@ -5,7 +5,7 @@ interface IPermissionsDistributePayload {
   mode: 'give' | 'revoke';
   permissions: string[];
   role?: string;
-  user_id?: number;
+  user?: number;
 }
 
 export const putPermissionsDistribute = async (

@@ -18,17 +18,17 @@ export const UsersPermissionsRevoke: FC<Props> = ({ data = [], userId }) => {
       permissions: data.map((permission) => ({
         id: permission.id,
         name: permission.name,
-        role_has: permission.role_has
+        user_has: permission.user_has
       }))
     },
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const permissionNames = values.permissions.filter((p) => p.role_has).map((p) => p.name);
+        const permissionNames = values.permissions.filter((p) => p.user_has).map((p) => p.name);
         await putPermissionsDistribute({
           mode: 'revoke',
           permissions: permissionNames,
-          user_id: userId ? userId : undefined
+          user: userId ? userId : undefined
         });
         navigate('/crm/users/list');
         queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -67,10 +67,10 @@ export const UsersPermissionsRevoke: FC<Props> = ({ data = [], userId }) => {
                         type="checkbox"
                         className="checkbox checkbox-sm"
                         name={`permissions[${index}].role_has`}
-                        checked={permission.role_has}
+                        checked={permission.user_has}
                         onChange={() => {
                           const newPermissions = [...formik.values.permissions];
-                          newPermissions[index].role_has = !newPermissions[index].role_has;
+                          newPermissions[index].user_has = !newPermissions[index].user_has;
                           formik.setFieldValue('permissions', newPermissions);
                         }}
                       />

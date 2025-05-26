@@ -9,7 +9,7 @@ import {
   PositionsListPage,
   SubdivisionsListPage
 } from '@/pages/global-parameters';
-import { RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
+import { RolesListPage } from '@/pages/roles-permissions';
 import { UsersListPage, UsersPublicProfilePage } from '@/pages/crm';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';

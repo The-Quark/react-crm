@@ -207,37 +207,14 @@ export const CuttedMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
     icon: 'clipboard',
-    requiredPermissions: ['manage roles', 'manage permissions'],
-    children: [
-      {
-        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
-        path: '/roles-permissions/roles/list',
-        requiredPermissions: ['manage roles']
-      }
-      // {
-      //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
-      //   path: '/roles-permissions/permissions'
-      // requiredPermissions: ['manage permissions']
-      // }
-    ]
+    requiredPermissions: ['manage roles']
   },
   //view roles and view permissions
   {
     title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
     icon: 'clipboard',
-    requiredPermissions: ['view roles', 'view permissions'],
-    children: [
-      {
-        title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.ROLES',
-        path: '/roles-permissions/roles/list',
-        requiredPermissions: ['view roles']
-      }
-      // {
-      //   title: 'MENU.MEGAMENU.ROLES_PERMISSIONS.PERMISSIONS',
-      //   path: '/roles-permissions/permissions'
-      // requiredPermissions: ['manage permissions']
-      // }
-    ]
+    requiredPermissions: ['view roles'],
+    path: '/roles-permissions/roles/list'
   },
   //"view users"
   {
