@@ -109,10 +109,8 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
           await putOrderSender(senderId, values);
         } else {
           const response = await postOrderSender(values);
-          console.log('API Response:', response);
           if (response?.result) {
             setSenderId(response.result);
-            console.log('Sender ID saved to context:', response.result);
           } else {
             throw new Error('Failed to get sender ID from response');
           }

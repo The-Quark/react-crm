@@ -37,14 +37,17 @@ const removeAuth = () => {
 };
 
 export function setupAxios(axios: any) {
+  const languageCode = getData('i18nConfig');
+  axios.defaults.headers.common['Accept'] = 'application/json';
+  axios.defaults.headers.common['Accept-Language'] = languageCode || 'en';
   axios.defaults.headers.Accept = 'application/json';
   axios.interceptors.request.use(
-    (config: { headers: { Authorization: string } }) => {
+    (config: { headers: { [key: string]: any; Authorization?: string } }) => {
       const auth = getAuth();
-
       if (auth?.token) {
         config.headers.Authorization = `Bearer ${auth.token}`;
       }
+      config.headers['Accept-Language'] = languageCode || 'en';
 
       return config;
     },

@@ -41,8 +41,6 @@ const OrderFormSteps = () => {
   const nextStep = () => setActiveStep((prev) => prev + 1);
   const prevStep = () => setActiveStep((prev) => prev - 1);
 
-  console.log('Current context values - senderId:', senderId, 'receiverId:', receiverId);
-
   const handleOrderSubmitSuccess = () => {
     setShowSuccessModal(true);
     if (!id) clearAll();
