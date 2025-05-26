@@ -13,7 +13,13 @@ import {
 } from '@/api';
 import { AxiosError } from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedTextArea
+} from '@/partials/sharedUI';
 import { IOrderSendersResponse } from '@/api/get/getOrderSenders/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 
@@ -230,7 +236,11 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
           <SharedInput name="street" label="Street" formik={formik} />
           <SharedInput name="house" label="House" formik={formik} />
           <SharedInput name="apartment" label="Apartment" formik={formik} />
-          <SharedInput name="location_description" label="Location description" formik={formik} />
+          <SharedTextArea
+            name="location_description"
+            label="Location description"
+            formik={formik}
+          />
           <SharedInput name="notes" label="Notes" formik={formik} />
           <SharedAutocomplete
             label="Contact"

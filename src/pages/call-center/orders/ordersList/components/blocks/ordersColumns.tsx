@@ -107,7 +107,7 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
       {
         accessorFn: (row) => row.hawb_pdf,
         id: 'hawb pdf',
-        header: ({ column }) => <DataGridColumnHeader title="HAWB doc" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="QR" column={column} />,
         enableSorting: true,
         cell: (info) => {
           const url = info.row.original.hawb_pdf.startsWith('http')
@@ -117,7 +117,7 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
           return (
             <div className="flex items-center gap-1.5">
               <a className="link" href={url} target="_blank" rel="noopener noreferrer">
-                hawb.pdf
+                qr.pdf
               </a>
             </div>
           );

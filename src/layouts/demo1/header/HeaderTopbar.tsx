@@ -90,29 +90,29 @@ const HeaderTopbar = () => {
       {/*  </MenuItem>*/}
       {/*</Menu>*/}
 
-      {/*<Menu>*/}
-      {/*  <MenuItem*/}
-      {/*    ref={itemNotificationsRef}*/}
-      {/*    toggle="dropdown"*/}
-      {/*    trigger="click"*/}
-      {/*    dropdownProps={{*/}
-      {/*      placement: isRTL() ? 'bottom-start' : 'bottom-end',*/}
-      {/*      modifiers: [*/}
-      {/*        {*/}
-      {/*          name: 'offset',*/}
-      {/*          options: {*/}
-      {/*            offset: isRTL() ? [-70, 10] : [70, 10] // [skid, distance]*/}
-      {/*          }*/}
-      {/*        }*/}
-      {/*      ]*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <MenuToggle className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">*/}
-      {/*      <KeenIcon icon="notification-status" />*/}
-      {/*    </MenuToggle>*/}
-      {/*    {DropdownNotifications({ menuTtemRef: itemNotificationsRef })}*/}
-      {/*  </MenuItem>*/}
-      {/*</Menu>*/}
+      <Menu>
+        <MenuItem
+          ref={itemNotificationsRef}
+          toggle="dropdown"
+          trigger="click"
+          dropdownProps={{
+            placement: isRTL() ? 'bottom-start' : 'bottom-end',
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: isRTL() ? [-70, 10] : [70, 10] // [skid, distance]
+                }
+              }
+            ]
+          }}
+        >
+          <MenuToggle className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
+            <KeenIcon icon="notification-status" />
+          </MenuToggle>
+          {DropdownNotifications({ menuTtemRef: itemNotificationsRef })}
+        </MenuItem>
+      </Menu>
 
       <Menu>
         <MenuItem

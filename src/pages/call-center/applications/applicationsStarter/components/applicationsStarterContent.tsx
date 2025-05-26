@@ -18,7 +18,8 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
@@ -115,21 +116,44 @@ export const ApplicationsStarterContent = () => {
     }
   });
 
+  const {
+    data: clientData,
+    isLoading: clientLoading,
+    isError: clientIsError,
+    error: clientError
+  } = useQuery({
+    queryKey: ['clientDetails', formik.values.client_id],
+    queryFn: () => getClients({ id: formik.values.client_id?.toString() ?? '' }),
+    staleTime: 60 * 60 * 1000,
+    enabled: !!formik.values.client_id && !isEditMode
+  });
+
   useEffect(() => {
-    formik.resetForm();
-    if (applicationData && isEditMode) {
-      formik.setValues(
-        {
-          email: applicationData.result[0].email ?? '',
-          phone: applicationData.result[0].phone,
-          message: applicationData.result[0].message ?? '',
-          source: String(applicationData.result[0].source.code ?? 'insta'),
-          full_name: applicationData.result[0].full_name,
-          client_id: applicationData.result[0].client_id ?? '',
-          status: applicationData.result[0].status as unknown as ApplicationsStatus
-        },
-        false
-      );
+    if (clientData?.result?.[0] && !isEditMode) {
+      const client = clientData.result[0];
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        phone: client.phone || prevValues.phone,
+        email: client.email || prevValues.email,
+        source: client.source?.code || prevValues.source
+      }));
+    }
+  }, [clientData, isEditMode]);
+
+  useEffect(() => {
+    if (isEditMode && applicationData?.result?.[0]) {
+      const appData = applicationData.result[0];
+      formik.setValues({
+        email: appData.email ?? '',
+        phone: appData.phone,
+        message: appData.message ?? '',
+        source: String(appData.source?.code ?? 'insta'),
+        full_name: appData.full_name,
+        client_id: appData.client_id ?? '',
+        status: appData.status as ApplicationsStatus
+      });
+    } else if (!isEditMode) {
+      formik.resetForm();
     }
   }, [isEditMode, applicationData]);
 
@@ -145,6 +169,10 @@ export const ApplicationsStarterContent = () => {
     return <SharedError error={clientsError} />;
   }
 
+  if (clientIsError) {
+    return <SharedError error={clientError} />;
+  }
+
   if (isEditMode && applicationIsError) {
     return <SharedError error={applicationError} />;
   }
@@ -157,27 +185,16 @@ export const ApplicationsStarterContent = () => {
         </div>
 
         <div className="card-body grid gap-5">
-          <SharedInput name="full_name" label="Full name" formik={formik} />
-          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-          <SharedSelect
-            name="source"
-            label="Source"
-            formik={formik}
-            options={
-              sourcesData?.result?.map((source) => ({ label: source.name, value: source.code })) ||
-              []
-            }
-          />
-
-          <SharedInput name="email" label="Email" formik={formik} type="email" />
-          <SharedInput name="message" label="Message" formik={formik} />
           <SharedAutocomplete
             label="Client"
             value={formik.values.client_id ?? ''}
             options={
-              clientsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.first_name || app.company_name
+              clientsData?.result?.map((client) => ({
+                id: client.id,
+                name:
+                  (client.first_name &&
+                    `${client?.first_name} ${client?.last_name}  ${client?.patronymic}`) ||
+                  client.company_name
               })) ?? []
             }
             placeholder="Select client"
@@ -191,6 +208,20 @@ export const ApplicationsStarterContent = () => {
             onSearchTermChange={setSearchTerm}
           />
 
+          <SharedInput name="full_name" label="Full name" formik={formik} />
+          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+          <SharedSelect
+            name="source"
+            label="Source"
+            formik={formik}
+            options={
+              sourcesData?.result?.map((source) => ({ label: source.name, value: source.code })) ||
+              []
+            }
+          />
+
+          <SharedInput name="email" label="Email" formik={formik} type="email" />
+          <SharedTextArea name="message" label="Message" formik={formik} />
           {isEditMode && (
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
               <label className="form-label max-w-56">Status</label>

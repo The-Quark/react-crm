@@ -14,7 +14,7 @@ import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { IPackageTypeFormValues } from '@/api/post/postPackageType/types.ts';
 import { useQueryClient } from '@tanstack/react-query';
-import { SharedInput, SharedSelect } from '@/partials/sharedUI';
+import { SharedInput, SharedSelect, SharedTextArea } from '@/partials/sharedUI';
 
 interface Language {
   code: string;
@@ -143,7 +143,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
                   }))}
                 />
 
-                <SharedInput name="description" label="Description" formik={formik} />
+                <SharedTextArea name="description" label="Description" formik={formik} />
 
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                   <label className="form-label max-w-56">Active</label>

@@ -55,20 +55,22 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
         }
       },
       {
-        accessorFn: (row) => row.packages[0].hawb,
+        accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '), // Для сортировки/фильтрации
         id: 'hawb',
         header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.packages[0].hawb}
-            </div>
+          <div className="flex flex-col gap-1">
+            {info.row.original.packages.map((pkg, index) => (
+              <div key={`${pkg.hawb}-${index}`} className="flex items-center gap-1.5">
+                <div className="leading-none text-gray-800 font-normal">{pkg.hawb}</div>
+              </div>
+            ))}
           </div>
         ),
         meta: {
           headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
+          cellClassName: 'text-gray-700 font-normal py-2' // Добавил padding по вертикали
         }
       },
       {

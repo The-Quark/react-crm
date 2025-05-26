@@ -12,7 +12,13 @@ import {
 } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedTextArea
+} from '@/partials/sharedUI';
 import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
@@ -229,7 +235,11 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
           <SharedInput name="street" label="Street" formik={formik} />
           <SharedInput name="house" label="House" formik={formik} />
           <SharedInput name="apartment" label="Apartment" formik={formik} />
-          <SharedInput name="location_description" label="Location description" formik={formik} />
+          <SharedTextArea
+            name="location_description"
+            label="Location description"
+            formik={formik}
+          />
           <SharedInput name="notes" label="Notes" formik={formik} />
           <SharedAutocomplete
             label="Contact"
