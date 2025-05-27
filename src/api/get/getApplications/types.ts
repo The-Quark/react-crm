@@ -1,3 +1,5 @@
+import { ApplicationsStatus } from '@/api/enums';
+
 interface Source {
   id: number;
   code: string;
@@ -6,12 +8,6 @@ interface Source {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
-export enum ApplicationsStatus {
-  NEW = 'new',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  DECLINED = 'declined'
 }
 
 export interface Application {

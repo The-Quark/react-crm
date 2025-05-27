@@ -33,3 +33,10 @@ export enum Gender {
   FEMALE = 'female',
   OTHER = 'other'
 }
+
+export enum ApplicationsStatus {
+  NEW = 'new',
+  RUNNING = 'running',
+  COMPLETED = 'completed',
+  DECLINED = 'declined'
+}

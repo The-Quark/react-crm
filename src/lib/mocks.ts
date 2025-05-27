@@ -2,7 +2,13 @@ import { PackageStatus } from '@/api/get/getPackages/types.ts';
 import { CargoStatus } from '@/api/get/getCargo/types.ts';
 import { TemplateType } from '@/api/get/getTemplates/types.ts';
 import { TaskType, TaskPriority, TaskStatus } from '@/api/get/getTask/types.ts';
-import { Gender, UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
+import {
+  Gender,
+  UserCourierType,
+  UserDriverStatus,
+  UserStatus,
+  ApplicationsStatus
+} from '@/api/enums';
 
 export const localesMock = [
   {
@@ -412,9 +418,9 @@ export const mockUserStatusOptions = [
   { id: 1, name: 'Active', value: UserStatus.ACTIVE },
   { id: 2, name: 'Vacation', value: UserStatus.VACATION },
   { id: 3, name: 'Fired', value: UserStatus.FIRED },
-  { id: 1, name: 'Staging', value: UserStatus.STAGING },
-  { id: 2, name: 'Decree', value: UserStatus.DECREE },
-  { id: 3, name: 'Unavailable', value: UserStatus.UNAVAILABLE }
+  { id: 4, name: 'Staging', value: UserStatus.STAGING },
+  { id: 5, name: 'Decree', value: UserStatus.DECREE },
+  { id: 6, name: 'Unavailable', value: UserStatus.UNAVAILABLE }
 ];
 
 export const mockDriverStatusOptions = [
@@ -425,5 +431,12 @@ export const mockDriverStatusOptions = [
 export const mockCourierTypeOptions = [
   { id: 1, name: 'Auto', value: UserCourierType.AUTO },
   { id: 2, name: 'Motorbike', value: UserCourierType.MOTORBIKE },
-  { id: 2, name: 'Pedestrian', value: UserCourierType.PEDESTRIAN }
+  { id: 3, name: 'Pedestrian', value: UserCourierType.PEDESTRIAN }
+];
+
+export const mockApplicationsStatusOptions = [
+  { id: 1, name: 'New', value: ApplicationsStatus.NEW },
+  { id: 2, name: 'Completed', value: ApplicationsStatus.COMPLETED },
+  { id: 3, name: 'Declined', value: ApplicationsStatus.DECLINED },
+  { id: 4, name: 'Running', value: ApplicationsStatus.RUNNING }
 ];

@@ -1,10 +1,3 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { postApplication, getApplications, getSources, putApplication, getClients } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
 import { useFormik } from 'formik';
@@ -22,8 +15,9 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
-import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
+import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate } from 'react-router-dom';
+import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
 
 export const formSchema = Yup.object().shape({
   source: Yup.string().required('Source is required'),
@@ -42,6 +36,7 @@ export const ApplicationsStarterContent = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const clientId = localStorage.getItem('clientID') || '';
 
   const {
     data: sourcesData,
@@ -82,7 +77,7 @@ export const ApplicationsStarterContent = () => {
     message: '',
     source: '',
     full_name: '',
-    client_id: '',
+    client_id: clientId,
     ...(isEditMode && { status: 'new' as unknown as ApplicationsStatus })
   };
 
@@ -223,30 +218,15 @@ export const ApplicationsStarterContent = () => {
           <SharedInput name="email" label="Email" formik={formik} type="email" />
           <SharedTextArea name="message" label="Message" formik={formik} />
           {isEditMode && (
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label max-w-56">Status</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <Select
-                  value={(formik.values.status as unknown as string) || 'new'}
-                  onValueChange={(value) => formik.setFieldValue('status', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="new">New</SelectItem>
-                    <SelectItem value="running">Running</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="declined">Declined</SelectItem>
-                  </SelectContent>
-                </Select>
-                {formik.touched.status && formik.errors.status && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.status}
-                  </span>
-                )}
-              </div>
-            </div>
+            <SharedSelect
+              name="status"
+              label="Status"
+              formik={formik}
+              options={mockApplicationsStatusOptions.map((opt) => ({
+                label: opt.name,
+                value: opt.value
+              }))}
+            />
           )}
 
           <div className="flex justify-end">
