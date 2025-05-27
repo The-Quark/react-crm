@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { getPackages } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { usePackagesColumns } from '@/pages/call-center/packages/packagesList/components/blocks/packagesColumns.tsx';
-import { PackagesToolbar } from '@/pages/call-center/packages/packagesList/components/blocks/packagesToolbar.tsx';
-import { PackagesModal } from '@/pages/call-center/packages/packagesList/components/blocks/packagesModal.tsx';
+import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesColumns.tsx';
+import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesToolbar.tsx';
+import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesModal.tsx';
 
 export const PackagesListContent = () => {
   const { data, isLoading, isError, error } = useQuery({

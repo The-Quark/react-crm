@@ -30,12 +30,8 @@ import {
   GuidesUnitsPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
-import {
-  ApplicationsListPage,
-  OrdersListPage,
-  CargoListPage,
-  PackagesListPage
-} from '@/pages/call-center';
+import { ApplicationsListPage, OrdersListPage } from '@/pages/call-center';
+import { PackagesListPage, CargoListPage } from '@/pages/warehouse';
 import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
@@ -70,8 +66,8 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
-        <Route path="/call-center/packages/list" element={<PackagesListPage />} />
-        <Route path="/call-center/cargo/list" element={<CargoListPage />} />
+        <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
+        <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/users/list" element={<UsersListPage />} />
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />

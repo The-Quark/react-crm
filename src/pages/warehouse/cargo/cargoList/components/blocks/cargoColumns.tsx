@@ -6,7 +6,7 @@ import { Cargo } from '@/api/get/getCargo/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
-import { CargoMenuOptions } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoMenuOptions.tsx';
+import { CargoMenuOptions } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoMenuOptions.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;

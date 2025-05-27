@@ -39,14 +39,16 @@ import {
   ApplicationsListPage,
   ApplicationsStarterPage,
   OrdersListPage,
-  OrdersStarterPage,
+  OrdersStarterPage
+} from '@/pages/call-center';
+import {
   PackagesListPage,
   PackagesStarterPage,
   CargoStarterPage,
   CargoListPage,
   PackagesUploadPage,
   CargoUploadPage
-} from '@/pages/call-center';
+} from '@/pages/warehouse';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import {
   CouriersListPage,
@@ -221,34 +223,34 @@ const routeConfig = [
         element: <OrdersStarterPage />
       },
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
-      { path: '/call-center/packages/starter', element: <PackagesStarterPage /> },
+      { path: '/warehouse/packages/starter', element: <PackagesStarterPage /> },
       {
-        path: '/call-center/packages/starter/:id',
+        path: '/warehouse/packages/starter/:id',
         element: <PackagesStarterPage />
       },
       {
-        path: '/call-center/packages/upload/:id',
+        path: '/warehouse/packages/upload/:id',
         element: <PackagesUploadPage />
       },
-      { path: '/call-center/packages/list', element: <PackagesListPage /> },
-      { path: '/call-center/cargo/starter', element: <CargoStarterPage /> },
+      { path: '/warehouse/packages/list', element: <PackagesListPage /> },
+      { path: '/warehouse/cargo/starter', element: <CargoStarterPage /> },
       {
-        path: '/call-center/cargo/starter/:id',
+        path: '/warehouse/cargo/starter/:id',
         element: <CargoStarterPage />
       },
       {
-        path: '/call-center/cargo/upload/:id',
+        path: '/warehouse/cargo/upload/:id',
         element: <CargoUploadPage />
       },
-      { path: '/call-center/cargo/list', element: <CargoListPage /> }
+      { path: '/warehouse/cargo/list', element: <CargoListPage /> }
     ]
   },
   {
     permission: 'view orders',
     routes: [
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
-      { path: '/call-center/packages/list', element: <PackagesListPage /> },
-      { path: '/call-center/cargo/list', element: <CargoListPage /> }
+      { path: '/warehouse/packages/list', element: <PackagesListPage /> },
+      { path: '/warehouse/cargo/list', element: <CargoListPage /> }
     ]
   }
 ];

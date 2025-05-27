@@ -6,7 +6,7 @@ import { Package } from '@/api/get/getPackages/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
-import { PackagesMenuOptions } from '@/pages/call-center/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
+import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -120,14 +120,14 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
         }
       },
       {
-        accessorFn: (row) => row.order.delivery_category,
+        accessorFn: (row) => row.order?.delivery_category,
         id: 'delivery category',
         header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.order.delivery_category}
+              {info.row.original.order?.delivery_category}
             </span>
           </div>
         ),

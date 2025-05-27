@@ -80,14 +80,20 @@ export const AllMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         path: '/call-center/orders/list'
+      }
+    ]
+  },
+  {
+    title: 'MENU.MEGAMENU.WAREHOUSE',
+    icon: 'flag',
+    children: [
+      {
+        title: 'MENU.MEGAMENU.WAREHOUSE.PACKAGES',
+        path: '/warehouse/packages/list'
       },
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.PACKAGES',
-        path: '/call-center/packages/list'
-      },
-      {
-        title: 'MENU.MEGAMENU.CALL_CENTER.CARGO',
-        path: '/call-center/cargo/list'
+        title: 'MENU.MEGAMENU.WAREHOUSE.CARGO',
+        path: '/warehouse/cargo/list'
       }
     ]
   },

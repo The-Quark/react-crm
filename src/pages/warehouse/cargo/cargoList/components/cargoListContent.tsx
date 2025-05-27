@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { getCargo } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { CargoToolbar } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoToolbar.tsx';
-import { useCargoColumns } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoColumns.tsx';
-import { CargoModal } from '@/pages/call-center/cargo/cargoList/components/blocks/cargoModal.tsx';
+import { CargoToolbar } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoToolbar.tsx';
+import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoColumns.tsx';
+import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoModal.tsx';
 
 export const CargoListContent = () => {
   const { data, isLoading, isError, error } = useQuery({

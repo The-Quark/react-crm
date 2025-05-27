@@ -291,6 +291,23 @@ export const CuttedMenuSideBar: TMenuConfig = [
       }
     ]
   },
+  {
+    title: 'MENU.MEGAMENU.WAREHOUSE',
+    icon: 'flag',
+    requiredPermissions: ['manage orders'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.WAREHOUSE.PACKAGES',
+        requiredPermissions: ['manage orders'],
+        path: '/warehouse/packages/list'
+      },
+      {
+        title: 'MENU.MEGAMENU.WAREHOUSE.CARGO',
+        requiredPermissions: ['manage orders'],
+        path: '/warehouse/cargo/list'
+      }
+    ]
+  },
   //"view applications and view orders"
   {
     title: 'MENU.MEGAMENU.CALL_CENTER',
@@ -306,16 +323,23 @@ export const CuttedMenuSideBar: TMenuConfig = [
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         requiredPermissions: ['view orders'],
         path: '/call-center/orders/list'
+      }
+    ]
+  },
+  {
+    title: 'MENU.MEGAMENU.WAREHOUSE',
+    icon: 'flag',
+    requiredPermissions: ['view orders'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.WAREHOUSE.PACKAGES',
+        requiredPermissions: ['view orders'],
+        path: '/warehouse/packages/list'
       },
       {
-        title: 'MENU.MEGAMENU.CALL_CENTER.PACKAGES',
+        title: 'MENU.MEGAMENU.WAREHOUSE.CARGO',
         requiredPermissions: ['view orders'],
-        path: '/call-center/packages/list'
-      },
-      {
-        title: 'MENU.MEGAMENU.CALL_CENTER.CARGO',
-        requiredPermissions: ['view orders'],
-        path: '/call-center/cargo/list'
+        path: '/warehouse/cargo/list'
       }
     ]
   }

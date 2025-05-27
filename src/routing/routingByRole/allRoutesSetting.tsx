@@ -97,13 +97,7 @@ import {
   ApplicationsListPage,
   ApplicationsStarterPage,
   OrdersStarterPage,
-  OrdersListPage,
-  CargoStarterPage,
-  PackagesStarterPage,
-  CargoListPage,
-  PackagesListPage,
-  PackagesUploadPage,
-  CargoUploadPage
+  OrdersListPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -129,6 +123,14 @@ import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversStarterPage } from '@/pages/hr-module/drivers';
 import { StaffListPage, StaffStarterPage } from '@/pages/hr-module/staff';
 import { CouriersListPage, CouriersStarterPage } from '@/pages/hr-module';
+import {
+  PackagesStarterPage,
+  CargoListPage,
+  PackagesListPage,
+  PackagesUploadPage,
+  CargoUploadPage,
+  CargoStarterPage
+} from '@/pages/warehouse';
 
 const AllRoutesSetting = () => {
   return (
@@ -171,14 +173,14 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
-        <Route path="/call-center/packages/starter" element={<PackagesStarterPage />} />
-        <Route path="/call-center/packages/starter/:id" element={<PackagesStarterPage />} />
-        <Route path="/call-center/packages/upload/:id" element={<PackagesUploadPage />} />
-        <Route path="/call-center/packages/list" element={<PackagesListPage />} />
-        <Route path="/call-center/cargo/starter" element={<CargoStarterPage />} />
-        <Route path="/call-center/cargo/starter/:id" element={<CargoStarterPage />} />
-        <Route path="/call-center/cargo/upload/:id" element={<CargoUploadPage />} />
-        <Route path="/call-center/cargo/list" element={<CargoListPage />} />
+        <Route path="/warehouse/packages/starter" element={<PackagesStarterPage />} />
+        <Route path="/warehouse/packages/starter/:id" element={<PackagesStarterPage />} />
+        <Route path="/warehouse/packages/upload/:id" element={<PackagesUploadPage />} />
+        <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
+        <Route path="/warehouse/cargo/starter" element={<CargoStarterPage />} />
+        <Route path="/warehouse/cargo/starter/:id" element={<CargoStarterPage />} />
+        <Route path="/warehouse/cargo/upload/:id" element={<CargoUploadPage />} />
+        <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
         <Route path="/crm/users/starter" element={<UsersStarterPage />} />
         <Route path="/crm/users/starter/:id" element={<UsersStarterPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />,
