@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea.tsx';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
-import { SharedInput } from '@/partials/sharedUI';
+import { SharedInput, SharedTextArea } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getSources/types.ts';
@@ -187,18 +187,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
 
       <SharedInput name="email" label="Email" formik={formik} type="email" />
       <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Notes</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
-          {formik.touched.notes && formik.errors.notes && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.notes}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedTextArea name="notes" label="Notes" formik={formik} />
 
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>

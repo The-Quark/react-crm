@@ -7,13 +7,26 @@ import { useClientsListLegalColumns } from '@/pages/clients/clients-list/compone
 import { useQuery } from '@tanstack/react-query';
 import { getClients } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
 
 type ClientType = 'individual' | 'legal';
 
 export const ClientsListContent = () => {
   const [clientType, setClientType] = useState<ClientType>('individual');
-  const columnsIndividual = useClientsListIndividualColumns();
-  const columnsLegal = useClientsListLegalColumns();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const columnsIndividual = useClientsListIndividualColumns({
+    onRowClick: (id) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    }
+  });
+  const columnsLegal = useClientsListLegalColumns({
+    onRowClick: (id) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    }
+  });
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['clients', clientType],
@@ -46,6 +59,11 @@ export const ClientsListContent = () => {
           />
         </div>
       )}
+      <ClientsListProfileModal
+        open={isModalOpen}
+        id={selectedId}
+        handleClose={() => setIsModalOpen(false)}
+      />
     </Container>
   );
 };

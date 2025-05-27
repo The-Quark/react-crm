@@ -6,7 +6,7 @@ import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { postClient } from '@/api';
 import { AxiosError } from 'axios';
-import { SharedInput } from '@/partials/sharedUI';
+import { SharedInput, SharedTextArea } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import {
   Select,
@@ -143,18 +143,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         type="tel"
       />
       <SharedInput name="representative_email" label="Representative email" formik={formik} />
-
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Special notes about the client</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
-          {formik.touched.notes && formik.errors.notes && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.notes}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedTextArea name="notes" label="Notes" formik={formik} />
 
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>

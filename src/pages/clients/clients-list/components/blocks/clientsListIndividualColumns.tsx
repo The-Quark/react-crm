@@ -7,7 +7,11 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 
-export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
+interface Props {
+  onRowClick: (id: number) => void;
+}
+
+export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -29,15 +33,18 @@ export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
         }
       },
       {
-        accessorFn: (row) => row.first_name,
+        accessorFn: (row) => `${row?.first_name} ${row?.last_name} ${row?.patronymic}`,
         id: 'client name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <div className="leading-none font-medium text-sm text-gray-900 hover:text-primary">
-                {`${info.row.original.first_name} ${info.row.original.last_name} ${info.row.original.patronymic}`}
+              <div
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                onClick={() => onRowClick(info.row.original.id)}
+              >
+                {`${info.row.original?.first_name} ${info.row.original?.last_name} ${info.row.original?.patronymic}`}
               </div>
             </div>
           </div>
@@ -60,7 +67,53 @@ export const useClientsListIndividualColumns = (): ColumnDef<Client>[] => {
           </div>
         ),
         meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.source?.name,
+        id: 'client source',
+        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.source?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.email,
+        id: 'client email',
+        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original?.email}</div>
+          </div>
+        ),
+        meta: {
           headerClassName: 'min-w-[200px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.birth_date,
+        id: 'client birth date',
+        header: ({ column }) => <DataGridColumnHeader title="Birth date" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.birth_date}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
         }
       },
       {

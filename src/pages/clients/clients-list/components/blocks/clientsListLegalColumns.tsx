@@ -7,7 +7,11 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 
-export const useClientsListLegalColumns = (): ColumnDef<Client>[] => {
+interface Props {
+  onRowClick: (id: number) => void;
+}
+
+export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -36,7 +40,10 @@ export const useClientsListLegalColumns = (): ColumnDef<Client>[] => {
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <div className="leading-none font-medium text-sm text-gray-900 hover:text-primary">
+              <div
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                onClick={() => onRowClick(info.row.original.id)}
+              >
                 {info.row.original.company_name}
               </div>
               <span className="text-2sm text-gray-700 font-normal">
@@ -63,17 +70,49 @@ export const useClientsListLegalColumns = (): ColumnDef<Client>[] => {
           </div>
         ),
         meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.source?.name,
+        id: 'client source',
+        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.source?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.email,
+        id: 'client email',
+        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original?.email}</div>
+          </div>
+        ),
+        meta: {
           headerClassName: 'min-w-[200px]'
         }
       },
       {
-        accessorFn: (row) => row,
-        id: 'orders',
-        header: ({ column }) => <DataGridColumnHeader title="Orders" column={column} />,
+        accessorFn: (row) => row.application_count,
+        id: 'applications',
+        header: ({ column }) => <DataGridColumnHeader title="Applications" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">mock</div>
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.application_count}
+            </div>
           </div>
         ),
         meta: {
@@ -82,13 +121,17 @@ export const useClientsListLegalColumns = (): ColumnDef<Client>[] => {
         }
       },
       {
-        accessorFn: (row) => row,
-        id: 'active orders',
-        header: ({ column }) => <DataGridColumnHeader title="Active Orders" column={column} />,
+        accessorFn: (row) => row.applications_packages_count,
+        id: 'applications packages',
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Applications packages" column={column} />
+        ),
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">mock</div>
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.applications_packages_count}
+            </div>
           </div>
         ),
         meta: {
