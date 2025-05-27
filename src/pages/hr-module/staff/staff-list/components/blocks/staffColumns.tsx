@@ -70,21 +70,6 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.phone,
-        id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.roles[0].name,
         id: 'role',
         header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
@@ -98,6 +83,37 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         ),
         meta: {
           headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.company?.company_name,
+        id: 'company',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.company?.company_name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.phone,
+        id: 'phone',
+        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {

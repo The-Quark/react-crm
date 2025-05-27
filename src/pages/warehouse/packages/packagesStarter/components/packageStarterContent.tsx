@@ -113,7 +113,7 @@ export const PackageStarterContent = () => {
             order_id: Number(putData.order_id)
           });
           queryClient.invalidateQueries({ queryKey: ['package'] });
-          navigate('/call-center/packages/list');
+          navigate('/warehouse/packages/list');
           resetForm();
           setSearchTerm('');
           setSearchOrderTerm('');
@@ -121,7 +121,7 @@ export const PackageStarterContent = () => {
         } else {
           await postPackage(values);
           queryClient.invalidateQueries({ queryKey: ['package'] });
-          navigate('/call-center/packages/list');
+          navigate('/warehouse/packages/list');
           resetForm();
           setSearchTerm('');
           setSearchOrderTerm('');

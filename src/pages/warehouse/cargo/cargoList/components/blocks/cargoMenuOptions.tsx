@@ -43,7 +43,7 @@ export const CargoMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
       {canManage && (
         <>
           <MenuItem>
-            <MenuLink path={`/call-center/cargo/upload/${id}`}>
+            <MenuLink path={`/warehouse/cargo/upload/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="file-up" />
               </MenuIcon>
@@ -52,7 +52,7 @@ export const CargoMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
           </MenuItem>
           <MenuSeparator />
           <MenuItem>
-            <MenuLink path={`/call-center/cargo/starter/${id}`}>
+            <MenuLink path={`/warehouse/cargo/starter/${id}`}>
               <MenuIcon>
                 <KeenIcon icon="pencil" />
               </MenuIcon>

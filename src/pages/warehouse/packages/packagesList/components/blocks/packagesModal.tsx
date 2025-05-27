@@ -168,12 +168,9 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
           <DialogActions>
             <a
               className="btn btn-md btn-light mr-3 mb-3"
-              href={`/call-center/packages/starter/${id}`}
+              href={`/warehouse/packages/starter/${id}`}
             >
               Update Package
-            </a>
-            <a className="btn btn-md btn-primary mr-3 mb-3" href={`/call-center/packages/starter/`}>
-              Create Package
             </a>
           </DialogActions>
         )}

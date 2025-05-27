@@ -154,14 +154,14 @@ export const CargoStarterContent = () => {
           const { status, ...putData } = payload;
           await putCargo(Number(id), { ...putData, status: status as CargoStatus });
           queryClient.invalidateQueries({ queryKey: ['cargo'] });
-          navigate('/call-center/cargo/list');
+          navigate('/warehouse/cargo/list');
           resetForm();
           setSearchAirlineTerm('');
           setSearchCompanyOrderTerm('');
         } else {
           await postCargo(payload);
           queryClient.invalidateQueries({ queryKey: ['cargo'] });
-          navigate('/call-center/cargo/list');
+          navigate('/warehouse/cargo/list');
           resetForm();
           setSearchAirlineTerm('');
           setSearchCompanyOrderTerm('');
@@ -188,7 +188,7 @@ export const CargoStarterContent = () => {
           from_airport: cargoData.result[0].from_airport,
           is_international: cargoData.result[0].is_international,
           notes: cargoData.result[0].notes,
-          packages: packageIds, // Use the transformed package IDs
+          packages: packageIds,
           to_airport: cargoData.result[0].to_airport,
           code: cargoData.result[0].code,
           airline: cargoData.result[0].airline.toString(),
@@ -223,7 +223,7 @@ export const CargoStarterContent = () => {
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit Package' : 'New Package'}</h3>
+          <h3 className="card-title">{isEditMode ? 'Edit Cargo' : 'NewCargo'}</h3>
         </div>
 
         <div className="card-body grid gap-5">

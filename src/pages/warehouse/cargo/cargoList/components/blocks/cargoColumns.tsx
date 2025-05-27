@@ -70,7 +70,7 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
         ),
         meta: {
           headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal py-2' // Добавил padding по вертикали
+          cellClassName: 'text-gray-700 font-normal py-2'
         }
       },
       {

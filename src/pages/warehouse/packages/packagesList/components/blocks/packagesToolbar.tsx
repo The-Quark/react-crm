@@ -22,7 +22,7 @@ export const PackagesToolbar: FC = () => {
       <h3 className="card-title">Packages</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
-          <a href="/call-center/packages/starter" className="btn btn-sm btn-primary">
+          <a href="/warehouse/packages/starter" className="btn btn-sm btn-primary">
             New Package
           </a>
         )}

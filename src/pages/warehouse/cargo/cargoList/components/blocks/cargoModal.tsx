@@ -116,11 +116,8 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
         </DialogBody>
         {canManage && (
           <DialogActions>
-            <a className="btn btn-md btn-light mr-3 mb-3" href={`/call-center/cargo/starter/${id}`}>
+            <a className="btn btn-md btn-light mr-3 mb-3" href={`/warehouse/cargo/starter/${id}`}>
               Update Cargo
-            </a>
-            <a className="btn btn-md btn-primary mr-3 mb-3" href={`/call-center/cargo/starter/`}>
-              Create Cargo
             </a>
           </DialogActions>
         )}
