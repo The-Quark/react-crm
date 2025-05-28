@@ -140,7 +140,6 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
-  const isAdmin = currentUser?.roles[0].name === 'superadmin';
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
@@ -236,7 +235,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: departmentsIsError,
     error: departmentsError
   } = useQuery({
-    queryKey: ['drivers-departments'],
+    queryKey: ['drivers-departments', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsDepartments({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -250,7 +249,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: subdivisionsIsError,
     error: subdivisionsError
   } = useQuery({
-    queryKey: ['drivers-subdivisions'],
+    queryKey: ['drivers-subdivisions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsSubdivisions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -264,7 +263,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: positionsIsError,
     error: positionsError
   } = useQuery({
-    queryKey: ['drivers-positions'],
+    queryKey: ['drivers-positions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsPositions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -301,13 +300,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     enabled: !!formik.values.country_id || !!usersData?.result[0]?.location?.country_id
   });
 
-  if (
-    companiesLoading ||
-    subdivisionsLoading ||
-    departmentsLoading ||
-    positionsLoading ||
-    rolesLoading
-  ) {
+  if (companiesLoading || rolesLoading) {
     return <SharedLoading />;
   }
 
@@ -510,6 +503,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
             touched={formik.touched.department_id}
             searchTerm={searchDepartmentTerm}
             onSearchTermChange={setSearchDepartmentTerm}
+            loading={departmentsLoading}
           />
 
           <SharedAutocomplete
@@ -531,6 +525,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
             touched={formik.touched.subdivision_id}
             searchTerm={searchSubdivisionTerm}
             onSearchTermChange={setSearchSubdivisionTerm}
+            loading={subdivisionsLoading}
           />
 
           <SharedAutocomplete
@@ -552,6 +547,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
             touched={formik.touched.position_id}
             searchTerm={searchPositionTerm}
             onSearchTermChange={setSearchPositionTerm}
+            loading={positionsLoading}
           />
           {!isEditMode && (
             <SharedInput name="password" label="Password" formik={formik} type="password" />

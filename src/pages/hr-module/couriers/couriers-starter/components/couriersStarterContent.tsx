@@ -263,7 +263,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     isError: departmentsIsError,
     error: departmentsError
   } = useQuery({
-    queryKey: ['drivers-departments'],
+    queryKey: ['drivers-departments', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsDepartments({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -277,7 +277,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     isError: subdivisionsIsError,
     error: subdivisionsError
   } = useQuery({
-    queryKey: ['drivers-subdivisions'],
+    queryKey: ['drivers-subdivisions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsSubdivisions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -291,7 +291,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     isError: positionsIsError,
     error: positionsError
   } = useQuery({
-    queryKey: ['drivers-positions'],
+    queryKey: ['drivers-positions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsPositions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
@@ -334,13 +334,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     }
   }, [formik.values.courier_type]);
 
-  if (
-    companiesLoading ||
-    subdivisionsLoading ||
-    departmentsLoading ||
-    positionsLoading ||
-    vehiclesLoading
-  ) {
+  if (companiesLoading || vehiclesLoading) {
     return <SharedLoading />;
   }
 
@@ -536,6 +530,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             touched={formik.touched.department_id}
             searchTerm={searchDepartmentTerm}
             onSearchTermChange={setSearchDepartmentTerm}
+            loading={departmentsLoading}
           />
 
           <SharedAutocomplete
@@ -557,6 +552,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             touched={formik.touched.subdivision_id}
             searchTerm={searchSubdivisionTerm}
             onSearchTermChange={setSearchSubdivisionTerm}
+            loading={subdivisionsLoading}
           />
 
           <SharedAutocomplete
@@ -578,6 +574,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             touched={formik.touched.position_id}
             searchTerm={searchPositionTerm}
             onSearchTermChange={setSearchPositionTerm}
+            loading={positionsLoading}
           />
 
           <SharedSelect
