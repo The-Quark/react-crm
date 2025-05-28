@@ -22,19 +22,18 @@ export const TasksListContent = () => {
   return (
     <Container>
       <div className="grid gap-5 lg:gap-7.5">
-        {isLoading ? (
-          <SharedLoading />
-        ) : (
-          <DataGrid
-            columns={columns}
-            data={data?.result}
-            rowSelection={true}
-            pagination={{ size: 15 }}
-            sorting={[{ id: 'id', desc: false }]}
-            toolbar={<TasksToolbar />}
-            layout={{ card: true }}
-          />
-        )}
+        <DataGrid
+          columns={columns}
+          data={data?.result}
+          rowSelection={true}
+          pagination={{ size: 15 }}
+          sorting={[{ id: 'id', desc: false }]}
+          toolbar={<TasksToolbar />}
+          layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading />
+          }}
+        />
       </div>
     </Container>
   );

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PACKAGE_URL } from '@/api/url';
-import { PackageStatus } from '@/api/get/getPackages/types.ts';
+import { PackageStatus } from '@/api/enums';
 import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
 import { cleanValues } from '@/lib/helpers.ts';
 

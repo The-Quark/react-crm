@@ -6,6 +6,8 @@ import { Task } from '@/api/get/getTask/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { TasksMenuOptions } from '@/pages/tasks/tasks-list/components/blocks/tasksMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { SharedPriorityBadge, SharedTypeBadge } from '@/partials/sharedUI';
 
 export const useTasksColumns = (): ColumnDef<Task>[] => {
   const { isRTL } = useLanguage();
@@ -73,52 +75,6 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) => row.type,
-        id: 'type',
-        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.type}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[150px]'
-        }
-      },
-      {
-        accessorFn: (row) => row.priority,
-        id: 'priority',
-        header: ({ column }) => <DataGridColumnHeader title="Priority" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.priority}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
-        accessorFn: (row) => row.status,
-        id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) =>
           `${row.assigned_by.first_name} ${row.assigned_by.last_name}${row.assigned_by.patronymic}`,
         id: 'assigned_by',
@@ -138,19 +94,63 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       },
       {
         accessorFn: (row) =>
-          `${row.assigned_to.first_name} ${row.assigned_to.last_name}${row.assigned_to.patronymic}`,
+          `${row.assigned_to?.first_name} ${row.assigned_to?.last_name}${row.assigned_to?.patronymic}`,
         id: 'assigned_to',
         header: ({ column }) => <DataGridColumnHeader title="Assigned to" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {`${info.row.original.assigned_to.first_name} ${info.row.original.assigned_to.last_name} ${info.row.original.assigned_to.patronymic}`}
+              {`${info.row.original.assigned_to?.first_name} ${info.row.original.assigned_to?.last_name} ${info.row.original.assigned_to?.patronymic}`}
             </div>
           </div>
         ),
         meta: {
           headerClassName: 'min-w-[150px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.type,
+        id: 'type',
+        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <SharedTypeBadge type={info.row.original.type} />
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.priority,
+        id: 'priority',
+        header: ({ column }) => <DataGridColumnHeader title="Priority" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <SharedPriorityBadge priority={info.row.original.priority} />
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.status,
+        id: 'status',
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <SharedStatusBadge status={info.row.original.status} />
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },

@@ -1,6 +1,5 @@
 import {
   getClients,
-  getGlobalParameters,
   getOrders,
   getPackages,
   getTask,
@@ -24,7 +23,7 @@ import {
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { TaskPriority, TaskStatus, TaskType } from '@/api/get/getTask/types.ts';
+import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { taskPriorityOptions, taskStatusOptions, taskTypeOptions } from '@/lib/mocks.ts';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
@@ -46,7 +45,6 @@ export const formSchema = Yup.object().shape({
   order_id: Yup.number().integer().nullable(),
   client_id: Yup.number().integer().nullable(),
   package_id: Yup.number().integer().nullable(),
-  company_id: Yup.number().integer().nullable(),
   due_date: Yup.string().required('Due date is required')
 });
 
@@ -59,7 +57,6 @@ export const TasksStarterContent = () => {
   const [searchClientTerm, setSearchClientTerm] = useState('');
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const [searchPackageTerm, setSearchPackageTerm] = useState('');
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchUserTerm, setSearchUserTerm] = useState('');
   const orderIdFromOrders = getData('orderIdFromOrders') ? getData('orderIdFromOrders') : '';
   const { data: currentUser } = useCurrentUser();
@@ -109,17 +106,6 @@ export const TasksStarterContent = () => {
   });
 
   const {
-    data: companiesData,
-    isLoading: companiesLoading,
-    isError: companiesIsError,
-    error: companiesError
-  } = useQuery({
-    queryKey: ['tasksCompanies'],
-    queryFn: () => getGlobalParameters(),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
     data: taskData,
     isLoading: taskLoading,
     isError: taskIsError,
@@ -140,7 +126,6 @@ export const TasksStarterContent = () => {
     package_id: '',
     priority: TaskPriority.LOW,
     title: '',
-    company_id: '',
     type: TaskType.INNER,
     ...(isEditMode && { status: TaskStatus.TODO as unknown as TaskStatus })
   };
@@ -191,7 +176,6 @@ export const TasksStarterContent = () => {
           assigned_to: taskData.result[0].assigned_to.id ?? '',
           assigned_by: taskData.result[0].assigned_by.id ?? '',
           package_id: taskData.result[0].package_id ?? '',
-          company_id: taskData.result[0].company_id ?? '',
           due_date: taskData.result[0].due_date ?? '',
           status: taskData.result[0].status as unknown as TaskStatus
         },
@@ -203,7 +187,6 @@ export const TasksStarterContent = () => {
   if (
     ordersLoading ||
     clientsLoading ||
-    companiesLoading ||
     packagesLoading ||
     usersLoading ||
     (isEditMode && taskLoading)
@@ -221,10 +204,6 @@ export const TasksStarterContent = () => {
 
   if (usersIsError) {
     return <SharedError error={usersError} />;
-  }
-
-  if (companiesIsError) {
-    return <SharedError error={companiesError} />;
   }
 
   if (packagesIsError) {
@@ -376,26 +355,6 @@ export const TasksStarterContent = () => {
             touched={formik.touched.package_id}
             searchTerm={searchPackageTerm}
             onSearchTermChange={setSearchPackageTerm}
-          />
-
-          <SharedAutocomplete
-            label="Company"
-            value={formik.values.company_id ?? ''}
-            options={
-              companiesData?.result?.map((app) => ({
-                id: app.id,
-                name: app.company_name
-              })) ?? []
-            }
-            placeholder="Select company"
-            searchPlaceholder="Search company"
-            onChange={(val) => {
-              formik.setFieldValue('company_id', val);
-            }}
-            error={formik.errors.company_id as string}
-            touched={formik.touched.company_id}
-            searchTerm={searchCompanyTerm}
-            onSearchTermChange={setSearchCompanyTerm}
           />
 
           <SharedAutocomplete

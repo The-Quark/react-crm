@@ -19,7 +19,8 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { ITemplatesResponse, TemplateType } from '@/api/get/getTemplates/types.ts';
+import { ITemplatesResponse } from '@/api/get/getTemplates/types.ts';
+import { TemplateType } from '@/api/enums';
 import { ITemplatesFormValues } from '@/api/post/postTemplate/types.ts';
 import { templateTypesOptions } from '@/lib/mocks.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';

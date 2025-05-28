@@ -1,13 +1,15 @@
-import { PackageStatus } from '@/api/get/getPackages/types.ts';
-import { CargoStatus } from '@/api/get/getCargo/types.ts';
-import { TemplateType } from '@/api/get/getTemplates/types.ts';
-import { TaskType, TaskPriority, TaskStatus } from '@/api/get/getTask/types.ts';
 import {
   Gender,
   UserCourierType,
   UserDriverStatus,
   UserStatus,
-  ApplicationsStatus
+  ApplicationsStatus,
+  TaskType,
+  TaskPriority,
+  TaskStatus,
+  TemplateType,
+  CargoStatus,
+  PackageStatus
 } from '@/api/enums';
 
 export const localesMock = [

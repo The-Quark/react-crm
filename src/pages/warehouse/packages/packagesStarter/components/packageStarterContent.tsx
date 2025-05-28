@@ -14,7 +14,7 @@ import {
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postPackage/types.ts';
-import { PackageStatus } from '@/api/get/getPackages/types.ts';
+import { PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/lib/mocks.ts';
 
 export const formSchema = Yup.object().shape({

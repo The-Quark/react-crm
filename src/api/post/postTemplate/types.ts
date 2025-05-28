@@ -1,4 +1,4 @@
-import { TemplateType } from '@/api/get/getTemplates/types';
+import { TemplateType } from '@/api/enums';
 export interface ITemplatesFormValues {
   code: string;
   company_id: string;

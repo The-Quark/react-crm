@@ -17,9 +17,9 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
     phone: string;
   }) => (
     <div className="bg-muted p-3 rounded-md">
-      <p className="font-medium">{`${user.first_name} ${user.last_name} ${user.patronymic}`}</p>
-      <p className="text-sm text-muted-foreground">{user.email}</p>
-      <p className="text-sm text-muted-foreground">{user.phone}</p>
+      <p className="font-medium">{`${user?.first_name} ${user?.last_name} ${user?.patronymic}`}</p>
+      <p className="text-sm text-muted-foreground">{user?.email}</p>
+      <p className="text-sm text-muted-foreground">{user?.phone}</p>
     </div>
   );
 
@@ -86,7 +86,7 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Assigned To:</label>
-            {renderUserInfo(task.assigned_to)}
+            {renderUserInfo(task?.assigned_to)}
           </div>
         </div>
 

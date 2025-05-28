@@ -1,3 +1,5 @@
+import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
+
 interface User {
   id: number;
   first_name: string;
@@ -88,30 +90,6 @@ interface Package {
   updated_at: string;
   client_id: number;
   status: string;
-}
-
-export enum TaskPriority {
-  LOW = 'low',
-  NORMAL = 'normal',
-  HIGH = 'high',
-  URGENT = 'urgent'
-}
-
-export enum TaskStatus {
-  TODO = 'to_do',
-  PROGRESS = 'in_progress',
-  OUTDATED = 'outdated',
-  BLOCKED = 'blocked',
-  CANCELLED = 'cancelled',
-  COMPLETED = 'completed'
-}
-
-export enum TaskType {
-  INNER = 'inner',
-  ORDERS = 'orders',
-  APPLICATIONS = 'applications',
-  PACKAGES = 'packages',
-  USERS = 'users'
 }
 
 export interface Task {

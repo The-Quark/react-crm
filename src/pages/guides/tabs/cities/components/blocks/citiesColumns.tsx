@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { DataGridColumnHeader, DataGridRowSelect, DataGridRowSelectAll } from '@/components';
+import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { City } from '@/api/get/getCitiesByCountryCode/types.ts';
 
@@ -9,18 +9,8 @@ export const useCitiesColumns = (): ColumnDef<City>[] => {
   const columns = useMemo<ColumnDef<City>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: () => <DataGridRowSelectAll />,
-        cell: ({ row }) => <DataGridRowSelect row={row} />,
-        enableSorting: false,
-        enableHiding: false,
-        meta: {
-          headerClassName: 'w-0'
-        }
-      },
-      {
         accessorFn: (row) => row.id,
-        id: 'city id',
+        id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
         enableSorting: true,
         cell: (info) => (

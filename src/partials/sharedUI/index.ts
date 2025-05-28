@@ -11,3 +11,5 @@ export * from './sharedConfirmModal.tsx';
 export * from './sharedMultiSelect.tsx';
 export * from './sharedInputTags.tsx';
 export * from './sharedAuthocompleteBase.tsx';
+export * from './sharedPriorityBadge.tsx';
+export * from './sharedTypeBadge.tsx';

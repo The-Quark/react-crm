@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import { UserStatus, UserDriverStatus } from '@/api/enums';
+import { UserStatus, UserDriverStatus, TaskStatus } from '@/api/enums';
 
-type StatusType = UserStatus | UserDriverStatus | string;
+type StatusType = UserStatus | UserDriverStatus | TaskStatus | string;
 
 interface StatusBadgeProps {
   status: StatusType | boolean;
@@ -10,6 +10,7 @@ interface StatusBadgeProps {
 
 export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
   const statusConfig = {
+    // User statuses
     [UserStatus.ACTIVE]: {
       label: 'Active',
       color: 'badge-success'
@@ -34,10 +35,37 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Unavailable',
       color: 'badge-secondary'
     },
+    // Driver statuses
     [UserDriverStatus.AVAILABLE]: {
       label: 'Available',
       color: 'badge-success'
     },
+    // Task statuses
+    [TaskStatus.TODO]: {
+      label: 'To Do',
+      color: 'badge-info'
+    },
+    [TaskStatus.CANCELLED]: {
+      label: 'Cancelled',
+      color: 'badge-secondary'
+    },
+    [TaskStatus.BLOCKED]: {
+      label: 'Blocked',
+      color: 'badge-danger'
+    },
+    [TaskStatus.COMPLETED]: {
+      label: 'Completed',
+      color: 'badge-success'
+    },
+    [TaskStatus.OUTDATED]: {
+      label: 'Outdated',
+      color: 'badge-warning'
+    },
+    [TaskStatus.PROGRESS]: {
+      label: 'In Progress',
+      color: 'badge-primary'
+    },
+    // Boolean statuses
     true: {
       label: 'Active',
       color: 'badge-success'
@@ -52,20 +80,23 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     }
   };
 
-  let normalizedStatus: StatusType | 'true' | 'false';
+  // Все возможные значения статусов
+  const allStatuses = [
+    ...Object.values(UserStatus),
+    ...Object.values(UserDriverStatus),
+    ...Object.values(TaskStatus)
+  ];
+
+  let normalizedStatus: keyof typeof statusConfig;
 
   if (typeof status === 'boolean') {
     normalizedStatus = status ? 'true' : 'false';
+  } else if (allStatuses.includes(status as any)) {
+    normalizedStatus = status as keyof typeof statusConfig;
   } else {
-    normalizedStatus = Object.values(UserStatus).includes(status as UserStatus)
-      ? (status as UserStatus)
-      : Object.values(UserDriverStatus).includes(status as UserDriverStatus)
-        ? (status as UserDriverStatus)
-        : 'unknown';
+    normalizedStatus = 'unknown';
   }
-
-  const config =
-    statusConfig[normalizedStatus as keyof typeof statusConfig] || statusConfig.unknown;
+  const config = statusConfig[normalizedStatus] || statusConfig.unknown;
 
   return (
     <div className={cn('badge badge-sm badge-outline', config.color, className)}>

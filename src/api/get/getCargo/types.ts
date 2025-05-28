@@ -1,3 +1,5 @@
+import { CargoStatus } from '@/api/enums';
+
 interface Media {
   id: number;
   model_type: string;
@@ -39,13 +41,6 @@ interface Company {
   created_at: string;
   updated_at: string;
   airlines: any | null;
-}
-
-export enum CargoStatus {
-  FORMED = 'formed',
-  ARRIVED_AIRPORT_SENDER = 'arrived_airport_sender',
-  ACCEPTED_AIRPORT_SENDER = 'accepted_airport_sender',
-  ARRIVED_AIRPORT_RECEIVER = 'arrived_airport_receiver'
 }
 
 export interface Cargo {

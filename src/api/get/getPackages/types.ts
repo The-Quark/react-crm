@@ -1,3 +1,5 @@
+import { PackageStatus } from '@/api/enums';
+
 interface Media {
   id: number;
   model_type: string;
@@ -78,27 +80,6 @@ interface Client {
   updated_at: string;
   application_count: number;
   applications_packages_count: number;
-}
-export enum PackageStatus {
-  AWAITING_AIRPORT = 'awaiting_airport',
-  READY_SEND = 'ready_send',
-  READY_DELIVERY = 'ready_delivery',
-  HEADING_CLIENT = 'heading_client',
-  DONE_PACKAGING = 'done_packaging',
-  IN_CARGO = 'in_cargo',
-  AWAITING_CUSTOMS = 'awaiting_customs',
-  READY_ODD = 'ready_odd',
-  HEADING_ODD = 'heading_odd',
-  ARRIVED_ODD = 'arrived_odd',
-  ARRIVED_AIRPORT = 'arrived_airport',
-  ARRIVED_WAREHOUSE = 'arrived_warehouse',
-  ACCEPTED_WAREHOUSE = 'accepted_warehouse',
-  PASSED_CUSTOMS = 'passed_customs',
-  TRANSFERED_COURIER = 'transfered_courier',
-  DELIVERED = 'delivered',
-  REJECT_DAMAGED = 'rejected_damaged',
-  REJECTED_CLIENT = 'rejected_client',
-  REJECT_OTHER = 'rejected_other'
 }
 export interface Package {
   id: number;

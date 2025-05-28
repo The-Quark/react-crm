@@ -1,3 +1,5 @@
+import { TemplateType } from '@/api/enums';
+
 export interface Media {
   id: number;
   model_type: string;
@@ -50,11 +52,6 @@ interface Language {
   updated_at: string;
   crm_language: CrmLanguage;
   file: Media;
-}
-export enum TemplateType {
-  EMAIL = 'email',
-  SMS = 'sms',
-  PRINT_FORM = 'print_form'
 }
 export interface Template {
   id: number;
