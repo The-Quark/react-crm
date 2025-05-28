@@ -1,6 +1,7 @@
 import {
   getCitiesByCountryCode,
   getCountries,
+  getGlobalParameters,
   getGlobalParamsDepartments,
   getGlobalParamsPositions,
   getGlobalParamsSubdivisions,
@@ -95,7 +96,11 @@ export const formSchemaPut = Yup.object().shape({
   driver_details: Yup.string().optional()
 });
 
-const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUserFormValues => {
+const getInitialValues = (
+  isEditMode: boolean,
+  userData: IGetUserByParams,
+  initialCompanyId: number | string
+): IUserFormValues => {
   if (isEditMode && userData?.result) {
     const data = userData.result[0];
     return {
@@ -103,7 +108,7 @@ const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUse
       email: data.email || '',
       status: data.status || UserStatus.ACTIVE,
       birth_date: data.birth_date || '',
-      company_id: data.company_id || '',
+      company_id: data.company_id || initialCompanyId,
       first_name: data.first_name || '',
       last_name: data.last_name || '',
       patronymic: data.patronymic || '',
@@ -129,7 +134,7 @@ const getInitialValues = (isEditMode: boolean, userData: IGetUserByParams): IUse
     email: '',
     status: UserStatus.ACTIVE,
     birth_date: '',
-    company_id: '',
+    company_id: initialCompanyId,
     first_name: '',
     last_name: '',
     patronymic: '',
@@ -156,6 +161,9 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
+  const isAdmin = currentUser?.roles[0].name === 'superadmin';
+  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
   const [searchPositionTerm, setSearchPositionTerm] = useState('');
@@ -176,40 +184,19 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
   });
 
   const {
-    data: departmentsData,
-    isLoading: departmentsLoading,
-    isError: departmentsIsError,
-    error: departmentsError
+    data: companiesData,
+    isLoading: companiesLoading,
+    isError: companiesIsError,
+    error: companiesError
   } = useQuery({
-    queryKey: ['staff-departments'],
-    queryFn: () => getGlobalParamsDepartments(),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
-    data: subdivisionsData,
-    isLoading: subdivisionsLoading,
-    isError: subdivisionsIsError,
-    error: subdivisionsError
-  } = useQuery({
-    queryKey: ['staff-subdivisions'],
-    queryFn: () => getGlobalParamsSubdivisions(),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
-    data: positionsData,
-    isLoading: positionsLoading,
-    isError: positionsIsError,
-    error: positionsError
-  } = useQuery({
-    queryKey: ['staff-positions'],
-    queryFn: () => getGlobalParamsPositions(),
-    staleTime: 60 * 60 * 1000
+    queryKey: ['hrModuleCompany'],
+    queryFn: () => getGlobalParameters(),
+    staleTime: 60 * 60 * 1000,
+    enabled: isAdmin
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, usersData as IGetUserByParams),
+    initialValues: getInitialValues(isEditMode, usersData as IGetUserByParams, initialCompanyId),
     validationSchema: isEditMode ? formSchemaPut : formSchemaPost,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -256,6 +243,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           navigate('/hr-module/couriers/list');
           resetForm();
         }
+        setSearchCompanyTerm('');
         setSearchDepartmentTerm('');
         setSearchSubdivisionTerm('');
         setSearchPositionTerm('');
@@ -266,6 +254,48 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
       setLoading(false);
       setSubmitting(false);
     }
+  });
+
+  const {
+    data: departmentsData,
+    isLoading: departmentsLoading,
+    isError: departmentsIsError,
+    error: departmentsError
+  } = useQuery({
+    queryKey: ['drivers-departments'],
+    queryFn: () =>
+      getGlobalParamsDepartments({
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+      }),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: subdivisionsData,
+    isLoading: subdivisionsLoading,
+    isError: subdivisionsIsError,
+    error: subdivisionsError
+  } = useQuery({
+    queryKey: ['drivers-subdivisions'],
+    queryFn: () =>
+      getGlobalParamsSubdivisions({
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+      }),
+    staleTime: 60 * 60 * 1000
+  });
+
+  const {
+    data: positionsData,
+    isLoading: positionsLoading,
+    isError: positionsIsError,
+    error: positionsError
+  } = useQuery({
+    queryKey: ['drivers-positions'],
+    queryFn: () =>
+      getGlobalParamsPositions({
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+      }),
+    staleTime: 60 * 60 * 1000
   });
 
   const {
@@ -303,7 +333,13 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     }
   }, [formik.values.courier_type]);
 
-  if (subdivisionsLoading || departmentsLoading || positionsLoading || vehiclesLoading) {
+  if (
+    companiesLoading ||
+    subdivisionsLoading ||
+    departmentsLoading ||
+    positionsLoading ||
+    vehiclesLoading
+  ) {
     return <SharedLoading />;
   }
 
@@ -329,6 +365,10 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
 
   if (subdivisionsIsError) {
     return <SharedError error={subdivisionsError} />;
+  }
+
+  if (companiesIsError && isAdmin) {
+    return <SharedError error={companiesError} />;
   }
 
   return (
@@ -446,8 +486,35 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           </div>
 
           <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-
           <SharedInput name="email" label="Email" formik={formik} type="email" />
+
+          {isAdmin && (
+            <SharedAutocomplete
+              label="Company"
+              value={formik.values.company_id ?? ''}
+              options={
+                companiesData?.result?.map((company) => ({
+                  id: company.id,
+                  name: company.company_name
+                })) ?? []
+              }
+              placeholder="Select company"
+              searchPlaceholder="Search company"
+              onChange={(val) => {
+                formik.setFieldValue('company_id', val);
+                formik.setFieldValue('department_id', '');
+                formik.setFieldValue('subdivision_id', '');
+                formik.setFieldValue('position_id', '');
+                setSearchDepartmentTerm('');
+                setSearchSubdivisionTerm('');
+                setSearchPositionTerm('');
+              }}
+              error={formik.errors.company_id as string}
+              touched={formik.touched.company_id}
+              searchTerm={searchCompanyTerm}
+              onSearchTermChange={setSearchCompanyTerm}
+            />
+          )}
 
           <SharedAutocomplete
             label="Department"
@@ -463,6 +530,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             onChange={(val) => {
               formik.setFieldValue('department_id', val);
             }}
+            disabled={!formik.values.company_id}
             error={formik.errors.department_id as string}
             touched={formik.touched.department_id}
             searchTerm={searchDepartmentTerm}
@@ -483,6 +551,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             onChange={(val) => {
               formik.setFieldValue('subdivision_id', val);
             }}
+            disabled={!formik.values.company_id}
             error={formik.errors.subdivision_id as string}
             touched={formik.touched.subdivision_id}
             searchTerm={searchSubdivisionTerm}
@@ -503,6 +572,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             onChange={(val) => {
               formik.setFieldValue('position_id', val);
             }}
+            disabled={!formik.values.company_id}
             error={formik.errors.position_id as string}
             touched={formik.touched.position_id}
             searchTerm={searchPositionTerm}

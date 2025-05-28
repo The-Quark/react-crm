@@ -103,25 +103,41 @@ export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.roles[0].name,
-        id: 'role',
-        header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'delivery_count',
+        header: ({ column }) => <DataGridColumnHeader title="Delivery count" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <div className="badge badge-sm badge-light badge-outline">
-              {info.row.original.roles[0].name}
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">mock</div>
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]'
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'active_delivery_count',
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Active delivery count" column={column} />
+        ),
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">mock</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Courier" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

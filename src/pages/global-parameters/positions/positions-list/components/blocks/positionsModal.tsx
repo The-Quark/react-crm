@@ -67,7 +67,7 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: positionsError
   } = useQuery({
     queryKey: ['formPositions', id],
-    queryFn: () => getGlobalParamsPositions(Number(id)),
+    queryFn: () => getGlobalParamsPositions({ id: Number(id) }),
     enabled: !!id && open
   });
 

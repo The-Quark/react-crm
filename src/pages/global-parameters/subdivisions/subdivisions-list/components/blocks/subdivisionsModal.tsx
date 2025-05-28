@@ -86,7 +86,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: subdivisionsError
   } = useQuery({
     queryKey: ['formSubdivisions', id],
-    queryFn: () => getGlobalParamsSubdivisions(Number(id)),
+    queryFn: () => getGlobalParamsSubdivisions({ id: Number(id) }),
     enabled: !!id && open
   });
 

@@ -86,13 +86,13 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.email,
+        accessorFn: (row) => row?.email,
         id: 'email',
         header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.email}</div>
+            <div className="leading-none text-gray-800 font-normal">{info.row.original?.email}</div>
           </div>
         ),
         meta: {
@@ -117,14 +117,14 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.department?.name,
+        accessorFn: (row) => row?.department?.name,
         id: 'department',
         header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.department?.name}
+              {info.row.original?.department?.name}
             </div>
           </div>
         ),
@@ -133,14 +133,30 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.subdivision?.name,
+        accessorFn: (row) => row?.subdivision?.name,
         id: 'subdivision',
+        header: ({ column }) => <DataGridColumnHeader title="Position" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.subdivision?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.position?.title,
+        id: 'position',
         header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.subdivision?.name}
+              {info.row.original?.position?.title}
             </div>
           </div>
         ),

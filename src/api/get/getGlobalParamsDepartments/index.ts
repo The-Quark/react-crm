@@ -2,12 +2,18 @@ import axios from 'axios';
 import { IGlobalParamsDepartments } from '@/api/get/getGlobalParamsDepartments/types';
 import { GLOBAL_PARAMS_DEPARTMENTS } from '@/api/url';
 
-export const getGlobalParamsDepartments = async (
-  id?: number
-): Promise<IGlobalParamsDepartments> => {
-  return await axios
-    .get<IGlobalParamsDepartments>(
-      id ? `${GLOBAL_PARAMS_DEPARTMENTS}?id=${id}` : GLOBAL_PARAMS_DEPARTMENTS
-    )
-    .then((res) => res.data);
+export const getGlobalParamsDepartments = async (params?: {
+  id?: number;
+  company_id?: number;
+}): Promise<IGlobalParamsDepartments> => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.id) queryParams.append('id', params.id.toString());
+  if (params?.company_id) queryParams.append('company_id', params.company_id.toString());
+
+  const url = queryParams.toString()
+    ? `${GLOBAL_PARAMS_DEPARTMENTS}?${queryParams}`
+    : GLOBAL_PARAMS_DEPARTMENTS;
+
+  return await axios.get<IGlobalParamsDepartments>(url).then((res) => res.data);
 };

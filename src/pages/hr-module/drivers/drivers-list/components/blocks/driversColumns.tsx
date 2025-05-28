@@ -71,6 +71,21 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
+        accessorFn: (row) => row.phone,
+        id: 'phone',
+        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row?.license_category,
         id: 'license category',
         header: ({ column }) => <DataGridColumnHeader title="License category" column={column} />,
@@ -88,21 +103,6 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.phone,
-        id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.vehicle?.plate_number,
         id: 'plate number',
         header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
@@ -112,6 +112,38 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
             <div className="leading-none text-gray-800 font-normal">
               {info.row.original.vehicle?.plate_number}
             </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'delivery_count',
+        header: ({ column }) => <DataGridColumnHeader title="Delivery count" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">mock</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'active_delivery_count',
+        header: ({ column }) => (
+          <DataGridColumnHeader title="Active delivery count" column={column} />
+        ),
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">mock</div>
           </div>
         ),
         meta: {

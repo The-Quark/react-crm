@@ -67,7 +67,7 @@ export const DepartmentsModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: departmentsError
   } = useQuery({
     queryKey: ['formDepartments', id],
-    queryFn: () => getGlobalParamsDepartments(Number(id)),
+    queryFn: () => getGlobalParamsDepartments({ id: Number(id) }),
     enabled: !!id && open
   });
 
