@@ -370,7 +370,14 @@ export const cargoStatusOptions = [
   { id: 1, name: 'Formed', value: CargoStatus.FORMED },
   { id: 2, name: 'Arrived at Sender Airport', value: CargoStatus.ARRIVED_AIRPORT_SENDER },
   { id: 3, name: 'Accepted at Sender Airport', value: CargoStatus.ACCEPTED_AIRPORT_SENDER },
-  { id: 4, name: 'Arrived at Receiver Airport', value: CargoStatus.ARRIVED_AIRPORT_RECEIVER }
+  { id: 4, name: 'Arrived at Receiver Airport', value: CargoStatus.ARRIVED_AIRPORT_RECEIVER },
+  {
+    id: 5,
+    name: 'Awaiting Accept Airport Sender',
+    value: CargoStatus.AWAITING_ACCEPT_AIRPORT_SENDER
+  },
+  { id: 6, name: 'Accepted TSW', value: CargoStatus.ACCEPTED_TSW },
+  { id: 7, name: 'Transferred TSW', value: CargoStatus.TRANSFERRED_TSW }
 ];
 
 export const templateTypesOptions = [

@@ -75,7 +75,10 @@ export enum CargoStatus {
   FORMED = 'formed',
   ARRIVED_AIRPORT_SENDER = 'arrived_airport_sender',
   ACCEPTED_AIRPORT_SENDER = 'accepted_airport_sender',
-  ARRIVED_AIRPORT_RECEIVER = 'arrived_airport_receiver'
+  ARRIVED_AIRPORT_RECEIVER = 'arrived_airport_receiver',
+  AWAITING_ACCEPT_AIRPORT_SENDER = 'awaiting_accept_airport_sender',
+  ACCEPTED_TSW = 'accepted_tsw',
+  TRANSFERRED_TSW = 'transferred_tsw'
 }
 
 export enum PackageStatus {

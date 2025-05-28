@@ -15,6 +15,7 @@ interface Props<T> {
   options: { label: string; value: string | number }[];
   placeholder?: string;
   isClearable?: boolean;
+  disabled?: boolean;
 }
 
 export const SharedSelect = <T,>({
@@ -23,7 +24,8 @@ export const SharedSelect = <T,>({
   formik,
   options,
   placeholder = 'Select...',
-  isClearable = false
+  isClearable = false,
+  disabled = false
 }: Props<T>) => {
   const fieldName = name.toString();
   const currentValue = formik.values[name];
@@ -35,6 +37,7 @@ export const SharedSelect = <T,>({
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <Select
+          disabled={disabled}
           value={currentValue === null || currentValue === undefined ? '' : String(currentValue)}
           onValueChange={(value) => {
             if (isClearable && value === CLEAR_OPTION_VALUE) {

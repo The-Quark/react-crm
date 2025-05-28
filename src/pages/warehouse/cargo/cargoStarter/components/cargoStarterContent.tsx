@@ -291,6 +291,7 @@ export const CargoStarterContent = () => {
             name="status"
             label="Status"
             formik={formik}
+            disabled={true}
             options={cargoStatusOptions.map((status) => ({
               label: status.name,
               value: status.value
