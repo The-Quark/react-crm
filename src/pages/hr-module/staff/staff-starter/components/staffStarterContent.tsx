@@ -218,6 +218,7 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
           navigate('/hr-module/staff/list');
           resetForm();
         }
+        setSearchCompanyTerm('');
         setSearchDepartmentTerm('');
         setSearchSubdivisionTerm('');
         setSearchPositionTerm('');
