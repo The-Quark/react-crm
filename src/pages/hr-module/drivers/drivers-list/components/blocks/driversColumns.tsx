@@ -5,6 +5,7 @@ import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
 import { DriversMenuOptions } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
@@ -119,45 +120,13 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.roles[0].name,
-        id: 'role',
-        header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <div className="badge badge-sm badge-light badge-outline">
-              {info.row.original.roles[0].name}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
-        accessorFn: (row) => row.status,
-        id: 'user status',
-        header: ({ column }) => <DataGridColumnHeader title="User status" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
         accessorFn: (row) => row?.driver_status,
         id: 'driver status',
         header: ({ column }) => <DataGridColumnHeader title="Driver status" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original?.driver_status}
-            </div>
+            <SharedStatusBadge status={info.row.original?.driver_status ?? ''} />
           </div>
         ),
         meta: {

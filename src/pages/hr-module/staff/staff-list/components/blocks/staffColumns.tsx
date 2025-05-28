@@ -5,6 +5,7 @@ import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
 import { StaffMenuOptions } from '@/pages/hr-module/staff/staff-list/components/blocks/staffMenuOptions.tsx';
 import { toAbsoluteUrl } from '@/utils';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
@@ -70,38 +71,6 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
-        accessorFn: (row) => row.roles[0].name,
-        id: 'role',
-        header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <div className="badge badge-sm badge-light badge-outline">
-              {info.row.original.roles[0].name}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
-        accessorFn: (row) => row.company?.company_name,
-        id: 'company',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.company?.company_name}
-            </div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]'
-        }
-      },
-      {
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
@@ -132,13 +101,61 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         }
       },
       {
+        accessorFn: (row) => row.company?.company_name,
+        id: 'company',
+        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.company?.company_name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.department?.name,
+        id: 'department',
+        header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.department?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.subdivision?.name,
+        id: 'subdivision',
+        header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.subdivision?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
+          <div className="flex flex-wrap gap-2.5 mb-2">
+            <SharedStatusBadge status={info.row.original.status} />
           </div>
         ),
         meta: {

@@ -1,14 +1,47 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useQuery } from '@tanstack/react-query';
+import { getGlobalParameters } from '@/api';
+import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
 
-export const CouriersToolbar: FC = () => {
+interface Props {
+  initialCompanyId?: number;
+  onCompanyChange: (companyId: number | null) => void;
+}
+
+export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }) => {
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManageSettings = has('manage users') || currentUser?.roles[0].name === 'superadmin';
-  const storageHiddenColumnsId = 'couriers-hidden-columns';
+  const isSuperAdmin = currentUser?.roles[0].name === 'superadmin';
+  const isViewer = currentUser?.roles[0].name === 'viewer';
+  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+
+  const {
+    data: companyData,
+    isLoading: companyLoading,
+    isError: companyIsError,
+    error: companyError
+  } = useQuery({
+    queryKey: ['hrModuleCompany'],
+    queryFn: () => getGlobalParameters(),
+    staleTime: 1000 * 60 * 5,
+    enabled: isViewer || isSuperAdmin
+  });
+
+  const handleCompanyChange = (val: number) => {
+    setSelectedCompanyId(val);
+    onCompanyChange(val);
+  };
+
+  if (companyIsError) {
+    return <SharedError error={companyError} />;
+  }
+
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Couriers</h3>
@@ -17,6 +50,26 @@ export const CouriersToolbar: FC = () => {
           <a href="/hr-module/couriers/starter" className="btn btn-sm btn-primary">
             New courier
           </a>
+        )}
+        {(isViewer || isSuperAdmin) && (
+          <div className="w-64">
+            <SharedAutocompleteBase
+              value={selectedCompanyId ?? ''}
+              options={
+                companyData?.result.map((item) => ({
+                  id: item.id,
+                  name: item.company_name
+                })) ?? []
+              }
+              placeholder="Select company"
+              searchPlaceholder="Search company"
+              onChange={handleCompanyChange}
+              onSearchTermChange={setSearchCompanyTerm}
+              searchTerm={searchCompanyTerm}
+              loading={companyLoading}
+              size="sm"
+            />
+          </div>
         )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">

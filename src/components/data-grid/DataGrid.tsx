@@ -61,6 +61,7 @@ export interface TDataGridProps<TData extends object> {
 export const DataGrid = <TData extends object>(props: TDataGridProps<TData>) => {
   return (
     <DataGridProvider {...props}>
+      {props.toolbar}
       <DataGridInner />
     </DataGridProvider>
   );

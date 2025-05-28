@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByParams } from '@/api';
@@ -10,9 +9,8 @@ import { useState } from 'react';
 
 export const StaffListContent = () => {
   const { currentUser } = useAuthContext();
-  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(
-    currentUser?.company_id ? Number(currentUser.company_id) : undefined
-  );
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['staff', selectedCompanyId],
@@ -22,14 +20,10 @@ export const StaffListContent = () => {
     staleTime: 1000 * 30,
     refetchInterval: 1000 * 60,
     refetchIntervalInBackground: true,
-    enabled: selectedCompanyId !== null
+    enabled: selectedCompanyId !== undefined
   });
 
   const columns = useStaffColumns();
-
-  const handleCompanyChange = (companyId: number | null) => {
-    setSelectedCompanyId(companyId === null ? undefined : companyId);
-  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -37,19 +31,23 @@ export const StaffListContent = () => {
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<StaffToolbar onCompanyChange={handleCompanyChange} />}
-          layout={{ card: true }}
-        />
-      )}
+      <DataGrid
+        columns={columns}
+        data={data?.result}
+        rowSelection={true}
+        pagination={{ size: 15 }}
+        sorting={[{ id: 'id', desc: false }]}
+        toolbar={
+          <StaffToolbar
+            initialCompanyId={initialCompanyId}
+            onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+          />
+        }
+        layout={{ card: true }}
+        messages={{
+          empty: isLoading && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

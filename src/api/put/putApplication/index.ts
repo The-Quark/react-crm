@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { APPLICATION_URL } from '@/api/url';
-import { ApplicationsStatus } from '@/api/get/getApplications/types.ts';
+import { ApplicationsStatus } from '@/api/enums';
 import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
 import { cleanValues } from '@/lib/helpers.ts';
 

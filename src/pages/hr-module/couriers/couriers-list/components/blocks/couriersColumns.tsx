@@ -5,6 +5,7 @@ import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
 import { CouriersMenuOptions } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
@@ -124,7 +125,7 @@ export const useCouriersColumns = (): ColumnDef<UserModel>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
+            <SharedStatusBadge status={info.row.original?.driver_status ?? ''} />
           </div>
         ),
         meta: {

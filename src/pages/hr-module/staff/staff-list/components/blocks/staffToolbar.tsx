@@ -4,20 +4,22 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
-import { SharedAutocomplete } from '@/partials/sharedUI';
+import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
 
 interface Props {
+  initialCompanyId?: number;
   onCompanyChange: (companyId: number | null) => void;
 }
 
-export const StaffToolbar: FC<Props> = ({ onCompanyChange }) => {
+export const StaffToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }) => {
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManageSettings = has('manage users') || currentUser?.roles[0].name === 'superadmin';
   const isSuperAdmin = currentUser?.roles[0].name === 'superadmin';
+  const isViewer = currentUser?.roles[0].name === 'viewer';
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
-  const storageHiddenColumnsId = 'staff-hidden-columns';
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
 
   const {
     data: companyData,
@@ -25,10 +27,20 @@ export const StaffToolbar: FC<Props> = ({ onCompanyChange }) => {
     isError: companyIsError,
     error: companyError
   } = useQuery({
-    queryKey: ['staffCompany'],
+    queryKey: ['hrModuleCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 2
+    staleTime: 1000 * 60 * 5,
+    enabled: isViewer || isSuperAdmin
   });
+
+  const handleCompanyChange = (val: number) => {
+    setSelectedCompanyId(val);
+    onCompanyChange(val);
+  };
+
+  if (companyIsError) {
+    return <SharedError error={companyError} />;
+  }
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
@@ -39,25 +51,25 @@ export const StaffToolbar: FC<Props> = ({ onCompanyChange }) => {
             New staff
           </a>
         )}
-        {isSuperAdmin && (
-          <SharedAutocomplete
-            label="Company"
-            value={currentUser?.company_id ? Number(currentUser.company_id) : ''}
-            options={
-              companyData?.result.map((item) => ({
-                ...item,
-                name: item.company_name,
-                value: item.id
-              })) ?? []
-            }
-            placeholder="Select company"
-            searchPlaceholder="Search company"
-            onChange={(val) => {
-              onCompanyChange(val ? Number(val) : null);
-            }}
-            searchTerm={searchCompanyTerm}
-            onSearchTermChange={setSearchCompanyTerm}
-          />
+        {(isViewer || isSuperAdmin) && (
+          <div className="w-64">
+            <SharedAutocompleteBase
+              value={selectedCompanyId ?? ''}
+              options={
+                companyData?.result.map((item) => ({
+                  id: item.id,
+                  name: item.company_name
+                })) ?? []
+              }
+              placeholder="Select company"
+              searchPlaceholder="Search company"
+              onChange={handleCompanyChange}
+              onSearchTermChange={setSearchCompanyTerm}
+              searchTerm={searchCompanyTerm}
+              loading={companyLoading}
+              size="sm"
+            />
+          </div>
         )}
         <DataGridColumnVisibility table={table} />
         <div className="relative">
