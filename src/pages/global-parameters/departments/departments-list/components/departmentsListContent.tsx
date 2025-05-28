@@ -5,14 +5,22 @@ import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useDepartmentsColumns } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsColumns.tsx';
 import { DepartmentsToolbar } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsToolbar.tsx';
+import { useAuthContext } from '@/auth';
+import { useState } from 'react';
 
 export const DepartmentsListContent = () => {
+  const { currentUser } = useAuthContext();
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['globalParamsDepartments'],
-    queryFn: () => getGlobalParamsDepartments(),
+    queryKey: ['globalParamsDepartments', selectedCompanyId],
+    queryFn: () => getGlobalParamsDepartments({ company_id: selectedCompanyId }),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
+    enabled: selectedCompanyId !== undefined
   });
+
   const columns = useDepartmentsColumns();
 
   if (isError) {
@@ -28,7 +36,12 @@ export const DepartmentsListContent = () => {
           rowSelection={true}
           pagination={{ size: 15 }}
           sorting={[{ id: 'id', desc: false }]}
-          toolbar={<DepartmentsToolbar />}
+          toolbar={
+            <DepartmentsToolbar
+              initialCompanyId={initialCompanyId}
+              onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+            />
+          }
           layout={{ card: true }}
           messages={{
             empty: isLoading && <SharedLoading simple />

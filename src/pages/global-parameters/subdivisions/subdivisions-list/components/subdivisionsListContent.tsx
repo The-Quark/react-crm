@@ -5,13 +5,20 @@ import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useSubdivisionsColumns } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsColumns.tsx';
 import { SubdivisionToolbar } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsToolbar.tsx';
+import { useAuthContext } from '@/auth';
+import { useState } from 'react';
 
 export const SubdivisionsListContent = () => {
+  const { currentUser } = useAuthContext();
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['globalParamsSubdivisions'],
-    queryFn: () => getGlobalParamsSubdivisions(),
+    queryKey: ['globalParamsSubdivisions', selectedCompanyId],
+    queryFn: () => getGlobalParamsSubdivisions({ company_id: selectedCompanyId }),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
+    enabled: selectedCompanyId !== undefined
   });
 
   const columns = useSubdivisionsColumns();
@@ -28,7 +35,12 @@ export const SubdivisionsListContent = () => {
         rowSelection={true}
         pagination={{ size: 15 }}
         sorting={[{ id: 'id', desc: false }]}
-        toolbar={<SubdivisionToolbar />}
+        toolbar={
+          <SubdivisionToolbar
+            initialCompanyId={initialCompanyId}
+            onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+          />
+        }
         layout={{ card: true }}
         messages={{
           empty: isLoading && <SharedLoading simple />

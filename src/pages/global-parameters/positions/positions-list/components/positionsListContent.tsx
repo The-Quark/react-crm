@@ -5,13 +5,20 @@ import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { usePositionsColumns } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsColumns.tsx';
 import { PositionsToolbar } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsToolbar.tsx';
+import { useAuthContext } from '@/auth';
+import { useState } from 'react';
 
 export const PositionsListContent = () => {
+  const { currentUser } = useAuthContext();
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['globalParamsPositions'],
-    queryFn: () => getGlobalParamsPositions(),
+    queryKey: ['globalParamsPositions', selectedCompanyId],
+    queryFn: () => getGlobalParamsPositions({ company_id: selectedCompanyId }),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
+    enabled: selectedCompanyId !== undefined
   });
 
   const columns = usePositionsColumns();
@@ -28,7 +35,12 @@ export const PositionsListContent = () => {
         rowSelection={true}
         pagination={{ size: 15 }}
         sorting={[{ id: 'id', desc: false }]}
-        toolbar={<PositionsToolbar />}
+        toolbar={
+          <PositionsToolbar
+            initialCompanyId={initialCompanyId}
+            onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+          />
+        }
         layout={{ card: true }}
         messages={{
           empty: isLoading && <SharedLoading simple />
