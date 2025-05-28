@@ -22,19 +22,18 @@ export const DepartmentsListContent = () => {
   return (
     <Container>
       <div className="grid gap-5 lg:gap-7.5">
-        {isLoading ? (
-          <SharedLoading />
-        ) : (
-          <DataGrid
-            columns={columns}
-            data={data?.result}
-            rowSelection={true}
-            pagination={{ size: 15 }}
-            sorting={[{ id: 'id', desc: false }]}
-            toolbar={<DepartmentsToolbar />}
-            layout={{ card: true }}
-          />
-        )}
+        <DataGrid
+          columns={columns}
+          data={data?.result}
+          rowSelection={true}
+          pagination={{ size: 15 }}
+          sorting={[{ id: 'id', desc: false }]}
+          toolbar={<DepartmentsToolbar />}
+          layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading simple />
+          }}
+        />
       </div>
     </Container>
   );

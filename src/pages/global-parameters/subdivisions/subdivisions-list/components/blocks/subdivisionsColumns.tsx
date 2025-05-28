@@ -6,6 +6,7 @@ import { Subdivision } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
 import { SubdivisionsMenuOptions } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsMenuOprions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
   const { isRTL } = useLanguage();
@@ -31,7 +32,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -39,7 +40,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[150px]',
+          headerClassName: 'min-w-[200px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },
@@ -56,7 +57,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]'
+          headerClassName: 'min-w-[150px]'
         }
       },
       {
@@ -98,13 +99,11 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[10px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },

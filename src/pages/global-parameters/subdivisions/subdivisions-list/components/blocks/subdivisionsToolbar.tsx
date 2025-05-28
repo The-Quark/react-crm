@@ -34,7 +34,7 @@ export const SubdivisionToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search name"
+            placeholder="Search subdivision"
             className="input input-sm ps-8"
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}

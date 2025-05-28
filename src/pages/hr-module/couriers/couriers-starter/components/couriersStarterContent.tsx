@@ -35,6 +35,7 @@ import {
   mockCourierTypeOptions,
   mockDriverStatusOptions,
   mockGenderOptions,
+  mockLicenseCategoryOptions,
   mockUserStatusOptions
 } from '@/lib/mocks.ts';
 import { format } from 'date-fns';
@@ -122,7 +123,7 @@ const getInitialValues = (
       city_id: String(data.location?.id) || '',
       country_id: String(data.location?.country_id) || '',
       role: 'courier',
-      license_category: data.license_category || '',
+      license_category: data.license_category || 'B',
       courier_type: data.courier_type || UserCourierType.AUTO,
       vehicle_id: data.vehicle_id || '',
       driver_status: data.driver_status || UserDriverStatus.AVAILABLE,
@@ -149,7 +150,7 @@ const getInitialValues = (
     country_id: '',
     courier_type: UserCourierType.AUTO,
     role: 'courier',
-    license_category: '',
+    license_category: 'B',
     vehicle_id: '',
     driver_status: UserDriverStatus.AVAILABLE,
     driver_details: ''
@@ -620,8 +621,15 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
               onSearchTermChange={setSearchVehicleTerm}
             />
           )}
-
-          <SharedInput name="license_category" label="License category" formik={formik} />
+          <SharedSelect
+            name="license_category"
+            label="License category"
+            formik={formik}
+            options={mockLicenseCategoryOptions.map((opt) => ({
+              label: opt.name,
+              value: opt.value
+            }))}
+          />
           <SharedTextArea name="driver_details" label="Details" formik={formik} />
           {!isEditMode && (
             <SharedInput name="password" label="Password" formik={formik} type="password" />

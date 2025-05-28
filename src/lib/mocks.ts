@@ -440,3 +440,22 @@ export const mockApplicationsStatusOptions = [
   { id: 3, name: 'Declined', value: ApplicationsStatus.DECLINED },
   { id: 4, name: 'Running', value: ApplicationsStatus.RUNNING }
 ];
+
+export const mockLicenseCategoryOptions = [
+  { id: 1, name: 'A — Motorcycles', value: 'A' },
+  { id: 2, name: 'A1 — Light motorcycles', value: 'A1' },
+  { id: 3, name: 'B — Passenger cars', value: 'B' },
+  { id: 4, name: 'B1 — Tricycles and quadricycles', value: 'B1' },
+  { id: 5, name: 'C — Trucks', value: 'C' },
+  { id: 6, name: 'C1 — Medium trucks (up to 7.5 tons)', value: 'C1' },
+  { id: 7, name: 'D — Buses', value: 'D' },
+  { id: 8, name: 'D1 — Minibuses (up to 16 seats)', value: 'D1' },
+  { id: 9, name: 'BE — Passenger cars with trailer', value: 'BE' },
+  { id: 10, name: 'C1E — Medium trucks with trailer', value: 'C1E' },
+  { id: 11, name: 'CE — Trucks with trailer', value: 'CE' },
+  { id: 12, name: 'D1E — Minibuses with trailer', value: 'D1E' },
+  { id: 13, name: 'DE — Buses with trailer', value: 'DE' },
+  { id: 14, name: 'M — Mopeds', value: 'M' },
+  { id: 15, name: 'Tm — Trams', value: 'Tm' },
+  { id: 16, name: 'Tb — Trolleybuses', value: 'Tb' }
+];

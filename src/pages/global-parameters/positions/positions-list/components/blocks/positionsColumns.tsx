@@ -6,6 +6,7 @@ import { Position } from '@/api/get/getGlobalParamsPositions/types.ts';
 import { PositionsMenuOptions } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsMenuOprions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const usePositionsColumns = (): ColumnDef<Position>[] => {
   const { isRTL } = useLanguage();
@@ -31,7 +32,7 @@ export const usePositionsColumns = (): ColumnDef<Position>[] => {
       {
         accessorFn: (row) => row.title,
         id: 'title',
-        header: ({ column }) => <DataGridColumnHeader title="Title" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Position" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -56,7 +57,7 @@ export const usePositionsColumns = (): ColumnDef<Position>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]'
+          headerClassName: 'min-w-[200px]'
         }
       },
       {
@@ -66,13 +67,11 @@ export const usePositionsColumns = (): ColumnDef<Position>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[10px]',
+          headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
         }
       },

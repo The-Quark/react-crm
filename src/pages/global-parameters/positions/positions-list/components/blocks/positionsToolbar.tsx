@@ -34,7 +34,7 @@ export const PositionsToolbar: FC = () => {
           />
           <input
             type="text"
-            placeholder="Search title"
+            placeholder="Search position"
             className="input input-sm ps-8"
             value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn('title')?.setFilterValue(e.target.value)}

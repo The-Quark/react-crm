@@ -4,7 +4,7 @@ import { UserStatus, UserDriverStatus } from '@/api/enums';
 type StatusType = UserStatus | UserDriverStatus | string;
 
 interface StatusBadgeProps {
-  status: StatusType;
+  status: StatusType | boolean;
   className?: string;
 }
 
@@ -38,19 +38,34 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Available',
       color: 'badge-success'
     },
+    true: {
+      label: 'Active',
+      color: 'badge-success'
+    },
+    false: {
+      label: 'Inactive',
+      color: 'badge-danger'
+    },
     unknown: {
       label: String(status),
       color: 'badge-default'
     }
   };
 
-  const normalizedStatus = Object.values(UserStatus).includes(status as UserStatus)
-    ? (status as UserStatus)
-    : Object.values(UserDriverStatus).includes(status as UserDriverStatus)
-      ? (status as UserDriverStatus)
-      : 'unknown';
+  let normalizedStatus: StatusType | 'true' | 'false';
 
-  const config = statusConfig[normalizedStatus] || statusConfig.unknown;
+  if (typeof status === 'boolean') {
+    normalizedStatus = status ? 'true' : 'false';
+  } else {
+    normalizedStatus = Object.values(UserStatus).includes(status as UserStatus)
+      ? (status as UserStatus)
+      : Object.values(UserDriverStatus).includes(status as UserDriverStatus)
+        ? (status as UserDriverStatus)
+        : 'unknown';
+  }
+
+  const config =
+    statusConfig[normalizedStatus as keyof typeof statusConfig] || statusConfig.unknown;
 
   return (
     <div className={cn('badge badge-sm badge-outline', config.color, className)}>

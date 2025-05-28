@@ -25,7 +25,7 @@ export const CompaniesToolbar = () => {
           />
           <input
             type="text"
-            placeholder="Search Company"
+            placeholder="Search company"
             className="input input-sm ps-8"
             value={(table.getColumn('company name')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>

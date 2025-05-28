@@ -31,7 +31,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { mockDriverStatusOptions, mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
+import {
+  mockDriverStatusOptions,
+  mockGenderOptions,
+  mockLicenseCategoryOptions,
+  mockUserStatusOptions
+} from '@/lib/mocks.ts';
 import { format } from 'date-fns';
 import { IGetUserByParams } from '@/api/get/getUserByParams/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
@@ -115,7 +120,7 @@ const getInitialValues = (
       city_id: String(data.location?.id) || '',
       country_id: String(data.location?.country_id) || '',
       role: 'driver',
-      license_category: data.license_category || '',
+      license_category: data.license_category || 'B',
       vehicle_id: data.vehicle_id || '',
       driver_status: data.driver_status || UserDriverStatus.AVAILABLE,
       driver_details: data.driver_details || ''
@@ -140,7 +145,7 @@ const getInitialValues = (
     city_id: '',
     country_id: '',
     role: 'driver',
-    license_category: '',
+    license_category: 'B',
     vehicle_id: '',
     driver_status: UserDriverStatus.AVAILABLE,
     driver_details: ''
@@ -588,8 +593,15 @@ export const DriversStarterContent: FC<Props> = ({ isEditMode, usersData, userId
             searchTerm={searchVehicleTerm}
             onSearchTermChange={setSearchVehicleTerm}
           />
-
-          <SharedInput name="license_category" label="License category" formik={formik} />
+          <SharedSelect
+            name="license_category"
+            label="License category"
+            formik={formik}
+            options={mockLicenseCategoryOptions.map((opt) => ({
+              label: opt.name,
+              value: opt.value
+            }))}
+          />
           <SharedTextArea name="driver_details" label="Details" formik={formik} />
           {!isEditMode && (
             <SharedInput name="password" label="Password" formik={formik} type="password" />

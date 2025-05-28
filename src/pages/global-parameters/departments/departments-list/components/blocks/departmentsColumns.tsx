@@ -6,6 +6,7 @@ import { Department } from '@/api/get/getGlobalParamsDepartments/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DepartmentsMenuOptions } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
   const { isRTL } = useLanguage();
@@ -58,7 +59,22 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
           </div>
         ),
         meta: {
-          headerClassName: 'min-w-[100px]'
+          headerClassName: 'min-w-[200px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.is_active,
+        id: 'is active',
+        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-2.5">
+            <SharedStatusBadge status={info.row.original.is_active} />
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
