@@ -124,7 +124,7 @@ export const SharedInput = <T,>({
         {type === 'password' ? (
           <label className="input w-full">
             <input
-              className="input w-full"
+              className="w-full"
               autoComplete="off"
               type={showPassword ? 'text' : 'password'}
               placeholder={label}

@@ -1,7 +1,9 @@
 import Menu from './components/menu';
+import System from './components/system';
 
 const ru = {
-  ...Menu
+  ...Menu,
+  ...System
 };
 
 export default ru;

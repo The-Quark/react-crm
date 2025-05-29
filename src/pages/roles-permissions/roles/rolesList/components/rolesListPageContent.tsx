@@ -1,4 +1,3 @@
-import { CardRole } from '@/partials/cards';
 import { getRoles } from '@/api/get/getRoles';
 import { Role } from '@/api/get/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';

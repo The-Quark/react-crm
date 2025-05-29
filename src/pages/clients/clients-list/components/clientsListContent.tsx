@@ -15,12 +15,14 @@ export const ClientsListContent = () => {
   const [clientType, setClientType] = useState<ClientType>('individual');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+
   const columnsIndividual = useClientsListIndividualColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
     }
   });
+
   const columnsLegal = useClientsListLegalColumns({
     onRowClick: (id) => {
       setSelectedId(id);
@@ -44,21 +46,20 @@ export const ClientsListContent = () => {
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <div className="grid gap-5 lg:gap-7.5">
-          <DataGrid
-            columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
-            data={isLoading ? [] : data?.result}
-            rowSelection={true}
-            pagination={{ size: 15 }}
-            sorting={[{ id: 'id', desc: false }]}
-            toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
-            layout={{ card: true }}
-          />
-        </div>
-      )}
+      <div className="grid gap-5 lg:gap-7.5">
+        <DataGrid
+          columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
+          data={isLoading ? [] : data?.result}
+          rowSelection={true}
+          pagination={{ size: 15 }}
+          sorting={[{ id: 'id', desc: false }]}
+          toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
+          layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading simple />
+          }}
+        />
+      </div>
       <ClientsListProfileModal
         open={isModalOpen}
         id={selectedId}

@@ -18,7 +18,7 @@ interface SharedAutocompleteProps {
   options: Option[];
   placeholder?: string;
   searchPlaceholder?: string;
-  onChange: (value: number) => void;
+  onChange: (value: number | string) => void; // Изменено для поддержки строки
   error?: string;
   touched?: boolean;
   searchTerm: string;
@@ -28,6 +28,8 @@ interface SharedAutocompleteProps {
   loadingText?: string;
   errorText?: string;
   emptyText?: string;
+  clearable?: boolean;
+  clearText?: string;
 }
 
 const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
@@ -45,7 +47,9 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   loading = false,
   loadingText = 'Loading...',
   errorText,
-  emptyText = 'No options available'
+  emptyText = 'No options available',
+  clearable = true,
+  clearText = 'Clear selection'
 }) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
@@ -59,7 +63,11 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
 
   const handleValueChange = useCallback(
     (val: string) => {
-      onChange(Number(val));
+      if (val === '__clear__') {
+        onChange('');
+      } else {
+        onChange(Number(val));
+      }
     },
     [onChange]
   );
@@ -74,7 +82,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   const filteredOptions = useMemo(() => {
     if (!debouncedSearchTerm) return options;
     const term = debouncedSearchTerm.toLowerCase();
-    return options.filter((opt) => opt.name.toLowerCase().includes(term));
+    return options.filter((opt) => opt.name?.toLowerCase().includes(term));
   }, [options, debouncedSearchTerm]);
 
   const renderOptions = useMemo(() => {
@@ -86,16 +94,48 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
       return <div className="p-2 text-center text-sm text-danger">{errorText}</div>;
     }
 
-    if (filteredOptions.length === 0) {
-      return <div className="p-2 text-center text-sm text-muted-foreground">{emptyText}</div>;
+    const optionsToRender = [];
+
+    if (
+      clearable &&
+      value &&
+      (!debouncedSearchTerm || clearText.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+    ) {
+      optionsToRender.push(
+        <SelectItem key="clear" value="__clear__" className="text-muted-foreground italic">
+          {clearText}
+        </SelectItem>
+      );
     }
 
-    return filteredOptions.map((opt) => (
-      <SelectItem key={opt.id} value={opt.id.toString()}>
-        {opt.name}
-      </SelectItem>
-    ));
-  }, [filteredOptions, loading, loadingText, errorText, emptyText]);
+    filteredOptions.forEach((opt) => {
+      optionsToRender.push(
+        <SelectItem key={opt.id} value={opt.id.toString()}>
+          {opt.name}
+        </SelectItem>
+      );
+    });
+
+    if (optionsToRender.length === 0) {
+      optionsToRender.push(
+        <div key="empty" className="p-2 text-center text-sm text-muted-foreground">
+          {emptyText}
+        </div>
+      );
+    }
+
+    return optionsToRender;
+  }, [
+    filteredOptions,
+    loading,
+    loadingText,
+    errorText,
+    emptyText,
+    clearable,
+    value,
+    clearText,
+    debouncedSearchTerm
+  ]);
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

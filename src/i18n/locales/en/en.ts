@@ -1,7 +1,9 @@
 import Menu from './components/menu';
+import System from './components/system';
 
 const en = {
-  ...Menu
+  ...Menu,
+  ...System
 };
 
 export default en;

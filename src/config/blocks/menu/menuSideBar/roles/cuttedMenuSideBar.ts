@@ -207,7 +207,8 @@ export const CuttedMenuSideBar: TMenuConfig = [
   {
     title: 'MENU.MEGAMENU.ROLES_PERMISSIONS',
     icon: 'clipboard',
-    requiredPermissions: ['manage roles']
+    requiredPermissions: ['manage roles'],
+    path: '/roles-permissions/roles/list'
   },
   //view roles and view permissions
   {

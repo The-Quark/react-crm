@@ -5,12 +5,13 @@ import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedRadio,
   SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
@@ -20,11 +21,27 @@ import { useNavigate } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
 
 export const formSchema = Yup.object().shape({
+  first_name: Yup.string().when('client_type', {
+    is: 'individual',
+    then: (schema) => schema.required('First name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
+  last_name: Yup.string().when('client_type', {
+    is: 'individual',
+    then: (schema) => schema.required('Last name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
+  patronymic: Yup.string().optional(),
+  company_name: Yup.string().when('client_type', {
+    is: 'legal',
+    then: (schema) => schema.required('Company name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
   source: Yup.string().required('Source is required'),
-  full_name: Yup.string().required('Full name is required'),
+  client_type: Yup.string().required('Client type is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
-  client_id: Yup.string().optional(),
   email: Yup.string().email('Invalid email address').optional(),
+  client_id: Yup.string().optional(),
   message: Yup.string().optional(),
   status: Yup.string().optional()
 });
@@ -37,6 +54,19 @@ export const ApplicationsStarterContent = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const clientId = localStorage.getItem('clientID') || '';
+
+  const resetClientFields = useCallback(() => {
+    return {
+      first_name: '',
+      last_name: '',
+      patronymic: '',
+      company_name: '',
+      client_type: 'individual',
+      phone: '',
+      email: '',
+      source: ''
+    };
+  }, []);
 
   const {
     data: sourcesData,
@@ -71,12 +101,19 @@ export const ApplicationsStarterContent = () => {
     enabled: isEditMode
   });
 
-  const initialValues: IApplicationPostFormValues & { status?: ApplicationsStatus } = {
+  const initialValues: IApplicationPostFormValues & {
+    status?: ApplicationsStatus;
+    company_name?: string;
+  } = {
     email: '',
     phone: '',
     message: '',
     source: '',
-    full_name: '',
+    first_name: '',
+    last_name: '',
+    patronymic: '',
+    company_name: '',
+    client_type: 'individual',
     client_id: clientId,
     ...(isEditMode && { status: 'new' as unknown as ApplicationsStatus })
   };
@@ -123,17 +160,37 @@ export const ApplicationsStarterContent = () => {
     enabled: !!formik.values.client_id && !isEditMode
   });
 
+  const handleClientChange = useCallback(
+    (val: string | number | null) => {
+      formik.setFieldValue('client_id', val ?? '');
+
+      if (val === null || val === '') {
+        const resetFields = resetClientFields();
+        Object.entries(resetFields).forEach(([field, value]) => {
+          formik.setFieldValue(field, value);
+        });
+        formik.setFieldValue('company_name', '');
+      }
+    },
+    [formik, resetClientFields]
+  );
+
   useEffect(() => {
-    if (clientData?.result?.[0] && !isEditMode) {
+    if (clientData?.result?.[0] && !isEditMode && formik.values.client_id) {
       const client = clientData.result[0];
       formik.setValues((prevValues) => ({
         ...prevValues,
-        phone: client.phone || prevValues.phone,
-        email: client.email || prevValues.email,
-        source: client.source?.code || prevValues.source
+        first_name: client.first_name || '',
+        last_name: client.last_name || '',
+        patronymic: client.patronymic || '',
+        company_name: client.company_name || '', // Заполняем название компании
+        client_type: client.type || 'individual',
+        phone: client.phone || '',
+        email: client.email || '',
+        source: client.source?.code || ''
       }));
     }
-  }, [clientData, isEditMode]);
+  }, [clientData, isEditMode, formik]);
 
   useEffect(() => {
     if (isEditMode && applicationData?.result?.[0]) {
@@ -143,7 +200,11 @@ export const ApplicationsStarterContent = () => {
         phone: appData.phone,
         message: appData.message ?? '',
         source: String(appData.source?.code ?? 'insta'),
-        full_name: appData.full_name,
+        first_name: appData.first_name,
+        last_name: appData.last_name,
+        patronymic: appData.patronymic,
+        company_name: appData.company_name ?? '',
+        client_type: appData.client_type ?? 'individual',
         client_id: appData.client_id ?? '',
         status: appData.status as ApplicationsStatus
       });
@@ -152,7 +213,10 @@ export const ApplicationsStarterContent = () => {
     }
   }, [isEditMode, applicationData]);
 
-  if (sourcesLoading || clientsLoading || (isEditMode && applicationLoading)) {
+  const isLoading =
+    sourcesLoading || clientsLoading || (isEditMode && applicationLoading) || clientLoading;
+
+  if (isLoading) {
     return <SharedLoading />;
   }
 
@@ -194,17 +258,37 @@ export const ApplicationsStarterContent = () => {
             }
             placeholder="Select client"
             searchPlaceholder="Search client"
-            onChange={(val) => {
-              formik.setFieldValue('client_id', val);
-            }}
+            onChange={handleClientChange}
             error={formik.errors.client_id as string}
             touched={formik.touched.client_id}
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
+            loading={clientsLoading || clientLoading}
           />
 
-          <SharedInput name="full_name" label="Full name" formik={formik} />
+          <SharedRadio
+            name="client_type"
+            label="Client Type"
+            formik={formik}
+            options={[
+              { value: 'individual', label: 'Individual' },
+              { value: 'legal', label: 'Legal' }
+            ]}
+            disabled={!!formik.values.client_id}
+          />
+
+          {formik.values.client_type === 'legal' ? (
+            <SharedInput name="company_name" label="Company name" formik={formik} />
+          ) : (
+            <>
+              <SharedInput name="first_name" label="First name" formik={formik} />
+              <SharedInput name="last_name" label="Last name" formik={formik} />
+              <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+            </>
+          )}
+
           <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+
           <SharedSelect
             name="source"
             label="Source"
@@ -217,6 +301,7 @@ export const ApplicationsStarterContent = () => {
 
           <SharedInput name="email" label="Email" formik={formik} type="email" />
           <SharedTextArea name="message" label="Message" formik={formik} />
+
           {isEditMode && (
             <SharedSelect
               name="status"

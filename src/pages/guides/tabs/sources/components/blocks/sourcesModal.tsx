@@ -35,13 +35,13 @@ const getInitialValues = (isEditMode: boolean, data: SourceResponse): ISourceFor
     return {
       name: data.result[0].name || '',
       code: data.result[0].code || '',
-      is_active: data.result[0].is_active || false
+      is_active: data.result[0].is_active || true
     };
   }
   return {
     code: '',
     name: '',
-    is_active: false
+    is_active: true
   };
 };
 
@@ -114,28 +114,29 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="code" label="Source code" formik={formik} />
-
-              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Active</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <div className="flex items-center gap-5">
-                    <label className="checkbox-group flex items-center gap-2">
-                      <input
-                        className="checkbox"
-                        type="checkbox"
-                        name="is_active"
-                        checked={formik.values.is_active}
-                        onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                      />
-                    </label>
+              {!!id && (
+                <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
+                  <label className="form-label max-w-56">Active</label>
+                  <div className="flex columns-1 w-full flex-wrap">
+                    <div className="flex items-center gap-5">
+                      <label className="checkbox-group flex items-center gap-2">
+                        <input
+                          className="checkbox"
+                          type="checkbox"
+                          name="is_active"
+                          checked={formik.values.is_active}
+                          onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
+                        />
+                      </label>
+                    </div>
+                    {formik.touched.is_active && formik.errors.is_active && (
+                      <span role="alert" className="text-danger text-xs mt-1">
+                        {formik.errors.is_active}
+                      </span>
+                    )}
                   </div>
-                  {formik.touched.is_active && formik.errors.is_active && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.is_active}
-                    </span>
-                  )}
                 </div>
-              </div>
+              )}
 
               <div className="flex justify-end">
                 <button
