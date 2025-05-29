@@ -37,20 +37,30 @@ export const useApplicationsColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.full_name,
-        id: 'full name',
-        header: ({ column }) => <DataGridColumnHeader title="Title" column={column} />,
+        accessorFn: (row) =>
+          row.client_type === 'legal'
+            ? row.company_name
+            : `${row.first_name} ${row.last_name} ${row.patronymic || ''}`,
+        id: 'client_name',
+        header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div
-              className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
-              onClick={() => onRowClick(info.row.original.id)}
-            >
-              {info.row.original.full_name}
+        cell: (info) => {
+          const displayName =
+            info.row.original.client_type === 'legal'
+              ? info.row.original.company_name
+              : `${info.row.original.first_name} ${info.row.original.last_name} ${info.row.original.patronymic || ''}`;
+
+          return (
+            <div className="flex flex-col gap-0.5">
+              <div
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+                onClick={() => onRowClick(info.row.original.id)}
+              >
+                {displayName?.trim()}
+              </div>
             </div>
-          </div>
-        ),
+          );
+        },
         meta: {
           headerClassName: 'min-w-[200px]',
           cellClassName: 'text-gray-700 font-normal'

@@ -218,7 +218,13 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             label="Application"
             value={formik.values.application_id}
             options={
-              applicationsData?.result?.map((app) => ({ id: app.id, name: app.full_name })) ?? []
+              (applicationsData?.result?.map((app) => ({
+                id: app.id,
+                name:
+                  app.client_type === 'legal'
+                    ? app.company_name || ''
+                    : `${app.first_name} ${app.last_name} ${app.patronymic || ''}`.trim() || ''
+              })) as { id: number; name: string }[]) ?? []
             }
             placeholder="Select application"
             searchPlaceholder="Search application"

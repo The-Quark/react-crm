@@ -55,8 +55,14 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Full name</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].full_name}</div>
+                  <label className="form-label max-w-56">
+                    {data.result[0].client_type === 'legal' ? 'Company name' : 'Full name'}
+                  </label>
+                  <div className="flex columns-1 w-full flex-wrap">
+                    {data.result[0].client_type === 'legal'
+                      ? data.result[0].company_name
+                      : `${data.result[0].first_name} ${data.result[0].last_name} ${data.result[0].patronymic || ''}`.trim()}
+                  </div>
                 </div>
 
                 <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
