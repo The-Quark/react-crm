@@ -8,6 +8,7 @@ import { deleteAirline } from '@/api';
 import AirlineModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
   const { isRTL } = useLanguage();
@@ -82,9 +83,7 @@ export const useAirlinesColumns = (): ColumnDef<Airline>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

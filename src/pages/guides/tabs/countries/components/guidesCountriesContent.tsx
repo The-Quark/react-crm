@@ -10,8 +10,6 @@ export const GuidesCountriesContent = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['guidesCountries'],
     queryFn: () => getCountries('iso2,phone_code,currency,timezones'),
-    retry: false,
-    refetchOnWindowFocus: false,
     staleTime: Infinity
   });
 
@@ -23,19 +21,18 @@ export const GuidesCountriesContent = () => {
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.data}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<CountriesToolbar />}
-          layout={{ card: true }}
-        />
-      )}
+      <DataGrid
+        columns={columns}
+        data={data?.data}
+        rowSelection={true}
+        pagination={{ size: 15 }}
+        sorting={[{ id: 'id', desc: false }]}
+        toolbar={<CountriesToolbar />}
+        layout={{ card: true }}
+        messages={{
+          empty: isLoading && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

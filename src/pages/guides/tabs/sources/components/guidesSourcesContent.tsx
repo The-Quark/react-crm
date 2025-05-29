@@ -22,19 +22,18 @@ export const GuidesSourcesContent = () => {
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<SourcesToolbar />}
-          layout={{ card: true }}
-        />
-      )}
+      <DataGrid
+        columns={columns}
+        data={data?.result}
+        rowSelection={true}
+        pagination={{ size: 15 }}
+        sorting={[{ id: 'id', desc: false }]}
+        toolbar={<SourcesToolbar />}
+        layout={{ card: true }}
+        messages={{
+          empty: isLoading && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

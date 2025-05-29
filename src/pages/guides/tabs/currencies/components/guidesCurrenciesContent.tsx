@@ -25,7 +25,6 @@ export const GuidesCurrenciesContent = () => {
       <DataGrid
         columns={columns}
         data={data?.result}
-        rowSelection={true}
         pagination={{ size: 15 }}
         sorting={[{ id: 'id', desc: false }]}
         toolbar={<CurrenciesToolbar />}

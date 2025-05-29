@@ -8,6 +8,7 @@ import { deleteLanguage } from '@/api';
 import LanguagesModal from '@/pages/guides/tabs/languages/components/blocks/languagesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useLanguagesColumns = (): ColumnDef<Language>[] => {
   const { isRTL } = useLanguage();
@@ -115,9 +116,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

@@ -21,19 +21,18 @@ export const GuidesLanguagesContent = () => {
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<LanguagesToolbar />}
-          layout={{ card: true }}
-        />
-      )}
+      <DataGrid
+        columns={columns}
+        data={data?.result}
+        rowSelection={true}
+        pagination={{ size: 15 }}
+        sorting={[{ id: 'id', desc: false }]}
+        toolbar={<LanguagesToolbar />}
+        layout={{ card: true }}
+        messages={{
+          empty: isLoading && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

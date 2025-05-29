@@ -16,7 +16,7 @@ export const SharedTextArea = <T,>({ name, label, formik }: SharedInputProps<T>)
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <Textarea
-          className="input w-full"
+          className="textarea w-full"
           placeholder={label}
           {...formik.getFieldProps(fieldName)}
         />

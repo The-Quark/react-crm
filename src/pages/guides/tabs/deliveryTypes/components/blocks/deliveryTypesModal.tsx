@@ -14,7 +14,7 @@ import { postDeliveryType, putDeliveryType, getDeliveryTypes } from '@/api';
 import { IDeliveryTypeFormValues } from '@/api/post/postDeliveryType/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DeliveryTypesResponse } from '@/api/get/getDeliveryTypes/types.ts';
-import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { SharedError, SharedInput, SharedLoading, SharedTextArea } from '@/partials/sharedUI';
 
 interface Props {
   open: boolean;
@@ -111,7 +111,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
-              <SharedInput name="description" label="Description" formik={formik} />
+              <SharedTextArea name="description" label="Description" formik={formik} />
 
               <div className="flex justify-end">
                 <button

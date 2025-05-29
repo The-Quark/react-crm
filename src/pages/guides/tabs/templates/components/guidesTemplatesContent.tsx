@@ -26,7 +26,7 @@ export const GuidesTemplatesContent = () => {
     queryKey: ['guidesTemplatesLanguages'],
     queryFn: () => getLanguages(),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 60
   });
 
   const columns = useTemplatesColumns({
@@ -44,7 +44,7 @@ export const GuidesTemplatesContent = () => {
 
   return (
     <Container>
-      {isLoading || isLanguagesLoading ? (
+      {isLanguagesLoading ? (
         <SharedLoading />
       ) : (
         <DataGrid
@@ -61,6 +61,9 @@ export const GuidesTemplatesContent = () => {
             />
           }
           layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading simple />
+          }}
         />
       )}
     </Container>

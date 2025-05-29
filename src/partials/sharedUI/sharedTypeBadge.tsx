@@ -1,9 +1,18 @@
 import { cn } from '@/lib/utils';
-import { TaskType } from '@/api/enums';
-import { Building2, ShoppingCart, FileText, Package, Users } from 'lucide-react';
+import { TaskType, VehicleType } from '@/api/enums';
+import {
+  Building2,
+  ShoppingCart,
+  FileText,
+  Package,
+  Users,
+  CarFront,
+  Truck,
+  Bike
+} from 'lucide-react';
 
 interface TypeBadgeProps {
-  type: TaskType | string;
+  type: TaskType | VehicleType | string;
   className?: string;
   showIcon?: boolean;
 }
@@ -35,6 +44,21 @@ export const SharedTypeBadge = ({ type, className, showIcon = true }: TypeBadgeP
       color: 'badge-primary',
       icon: Users
     },
+    [VehicleType.VAN]: {
+      label: 'VAN',
+      color: 'badge-info',
+      icon: Truck
+    },
+    [VehicleType.AUTO]: {
+      label: 'AUTO',
+      color: 'badge-primary',
+      icon: CarFront
+    },
+    [VehicleType.MOTORBIKE]: {
+      label: 'Motorbike',
+      color: 'badge-warning',
+      icon: Bike
+    },
     unknown: {
       label: String(type),
       color: 'badge-default',
@@ -42,12 +66,15 @@ export const SharedTypeBadge = ({ type, className, showIcon = true }: TypeBadgeP
     }
   };
 
-  const allTypes = Object.values(TaskType);
+  const taskTypes = Object.values(TaskType);
+  const vehicleTypes = Object.values(VehicleType);
 
   let normalizedType: keyof typeof typeConfig;
 
-  if (allTypes.includes(type as TaskType)) {
+  if (taskTypes.includes(type as TaskType)) {
     normalizedType = type as TaskType;
+  } else if (vehicleTypes.includes(type as VehicleType)) {
+    normalizedType = type as VehicleType;
   } else {
     normalizedType = 'unknown';
   }

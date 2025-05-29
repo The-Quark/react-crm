@@ -32,6 +32,9 @@ export const GuidesAirlineRatesContent = () => {
           sorting={[{ id: 'id', desc: false }]}
           toolbar={<AirlineRatesToolbar />}
           layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading simple />
+          }}
         />
       )}
     </Container>

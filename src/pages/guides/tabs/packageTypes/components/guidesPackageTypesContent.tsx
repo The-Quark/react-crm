@@ -45,7 +45,7 @@ export const GuidesPackagesContent = () => {
 
   return (
     <Container>
-      {isLoading || isLanguagesLoading ? (
+      {isLanguagesLoading ? (
         <SharedLoading />
       ) : (
         <DataGrid
@@ -62,6 +62,9 @@ export const GuidesPackagesContent = () => {
             />
           }
           layout={{ card: true }}
+          messages={{
+            empty: isLoading && <SharedLoading simple />
+          }}
         />
       )}
     </Container>

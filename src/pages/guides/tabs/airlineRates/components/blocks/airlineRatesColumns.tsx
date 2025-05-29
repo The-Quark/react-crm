@@ -8,6 +8,7 @@ import { deleteAirlineRate } from '@/api';
 import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
   const { isRTL } = useLanguage();
@@ -103,9 +104,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

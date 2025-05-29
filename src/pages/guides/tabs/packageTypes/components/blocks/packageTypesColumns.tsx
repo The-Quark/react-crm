@@ -8,6 +8,7 @@ import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/block
 import { PackageType } from '@/api/get/getPackageTypes/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 interface Language {
   id: number;
@@ -82,31 +83,6 @@ export const usePackageTypesColumns = ({
         }
       },
       {
-        accessorFn: (row) => {
-          const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
-          return lang?.description || '';
-        },
-        id: 'description',
-        header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
-        enableSorting: true,
-        cell: (info) => {
-          const lang = info.row.original.language.find(
-            (l) => l.crm_language?.code === selectedLanguage
-          );
-          return (
-            <div className="flex items-center gap-1.5">
-              <div className="leading-none text-gray-800 font-normal">
-                {lang?.description || ''}
-              </div>
-            </div>
-          );
-        },
-        meta: {
-          headerClassName: 'min-w-[80px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) =>
           row.language
             .map((lang) => lang.crm_language?.code)
@@ -132,15 +108,38 @@ export const usePackageTypesColumns = ({
         }
       },
       {
+        accessorFn: (row) => {
+          const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
+          return lang?.description || '';
+        },
+        id: 'description',
+        header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
+        enableSorting: true,
+        cell: (info) => {
+          const lang = info.row.original.language.find(
+            (l) => l.crm_language?.code === selectedLanguage
+          );
+          return (
+            <div className="flex items-center gap-1.5">
+              <div className="leading-none text-gray-800 font-normal">
+                {lang?.description || ''}
+              </div>
+            </div>
+          );
+        },
+        meta: {
+          headerClassName: 'min-w-[80px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

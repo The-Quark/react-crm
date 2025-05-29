@@ -21,9 +21,7 @@ export const GuidesCitiesContent = () => {
   } = useQuery({
     queryKey: ['guidesCitiesCountries'],
     queryFn: () => getCountries('id,iso2,name'),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: Infinity
   });
 
   const {
@@ -53,7 +51,7 @@ export const GuidesCitiesContent = () => {
 
   return (
     <Container>
-      {countriesLoading || citiesLoading ? (
+      {countriesLoading ? (
         <SharedLoading />
       ) : (
         <DataGrid
@@ -70,6 +68,9 @@ export const GuidesCitiesContent = () => {
             />
           }
           layout={{ card: true }}
+          messages={{
+            empty: citiesLoading && <SharedLoading simple />
+          }}
         />
       )}
     </Container>

@@ -8,6 +8,8 @@ import { deleteVehicle } from '@/api';
 import VehiclesModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { SharedTypeBadge } from '@/partials/sharedUI';
 
 export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
@@ -54,7 +56,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.type}</div>
+            <SharedTypeBadge type={info.row.original.type} />
           </div>
         ),
         meta: {
@@ -92,21 +94,6 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         }
       },
       {
-        accessorFn: (row) => row.status,
-        id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.avg_fuel_consumption,
         id: 'avg fuel consumption',
         header: ({ column }) => (
@@ -118,6 +105,21 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
             <div className="leading-none text-gray-800 font-normal">
               {info.row.original.avg_fuel_consumption}
             </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.status,
+        id: 'status',
+        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <SharedStatusBadge status={info.row.original.status} />
           </div>
         ),
         meta: {
