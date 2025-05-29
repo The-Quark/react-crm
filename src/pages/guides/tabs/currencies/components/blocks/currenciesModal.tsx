@@ -14,7 +14,7 @@ import { ICurrencyFormValues } from '@/api/post/postCurrency/types.ts';
 import { getCurrencies, postCurrency, putCurrency } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CurrencyResponse } from '@/api/get/getCurrencies/types.ts';
-import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { SharedDecimalInput, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { decimalValidation } from '@/utils';
 
 interface Props {
@@ -127,12 +127,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="symbol" label="Symbol" formik={formik} />
               <SharedInput name="code" label="Code" formik={formik} />
-              <SharedInput
-                name="rate_to_base"
-                label="Rate to base"
-                type="decimal"
-                formik={formik}
-              />
+              <SharedDecimalInput name="rate_to_base" label="Rate to base" formik={formik} />
 
               <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                 <label className="form-label max-w-56">Base</label>

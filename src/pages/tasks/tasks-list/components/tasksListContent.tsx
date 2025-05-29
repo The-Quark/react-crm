@@ -31,7 +31,7 @@ export const TasksListContent = () => {
           toolbar={<TasksToolbar />}
           layout={{ card: true }}
           messages={{
-            empty: isLoading && <SharedLoading />
+            empty: isLoading && <SharedLoading simple />
           }}
         />
       </div>

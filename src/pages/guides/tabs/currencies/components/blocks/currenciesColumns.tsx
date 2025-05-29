@@ -8,6 +8,7 @@ import { deleteCurrency } from '@/api';
 import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
   const { isRTL } = useLanguage();
@@ -46,21 +47,6 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         }
       },
       {
-        accessorFn: (row) => row.symbol,
-        id: 'symbol',
-        header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.symbol}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[100px]',
-          cellClassName: 'text-gray-700 font-normal'
-        }
-      },
-      {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
@@ -75,15 +61,13 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         }
       },
       {
-        accessorFn: (row) => row.is_base,
-        id: 'is base',
-        header: ({ column }) => <DataGridColumnHeader title="Base" column={column} />,
+        accessorFn: (row) => row.symbol,
+        id: 'symbol',
+        header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_base ? 'Yes' : 'No'}
-            </div>
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.symbol}</div>
           </div>
         ),
         meta: {
@@ -109,15 +93,28 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         }
       },
       {
+        accessorFn: (row) => row.is_base,
+        id: 'is base',
+        header: ({ column }) => <DataGridColumnHeader title="Base" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <SharedStatusBadge status={info.row.original.is_base} />
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </span>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

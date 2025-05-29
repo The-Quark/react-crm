@@ -312,11 +312,17 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             error={formik.errors.order_content as string}
             touched={formik.touched.order_content}
           />
-          <SharedInput name="weight" label="Weight" type="decimal" formik={formik} />
-          <SharedInput name="width" label="Width" type="decimal" formik={formik} />
-          <SharedInput name="length" label="Length" type="decimal" formik={formik} />
+          <SharedInput name="weight" label="Weight (kg)" type="decimal" formik={formik} />
+          <SharedInput name="width" label="Width (m)" type="decimal" formik={formik} />
+          <SharedInput name="length" label="Length (m)" type="decimal" formik={formik} />
           <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
-          <SharedInput name="places_count" label="Places Count" type="number" formik={formik} />
+          <SharedInput
+            name="places_count"
+            label="Places Count"
+            type="number"
+            formik={formik}
+            disabled
+          />
           {orderData?.price && (
             <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
           )}
@@ -343,7 +349,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           {orderData?.id && (
             <SharedSelect
               name="status"
-              label="Custom Clearance"
+              label="Status"
               formik={formik}
               options={mockOrdersStatus.map((status) => ({
                 label: status.name,

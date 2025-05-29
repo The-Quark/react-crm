@@ -13,3 +13,4 @@ export * from './sharedInputTags.tsx';
 export * from './sharedAuthocompleteBase.tsx';
 export * from './sharedPriorityBadge.tsx';
 export * from './sharedTypeBadge.tsx';
+export * from './sharedDecimalInput.tsx';

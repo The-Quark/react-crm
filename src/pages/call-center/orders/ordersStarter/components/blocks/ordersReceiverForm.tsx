@@ -240,7 +240,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
             label="Location description"
             formik={formik}
           />
-          <SharedInput name="notes" label="Notes" formik={formik} />
+          <SharedTextArea name="notes" label="Notes" formik={formik} />
           <SharedAutocomplete
             label="Contact"
             value={formik.values.contact_id ?? ''}
