@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -31,8 +30,8 @@ interface Props {
 const validateSchema = Yup.object().shape({
   first_name: Yup.string().required('First name is required'),
   last_name: Yup.string().required('Last name is required'),
-  patronymic: Yup.string().required('Patronymic is required'),
-  birth_date: Yup.string().required('Birth date is required'),
+  patronymic: Yup.string().optional(),
+  birth_date: Yup.string().optional(),
   gender: Yup.string().required('Gender date is required'),
   email: Yup.string().email('Invalid email address').optional().nullable(),
   phone: Yup.string()

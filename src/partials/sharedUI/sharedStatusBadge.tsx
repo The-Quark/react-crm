@@ -1,7 +1,19 @@
 import { cn } from '@/lib/utils';
-import { UserStatus, UserDriverStatus, TaskStatus, VehicleStatus } from '@/api/enums';
+import {
+  UserStatus,
+  UserDriverStatus,
+  TaskStatus,
+  VehicleStatus,
+  ApplicationsStatus
+} from '@/api/enums';
 
-type StatusType = UserStatus | UserDriverStatus | TaskStatus | VehicleStatus | string;
+type StatusType =
+  | ApplicationsStatus
+  | UserStatus
+  | UserDriverStatus
+  | TaskStatus
+  | VehicleStatus
+  | string;
 
 interface StatusBadgeProps {
   status: StatusType | boolean;
@@ -74,6 +86,19 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'On Service',
       color: 'badge-info'
     },
+    // Application statuses
+    [ApplicationsStatus.NEW]: {
+      label: 'New',
+      color: 'badge-info'
+    },
+    [ApplicationsStatus.RUNNING]: {
+      label: 'Running',
+      color: 'badge-primary'
+    },
+    [ApplicationsStatus.DECLINED]: {
+      label: 'Declined',
+      color: 'badge-danger'
+    },
     // Boolean statuses
     true: {
       label: 'Active',
@@ -93,7 +118,8 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     ...Object.values(UserStatus),
     ...Object.values(UserDriverStatus),
     ...Object.values(TaskStatus),
-    ...Object.values(VehicleStatus)
+    ...Object.values(VehicleStatus),
+    ...Object.values(ApplicationsStatus)
   ];
 
   let normalizedStatus: keyof typeof statusConfig;
