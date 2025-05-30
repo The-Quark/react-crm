@@ -41,7 +41,7 @@ export const formSchema = Yup.object().shape({
   client_type: Yup.string().required('Client type is required'),
   phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
   email: Yup.string().email('Invalid email address').optional(),
-  client_id: Yup.string().optional(),
+  client_id: Yup.string().optional().nullable(),
   message: Yup.string().optional(),
   status: Yup.string().optional()
 });

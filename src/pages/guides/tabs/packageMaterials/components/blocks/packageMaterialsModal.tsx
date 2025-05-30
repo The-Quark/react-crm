@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -19,15 +19,16 @@ import {
 } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  SharedDecimalInput,
   SharedError,
   SharedInput,
   SharedLoading,
   SharedMultiSelect,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { PackageMaterialResponse } from '@/api/get/getPackageMaterials/types.ts';
 import { IPackageMaterialFormValues } from '@/api/post/postPackageMaterial/types.ts';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import { decimalValidation } from '@/utils';
 
 interface Props {
@@ -62,7 +63,7 @@ const getInitialValues = (
       description: packageMaterialData.result[0].description || '',
       price: Number(packageMaterialData.result[0].price) || 0,
       unit_id: packageMaterialData.result[0].unit_id || '',
-      company_id: packageMaterialData.result[0].company.map((c) => c.id) || [],
+      company_id: packageMaterialData.result[0].company.map((c) => String(c.id)) || [],
       is_active: packageMaterialData.result[0].is_active || true
     };
   }
@@ -80,6 +81,7 @@ const getInitialValues = (
 const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+
   const {
     data: packageMaterialData,
     isLoading: packageMaterialLoading,
@@ -125,7 +127,6 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
         const payload = {
           ...values
         };
-
         if (id) {
           await putPackageMaterial(Number(id), payload);
         } else {
@@ -142,6 +143,15 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
       }
     }
   });
+
+  const companiesOptions = useMemo(() => {
+    return (
+      companiesData?.result?.map((company) => ({
+        id: company.id.toString(),
+        name: company.company_name
+      })) || []
+    );
+  }, [companiesData]);
 
   const handleClose = () => {
     formik.resetForm();
@@ -175,7 +185,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="code" label="Code" formik={formik} />
-              <SharedInput name="price" label="Price" formik={formik} type="decimal" />
+              <SharedDecimalInput name="price" label="Price" formik={formik} />
               <SharedSelect
                 name="unit_id"
                 label="Select unit"
@@ -188,38 +198,21 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 }
                 placeholder="Select unit"
               />
-
               <SharedMultiSelect
-                selectedValues={formik.values.company_id.map(String)}
+                label="Company"
+                selectedValues={formik.values.company_id}
                 onChange={(values) => formik.setFieldValue('company_id', values)}
                 placeholder="Select company..."
                 searchPlaceholder="Search company..."
-                label="Company"
+                options={companiesOptions.map((company) => ({
+                  value: company.id,
+                  label: company.name
+                }))}
                 error={formik.errors.company_id as string}
                 touched={formik.touched.company_id}
-                options={
-                  companiesData?.result?.map((app) => ({
-                    value: String(app.id),
-                    label: app.company_name
-                  })) ?? []
-                }
               />
 
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Description</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <Textarea
-                    rows={4}
-                    placeholder="Description"
-                    {...formik.getFieldProps('description')}
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.description}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedTextArea name="description" label="Description" formik={formik} />
 
               {!!id && (
                 <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">

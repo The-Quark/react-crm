@@ -8,6 +8,7 @@ import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
   const { isRTL } = useLanguage();
@@ -31,20 +32,6 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         }
       },
       {
-        accessorFn: (row) => row.code,
-        id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[80px]'
-        }
-      },
-      {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
@@ -57,6 +44,20 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         meta: {
           headerClassName: 'min-w-[150px]',
           cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.code,
+        id: 'code',
+        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[80px]'
         }
       },
       {
@@ -118,9 +119,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.is_active ? 'Yes' : 'No'}
-            </div>
+            <SharedStatusBadge status={info.row.original.is_active} />
           </div>
         ),
         meta: {

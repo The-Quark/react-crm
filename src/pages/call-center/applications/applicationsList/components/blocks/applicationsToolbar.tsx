@@ -96,10 +96,10 @@ export const ApplicationsToolbar: FC = () => {
           {/*search by id search by client full name select status date created time*/}
           <input
             type="text"
-            placeholder="Search application"
+            placeholder="Search client"
             className="input input-sm ps-8"
-            value={(table.getColumn('full name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('full name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('client name')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('client name')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>

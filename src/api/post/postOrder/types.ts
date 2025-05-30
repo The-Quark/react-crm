@@ -1,7 +1,7 @@
 export interface IOrderFormValues {
   application_id: number | string;
-  sender_id: number;
-  receiver_id: number;
+  sender_id?: number;
+  receiver_id?: number;
   source_id?: number | string;
   delivery_type: number | string;
   delivery_category: string;
@@ -19,4 +19,28 @@ export interface IOrderFormValues {
   is_international: boolean;
   status?: string;
   order_content?: string[];
+  sender_first_name: string;
+  sender_last_name: string;
+  sender_patronymic?: string;
+  sender_country_id: number | string;
+  sender_city_id: number | string;
+  sender_phone: string;
+  sender_street: string;
+  sender_house: string;
+  sender_apartment: string;
+  sender_location_description?: string;
+  sender_notes?: string;
+  sender_contact_id?: number | null | string;
+  receiver_first_name: string;
+  receiver_last_name: string;
+  receiver_patronymic?: string;
+  receiver_country_id: number | string;
+  receiver_city_id: number | string;
+  receiver_phone: string;
+  receiver_street: string;
+  receiver_house: string;
+  receiver_apartment: string;
+  receiver_location_description?: string;
+  receiver_notes?: string;
+  receiver_contact_id?: number | null | string;
 }

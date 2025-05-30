@@ -42,7 +42,7 @@ export const useApplicationsColumns = ({
           row.client_type === 'legal'
             ? row.company_name
             : `${row.first_name} ${row.last_name} ${row.patronymic || ''}`,
-        id: 'client_name',
+        id: 'client name',
         header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
         enableSorting: true,
         cell: (info) => {

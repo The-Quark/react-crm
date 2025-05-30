@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
@@ -9,7 +9,6 @@ import {
   getLanguages,
   postGlobalParameter,
   putGlobalParameter,
-  getGlobalParameters,
   getAirlines
 } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -20,7 +19,14 @@ import {
   SharedMultiSelect,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useParams, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
+import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
+
+interface Props {
+  isEditMode: boolean;
+  parameterData?: ParametersModel;
+  parameterId?: number;
+}
 
 const createParameterSchema = Yup.object().shape({
   company_name: Yup.string().required('Company name is required'),
@@ -49,14 +55,43 @@ interface IParameterFormValues {
   cost_per_airplace: number;
 }
 
-export const CompaniesStarterContent = () => {
+const getInitialValues = (
+  isEditMode: boolean,
+  parameterData: ParametersModel,
+  currentLanguage: string
+): IParameterFormValues => {
+  if (isEditMode && parameterData) {
+    return {
+      company_name: parameterData.company_name ?? '',
+      timezone: parameterData.timezone ?? '',
+      currency: parameterData.currency ?? '',
+      language: parameterData.language.code ?? '',
+      legal_address: parameterData.legal_address ?? '',
+      warehouse_address: parameterData.warehouse_address ?? '',
+      airlines: parameterData?.airlines.map((airline) => airline.id.toString()) || [],
+      dimensions_per_place: parameterData.dimensions_per_place ?? '',
+      cost_per_airplace: parseFloat(parameterData.cost_per_airplace) ?? 0
+    };
+  }
+  return {
+    company_name: '',
+    timezone: '',
+    currency: localStorage.getItem('app_currency') || 'USD',
+    language: currentLanguage,
+    legal_address: '',
+    warehouse_address: '',
+    airlines: [],
+    dimensions_per_place: '',
+    cost_per_airplace: 0
+  };
+};
+
+export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId }: Props) => {
   const [loading, setLoading] = useState(false);
   const { currentLanguage } = useLanguage();
-  const { id } = useParams<{ id: string }>();
-  const isEditMode = !!id;
   const navigate = useNavigate();
   const {
-    data: cuurencyData,
+    data: curencyData,
     isLoading: loadingCurrencies,
     isError: isCurrenciesError,
     error: currenciesErrorMessage
@@ -82,19 +117,6 @@ export const CompaniesStarterContent = () => {
   });
 
   const {
-    data: parameterData,
-    isLoading: loadingParameter,
-    isError: isParameterError,
-    error: parameterErrorMessage
-  } = useQuery({
-    queryKey: ['global-parameter', id],
-    queryFn: () => getGlobalParameters(id ? parseInt(id) : undefined),
-    enabled: isEditMode,
-    retry: false,
-    refetchOnWindowFocus: false
-  });
-
-  const {
     data: airlinesData,
     isLoading: airlinesLoading,
     isError: airlinesIsError,
@@ -106,45 +128,19 @@ export const CompaniesStarterContent = () => {
     staleTime: 1000 * 60 * 5
   });
 
-  const selectedAirlines = useMemo(() => {
-    if (!parameterData || !isEditMode) return [];
-    return parameterData.result[0]?.airlines || [];
-  }, [parameterData, isEditMode]);
-
-  const airlineOptions = useMemo(() => {
-    return (
-      airlinesData?.result?.map((airline) => ({
-        id: airline.id.toString(),
-        name: airline.name
-      })) || []
-    );
-  }, [airlinesData]);
-
-  const selectedAirlineIds = useMemo(() => {
-    return selectedAirlines.map((airline) => airline.id.toString());
-  }, [selectedAirlines]);
-
-  const initialValues: IParameterFormValues = {
-    company_name: '',
-    timezone: '',
-    currency: localStorage.getItem('app_currency') || 'USD',
-    language: currentLanguage.code,
-    legal_address: '',
-    warehouse_address: '',
-    airlines: [],
-    dimensions_per_place: '',
-    cost_per_airplace: 0
-  };
-
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(
+      isEditMode,
+      parameterData as ParametersModel,
+      currentLanguage.code
+    ),
     validationSchema: createParameterSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        if (isEditMode && id) {
-          await putGlobalParameter(Number(id), {
+        if (isEditMode && parameterId) {
+          await putGlobalParameter(Number(parameterId), {
             ...values,
             airlines: values.airlines
           });
@@ -166,22 +162,18 @@ export const CompaniesStarterContent = () => {
   useEffect(() => {
     if (parameterData && isEditMode) {
       formik.setValues({
-        company_name: parameterData.result[0].company_name ?? '',
-        timezone: parameterData.result[0].timezone ?? '',
-        currency: parameterData.result[0].currency ?? '',
-        language: parameterData.result[0].language.code ?? '',
-        legal_address: parameterData.result[0].legal_address ?? '',
-        warehouse_address: parameterData.result[0].warehouse_address ?? '',
-        airlines: selectedAirlineIds,
-        dimensions_per_place: parameterData.result[0].dimensions_per_place ?? '',
-        cost_per_airplace: parseFloat(parameterData.result[0].cost_per_airplace) ?? 0
+        company_name: parameterData.company_name ?? '',
+        timezone: parameterData.timezone ?? '',
+        currency: parameterData.currency ?? '',
+        language: parameterData.language.code ?? '',
+        legal_address: parameterData.legal_address ?? '',
+        warehouse_address: parameterData.warehouse_address ?? '',
+        airlines: parameterData?.airlines.map((airline) => airline.id.toString()) || [],
+        dimensions_per_place: parameterData.dimensions_per_place ?? '',
+        cost_per_airplace: parseFloat(parameterData.cost_per_airplace) ?? 0
       });
     }
-  }, [parameterData, isEditMode, selectedAirlineIds]);
-
-  if (isParameterError) {
-    return <SharedError error={parameterErrorMessage} />;
-  }
+  }, [parameterData, isEditMode, airlinesData]);
 
   if (isLanguagesError) {
     return <SharedError error={languagesErrorMessage} />;
@@ -196,7 +188,10 @@ export const CompaniesStarterContent = () => {
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      {loadingCurrencies || loadingLanguages || loadingParameter || airlinesLoading ? (
+      {loadingCurrencies ||
+      loadingLanguages ||
+      airlinesLoading ||
+      (isEditMode && !parameterData) ? (
         <SharedLoading />
       ) : (
         <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
@@ -211,7 +206,7 @@ export const CompaniesStarterContent = () => {
               label="Currency"
               formik={formik}
               options={
-                cuurencyData?.result?.map((currency) => ({
+                curencyData?.result?.map((currency) => ({
                   label: currency.name,
                   value: currency.code
                 })) || []
@@ -243,10 +238,12 @@ export const CompaniesStarterContent = () => {
             <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
 
             <SharedMultiSelect
-              options={airlineOptions.map((airline) => ({
-                value: airline.id,
-                label: airline.name
-              }))}
+              options={
+                airlinesData?.result?.map((airline) => ({
+                  value: airline.id.toString(),
+                  label: airline.name
+                })) || []
+              }
               selectedValues={formik.values.airlines}
               onChange={(values) => formik.setFieldValue('airlines', values)}
               placeholder="Select airlines..."
@@ -254,6 +251,7 @@ export const CompaniesStarterContent = () => {
               label="Airlines"
               error={formik.errors.airlines as string}
               touched={formik.touched.airlines}
+              key={parameterId}
             />
 
             <SharedInput name="dimensions_per_place" label="Dimension Per Place" formik={formik} />
