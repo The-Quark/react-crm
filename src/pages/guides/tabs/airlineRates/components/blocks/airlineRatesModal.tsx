@@ -20,7 +20,12 @@ import {
   getCurrencies
 } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedDecimalInput,
+  SharedError,
+  SharedLoading
+} from '@/partials/sharedUI';
 import { IAirlineRatesResponse } from '@/api/get/getAirlineRates/types.ts';
 import { IAirlineRateFormValues } from '@/api/post/postAirlineRate/types.ts';
 import { decimalValidation } from '@/utils';
@@ -366,14 +371,9 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCurrencyTerm}
                 onSearchTermChange={setSearchCurrencyTerm}
               />
-              <SharedInput
-                name="price_per_kg"
-                label="Price per kg"
-                type="decimal"
-                formik={formik}
-              />
-              <SharedInput name="min_weight" label="Min weight" type="decimal" formik={formik} />
-              <SharedInput name="max_weight" label="Max weight" type="decimal" formik={formik} />
+              <SharedDecimalInput name="price_per_kg" label="Price per kg" formik={formik} />
+              <SharedDecimalInput name="min_weight" label="Min weight" formik={formik} />
+              <SharedDecimalInput name="max_weight" label="Max weight" formik={formik} />
 
               <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
                 <label className="form-label max-w-56">Active</label>

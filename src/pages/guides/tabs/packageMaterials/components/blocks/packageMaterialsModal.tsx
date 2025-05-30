@@ -61,7 +61,7 @@ const getInitialValues = (
       name: packageMaterialData.result[0].name || '',
       code: packageMaterialData.result[0].code || '',
       description: packageMaterialData.result[0].description || '',
-      price: Number(packageMaterialData.result[0].price) || 0,
+      price: packageMaterialData.result[0].price || '',
       unit_id: packageMaterialData.result[0].unit_id || '',
       company_id: packageMaterialData.result[0].company.map((c) => String(c.id)) || [],
       is_active: packageMaterialData.result[0].is_active || true
@@ -71,7 +71,7 @@ const getInitialValues = (
     name: '',
     code: '',
     description: '',
-    price: 0,
+    price: '',
     unit_id: '',
     company_id: [],
     is_active: true
@@ -185,7 +185,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
               <SharedInput name="code" label="Code" formik={formik} />
-              <SharedDecimalInput name="price" label="Price" formik={formik} />
+              <SharedDecimalInput name="price" label="Price ($)" formik={formik} />
               <SharedSelect
                 name="unit_id"
                 label="Select unit"
@@ -200,7 +200,10 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
               />
               <SharedMultiSelect
                 label="Company"
-                selectedValues={formik.values.company_id}
+                selectedValues={
+                  packageMaterialData?.result[0].company.map((c) => String(c.id)) ||
+                  formik.values.company_id
+                }
                 onChange={(values) => formik.setFieldValue('company_id', values)}
                 placeholder="Select company..."
                 searchPlaceholder="Search company..."
@@ -210,6 +213,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 }))}
                 error={formik.errors.company_id as string}
                 touched={formik.touched.company_id}
+                modalPopover
               />
 
               <SharedTextArea name="description" label="Description" formik={formik} />

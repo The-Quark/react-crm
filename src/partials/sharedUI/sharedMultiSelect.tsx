@@ -17,6 +17,8 @@ interface MultiSelectProps {
   error?: string | string[];
   touched?: boolean;
   label: string;
+  modalPopover?: boolean;
+  disabled?: boolean;
 }
 
 export function SharedMultiSelect({
@@ -28,6 +30,8 @@ export function SharedMultiSelect({
   error,
   className,
   touched,
+  modalPopover = false,
+  disabled = false,
   label
 }: MultiSelectProps) {
   return (
@@ -39,6 +43,8 @@ export function SharedMultiSelect({
           onValueChange={onChange}
           defaultValue={selectedValues}
           placeholder={placeholder}
+          modalPopover={modalPopover}
+          disabled={disabled}
         />
         {touched && error && (
           <span className="text-xs text-destructive">

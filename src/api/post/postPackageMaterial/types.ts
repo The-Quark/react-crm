@@ -3,7 +3,7 @@ export interface IPackageMaterialFormValues {
   name: string;
   unit_id: number | string;
   company_id: string[];
-  price: number;
+  price: string;
   description?: string;
   is_active: boolean;
 }
