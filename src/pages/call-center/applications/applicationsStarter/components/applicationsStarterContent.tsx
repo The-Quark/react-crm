@@ -17,7 +17,7 @@ import {
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { ApplicationsStatus } from '@/api/enums';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
 
 export const formSchema = Yup.object().shape({
@@ -52,8 +52,9 @@ export const ApplicationsStarterContent = () => {
   const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
-  const clientId = localStorage.getItem('clientID') || '';
+  const clientId = searchParams.get('client_id');
 
   const resetClientFields = useCallback(() => {
     return {

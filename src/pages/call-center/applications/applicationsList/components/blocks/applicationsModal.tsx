@@ -13,6 +13,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useNavigate } from 'react-router';
 
 interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ interface Props {
 
 export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
+  const navigate = useNavigate();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
@@ -31,10 +33,10 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
 
   const handleCreateOrder = (applicationId: number | null) => {
     if (applicationId !== null) {
-      localStorage.setItem('applicationId', applicationId.toString());
-      window.location.href = '/call-center/orders/starter';
+      navigate(`/call-center/orders/starter?application_id=${applicationId}`);
     }
   };
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">

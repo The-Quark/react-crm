@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, Fragment } from 'react';
 import { OrdersSenderForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersSenderForm.tsx';
 import { OrdersReceiverForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersReceiverForm.tsx';
 import { OrdersMainForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersMainForm.tsx';
@@ -13,19 +13,23 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Order } from '@/api/get/getOrder/types.ts';
 
-const { useStepper, steps, utils } = defineStepper(
+const { useStepper, utils } = defineStepper(
+  { id: 'main', title: 'Order Details' },
   { id: 'sender', title: 'Sender Information' },
-  { id: 'receiver', title: 'Receiver Information' },
-  { id: 'main', title: 'Order Details' }
+  { id: 'receiver', title: 'Receiver Information' }
 );
 
 const OrderFormSteps = () => {
   const { id } = useParams<{ id: string }>();
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { clearAll, setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
   const stepper = useStepper();
-  const currentIndex = utils.getIndex(stepper.current.id);
+  const currentStep = stepper.current;
+  console.log('currentStep', currentStep);
+  const currentIndex = utils.getIndex(currentStep.id);
+  console.log('currentIndex', currentIndex);
+  const allSteps = stepper.all;
 
   const {
     data: orderData,
@@ -47,53 +51,56 @@ const OrderFormSteps = () => {
   }, [orderData]);
 
   const handleOrderSubmitSuccess = () => {
-    setShowSuccessModal(true);
     if (!id) clearAll();
   };
 
   if (isLoading) return <SharedLoading />;
+
   if (isError) return <SharedError error={error} />;
 
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
-      {/* Stepper navigation header */}
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">Create New Order</h2>
+        <h2 className="text-lg font-medium">{id ? 'Edit Order' : 'Create New Order'}</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Step {currentIndex + 1} of {steps.length}
+            Step {currentIndex + 1} of {allSteps.length}
           </span>
         </div>
       </div>
 
-      {/* Stepper progress indicator */}
       <nav aria-label="Order creation steps" className="my-4">
         <ol className="flex items-center justify-between gap-2" aria-orientation="horizontal">
-          {stepper.all.map((step, index, array) => (
-            <Fragment key={step.id}>
-              <li className="flex items-center gap-4 flex-shrink-0">
-                <Button
-                  type="button"
-                  role="tab"
-                  variant={index <= currentIndex ? 'default' : 'secondary'}
-                  aria-current={stepper.current.id === step.id ? 'step' : undefined}
-                  aria-posinset={index + 1}
-                  aria-setsize={steps.length}
-                  aria-selected={stepper.current.id === step.id}
-                  className="flex size-10 items-center justify-center rounded-full"
-                  onClick={() => stepper.goTo(step.id)}
-                >
-                  {index + 1}
-                </Button>
-                <span className="text-sm font-medium">{step.title}</span>
-              </li>
-              {index < array.length - 1 && (
-                <Separator
-                  className={`flex-1 ${index < currentIndex ? 'bg-primary' : 'bg-muted'}`}
-                />
-              )}
-            </Fragment>
-          ))}
+          {allSteps.map((step, index, array) => {
+            const isActive = step.id === currentStep.id;
+            const isCompleted = index < currentIndex;
+
+            return (
+              <Fragment key={step.id}>
+                <li className="flex items-center gap-4 flex-shrink-0">
+                  <Button
+                    type="button"
+                    role="tab"
+                    variant={isActive ? 'default' : isCompleted ? 'default' : 'outline'}
+                    aria-current={isActive ? 'step' : undefined}
+                    aria-posinset={index + 1}
+                    aria-setsize={allSteps.length}
+                    aria-selected={isActive}
+                    className="flex size-10 items-center justify-center rounded-full"
+                    onClick={() => stepper.goTo(step.id)}
+                  >
+                    {index + 1}
+                  </Button>
+                  <span className={`text-sm font-medium ${isActive ? 'text-primary' : ''}`}>
+                    {step.title}
+                  </span>
+                </li>
+                {index < array.length - 1 && (
+                  <Separator className={`flex-1 ${isCompleted ? 'bg-primary' : 'bg-muted'}`} />
+                )}
+              </Fragment>
+            );
+          })}
         </ol>
       </nav>
 
@@ -101,6 +108,7 @@ const OrderFormSteps = () => {
         <StepContent
           onOrderSubmitSuccess={handleOrderSubmitSuccess}
           orderData={orderData?.result[0]}
+          stepper={stepper}
         />
       </div>
     </div>
@@ -109,53 +117,36 @@ const OrderFormSteps = () => {
 
 const StepContent = ({
   onOrderSubmitSuccess,
-  orderData
+  orderData,
+  stepper
 }: {
   onOrderSubmitSuccess: () => void;
-  orderData?: any;
+  orderData?: Order;
+  stepper: ReturnType<typeof useStepper>;
 }) => {
-  const stepper = useStepper();
-
   return (
     <>
-      {stepper.switch({
-        sender: () => (
-          <div className="grid gap-4">
-            <OrdersSenderForm onNext={stepper.next} />
-            <div className="flex justify-end">
-              <Button onClick={stepper.next}>Next</Button>
-            </div>
-          </div>
-        ),
-        receiver: () => (
-          <div className="grid gap-4">
-            <OrdersReceiverForm onNext={stepper.next} onBack={stepper.prev} />
-            <div className="flex justify-end gap-4">
-              <Button variant="secondary" onClick={stepper.prev}>
-                Back
-              </Button>
-              <Button onClick={stepper.next}>Next</Button>
-            </div>
-          </div>
-        ),
-        main: () => (
-          <div className="grid gap-4">
-            <OrdersMainForm
-              onBack={stepper.prev}
-              onSubmitSuccess={onOrderSubmitSuccess}
-              orderData={orderData}
-            />
-            <div className="flex justify-end gap-4">
-              <Button variant="secondary" onClick={stepper.prev}>
-                Back
-              </Button>
-              <Button type="submit" form="order-main-form">
-                {stepper.isLast ? 'Complete Order' : 'Next'}
-              </Button>
-            </div>
-          </div>
-        )
-      })}
+      {stepper.current.id === 'main' && (
+        <div className="grid gap-4">
+          <OrdersMainForm onNext={stepper.next} orderData={orderData} />
+        </div>
+      )}
+
+      {stepper.current.id === 'sender' && (
+        <div className="grid gap-4">
+          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} />
+        </div>
+      )}
+
+      {stepper.current.id === 'receiver' && (
+        <div className="grid gap-4">
+          {/*<OrdersReceiverForm*/}
+          {/*  onBack={stepper.prev}*/}
+          {/*  onSubmitSuccess={onOrderSubmitSuccess}*/}
+          {/*  orderData={orderData}*/}
+          {/*/>*/}
+        </div>
+      )}
     </>
   );
 };

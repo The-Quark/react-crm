@@ -2,34 +2,27 @@ import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import {
   SharedAutocomplete,
+  SharedDecimalInput,
   SharedError,
   SharedInput,
   SharedInputTags,
   SharedLoading,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import {
-  getApplications,
-  getDeliveryTypes,
-  getPackageTypes,
-  getSources,
-  postOrder,
-  putOrder
-} from '@/api';
-import { AxiosError } from 'axios';
+import { getApplications, getDeliveryTypes, getPackageTypes, getSources } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { useNavigate } from 'react-router';
 import { Order } from '@/api/get/getOrder/types.ts';
 import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
+import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
 
 interface Props {
-  onBack: () => void;
-  onSubmitSuccess?: () => void;
   orderData?: Order;
+  onNext: () => void;
 }
 
 const formSchema = Yup.object().shape({
@@ -51,6 +44,7 @@ const formSchema = Yup.object().shape({
   weight: decimalValidation.required('Weight is required'),
   width: decimalValidation.required('Width is required'),
   length: decimalValidation.required('Length is required'),
+  height: decimalValidation.required('Height is required'),
   price: Yup.string().optional(),
   places_count: Yup.number().typeError('Places count must be a number').optional(),
   customs_clearance: Yup.boolean().required('Customs clearance is required'),
@@ -60,26 +54,23 @@ const formSchema = Yup.object().shape({
   order_content: Yup.array().of(Yup.string()).optional()
 });
 
-export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }) => {
-  const { senderId, receiverId, applicationId, setApplicationId, clearAll } = useOrderCreation();
-  const [loading, setLoading] = useState(false);
+export const OrdersMainForm: FC<Props> = ({ orderData, onNext }) => {
+  const { setMainFormData, mainFormData, setApplicationId, applicationId } = useOrderCreation();
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
   const formik = useFormik({
-    initialValues: {
+    initialValues: mainFormData || {
       id: orderData?.id || 0,
+      application_id: orderData?.application_id || applicationId || '',
       status: orderData?.status || undefined,
-      application_id: applicationId || '',
-      sender_id: senderId || 0,
-      receiver_id: receiverId || 0,
-      delivery_type: orderData?.delivery_type.id || '',
+      delivery_type: orderData?.delivery_type?.id || '',
       delivery_category: orderData?.delivery_category || 'b2b',
-      package_type: orderData?.package_type.id || '',
+      package_type: orderData?.package_type?.id || '',
       weight: orderData?.weight || '',
       width: orderData?.width || '',
       length: orderData?.length || '',
+      height: orderData?.height || '',
       volume: orderData?.volume || '',
       places_count: orderData?.places_count || 0,
       customs_clearance: orderData?.customs_clearance || false,
@@ -91,47 +82,9 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
       order_content: orderData?.order_content || []
     },
     validationSchema: formSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setLoading(true);
-      try {
-        const submitValues = { ...values };
-        if (Array.isArray(submitValues.order_content) && submitValues.order_content.length === 0) {
-          (submitValues as { order_content?: string[] }).order_content &&
-            delete (submitValues as { order_content?: string[] }).order_content;
-        }
-        const { price, ...finalValues } = submitValues;
-        if (orderData) {
-          await putOrder(orderData.id, {
-            ...finalValues,
-            status: values.status as
-              | 'package_awaiting'
-              | 'buy_for_someone'
-              | 'package_received'
-              | 'expired',
-            delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
-            delivery_type: Number(values.delivery_type)
-          });
-        } else {
-          await postOrder({
-            ...finalValues,
-            delivery_category: values.delivery_category as 'b2b' | 'b2c' | 'c2c' | 'c2b',
-            delivery_type: Number(values.delivery_type)
-          });
-        }
-        navigate('/call-center/orders/list');
-        resetForm();
-        if (onSubmitSuccess) {
-          onSubmitSuccess();
-        }
-        clearAll();
-      } catch (err) {
-        const error = err as AxiosError<{ message?: string }>;
-        const errorMessage = error.response?.data?.message || error.message;
-        console.error(errorMessage);
-      } finally {
-        setLoading(false);
-        setSubmitting(false);
-      }
+    onSubmit: (values) => {
+      setMainFormData(values as IOrderFormValues);
+      onNext();
     }
   });
 
@@ -180,17 +133,17 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
   });
 
   useEffect(() => {
-    const { width, length, weight } = formik.values;
-    if (width && length && weight) {
-      const volume = Number(width) * Number(length) * Number(weight);
+    const { width, length, height } = formik.values;
+    if (width && length && height) {
+      const volume = Number(width) * Number(length) * Number(height);
       formik.setFieldValue('volume', volume.toFixed(2));
     } else {
       formik.setFieldValue('volume', '');
     }
-  }, [formik.values.width, formik.values.length, formik.values.weight]);
+  }, [formik.values.width, formik.values.length, formik.values.height]);
 
   if (deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   if (deliveryTypesIsError) {
@@ -209,10 +162,7 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
-        <div className="card-header" id="general_settings">
-          <h3 className="card-title">New Order</h3>
-        </div>
+      <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
           <SharedAutocomplete
             label="Application"
@@ -307,9 +257,13 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
           />
           <SharedInputTags
             value={
-              Array.isArray(formik.values.order_content)
-                ? formik.values.order_content
-                : [formik.values.order_content]
+              Array.isArray(formik.values?.order_content)
+                ? (formik.values?.order_content.filter(
+                    (v): v is string => typeof v === 'string'
+                  ) as string[])
+                : typeof formik.values?.order_content === 'string'
+                  ? [formik.values.order_content]
+                  : []
             }
             onChange={(value) =>
               formik.setFieldValue('order_content', value as typeof formik.values.order_content)
@@ -318,20 +272,6 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
             error={formik.errors.order_content as string}
             touched={formik.touched.order_content}
           />
-          <SharedInput name="weight" label="Weight (kg)" type="decimal" formik={formik} />
-          <SharedInput name="width" label="Width (m)" type="decimal" formik={formik} />
-          <SharedInput name="length" label="Length (m)" type="decimal" formik={formik} />
-          <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
-          <SharedInput
-            name="places_count"
-            label="Places Count"
-            type="number"
-            formik={formik}
-            disabled
-          />
-          {orderData?.price && (
-            <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
-          )}
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
             <label className="form-label max-w-56">Custom Clearance</label>
             <div className="flex columns-1 w-full flex-wrap">
@@ -352,6 +292,19 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
               )}
             </div>
           </div>
+          <SharedDecimalInput name="weight" label="Weight (kg)" formik={formik} />
+          <SharedDecimalInput name="width" label="Width (m)" formik={formik} />
+          <SharedDecimalInput name="length" label="Length (m)" formik={formik} />
+          <SharedDecimalInput name="height" label="Height (m)" formik={formik} />
+          <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
+          <SharedInput
+            name="places_count"
+            label="Places Count"
+            type="number"
+            formik={formik}
+            disabled
+          />
+          <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
           {orderData?.id && (
             <SharedSelect
               name="status"
@@ -363,19 +316,12 @@ export const OrdersMainForm: FC<Props> = ({ onBack, onSubmitSuccess, orderData }
               }))}
             />
           )}
-          <SharedInput name="package_description" label="Package Description" formik={formik} />
-          <SharedInput name="special_wishes" label="Special Wishes" formik={formik} />
+          <SharedTextArea name="package_description" label="Package Description" formik={formik} />
+          <SharedTextArea name="special_wishes" label="Special Wishes" formik={formik} />
 
-          <div className="flex justify-between">
-            <button className="btn btn-primary" type="button" onClick={onBack}>
-              Back
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
-            >
-              {loading ? 'Please wait...' : orderData?.id ? 'Update' : 'Submit'}
+          <div className="flex justify-end">
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+              {orderData?.id ? 'Update' : 'Submit'}
             </button>
           </div>
         </div>

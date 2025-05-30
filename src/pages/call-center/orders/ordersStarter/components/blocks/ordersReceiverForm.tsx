@@ -22,6 +22,13 @@ import {
 import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
+import { Order } from '@/api/get/getOrder/types.ts';
+
+interface Props {
+  onBack: () => void;
+  onSubmitSuccess?: () => void;
+  orderData?: Order;
+}
 
 interface Props {
   onNext: () => void;

@@ -13,6 +13,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useNavigate } from 'react-router';
 
 interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ interface Props {
 
 export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
+  const navigate = useNavigate();
   const { has } = useUserPermissions();
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
@@ -31,8 +33,7 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
 
   const handleCreateApplication = (clientID: number | null) => {
     if (clientID !== null) {
-      localStorage.setItem('clientID', clientID.toString());
-      window.location.href = '/call-center/applications/starter';
+      navigate(`/call-center/applications/starter?client_id=${clientID}`);
     }
   };
 

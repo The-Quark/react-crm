@@ -81,20 +81,21 @@ export interface Order {
   id: number;
   contact_id: number;
   order_code: string;
-  application_id: number;
+  application_id?: number;
   sender_id: number;
   receiver_id: number;
   delivery_type: DeliveryType;
   package_type: PackageType;
   weight: string;
+  height: string;
   width: string;
   length: string;
   volume: string;
   places_count: number;
   customs_clearance: boolean;
   price: string;
-  package_description: string | null;
-  special_wishes: string | null;
+  package_description?: string;
+  special_wishes?: string;
   status: string;
   status_changed_at: string;
   client_id: number | null;
@@ -108,7 +109,7 @@ export interface Order {
   sender: Person;
   receiver: Person;
   source: Source | null;
-  order_content: string[] | null;
+  order_content?: string[];
   hawb_pdf: string;
 }
 

@@ -25,6 +25,7 @@ import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/compo
 
 interface Props {
   onNext: () => void;
+  onBack: () => void;
 }
 
 const formSchema = Yup.object().shape({
@@ -73,7 +74,7 @@ const getInitialValues = (
   };
 };
 
-export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
+export const OrdersSenderForm: FC<Props> = ({ onNext, onBack }) => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -195,11 +196,27 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
   }
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
-        <div className="card-header" id="general_settings">
-          <h3 className="card-title"> {isEditMode ? 'Edit Order Sender' : 'New Order Sender'}</h3>
-        </div>
+      <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
+          <SharedAutocomplete
+            label="Contact"
+            value={formik.values.contact_id ?? ''}
+            options={
+              clientsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.first_name || app.company_name
+              })) ?? []
+            }
+            placeholder="Select contact"
+            searchPlaceholder="Search contact"
+            onChange={(val) => {
+              formik.setFieldValue('contact_id', val);
+            }}
+            error={formik.errors.contact_id as string}
+            touched={formik.touched.contact_id}
+            searchTerm={clientSearchTerm}
+            onSearchTermChange={setClientSearchTerm}
+          />
           <SharedInput name="full_name" label="Full name" formik={formik} />
           <SharedAutocomplete
             label="Country"
@@ -242,27 +259,11 @@ export const OrdersSenderForm: FC<Props> = ({ onNext }) => {
             formik={formik}
           />
           <SharedTextArea name="notes" label="Notes" formik={formik} />
-          <SharedAutocomplete
-            label="Contact"
-            value={formik.values.contact_id ?? ''}
-            options={
-              clientsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.first_name || app.company_name
-              })) ?? []
-            }
-            placeholder="Select contact"
-            searchPlaceholder="Search contact"
-            onChange={(val) => {
-              formik.setFieldValue('contact_id', val);
-            }}
-            error={formik.errors.contact_id as string}
-            touched={formik.touched.contact_id}
-            searchTerm={clientSearchTerm}
-            onSearchTermChange={setClientSearchTerm}
-          />
 
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <button className="btn btn-light" onClick={onBack}>
+              Back
+            </button>
             <button
               type="submit"
               className="btn btn-primary"
