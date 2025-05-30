@@ -1,5 +1,6 @@
-import { postApplication, getApplications, getSources, putApplication, getClients } from '@/api';
+import { postApplication, getSources, putApplication, getClients } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
+import { Application } from '@/api/get/getApplications/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -15,10 +16,15 @@ import {
   SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
 import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
+
+interface Props {
+  isEditMode: boolean;
+  applicationData?: Application;
+  applicationId?: number;
+}
 
 export const formSchema = Yup.object().shape({
   first_name: Yup.string().when('client_type', {
@@ -46,10 +52,47 @@ export const formSchema = Yup.object().shape({
   status: Yup.string().optional()
 });
 
-export const ApplicationsStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
+const getInitialValues = (
+  isEditMode: boolean,
+  applicationData: Application,
+  clientId: string
+): IApplicationPostFormValues => {
+  if (isEditMode && applicationData) {
+    return {
+      email: applicationData.email || '',
+      phone: applicationData.phone || '',
+      message: applicationData.message || '',
+      source: applicationData.source.code || 'insta',
+      first_name: applicationData.first_name || '',
+      last_name: applicationData.last_name || '',
+      patronymic: applicationData.patronymic || '',
+      company_name: applicationData.company_name || '',
+      client_type: applicationData.client_type || 'individual',
+      client_id: applicationData.client_id || clientId.toString(),
+      status: applicationData.status || ('new' as unknown as ApplicationsStatus)
+    };
+  }
+  return {
+    email: '',
+    phone: '',
+    message: '',
+    source: '',
+    first_name: '',
+    last_name: '',
+    patronymic: '',
+    company_name: '',
+    client_type: 'individual',
+    client_id: clientId ?? '',
+    status: 'new' as unknown as ApplicationsStatus
+  };
+};
+
+export const ApplicationsStarterContent = ({
+  isEditMode,
+  applicationId,
+  applicationData
+}: Props) => {
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -91,44 +134,23 @@ export const ApplicationsStarterContent = () => {
     staleTime: 60 * 60 * 1000
   });
 
-  const {
-    data: applicationData,
-    isLoading: applicationLoading,
-    isError: applicationIsError,
-    error: applicationError
-  } = useQuery({
-    queryKey: ['application', id],
-    queryFn: () => getApplications(id ? parseInt(id) : undefined),
-    enabled: isEditMode
-  });
-
-  const initialValues: IApplicationPostFormValues & {
-    status?: ApplicationsStatus;
-    company_name?: string;
-  } = {
-    email: '',
-    phone: '',
-    message: '',
-    source: '',
-    first_name: '',
-    last_name: '',
-    patronymic: '',
-    company_name: '',
-    client_type: 'individual',
-    client_id: clientId,
-    ...(isEditMode && { status: 'new' as unknown as ApplicationsStatus })
-  };
-
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(
+      isEditMode,
+      applicationData || ({} as Application),
+      String(clientId)
+    ),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        if (isEditMode && id) {
+        if (isEditMode && applicationId) {
           const { status, ...putData } = values;
-          await putApplication(Number(id), { ...putData, status: status as ApplicationsStatus });
+          await putApplication(Number(applicationId), {
+            ...putData,
+            status: status as ApplicationsStatus
+          });
           queryClient.invalidateQueries({ queryKey: ['applications'] });
           navigate('/call-center/applications/list');
           resetForm();
@@ -184,7 +206,7 @@ export const ApplicationsStarterContent = () => {
         first_name: client.first_name || '',
         last_name: client.last_name || '',
         patronymic: client.patronymic || '',
-        company_name: client.company_name || '', // Заполняем название компании
+        company_name: client.company_name || '',
         client_type: client.type || 'individual',
         phone: client.phone || '',
         email: client.email || '',
@@ -193,29 +215,7 @@ export const ApplicationsStarterContent = () => {
     }
   }, [clientData, isEditMode, formik]);
 
-  useEffect(() => {
-    if (isEditMode && applicationData?.result?.[0]) {
-      const appData = applicationData.result[0];
-      formik.setValues({
-        email: appData.email ?? '',
-        phone: appData.phone,
-        message: appData.message ?? '',
-        source: String(appData.source?.code ?? 'insta'),
-        first_name: appData.first_name,
-        last_name: appData.last_name,
-        patronymic: appData.patronymic,
-        company_name: appData.company_name ?? '',
-        client_type: appData.client_type ?? 'individual',
-        client_id: appData.client_id ?? '',
-        status: appData.status as ApplicationsStatus
-      });
-    } else if (!isEditMode) {
-      formik.resetForm();
-    }
-  }, [isEditMode, applicationData]);
-
-  const isLoading =
-    sourcesLoading || clientsLoading || (isEditMode && applicationLoading) || clientLoading;
+  const isLoading = sourcesLoading || clientsLoading || clientLoading;
 
   if (isLoading) {
     return <SharedLoading />;
@@ -231,10 +231,6 @@ export const ApplicationsStarterContent = () => {
 
   if (clientIsError) {
     return <SharedError error={clientError} />;
-  }
-
-  if (isEditMode && applicationIsError) {
-    return <SharedError error={applicationError} />;
   }
 
   return (

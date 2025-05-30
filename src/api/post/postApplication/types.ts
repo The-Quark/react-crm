@@ -9,4 +9,5 @@ export interface IApplicationPostFormValues {
   client_id?: number | null | string;
   email?: string | null;
   message?: string | null;
+  status?: string;
 }

@@ -9,7 +9,8 @@ import {
   TaskStatus,
   TemplateType,
   CargoStatus,
-  PackageStatus
+  PackageStatus,
+  OrderStatus
 } from '@/api/enums';
 
 export const localesMock = [
@@ -325,22 +326,22 @@ export const mockOrdersStatus = [
   {
     id: 1,
     name: 'Package awaiting',
-    value: 'package_awaiting'
+    value: OrderStatus.PACKAGE_AWAITING
   },
   {
     id: 2,
     name: 'Buy for someone',
-    value: 'buy_for_someone'
+    value: OrderStatus.BUY_FOR_SOMEONE
   },
   {
     id: 3,
     name: 'Package received',
-    value: 'package_received'
+    value: OrderStatus.PACKAGE_RECEIVED
   },
   {
     id: 4,
     name: 'Expired',
-    value: 'expired'
+    value: OrderStatus.EXPIRED
   }
 ];
 

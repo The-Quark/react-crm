@@ -102,3 +102,10 @@ export enum PackageStatus {
   REJECTED_CLIENT = 'rejected_client',
   REJECT_OTHER = 'rejected_other'
 }
+
+export enum OrderStatus {
+  PACKAGE_AWAITING = 'package_awaiting',
+  BUY_FOR_SOMEONE = 'buy_for_someone',
+  PACKAGE_RECEIVED = 'package_received',
+  EXPIRED = 'expired'
+}
