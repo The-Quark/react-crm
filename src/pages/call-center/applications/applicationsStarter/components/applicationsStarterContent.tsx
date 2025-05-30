@@ -93,10 +93,10 @@ export const ApplicationsStarterContent = ({
   applicationData
 }: Props) => {
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState('');
   const clientId = searchParams.get('client_id');
 
   const resetClientFields = useCallback(() => {
@@ -180,7 +180,7 @@ export const ApplicationsStarterContent = ({
     queryKey: ['clientDetails', formik.values.client_id],
     queryFn: () => getClients({ id: formik.values.client_id?.toString() ?? '' }),
     staleTime: 60 * 60 * 1000,
-    enabled: !!formik.values.client_id && !isEditMode
+    enabled: !!formik.values.client_id && isEditMode
   });
 
   const handleClientChange = useCallback(
