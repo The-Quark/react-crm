@@ -65,7 +65,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Full Name</label>
-                      <div className="flex columns-1 w-full">{order.sender.full_name || '-'}</div>
+                      <div className="flex columns-1 w-full">{order.sender.first_name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Phone</label>
@@ -92,7 +92,9 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Full Name</label>
-                      <div className="flex columns-1 w-full">{order.receiver.full_name || '-'}</div>
+                      <div className="flex columns-1 w-full">
+                        {order.receiver.first_name || '-'}
+                      </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Phone</label>
