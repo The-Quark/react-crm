@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { debounce } from '@/lib/helpers.ts';
 
-export const TasksToolbar = () => {
+interface TasksToolbarProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+export const TasksToolbar: React.FC<TasksToolbarProps> = ({ onSearch }) => {
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const [searchValue, setSearchValue] = useState('');
   const canManage = has('manage tasks') || currentUser?.roles[0].name === 'superadmin';
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
+  };
+
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Tasks</h3>
@@ -27,8 +47,8 @@ export const TasksToolbar = () => {
             type="text"
             placeholder="Search title"
             className="input input-sm ps-8"
-            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-            onChange={(event) => table.getColumn('title')?.setFilterValue(event.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>
