@@ -61,11 +61,22 @@ interface Application {
   deleted_at: string | null;
 }
 
+interface City {
+  id: number;
+  country_id: number;
+  country_code: string;
+  name: string;
+  state_id: number;
+}
+
 interface Person {
   id: number;
   contact_id: number | null;
-  full_name: string;
+  first_name: string;
+  last_name: string;
+  patronymic?: string;
   city_id: number;
+  city: City | null;
   phone: string;
   street: string;
   house: string;

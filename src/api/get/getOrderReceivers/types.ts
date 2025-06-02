@@ -21,6 +21,8 @@ interface City {
 export interface IOrderReceiver {
   id: number;
   contact_id: number | null;
+  first_name: string;
+  last_name: string;
   full_name: string;
   country_id: number;
   city_id: number;

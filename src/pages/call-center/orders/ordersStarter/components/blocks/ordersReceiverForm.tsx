@@ -1,17 +1,9 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getCitiesByCountryCode,
-  getClients,
-  getCountries,
-  getOrderReceivers,
-  postOrderReceiver,
-  putOrderReceiver
-} from '@/api';
+import { useQuery } from '@tanstack/react-query';
+import { getCitiesByCountryCode, getClients, getCountries } from '@/api';
 import { useFormik } from 'formik';
-import { AxiosError } from 'axios';
 import {
   SharedAutocomplete,
   SharedError,
@@ -19,86 +11,77 @@ import {
   SharedLoading,
   SharedTextArea
 } from '@/partials/sharedUI';
-import { IOrderReceiversResponse } from '@/api/get/getOrderReceivers/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { IReceiverOrderFormValues } from '@/api/post/postOrderReceiver/types.ts';
 import { Order } from '@/api/get/getOrder/types.ts';
+import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
 
 interface Props {
   onBack: () => void;
-  onSubmitSuccess?: () => void;
+  onConfirmModal?: () => void;
   orderData?: Order;
 }
 
-interface Props {
-  onNext: () => void;
-  onBack: () => void;
-}
 const formSchema = Yup.object().shape({
-  full_name: Yup.string().required('Full name is required'),
-  city_id: Yup.number().typeError('City is required').required('City is required'),
-  country_id: Yup.number().typeError('Country is required').required('Country is required'),
-  phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
-  street: Yup.string().required('Street is required'),
-  house: Yup.string().required('House is required'),
-  apartment: Yup.string().required('Apartment is required'),
-  location_description: Yup.string().optional(),
-  notes: Yup.string().optional(),
-  contact_id: Yup.number().optional()
+  receiver_first_name: Yup.string().required('First name is required'),
+  receiver_last_name: Yup.string().required('Last name is required'),
+  receiver_patronymic: Yup.string().optional(),
+  receiver_city_id: Yup.number().typeError('City is required').required('City is required'),
+  receiver_country_id: Yup.number()
+    .typeError('Country is required')
+    .required('Country is required'),
+  receiver_phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'Invalid phone number')
+    .required('Phone is required'),
+  receiver_street: Yup.string().required('Street is required'),
+  receiver_house: Yup.string().required('House is required'),
+  receiver_apartment: Yup.string().required('Apartment is required'),
+  receiver_location_description: Yup.string().optional(),
+  receiver_notes: Yup.string().optional(),
+  receiver_contact_id: Yup.number().optional()
 });
 
-const getInitialValues = (
-  isEditMode: boolean,
-  receiverData: IOrderReceiversResponse
-): IReceiverOrderFormValues => {
-  if (isEditMode && receiverData?.result) {
+const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValues => {
+  if (isEditMode && orderData) {
     return {
-      full_name: receiverData.result[0].full_name || '',
-      country_id: receiverData.result[0].city.country_id || '',
-      city_id: receiverData.result[0].city_id || '',
-      phone: receiverData.result[0].phone || '',
-      street: receiverData.result[0].street || '',
-      house: receiverData.result[0].house || '',
-      apartment: receiverData.result[0].apartment || '',
-      location_description: receiverData.result[0].location_description || '',
-      notes: receiverData.result[0].notes || '',
-      contact_id: receiverData.result[0].contact_id || 0
+      receiver_first_name: orderData.sender.first_name || '',
+      receiver_last_name: orderData.sender.last_name || '',
+      receiver_patronymic: orderData.sender.patronymic || '',
+      receiver_country_id: orderData.sender.city?.country_id || '',
+      receiver_city_id: orderData.sender.city_id || '',
+      receiver_phone: orderData.sender.phone || '',
+      receiver_street: orderData.sender.street || '',
+      receiver_house: orderData.sender.house || '',
+      receiver_apartment: orderData.sender.apartment || '',
+      receiver_location_description: orderData.sender.location_description || '',
+      receiver_notes: orderData.sender.notes || '',
+      receiver_contact_id: orderData.sender.contact_id || ''
     };
   }
 
   return {
-    full_name: '',
-    city_id: '',
-    phone: '',
-    street: '',
-    house: '',
-    apartment: '',
-    location_description: '',
-    notes: '',
-    contact_id: '',
-    country_id: ''
+    receiver_first_name: '',
+    receiver_last_name: '',
+    receiver_patronymic: '',
+    receiver_country_id: '',
+    receiver_city_id: '',
+    receiver_phone: '',
+    receiver_street: '',
+    receiver_house: '',
+    receiver_apartment: '',
+    receiver_location_description: '',
+    receiver_notes: '',
+    receiver_contact_id: ''
   };
 };
 
-export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
+export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModal }) => {
+  const { setMainFormData } = useOrderCreation();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-  const { receiverId, setReceiverId } = useOrderCreation();
+  const { receiverId } = useOrderCreation();
   const isEditMode = !!receiverId;
-  const queryClient = useQueryClient();
-
-  const {
-    data: receiverData,
-    isLoading: receiverIsLoading,
-    isError: receiverIsError,
-    error: receiverError
-  } = useQuery({
-    queryKey: ['orderReceiver', receiverId],
-    queryFn: () => getOrderReceivers(Number(receiverId)),
-    enabled: isEditMode
-  });
 
   const {
     data: clientsData,
@@ -112,30 +95,11 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, receiverData as IOrderReceiversResponse),
+    initialValues: getInitialValues(isEditMode, orderData as Order),
     validationSchema: formSchema,
     enableReinitialize: true,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setLoading(true);
-      try {
-        if (isEditMode && receiverId) {
-          await putOrderReceiver(Number(receiverId), values);
-        } else {
-          const { result: newReceiverId } = await postOrderReceiver(values);
-          setReceiverId(newReceiverId);
-        }
-        onNext();
-        resetForm();
-        setSearchTerm('');
-        setCitySearchTerm('');
-        setClientSearchTerm('');
-      } catch (err) {
-        const error = err as AxiosError<{ message?: string }>;
-        console.error(error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
-        setSubmitting(false);
-      }
+    onSubmit: (values) => {
+      setMainFormData(values as IOrderFormValues);
     }
   });
 
@@ -156,25 +120,19 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['orderCities', formik.values.country_id || receiverData?.result[0]?.city.country_id],
+    queryKey: ['orderCities', formik.values.receiver_country_id],
     queryFn: () =>
-      getCitiesByCountryCode(
-        (formik.values.country_id || String(receiverData?.result[0]?.city.country_id)).toString(),
-        'id'
-      ),
-    enabled: !!formik.values.country_id || !!receiverData?.result[0]?.city.country_id,
+      getCitiesByCountryCode(formik.values.receiver_country_id as string | number, 'id'),
+    enabled: !!formik.values.sender_country_id,
     staleTime: 1000 * 60 * 5
   });
 
-  const isFormLoading =
-    countriesLoading || clientsLoading || (isEditMode && (receiverIsLoading || citiesLoading));
-  const isFormError =
-    countriesIsError || clientsIsError || (isEditMode && (receiverIsError || citiesIsError));
-  const formErrors = [countriesError, clientsError, receiverError, citiesError].filter(
-    (error) => error !== null
-  );
+  const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
+  const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
+  const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
+
   if (isFormLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   if (isFormError) {
@@ -183,16 +141,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
         {formErrors.map((error, index) => (
           <SharedError key={index} error={error} />
         ))}
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            queryClient.invalidateQueries({
-              queryKey: ['orderCountries', 'orderCities', 'orderReceiver']
-            })
-          }
-        >
-          Retry
-        </button>
       </div>
     );
   }
@@ -200,73 +148,78 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, onNext }) => {
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
-        <div className="card-header" id="general_settings">
-          <h3 className="card-title">
-            {isEditMode ? 'Edit Order Receiver' : 'New Order Receiver'}
-          </h3>
-        </div>
         <div className="card-body grid gap-5">
-          <SharedInput name="full_name" label="Full name" formik={formik} />
+          <SharedAutocomplete
+            label="Contact"
+            value={formik.values.receiver_contact_id ?? orderData?.receiver.contact_id ?? ''}
+            options={
+              clientsData?.result?.map((client) => ({
+                id: client.id,
+                name:
+                  [client.first_name, client.last_name, client.patronymic]
+                    .filter(Boolean)
+                    .join(' ') || client.company_name
+              })) ?? []
+            }
+            placeholder="Select contact"
+            searchPlaceholder="Search contact"
+            onChange={(val) => {
+              formik.setFieldValue('receiver_contact_id', val);
+            }}
+            error={formik.errors.receiver_contact_id as string}
+            touched={formik.touched.receiver_contact_id}
+            searchTerm={clientSearchTerm}
+            onSearchTermChange={setClientSearchTerm}
+          />
+
+          <SharedInput name="receiver_first_name" label="First name" formik={formik} />
+          <SharedInput name="receiver_last_name" label="Last name" formik={formik} />
+          <SharedInput name="receiver_patronymic" label="Patronymic" formik={formik} />
+          <SharedInput name="receiver_phone" label="Phone" formik={formik} type="tel" />
+
           <SharedAutocomplete
             label="Country"
-            value={formik.values.country_id}
+            value={formik.values.receiver_country_id ?? orderData?.receiver.city?.country_id ?? ''}
             options={countriesData?.data ?? []}
             placeholder="Select country"
             searchPlaceholder="Search country"
             onChange={(val) => {
-              formik.setFieldValue('country_id', val);
-              formik.setFieldValue('city_id', '');
+              formik.setFieldValue('receiver_country_id', val);
+              formik.setFieldValue('receiver_city_id', '');
             }}
-            error={formik.errors.country_id as string}
-            touched={formik.touched.country_id}
+            error={formik.errors.receiver_country_id as string}
+            touched={formik.touched.receiver_country_id}
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
+
           <SharedAutocomplete
             label="City"
-            value={formik.values.city_id}
+            value={formik.values.receiver_city_id ?? orderData?.receiver.city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
-            placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
+            placeholder={formik.values.receiver_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"
-            onChange={(val) => formik.setFieldValue('city_id', val)}
-            error={formik.errors.city_id as string}
-            touched={formik.touched.city_id}
+            onChange={(val) => formik.setFieldValue('receiver_city_id', val)}
+            error={formik.errors.receiver_city_id as string}
+            touched={formik.touched.receiver_city_id}
             searchTerm={citySearchTerm}
             onSearchTermChange={setCitySearchTerm}
-            disabled={!formik.values.country_id}
+            disabled={!formik.values.receiver_country_id}
             loading={citiesLoading}
             errorText={citiesIsError ? 'Failed to load cities' : undefined}
             emptyText="No cities available"
           />
-          <SharedInput name="phone" label="Phone" formik={formik} type="tel" />
-          <SharedInput name="street" label="Street" formik={formik} />
-          <SharedInput name="house" label="House" formik={formik} />
-          <SharedInput name="apartment" label="Apartment" formik={formik} />
+
+          <SharedInput name="receiver_street" label="Street" formik={formik} />
+          <SharedInput name="receiver_house" label="House" formik={formik} />
+          <SharedInput name="receiver_apartment" label="Apartment" formik={formik} />
+
           <SharedTextArea
-            name="location_description"
+            name="receiver_location_description"
             label="Location description"
             formik={formik}
           />
-          <SharedTextArea name="notes" label="Notes" formik={formik} />
-          <SharedAutocomplete
-            label="Contact"
-            value={formik.values.contact_id ?? ''}
-            options={
-              clientsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.first_name || app.company_name
-              })) ?? []
-            }
-            placeholder="Select client"
-            searchPlaceholder="Search application"
-            onChange={(val) => {
-              formik.setFieldValue('contact_id', val);
-            }}
-            error={formik.errors.contact_id as string}
-            touched={formik.touched.contact_id}
-            searchTerm={clientSearchTerm}
-            onSearchTermChange={setClientSearchTerm}
-          />
+          <SharedTextArea name="receiver_notes" label="Notes" formik={formik} />
 
           <div className="flex justify-between">
             <button className="btn btn-primary" onClick={onBack}>

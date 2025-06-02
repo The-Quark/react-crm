@@ -23,6 +23,7 @@ import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
 interface Props {
   orderData?: Order;
   onNext: () => void;
+  orderId: string;
 }
 
 const formSchema = Yup.object().shape({
@@ -54,14 +55,14 @@ const formSchema = Yup.object().shape({
   order_content: Yup.array().of(Yup.string()).optional()
 });
 
-export const OrdersMainForm: FC<Props> = ({ orderData, onNext }) => {
-  const { setMainFormData, mainFormData, setApplicationId, applicationId } = useOrderCreation();
-  const { currentLanguage } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const formik = useFormik({
-    initialValues: mainFormData || {
-      id: orderData?.id || 0,
+const getInitialValues = (
+  isEditMode: boolean,
+  orderData: Order,
+  applicationId: string | number
+): IOrderFormValues => {
+  if (isEditMode && orderData) {
+    return {
+      id: orderData.id || 0,
       application_id: orderData?.application_id || applicationId || '',
       status: orderData?.status || undefined,
       delivery_type: orderData?.delivery_type?.id || '',
@@ -80,7 +81,40 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext }) => {
       special_wishes: orderData?.special_wishes || '',
       source_id: orderData?.source?.id || '',
       order_content: orderData?.order_content || []
-    },
+    };
+  }
+
+  return {
+    id: 0,
+    application_id: '',
+    status: undefined,
+    delivery_type: '',
+    delivery_category: 'b2b',
+    package_type: '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    volume: '',
+    places_count: 0,
+    customs_clearance: false,
+    is_international: false,
+    price: '',
+    package_description: '',
+    special_wishes: '',
+    source_id: '',
+    order_content: orderData?.order_content || []
+  };
+};
+
+export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
+  const { setMainFormData, setApplicationId, applicationId } = useOrderCreation();
+  const { currentLanguage } = useLanguage();
+  const [searchTerm, setSearchTerm] = useState('');
+  const isEditMode = !!orderId;
+
+  const formik = useFormik({
+    initialValues: getInitialValues(isEditMode, orderData as Order, applicationId || ''),
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData(values as IOrderFormValues);
@@ -142,22 +176,29 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext }) => {
     }
   }, [formik.values.width, formik.values.length, formik.values.height]);
 
-  if (deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading) {
+  const isFormLoading =
+    deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading;
+  const isFormError =
+    deliveryTypesIsError || packageTypesIsError || applicationsIsError || sourcesIsError;
+  const formErrors = [
+    deliveryTypesError,
+    packageTypesError,
+    applicationsError,
+    sourcesError
+  ].filter((error) => error !== null);
+
+  if (isFormLoading) {
     return <SharedLoading simple />;
   }
 
-  if (deliveryTypesIsError) {
-    return <SharedError error={deliveryTypesError} />;
-  }
-  if (packageTypesIsError) {
-    return <SharedError error={packageTypesError} />;
-  }
-  if (applicationsIsError) {
-    return <SharedError error={applicationsError} />;
-  }
-
-  if (sourcesIsError) {
-    return <SharedError error={sourcesError} />;
+  if (isFormError) {
+    return (
+      <div>
+        {formErrors.map((error, index) => (
+          <SharedError key={index} error={error} />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -166,7 +207,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext }) => {
         <div className="card-body grid gap-5">
           <SharedAutocomplete
             label="Application"
-            value={formik.values.application_id}
+            value={formik.values.application_id ?? ''}
             options={
               (applicationsData?.result?.map((app) => ({
                 id: app.id,

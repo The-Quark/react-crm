@@ -26,9 +26,7 @@ const OrderFormSteps = () => {
   const { clearAll, setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
   const stepper = useStepper();
   const currentStep = stepper.current;
-  console.log('currentStep', currentStep);
   const currentIndex = utils.getIndex(currentStep.id);
-  console.log('currentIndex', currentIndex);
   const allSteps = stepper.all;
 
   const {
@@ -109,6 +107,7 @@ const OrderFormSteps = () => {
           onOrderSubmitSuccess={handleOrderSubmitSuccess}
           orderData={orderData?.result[0]}
           stepper={stepper}
+          orderId={id ?? ''}
         />
       </div>
     </div>
@@ -118,33 +117,35 @@ const OrderFormSteps = () => {
 const StepContent = ({
   onOrderSubmitSuccess,
   orderData,
-  stepper
+  stepper,
+  orderId
 }: {
   onOrderSubmitSuccess: () => void;
   orderData?: Order;
   stepper: ReturnType<typeof useStepper>;
+  orderId: string;
 }) => {
   return (
     <>
       {stepper.current.id === 'main' && (
         <div className="grid gap-4">
-          <OrdersMainForm onNext={stepper.next} orderData={orderData} />
+          <OrdersMainForm onNext={stepper.next} orderData={orderData} orderId={orderId} />
         </div>
       )}
 
       {stepper.current.id === 'sender' && (
         <div className="grid gap-4">
-          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} />
+          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} orderData={orderData} />
         </div>
       )}
 
       {stepper.current.id === 'receiver' && (
         <div className="grid gap-4">
-          {/*<OrdersReceiverForm*/}
-          {/*  onBack={stepper.prev}*/}
-          {/*  onSubmitSuccess={onOrderSubmitSuccess}*/}
-          {/*  orderData={orderData}*/}
-          {/*/>*/}
+          <OrdersReceiverForm
+            onBack={stepper.prev}
+            onConfirmModal={onOrderSubmitSuccess}
+            orderData={orderData}
+          />
         </div>
       )}
     </>
