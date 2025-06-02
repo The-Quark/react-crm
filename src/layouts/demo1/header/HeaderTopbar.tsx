@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { KeenIcon } from '@/components/keenicons';
 import { toAbsoluteUrl } from '@/utils';
-import { Menu, MenuItem, MenuToggle } from '@/components';
+import { Menu, MenuItem, MenuLink, MenuToggle } from '@/components';
 import { DropdownUser } from '@/partials/dropdowns/user';
 import { DropdownNotifications } from '@/partials/dropdowns/notifications';
 import { DropdownApps } from '@/partials/dropdowns/apps';
@@ -89,6 +89,17 @@ const HeaderTopbar = () => {
       {/*    {DropdownApps()}*/}
       {/*  </MenuItem>*/}
       {/*</Menu>*/}
+
+      <Menu>
+        <MenuItem>
+          <MenuLink
+            path="/call-center/fast-form/start"
+            className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
+          >
+            <KeenIcon icon="rocket" />
+          </MenuLink>
+        </MenuItem>
+      </Menu>
 
       <Menu>
         <MenuItem

@@ -100,6 +100,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     enableReinitialize: true,
     onSubmit: (values) => {
       setMainFormData(values as IOrderFormValues);
+      onConfirmModal?.();
     }
   });
 

@@ -18,6 +18,7 @@ export const TasksListContent = () => {
   if (isError) {
     return <SharedError error={error} />;
   }
+  console.log('Tasks: ', data);
 
   return (
     <Container>

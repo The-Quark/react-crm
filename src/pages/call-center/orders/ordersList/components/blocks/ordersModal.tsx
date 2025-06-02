@@ -154,7 +154,9 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Delivery Type</label>
-                      <div className="flex columns-1 w-full">{order.delivery_type.name || '-'}</div>
+                      <div className="flex columns-1 w-full">
+                        {order?.delivery_type?.name || '-'}
+                      </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Package Type</label>

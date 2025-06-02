@@ -1,6 +1,4 @@
 import { useEffect, Fragment, useState } from 'react';
-import { OrdersSenderForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersSenderForm.tsx';
-import { OrdersReceiverForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersReceiverForm.tsx';
 import { OrdersMainForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersMainForm.tsx';
 import {
   OrderCreationProvider,
@@ -16,13 +14,9 @@ import { Separator } from '@/components/ui/separator';
 import { Order } from '@/api/get/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
 
-const { useStepper, utils } = defineStepper(
-  { id: 'main', title: 'Order Details' },
-  { id: 'sender', title: 'Sender Information' },
-  { id: 'receiver', title: 'Receiver Information' }
-);
+const { useStepper, utils } = defineStepper({ id: 'application', title: 'Application' });
 
-const OrderFormSteps = () => {
+const FastFormFormSteps = () => {
   const { id } = useParams<{ id: string }>();
   const { clearAll, setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
   const stepper = useStepper();
@@ -138,36 +132,21 @@ const StepContent = ({
 }) => {
   return (
     <>
-      {stepper.current.id === 'main' && (
+      {stepper.current.id === 'application' && (
         <div className="grid gap-4">
           <OrdersMainForm onNext={stepper.next} orderData={orderData} orderId={orderId} />
         </div>
       )}
 
-      {stepper.current.id === 'sender' && (
-        <div className="grid gap-4">
-          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} orderData={orderData} />
-        </div>
-      )}
-
-      {stepper.current.id === 'receiver' && (
-        <div className="grid gap-4">
-          <OrdersReceiverForm
-            onBack={stepper.prev}
-            onConfirmModal={handleOpen}
-            orderData={orderData}
-          />
-        </div>
-      )}
       <OrdersConfirmModal open={open} handleClose={handleClose} onOrderSubmit={onOrderSubmit} />
     </>
   );
 };
 
-export const OrdersStarterContent = () => {
+export const FastFormStarterContent = () => {
   return (
     <OrderCreationProvider>
-      <OrderFormSteps />
+      <FastFormFormSteps />
     </OrderCreationProvider>
   );
 };

@@ -1,7 +1,7 @@
-import { Highlights } from './blocks';
+import { Highlights } from './blocks/Highlights.tsx';
 import { Contributions, MediaUploads } from '@/pages/public-profile/profiles/default';
 
-const Demo1LightSidebarContent = () => {
+export const DashboardContent = () => {
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <div className="grid lg:grid-cols-3 gap-y-5 lg:gap-7.5 items-stretch">
@@ -30,5 +30,3 @@ const Demo1LightSidebarContent = () => {
     </div>
   );
 };
-
-export { Demo1LightSidebarContent };

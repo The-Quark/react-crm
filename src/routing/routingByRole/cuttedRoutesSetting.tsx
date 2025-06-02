@@ -38,6 +38,7 @@ import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.ts
 import {
   ApplicationsListPage,
   ApplicationsStarterPage,
+  FastFormStarterPage,
   OrdersListPage,
   OrdersStarterPage
 } from '@/pages/call-center';
@@ -223,6 +224,7 @@ const routeConfig = [
         element: <OrdersStarterPage />
       },
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/fast-form/starter', element: <FastFormStarterPage /> },
       { path: '/warehouse/packages/starter', element: <PackagesStarterPage /> },
       {
         path: '/warehouse/packages/starter/:id',
