@@ -4,7 +4,3 @@ export interface IGlobalParamsPositionFormValues {
   description?: string;
   is_active?: boolean;
 }
-
-export interface IGlobalParamsPositionResponse {
-  result: number;
-}

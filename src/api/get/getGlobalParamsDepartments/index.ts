@@ -1,19 +1,27 @@
 import axios from 'axios';
 import { IGlobalParamsDepartments } from '@/api/get/getGlobalParamsDepartments/types';
 import { GLOBAL_PARAMS_DEPARTMENTS } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-export const getGlobalParamsDepartments = async (params?: {
+interface IGetGlobalParamsDepartmentsParams extends IPaginationParams {
   id?: number;
   company_id?: number;
-}): Promise<IGlobalParamsDepartments> => {
-  const queryParams = new URLSearchParams();
+}
 
-  if (params?.id) queryParams.append('id', params.id.toString());
-  if (params?.company_id) queryParams.append('company_id', params.company_id.toString());
+export const getGlobalParamsDepartments = async ({
+  id,
+  per_page,
+  page,
+  company_id
+}: IGetGlobalParamsDepartmentsParams = {}): Promise<IGlobalParamsDepartments> => {
+  const params = new URLSearchParams();
 
-  const url = queryParams.toString()
-    ? `${GLOBAL_PARAMS_DEPARTMENTS}?${queryParams}`
-    : GLOBAL_PARAMS_DEPARTMENTS;
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (company_id) params.append('company_id', company_id.toString());
 
-  return await axios.get<IGlobalParamsDepartments>(url).then((res) => res.data);
+  return axios
+    .get<IGlobalParamsDepartments>(GLOBAL_PARAMS_DEPARTMENTS, { params })
+    .then((res) => res.data);
 };

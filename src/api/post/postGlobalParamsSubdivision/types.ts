@@ -8,7 +8,3 @@ export interface IGlobalParamsSubdivisionFormValues {
   warehouse_address: string;
   is_active?: boolean;
 }
-
-export interface IGlobalParamsSubdivisionResponse {
-  result: number;
-}

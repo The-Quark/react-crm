@@ -12,16 +12,35 @@ export const DepartmentsListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['globalParamsDepartments', selectedCompanyId],
-    queryFn: () => getGlobalParamsDepartments({ company_id: selectedCompanyId }),
-    refetchOnWindowFocus: false,
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['globalParamsDepartments', selectedCompanyId, pageIndex, pageSize, searchTerm],
+    queryFn: () =>
+      getGlobalParamsDepartments({
+        company_id: selectedCompanyId,
+        page: pageIndex + 1,
+        per_page: pageSize
+      }),
+    refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,
     enabled: selectedCompanyId !== undefined
   });
 
   const columns = useDepartmentsColumns();
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPageIndex(params.pageIndex);
+    setPageSize(params.pageSize);
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPageIndex(0);
+    setPageSize(15);
+  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -29,25 +48,29 @@ export const DepartmentsListContent = () => {
 
   return (
     <Container>
-      <div className="grid gap-5 lg:gap-7.5">
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={
-            <DepartmentsToolbar
-              initialCompanyId={initialCompanyId}
-              onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
-            />
-          }
-          layout={{ card: true }}
-          messages={{
-            empty: isLoading && <SharedLoading simple />
-          }}
-        />
-      </div>
+      <DataGrid
+        columns={columns}
+        data={data?.result || []}
+        rowSelection={true}
+        pagination={{
+          page: pageIndex,
+          size: pageSize
+        }}
+        onFetchData={handleFetchData}
+        toolbar={
+          <DepartmentsToolbar
+            initialCompanyId={initialCompanyId}
+            onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+            onSearch={handleSearch}
+          />
+        }
+        layout={{ card: true }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+        serverSide
+      />
     </Container>
   );
 };

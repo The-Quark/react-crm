@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Airline {
   id: number;
   name: string;
@@ -32,7 +34,6 @@ export interface ParametersModel {
   created_at: string;
   updated_at: string;
 }
-export interface ParametersListResponse {
+export interface ParametersListResponse extends IPagination {
   result: ParametersModel[];
-  count: number;
 }

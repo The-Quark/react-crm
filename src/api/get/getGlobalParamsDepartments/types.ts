@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Company {
   id: number;
   company_name: string;
@@ -26,7 +28,6 @@ export interface Department {
   company: Company | null;
 }
 
-export interface IGlobalParamsDepartments {
+export interface IGlobalParamsDepartments extends IPagination {
   result: Department[];
-  count: number;
 }

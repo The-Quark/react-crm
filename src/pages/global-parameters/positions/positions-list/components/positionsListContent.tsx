@@ -12,16 +12,35 @@ export const PositionsListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['globalParamsPositions', selectedCompanyId],
-    queryFn: () => getGlobalParamsPositions({ company_id: selectedCompanyId }),
-    refetchOnWindowFocus: false,
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['globalParamsPositions', selectedCompanyId, pageIndex, pageSize, searchTerm],
+    queryFn: () =>
+      getGlobalParamsPositions({
+        company_id: selectedCompanyId,
+        page: pageIndex + 1,
+        per_page: pageSize
+      }),
+    refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,
     enabled: selectedCompanyId !== undefined
   });
 
   const columns = usePositionsColumns();
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPageIndex(params.pageIndex);
+    setPageSize(params.pageSize);
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPageIndex(0);
+    setPageSize(15);
+  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -31,20 +50,26 @@ export const PositionsListContent = () => {
     <Container>
       <DataGrid
         columns={columns}
-        data={data?.result}
+        data={data?.result || []}
         rowSelection={true}
-        pagination={{ size: 15 }}
-        sorting={[{ id: 'id', desc: false }]}
+        pagination={{
+          page: pageIndex,
+          size: pageSize
+        }}
+        onFetchData={handleFetchData}
         toolbar={
           <PositionsToolbar
             initialCompanyId={initialCompanyId}
             onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
+            onSearch={handleSearch}
           />
         }
         layout={{ card: true }}
         messages={{
-          empty: isLoading && <SharedLoading simple />
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
         }}
+        serverSide
       />
     </Container>
   );

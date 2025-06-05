@@ -1,13 +1,19 @@
 import axios from 'axios';
 import { TASK_URL } from '@/api/url';
 import { ITasksResponse } from '@/api/get/getTask/types.ts';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-const getTask = async (
-  id?: number,
-  per_page?: number,
-  page?: number,
-  title?: string
-): Promise<ITasksResponse> => {
+interface IGetTaskParams extends IPaginationParams {
+  id?: number;
+  title?: string;
+}
+
+const getTask = async ({
+  id,
+  per_page,
+  page,
+  title
+}: IGetTaskParams = {}): Promise<ITasksResponse> => {
   const params = new URLSearchParams();
 
   if (id) params.append('id', id.toString());
@@ -15,7 +21,7 @@ const getTask = async (
   if (page) params.append('page', page.toString());
   if (title) params.append('title', title);
 
-  return await axios.get<ITasksResponse>(TASK_URL, { params }).then((res) => res.data);
+  return axios.get<ITasksResponse>(TASK_URL, { params }).then((res) => res.data);
 };
 
 export { getTask };

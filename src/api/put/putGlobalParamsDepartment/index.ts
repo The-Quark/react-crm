@@ -1,17 +1,18 @@
 import axios from 'axios';
-import {
-  IGlobalParamsDepartmentResponse,
-  IGlobalParamsDepartmentFormValues
-} from '@/api/post/postGlobalParamsDepartment/types.ts';
+import { IGlobalParamsDepartmentFormValues } from '@/api/post/postGlobalParamsDepartment/types.ts';
 import { GLOBAL_PARAMS_DEPARTMENTS } from '@/api/url';
+import { IPostPutResponse } from '@/api/generalManualTypes';
 
 export const putGlobalParamsDepartment = async (
   id: number,
   data: IGlobalParamsDepartmentFormValues
-): Promise<IGlobalParamsDepartmentResponse> => {
-  return await axios
-    .put<IGlobalParamsDepartmentResponse>(`${GLOBAL_PARAMS_DEPARTMENTS}?id=${id}`, data, {
+): Promise<IPostPutResponse> => {
+  const response = await axios.put<IPostPutResponse>(
+    `${GLOBAL_PARAMS_DEPARTMENTS}?id=${id}`,
+    data,
+    {
       headers: { 'Content-Type': 'application/json' }
-    })
-    .then((res) => res.data);
+    }
+  );
+  return response.data;
 };

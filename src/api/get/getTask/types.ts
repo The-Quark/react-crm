@@ -1,4 +1,5 @@
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 interface User {
   id: number;
@@ -114,17 +115,6 @@ export interface Task {
   package?: Package;
 }
 
-export interface ITasksResponse {
+export interface ITasksResponse extends IPagination {
   result: Task[];
-  current_page: number;
-  first_page_url: string;
-  from: number;
-  last_page: number;
-  last_page_url: string | null;
-  next_page_url: string | null;
-  path: string;
-  per_page: number;
-  prev_page_url: string | null;
-  to: number;
-  total: number;
 }

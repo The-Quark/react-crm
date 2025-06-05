@@ -112,7 +112,7 @@ export const TasksStarterContent = () => {
     error: taskError
   } = useQuery({
     queryKey: ['task', id],
-    queryFn: () => getTask(id ? parseInt(id) : undefined),
+    queryFn: () => getTask({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 

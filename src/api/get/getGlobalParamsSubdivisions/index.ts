@@ -1,19 +1,27 @@
 import axios from 'axios';
 import { ISubdivisionResponse } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
 import { GLOBAL_PARAMS_SUBDIVISIONS } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-export const getGlobalParamsSubdivisions = async (params?: {
+interface IGetGlobalParamsSubdivisionsParams extends IPaginationParams {
   id?: number;
   company_id?: number;
-}): Promise<ISubdivisionResponse> => {
-  const queryParams = new URLSearchParams();
+}
 
-  if (params?.id) queryParams.append('id', params.id.toString());
-  if (params?.company_id) queryParams.append('company_id', params.company_id.toString());
+export const getGlobalParamsSubdivisions = async ({
+  id,
+  per_page,
+  page,
+  company_id
+}: IGetGlobalParamsSubdivisionsParams = {}): Promise<ISubdivisionResponse> => {
+  const params = new URLSearchParams();
 
-  const url = queryParams.toString()
-    ? `${GLOBAL_PARAMS_SUBDIVISIONS}?${queryParams}`
-    : GLOBAL_PARAMS_SUBDIVISIONS;
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (company_id) params.append('company_id', company_id.toString());
 
-  return await axios.get<ISubdivisionResponse>(url).then((res) => res.data);
+  return axios
+    .get<ISubdivisionResponse>(GLOBAL_PARAMS_SUBDIVISIONS, { params })
+    .then((res) => res.data);
 };

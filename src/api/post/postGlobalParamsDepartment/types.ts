@@ -4,7 +4,3 @@ export interface IGlobalParamsDepartmentFormValues {
   description?: string;
   is_active?: boolean;
 }
-
-export interface IGlobalParamsDepartmentResponse {
-  result: number;
-}

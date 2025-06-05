@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Company {
   id: number;
   company_name: string;
@@ -58,7 +60,6 @@ export interface Subdivision {
   currency: Currency;
 }
 
-export interface ISubdivisionResponse {
+export interface ISubdivisionResponse extends IPagination {
   result: Subdivision[];
-  count: number;
 }

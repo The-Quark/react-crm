@@ -6,13 +6,15 @@ import { PositionsModal } from '@/pages/global-parameters/positions/positions-li
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
+import { debounce } from '@/lib/helpers.ts';
 
 interface Props {
   initialCompanyId?: number;
   onCompanyChange: (companyId: number | null) => void;
+  onSearch?: (searchTerm: string) => void;
 }
 
-export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }) => {
+export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
@@ -23,6 +25,20 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange 
   const isViewer = currentUser?.roles[0].name === 'viewer';
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+  const [searchValue, setSearchValue] = useState('');
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
+  };
 
   const handleClose = () => {
     setModalOpen(false);
@@ -92,8 +108,8 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange 
             type="text"
             placeholder="Search position"
             className="input input-sm ps-8"
-            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('title')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

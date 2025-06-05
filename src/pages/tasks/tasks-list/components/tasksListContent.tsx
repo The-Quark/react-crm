@@ -15,7 +15,12 @@ export const TasksListContent = () => {
 
   const { data, isError, error, isFetching, isPending } = useQuery<ITasksResponse>({
     queryKey: ['tasks', pageIndex, pageSize, searchTerm],
-    queryFn: () => getTask(undefined, pageSize, pageIndex + 1, searchTerm),
+    queryFn: () =>
+      getTask({
+        page: pageIndex + 1,
+        per_page: pageSize,
+        title: searchTerm
+      }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
   });
