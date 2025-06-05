@@ -42,25 +42,23 @@ export const CompaniesListContent = () => {
 
   return (
     <Container>
-      <div className="grid gap-5 lg:gap-7.5">
-        <DataGrid
-          columns={columns}
-          data={data?.result || []}
-          rowSelection={true}
-          pagination={{
-            page: pageIndex,
-            size: pageSize
-          }}
-          onFetchData={handleFetchData}
-          toolbar={<CompaniesToolbar onSearch={handleSearch} />}
-          layout={{ card: true }}
-          messages={{
-            empty: isPending && <SharedLoading simple />,
-            loading: isFetching && <SharedLoading simple />
-          }}
-          serverSide
-        />
-      </div>
+      <DataGrid
+        columns={columns}
+        data={data?.result || []}
+        rowSelection={true}
+        pagination={{
+          page: pageIndex,
+          size: pageSize
+        }}
+        onFetchData={handleFetchData}
+        toolbar={<CompaniesToolbar onSearch={handleSearch} />}
+        layout={{ card: true }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+        serverSide
+      />
     </Container>
   );
 };

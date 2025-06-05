@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 type ClientType = 'legal' | 'individual';
 
 interface Source {
@@ -40,7 +42,6 @@ export interface Client {
   applications_packages_count: number;
 }
 
-export interface IClientResponse {
+export interface IClientResponse extends IPagination {
   result: Client[];
-  count: number;
 }

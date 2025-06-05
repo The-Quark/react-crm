@@ -1,21 +1,25 @@
 import axios from 'axios';
 import { IClientResponse } from '@/api/get/getClients/types.ts';
 import { CLIENT_URL } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-const getClients = async (
-  params?: { type: 'legal' | 'individual' } | { id: string }
-): Promise<IClientResponse> => {
-  let url = CLIENT_URL;
+interface IGetClientsParams extends IPaginationParams {
+  id?: number;
+  type?: 'legal' | 'individual';
+}
 
-  if (params) {
-    if ('type' in params) {
-      url += `?type=${params.type}`;
-    } else if ('id' in params) {
-      url += `?id=${params.id}`;
-    }
-  }
+export const getClients = async ({
+  id,
+  type,
+  page,
+  per_page
+}: IGetClientsParams = {}): Promise<IClientResponse> => {
+  const params = new URLSearchParams();
 
-  return await axios.get<IClientResponse>(url).then((res) => res.data);
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (type) params.append('type', type.toString());
+
+  return axios.get<IClientResponse>(CLIENT_URL, { params }).then((res) => res.data);
 };
-
-export { getClients };

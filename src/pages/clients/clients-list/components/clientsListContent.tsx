@@ -15,6 +15,9 @@ export const ClientsListContent = () => {
   const [clientType, setClientType] = useState<ClientType>('individual');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(15);
 
   const columnsIndividual = useClientsListIndividualColumns({
     onRowClick: (id) => {
@@ -30,15 +33,23 @@ export const ClientsListContent = () => {
     }
   });
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['clients', clientType],
-    queryFn: () => getClients({ type: clientType }),
-    retry: false,
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 30,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: true
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['clients', clientType, pageIndex, pageSize, searchTerm],
+    queryFn: () => getClients({ type: clientType, page: pageIndex + 1, per_page: pageSize }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPageIndex(params.pageIndex);
+    setPageSize(params.pageSize);
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPageIndex(0);
+    setPageSize(15);
+  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -46,20 +57,28 @@ export const ClientsListContent = () => {
 
   return (
     <Container>
-      <div className="grid gap-5 lg:gap-7.5">
-        <DataGrid
-          columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
-          data={isLoading ? [] : data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<ClientsListToolbar clientType={clientType} setClientType={setClientType} />}
-          layout={{ card: true }}
-          messages={{
-            empty: isLoading && <SharedLoading simple />
-          }}
-        />
-      </div>
+      <DataGrid
+        columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
+        data={data?.result || []}
+        rowSelection={true}
+        pagination={{
+          page: pageIndex,
+          size: pageSize
+        }}
+        toolbar={
+          <ClientsListToolbar
+            clientType={clientType}
+            setClientType={setClientType}
+            onSearch={handleSearch}
+          />
+        }
+        layout={{ card: true }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+        serverSide
+      />
       <ClientsListProfileModal
         open={isModalOpen}
         id={selectedId}
