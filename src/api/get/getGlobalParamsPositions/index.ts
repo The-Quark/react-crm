@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GLOBAL_PARAMS_POSITIONS } from '@/api/url';
 import { IPaginationParams } from '@/api/generalManualTypes';
-import { IGlobalParamsDepartments } from '@/api/get/getGlobalParamsDepartments/types.ts';
+import { IGlobalParamsPositionModel } from '@/api/get/getGlobalParamsPositions/types.ts';
 
 interface IGetGlobalParamsPositionsParams extends IPaginationParams {
   id?: number;
@@ -13,7 +13,7 @@ export const getGlobalParamsPositions = async ({
   per_page,
   page,
   company_id
-}: IGetGlobalParamsPositionsParams = {}): Promise<IGlobalParamsDepartments> => {
+}: IGetGlobalParamsPositionsParams = {}): Promise<IGlobalParamsPositionModel> => {
   const params = new URLSearchParams();
 
   if (id) params.append('id', id.toString());
@@ -22,6 +22,6 @@ export const getGlobalParamsPositions = async ({
   if (company_id) params.append('company_id', company_id.toString());
 
   return axios
-    .get<IGlobalParamsDepartments>(GLOBAL_PARAMS_POSITIONS, { params })
+    .get<IGlobalParamsPositionModel>(GLOBAL_PARAMS_POSITIONS, { params })
     .then((res) => res.data);
 };

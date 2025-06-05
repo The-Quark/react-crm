@@ -17,7 +17,7 @@ export const CompaniesStarterPage = () => {
     error: parameterError
   } = useQuery({
     queryKey: ['global-parameter', id],
-    queryFn: () => getGlobalParameters(id ? parseInt(id) : undefined),
+    queryFn: () => getGlobalParameters({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode,
     staleTime: 0,
     refetchOnWindowFocus: true,
