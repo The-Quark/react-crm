@@ -306,8 +306,8 @@ export const TasksStarterContent = () => {
                 name: `${app.first_name} ${app.last_name} ${app.patronymic}`
               })) ?? []
             }
-            placeholder="Select users"
-            searchPlaceholder="Search users"
+            placeholder="Select user"
+            searchPlaceholder="Search user"
             onChange={(val) => {
               formik.setFieldValue('assigned_to', val);
             }}

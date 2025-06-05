@@ -26,7 +26,7 @@ export const SharedPriorityBadge = ({
     },
     [TaskPriority.HIGH]: {
       label: 'High',
-      color: 'badge-warning',
+      color: 'badge-danger',
       icon: ArrowUp
     },
     [TaskPriority.URGENT]: {

@@ -41,6 +41,7 @@ export function setupAxios(axios: any) {
   axios.defaults.headers.common['Accept'] = 'application/json';
   axios.defaults.headers.common['Accept-Language'] = languageCode || 'en';
   axios.defaults.headers.Accept = 'application/json';
+
   axios.interceptors.request.use(
     (config: { headers: { [key: string]: any; Authorization?: string } }) => {
       const auth = getAuth();
@@ -48,26 +49,29 @@ export function setupAxios(axios: any) {
         config.headers.Authorization = `Bearer ${auth.token}`;
       }
       config.headers['Accept-Language'] = languageCode || 'en';
-
       return config;
     },
     async (err: any) => await Promise.reject(err)
   );
+
   axios.interceptors.response.use(
     (response: any) => {
-      const { method, url } = response.config;
-      const endpoint = url?.split('/').filter(Boolean).pop();
-      const requestName = `[${method?.toUpperCase()}] ${endpoint}`;
-      if (response.status >= 200 && response.status < 300) {
-        toast.success(`The ${requestName} request was completed successfully!`);
+      const { method } = response.config;
+      if (['post', 'put'].includes(method?.toLowerCase()) && response.data?.message) {
+        const toastType = response.status >= 200 && response.status < 300 ? 'success' : 'info';
+        toast[toastType](response.data.message);
       }
+
       return response;
     },
     (error: any) => {
       if (error.response) {
-        const { status } = error.response;
+        const { status, data } = error.response;
 
-        if (status === 401) {
+        if (['post', 'put'].includes(error.config?.method?.toLowerCase()) && data?.message) {
+          const toastType = status >= 500 ? 'error' : 'warning';
+          toast[toastType](data.message);
+        } else if (status === 401) {
           toast.error('The session has expired, log in again');
           removeAuth();
         } else if (status >= 400 && status < 500) {
