@@ -18,7 +18,7 @@ import {
 } from '@tanstack/react-table';
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { DataGridInner } from './DataGridInner';
-import { TDataGridProps, TDataGridRequestParams } from './DataGrid';
+import { TDataGridProps } from './DataGrid';
 import { deepMerge, debounce } from '@/lib/helpers';
 
 export interface IDataGridContextProps<TData extends object> {
@@ -64,9 +64,7 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
     rowSelection: false,
     serverSide: false
   };
-
   const mergedProps = deepMerge(defaultValues, props);
-
   const [data, setData] = useState<TData[]>(mergedProps.data || []);
   const [loading, setLoading] = useState<boolean>(false);
   const [totalRows, setTotalRows] = useState<number>(
@@ -83,23 +81,22 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
 
   const fetchServerSideData = useCallback(async () => {
     if (loading || !mergedProps.onFetchData) return;
-
     setLoading(true);
-
     try {
-      const requestParams: TDataGridRequestParams = {
+      const response = await mergedProps.onFetchData({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
         sorting,
         columnFilters
-      };
-
-      const { data, totalCount } = await mergedProps.onFetchData(requestParams);
-
-      setData(data || []);
-      setTotalRows(totalCount || 0);
+      });
+      const validatedData = Array.isArray(response?.data) ? response.data : [];
+      const validatedTotal = typeof response?.totalCount === 'number' ? response.totalCount : 0;
+      setData(validatedData);
+      setTotalRows(validatedTotal);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      console.error('Fetch error:', error);
+      setData([]);
+      setTotalRows(0);
     } finally {
       setLoading(false);
     }
@@ -136,7 +133,7 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
   };
 
   const table = useReactTable({
-    data,
+    data: mergedProps.data,
     columns: mergedProps.columns,
     pageCount: mergedProps.serverSide ? Math.ceil(totalRows / pagination.pageSize) : undefined,
     state: {

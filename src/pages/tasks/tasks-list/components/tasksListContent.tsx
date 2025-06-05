@@ -6,36 +6,35 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useTasksColumns } from '@/pages/tasks/tasks-list/components/blocks/tasksColumns.tsx';
 import { TasksToolbar } from '@/pages/tasks/tasks-list/components/blocks/tasksToolbar.tsx';
 import { useState } from 'react';
+import { ITasksResponse } from '@/api/get/getTask/types.ts';
 
 export const TasksListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(15);
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isError, error, isFetching, isPending } = useQuery<ITasksResponse>({
     queryKey: ['tasks', pageIndex, pageSize, searchTerm],
     queryFn: () => getTask(undefined, pageSize, pageIndex + 1, searchTerm),
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
 
   const columns = useTasksColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    console.log('Fetching with:', params); // для отладки
     setPageIndex(params.pageIndex);
     setPageSize(params.pageSize);
   };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPageIndex(0), setPageSize(15);
+    setPageIndex(0);
+    setPageSize(15);
   };
 
   if (isError) {
     return <SharedError error={error} />;
-  }
-  if (!data) {
-    return <SharedLoading />;
   }
 
   return (
@@ -47,14 +46,14 @@ export const TasksListContent = () => {
           rowSelection={true}
           pagination={{
             page: pageIndex,
-            size: pageSize,
-            info: `Total: ${data?.total || 0} items`
+            size: pageSize
           }}
           onFetchData={handleFetchData}
           toolbar={<TasksToolbar onSearch={handleSearch} />}
           layout={{ card: true }}
           messages={{
-            empty: isPending && <SharedLoading simple />
+            empty: isPending && <SharedLoading simple />,
+            loading: isFetching && <SharedLoading simple />
           }}
           serverSide
         />
