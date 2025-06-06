@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
-import { getUserList } from '@/api';
+import { getUserList } from '@/api/get/getUser';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { useUsersColumns } from '@/pages/crm/users-list/components/blocks/usersColumns.tsx';
 import { UsersToolbar } from '@/pages/crm/users-list/components/blocks/usersToolbar.tsx';

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Position } from '@/api/get/getGlobalParamsPositions/types.ts';
+import { Position } from '@/api/get/getGlobalParams/getGlobalParamsPositions/types.ts';
 import { PositionsMenuOptions } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsMenuOprions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';

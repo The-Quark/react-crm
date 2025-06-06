@@ -1,6 +1,6 @@
 import { type TLanguageCode } from '@/i18n';
 import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
-import { Vehicle } from '@/api/get/getVehicles/types.ts';
+import { Vehicle } from '@/api/get/getGuides/getVehicles/types.ts';
 
 export interface AuthModel {
   token: string;

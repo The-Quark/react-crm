@@ -4,7 +4,7 @@ import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deletePackageMaterial } from '@/api';
-import { PackageMaterial } from '@/api/get/getPackageMaterials/types.ts';
+import { PackageMaterial } from '@/api/get/getGuides/getPackageMaterials/types.ts';
 import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';

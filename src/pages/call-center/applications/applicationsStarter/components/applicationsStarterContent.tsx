@@ -1,6 +1,6 @@
 import { postApplication, getSources, putApplication, getClients } from '@/api';
-import { IApplicationPostFormValues } from '@/api/post/postApplication/types.ts';
-import { Application } from '@/api/get/getApplications/types.ts';
+import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
+import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';

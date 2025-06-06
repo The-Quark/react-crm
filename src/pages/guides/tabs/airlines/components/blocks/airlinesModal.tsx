@@ -13,8 +13,8 @@ import { useFormik } from 'formik';
 import { getAirlines, putAirline, postAirline, getCountries } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
-import { AirlineResponse } from '@/api/get/getAirlines/types.ts';
-import { IAirlineFormValues } from '@/api/post/postAirline/types.ts';
+import { AirlineResponse } from '@/api/get/getGuides/getAirlines/types.ts';
+import { IAirlineFormValues } from '@/api/post/postGuides/postAirline/types.ts';
 
 interface Props {
   open: boolean;

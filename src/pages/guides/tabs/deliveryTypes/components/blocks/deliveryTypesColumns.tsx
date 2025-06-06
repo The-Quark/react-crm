@@ -4,7 +4,7 @@ import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteDeliveryType } from '@/api';
-import { DeliveryType } from '@/api/get/getDeliveryTypes/types.ts';
+import { DeliveryType } from '@/api/get/getGuides/getDeliveryTypes/types.ts';
 import { DeliveryTypesModal } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';

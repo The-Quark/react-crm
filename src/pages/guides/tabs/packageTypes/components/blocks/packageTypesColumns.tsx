@@ -5,7 +5,7 @@ import { useLanguage } from '@/providers';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deletePackageType } from '@/api';
 import PackageTypesModal from '@/pages/guides/tabs/packageTypes/components/blocks/packageTypesModal.tsx';
-import { PackageType } from '@/api/get/getPackageTypes/types.ts';
+import { PackageType } from '@/api/get/getGuides/getPackageTypes/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';

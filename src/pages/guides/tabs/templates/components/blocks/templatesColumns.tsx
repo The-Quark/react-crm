@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Template } from '@/api/get/getTemplates/types.ts';
+import { Template } from '@/api/get/getGuides/getTemplates/types.ts';
 import { TemplatesMenuOptions } from '@/pages/guides/tabs/templates/components/blocks/templatesMenuOptions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Country } from '@/api/get/getCountries/types.ts';
+import { Country } from '@/api/get/getGuides/getCountries/types.ts';
 
 export const useCountriesColumns = (): ColumnDef<Country>[] => {
   const { isRTL } = useLanguage();

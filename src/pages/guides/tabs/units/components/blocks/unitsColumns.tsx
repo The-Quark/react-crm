@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Unit } from '@/api/get/getUnits/types.ts';
+import { Unit } from '@/api/get/getGuides/getUnits/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteUnit } from '@/api';
 import UnitModal from '@/pages/guides/tabs/units/components/blocks/unitsModal.tsx';

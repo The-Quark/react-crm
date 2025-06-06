@@ -11,9 +11,9 @@ import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { postDeliveryType, putDeliveryType, getDeliveryTypes } from '@/api';
-import { IDeliveryTypeFormValues } from '@/api/post/postDeliveryType/types.ts';
+import { IDeliveryTypeFormValues } from '@/api/post/postGuides/postDeliveryType/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { DeliveryTypesResponse } from '@/api/get/getDeliveryTypes/types.ts';
+import { DeliveryTypesResponse } from '@/api/get/getGuides/getDeliveryTypes/types.ts';
 import { SharedError, SharedInput, SharedLoading, SharedTextArea } from '@/partials/sharedUI';
 
 interface Props {

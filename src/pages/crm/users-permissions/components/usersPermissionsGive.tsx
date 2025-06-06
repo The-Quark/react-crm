@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Permission } from '@/api/get/getPermissionsMap/types.ts';
+import { Permission } from '@/api/get/getACL/getPermissionsMap/types.ts';
 import { useFormik } from 'formik';
 import { putPermissionsDistribute } from '@/api';
 import { useNavigate } from 'react-router-dom';

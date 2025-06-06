@@ -16,7 +16,7 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { Client } from '@/api/get/getClients/types.ts';
-import { Source } from '@/api/get/getSources/types.ts';
+import { Source } from '@/api/get/getGuides/getSources/types.ts';
 
 interface Props {
   clientData?: Client;

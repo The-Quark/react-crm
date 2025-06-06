@@ -10,12 +10,12 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { ISourceFormValues } from '@/api/post/postSource/types.ts';
+import { ISourceFormValues } from '@/api/post/postGuides/postSource/types.ts';
 import { postSource } from '@/api';
 import { getSources } from '@/api/get';
 import { putSource } from '@/api/put';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { SourceResponse } from '@/api/get/getSources/types.ts';
+import { SourceResponse } from '@/api/get/getGuides/getSources/types.ts';
 import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {

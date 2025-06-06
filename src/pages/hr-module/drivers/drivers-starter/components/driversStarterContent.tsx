@@ -38,7 +38,7 @@ import {
   mockUserStatusOptions
 } from '@/lib/mocks.ts';
 import { format } from 'date-fns';
-import { IGetUserByParams } from '@/api/get/getUserByParams/types.ts';
+import { IGetUserByParams } from '@/api/get/getUser/getUserByParams/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 import { useAuthContext } from '@/auth';
 

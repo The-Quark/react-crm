@@ -1,0 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import * as authHelper from '@/auth/_helpers.ts';
+import { UserResponse } from '@/api/get/getUser/getCurrentUser/types.ts';
+import { USERS_URL } from '@/api/url';
+
+const fetchCurrentUser = async () => {
+  const { data } = await axios.get<UserResponse>(USERS_URL);
+  return data.result;
+};
+
+export const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ['currentUser'],
+    queryFn: fetchCurrentUser,
+    retry: false,
+    enabled: !!authHelper.getAuth(),
+    staleTime: Infinity
+  });
+};

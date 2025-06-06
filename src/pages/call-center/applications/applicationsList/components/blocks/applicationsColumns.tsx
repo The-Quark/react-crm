@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
-import { Application } from '@/api/get/getApplications/types.ts';
+import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { ApplicationsMenuOptions } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsMenuOptions.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';

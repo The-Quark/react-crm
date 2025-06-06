@@ -19,7 +19,7 @@ import { AxiosError } from 'axios';
 import { SharedInput, SharedTextArea } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
-import { Source } from '@/api/get/getSources/types.ts';
+import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 
 interface Props {

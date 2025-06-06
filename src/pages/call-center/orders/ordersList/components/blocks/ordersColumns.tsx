@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
-import { Order } from '@/api/get/getOrder/types.ts';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';

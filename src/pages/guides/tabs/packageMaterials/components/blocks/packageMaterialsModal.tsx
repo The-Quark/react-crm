@@ -27,8 +27,8 @@ import {
   SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
-import { PackageMaterialResponse } from '@/api/get/getPackageMaterials/types.ts';
-import { IPackageMaterialFormValues } from '@/api/post/postPackageMaterial/types.ts';
+import { PackageMaterialResponse } from '@/api/get/getGuides/getPackageMaterials/types.ts';
+import { IPackageMaterialFormValues } from '@/api/post/postGuides/postPackageMaterial/types.ts';
 import { decimalValidation } from '@/utils';
 
 interface Props {

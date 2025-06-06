@@ -15,10 +15,10 @@ import { getApplications, getDeliveryTypes, getPackageTypes, getSources } from '
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { Order } from '@/api/get/getOrder/types.ts';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
-import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
   orderData?: Order;

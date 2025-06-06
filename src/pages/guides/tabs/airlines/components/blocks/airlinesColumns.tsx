@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Airline } from '@/api/get/getAirlines/types.ts';
+import { Airline } from '@/api/get/getGuides/getAirlines/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteAirline } from '@/api';
 import AirlineModal from '@/pages/guides/tabs/airlines/components/blocks/airlinesModal.tsx';

@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
-import { IPackageTypeFormValues } from '@/api/post/postPackageType/types.ts';
+import { IPackageTypeFormValues } from '@/api/post/postGuides/postPackageType/types.ts';
 import { useQueryClient } from '@tanstack/react-query';
 import { SharedInput, SharedSelect, SharedTextArea } from '@/partials/sharedUI';
 

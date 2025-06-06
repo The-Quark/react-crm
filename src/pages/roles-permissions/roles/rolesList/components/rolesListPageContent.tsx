@@ -1,5 +1,4 @@
-import { getRoles } from '@/api/get/getRoles';
-import { Role } from '@/api/get/getRoles/types.ts';
+import { Role } from '@/api/get/getACL/getRoles/types.ts';
 import { CircularProgress } from '@mui/material';
 import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
@@ -7,6 +6,7 @@ import { SharedError } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { RolesListCard } from '@/pages/roles-permissions/roles/rolesList/components/rolesListCard.tsx';
+import { getRoles } from '@/api/get/getACL';
 
 export const RolesListPageContent = () => {
   const { currentUser } = useAuthContext();

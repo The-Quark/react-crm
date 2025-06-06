@@ -20,7 +20,7 @@ import {
   SharedSelect
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router';
-import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
 
 interface Props {
   isEditMode: boolean;

@@ -10,12 +10,12 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { ILanguageFormValues } from '@/api/post/postLanguage/types.ts';
+import { ILanguageFormValues } from '@/api/post/postGuides/postLanguage/types.ts';
 import { postLanguage } from '@/api';
-import { getLanguages } from '@/api/get/getLanguages';
+import { getLanguages } from '@/api/get/getGuides/getLanguages';
 import { putLanguage } from '@/api/put';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { LanguageResponse } from '@/api/get/getLanguages/types.ts';
+import { LanguageResponse } from '@/api/get/getGuides/getLanguages/types.ts';
 import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 
 interface Props {

@@ -10,9 +10,9 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { IGlobalParamsSubdivisionFormValues } from '@/api/post/postGlobalParamsSubdivision/types.ts';
+import { IGlobalParamsSubdivisionFormValues } from '@/api/post/postGlobalParams/postGlobalParamsSubdivision/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ISubdivisionResponse } from '@/api/get/getGlobalParamsSubdivisions/types.ts';
+import { ISubdivisionResponse } from '@/api/get/getGlobalParams/getGlobalParamsSubdivisions/types.ts';
 import {
   SharedAutocomplete,
   SharedError,

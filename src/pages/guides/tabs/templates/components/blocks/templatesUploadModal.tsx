@@ -13,8 +13,8 @@ import { useFormik } from 'formik';
 import { getTemplates, getLanguages, postTemplateUpload } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
-import { UploadType } from '@/api/post/postCargoUpload/types.ts';
-import { Media } from '@/api/get/getTemplates/types.ts';
+import { UploadType } from '@/api/post/postWorkflow/postCargoUpload/types.ts';
+import { Media } from '@/api/get/getGuides/getTemplates/types.ts';
 import { AxiosError } from 'axios';
 import Dropzone from 'shadcn-dropzone';
 

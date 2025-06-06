@@ -10,10 +10,10 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { ICurrencyFormValues } from '@/api/post/postCurrency/types.ts';
+import { ICurrencyFormValues } from '@/api/post/postGuides/postCurrency/types.ts';
 import { getCurrencies, postCurrency, putCurrency } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CurrencyResponse } from '@/api/get/getCurrencies/types.ts';
+import { CurrencyResponse } from '@/api/get/getGuides/getCurrencies/types.ts';
 import { SharedDecimalInput, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
 import { decimalValidation } from '@/utils';
 

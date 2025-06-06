@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface OrderCreationContextType {
   senderId: number | null;

@@ -12,8 +12,8 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { Order } from '@/api/get/getOrder/types.ts';
-import { IOrderFormValues } from '@/api/post/postOrder/types.ts';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
   onBack: () => void;

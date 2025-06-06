@@ -10,7 +10,7 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { IVehicleFormValues } from '@/api/post/postVehicle/types.ts';
+import { IVehicleFormValues } from '@/api/post/postGuides/postVehicle/types.ts';
 import { getVehicles, postVehicle, putVehicle } from '@/api';
 import {
   Select,
@@ -20,7 +20,7 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { VehiclesResponse } from '@/api/get/getVehicles/types.ts';
+import { VehiclesResponse } from '@/api/get/getGuides/getVehicles/types.ts';
 import { VehicleStatus, VehicleType } from '@/api/enums';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 

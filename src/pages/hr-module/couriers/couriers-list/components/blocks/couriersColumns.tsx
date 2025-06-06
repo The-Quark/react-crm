@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
-import { UserModel } from '@/api/get/getUsersList/types.ts';
+import { UserModel } from '@/api/get/getUser/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
 import { CouriersMenuOptions } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';

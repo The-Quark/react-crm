@@ -26,8 +26,8 @@ import {
   SharedError,
   SharedLoading
 } from '@/partials/sharedUI';
-import { IAirlineRatesResponse } from '@/api/get/getAirlineRates/types.ts';
-import { IAirlineRateFormValues } from '@/api/post/postAirlineRate/types.ts';
+import { IAirlineRatesResponse } from '@/api/get/getGuides/getAirlineRates/types.ts';
+import { IAirlineRateFormValues } from '@/api/post/postGuides/postAirlineRate/types.ts';
 import { decimalValidation } from '@/utils';
 
 interface Props {

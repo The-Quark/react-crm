@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
 import { ParameterMenuOptions } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesMenuOptions.tsx';
-import { ParametersModel } from '@/api/get/getGlobalParameters/types.ts';
+import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 

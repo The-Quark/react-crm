@@ -7,7 +7,7 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import Dropzone from 'shadcn-dropzone';
 import { getPackages, postPackageUpload } from '@/api';
-import { UploadType } from '@/api/post/postPackageUpload/types.ts';
+import { UploadType } from '@/api/post/postWorkflow/postPackageUpload/types.ts';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
 
 export const formSchema = Yup.object().shape({

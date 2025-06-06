@@ -1,0 +1,25 @@
+import axios from 'axios';
+import { UserModel } from '@/api/put/putUsers/putUser/types.ts';
+import { USERS_URL } from '@/api/url';
+import { cleanValues } from '@/lib/helpers.ts';
+
+export const putUser = async (
+  data: UserModel,
+  removeAvatar: boolean = false
+): Promise<UserModel> => {
+  const formData = new FormData();
+  const cleanData = cleanValues(data);
+
+  Object.entries(cleanData).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      formData.append(key, value instanceof Blob ? value : String(value));
+    }
+  });
+  const urlWithParam = removeAvatar ? `${USERS_URL}?remove_avatar=1` : `${USERS_URL}`;
+
+  return await axios
+    .post<UserModel>(urlWithParam, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    .then((res) => res.data);
+};

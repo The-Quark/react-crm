@@ -13,7 +13,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Order } from '@/api/get/getOrder/types.ts';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
 
 const { useStepper, utils } = defineStepper(
