@@ -95,7 +95,7 @@ export const CargoStarterContent = () => {
     error: cargoError
   } = useQuery({
     queryKey: ['cargo', id],
-    queryFn: () => getCargo(id ? parseInt(id) : undefined),
+    queryFn: () => getCargo({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 

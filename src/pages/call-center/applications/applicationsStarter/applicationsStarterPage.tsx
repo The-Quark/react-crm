@@ -17,7 +17,7 @@ export const ApplicationsStarterPage = () => {
     error: applicationError
   } = useQuery({
     queryKey: ['application', id],
-    queryFn: () => getApplications(id ? parseInt(id) : undefined),
+    queryFn: () => getApplications({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 

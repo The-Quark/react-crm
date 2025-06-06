@@ -1,4 +1,5 @@
 import { PackageStatus } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 interface Media {
   id: number;
@@ -104,7 +105,6 @@ export interface Package {
   medias: Media[];
   hawb_pdf: string;
 }
-export interface PackagesResponse {
+export interface PackagesResponse extends IPagination {
   result: Package[];
-  count: number;
 }

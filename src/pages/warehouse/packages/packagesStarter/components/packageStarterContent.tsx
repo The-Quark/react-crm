@@ -50,7 +50,7 @@ export const PackageStarterContent = () => {
     error: ordersError
   } = useQuery({
     queryKey: ['packageOrders'],
-    queryFn: () => getOrders(),
+    queryFn: () => getOrders({}),
     staleTime: 60 * 60 * 1000
   });
 
@@ -72,7 +72,7 @@ export const PackageStarterContent = () => {
     error: cargoError
   } = useQuery({
     queryKey: ['packageCargo', id],
-    queryFn: () => getCargo(id ? parseInt(id) : undefined),
+    queryFn: () => getCargo({ id: id ? parseInt(id) : undefined }),
     staleTime: 60 * 60 * 1000,
     enabled: isEditMode
   });
@@ -84,7 +84,7 @@ export const PackageStarterContent = () => {
     error: packageError
   } = useQuery({
     queryKey: ['package', id],
-    queryFn: () => getPackages(id ? parseInt(id) : undefined),
+    queryFn: () => getPackages({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 

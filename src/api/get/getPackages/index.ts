@@ -1,11 +1,27 @@
 import axios from 'axios';
 import { PackagesResponse } from '@/api/get/getPackages/types.ts';
 import { PACKAGE_URL } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-const getPackages = async (id?: number): Promise<PackagesResponse> => {
-  return await axios
-    .get<PackagesResponse>(id ? `${PACKAGE_URL}?id=${id}` : PACKAGE_URL)
-    .then((res) => res.data);
+interface IGetPackages extends IPaginationParams {
+  id?: number;
+  title?: string;
+}
+
+const getPackages = async ({
+  id,
+  title,
+  page,
+  per_page
+}: IGetPackages = {}): Promise<PackagesResponse> => {
+  const params = new URLSearchParams();
+
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (title) params.append('title', title);
+
+  return await axios.get<PackagesResponse>(PACKAGE_URL, { params }).then((res) => res.data);
 };
 
 export { getPackages };

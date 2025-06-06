@@ -12,9 +12,11 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const DataGridPagination = () => {
-  const { table, totalRows, props } = useDataGrid();
+  const { table, props } = useDataGrid();
   const btnBaseClasses = 'size-7 p-0 text-[13px]';
   const btnArrowClasses = btnBaseClasses + ' rtl:transform rtl:rotate-180';
+
+  const totalRows = props.pagination?.total || 0;
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
   const from = pageIndex * pageSize + 1;

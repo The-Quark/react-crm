@@ -9,15 +9,17 @@ import { useState } from 'react';
 
 export const CompaniesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['global-parameters', pageIndex, pageSize, searchTerm],
+    queryKey: ['global-parameters', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getGlobalParameters({
-        page: pageIndex + 1,
-        per_page: pageSize
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
@@ -26,14 +28,19 @@ export const CompaniesListContent = () => {
   const columns = useParametersColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPageIndex(params.pageIndex);
-    setPageSize(params.pageSize);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
   };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPageIndex(0);
-    setPageSize(15);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
   };
 
   if (isError) {
@@ -43,21 +50,21 @@ export const CompaniesListContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
         data={data?.result || []}
-        rowSelection={true}
-        pagination={{
-          page: pageIndex,
-          size: pageSize
-        }}
         onFetchData={handleFetchData}
-        toolbar={<CompaniesToolbar onSearch={handleSearch} />}
         layout={{ card: true }}
+        toolbar={<CompaniesToolbar onSearch={handleSearch} />}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
-        serverSide
       />
     </Container>
   );

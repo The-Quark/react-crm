@@ -129,7 +129,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: applicationsError
   } = useQuery({
     queryKey: ['applications'],
-    queryFn: () => getApplications(),
+    queryFn: () => getApplications({}),
     staleTime: 1000 * 60 * 5
   });
 

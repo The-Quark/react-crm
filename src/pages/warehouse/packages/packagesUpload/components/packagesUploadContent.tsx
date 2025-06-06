@@ -39,7 +39,7 @@ export const PackagesUploadContent = () => {
     error: packageError
   } = useQuery({
     queryKey: ['packageUpload', id],
-    queryFn: () => getPackages(id ? parseInt(id) : undefined),
+    queryFn: () => getPackages({ id: id ? parseInt(id) : undefined }),
     enabled: !!id
   });
 

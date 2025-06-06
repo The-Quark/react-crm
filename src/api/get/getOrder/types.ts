@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface DeliveryType {
   id: number;
   name: string;
@@ -124,7 +126,6 @@ export interface Order {
   hawb_pdf: string;
 }
 
-export interface IOrdersResponse {
+export interface IOrdersResponse extends IPagination {
   result: Order[];
-  count: number;
 }

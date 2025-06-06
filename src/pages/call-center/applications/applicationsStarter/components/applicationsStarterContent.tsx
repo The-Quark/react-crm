@@ -178,7 +178,8 @@ export const ApplicationsStarterContent = ({
     error: clientError
   } = useQuery({
     queryKey: ['clientDetails', formik.values.client_id],
-    queryFn: () => getClients({ id: formik.values.client_id?.toString() ?? '' }),
+    queryFn: () =>
+      getClients({ id: formik.values.client_id ? Number(formik.values.client_id) : undefined }),
     staleTime: 60 * 60 * 1000,
     enabled: !!formik.values.client_id && isEditMode
   });

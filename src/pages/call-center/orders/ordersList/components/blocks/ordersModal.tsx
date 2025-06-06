@@ -28,7 +28,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => (id !== null ? getOrders(id) : Promise.reject('Invalid ID'))
+    queryFn: () => (id !== null ? getOrders({ id: Number(id) }) : Promise.reject('Invalid ID'))
   });
   const navigate = useNavigate();
   const order = data?.result?.[0];

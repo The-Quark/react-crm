@@ -1,4 +1,5 @@
 import { Vehicle } from '@/api/get/getVehicles/types.ts';
+import {IPagination} from "@/api/generalManualTypes";
 
 interface Role {
   id: number;
@@ -137,7 +138,6 @@ export interface UserModel {
   vehicle: Vehicle | null;
 }
 
-export interface UserListResponse {
+export interface UserListResponse extends IPagination{
   result: UserModel[];
-  count: number;
 }

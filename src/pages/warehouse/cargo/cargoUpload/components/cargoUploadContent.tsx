@@ -39,7 +39,7 @@ export const CargoUploadContent = () => {
     error: cargoError
   } = useQuery({
     queryKey: ['cargoUpload', id],
-    queryFn: () => getCargo(id ? parseInt(id) : undefined),
+    queryFn: () => getCargo({ id: id ? parseInt(id) : undefined }),
     enabled: !!id
   });
 

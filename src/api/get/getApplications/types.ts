@@ -1,4 +1,5 @@
 import { ApplicationsStatus } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 interface Source {
   id: number;
@@ -33,7 +34,6 @@ export interface Application {
   status: ApplicationsStatus;
 }
 
-export interface ApplicationsResponse {
+export interface ApplicationsResponse extends IPagination {
   result: Application[];
-  count: number;
 }

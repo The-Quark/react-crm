@@ -28,7 +28,7 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['clients-id', id],
-    queryFn: () => (id !== null ? getClients({ id: String(id) }) : Promise.reject('Invalid ID'))
+    queryFn: () => (id !== null ? getClients({ id: Number(id) }) : Promise.reject('Invalid ID'))
   });
 
   const handleCreateApplication = (clientID: number | null) => {

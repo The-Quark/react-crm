@@ -68,7 +68,7 @@ export const TasksStarterContent = () => {
     error: ordersError
   } = useQuery({
     queryKey: ['tasksOrders'],
-    queryFn: () => getOrders(),
+    queryFn: () => getOrders({}),
     staleTime: 60 * 60 * 1000
   });
 
@@ -79,7 +79,7 @@ export const TasksStarterContent = () => {
     error: usersError
   } = useQuery({
     queryKey: ['tasksUsers'],
-    queryFn: () => getUserList(),
+    queryFn: () => getUserList({}),
     staleTime: 60 * 60 * 1000
   });
 

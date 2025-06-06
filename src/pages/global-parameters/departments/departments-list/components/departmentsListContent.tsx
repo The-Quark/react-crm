@@ -13,16 +13,24 @@ export const DepartmentsListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['globalParamsDepartments', selectedCompanyId, pageIndex, pageSize, searchTerm],
+    queryKey: [
+      'globalParamsDepartments',
+      selectedCompanyId,
+      pagination.pageIndex,
+      pagination.pageSize,
+      searchTerm
+    ],
     queryFn: () =>
       getGlobalParamsDepartments({
         company_id: selectedCompanyId,
-        page: pageIndex + 1,
-        per_page: pageSize
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
       }),
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,
@@ -32,14 +40,19 @@ export const DepartmentsListContent = () => {
   const columns = useDepartmentsColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPageIndex(params.pageIndex);
-    setPageSize(params.pageSize);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
   };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPageIndex(0);
-    setPageSize(15);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
   };
 
   if (isError) {
@@ -49,14 +62,11 @@ export const DepartmentsListContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
         data={data?.result || []}
-        rowSelection={true}
-        pagination={{
-          page: pageIndex,
-          size: pageSize
-        }}
         onFetchData={handleFetchData}
+        layout={{ card: true }}
         toolbar={
           <DepartmentsToolbar
             initialCompanyId={initialCompanyId}
@@ -64,12 +74,15 @@ export const DepartmentsListContent = () => {
             onSearch={handleSearch}
           />
         }
-        layout={{ card: true }}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
-        serverSide
       />
     </Container>
   );

@@ -1,28 +1,28 @@
 import axios from 'axios';
 import { IGetUserByParams } from '@/api/get/getUserByParams/types.ts';
 import { USERS_URL } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-type GetUserParams = {
+interface IGetUserParams extends IPaginationParams {
   id?: number;
   companyId?: number;
   role?: string;
-};
+}
 
-export const getUserByParams = async (params: GetUserParams): Promise<IGetUserByParams> => {
-  const queryParams = new URLSearchParams();
+export const getUserByParams = async ({
+  id,
+  companyId,
+  role,
+  page,
+  per_page
+}: IGetUserParams): Promise<IGetUserByParams> => {
+  const params = new URLSearchParams();
 
-  if (params.id !== undefined) {
-    queryParams.append('id', params.id.toString());
-  }
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (companyId) params.append('company_id', companyId.toString());
+  if (role) params.append('role', role.toString());
 
-  if (params.companyId !== undefined) {
-    queryParams.append('company_id', params.companyId.toString());
-  }
-
-  if (params.role !== undefined) {
-    queryParams.append('role', params.role);
-  }
-
-  const url = `${USERS_URL}?${queryParams.toString()}`;
-  return await axios.get<IGetUserByParams>(url).then((res) => res.data);
+  return await axios.get<IGetUserByParams>(USERS_URL, { params }).then((res) => res.data);
 };

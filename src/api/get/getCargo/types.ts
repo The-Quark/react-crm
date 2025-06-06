@@ -1,4 +1,5 @@
 import { CargoStatus } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 interface Media {
   id: number;
@@ -67,7 +68,6 @@ export interface Cargo {
   packages: any[];
 }
 
-export interface CargoResponse {
+export interface CargoResponse extends IPagination {
   result: Cargo[];
-  count: number;
 }

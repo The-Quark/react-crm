@@ -38,7 +38,7 @@ const OrderFormSteps = () => {
     isError
   } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => getOrders(Number(id)),
+    queryFn: () => getOrders({ id: Number(id) }),
     enabled: !!id
   });
 

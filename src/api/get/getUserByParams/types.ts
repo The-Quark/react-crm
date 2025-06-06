@@ -1,5 +1,6 @@
 import { UserCourierType, UserDriverStatus, UserStatus } from '@/api/enums';
 import { Vehicle } from '@/api/get/getVehicles/types.ts';
+import { IPagination } from '@/api/generalManualTypes';
 
 interface Permission {
   id: number;
@@ -164,7 +165,6 @@ interface UserModel {
   can_register?: boolean;
 }
 
-export interface IGetUserByParams {
+export interface IGetUserByParams extends IPagination {
   result: UserModel[];
-  count: number;
 }

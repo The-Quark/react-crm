@@ -49,6 +49,7 @@ export interface TDataGridProps<TData extends object> {
     more?: boolean;
     moreLimit?: number;
     info?: string;
+    total?: number;
   };
   sorting?: { id: string; desc?: boolean }[];
   toolbar?: ReactNode;

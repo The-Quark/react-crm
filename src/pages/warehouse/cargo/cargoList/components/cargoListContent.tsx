@@ -9,17 +9,25 @@ import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/bl
 import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoModal.tsx';
 
 export const CargoListContent = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['cargo'],
-    queryFn: () => getCargo(),
-    retry: false,
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 30,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: true
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['cargo', pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryFn: () =>
+      getCargo({
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
+        title: searchTerm
+      }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
+  });
 
   const columns = useCargoColumns({
     onRowClick: (id) => {
@@ -28,25 +36,45 @@ export const CargoListContent = () => {
     }
   });
 
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
   if (isError) {
     return <SharedError error={error} />;
   }
 
   return (
     <Container>
-      {isLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={<CargoToolbar />}
-          layout={{ card: true }}
-        />
-      )}
+      <DataGrid
+        serverSide
+        columns={columns}
+        layout={{ card: true }}
+        data={data?.result || []}
+        onFetchData={handleFetchData}
+        toolbar={<CargoToolbar onSearch={handleSearch} />}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+      />
       <CargoModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
     </Container>
   );

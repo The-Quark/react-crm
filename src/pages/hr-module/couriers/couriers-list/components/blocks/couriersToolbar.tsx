@@ -5,13 +5,15 @@ import { useUserPermissions } from '@/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
+import { debounce } from '@/lib/helpers.ts';
 
 interface Props {
   initialCompanyId?: number;
   onCompanyChange: (companyId: number | null) => void;
+  onSearch?: (searchTerm: string) => void;
 }
 
-export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }) => {
+export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -20,6 +22,7 @@ export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }
   const isViewer = currentUser?.roles[0].name === 'viewer';
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+  const [searchValue, setSearchValue] = useState('');
 
   const {
     data: companyData,
@@ -32,6 +35,19 @@ export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }
     staleTime: 1000 * 60 * 5,
     enabled: isViewer || isSuperAdmin
   });
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
+  };
 
   const handleCompanyChange = (val: number) => {
     setSelectedCompanyId(val);
@@ -81,8 +97,8 @@ export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange }
             type="text"
             placeholder="Search courier"
             className="input input-sm ps-8"
-            value={(table.getColumn('courier')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('courier')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

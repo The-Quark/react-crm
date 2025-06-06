@@ -10,15 +10,17 @@ import { ITasksResponse } from '@/api/get/getTask/types.ts';
 
 export const TasksListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery<ITasksResponse>({
-    queryKey: ['tasks', pageIndex, pageSize, searchTerm],
+    queryKey: ['tasks', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getTask({
-        page: pageIndex + 1,
-        per_page: pageSize,
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
         title: searchTerm
       }),
     staleTime: 1000 * 60 * 5,
@@ -28,14 +30,19 @@ export const TasksListContent = () => {
   const columns = useTasksColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPageIndex(params.pageIndex);
-    setPageSize(params.pageSize);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
   };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPageIndex(0);
-    setPageSize(15);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
   };
 
   if (isError) {
@@ -44,25 +51,23 @@ export const TasksListContent = () => {
 
   return (
     <Container>
-      <div className="grid gap-5 lg:gap-7.5">
-        <DataGrid
-          columns={columns}
-          data={data?.result || []}
-          rowSelection={true}
-          pagination={{
-            page: pageIndex,
-            size: pageSize
-          }}
-          onFetchData={handleFetchData}
-          toolbar={<TasksToolbar onSearch={handleSearch} />}
-          layout={{ card: true }}
-          messages={{
-            empty: isPending && <SharedLoading simple />,
-            loading: isFetching && <SharedLoading simple />
-          }}
-          serverSide
-        />
-      </div>
+      <DataGrid
+        serverSide
+        columns={columns}
+        data={data?.result || []}
+        onFetchData={handleFetchData}
+        layout={{ card: true }}
+        toolbar={<TasksToolbar onSearch={handleSearch} />}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

@@ -16,8 +16,10 @@ export const ClientsListContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
   const columnsIndividual = useClientsListIndividualColumns({
     onRowClick: (id) => {
@@ -34,21 +36,31 @@ export const ClientsListContent = () => {
   });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['clients', clientType, pageIndex, pageSize, searchTerm],
-    queryFn: () => getClients({ type: clientType, page: pageIndex + 1, per_page: pageSize }),
+    queryKey: ['clients', clientType, pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryFn: () =>
+      getClients({
+        type: clientType,
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
+      }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPageIndex(params.pageIndex);
-    setPageSize(params.pageSize);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
   };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPageIndex(0);
-    setPageSize(15);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
   };
 
   if (isError) {
@@ -58,13 +70,10 @@ export const ClientsListContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
         data={data?.result || []}
-        rowSelection={true}
-        pagination={{
-          page: pageIndex,
-          size: pageSize
-        }}
+        layout={{ card: true }}
         toolbar={
           <ClientsListToolbar
             clientType={clientType}
@@ -72,12 +81,15 @@ export const ClientsListContent = () => {
             onSearch={handleSearch}
           />
         }
-        layout={{ card: true }}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
-        serverSide
       />
       <ClientsListProfileModal
         open={isModalOpen}

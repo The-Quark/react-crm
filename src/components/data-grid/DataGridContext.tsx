@@ -24,7 +24,6 @@ import { deepMerge, debounce } from '@/lib/helpers';
 export interface IDataGridContextProps<TData extends object> {
   props: TDataGridProps<TData>;
   table: Table<TData>;
-  totalRows: number;
   loading: boolean;
   setLoading: (state: boolean) => void;
   reload: () => void;
@@ -64,12 +63,9 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
     rowSelection: false,
     serverSide: false
   };
+
   const mergedProps = deepMerge(defaultValues, props);
-  const [data, setData] = useState<TData[]>(mergedProps.data || []);
   const [loading, setLoading] = useState<boolean>(false);
-  const [totalRows, setTotalRows] = useState<number>(
-    mergedProps.data ? mergedProps.data.length : 0
-  );
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: props.pagination?.page ?? 0,
     pageSize: props.pagination?.size ?? 5
@@ -89,14 +85,8 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
         sorting,
         columnFilters
       });
-      const validatedData = Array.isArray(response?.data) ? response.data : [];
-      const validatedTotal = typeof response?.totalCount === 'number' ? response.totalCount : 0;
-      setData(validatedData);
-      setTotalRows(validatedTotal);
     } catch (error) {
       console.error('Fetch error:', error);
-      setData([]);
-      setTotalRows(0);
     } finally {
       setLoading(false);
     }
@@ -108,14 +98,11 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
     if (mergedProps.serverSide) {
       debouncedFetchData();
     } else {
-      setLoading(true); // Show loading bar for local data
-      setData(mergedProps.data || []);
-      setTotalRows(mergedProps.data ? mergedProps.data.length : 0);
-      setLoading(false); // Hide loading bar after data is set
+      setLoading(true);
+      setLoading(false);
     }
   };
 
-  // Trigger debounced fetch for server-side data; load local data if serverSide is false
   useEffect(() => {
     loadData();
   }, [pagination, sorting, columnFilters, mergedProps.data, mergedProps.serverSide]);
@@ -135,7 +122,9 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
   const table = useReactTable({
     data: mergedProps.data,
     columns: mergedProps.columns,
-    pageCount: mergedProps.serverSide ? Math.ceil(totalRows / pagination.pageSize) : undefined,
+    pageCount: mergedProps.serverSide
+      ? Math.ceil(mergedProps.pagination.total / pagination.pageSize)
+      : undefined,
     state: {
       sorting,
       columnVisibility,
@@ -166,7 +155,6 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
       value={{
         props: mergedProps,
         table,
-        totalRows,
         loading,
         setLoading,
         reload: loadData

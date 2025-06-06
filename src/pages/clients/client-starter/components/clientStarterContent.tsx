@@ -19,7 +19,7 @@ const ClientStarterContent = () => {
     error: clientError
   } = useQuery({
     queryKey: ['client', id],
-    queryFn: () => getClients({ id: id as string }),
+    queryFn: () => getClients({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 

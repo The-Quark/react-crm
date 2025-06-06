@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import {
   Select,
@@ -15,15 +15,35 @@ import { cn } from '@/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { debounce } from '@/lib/helpers.ts';
 
-export const ApplicationsToolbar: FC = () => {
+interface ToolbarProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+export const ApplicationsToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
   const date = table.getColumn('created at')?.getFilterValue() as DateRange | undefined;
+
   const handleDateChange = (range: DateRange | undefined) => {
     table.getColumn('created at')?.setFilterValue(range);
+  };
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
   };
 
   return (
@@ -98,8 +118,8 @@ export const ApplicationsToolbar: FC = () => {
             type="text"
             placeholder="Search client"
             className="input input-sm ps-8"
-            value={(table.getColumn('client name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('client name')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

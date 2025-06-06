@@ -28,7 +28,8 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['application', id],
-    queryFn: () => (id !== null ? getApplications(id) : Promise.reject('Invalid ID'))
+    queryFn: () =>
+      id !== null ? getApplications({ id: Number(id) }) : Promise.reject('Invalid ID')
   });
 
   const handleCreateOrder = (applicationId: number | null) => {

@@ -26,7 +26,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageID', id],
-    queryFn: () => (id !== null ? getPackages(id) : Promise.reject('Invalid ID'))
+    queryFn: () => (id !== null ? getPackages({ id: Number(id) }) : Promise.reject('Invalid ID'))
   });
 
   const packageData = data?.result?.[0];

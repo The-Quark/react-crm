@@ -12,19 +12,43 @@ export const DriversListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['drivers', selectedCompanyId],
-    queryFn: () => getUserByParams({ companyId: selectedCompanyId, role: 'driver' }),
-    retry: false,
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['drivers', selectedCompanyId, pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryFn: () =>
+      getUserByParams({
+        companyId: selectedCompanyId,
+        role: 'driver',
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
+      }),
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
-    staleTime: 1000 * 30,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: true,
     enabled: selectedCompanyId !== undefined
   });
 
   const columns = useDriversColumns();
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -33,20 +57,26 @@ export const DriversListContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
-        data={data?.result}
-        rowSelection={true}
-        pagination={{ size: 15 }}
-        sorting={[{ id: 'id', desc: false }]}
+        data={data?.result || []}
+        onFetchData={handleFetchData}
+        layout={{ card: true }}
         toolbar={
           <DriversToolbar
+            onSearch={handleSearch}
             initialCompanyId={initialCompanyId}
             onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
           />
         }
-        layout={{ card: true }}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
-          empty: isLoading && <SharedLoading simple />
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
         }}
       />
     </Container>

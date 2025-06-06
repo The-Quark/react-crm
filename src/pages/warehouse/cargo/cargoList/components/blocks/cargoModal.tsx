@@ -26,7 +26,7 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['cargoID', id],
-    queryFn: () => (id !== null ? getCargo(id) : Promise.reject('Invalid ID'))
+    queryFn: () => (id !== null ? getCargo({ id: Number(id) }) : Promise.reject('Invalid ID'))
   });
 
   const cargo = data?.result?.[0];

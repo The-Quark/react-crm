@@ -9,14 +9,22 @@ import { OrdersToolbar } from '@/pages/call-center/orders/ordersList/components/
 import { OrdersModal } from '@/pages/call-center/orders/ordersList/components/blocks/ordersModal.tsx';
 
 export const OrdersListContent = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['orders'],
-    queryFn: () => getOrders(),
-    retry: false,
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 30,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: true
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
+
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['orders', pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryFn: () =>
+      getOrders({
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
+        title: searchTerm
+      }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -28,6 +36,22 @@ export const OrdersListContent = () => {
     }
   });
 
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
   if (isError) {
     return <SharedError error={error} />;
   }
@@ -35,15 +59,19 @@ export const OrdersListContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
-        data={data?.result}
-        rowSelection={true}
-        pagination={{ size: 15 }}
-        sorting={[{ id: 'id', desc: false }]}
-        toolbar={<OrdersToolbar />}
+        data={data?.result || []}
         layout={{ card: true }}
+        toolbar={<OrdersToolbar onSearch={handleSearch} />}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
-          empty: isLoading && <SharedLoading simple />
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
         }}
       />
       <OrdersModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
