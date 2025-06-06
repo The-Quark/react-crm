@@ -140,7 +140,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources(),
+    queryFn: () => getSources({}),
     staleTime: 60 * 60 * 1000
   });
 
@@ -151,7 +151,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: deliveryTypesError
   } = useQuery({
     queryKey: ['deliveryTypes'],
-    queryFn: () => getDeliveryTypes(),
+    queryFn: () => getDeliveryTypes({}),
     staleTime: 1000 * 60 * 5
   });
 
@@ -162,7 +162,10 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: packageTypesError
   } = useQuery({
     queryKey: ['packageTypes'],
-    queryFn: () => getPackageTypes(undefined, currentLanguage.code),
+    queryFn: () =>
+      getPackageTypes({
+        language_code: currentLanguage.code
+      }),
     staleTime: 1000 * 60 * 5
   });
 

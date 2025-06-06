@@ -180,7 +180,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     error: vehiclesError
   } = useQuery({
     queryKey: ['staff-vehicles'],
-    queryFn: () => getVehicles(),
+    queryFn: () => getVehicles({}),
     staleTime: 60 * 60 * 1000
   });
 

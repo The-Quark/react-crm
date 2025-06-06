@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface Currency {
   id: number;
   code: string;
@@ -11,7 +13,6 @@ export interface Currency {
   updated_at: string;
 }
 
-export interface CurrencyResponse {
+export interface CurrencyResponse extends IPagination {
   result: Currency[];
-  count: number;
 }

@@ -56,7 +56,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
       const fetchReq = async () => {
         setFormLoading(true);
         try {
-          const reqData = await getPackageTypes(Number(id), undefined);
+          const reqData = await getPackageTypes({ id: Number(id) });
           const req = reqData.result[0];
           setInitialValues({
             code: req.code,

@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Country {
   id: number;
   iso2: string;
@@ -77,7 +79,6 @@ export interface Airline {
   rates: AirlineRate[];
 }
 
-export interface AirlineResponse {
+export interface AirlineResponse extends IPagination {
   result: Airline[];
-  count: number;
 }

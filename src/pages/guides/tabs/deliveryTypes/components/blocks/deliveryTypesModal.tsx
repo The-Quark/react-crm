@@ -54,7 +54,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: deliveryTypesError
   } = useQuery({
     queryKey: ['formDeliveryTypes', id],
-    queryFn: () => getDeliveryTypes(Number(id)),
+    queryFn: () => getDeliveryTypes({ id: Number(id) }),
     enabled: !!id && open
   });
 

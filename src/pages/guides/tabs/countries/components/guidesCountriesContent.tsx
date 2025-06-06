@@ -7,7 +7,7 @@ import { CountriesToolbar } from '@/pages/guides/tabs/countries/components/block
 import { useCountriesColumns } from '@/pages/guides/tabs/countries/components/blocks/countriesColumns.tsx';
 
 export const GuidesCountriesContent = () => {
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['guidesCountries'],
     queryFn: () => getCountries('iso2,phone_code,currency,timezones'),
     staleTime: Infinity
@@ -22,15 +22,17 @@ export const GuidesCountriesContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
-        data={data?.data}
+        data={data?.data || []}
         rowSelection={true}
         pagination={{ size: 15 }}
         sorting={[{ id: 'id', desc: false }]}
         toolbar={<CountriesToolbar />}
         layout={{ card: true }}
         messages={{
-          empty: isLoading && <SharedLoading simple />
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
         }}
       />
     </Container>

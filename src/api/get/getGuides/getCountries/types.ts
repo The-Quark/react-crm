@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Timezone {
   id: number;
   name: string;
@@ -25,7 +27,7 @@ export interface Country {
   timezones: Timezone[];
 }
 
-export interface CountriesResponse {
+export interface CountriesResponse extends IPagination {
   success: boolean;
   message: string;
   data: Country[];

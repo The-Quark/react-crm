@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Airline {
   id: number;
   code: string;
@@ -81,7 +83,6 @@ export interface AirlineRate {
   delivery_types: DeliveryType[];
 }
 
-export interface IAirlineRatesResponse {
+export interface IAirlineRatesResponse extends IPagination {
   result: AirlineRate[];
-  count: number;
 }

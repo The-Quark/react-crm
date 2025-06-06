@@ -3,20 +3,42 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { DeliveryTypesModal } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { debounce } from '@/lib/helpers.ts';
 
-export const DeliveryTypesToolbar: FC = () => {
+interface ToolbarProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+export const DeliveryTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+
   const handleClose = () => {
     setModalOpen(false);
   };
+
   const handleOpen = () => {
     setModalOpen(true);
   };
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
+  };
+
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Delivery Types</h3>
@@ -36,8 +58,8 @@ export const DeliveryTypesToolbar: FC = () => {
             type="text"
             placeholder="Search delivery type"
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

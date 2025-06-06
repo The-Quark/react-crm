@@ -107,7 +107,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
     error: languageError
   } = useQuery({
     queryKey: ['templatesLanguage'],
-    queryFn: () => getLanguages(),
+    queryFn: () => getLanguages({}),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });

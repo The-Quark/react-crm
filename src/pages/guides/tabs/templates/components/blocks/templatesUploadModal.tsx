@@ -65,7 +65,7 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
     error: languageError
   } = useQuery({
     queryKey: ['templatesLanguage'],
-    queryFn: () => getLanguages(),
+    queryFn: () => getLanguages({}),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });

@@ -68,7 +68,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: currencyError
   } = useQuery({
     queryKey: ['formCurrency', id],
-    queryFn: () => getCurrencies(Number(id)),
+    queryFn: () => getCurrencies({ id: Number(id) }),
     enabled: !!id && open
   });
 

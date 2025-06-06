@@ -119,7 +119,7 @@ export const ApplicationsStarterContent = ({
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources(),
+    queryFn: () => getSources({}),
     staleTime: 60 * 60 * 1000
   });
 

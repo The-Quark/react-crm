@@ -5,15 +5,44 @@ import { getAirlines } from '@/api';
 import { useAirlinesColumns } from '@/pages/guides/tabs/airlines/components/blocks/airlinesColumns.tsx';
 import { AirlinesToolbar } from '@/pages/guides/tabs/airlines/components/blocks/airlinesToolbar.tsx';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useState } from 'react';
 
 export const GuidesAirlinesContent = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['guidesAirlines'],
-    queryFn: () => getAirlines(),
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
   });
+
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: ['guidesAirlines', pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryFn: () =>
+      getAirlines({
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
+        title: searchTerm
+      }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
+  });
+
   const columns = useAirlinesColumns();
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
 
   if (isError) {
     return <SharedError error={error} />;
@@ -22,15 +51,20 @@ export const GuidesAirlinesContent = () => {
   return (
     <Container>
       <DataGrid
+        serverSide
         columns={columns}
-        data={data?.result}
-        rowSelection={true}
-        pagination={{ size: 15 }}
-        sorting={[{ id: 'id', desc: false }]}
-        toolbar={<AirlinesToolbar />}
+        data={data?.result || []}
+        onFetchData={handleFetchData}
+        toolbar={<AirlinesToolbar onSearch={handleSearch} />}
         layout={{ card: true }}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
         messages={{
-          empty: isLoading && <SharedLoading simple />
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
         }}
       />
     </Container>

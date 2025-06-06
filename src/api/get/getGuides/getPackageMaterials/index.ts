@@ -1,10 +1,28 @@
 import axios from 'axios';
 import { PackageMaterialResponse } from '@/api/get/getGuides/getPackageMaterials/types.ts';
 import { PACKAGE_MATERIAL_URL } from '@/api/url';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-const getPackageMaterials = async (id?: number): Promise<PackageMaterialResponse> => {
+interface IGetPackageMaterials extends IPaginationParams {
+  id?: number;
+  title?: string;
+}
+
+const getPackageMaterials = async ({
+  id,
+  title,
+  per_page,
+  page
+}: IGetPackageMaterials): Promise<PackageMaterialResponse> => {
+  const params = new URLSearchParams();
+
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (title) params.append('title', title);
+
   return await axios
-    .get<PackageMaterialResponse>(id ? `${PACKAGE_MATERIAL_URL}?id=${id}` : PACKAGE_MATERIAL_URL)
+    .get<PackageMaterialResponse>(PACKAGE_MATERIAL_URL, { params })
     .then((res) => res.data);
 };
 

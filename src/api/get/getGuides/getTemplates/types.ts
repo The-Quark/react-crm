@@ -1,4 +1,5 @@
 import { TemplateType } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 export interface Media {
   id: number;
@@ -65,7 +66,6 @@ export interface Template {
   language: Language[];
 }
 
-export interface ITemplatesResponse {
+export interface ITemplatesResponse extends IPagination {
   result: Template[];
-  count: number;
 }

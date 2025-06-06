@@ -175,7 +175,7 @@ export const DriversStarterContent: FC<Props> = ({ isEditMode, usersData, userId
     error: vehiclesError
   } = useQuery({
     queryKey: ['staff-vehicles'],
-    queryFn: () => getVehicles(),
+    queryFn: () => getVehicles({}),
     staleTime: 60 * 60 * 1000
   });
 

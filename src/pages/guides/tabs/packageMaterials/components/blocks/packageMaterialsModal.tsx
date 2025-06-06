@@ -89,7 +89,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: packageMaterialError
   } = useQuery({
     queryKey: ['formPackageMaterial', id],
-    queryFn: () => getPackageMaterials(Number(id)),
+    queryFn: () => getPackageMaterials({ id: Number(id) }),
     enabled: !!id && open
   });
 
@@ -100,7 +100,7 @@ const PackageMaterialsModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: unitsError
   } = useQuery({
     queryKey: ['guidesPackageMaterialsUnits'],
-    queryFn: () => getUnits(),
+    queryFn: () => getUnits({}),
     staleTime: 1000 * 60 * 60,
     refetchOnWindowFocus: false
   });

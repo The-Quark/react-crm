@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -87,7 +87,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: vehicleError
   } = useQuery({
     queryKey: ['formVehicles', id],
-    queryFn: () => getVehicles(Number(id)),
+    queryFn: () => getVehicles({ id: Number(id) }),
     enabled: !!id && open
   });
 

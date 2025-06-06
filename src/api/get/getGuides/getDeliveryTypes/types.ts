@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface DeliveryType {
   id: number;
   name: string;
@@ -8,7 +10,6 @@ export interface DeliveryType {
   deleted_at: string | null;
 }
 
-export interface DeliveryTypesResponse {
+export interface DeliveryTypesResponse extends IPagination {
   result: DeliveryType[];
-  count: number;
 }

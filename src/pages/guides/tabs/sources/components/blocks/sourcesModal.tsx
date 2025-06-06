@@ -56,7 +56,7 @@ const SourceModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: sourcesError
   } = useQuery({
     queryKey: ['formSources', id],
-    queryFn: () => getSources(Number(id)),
+    queryFn: () => getSources({ id: Number(id) }),
     enabled: !!id && open
   });
 

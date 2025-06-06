@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface Source {
   id: number;
   code: string;
@@ -8,7 +10,6 @@ export interface Source {
   updated_at: string;
 }
 
-export interface SourceResponse {
+export interface SourceResponse extends IPagination {
   result: Source[];
-  count: number;
 }

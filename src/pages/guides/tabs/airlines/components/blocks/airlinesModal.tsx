@@ -60,7 +60,7 @@ const AirlineModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: airlinesError
   } = useQuery({
     queryKey: ['formAirline', id],
-    queryFn: () => getAirlines(Number(id)),
+    queryFn: () => getAirlines({ id: Number(id) }),
     enabled: !!id && open
   });
 

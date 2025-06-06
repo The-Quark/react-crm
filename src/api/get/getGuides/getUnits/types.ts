@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface Unit {
   id: number;
   code: string;
@@ -7,7 +9,6 @@ export interface Unit {
   updated_at: string;
 }
 
-export interface UnitsResponse {
+export interface UnitsResponse extends IPagination {
   result: Unit[];
-  count: number;
 }

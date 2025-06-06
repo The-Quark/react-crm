@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { TEMPLATE_URL } from '@/api/url';
 import { ITemplatesResponse } from '@/api/get/getGuides/getTemplates/types.ts';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-interface ITemplatesFilters {
+interface ITemplatesFilters extends IPaginationParams {
   id?: number;
   company_id?: number;
   type?: string;
@@ -10,22 +11,26 @@ interface ITemplatesFilters {
   language_code?: string;
 }
 
-const getTemplates = async (filters?: ITemplatesFilters): Promise<ITemplatesResponse> => {
-  const queryParams = new URLSearchParams();
+const getTemplates = async ({
+  language_code,
+  code,
+  id,
+  type,
+  company_id,
+  page,
+  per_page
+}: ITemplatesFilters): Promise<ITemplatesResponse> => {
+  const params = new URLSearchParams();
 
-  if (filters) {
-    if (filters.id !== undefined) queryParams.append('id', filters.id.toString());
-    if (filters.company_id !== undefined)
-      queryParams.append('company_id', filters.company_id.toString());
-    if (filters.type !== undefined) queryParams.append('type', filters.type);
-    if (filters.code !== undefined) queryParams.append('code', filters.code);
-    if (filters.language_code !== undefined)
-      queryParams.append('language_code', filters.language_code);
-  }
+  if (id) params.append('id', id.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  if (language_code) params.append('language_code', language_code.toString());
+  if (code) params.append('code', code.toString());
+  if (type) params.append('type', type.toString());
+  if (company_id) params.append('company_id', company_id.toString());
 
-  const url = filters ? `${TEMPLATE_URL}?${queryParams.toString()}` : TEMPLATE_URL;
-
-  return await axios.get<ITemplatesResponse>(url).then((res) => res.data);
+  return await axios.get<ITemplatesResponse>(TEMPLATE_URL, { params }).then((res) => res.data);
 };
 
 export { getTemplates };

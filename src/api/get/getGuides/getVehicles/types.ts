@@ -1,4 +1,5 @@
 import { VehicleStatus, VehicleType } from '@/api/enums';
+import { IPagination } from '@/api/generalManualTypes';
 
 export interface Vehicle {
   id: number;
@@ -13,7 +14,6 @@ export interface Vehicle {
   updated_at: string;
 }
 
-export interface VehiclesResponse {
+export interface VehiclesResponse extends IPagination {
   result: Vehicle[];
-  count: number;
 }

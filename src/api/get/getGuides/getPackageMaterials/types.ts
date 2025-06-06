@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 interface Unit {
   id: number;
   code: string;
@@ -42,7 +44,6 @@ export interface PackageMaterial {
   company: Company[];
 }
 
-export interface PackageMaterialResponse {
+export interface PackageMaterialResponse extends IPagination {
   result: PackageMaterial[];
-  count: number;
 }

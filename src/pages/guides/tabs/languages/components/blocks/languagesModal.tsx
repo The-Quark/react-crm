@@ -69,7 +69,7 @@ const LanguagesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: languageError
   } = useQuery({
     queryKey: ['formLanguage', id],
-    queryFn: () => getLanguages(Number(id)),
+    queryFn: () => getLanguages({ id: Number(id) }),
     enabled: !!id && open
   });
 

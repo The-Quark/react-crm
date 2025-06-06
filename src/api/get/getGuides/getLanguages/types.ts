@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface Language {
   id: number;
   created_at: string;
@@ -11,7 +13,6 @@ export interface Language {
   deleted_at: string | null;
 }
 
-export interface LanguageResponse {
+export interface LanguageResponse extends IPagination {
   result: Language[];
-  count: number;
 }

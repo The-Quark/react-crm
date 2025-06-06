@@ -1,3 +1,5 @@
+import { IPagination } from '@/api/generalManualTypes';
+
 export interface CRMLanguage {
   id: number;
   created_at: string;
@@ -33,7 +35,6 @@ export interface PackageType {
   language: PackageTypeLanguage[];
 }
 
-export interface PackageTypesResponse {
+export interface PackageTypesResponse extends IPagination {
   result: PackageType[];
-  count: number;
 }

@@ -12,10 +12,28 @@ import { TemplatesToolbar } from '@/pages/guides/tabs/templates/components/block
 export const GuidesTemplatesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15
+  });
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['guidesTemplates', selectedLanguage.code],
-    queryFn: () => getTemplates({ language_code: selectedLanguage.code })
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: [
+      'guidesTemplates',
+      selectedLanguage.code,
+      pagination.pageIndex,
+      pagination.pageSize,
+      searchTerm
+    ],
+    queryFn: () =>
+      getTemplates({
+        language_code: selectedLanguage.code,
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize
+      }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
 
   const {
@@ -24,7 +42,7 @@ export const GuidesTemplatesContent = () => {
     error: isLanguageError
   } = useQuery({
     queryKey: ['guidesTemplatesLanguages'],
-    queryFn: () => getLanguages(),
+    queryFn: () => getLanguages({}),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 60
   });
@@ -33,6 +51,22 @@ export const GuidesTemplatesContent = () => {
     languages: languagesData?.result || [],
     selectedLanguage: selectedLanguage.code
   });
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
 
   const handleLanguageChange = (languageCode: string) => {
     setSelectedLanguage((prev) => ({ ...prev, code: languageCode as TLanguageCode }));
@@ -44,28 +78,29 @@ export const GuidesTemplatesContent = () => {
 
   return (
     <Container>
-      {isLanguagesLoading ? (
-        <SharedLoading />
-      ) : (
-        <DataGrid
-          columns={columns}
-          data={data?.result}
-          rowSelection={true}
-          pagination={{ size: 15 }}
-          sorting={[{ id: 'id', desc: false }]}
-          toolbar={
-            <TemplatesToolbar
-              currentLanguage={selectedLanguage.code}
-              languages={languagesData?.result || []}
-              onLanguageChange={handleLanguageChange}
-            />
-          }
-          layout={{ card: true }}
-          messages={{
-            empty: isLoading && <SharedLoading simple />
-          }}
-        />
-      )}
+      <DataGrid
+        serverSide
+        columns={columns}
+        data={data?.result || []}
+        onFetchData={handleFetchData}
+        toolbar={
+          <TemplatesToolbar
+            currentLanguage={selectedLanguage.code}
+            languages={languagesData?.result || []}
+            onLanguageChange={handleLanguageChange}
+          />
+        }
+        layout={{ card: true }}
+        pagination={{
+          page: pagination.pageIndex,
+          size: pagination.pageSize,
+          total: data?.total || 0
+        }}
+        messages={{
+          empty: isPending && <SharedLoading simple />,
+          loading: isFetching && <SharedLoading simple />
+        }}
+      />
     </Container>
   );
 };

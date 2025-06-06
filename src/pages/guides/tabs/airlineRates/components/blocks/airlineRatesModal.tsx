@@ -105,7 +105,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: airlineRateError
   } = useQuery({
     queryKey: ['formAirlineRate', id],
-    queryFn: () => getAirlineRates(Number(id)),
+    queryFn: () => getAirlineRates({ id: Number(id) }),
     enabled: !!id && open
   });
 
@@ -116,7 +116,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: airlineError
   } = useQuery({
     queryKey: ['airlineRatesAirline'],
-    queryFn: () => getAirlines(),
+    queryFn: () => getAirlines({}),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });
@@ -140,7 +140,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: currenciesError
   } = useQuery({
     queryKey: ['airlineRatesCurrencies'],
-    queryFn: () => getCurrencies(),
+    queryFn: () => getCurrencies({}),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });

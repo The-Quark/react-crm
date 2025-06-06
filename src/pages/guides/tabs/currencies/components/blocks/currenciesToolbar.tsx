@@ -3,8 +3,14 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/currenciesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { debounce } from '@/lib/helpers.ts';
 
-export const CurrenciesToolbar: FC = () => {
+interface ToolbarProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+export const CurrenciesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
@@ -17,6 +23,19 @@ export const CurrenciesToolbar: FC = () => {
   };
   const handleOpen = () => {
     setModalOpen(true);
+  };
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
   };
 
   return (
@@ -38,8 +57,8 @@ export const CurrenciesToolbar: FC = () => {
             type="text"
             placeholder="Search currency"
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

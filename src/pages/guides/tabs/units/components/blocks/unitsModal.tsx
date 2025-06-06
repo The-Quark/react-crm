@@ -51,7 +51,7 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: unitError
   } = useQuery({
     queryKey: ['formUnits', id],
-    queryFn: () => getUnits(Number(id)),
+    queryFn: () => getUnits({ id: Number(id) }),
     enabled: !!id && open
   });
 
