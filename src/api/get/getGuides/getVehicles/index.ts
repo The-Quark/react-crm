@@ -5,12 +5,12 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetVehicles extends IPaginationParams {
   id?: number;
-  title?: string;
+  plate_number?: string;
 }
 
 const getVehicles = async ({
   id,
-  title,
+  plate_number,
   per_page,
   page
 }: IGetVehicles): Promise<VehiclesResponse> => {
@@ -19,7 +19,7 @@ const getVehicles = async ({
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (plate_number) params.append('plate_number', plate_number);
 
   return await axios.get<VehiclesResponse>(VEHICLE_URL, { params }).then((res) => res.data);
 };

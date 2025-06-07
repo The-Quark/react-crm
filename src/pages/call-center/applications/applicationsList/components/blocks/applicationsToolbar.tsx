@@ -16,12 +16,19 @@ import { Calendar } from '@/components/ui/calendar.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/lib/helpers.ts';
+import { ApplicationsStatus } from '@/api/enums';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
+  onStatusChange?: (status: ApplicationsStatus | undefined) => void;
+  currentStatus?: ApplicationsStatus;
 }
 
-export const ApplicationsToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+export const ApplicationsToolbar: FC<ToolbarProps> = ({
+  onSearch,
+  currentStatus,
+  onStatusChange
+}) => {
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
@@ -46,6 +53,15 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     debouncedSearch(value);
   };
 
+  const handleStatusChange = (value: string) => {
+    const newStatus = value === 'all' ? undefined : (value as ApplicationsStatus);
+
+    table.getColumn('status')?.setFilterValue(newStatus || '');
+    if (onStatusChange) {
+      onStatusChange(newStatus);
+    }
+  };
+
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Applications</h3>
@@ -55,12 +71,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             New application
           </a>
         )}
-        <Select
-          value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('status')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
+        <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>

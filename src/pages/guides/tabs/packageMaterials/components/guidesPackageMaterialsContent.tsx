@@ -20,7 +20,7 @@ export const GuidesPackageMaterialsContent = () => {
       getPackageMaterials({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        title: searchTerm
+        name: searchTerm
       }),
     staleTime: 1000 * 60 * 60,
     refetchOnWindowFocus: true

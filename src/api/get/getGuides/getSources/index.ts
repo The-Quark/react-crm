@@ -5,16 +5,16 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetSources extends IPaginationParams {
   id?: number;
-  title?: string;
+  name?: string;
 }
 
-const getSources = async ({ title, id, per_page, page }: IGetSources): Promise<SourceResponse> => {
+const getSources = async ({ name, id, per_page, page }: IGetSources): Promise<SourceResponse> => {
   const params = new URLSearchParams();
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (name) params.append('name', name);
 
   return await axios.get<SourceResponse>(SOURCE_URL, { params }).then((res) => res.data);
 };

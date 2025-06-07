@@ -5,12 +5,12 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetPackageMaterials extends IPaginationParams {
   id?: number;
-  title?: string;
+  name?: string;
 }
 
 const getPackageMaterials = async ({
   id,
-  title,
+  name,
   per_page,
   page
 }: IGetPackageMaterials): Promise<PackageMaterialResponse> => {
@@ -19,7 +19,7 @@ const getPackageMaterials = async ({
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (name) params.append('name', name);
 
   return await axios
     .get<PackageMaterialResponse>(PACKAGE_MATERIAL_URL, { params })

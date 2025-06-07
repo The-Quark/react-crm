@@ -1,27 +1,30 @@
 /* eslint-disable prettier/prettier */
-import { DataGrid, Container } from '@/components';
+import { Container, DataGrid } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getApplications } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useApplicationsColumns } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsColumns.tsx';
 import { ApplicationsToolbar } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsToolbar.tsx';
 import { useState } from 'react';
 import { ApplicationsModal } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsModal.tsx';
+import { ApplicationsStatus } from '@/api/enums';
 
 export const ApplicationListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [status, setStatus] = useState<ApplicationsStatus>();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['applications', pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryKey: ['applications', pagination.pageIndex, pagination.pageSize, searchTerm, status],
     queryFn: () =>
       getApplications({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        title: searchTerm
+        full_name: searchTerm,
+        status: status
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
@@ -52,6 +55,14 @@ export const ApplicationListContent = () => {
     });
   };
 
+  const handleStatusChange = (newStatus: ApplicationsStatus | undefined) => {
+    setStatus(newStatus);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
   if (isError) {
     return <SharedError error={error} />;
   }
@@ -64,7 +75,13 @@ export const ApplicationListContent = () => {
         data={data?.result || []}
         onFetchData={handleFetchData}
         layout={{ card: true }}
-        toolbar={<ApplicationsToolbar onSearch={handleSearch} />}
+        toolbar={
+          <ApplicationsToolbar
+            onSearch={handleSearch}
+            onStatusChange={handleStatusChange}
+            currentStatus={status}
+          />
+        }
         pagination={{
           page: pagination.pageIndex,
           size: pagination.pageSize,

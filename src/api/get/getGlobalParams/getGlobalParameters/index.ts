@@ -5,21 +5,21 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetGlobalParametersParams extends IPaginationParams {
   id?: number;
-  title?: string;
+  company_name?: string;
 }
 
 const getGlobalParameters = async ({
   id,
   per_page,
   page,
-  title
+  company_name
 }: IGetGlobalParametersParams = {}): Promise<ParametersListResponse> => {
   const params = new URLSearchParams();
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (company_name) params.append('company_name', company_name);
 
   return axios
     .get<ParametersListResponse>(COMPANY_GLOBAL_SETTINGS_URL, { params })

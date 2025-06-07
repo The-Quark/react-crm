@@ -55,7 +55,7 @@ export const formSchema = Yup.object().shape({
 const getInitialValues = (
   isEditMode: boolean,
   applicationData: Application,
-  clientId: string
+  clientId: string | null
 ): IApplicationPostFormValues => {
   if (isEditMode && applicationData) {
     return {
@@ -68,7 +68,7 @@ const getInitialValues = (
       patronymic: applicationData.patronymic || '',
       company_name: applicationData.company_name || '',
       client_type: applicationData.client_type || 'individual',
-      client_id: applicationData.client_id || clientId.toString(),
+      client_id: applicationData.client_id || clientId,
       status: applicationData.status || ('new' as unknown as ApplicationsStatus)
     };
   }
@@ -135,11 +135,7 @@ export const ApplicationsStarterContent = ({
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(
-      isEditMode,
-      applicationData || ({} as Application),
-      String(clientId)
-    ),
+    initialValues: getInitialValues(isEditMode, applicationData || ({} as Application), clientId),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { debounce } from '@/lib/helpers.ts';
 
 interface Language {
   id: number;
@@ -21,12 +22,14 @@ interface Props {
   currentLanguage: string;
   languages: Language[];
   onLanguageChange: (languageCode: string) => void;
+  onSearch: (searchTerm: string) => void;
 }
 
 export const PackageTypesToolbar: FC<Props> = ({
   currentLanguage,
   onLanguageChange,
-  languages
+  languages,
+  onSearch
 }) => {
   const { table } = useDataGrid();
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,6 +37,7 @@ export const PackageTypesToolbar: FC<Props> = ({
   const { has } = useUserPermissions();
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const [searchValue, setSearchValue] = useState('');
 
   const handleClose = () => {
     setModalOpen(false);
@@ -41,6 +45,19 @@ export const PackageTypesToolbar: FC<Props> = ({
 
   const handleOpen = () => {
     setModalOpen(true);
+  };
+
+  const debouncedSearch = debounce((value: string) => {
+    if (onSearch) {
+      onSearch(value);
+    }
+    table.getColumn('title')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValue(value);
+    debouncedSearch(value);
   };
 
   const handleLanguageSelectChange = (value: string) => {
@@ -78,8 +95,8 @@ export const PackageTypesToolbar: FC<Props> = ({
             type="text"
             placeholder="Search package type"
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

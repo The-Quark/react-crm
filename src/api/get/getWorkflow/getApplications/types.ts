@@ -13,6 +13,7 @@ interface Source {
 
 export interface Application {
   id: number;
+  full_name: string | undefined;
   source_id: number;
   company_name: string | undefined;
   first_name: string | undefined;

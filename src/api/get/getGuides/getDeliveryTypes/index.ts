@@ -5,11 +5,11 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetDeliveryTypes extends IPaginationParams {
   id?: number;
-  title?: string;
+  name?: string;
 }
 
 export const getDeliveryTypes = async ({
-  title,
+  name,
   id,
   per_page,
   page
@@ -19,7 +19,7 @@ export const getDeliveryTypes = async ({
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (name) params.append('name', name);
 
   return await axios
     .get<DeliveryTypesResponse>(DELIVERY_TYPES_URL, { params })

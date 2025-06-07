@@ -30,7 +30,8 @@ export const PositionsListContent = () => {
       getGlobalParamsPositions({
         company_id: selectedCompanyId,
         page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
+        per_page: pagination.pageSize,
+        title: searchTerm
       }),
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,

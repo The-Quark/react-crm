@@ -38,26 +38,18 @@ export const useApplicationsColumns = ({
         }
       },
       {
-        accessorFn: (row) =>
-          row.client_type === 'legal'
-            ? row.company_name
-            : `${row.first_name} ${row.last_name} ${row.patronymic || ''}`,
-        id: 'client name',
-        header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
+        accessorFn: (row) => row?.full_name,
+        id: 'full name',
+        header: ({ column }) => <DataGridColumnHeader title="Application" column={column} />,
         enableSorting: true,
         cell: (info) => {
-          const displayName =
-            info.row.original.client_type === 'legal'
-              ? info.row.original.company_name
-              : `${info.row.original.first_name} ${info.row.original.last_name} ${info.row.original.patronymic || ''}`;
-
           return (
             <div className="flex flex-col gap-0.5">
               <div
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
                 onClick={() => onRowClick(info.row.original.id)}
               >
-                {displayName?.trim()}
+                {info.row.original?.full_name}
               </div>
             </div>
           );

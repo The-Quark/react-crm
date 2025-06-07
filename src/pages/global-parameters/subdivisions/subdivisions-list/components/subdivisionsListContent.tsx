@@ -30,7 +30,8 @@ export const SubdivisionsListContent = () => {
       getGlobalParamsSubdivisions({
         company_id: selectedCompanyId,
         page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
+        per_page: pagination.pageSize,
+        name: searchTerm
       }),
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,

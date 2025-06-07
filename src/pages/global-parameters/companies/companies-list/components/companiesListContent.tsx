@@ -19,7 +19,8 @@ export const CompaniesListContent = () => {
     queryFn: () =>
       getGlobalParameters({
         page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
+        per_page: pagination.pageSize,
+        company_name: searchTerm
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true

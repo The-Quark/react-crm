@@ -20,7 +20,7 @@ export const GuidesVehiclesContent = () => {
       getVehicles({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        title: searchTerm
+        plate_number: searchTerm
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true

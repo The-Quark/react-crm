@@ -5,12 +5,12 @@ import { IPaginationParams } from '@/api/generalManualTypes';
 
 interface IGetPackageTypes extends IPaginationParams {
   id?: number;
-  title?: string;
+  code?: string;
   language_code?: string;
 }
 
 const getPackageTypes = async ({
-  title,
+  code,
   language_code,
   id,
   page,
@@ -21,7 +21,7 @@ const getPackageTypes = async ({
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
-  if (title) params.append('title', title);
+  if (code) params.append('code', code);
   if (language_code) params.append('language_code', language_code);
 
   const res = await axios.get<PackageTypesResponse>(PACKAGE_TYPES_URL, { params });

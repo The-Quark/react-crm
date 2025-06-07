@@ -30,7 +30,7 @@ export const GuidesPackagesContent = () => {
       getPackageTypes({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        title: searchTerm,
+        code: searchTerm,
         language_code: selectedLanguage.code
       }),
     staleTime: 1000 * 60 * 60
@@ -88,6 +88,7 @@ export const GuidesPackagesContent = () => {
             currentLanguage={selectedLanguage.code}
             languages={languagesData?.result || []}
             onLanguageChange={handleLanguageChange}
+            onSearch={handleSearch}
           />
         }
         layout={{ card: true }}
