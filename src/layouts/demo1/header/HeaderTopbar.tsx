@@ -4,17 +4,14 @@ import { toAbsoluteUrl } from '@/utils';
 import { Menu, MenuItem, MenuLink, MenuToggle } from '@/components';
 import { DropdownUser } from '@/partials/dropdowns/user';
 import { DropdownNotifications } from '@/partials/dropdowns/notifications';
-import { DropdownApps } from '@/partials/dropdowns/apps';
-import { DropdownChat } from '@/partials/dropdowns/chat';
-import { ModalSearch } from '@/partials/modals/search/ModalSearch';
 import { useLanguage } from '@/i18n';
-import { useCurrentUser } from '@/api/get';
+import { getUserNotifications, useCurrentUser } from '@/api/get';
+import { useQuery } from '@tanstack/react-query';
+
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
 const HeaderTopbar = () => {
   const { isRTL } = useLanguage();
-  const itemChatRef = useRef<any>(null);
-  const itemAppsRef = useRef<any>(null);
   const itemUserRef = useRef<any>(null);
   const itemNotificationsRef = useRef<any>(null);
   const { data: currentUser } = useCurrentUser();
@@ -24,10 +21,25 @@ const HeaderTopbar = () => {
   };
 
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+
   const handleOpen = () => setSearchModalOpen(true);
+
   const handleClose = () => {
     setSearchModalOpen(false);
   };
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: () => getUserNotifications(),
+    refetchInterval: 10000,
+    staleTime: 5000
+  });
+
+  const hasUnreadNotifications =
+    !isLoading &&
+    !isError &&
+    Array.isArray(data) &&
+    data.some((notification) => notification.read_at === null);
 
   return (
     <div className="flex items-center gap-2 lg:gap-3.5">
@@ -120,8 +132,16 @@ const HeaderTopbar = () => {
         >
           <MenuToggle className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
             <KeenIcon icon="notification-status" />
+            {hasUnreadNotifications && (
+              <span className="absolute top-0 right-0 size-2.5 bg-danger rounded-full border-2"></span>
+            )}
           </MenuToggle>
-          {DropdownNotifications({ menuTtemRef: itemNotificationsRef })}
+          {DropdownNotifications({
+            menuTtemRef: itemNotificationsRef,
+            notifications: data || [],
+            isLoading: isLoading,
+            isError: isError
+          })}
         </MenuItem>
       </Menu>
 
