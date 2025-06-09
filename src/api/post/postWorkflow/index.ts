@@ -6,3 +6,4 @@ export * from './postCargoUpload';
 export * from './postOrderReceiver';
 export * from './postOrderSender';
 export * from './postPackageUpload';
+export * from './postOrderCalculate';

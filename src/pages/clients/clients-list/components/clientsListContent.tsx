@@ -73,6 +73,7 @@ export const ClientsListContent = () => {
         serverSide
         columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
         data={data?.result || []}
+        onFetchData={handleFetchData}
         layout={{ card: true }}
         toolbar={
           <ClientsListToolbar

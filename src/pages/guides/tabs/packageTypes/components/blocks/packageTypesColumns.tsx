@@ -46,20 +46,6 @@ export const usePackageTypesColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.code,
-        id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
-          </div>
-        ),
-        meta: {
-          headerClassName: 'min-w-[80px]'
-        }
-      },
-      {
         accessorFn: (row) => {
           const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
           return lang?.name || '';
@@ -80,6 +66,20 @@ export const usePackageTypesColumns = ({
         meta: {
           headerClassName: 'min-w-[200px]',
           cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.code,
+        id: 'code',
+        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[80px]'
         }
       },
       {

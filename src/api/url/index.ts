@@ -71,3 +71,5 @@ export const PERMISSSIONS_MAP = `${api}/permissions/map`;
 export const PERMISSIONS_DISTRIBUTE = `${api}/permissions/distribute`;
 
 export const USER_NOTIFICATIONS = `${api}/user/notifications`;
+
+export const ORDER_CALCULATE = `${api}/order/calculate`;

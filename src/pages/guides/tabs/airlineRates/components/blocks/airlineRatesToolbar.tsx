@@ -54,13 +54,13 @@ export const AirlineRatesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             icon="magnifier"
             className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
           />
-          {/*<input*/}
-          {/*  type="text"*/}
-          {/*  placeholder="Search airline"*/}
-          {/*  className="input input-sm ps-8"*/}
-          {/*  value={searchValue}*/}
-          {/*  onChange={handleSearchChange}*/}
-          {/*/>*/}
+          <input
+            type="text"
+            placeholder="Search airline"
+            className="input input-sm ps-8"
+            value={searchValue}
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
       <AirlineRatesModal open={modalOpen} onOpenChange={handleClose} />

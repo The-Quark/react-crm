@@ -11,7 +11,13 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import { getApplications, getDeliveryTypes, getPackageTypes, getSources } from '@/api';
+import {
+  getApplications,
+  getDeliveryTypes,
+  getPackageTypes,
+  getSources,
+  postOrderCalculate
+} from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
@@ -19,6 +25,7 @@ import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
+import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 
 interface Props {
   orderData?: Order;
@@ -46,8 +53,6 @@ const formSchema = Yup.object().shape({
   width: decimalValidation.required('Width is required'),
   length: decimalValidation.required('Length is required'),
   height: decimalValidation.required('Height is required'),
-  price: Yup.string().optional(),
-  places_count: Yup.number().typeError('Places count must be a number').optional(),
   customs_clearance: Yup.boolean().required('Customs clearance is required'),
   is_international: Yup.boolean().required('Is international is required'),
   package_description: Yup.string().optional(),
@@ -122,6 +127,29 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     }
   });
 
+  useEffect(() => {
+    const { weight, width, length, height } = formik.values;
+
+    if (weight && width && length && height) {
+      const calculateData: IPostCalculateFormFields = {
+        weight,
+        width,
+        length,
+        height
+      };
+
+      postOrderCalculate(calculateData)
+        .then((response) => {
+          formik.setFieldValue('volume', response.volume);
+          formik.setFieldValue('places_count', response.places_count);
+          formik.setFieldValue('price', response.price);
+        })
+        .catch((error) => {
+          console.error('Error calculating order:', error);
+        });
+    }
+  }, [formik.values.weight, formik.values.width, formik.values.length, formik.values.height]);
+
   const {
     data: applicationsData,
     isLoading: applicationsLoading,
@@ -168,16 +196,6 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
       }),
     staleTime: 1000 * 60 * 5
   });
-
-  useEffect(() => {
-    const { width, length, height } = formik.values;
-    if (width && length && height) {
-      const volume = Number(width) * Number(length) * Number(height);
-      formik.setFieldValue('volume', volume.toFixed(2));
-    } else {
-      formik.setFieldValue('volume', '');
-    }
-  }, [formik.values.width, formik.values.length, formik.values.height]);
 
   const isFormLoading =
     deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading;
