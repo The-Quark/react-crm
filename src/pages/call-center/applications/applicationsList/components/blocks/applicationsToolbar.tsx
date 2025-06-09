@@ -39,8 +39,6 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
 
-  console.log('date: ', currentDateRange);
-
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
       onSearch(value);
