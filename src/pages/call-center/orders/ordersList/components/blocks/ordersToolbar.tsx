@@ -16,21 +16,32 @@ import { Calendar } from '@/components/ui/calendar.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/lib/helpers.ts';
+import { OrderStatus } from '@/api/enums';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
+  onStatus?: (status: string | undefined) => void;
+  onDeliveryCategory?: (delivery_category: string | undefined) => void;
+  currentStatus?: string;
+  currentDeliveryCategory?: string;
+  currentDateRange?: DateRange;
+  onDateRangeChange?: (range: DateRange | undefined) => void;
 }
 
-export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+export const OrdersToolbar: FC<ToolbarProps> = ({
+  onSearch,
+  onDeliveryCategory,
+  onStatus,
+  currentStatus,
+  currentDeliveryCategory,
+  onDateRangeChange,
+  currentDateRange
+}) => {
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
-  const date = table.getColumn('created at')?.getFilterValue() as DateRange | undefined;
-  const handleDateChange = (range: DateRange | undefined) => {
-    table.getColumn('created at')?.setFilterValue(range);
-  };
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
@@ -45,6 +56,31 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     debouncedSearch(value);
   };
 
+  const handleStatusChange = (value: string) => {
+    const newStatus = value === 'all' ? undefined : (value as OrderStatus);
+
+    table.getColumn('status')?.setFilterValue(newStatus || '');
+    if (onStatus) {
+      onStatus(newStatus);
+    }
+  };
+
+  const handleDeliveryCategoryChange = (value: string) => {
+    const newDeliveryType = value === 'all' ? undefined : value;
+
+    table.getColumn('delivery_category')?.setFilterValue(newDeliveryType || '');
+    if (onDeliveryCategory) {
+      onDeliveryCategory(newDeliveryType);
+    }
+  };
+
+  const handleDateChange = (range: DateRange | undefined) => {
+    if (onDateRangeChange) {
+      onDateRangeChange(range);
+    }
+    table.getColumn('created at')?.setFilterValue(range);
+  };
+
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
       <h3 className="card-title">Orders</h3>
@@ -55,10 +91,8 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           </a>
         )}
         <Select
-          value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('delivery category')?.setFilterValue(value === 'all' ? '' : value);
-          }}
+          value={currentDeliveryCategory || 'all'}
+          onValueChange={handleDeliveryCategoryChange}
         >
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select category" />
@@ -72,12 +106,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('status')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
+        <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
@@ -96,17 +125,18 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
               id="date"
               className={cn(
                 'btn btn-sm btn-light data-[state=open]:bg-light-active',
-                !date && 'text-gray-400'
+                !currentDateRange && 'text-gray-400'
               )}
             >
               <KeenIcon icon="calendar" className="me-0.5" />
-              {date?.from ? (
-                date.to ? (
+              {currentDateRange?.from ? (
+                currentDateRange.to ? (
                   <>
-                    {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                    {format(currentDateRange.from, 'LLL dd, y')} -{' '}
+                    {format(currentDateRange.to, 'LLL dd, y')}
                   </>
                 ) : (
-                  format(date.from, 'LLL dd, y')
+                  format(currentDateRange.from, 'LLL dd, y')
                 )
               ) : (
                 <span>Pick a date range</span>
@@ -117,8 +147,8 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             <Calendar
               initialFocus
               mode="range"
-              defaultMonth={date?.from}
-              selected={date}
+              defaultMonth={currentDateRange?.from}
+              selected={currentDateRange}
               onSelect={handleDateChange}
               numberOfMonths={2}
             />
@@ -132,7 +162,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search sender"
+            placeholder="Search order code"
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}
