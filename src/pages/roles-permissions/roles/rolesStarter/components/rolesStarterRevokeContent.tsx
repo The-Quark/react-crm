@@ -45,9 +45,9 @@ export const RolesStarterRevokeContent: FC<Props> = ({ data = [], role }) => {
   };
 
   return (
-    <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+    <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
       <div className="flex w-full flex-col gap-5">
-        <div className="card">
+        <div className="">
           <div className="card-header gap-2">
             <h3 className="card-title">
               <span className="link">{role?.toUpperCase()}</span>
