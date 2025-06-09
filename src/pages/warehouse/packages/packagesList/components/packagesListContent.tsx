@@ -62,6 +62,7 @@ export const PackagesListContent = () => {
         serverSide
         columns={columns}
         data={data?.result || []}
+        onFetchData={handleFetchData}
         layout={{ card: true }}
         toolbar={<PackagesToolbar onSearch={handleSearch} />}
         pagination={{

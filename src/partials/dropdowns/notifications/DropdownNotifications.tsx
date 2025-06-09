@@ -25,8 +25,6 @@ const DropdownNotifications = ({
     }
   };
 
-  console.log('notifications: ', notifications);
-
   const buildHeader = () => {
     return (
       <div className="flex items-center justify-between gap-2.5 text-sm text-gray-900 font-semibold px-5 py-2.5 border-b border-b-gray-200">

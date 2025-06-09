@@ -53,8 +53,6 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
       );
     }
 
-    console.log('notifications build: ', notifications);
-
     return (
       <div className="flex flex-col gap-5 pt-3 pb-4 divider-y divider-gray-200">
         {notifications.map((notification) => (

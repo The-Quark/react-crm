@@ -8,29 +8,41 @@ import { ApplicationsToolbar } from '@/pages/call-center/applications/applicatio
 import { useState } from 'react';
 import { ApplicationsModal } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsModal.tsx';
 import { ApplicationsStatus } from '@/api/enums';
+import { DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 
 export const ApplicationListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<ApplicationsStatus>();
+  const [dateRange, setDateRange] = useState<DateRange>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['applications', pagination.pageIndex, pagination.pageSize, searchTerm, status],
+    queryKey: [
+      'applications',
+      pagination.pageIndex,
+      pagination.pageSize,
+      searchTerm,
+      status,
+      dateRange
+    ],
     queryFn: () =>
       getApplications({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
         full_name: searchTerm,
-        status: status
+        status: status,
+        start_date: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,
+        end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
 
   const columns = useApplicationsColumns({
     onRowClick: (id) => {
@@ -63,6 +75,14 @@ export const ApplicationListContent = () => {
     });
   };
 
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
   if (isError) {
     return <SharedError error={error} />;
   }
@@ -79,7 +99,9 @@ export const ApplicationListContent = () => {
           <ApplicationsToolbar
             onSearch={handleSearch}
             onStatusChange={handleStatusChange}
+            onDateRangeChange={handleDateRangeChange}
             currentStatus={status}
+            currentDateRange={dateRange}
           />
         }
         pagination={{

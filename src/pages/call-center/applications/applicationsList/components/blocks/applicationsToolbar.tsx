@@ -21,24 +21,25 @@ import { ApplicationsStatus } from '@/api/enums';
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
   onStatusChange?: (status: ApplicationsStatus | undefined) => void;
+  onDateRangeChange?: (range: DateRange | undefined) => void;
   currentStatus?: ApplicationsStatus;
+  currentDateRange?: DateRange;
 }
 
 export const ApplicationsToolbar: FC<ToolbarProps> = ({
   onSearch,
   currentStatus,
-  onStatusChange
+  onStatusChange,
+  onDateRangeChange,
+  currentDateRange
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
-  const date = table.getColumn('created at')?.getFilterValue() as DateRange | undefined;
 
-  const handleDateChange = (range: DateRange | undefined) => {
-    table.getColumn('created at')?.setFilterValue(range);
-  };
+  console.log('date: ', currentDateRange);
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
@@ -60,6 +61,13 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
     if (onStatusChange) {
       onStatusChange(newStatus);
     }
+  };
+
+  const handleDateChange = (range: DateRange | undefined) => {
+    if (onDateRangeChange) {
+      onDateRangeChange(range);
+    }
+    table.getColumn('created at')?.setFilterValue(range);
   };
 
   return (
@@ -90,17 +98,18 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
               id="date"
               className={cn(
                 'btn btn-sm btn-light data-[state=open]:bg-light-active',
-                !date && 'text-gray-400'
+                !currentDateRange && 'text-gray-400'
               )}
             >
               <KeenIcon icon="calendar" className="me-0.5" />
-              {date?.from ? (
-                date.to ? (
+              {currentDateRange?.from ? (
+                currentDateRange.to ? (
                   <>
-                    {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                    {format(currentDateRange.from, 'LLL dd, y')} -{' '}
+                    {format(currentDateRange.to, 'LLL dd, y')}
                   </>
                 ) : (
-                  format(date.from, 'LLL dd, y')
+                  format(currentDateRange.from, 'LLL dd, y')
                 )
               ) : (
                 <span>Pick a date range</span>
@@ -111,8 +120,8 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
             <Calendar
               initialFocus
               mode="range"
-              defaultMonth={date?.from}
-              selected={date}
+              defaultMonth={currentDateRange?.from}
+              selected={currentDateRange}
               onSelect={handleDateChange}
               numberOfMonths={2}
             />
@@ -127,7 +136,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
           {/*search by id search by client full name select status date created time*/}
           <input
             type="text"
-            placeholder="Search client"
+            placeholder="Search application"
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}
