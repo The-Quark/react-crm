@@ -342,6 +342,16 @@ export const mockOrdersStatus = [
     id: 4,
     name: 'Expired',
     value: OrderStatus.EXPIRED
+  },
+  {
+    id: 5,
+    name: 'Cancelled',
+    value: OrderStatus.CANCELLED
+  },
+  {
+    id: 6,
+    name: 'Reweighting',
+    value: OrderStatus.REWEIGHTING
   }
 ];
 
