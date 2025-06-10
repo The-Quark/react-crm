@@ -64,7 +64,8 @@ const formSchema = Yup.object().shape({
 const getInitialValues = (
   isEditMode: boolean,
   orderData: Order,
-  applicationId: string | number
+  applicationId: string | number,
+  mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
   console.log('Application Id: ', applicationId);
   if (isEditMode && orderData) {
@@ -92,25 +93,25 @@ const getInitialValues = (
   }
 
   return {
-    id: 0,
-    application_id: applicationId || '',
-    status: undefined,
-    delivery_type: '',
-    delivery_category: 'b2b',
-    package_type: '',
-    weight: '',
-    width: '',
-    length: '',
-    height: '',
-    volume: '',
-    places_count: 0,
-    customs_clearance: false,
-    is_international: false,
-    price: '',
-    package_description: '',
-    special_wishes: '',
-    source_id: '',
-    order_content: orderData?.order_content || []
+    id: mainForm?.id || 0,
+    application_id: applicationId || mainForm?.application_id,
+    status: mainForm?.status || undefined,
+    delivery_type: mainForm?.delivery_type || '',
+    delivery_category: mainForm?.delivery_category || 'b2b',
+    package_type: mainForm?.package_type || '',
+    weight: mainForm?.weight || '',
+    width: mainForm?.width || '',
+    length: mainForm?.length || '',
+    height: mainForm?.height || '',
+    volume: mainForm?.volume || '',
+    places_count: mainForm?.places_count || 0,
+    customs_clearance: mainForm?.customs_clearance || false,
+    is_international: mainForm?.is_international || false,
+    price: mainForm?.price || '',
+    package_description: mainForm?.package_description || '',
+    special_wishes: mainForm?.special_wishes || '',
+    source_id: mainForm?.source_id || '',
+    order_content: mainForm?.order_content || []
   };
 };
 
@@ -121,7 +122,12 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
   const isEditMode = !!orderId;
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, orderData as Order, applicationId || ''),
+    initialValues: getInitialValues(
+      isEditMode,
+      orderData as Order,
+      applicationId || '',
+      mainFormData
+    ),
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData({ ...mainFormData, ...values });

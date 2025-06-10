@@ -40,7 +40,11 @@ const formSchema = Yup.object().shape({
   receiver_contact_id: Yup.number().optional()
 });
 
-const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValues => {
+const getInitialValues = (
+  isEditMode: boolean,
+  orderData: Order,
+  mainForm: IOrderFormValues | null
+): IOrderFormValues => {
   if (isEditMode && orderData) {
     return {
       receiver_first_name: orderData.receiver.first_name || '',
@@ -59,18 +63,18 @@ const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValu
   }
 
   return {
-    receiver_first_name: '',
-    receiver_last_name: '',
-    receiver_patronymic: '',
-    receiver_country_id: '',
-    receiver_city_id: '',
-    receiver_phone: '',
-    receiver_street: '',
-    receiver_house: '',
-    receiver_apartment: '',
-    receiver_location_description: '',
-    receiver_notes: '',
-    receiver_contact_id: ''
+    receiver_first_name: mainForm?.receiver_first_name || '',
+    receiver_last_name: mainForm?.receiver_last_name || '',
+    receiver_patronymic: mainForm?.receiver_patronymic || '',
+    receiver_country_id: mainForm?.receiver_country_id || '',
+    receiver_city_id: mainForm?.receiver_city_id || '',
+    receiver_phone: mainForm?.receiver_phone || '',
+    receiver_street: mainForm?.receiver_street || '',
+    receiver_house: mainForm?.receiver_house || '',
+    receiver_apartment: mainForm?.receiver_apartment || '',
+    receiver_location_description: mainForm?.receiver_location_description || '',
+    receiver_notes: mainForm?.receiver_notes || '',
+    receiver_contact_id: mainForm?.receiver_contact_id || ''
   };
 };
 
@@ -96,7 +100,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, orderData as Order),
+    initialValues: getInitialValues(isEditMode, orderData as Order, mainFormData),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
