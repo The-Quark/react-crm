@@ -10,7 +10,7 @@ export interface IOrderPutFormValues extends IOrderFormValues {
 
 export const putOrder = async (
   id: number,
-  data: Omit<IOrderPutFormValues, 'created_at' | 'updated_at'>
+  data: IOrderPutFormValues
 ): Promise<IOrderPutFormValues> => {
   const cleanedData = cleanValues(data);
   return await axios

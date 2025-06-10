@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
-import { postOrder } from '@/api';
+import { IOrderPutFormValues, postOrder, putOrder } from '@/api';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
@@ -46,8 +46,12 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
 
   const handleOrderSubmit = async (data: IOrderFormValues) => {
     try {
-      await postOrder(data);
-      console.log('Order created successfully');
+      if (isEditMode) {
+        const putData = { ...data, id: orderId as number } as IOrderPutFormValues;
+        await putOrder(orderId as number, putData);
+      } else {
+        await postOrder(data);
+      }
     } catch (error) {
       console.error('Error creating order:', error);
       throw error;
