@@ -40,7 +40,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
     if (orderData) {
       setSenderId(orderData.sender_id);
       setReceiverId(orderData.receiver_id);
-      setApplicationId(orderData.application_id);
+      setApplicationId(orderData?.application_id ?? undefined);
     }
   }, [orderData]);
 

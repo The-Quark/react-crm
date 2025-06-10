@@ -33,7 +33,6 @@ const validateSchema = Yup.object().shape({
   legal_address: Yup.string().required('Company legal address is required'),
   representative_first_name: Yup.string().required('Representative name is required'),
   representative_last_name: Yup.string().required('Representative surname is required'),
-  representative_patronymic: Yup.string().optional(),
   representative_phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
   representative_email: Yup.string().email('Invalid email address').optional(),
   notes: Yup.string().max(500, 'Maximum 500 symbols'),

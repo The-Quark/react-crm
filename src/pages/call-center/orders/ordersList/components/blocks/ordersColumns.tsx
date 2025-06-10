@@ -56,14 +56,14 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
         }
       },
       {
-        accessorFn: (row) => row.sender.first_name,
+        accessorFn: (row) => row.sender?.full_name,
         id: 'sender full name',
         header: ({ column }) => <DataGridColumnHeader title="Sender" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.sender.first_name}
+              {info.row.original?.sender?.full_name}
             </div>
           </div>
         ),
@@ -73,14 +73,14 @@ export const useOrdersColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Ord
         }
       },
       {
-        accessorFn: (row) => row.receiver.first_name,
+        accessorFn: (row) => row.receiver?.full_name,
         id: 'receiver full name',
         header: ({ column }) => <DataGridColumnHeader title="Receiver" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.receiver.first_name}
+              {info.row.original?.receiver?.full_name}
             </div>
           </div>
         ),

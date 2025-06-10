@@ -116,33 +116,39 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                 </div>
 
                 {/* Application Block */}
-                <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-3">Application Information</h4>
-                  <div className="grid gap-2.5">
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Full Name</label>
-                      <div className="flex columns-1 w-full">
-                        {order.application.full_name || '-'}
+                {order.application && (
+                  <div className="border-b pb-4">
+                    <h4 className="text-lg font-semibold mb-3">Application Information</h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Full Name</label>
+                        <div className="flex columns-1 w-full">
+                          {order.application.full_name || '-'}
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Phone</label>
-                      <div className="flex columns-1 w-full">{order.application.phone || '-'}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Status</label>
-                      <div className="flex columns-1 w-full">{order.application.status || '-'}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Created At</label>
-                      <div className="flex columns-1 w-full">
-                        {order.application.created_at
-                          ? new Date(order.application.created_at).toLocaleDateString('ru-RU')
-                          : '-'}
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <div className="flex columns-1 w-full">
+                          {order.application.phone || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Status</label>
+                        <div className="flex columns-1 w-full">
+                          {order.application.status || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Created At</label>
+                        <div className="flex columns-1 w-full">
+                          {order.application.created_at
+                            ? new Date(order.application.created_at).toLocaleDateString('ru-RU')
+                            : '-'}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Order Block */}
                 <div>

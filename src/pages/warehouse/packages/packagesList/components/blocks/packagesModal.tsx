@@ -81,7 +81,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                   </div>
                 </div>
-                {packageData.client.type === 'legal' ? (
+                {packageData?.client && packageData.client.type === 'legal' ? (
                   <div className="border-b pb-4">
                     <h4 className="text-lg font-semibold mb-3">Company</h4>
                     <div className="grid gap-2.5">
@@ -138,23 +138,23 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">Full name</label>
                         <div className="flex columns-1 w-full">
-                          {(packageData.client.last_name || '-') +
+                          {(packageData.client?.last_name || '-') +
                             ' ' +
-                            (packageData.client.first_name || '-') +
+                            (packageData.client?.first_name || '-') +
                             ' ' +
-                            (packageData.client.patronymic || '-')}
+                            (packageData.client?.patronymic || '-')}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">Phone</label>
                         <div className="flex columns-1 w-full">
-                          {packageData.client.phone || '-'}
+                          {packageData.client?.phone || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">Email</label>
                         <div className="flex columns-1 w-full">
-                          {packageData.client.email || '-'}
+                          {packageData.client?.email || '-'}
                         </div>
                       </div>
                     </div>

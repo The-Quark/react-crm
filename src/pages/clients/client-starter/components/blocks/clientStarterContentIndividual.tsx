@@ -49,12 +49,12 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     type: 'individual',
     first_name: clientData ? clientData.first_name : '',
     last_name: clientData ? clientData.last_name : '',
-    patronymic: clientData ? clientData.patronymic : '',
+    patronymic: clientData && clientData.patronymic !== null ? clientData.patronymic : undefined,
     birth_date: clientData ? clientData.birth_date : '',
     gender: clientData ? clientData.gender : 'male',
-    email: clientData ? clientData.email : '',
+    email: clientData && clientData.email !== null ? clientData.email : undefined,
     phone: clientData ? clientData.phone : '',
-    notes: clientData ? clientData.notes : '',
+    notes: clientData && clientData.notes !== null ? clientData.notes : undefined,
     source_id: clientData ? clientData.source_id.toString() : ''
   };
 

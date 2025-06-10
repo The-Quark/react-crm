@@ -33,22 +33,33 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         }
       },
       {
-        accessorFn: (row) => `${row?.first_name} ${row?.last_name} ${row?.patronymic}`,
-        id: 'client name',
+        accessorFn: (row) =>
+          [row?.first_name, row?.last_name, row?.patronymic].filter(Boolean).join(' '),
+        id: 'client_name',
         header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
         enableSorting: true,
-        cell: (info) => (
-          <div className="flex items-center gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <div
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                onClick={() => onRowClick(info.row.original.id)}
-              >
-                {`${info.row.original?.first_name} ${info.row.original?.last_name} ${info.row.original?.patronymic}`}
+        cell: (info) => {
+          const fullName = [
+            info.row.original?.first_name,
+            info.row.original?.last_name,
+            info.row.original?.patronymic
+          ]
+            .filter(Boolean)
+            .join(' ');
+
+          return (
+            <div className="flex items-center gap-2.5">
+              <div className="flex flex-col gap-0.5">
+                <div
+                  className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+                  onClick={() => onRowClick(info.row.original.id)}
+                >
+                  {fullName}
+                </div>
               </div>
             </div>
-          </div>
-        ),
+          );
+        },
         meta: {
           headerClassName: 'min-w-[300px]',
           cellClassName: 'text-gray-700 font-normal'

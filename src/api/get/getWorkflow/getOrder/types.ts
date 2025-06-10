@@ -74,6 +74,7 @@ interface City {
 interface Person {
   id: number;
   contact_id: number | null;
+  full_name: string;
   first_name: string;
   last_name: string;
   patronymic?: string;
@@ -94,7 +95,7 @@ export interface Order {
   id: number;
   contact_id: number;
   order_code: string;
-  application_id?: number;
+  application_id: number | null;
   sender_id: number;
   receiver_id: number;
   delivery_type: DeliveryType;
@@ -118,7 +119,7 @@ export interface Order {
   updated_at: string;
   deleted_at: string | null;
   delivery_category: string;
-  application: Application;
+  application: Application | null;
   sender: Person;
   receiver: Person;
   source: Source | null;

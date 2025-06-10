@@ -40,7 +40,7 @@ const FastFormFormSteps = () => {
     if (orderData) {
       setSenderId(orderData.result[0].sender_id);
       setReceiverId(orderData.result[0].receiver_id);
-      setApplicationId(orderData.result[0].application_id);
+      // setApplicationId(orderData?.result[0]?.application_id);
     }
   }, [orderData]);
 
