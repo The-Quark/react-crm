@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
-import { postClient } from '@/api';
+import { postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
 import { SharedInput, SharedTextArea } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   clientData?: Client;
@@ -33,7 +33,7 @@ const validateSchema = Yup.object().shape({
   legal_address: Yup.string().required('Company legal address is required'),
   representative_first_name: Yup.string().required('Representative name is required'),
   representative_last_name: Yup.string().required('Representative surname is required'),
-  representative_patronymic: Yup.string().required('Representative patronymic is required'),
+  representative_patronymic: Yup.string().optional(),
   representative_phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
   representative_email: Yup.string().email('Invalid email address').optional(),
   notes: Yup.string().max(500, 'Maximum 500 symbols'),
@@ -47,6 +47,7 @@ const validateSchema = Yup.object().shape({
 const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const initialValues: IClientFormValues = {
     type: 'legal',
@@ -72,12 +73,20 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
       setLoading(true);
       setStatus(null);
       try {
-        await postClient({
-          ...values,
-          bin: String(values.bin)
-        });
+        if (clientData) {
+          await putClient(clientData.id, {
+            ...values,
+            bin: String(values.bin)
+          });
+        } else {
+          await postClient({
+            ...values,
+            bin: String(values.bin)
+          });
+        }
         resetForm();
         navigate('/clients');
+        queryClient.invalidateQueries({ queryKey: ['clients'] });
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         setStatus(error.response?.data?.message || 'Failed to create client');

@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   clientData?: Client;
@@ -30,8 +31,6 @@ interface Props {
 const validateSchema = Yup.object().shape({
   first_name: Yup.string().required('First name is required'),
   last_name: Yup.string().required('Last name is required'),
-  patronymic: Yup.string().optional(),
-  birth_date: Yup.string().optional(),
   gender: Yup.string().required('Gender date is required'),
   email: Yup.string().email('Invalid email address').optional().nullable(),
   phone: Yup.string()
@@ -44,6 +43,7 @@ const validateSchema = Yup.object().shape({
 const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const initialValues: IClientFormValues = {
     type: 'individual',
@@ -80,6 +80,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         }
         resetForm();
         navigate('/clients');
+        queryClient.invalidateQueries({ queryKey: ['clients'] });
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         setStatus(error.response?.data?.message || 'Failed to create client');

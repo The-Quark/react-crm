@@ -74,7 +74,6 @@ const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValu
 
 export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
   const { setMainFormData, mainFormData } = useOrderCreation();
-  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
@@ -122,7 +121,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['orderCities', formik.values.sender_country_id],
+    queryKey: ['orderSenderCities', formik.values.sender_country_id],
     queryFn: () => getCitiesByCountryCode(formik.values.sender_country_id as string | number, 'id'),
     enabled: !!formik.values.sender_country_id,
     staleTime: 1000 * 60 * 5
@@ -226,12 +225,8 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
             <button className="btn btn-light" onClick={onBack}>
               Back
             </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
-            >
-              {loading ? 'Please wait...' : 'Next'}
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+              {formik.isSubmitting ? 'Please wait...' : 'Next'}
             </button>
           </div>
         </div>

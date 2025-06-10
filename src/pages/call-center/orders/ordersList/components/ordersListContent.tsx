@@ -36,7 +36,7 @@ export const OrdersListContent = () => {
       getOrders({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        order_code: searchTerm,
+        searchorder: searchTerm,
         delivery_category: deliveryCategory,
         status: status,
         start_date: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,

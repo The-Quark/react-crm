@@ -138,7 +138,7 @@ const StepContent = ({
         </div>
       )}
 
-      <OrdersConfirmModal open={open} handleClose={handleClose} onOrderSubmit={onOrderSubmit} />
+      {/*<OrdersConfirmModal open={open} handleClose={handleClose} onOrderSubmit={onOrderSubmit} />*/}
     </>
   );
 };

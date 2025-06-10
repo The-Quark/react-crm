@@ -162,7 +162,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
           />
           <input
             type="text"
-            placeholder="Search order code"
+            placeholder="Search order"
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

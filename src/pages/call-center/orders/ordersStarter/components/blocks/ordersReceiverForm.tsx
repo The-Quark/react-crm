@@ -43,18 +43,18 @@ const formSchema = Yup.object().shape({
 const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValues => {
   if (isEditMode && orderData) {
     return {
-      receiver_first_name: orderData.sender.first_name || '',
-      receiver_last_name: orderData.sender.last_name || '',
-      receiver_patronymic: orderData.sender.patronymic || '',
-      receiver_country_id: orderData.sender.city?.country_id || '',
-      receiver_city_id: orderData.sender.city_id || '',
-      receiver_phone: orderData.sender.phone || '',
-      receiver_street: orderData.sender.street || '',
-      receiver_house: orderData.sender.house || '',
-      receiver_apartment: orderData.sender.apartment || '',
-      receiver_location_description: orderData.sender.location_description || '',
-      receiver_notes: orderData.sender.notes || '',
-      receiver_contact_id: orderData.sender.contact_id || ''
+      receiver_first_name: orderData.receiver.first_name || '',
+      receiver_last_name: orderData.receiver.last_name || '',
+      receiver_patronymic: orderData.receiver.patronymic || '',
+      receiver_country_id: orderData.receiver.city?.country_id || '',
+      receiver_city_id: orderData.receiver.city_id || '',
+      receiver_phone: orderData.receiver.phone || '',
+      receiver_street: orderData.receiver.street || '',
+      receiver_house: orderData.receiver.house || '',
+      receiver_apartment: orderData.receiver.apartment || '',
+      receiver_location_description: orderData.receiver.location_description || '',
+      receiver_notes: orderData.receiver.notes || '',
+      receiver_contact_id: orderData.receiver.contact_id || ''
     };
   }
 
@@ -76,7 +76,6 @@ const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValu
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModal }) => {
   const { setMainFormData, mainFormData } = useOrderCreation();
-  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
@@ -124,10 +123,10 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['orderCities', formik.values.receiver_country_id],
+    queryKey: ['orderReceiverCities', formik.values.receiver_country_id],
     queryFn: () =>
       getCitiesByCountryCode(formik.values.receiver_country_id as string | number, 'id'),
-    enabled: !!formik.values.sender_country_id,
+    enabled: !!formik.values.receiver_country_id,
     staleTime: 1000 * 60 * 5
   });
 
@@ -229,12 +228,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             <button className="btn btn-primary" onClick={onBack}>
               Back
             </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
-            >
-              {loading ? 'Please wait...' : 'Next'}
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+              {formik.isSubmitting ? 'Please wait...' : 'Next'}
             </button>
           </div>
         </div>
