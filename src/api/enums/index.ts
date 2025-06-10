@@ -109,5 +109,5 @@ export enum OrderStatus {
   PACKAGE_RECEIVED = 'package_received',
   EXPIRED = 'expired',
   CANCELLED = 'cancelled',
-  REWEIGHTING = 'reweighting'
+  REWEIGHING = 'reweighing'
 }

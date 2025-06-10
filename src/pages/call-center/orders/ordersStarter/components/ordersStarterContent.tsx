@@ -1,4 +1,4 @@
-import { useEffect, Fragment, useState } from 'react';
+import { useEffect, Fragment, useState, FC } from 'react';
 import { OrdersSenderForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersSenderForm.tsx';
 import { OrdersReceiverForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersReceiverForm.tsx';
 import { OrdersMainForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersMainForm.tsx';
@@ -7,14 +7,19 @@ import {
   useOrderCreation
 } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { useParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
-import { getOrders } from '@/api';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
+import { postOrder } from '@/api';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
+
+interface Props {
+  isEditMode: boolean;
+  orderData?: Order;
+  orderId?: number;
+}
 
 const { useStepper, utils } = defineStepper(
   { id: 'main', title: 'Order Details' },
@@ -22,41 +27,32 @@ const { useStepper, utils } = defineStepper(
   { id: 'receiver', title: 'Receiver Information' }
 );
 
-const OrderFormSteps = () => {
+const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
   const { id } = useParams<{ id: string }>();
-  const { clearAll, setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
+  const { setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
   const allSteps = stepper.all;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    data: orderData,
-    isLoading,
-    error,
-    isError
-  } = useQuery({
-    queryKey: ['order', id],
-    queryFn: () => getOrders({ id: Number(id) }),
-    enabled: !!id
-  });
-
   useEffect(() => {
     if (orderData) {
-      setSenderId(orderData.result[0].sender_id);
-      setReceiverId(orderData.result[0].receiver_id);
-      setApplicationId(orderData.result[0].application_id);
+      setSenderId(orderData.sender_id);
+      setReceiverId(orderData.receiver_id);
+      setApplicationId(orderData.application_id);
     }
   }, [orderData]);
 
-  const handleOrderSubmitSuccess = () => {
-    if (!id) clearAll();
+  const handleOrderSubmit = async (data: IOrderFormValues) => {
+    try {
+      await postOrder(data);
+      console.log('Order created successfully');
+    } catch (error) {
+      console.error('Error creating order:', error);
+      throw error;
+    }
   };
-
-  if (isLoading) return <SharedLoading />;
-
-  if (isError) return <SharedError error={error} />;
 
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
@@ -106,8 +102,8 @@ const OrderFormSteps = () => {
 
       <div className="space-y-4">
         <StepContent
-          onOrderSubmit={handleOrderSubmitSuccess}
-          orderData={orderData?.result[0]}
+          onOrderSubmit={handleOrderSubmit}
+          orderData={orderData}
           stepper={stepper}
           orderId={id ?? ''}
           open={isModalOpen}
@@ -128,7 +124,7 @@ const StepContent = ({
   handleClose,
   handleOpen
 }: {
-  onOrderSubmit: () => void;
+  onOrderSubmit: (orderData: IOrderFormValues) => Promise<void>;
   orderData?: Order;
   stepper: ReturnType<typeof useStepper>;
   orderId: string;
@@ -136,6 +132,13 @@ const StepContent = ({
   handleClose: () => void;
   handleOpen: () => void;
 }) => {
+  const { mainFormData, clearAll } = useOrderCreation();
+
+  const handleSubmit = async (data: IOrderFormValues) => {
+    await onOrderSubmit(data);
+    if (!orderId) clearAll();
+  };
+
   return (
     <>
       {stepper.current.id === 'main' && (
@@ -159,15 +162,20 @@ const StepContent = ({
           />
         </div>
       )}
-      <OrdersConfirmModal open={open} handleClose={handleClose} onOrderSubmit={onOrderSubmit} />
+      <OrdersConfirmModal
+        open={open}
+        handleClose={handleClose}
+        onOrderSubmit={handleSubmit}
+        orderData={mainFormData as IOrderFormValues}
+      />
     </>
   );
 };
 
-export const OrdersStarterContent = () => {
+export const OrdersStarterContent: FC<Props> = ({ orderId, orderData, isEditMode }) => {
   return (
     <OrderCreationProvider>
-      <OrderFormSteps />
+      <OrderFormSteps orderData={orderData} orderId={orderId} isEditMode={isEditMode} />
     </OrderCreationProvider>
   );
 };

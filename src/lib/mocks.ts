@@ -351,7 +351,7 @@ export const mockOrdersStatus = [
   {
     id: 6,
     name: 'Reweighting',
-    value: OrderStatus.REWEIGHTING
+    value: OrderStatus.REWEIGHING
   }
 ];
 

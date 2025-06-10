@@ -123,6 +123,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData(values as IOrderFormValues);
+      console.log('Main', values);
       onNext();
     }
   });

@@ -198,9 +198,7 @@ export const ApplicationsStarterContent = ({
   useEffect(() => {
     if (clientData?.result?.[0] && formik.values.client_id) {
       const client = clientData.result[0];
-      console.log('client: ', client);
 
-      // Проверяем, действительно ли значения отличаются от текущих
       const shouldUpdate =
         formik.values.first_name !== (client.first_name || '') ||
         formik.values.last_name !== (client.last_name || '') ||

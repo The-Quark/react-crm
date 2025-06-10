@@ -75,13 +75,15 @@ const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValu
 };
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModal }) => {
-  const { setMainFormData } = useOrderCreation();
+  const { setMainFormData, mainFormData } = useOrderCreation();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
   const { receiverId } = useOrderCreation();
   const isEditMode = !!receiverId;
+
+  console.log('Form: ', mainFormData);
 
   const {
     data: clientsData,
@@ -99,6 +101,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
+      console.log('receiver: ', values);
       setMainFormData(values as IOrderFormValues);
       onConfirmModal?.();
     }

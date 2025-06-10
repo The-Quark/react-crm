@@ -73,13 +73,15 @@ const getInitialValues = (isEditMode: boolean, orderData: Order): IOrderFormValu
 };
 
 export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
-  const { setMainFormData } = useOrderCreation();
+  const { setMainFormData, mainFormData } = useOrderCreation();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
   const { senderId } = useOrderCreation();
   const isEditMode = !!senderId;
+
+  console.log('Form: ', mainFormData);
 
   const {
     data: clientsData,
@@ -97,6 +99,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
+      console.log('Sender: ', values);
       setMainFormData(values as IOrderFormValues);
       onNext();
     }

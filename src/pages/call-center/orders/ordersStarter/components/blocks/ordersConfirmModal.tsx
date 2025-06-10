@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -8,16 +8,32 @@ import {
 } from '@/components/ui/dialog.tsx';
 import { KeenIcon } from '@/components';
 import { DialogActions } from '@mui/material';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 
 interface Props {
   open: boolean;
-  onOrderSubmit: () => void;
+  onOrderSubmit: (orderData: IOrderFormValues) => Promise<void>;
   handleClose: () => void;
+  orderData: IOrderFormValues;
 }
 
-export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit }) => {
+export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit, orderData }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { mainFormData } = useOrderCreation();
+
+  const handleConfirm = async () => {
+    setIsSubmitting(true);
+    try {
+      if (!mainFormData) throw new Error('mainFormData is null');
+      await onOrderSubmit(mainFormData);
+      handleClose();
+    } catch (error) {
+      console.error('Error submitting order:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -43,15 +59,11 @@ export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit
                 <div className="grid gap-2.5">
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Application</label>
-                    <div className="flex columns-1 w-full">
-                      {mainFormData?.application_id || '-'}
-                    </div>
+                    <div className="flex columns-1 w-full">{orderData?.application_id || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Delivery Type</label>
-                    <div className="flex columns-1 w-full">
-                      {mainFormData?.delivery_type || '-'}
-                    </div>
+                    <div className="flex columns-1 w-full">{orderData?.delivery_type || '-'}</div>
                   </div>
                 </div>
               </div>
@@ -60,7 +72,11 @@ export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit
         </DialogBody>
         <DialogActions>
           <button className="btn btn-md btn-light mr-3 mb-3">Send To Drafts</button>
-          <button className="btn btn-md btn-primary mr-3 mb-3" onClick={onOrderSubmit}>
+          <button
+            className="btn btn-md btn-primary mr-3 mb-3"
+            onClick={handleConfirm}
+            disabled={isSubmitting}
+          >
             Confirm Order
           </button>
         </DialogActions>
