@@ -62,7 +62,12 @@ export function uniqueID(): string {
 export const cleanValues = (values: Record<string, any>): Record<string, any> => {
   return Object.fromEntries(
     Object.entries(values).filter(
-      ([_, value]) => value !== undefined && value !== null && value !== '' && value !== 0
+      ([_, value]) =>
+        value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        value !== 0 &&
+        !(Array.isArray(value) && value.length === 0)
     )
   );
 };

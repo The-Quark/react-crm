@@ -61,7 +61,7 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     },
     [TaskStatus.CANCELLED]: {
       label: 'Cancelled',
-      color: 'badge-secondary'
+      color: 'badge-danger'
     },
     [TaskStatus.BLOCKED]: {
       label: 'Blocked',
@@ -117,6 +117,10 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     [OrderStatus.PACKAGE_RECEIVED]: {
       label: 'Package Received',
       color: 'badge-success'
+    },
+    [OrderStatus.REWEIGHING]: {
+      label: 'Reweighing',
+      color: 'badge-warning'
     },
     // Boolean statuses
     true: {

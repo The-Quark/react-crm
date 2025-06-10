@@ -100,7 +100,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     enableReinitialize: true,
     onSubmit: (values) => {
       console.log('Sender: ', values);
-      setMainFormData(values as IOrderFormValues);
+      setMainFormData({ ...mainFormData, ...values });
       onNext();
     }
   });

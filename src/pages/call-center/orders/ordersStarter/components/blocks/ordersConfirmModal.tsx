@@ -10,6 +10,7 @@ import { KeenIcon } from '@/components';
 import { DialogActions } from '@mui/material';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   open: boolean;
@@ -21,6 +22,7 @@ interface Props {
 export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit, orderData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mainFormData } = useOrderCreation();
+  const navigate = useNavigate();
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
@@ -28,6 +30,7 @@ export const OrdersConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit
       if (!mainFormData) throw new Error('mainFormData is null');
       await onOrderSubmit(mainFormData);
       handleClose();
+      navigate('/call-center/orders/list');
     } catch (error) {
       console.error('Error submitting order:', error);
     } finally {

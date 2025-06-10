@@ -26,6 +26,7 @@ import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
+import { ApplicationsStatus } from '@/api/enums';
 
 interface Props {
   orderData?: Order;
@@ -65,6 +66,7 @@ const getInitialValues = (
   orderData: Order,
   applicationId: string | number
 ): IOrderFormValues => {
+  console.log('Application Id: ', applicationId);
   if (isEditMode && orderData) {
     return {
       id: orderData.id || 0,
@@ -91,7 +93,7 @@ const getInitialValues = (
 
   return {
     id: 0,
-    application_id: '',
+    application_id: applicationId || '',
     status: undefined,
     delivery_type: '',
     delivery_category: 'b2b',
@@ -113,7 +115,7 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
-  const { setMainFormData, setApplicationId, applicationId } = useOrderCreation();
+  const { setMainFormData, setApplicationId, applicationId, mainFormData } = useOrderCreation();
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const isEditMode = !!orderId;
@@ -122,7 +124,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     initialValues: getInitialValues(isEditMode, orderData as Order, applicationId || ''),
     validationSchema: formSchema,
     onSubmit: (values) => {
-      setMainFormData(values as IOrderFormValues);
+      setMainFormData({ ...mainFormData, ...values });
       console.log('Main', values);
       onNext();
     }
@@ -158,7 +160,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: applicationsError
   } = useQuery({
     queryKey: ['applications'],
-    queryFn: () => getApplications({}),
+    queryFn: () => getApplications({ status: ApplicationsStatus.NEW }),
     staleTime: 1000 * 60 * 5
   });
 
