@@ -56,10 +56,10 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
       },
       {
         accessorFn: (row) => {
-          const client = row.client;
-          return client.type === 'individual'
-            ? `${client.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
-            : client.company_name || '';
+          const client = row?.client;
+          return client?.type === 'individual'
+            ? `${client?.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
+            : client?.company_name || '';
         },
         id: 'client full name',
         header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
@@ -67,9 +67,9 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
         cell: (info) => {
           const client = info.row.original.client;
           const fullName =
-            client.type === 'individual'
+            client?.type === 'individual'
               ? `${client.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
-              : client.company_name;
+              : client?.company_name;
 
           return (
             <div className="flex flex-col gap-0.5">

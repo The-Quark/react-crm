@@ -98,9 +98,9 @@ export interface Package {
   created_at: string;
   updated_at: string;
   client_id: number;
-  order: Order;
+  order: Order | null;
   cargo: any[];
-  client: Client;
+  client: Client | null;
   media: Media[];
   medias: Media[];
   hawb_pdf: string;
