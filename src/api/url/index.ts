@@ -73,3 +73,5 @@ export const PERMISSIONS_DISTRIBUTE = `${api}/permissions/distribute`;
 export const USER_NOTIFICATIONS = `${api}/user/notifications`;
 
 export const ORDER_CALCULATE = `${api}/order/calculate`;
+
+export const FILE_TYPE = `${api}/filetype/manage`;

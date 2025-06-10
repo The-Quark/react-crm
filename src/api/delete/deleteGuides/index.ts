@@ -9,3 +9,4 @@ export * from './deleteSource';
 export * from './deleteTemplate';
 export * from './deleteUnit';
 export * from './deleteVehicle';
+export * from './deleteFileType';

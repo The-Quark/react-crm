@@ -157,6 +157,10 @@ export const ViewerMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.TEMPLATES',
         path: '/guides/templates'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.FILE_TYPES',
+        path: '/guides/file-types'
       }
     ]
   }

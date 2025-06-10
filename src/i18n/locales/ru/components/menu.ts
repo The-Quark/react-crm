@@ -52,6 +52,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES': 'Типы посылок',
   'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS': 'Упаковочные материалы',
   'MENU.MEGAMENU.GUIDES.TEMPLATES': 'Шаблоны',
+  'MENU.MEGAMENU.GUIDES.FILE_TYPES': 'Типы файлов',
   'MENU.MEGAMENU.GUIDES.UNITS': 'Единицы',
   'MENU.MEGAMENU.DEMONSTRATION': 'Демонстрация',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'Публичный профиль',

@@ -2,19 +2,19 @@ import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
-import { Unit } from '@/api/get/getGuides/getUnits/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
-import { deleteUnit } from '@/api';
-import UnitModal from '@/pages/guides/tabs/units/components/blocks/unitsModal.tsx';
+import { deleteFileType } from '@/api';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { FileType } from '@/api/get/getGuides/getFileTypes/types.ts';
+import FileTypeModal from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesModal.tsx';
 
-export const useUnitsColumns = (): ColumnDef<Unit>[] => {
+export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const columns = useMemo<ColumnDef<Unit>[]>(
+  const columns = useMemo<ColumnDef<FileType>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
@@ -33,7 +33,7 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
+        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -46,17 +46,35 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
         }
       },
       {
-        accessorFn: (row) => row.code,
-        id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        accessorFn: (row) => row.step,
+        id: 'step',
+        header: ({ column }) => <DataGridColumnHeader title="Step" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
+            <span className="leading-none text-gray-800 font-normal">{info.row.original.step}</span>
           </div>
         ),
         meta: {
           headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row.types,
+        id: 'types',
+        header: ({ column }) => <DataGridColumnHeader title="Types" column={column} />,
+        enableSorting: true,
+        cell: (info) => {
+          const types = info.row.original.types;
+          return (
+            <div className="text-gray-800 font-normal leading-none">
+              {types.map((type) => type).join(', ')}
+            </div>
+          );
+        },
+        meta: {
+          headerClassName: 'min-w-[165px]',
+          cellClassName: 'text-gray-700 font-normal'
         }
       },
       {
@@ -66,10 +84,10 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
         cell: (info) => (
           <GuidesMenuOptions
             id={info.row.original.id}
-            invalidateRequestKey="guidesUnits"
-            deleteRequest={deleteUnit}
+            invalidateRequestKey="guidesFileTypes"
+            deleteRequest={deleteFileType}
             renderModal={({ open, onOpenChange }) => (
-              <UnitModal
+              <FileTypeModal
                 open={open}
                 onOpenChange={() => onOpenChange(true)}
                 id={info.row.original.id}

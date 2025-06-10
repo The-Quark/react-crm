@@ -10,11 +10,11 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { IUnitsFormValues } from '@/api/post/postGuides/postUnit/types.ts';
-import { postUnit, putUnit, getUnits } from '@/api';
+import { getFileTypes, putFileType, postFileType } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { UnitsResponse } from '@/api/get/getGuides/getUnits/types.ts';
-import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { SharedError, SharedInput, SharedInputTags, SharedLoading } from '@/partials/sharedUI';
+import { FileTypesResponse } from '@/api/get/getGuides/getFileTypes/types.ts';
+import { IFileTypeFormValues } from '@/api/post/postGuides/postFileType/types.ts';
 
 interface Props {
   open: boolean;
@@ -23,53 +23,59 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  code: Yup.string().required('Code is required'),
-  name: Yup.string().required('Name is required')
+  name: Yup.string().required('Name is required'),
+  types: Yup.array()
+    .of(Yup.string().required())
+    .min(1, 'At least one type must be selected')
+    .required('Types is required'),
+  step: Yup.number().required('Step is required')
 });
 
-const getInitialValues = (isEditMode: boolean, data: UnitsResponse): IUnitsFormValues => {
+const getInitialValues = (isEditMode: boolean, data: FileTypesResponse): IFileTypeFormValues => {
   if (isEditMode && data?.result) {
     return {
       name: data.result[0].name || '',
-      code: data.result[0].code || ''
+      step: data.result[0].step || 0,
+      types: data.result[0].types || []
     };
   }
   return {
-    code: '',
-    name: ''
+    name: '',
+    step: 0,
+    types: []
   };
 };
 
-const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
+const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const {
-    data: unitData,
-    isLoading: unitLoading,
-    isError: unitIsError,
-    error: unitError
+    data: fileTypeData,
+    isLoading: fileTypeLoading,
+    isError: fileTypeIsError,
+    error: fileTypeError
   } = useQuery({
-    queryKey: ['formUnits', id],
-    queryFn: () => getUnits({ id: Number(id) }),
+    queryKey: ['formFileTypes', id],
+    queryFn: () => getFileTypes({ id: Number(id) }),
     enabled: !!id && open
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(!!id, unitData as UnitsResponse),
+    initialValues: getInitialValues(!!id, fileTypeData as FileTypesResponse),
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
         if (id) {
-          await putUnit(Number(id), values);
+          await putFileType(Number(id), values);
         } else {
-          await postUnit(values);
+          await postFileType(values);
         }
         resetForm();
         onOpenChange();
-        queryClient.invalidateQueries({ queryKey: ['guidesUnits'] });
+        queryClient.invalidateQueries({ queryKey: ['guidesFileTypes'] });
       } catch (err) {
         console.error('Error submitting:', err);
       } finally {
@@ -81,7 +87,7 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
   const handleClose = () => {
     formik.resetForm();
-    queryClient.removeQueries({ queryKey: ['formUnits'] });
+    queryClient.removeQueries({ queryKey: ['formSources'] });
     onOpenChange();
   };
 
@@ -102,13 +108,31 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
           </button>
         </DialogHeader>
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-          {id && unitIsError && <SharedError error={unitError} />}
-          {unitLoading ? (
+          {id && fileTypeIsError && <SharedError error={fileTypeError} />}
+          {fileTypeLoading ? (
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedInput name="name" label="Name" formik={formik} />
-              <SharedInput name="code" label="Unit code" formik={formik} />
+              <SharedInput name="step" label="Step" formik={formik} type="number" />
+
+              <SharedInputTags
+                value={
+                  Array.isArray(formik.values?.types)
+                    ? (formik.values?.types.filter(
+                        (v): v is string => typeof v === 'string'
+                      ) as string[])
+                    : typeof formik.values?.types === 'string'
+                      ? [formik.values.types]
+                      : []
+                }
+                onChange={(value) =>
+                  formik.setFieldValue('types', value as typeof formik.values.types)
+                }
+                label="Types"
+                error={formik.errors.types as string}
+                touched={formik.touched.types}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -127,4 +151,4 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
   );
 };
 
-export default UnitModal;
+export default FileTypeModal;

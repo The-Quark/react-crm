@@ -52,6 +52,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.PACKAGE_TYPES': 'أنواع الطرود',
   'MENU.MEGAMENU.GUIDES.PACKAGE_MATERIALS': 'مواد التغليف',
   'MENU.MEGAMENU.GUIDES.TEMPLATES': 'قوالب',
+  'MENU.MEGAMENU.GUIDES.FILE_TYPES': 'أنواع الملفات',
   'MENU.MEGAMENU.GUIDES.UNITS': 'وحدات',
   'MENU.MEGAMENU.DEMONSTRATION': 'عرض توضيحي',
   'MENU.MEGAMENU.PUBLIC_PROFILE': 'الملف الشخصي العام',

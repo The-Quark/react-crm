@@ -11,3 +11,4 @@ export * from './getUnits';
 export * from './getVehicles';
 export * from './getPackageMaterials';
 export * from './getLanguages';
+export * from './getFileTypes';
