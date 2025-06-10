@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import {
   SharedAutocomplete,
+  SharedDecimalInput,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -16,18 +17,12 @@ import { useNavigate } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/lib/mocks.ts';
+import { decimalValidation } from '@/utils';
 
 export const formSchema = Yup.object().shape({
   client_id: Yup.string().required('Client is required'),
   order_id: Yup.string().required('Order is required'),
-  weight: Yup.number()
-    .min(0, 'Weight cannot be negative')
-    .test('is-two-decimal', 'The weight field must have exactly 2 decimal places.', (value) => {
-      if (value === undefined || value === null) return true;
-      const decimalPart = value.toString().split('.')[1];
-      return decimalPart?.length === 2;
-    })
-    .optional(),
+  weight: decimalValidation.required('Weight is required'),
   dimensions: Yup.string().optional(),
   status: Yup.string().optional(),
   cargo_id: Yup.string().optional()
@@ -220,7 +215,7 @@ export const PackageStarterContent = () => {
             onSearchTermChange={setSearchOrderTerm}
           />
 
-          <SharedInput name="weight" label="Weight" formik={formik} type="number" />
+          <SharedDecimalInput name="weight" label="Weight (kg)" formik={formik} />
 
           {isEditMode && (
             <>
