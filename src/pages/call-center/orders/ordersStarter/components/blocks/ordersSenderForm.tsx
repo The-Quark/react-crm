@@ -110,7 +110,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     isError: countriesIsError,
     error: countriesError
   } = useQuery({
-    queryKey: ['orderCountries'],
+    queryKey: ['orderSenderCountries'],
     queryFn: () => getCountries('id,iso2,name'),
     staleTime: Infinity
   });
