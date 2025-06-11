@@ -364,9 +364,9 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             </div>
           </div>
           <SharedDecimalInput name="weight" label="Weight (kg)" formik={formik} />
-          <SharedDecimalInput name="width" label="Width (m)" formik={formik} />
-          <SharedDecimalInput name="length" label="Length (m)" formik={formik} />
-          <SharedDecimalInput name="height" label="Height (m)" formik={formik} />
+          <SharedDecimalInput name="width" label="Width (cm)" formik={formik} />
+          <SharedDecimalInput name="length" label="Length (cm)" formik={formik} />
+          <SharedDecimalInput name="height" label="Height (cm)" formik={formik} />
           <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
           <SharedInput
             name="places_count"
