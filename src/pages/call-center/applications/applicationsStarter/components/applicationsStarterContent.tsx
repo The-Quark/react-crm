@@ -129,8 +129,8 @@ export const ApplicationsStarterContent = ({
     isError: clientsIsError,
     error: clientsError
   } = useQuery({
-    queryKey: ['applicationClients'],
-    queryFn: () => getClients(),
+    queryKey: ['applicationClients', searchTerm],
+    queryFn: () => getClients({}),
     staleTime: 60 * 60 * 1000
   });
 

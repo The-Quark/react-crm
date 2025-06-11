@@ -7,33 +7,78 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { cargoStatusOptions } from '@/lib/mocks.ts';
+import { cargoStatusOptions, mockDeliveryCategories } from '@/lib/mocks.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/lib/helpers.ts';
+import { CargoStatus } from '@/api/enums';
 
 interface ToolbarProps {
-  onSearch?: (searchTerm: string) => void;
+  onSearchCode?: (searchTerm: string) => void;
+  onSearchPackage?: (searchTerm: string) => void;
+  onStatusChange?: (status: CargoStatus | undefined) => void;
+  currentStatus?: CargoStatus;
+  onDeliveryCategoryChange?: (status: string | undefined) => void;
+  currentDeliveryCategory?: string;
 }
 
-export const CargoToolbar: FC<ToolbarProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState('');
+export const CargoToolbar: FC<ToolbarProps> = ({
+  onSearchCode,
+  onSearchPackage,
+  currentDeliveryCategory,
+  onDeliveryCategoryChange,
+  currentStatus,
+  onStatusChange
+}) => {
+  const [searchValueCode, setSearchValueCode] = useState('');
+  const [searchValuePackage, setSearchValuePackage] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
-  const debouncedSearch = debounce((value: string) => {
-    if (onSearch) {
-      onSearch(value);
+  const debouncedSearchCode = debounce((value: string) => {
+    if (onSearchCode) {
+      onSearchCode(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('code')?.setFilterValue(value);
   }, 300);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChangeCode = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchValue(value);
-    debouncedSearch(value);
+    setSearchValueCode(value);
+    debouncedSearchCode(value);
+  };
+
+  const debouncedSearchPackage = debounce((value: string) => {
+    if (onSearchPackage) {
+      onSearchPackage(value);
+    }
+    table.getColumn('hawb')?.setFilterValue(value);
+  }, 300);
+
+  const handleSearchChangePackage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchValuePackage(value);
+    debouncedSearchPackage(value);
+  };
+
+  const handleStatusChange = (value: string) => {
+    const newStatus = value === 'all' ? undefined : (value as CargoStatus);
+
+    table.getColumn('status')?.setFilterValue(newStatus || '');
+    if (onStatusChange) {
+      onStatusChange(newStatus);
+    }
+  };
+
+  const handleDeliveryTypeChange = (value: string) => {
+    const newCategory = value === 'all' ? undefined : (value as string);
+
+    table.getColumn('delivery category')?.setFilterValue(newCategory || '');
+    if (onDeliveryCategoryChange) {
+      onDeliveryCategoryChange(newCategory);
+    }
   };
 
   return (
@@ -45,12 +90,20 @@ export const CargoToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             New Cargo
           </a>
         )}
-        <Select
-          value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('status')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
+        <Select value={currentDeliveryCategory || 'all'} onValueChange={handleDeliveryTypeChange}>
+          <SelectTrigger className="w-32" size="sm">
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {mockDeliveryCategories.map((category) => (
+              <SelectItem key={category.value} value={category.value}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
@@ -73,8 +126,21 @@ export const CargoToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             type="text"
             placeholder="Search mawb"
             className="input input-sm ps-8"
-            value={searchValue}
-            onChange={handleSearchChange}
+            value={searchValueCode}
+            onChange={handleSearchChangeCode}
+          />
+        </div>
+        <div className="relative">
+          <KeenIcon
+            icon="magnifier"
+            className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
+          />
+          <input
+            type="text"
+            placeholder="Search hawb"
+            className="input input-sm ps-8"
+            value={searchValuePackage}
+            onChange={handleSearchChangePackage}
           />
         </div>
       </div>
