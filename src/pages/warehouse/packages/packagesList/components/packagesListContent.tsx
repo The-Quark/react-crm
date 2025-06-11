@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesColumns.tsx';
 import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesToolbar.tsx';
 import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesModal.tsx';
+import { PackageStatus } from '@/api/enums';
 
 export const PackagesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,16 +15,27 @@ export const PackagesListContent = () => {
     pageIndex: 0,
     pageSize: 15
   });
+  const [status, setStatus] = useState<PackageStatus>();
+  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['packages', pagination.pageIndex, pagination.pageSize, searchTerm],
+    queryKey: [
+      'packages',
+      pagination.pageIndex,
+      pagination.pageSize,
+      searchTerm,
+      status,
+      deliveryCategory
+    ],
     queryFn: () =>
       getPackages({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
-        title: searchTerm
+        status: status,
+        hawb: searchTerm,
+        delivery_category: deliveryCategory
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
@@ -52,6 +64,22 @@ export const PackagesListContent = () => {
     });
   };
 
+  const handleStatusChange = (newStatus: PackageStatus | undefined) => {
+    setStatus(newStatus);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
+  const handleDeliveryCategoryChange = (newCategory: string | undefined) => {
+    setDeliveryCategory(newCategory);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
   if (isError) {
     return <SharedError error={error} />;
   }
@@ -64,7 +92,15 @@ export const PackagesListContent = () => {
         data={data?.result || []}
         onFetchData={handleFetchData}
         layout={{ card: true }}
-        toolbar={<PackagesToolbar onSearch={handleSearch} />}
+        toolbar={
+          <PackagesToolbar
+            onSearch={handleSearch}
+            currentStatus={status}
+            onStatusChange={handleStatusChange}
+            currentDeliveryCategory={deliveryCategory}
+            onDeliveryCategoryChange={handleDeliveryCategoryChange}
+          />
+        }
         pagination={{
           page: pagination.pageIndex,
           size: pagination.pageSize,

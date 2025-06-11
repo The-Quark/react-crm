@@ -1,7 +1,7 @@
 import { TaskType, TaskPriority, TaskStatus } from '@/api/enums';
 
 export interface ITaskFormValues {
-  title: string;
+  title?: string;
   description: string;
   type: TaskType;
   priority: TaskPriority;

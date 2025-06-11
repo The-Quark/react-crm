@@ -30,7 +30,7 @@ interface Props {
 }
 
 export const formSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
+  title: Yup.string().optional(),
   description: Yup.string().required('Description is required'),
   type: Yup.mixed<TaskType>().oneOf(Object.values(TaskType)).required('Type is required'),
   priority: Yup.mixed<TaskPriority>()
@@ -71,8 +71,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     isError: usersIsError,
     error: usersError
   } = useQuery({
-    queryKey: ['tasksUsers'],
-    queryFn: () => getUserList({}),
+    queryKey: ['tasksUsers', searchUserTerm],
+    queryFn: () => getUserList({ full_name: searchOrderTerm, per_page: 50 }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -82,8 +82,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     isError: packagesIsError,
     error: packagesError
   } = useQuery({
-    queryKey: ['tasksPackages'],
-    queryFn: () => getPackages({}),
+    queryKey: ['tasksPackages', searchPackageTerm],
+    queryFn: () => getPackages({ hawb: searchOrderTerm, per_page: 50 }),
     staleTime: 60 * 60 * 1000
   });
 

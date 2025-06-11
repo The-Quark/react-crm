@@ -1,4 +1,4 @@
-import { getClients, getOrders, getPackages, putPackage, postPackage, getCargo } from '@/api';
+import { getClients, getOrders, putPackage, postPackage, getCargo } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -12,12 +12,18 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
+import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
+
+interface Props {
+  isEditMode: boolean;
+  packageData?: Package;
+  packageId?: number;
+}
 
 export const formSchema = Yup.object().shape({
   client_id: Yup.string().required('Client is required'),
@@ -28,10 +34,8 @@ export const formSchema = Yup.object().shape({
   cargo_id: Yup.string().optional()
 });
 
-export const PackageStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
+export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Props) => {
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
@@ -66,20 +70,9 @@ export const PackageStarterContent = () => {
     isError: cargoIsError,
     error: cargoError
   } = useQuery({
-    queryKey: ['packageCargo', id],
-    queryFn: () => getCargo({ id: id ? parseInt(id) : undefined }),
+    queryKey: ['packageCargo', packageId],
+    queryFn: () => getCargo({ id: packageId ? parseInt(String(packageId)) : undefined }),
     staleTime: 60 * 60 * 1000,
-    enabled: isEditMode
-  });
-
-  const {
-    data: packageData,
-    isLoading: packageLoading,
-    isError: packageIsError,
-    error: packageError
-  } = useQuery({
-    queryKey: ['package', id],
-    queryFn: () => getPackages({ id: id ? parseInt(id) : undefined }),
     enabled: isEditMode
   });
 
@@ -98,9 +91,9 @@ export const PackageStarterContent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        if (isEditMode && id) {
+        if (isEditMode && packageId) {
           const { status, cargo_id, ...putData } = values;
-          await putPackage(Number(id), {
+          await putPackage(Number(packageId), {
             ...putData,
             status: status as PackageStatus,
             cargo_id: cargo_id !== undefined ? String(cargo_id) : '',
@@ -136,19 +129,19 @@ export const PackageStarterContent = () => {
     if (packageData && isEditMode) {
       formik.setValues(
         {
-          client_id: packageData.result[0].client_id ?? '',
-          order_id: packageData.result[0].order_id ?? '',
-          weight: parseFloat(packageData.result[0].weight) ?? 0,
-          dimensions: packageData.result[0].dimensions ?? '',
-          status: packageData.result[0].status as unknown as PackageStatus,
-          cargo_id: packageData.result[0].cargo_id?.toString() ?? ''
+          client_id: packageData.client_id ?? '',
+          order_id: packageData.order_id ?? '',
+          weight: parseFloat(packageData.weight) ?? 0,
+          dimensions: packageData.dimensions ?? '',
+          status: packageData.status as unknown as PackageStatus,
+          cargo_id: packageData.cargo_id?.toString() ?? ''
         },
         false
       );
     }
   }, [isEditMode, packageData]);
 
-  if (ordersLoading || clientsLoading || (isEditMode && packageLoading && cargoLoading)) {
+  if (ordersLoading || clientsLoading || (isEditMode && cargoLoading)) {
     return <SharedLoading />;
   }
 
@@ -158,10 +151,6 @@ export const PackageStarterContent = () => {
 
   if (clientsIsError) {
     return <SharedError error={clientsError} />;
-  }
-
-  if (isEditMode && packageIsError) {
-    return <SharedError error={packageError} />;
   }
 
   if (isEditMode && cargoIsError) {

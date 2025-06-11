@@ -85,6 +85,7 @@ interface Client {
 export interface Package {
   id: number;
   hawb: string;
+  delivery_category: string;
   status: PackageStatus;
   order_id: number;
   cargo_id: number | null;

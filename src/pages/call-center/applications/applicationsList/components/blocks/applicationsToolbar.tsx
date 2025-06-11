@@ -43,7 +43,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('full name')?.setFilterValue(value);
   }, 300);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

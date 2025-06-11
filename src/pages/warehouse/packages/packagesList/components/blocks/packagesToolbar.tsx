@@ -11,12 +11,23 @@ import { mockDeliveryCategories, packageStatusOptions } from '@/lib/mocks.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/lib/helpers.ts';
+import { PackageStatus } from '@/api/enums';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
+  onStatusChange?: (status: PackageStatus | undefined) => void;
+  currentStatus?: PackageStatus;
+  onDeliveryCategoryChange?: (status: string | undefined) => void;
+  currentDeliveryCategory?: string;
 }
 
-export const PackagesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+export const PackagesToolbar: FC<ToolbarProps> = ({
+  onSearch,
+  currentStatus,
+  onStatusChange,
+  currentDeliveryCategory,
+  onDeliveryCategoryChange
+}) => {
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
@@ -27,13 +38,31 @@ export const PackagesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('hawb')?.setFilterValue(value);
   }, 300);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchValue(value);
     debouncedSearch(value);
+  };
+
+  const handleStatusChange = (value: string) => {
+    const newStatus = value === 'all' ? undefined : (value as PackageStatus);
+
+    table.getColumn('status')?.setFilterValue(newStatus || '');
+    if (onStatusChange) {
+      onStatusChange(newStatus);
+    }
+  };
+
+  const handleDeliveryTypeChange = (value: string) => {
+    const newCategory = value === 'all' ? undefined : (value as string);
+
+    table.getColumn('delivery category')?.setFilterValue(newCategory || '');
+    if (onDeliveryCategoryChange) {
+      onDeliveryCategoryChange(newCategory);
+    }
   };
 
   return (
@@ -45,12 +74,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             New Package
           </a>
         )}
-        <Select
-          value={(table.getColumn('delivery category')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('delivery category')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
+        <Select value={currentDeliveryCategory || 'all'} onValueChange={handleDeliveryTypeChange}>
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
@@ -63,12 +87,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
-          onValueChange={(value) => {
-            table.getColumn('status')?.setFilterValue(value === 'all' ? '' : value);
-          }}
-        >
+        <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
@@ -89,7 +108,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search client"
+            placeholder="Search hawb"
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}
