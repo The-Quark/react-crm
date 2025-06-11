@@ -7,6 +7,7 @@ import { DropdownNotifications } from '@/partials/dropdowns/notifications';
 import { useLanguage } from '@/i18n';
 import { getUserNotifications, useCurrentUser } from '@/api/get';
 import { useQuery } from '@tanstack/react-query';
+import { INotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
@@ -15,22 +16,17 @@ const HeaderTopbar = () => {
   const itemUserRef = useRef<any>(null);
   const itemNotificationsRef = useRef<any>(null);
   const { data: currentUser } = useCurrentUser();
+  const [notificationType, setNotificationType] = useState<'task' | 'application'>('task');
+  const [pageIndex, setPageIndex] = useState<number>(0);
 
-  const handleShow = () => {
-    window.dispatchEvent(new Event('resize'));
-  };
-
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-
-  const handleOpen = () => setSearchModalOpen(true);
-
-  const handleClose = () => {
-    setSearchModalOpen(false);
-  };
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['notifications'],
-    queryFn: () => getUserNotifications(),
+  const { data, isLoading, isError } = useQuery<INotificationResponse>({
+    queryKey: ['notifications', notificationType, pageIndex],
+    queryFn: () =>
+      getUserNotifications({
+        type: notificationType,
+        per_page: 5,
+        page: pageIndex
+      }),
     refetchInterval: 10000,
     staleTime: 5000
   });
@@ -41,67 +37,17 @@ const HeaderTopbar = () => {
     Array.isArray(data) &&
     data.some((notification) => notification.read_at === null);
 
+  const handleNotificationTypeChange = (type: 'task' | 'application') => {
+    setNotificationType(type);
+    setPageIndex(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPageIndex(newPage);
+  };
+
   return (
     <div className="flex items-center gap-2 lg:gap-3.5">
-      {/*<button*/}
-      {/*  onClick={handleOpen}*/}
-      {/*  className="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500"*/}
-      {/*>*/}
-      {/*  <KeenIcon icon="magnifier" />*/}
-      {/*</button>*/}
-      {/*<ModalSearch open={searchModalOpen} onOpenChange={handleClose} />*/}
-
-      {/*<Menu>*/}
-      {/*  <MenuItem*/}
-      {/*    ref={itemChatRef}*/}
-      {/*    onShow={handleShow}*/}
-      {/*    toggle="dropdown"*/}
-      {/*    trigger="click"*/}
-      {/*    dropdownProps={{*/}
-      {/*      placement: isRTL() ? 'bottom-start' : 'bottom-end',*/}
-      {/*      modifiers: [*/}
-      {/*        {*/}
-      {/*          name: 'offset',*/}
-      {/*          options: {*/}
-      {/*            offset: isRTL() ? [-170, 10] : [170, 10]*/}
-      {/*          }*/}
-      {/*        }*/}
-      {/*      ]*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <MenuToggle className="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">*/}
-      {/*      <KeenIcon icon="messages" />*/}
-      {/*    </MenuToggle>*/}
-
-      {/*    {DropdownChat({ menuTtemRef: itemChatRef })}*/}
-      {/*  </MenuItem>*/}
-      {/*</Menu>*/}
-
-      {/*<Menu>*/}
-      {/*  <MenuItem*/}
-      {/*    ref={itemAppsRef}*/}
-      {/*    toggle="dropdown"*/}
-      {/*    trigger="click"*/}
-      {/*    dropdownProps={{*/}
-      {/*      placement: isRTL() ? 'bottom-start' : 'bottom-end',*/}
-      {/*      modifiers: [*/}
-      {/*        {*/}
-      {/*          name: 'offset',*/}
-      {/*          options: {*/}
-      {/*            offset: isRTL() ? [-10, 10] : [10, 10]*/}
-      {/*          }*/}
-      {/*        }*/}
-      {/*      ]*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <MenuToggle className="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">*/}
-      {/*      <KeenIcon icon="element-11" />*/}
-      {/*    </MenuToggle>*/}
-
-      {/*    {DropdownApps()}*/}
-      {/*  </MenuItem>*/}
-      {/*</Menu>*/}
-
       <Menu>
         <MenuItem>
           <MenuLink
@@ -124,7 +70,7 @@ const HeaderTopbar = () => {
               {
                 name: 'offset',
                 options: {
-                  offset: isRTL() ? [-70, 10] : [70, 10] // [skid, distance]
+                  offset: isRTL() ? [-70, 10] : [70, 10]
                 }
               }
             ]
@@ -138,9 +84,13 @@ const HeaderTopbar = () => {
           </MenuToggle>
           {DropdownNotifications({
             menuTtemRef: itemNotificationsRef,
-            notifications: data || [],
-            isLoading: isLoading,
-            isError: isError
+            notifications: data,
+            isLoading,
+            isError,
+            onTypeChange: handleNotificationTypeChange,
+            currentType: notificationType,
+            onPageChange: handlePageChange,
+            currentPage: pageIndex
           })}
         </MenuItem>
       </Menu>
@@ -156,7 +106,7 @@ const HeaderTopbar = () => {
               {
                 name: 'offset',
                 options: {
-                  offset: isRTL() ? [-20, 10] : [20, 10] // [skid, distance]
+                  offset: isRTL() ? [-20, 10] : [20, 10]
                 }
               }
             ]

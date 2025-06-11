@@ -1,28 +1,40 @@
-import { useLanguage } from '@/i18n';
-import { KeenIcon } from '@/components';
+import { KeenIcon, Tab, TabPanel, Tabs, TabsList } from '@/components';
 import { MenuSub } from '@/components/menu';
-import { DropdownNotificationsAll } from './DropdownNotificationsAll';
-import { NotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
+import { INotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
+import { DropdownNotificationsTask } from '@/partials/dropdowns/notifications/DropdownNotificationsTask.tsx';
+import { DropdownNotificationsApplication } from '@/partials/dropdowns/notifications/DropdownNotificationsApplication.tsx';
+import React from 'react';
 
 interface IDropdownNotificationProps {
   menuTtemRef: any;
-  notifications: NotificationResponse[];
+  notifications?: INotificationResponse;
   isLoading?: boolean;
   isError?: boolean;
+  onTypeChange: (type: 'task' | 'application') => void;
+  currentType: 'task' | 'application';
+  onPageChange: (page: number) => void;
+  currentPage: number;
 }
 
 const DropdownNotifications = ({
   menuTtemRef,
   notifications,
   isError,
-  isLoading
+  isLoading,
+  onTypeChange,
+  currentType,
+  onPageChange,
+  currentPage
 }: IDropdownNotificationProps) => {
-  const { isRTL } = useLanguage();
-
   const handleClose = () => {
     if (menuTtemRef.current) {
       menuTtemRef.current.hide();
     }
+  };
+
+  const handleTabChange = (_event: React.SyntheticEvent | null, value: string | number | null) => {
+    const type = value === 1 ? 'task' : 'application';
+    onTypeChange(type);
   };
 
   const buildHeader = () => {
@@ -36,66 +48,45 @@ const DropdownNotifications = ({
     );
   };
 
-  // const buildTabs = () => {
-  //   return (
-  //     <Tabs defaultValue={1} className="">
-  //       <TabsList className="justify-between px-5 mb-2">
-  //         <div className="flex items-center gap-5">
-  //           <Tab value={1}>All</Tab>
-  //           <Tab value={2} className="relative">
-  //             Inbox
-  //             <span className="badge badge-dot badge-success size-[5px] absolute top-2 rtl:start-0 end-0 transform translate-y-1/2 translate-x-full"></span>
-  //           </Tab>
-  //           <Tab value={3}>Team</Tab>
-  //           <Tab value={4}>Following</Tab>
-  //         </div>
-  //         <Menu>
-  //           <MenuItem
-  //             toggle="dropdown"
-  //             trigger="click"
-  //             dropdownProps={{
-  //               placement: isRTL() ? 'bottom-start' : 'bottom-end',
-  //               modifiers: [
-  //                 {
-  //                   name: 'offset',
-  //                   options: {
-  //                     offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
-  //                   }
-  //                 }
-  //               ]
-  //             }}
-  //           >
-  //             <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
-  //               <KeenIcon icon="setting-2" />
-  //             </MenuToggle>
-  //             {DropdownCrud2()}
-  //           </MenuItem>
-  //         </Menu>
-  //       </TabsList>
-  //       <TabPanel value={1}>
-  //         <DropdownNotificationsAll />
-  //       </TabPanel>
-  //       <TabPanel value={2}>
-  //         <DropdownNotificationsInbox />
-  //       </TabPanel>
-  //       <TabPanel value={3}>
-  //         <DropdownNotificationsTeam />
-  //       </TabPanel>
-  //       <TabPanel value={4}>
-  //         <DropdownNotificationsFollowing />
-  //       </TabPanel>
-  //     </Tabs>
-  //   );
-  // };
+  const buildTabs = () => {
+    return (
+      <Tabs defaultValue={currentType === 'task' ? 1 : 2} className="" onChange={handleTabChange}>
+        <TabsList className="justify-between px-5 mb-2">
+          <div className="flex items-center gap-5">
+            <Tab value={1}>Tasks</Tab>
+            <Tab value={2}>Applications</Tab>
+          </div>
+        </TabsList>
+        <TabPanel value={1}>
+          <DropdownNotificationsTask
+            notifications={notifications?.result}
+            isLoading={isLoading}
+            isError={isError}
+            currentPage={currentPage === 0 ? currentPage + 1 : currentPage}
+            onPageChange={onPageChange}
+            total={notifications?.total}
+            lastPage={notifications?.last_page}
+          />
+        </TabPanel>
+        <TabPanel value={2}>
+          <DropdownNotificationsApplication
+            notifications={notifications?.result}
+            isLoading={isLoading}
+            isError={isError}
+            currentPage={currentPage === 0 ? currentPage + 1 : currentPage}
+            onPageChange={onPageChange}
+            total={notifications?.total}
+            lastPage={notifications?.last_page}
+          />
+        </TabPanel>
+      </Tabs>
+    );
+  };
 
   return (
     <MenuSub rootClassName="w-full max-w-[460px]" className="light:border-gray-300">
       {buildHeader()}
-      <DropdownNotificationsAll
-        notifications={notifications}
-        isLoading={isLoading}
-        isError={isError}
-      />
+      {buildTabs()}
     </MenuSub>
   );
 };

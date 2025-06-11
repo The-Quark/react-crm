@@ -1,7 +1,22 @@
 import axios from 'axios';
 import { USER_NOTIFICATIONS } from '@/api/url';
-import { NotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
+import { INotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
+import { IPaginationParams } from '@/api/generalManualTypes';
 
-export const getUserNotifications = async (): Promise<NotificationResponse[]> => {
-  return await axios.get<NotificationResponse[]>(USER_NOTIFICATIONS).then((res) => res.data);
+interface IGetUserNotifications extends IPaginationParams {
+  type: 'task' | 'application';
+}
+
+export const getUserNotifications = async ({
+  type,
+  page,
+  per_page
+}: IGetUserNotifications): Promise<INotificationResponse> => {
+  const params = new URLSearchParams();
+  if (type) params.append('type', type.toString());
+  if (per_page) params.append('per_page', per_page.toString());
+  if (page) params.append('page', page.toString());
+  return await axios
+    .get<INotificationResponse>(USER_NOTIFICATIONS, { params })
+    .then((res) => res.data);
 };

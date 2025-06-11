@@ -2,18 +2,27 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { getHeight } from '@/utils';
 import { useViewport } from '@/hooks';
 import { NotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
-import { DropdownNotificationsItemCard } from '@/partials/dropdowns/notifications/items/DropdownNotificationsItemCard.tsx';
+import { DropdownNotificationsApplicationCard } from '@/partials/dropdowns/notifications/items/DropdownNotificationsApplicationCard.tsx';
+import { KeenIcon } from '@/components';
 
-interface IDropdownNotificationsAllProps {
-  notifications: NotificationResponse[];
+interface IDropdownNotificationsApplicationProps {
+  notifications?: NotificationResponse[];
   isLoading?: boolean;
   isError?: boolean;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  total?: number;
+  lastPage?: number;
 }
 
-const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
+const DropdownNotificationsApplication: FC<IDropdownNotificationsApplicationProps> = ({
   notifications,
   isLoading,
-  isError
+  isError,
+  onPageChange,
+  currentPage,
+  total,
+  lastPage
 }) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const [listHeight, setListHeight] = useState<number>(0);
@@ -27,6 +36,18 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
       setListHeight(availableHeight);
     }
   }, [viewportHeight]);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < (lastPage ?? 1)) {
+      onPageChange(currentPage + 1);
+    }
+  };
 
   const buildList = () => {
     if (isLoading) {
@@ -45,7 +66,7 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
       );
     }
 
-    if (notifications.length === 0) {
+    if (notifications?.length === 0) {
       return (
         <div className="flex justify-center items-center h-32 text-gray-500">
           No notifications found
@@ -55,8 +76,8 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
 
     return (
       <div className="flex flex-col gap-5 pt-3 pb-4 divider-y divider-gray-200">
-        {notifications.map((notification) => (
-          <DropdownNotificationsItemCard key={notification.id} notification={notification} />
+        {notifications?.map((notification) => (
+          <DropdownNotificationsApplicationCard key={notification.id} notification={notification} />
         ))}
       </div>
     );
@@ -66,9 +87,24 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
     return (
       <>
         <div className="border-b border-b-gray-200"></div>
-        <div className="grid grid-cols-2 p-5 gap-2.5">
-          {/*<button className="btn btn-sm btn-light justify-center">Archive all</button>*/}
-          {/*<button className="btn btn-sm btn-light justify-center">Mark all as read</button>*/}
+        <div className="grid grid-cols-3 p-5 gap-2.5 items-center">
+          <button
+            className="btn btn-sm btn-light justify-center"
+            onClick={handlePrevious}
+            disabled={currentPage <= 1 || isLoading}
+          >
+            <KeenIcon icon="arrow-left" />
+          </button>
+          <div className="text-center text-sm text-gray-500">
+            Page {currentPage} of {lastPage}
+          </div>
+          <button
+            className="btn btn-sm btn-light justify-center"
+            onClick={handleNext}
+            disabled={currentPage >= (total ?? 1) || isLoading}
+          >
+            <KeenIcon icon="arrow-right" />
+          </button>
         </div>
       </>
     );
@@ -84,4 +120,4 @@ const DropdownNotificationsAll: FC<IDropdownNotificationsAllProps> = ({
   );
 };
 
-export { DropdownNotificationsAll };
+export { DropdownNotificationsApplication };
