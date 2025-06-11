@@ -9,11 +9,24 @@ import { TasksMenuOptions } from '@/pages/tasks/tasks-list/components/blocks/tas
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { SharedPriorityBadge, SharedTypeBadge } from '@/partials/sharedUI';
 
+const formatUserName = (user?: {
+  first_name?: string | null;
+  last_name?: string | null;
+  patronymic?: string | null;
+}) => {
+  if (!user) return '';
+
+  const parts = [user.first_name, user.last_name, user.patronymic].filter(Boolean); // Remove any null/undefined/empty strings
+
+  return parts.join(' ');
+};
+
 export const useTasksColumns = (): ColumnDef<Task>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage tasks') || currentUser?.roles[0].name === 'superadmin';
+
   const columns = useMemo<ColumnDef<Task>[]>(
     () => [
       {
@@ -75,15 +88,14 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) =>
-          `${row.assigned_by.first_name} ${row.assigned_by.last_name}${row.assigned_by.patronymic}`,
+        accessorFn: (row) => formatUserName(row.assigned_by),
         id: 'assigned_by',
         header: ({ column }) => <DataGridColumnHeader title="Assigned by" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {`${info.row.original.assigned_by.first_name} ${info.row.original.assigned_by.last_name} ${info.row.original.assigned_by.patronymic}`}
+              {formatUserName(info.row.original.assigned_by)}
             </div>
           </div>
         ),
@@ -93,15 +105,14 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         }
       },
       {
-        accessorFn: (row) =>
-          `${row.assigned_to?.first_name} ${row.assigned_to?.last_name}${row.assigned_to?.patronymic}`,
+        accessorFn: (row) => formatUserName(row.assigned_to),
         id: 'assigned_to',
         header: ({ column }) => <DataGridColumnHeader title="Assigned to" column={column} />,
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {`${info.row.original.assigned_to?.first_name} ${info.row.original.assigned_to?.last_name} ${info.row.original.assigned_to?.patronymic}`}
+              {formatUserName(info.row.original.assigned_to)}
             </div>
           </div>
         ),
@@ -191,5 +202,6 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
     ],
     [isRTL, canManage]
   );
+
   return canManage ? columns : columns.slice(0, -1);
 };

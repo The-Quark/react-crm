@@ -1,19 +1,10 @@
-import {
-  getClients,
-  getOrders,
-  getPackages,
-  getTask,
-  getUserList,
-  postTask,
-  putTask,
-  useCurrentUser
-} from '@/api';
+import { getOrders, getPackages, getUserList, postTask, putTask, useCurrentUser } from '@/api';
 import { ITaskFormValues } from '@/api/post/postTask/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
@@ -21,7 +12,6 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
 import { Textarea } from '@/components/ui/textarea.tsx';
@@ -31,6 +21,13 @@ import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { getData, setData } from '@/utils/include/LocalStorage';
+import { Task } from '@/api/get/getTask/types.ts';
+
+interface Props {
+  isEditMode: boolean;
+  taskData?: Task;
+  taskId?: number;
+}
 
 export const formSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -43,18 +40,14 @@ export const formSchema = Yup.object().shape({
   assigned_by: Yup.number().integer().required('Assigned by is required'),
   assigned_to: Yup.number().integer().required('Assigned to is required'),
   order_id: Yup.number().integer().nullable(),
-  client_id: Yup.number().integer().nullable(),
   package_id: Yup.number().integer().nullable(),
   due_date: Yup.string().required('Due date is required')
 });
 
-export const TasksStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
+export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode }) => {
   const [loading, setLoading] = useState(false);
-  const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [searchClientTerm, setSearchClientTerm] = useState('');
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const [searchPackageTerm, setSearchPackageTerm] = useState('');
   const [searchUserTerm, setSearchUserTerm] = useState('');
@@ -67,8 +60,8 @@ export const TasksStarterContent = () => {
     isError: ordersIsError,
     error: ordersError
   } = useQuery({
-    queryKey: ['tasksOrders'],
-    queryFn: () => getOrders({}),
+    queryKey: ['tasksOrders', searchOrderTerm],
+    queryFn: () => getOrders({ searchorder: searchOrderTerm, per_page: 50 }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -84,42 +77,19 @@ export const TasksStarterContent = () => {
   });
 
   const {
-    data: clientsData,
-    isLoading: clientsLoading,
-    isError: clientsIsError,
-    error: clientsError
-  } = useQuery({
-    queryKey: ['tasksClients'],
-    queryFn: () => getClients(),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
     data: packagesData,
     isLoading: packagesLoading,
     isError: packagesIsError,
     error: packagesError
   } = useQuery({
     queryKey: ['tasksPackages'],
-    queryFn: () => getPackages(),
+    queryFn: () => getPackages({}),
     staleTime: 60 * 60 * 1000
-  });
-
-  const {
-    data: taskData,
-    isLoading: taskLoading,
-    isError: taskIsError,
-    error: taskError
-  } = useQuery({
-    queryKey: ['task', id],
-    queryFn: () => getTask({ id: id ? parseInt(id) : undefined }),
-    enabled: isEditMode
   });
 
   const initialValues: ITaskFormValues & { status?: TaskStatus } = {
     assigned_by: currentUser?.id || '',
     assigned_to: '',
-    client_id: '',
     description: '',
     due_date: '',
     order_id: String(orderIdFromOrders) || '',
@@ -137,8 +107,8 @@ export const TasksStarterContent = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
       try {
-        if (isEditMode && id) {
-          await putTask(Number(id), values);
+        if (isEditMode && taskId) {
+          await putTask(Number(taskId), values);
           queryClient.invalidateQueries({ queryKey: ['tasks'] });
           navigate('/tasks/list');
           resetForm();
@@ -150,7 +120,6 @@ export const TasksStarterContent = () => {
         }
         setData('orderIdFromOrders', '');
         setSearchUserTerm('');
-        setSearchClientTerm('');
         setSearchUserTerm('');
         setSearchPackageTerm('');
       } catch (err) {
@@ -167,39 +136,28 @@ export const TasksStarterContent = () => {
     if (taskData && isEditMode) {
       formik.setValues(
         {
-          title: taskData.result[0].title ?? '',
-          description: taskData.result[0].description,
-          type: taskData.result[0].type ?? TaskType.INNER,
-          priority: taskData.result[0].priority ?? TaskPriority.LOW,
-          client_id: taskData.result[0].client_id ?? '',
-          order_id: taskData.result[0].order_id ?? '',
-          assigned_to: taskData.result[0].assigned_to.id ?? '',
-          assigned_by: taskData.result[0].assigned_by.id ?? '',
-          package_id: taskData.result[0].package_id ?? '',
-          due_date: taskData.result[0].due_date ?? '',
-          status: taskData.result[0].status as unknown as TaskStatus
+          title: taskData.title ?? '',
+          description: taskData.description,
+          type: taskData.type ?? TaskType.INNER,
+          priority: taskData.priority ?? TaskPriority.LOW,
+          order_id: taskData.order_id ?? '',
+          assigned_to: taskData.assigned_to.id ?? '',
+          assigned_by: taskData.assigned_by.id ?? '',
+          package_id: taskData.package_id ?? '',
+          due_date: taskData.due_date ?? '',
+          status: taskData.status as unknown as TaskStatus
         },
         false
       );
     }
   }, [isEditMode, taskData]);
 
-  if (
-    ordersLoading ||
-    clientsLoading ||
-    packagesLoading ||
-    usersLoading ||
-    (isEditMode && taskLoading)
-  ) {
+  if (packagesLoading || usersLoading) {
     return <SharedLoading />;
   }
 
   if (ordersIsError) {
     return <SharedError error={ordersError} />;
-  }
-
-  if (clientsIsError) {
-    return <SharedError error={clientsError} />;
   }
 
   if (usersIsError) {
@@ -208,10 +166,6 @@ export const TasksStarterContent = () => {
 
   if (packagesIsError) {
     return <SharedError error={packagesError} />;
-  }
-
-  if (isEditMode && taskIsError) {
-    return <SharedError error={taskError} />;
   }
 
   return (
@@ -335,6 +289,7 @@ export const TasksStarterContent = () => {
             touched={formik.touched.order_id}
             searchTerm={searchOrderTerm}
             onSearchTermChange={setSearchOrderTerm}
+            loading={ordersLoading}
           />
 
           <SharedAutocomplete
@@ -355,26 +310,6 @@ export const TasksStarterContent = () => {
             touched={formik.touched.package_id}
             searchTerm={searchPackageTerm}
             onSearchTermChange={setSearchPackageTerm}
-          />
-
-          <SharedAutocomplete
-            label="Client"
-            value={formik.values.client_id ?? ''}
-            options={
-              clientsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.first_name || app.company_name
-              })) ?? []
-            }
-            placeholder="Select client"
-            searchPlaceholder="Search client"
-            onChange={(val) => {
-              formik.setFieldValue('client_id', val);
-            }}
-            error={formik.errors.client_id as string}
-            touched={formik.touched.client_id}
-            searchTerm={searchClientTerm}
-            onSearchTermChange={setSearchClientTerm}
           />
 
           {isEditMode && (
