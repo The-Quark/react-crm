@@ -1,4 +1,4 @@
-import { getClients, getOrders, putPackage, postPackage, getCargo } from '@/api';
+import { getOrders, putPackage, postPackage, getCargo } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -26,7 +26,6 @@ interface Props {
 }
 
 export const formSchema = Yup.object().shape({
-  client_id: Yup.string().required('Client is required'),
   order_id: Yup.string().required('Order is required'),
   weight: decimalValidation.required('Weight is required'),
   dimensions: Yup.string().optional(),
@@ -38,7 +37,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const [searchCargoTerm, setSearchCargoTerm] = useState('');
 
@@ -48,19 +46,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     isError: ordersIsError,
     error: ordersError
   } = useQuery({
-    queryKey: ['packageOrders'],
-    queryFn: () => getOrders({}),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
-    data: clientsData,
-    isLoading: clientsLoading,
-    isError: clientsIsError,
-    error: clientsError
-  } = useQuery({
-    queryKey: ['packageClients'],
-    queryFn: () => getClients(),
+    queryKey: ['packageOrders', searchOrderTerm],
+    queryFn: () => getOrders({ per_page: 50, searchorder: searchOrderTerm }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -77,7 +64,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   });
 
   const initialValues: IPackageFormValues & { status?: PackageStatus; cargo_id?: string } = {
-    client_id: '',
     order_id: '',
     weight: '',
     dimensions: '',
@@ -97,13 +83,11 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             ...putData,
             status: status as PackageStatus,
             cargo_id: cargo_id !== undefined ? String(cargo_id) : '',
-            client_id: Number(putData.client_id),
             order_id: Number(putData.order_id)
           });
           queryClient.invalidateQueries({ queryKey: ['package'] });
           navigate('/warehouse/packages/list');
           resetForm();
-          setSearchTerm('');
           setSearchOrderTerm('');
           setSearchCargoTerm('');
         } else {
@@ -111,7 +95,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           queryClient.invalidateQueries({ queryKey: ['package'] });
           navigate('/warehouse/packages/list');
           resetForm();
-          setSearchTerm('');
           setSearchOrderTerm('');
           setSearchCargoTerm('');
         }
@@ -124,12 +107,19 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     }
   });
 
+  const handleOrderChange = (orderId: string) => {
+    formik.setFieldValue('order_id', orderId);
+    const selectedOrder = ordersData?.result?.find((order) => order.id === Number(orderId));
+    if (selectedOrder?.weight) {
+      formik.setFieldValue('weight', selectedOrder.weight.toString());
+    }
+  };
+
   useEffect(() => {
     formik.resetForm();
     if (packageData && isEditMode) {
       formik.setValues(
         {
-          client_id: packageData.client_id ?? '',
           order_id: packageData.order_id ?? '',
           weight: parseFloat(packageData.weight) ?? 0,
           dimensions: packageData.dimensions ?? '',
@@ -141,16 +131,12 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     }
   }, [isEditMode, packageData]);
 
-  if (ordersLoading || clientsLoading || (isEditMode && cargoLoading)) {
+  if (ordersLoading || (isEditMode && cargoLoading)) {
     return <SharedLoading />;
   }
 
   if (ordersIsError) {
     return <SharedError error={ordersError} />;
-  }
-
-  if (clientsIsError) {
-    return <SharedError error={clientsError} />;
   }
 
   if (isEditMode && cargoIsError) {
@@ -166,25 +152,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
         <div className="card-body grid gap-5">
           <SharedAutocomplete
-            label="Client"
-            value={formik.values.client_id ?? ''}
-            options={
-              clientsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.first_name || app.company_name
-              })) ?? []
-            }
-            placeholder="Select client"
-            searchPlaceholder="Search client"
-            onChange={(val) => {
-              formik.setFieldValue('client_id', val);
-            }}
-            error={formik.errors.client_id as string}
-            touched={formik.touched.client_id}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-          />
-          <SharedAutocomplete
             label="Order"
             value={formik.values.order_id ?? ''}
             options={
@@ -195,9 +162,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             }
             placeholder="Select order"
             searchPlaceholder="Search order"
-            onChange={(val) => {
-              formik.setFieldValue('order_id', val);
-            }}
+            onChange={(val: string | number) => handleOrderChange(String(val))}
             error={formik.errors.order_id as string}
             touched={formik.touched.order_id}
             searchTerm={searchOrderTerm}

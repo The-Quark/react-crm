@@ -7,6 +7,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { CargoMenuOptions } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -97,7 +98,7 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
+            <SharedStatusBadge status={info.row.original.status} />
           </div>
         ),
         meta: {

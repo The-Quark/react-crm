@@ -5,7 +5,8 @@ import {
   TaskStatus,
   VehicleStatus,
   ApplicationsStatus,
-  OrderStatus
+  OrderStatus,
+  CargoStatus
 } from '@/api/enums';
 
 type StatusType =
@@ -101,7 +102,7 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Declined',
       color: 'badge-danger'
     },
-    // Application statuses
+    // Order statuses
     [OrderStatus.EXPIRED]: {
       label: 'Expired',
       color: 'badge-warning'
@@ -121,6 +122,35 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     [OrderStatus.REWEIGHING]: {
       label: 'Reweighing',
       color: 'badge-warning'
+    },
+    // Cargo statuses
+    [CargoStatus.FORMED]: {
+      label: 'Formed',
+      color: 'badge-success'
+    },
+    [CargoStatus.ARRIVED_AIRPORT_SENDER]: {
+      label: 'Arrived at Sender Airport',
+      color: 'badge-info'
+    },
+    [CargoStatus.ARRIVED_AIRPORT_RECEIVER]: {
+      label: 'Arrived at Receiver Airport',
+      color: 'badge-info'
+    },
+    [CargoStatus.ACCEPTED_AIRPORT_SENDER]: {
+      label: 'Accepted at Sender Airport',
+      color: 'badge-success'
+    },
+    [CargoStatus.AWAITING_ACCEPT_AIRPORT_SENDER]: {
+      label: 'Awaiting Acceptance at Sender Airport',
+      color: 'badge-warning'
+    },
+    [CargoStatus.ACCEPTED_TSW]: {
+      label: 'Accepted by TSW',
+      color: 'badge-success'
+    },
+    [CargoStatus.TRANSFERRED_TSW]: {
+      label: 'Transferred by TSW',
+      color: 'badge-primary'
     },
     // Boolean statuses
     true: {
@@ -143,7 +173,8 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     ...Object.values(TaskStatus),
     ...Object.values(VehicleStatus),
     ...Object.values(ApplicationsStatus),
-    ...Object.values(OrderStatus)
+    ...Object.values(OrderStatus),
+    ...Object.values(CargoStatus)
   ];
 
   let normalizedStatus: keyof typeof statusConfig;
