@@ -33,6 +33,7 @@ const ClientStarterContent = () => {
     queryFn: () => getSources({}),
     staleTime: 60 * 60 * 1000
   });
+
   useEffect(() => {
     if (clientData?.result?.[0]?.type && clientType !== clientData.result[0].type) {
       setClientType(clientData.result[0].type);

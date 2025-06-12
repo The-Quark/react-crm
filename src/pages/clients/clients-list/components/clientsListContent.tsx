@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { useState } from 'react';
 import { Container, DataGrid } from '@/components';
 import { ClientsListToolbar } from '@/pages/clients/clients-list/components/blocks/clientsListToolbar.tsx';
@@ -16,9 +15,34 @@ export const ClientsListContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchPhone, setSearchPhone] = useState('');
+  const [clientCityId, setClientCityId] = useState<number>();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
+  });
+
+  const { data, isError, error, isFetching, isPending } = useQuery({
+    queryKey: [
+      'clients',
+      clientType,
+      pagination.pageIndex,
+      pagination.pageSize,
+      searchTerm,
+      searchPhone,
+      clientCityId
+    ],
+    queryFn: () =>
+      getClients({
+        type: clientType,
+        page: pagination.pageIndex + 1,
+        per_page: pagination.pageSize,
+        full_name: searchTerm,
+        phone: searchPhone,
+        city_id: clientCityId
+      }),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true
   });
 
   const columnsIndividual = useClientsListIndividualColumns({
@@ -35,18 +59,6 @@ export const ClientsListContent = () => {
     }
   });
 
-  const { data, isError, error, isFetching, isPending } = useQuery({
-    queryKey: ['clients', clientType, pagination.pageIndex, pagination.pageSize, searchTerm],
-    queryFn: () =>
-      getClients({
-        type: clientType,
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
-      }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
-  });
-
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
       ...prev,
@@ -55,8 +67,24 @@ export const ClientsListContent = () => {
     }));
   };
 
-  const handleSearch = (term: string) => {
+  const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
+  const handleSearchPhone = (phone: string) => {
+    setSearchPhone(phone);
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15
+    });
+  };
+
+  const handleClientCity = (cityId: number) => {
+    setClientCityId(cityId);
     setPagination({
       pageIndex: 0,
       pageSize: 15
@@ -79,7 +107,10 @@ export const ClientsListContent = () => {
           <ClientsListToolbar
             clientType={clientType}
             setClientType={setClientType}
-            onSearch={handleSearch}
+            onSearchTerm={handleSearchTerm}
+            onSearchPhone={handleSearchPhone}
+            currentCityId={clientCityId}
+            onClientCity={handleClientCity}
           />
         }
         pagination={{
