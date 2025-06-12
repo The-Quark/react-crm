@@ -36,8 +36,7 @@ const formSchema = Yup.object().shape({
   receiver_house: Yup.string().required('House is required'),
   receiver_apartment: Yup.string().required('Apartment is required'),
   receiver_location_description: Yup.string().optional(),
-  receiver_notes: Yup.string().optional(),
-  receiver_contact_id: Yup.number().optional()
+  receiver_notes: Yup.string().optional()
 });
 
 const getInitialValues = (
@@ -94,8 +93,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     isError: clientsIsError,
     error: clientsError
   } = useQuery({
-    queryKey: ['orderReceiverClients'],
-    queryFn: () => getClients(),
+    queryKey: ['orderReceiverClients', clientSearchTerm],
+    queryFn: () => getClients({ per_page: 50 }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -134,6 +133,20 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     staleTime: 1000 * 60 * 5
   });
 
+  const handleClientChange = (clientId: string) => {
+    formik.setFieldValue('receiver_contact_id', clientId);
+    const selectedClient = clientsData?.result?.find((client) => client.id === Number(clientId));
+    if (selectedClient) {
+      formik.setValues({
+        ...formik.values,
+        receiver_first_name: selectedClient.first_name || '',
+        receiver_last_name: selectedClient.last_name || '',
+        receiver_patronymic: selectedClient.patronymic || '',
+        receiver_phone: selectedClient.phone || ''
+      });
+    }
+  };
+
   const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
   const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
@@ -170,9 +183,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             }
             placeholder="Select contact"
             searchPlaceholder="Search contact"
-            onChange={(val) => {
-              formik.setFieldValue('receiver_contact_id', val);
-            }}
+            onChange={(val) => handleClientChange(String(val))}
             error={formik.errors.receiver_contact_id as string}
             touched={formik.touched.receiver_contact_id}
             searchTerm={clientSearchTerm}

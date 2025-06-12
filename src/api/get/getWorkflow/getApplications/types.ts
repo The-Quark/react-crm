@@ -16,6 +16,7 @@ export interface Application {
   full_name: string | undefined;
   source_id: number;
   company_name: string | undefined;
+  bin: string | undefined;
   first_name: string | undefined;
   last_name: string | undefined;
   patronymic: string | undefined;

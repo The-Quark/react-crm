@@ -34,8 +34,7 @@ const formSchema = Yup.object().shape({
   sender_house: Yup.string().required('House is required'),
   sender_apartment: Yup.string().required('Apartment is required'),
   sender_location_description: Yup.string().optional(),
-  sender_notes: Yup.string().optional(),
-  sender_contact_id: Yup.number().optional()
+  sender_notes: Yup.string().optional()
 });
 
 const getInitialValues = (
@@ -84,16 +83,14 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
   const { senderId } = useOrderCreation();
   const isEditMode = !!senderId;
 
-  console.log('Form: ', mainFormData);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,
     isError: clientsIsError,
     error: clientsError
   } = useQuery({
-    queryKey: ['orderSenderClients'],
-    queryFn: () => getClients(),
+    queryKey: ['orderSenderClients', clientSearchTerm],
+    queryFn: () => getClients({ per_page: 50 }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -102,7 +99,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log('Sender: ', values);
       setMainFormData({ ...mainFormData, ...values });
       onNext();
     }
@@ -130,6 +126,20 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
     enabled: !!formik.values.sender_country_id,
     staleTime: 1000 * 60 * 5
   });
+
+  const handleClientChange = (clientId: string) => {
+    formik.setFieldValue('sender_contact_id', clientId);
+    const selectedClient = clientsData?.result?.find((client) => client.id === Number(clientId));
+    if (selectedClient) {
+      formik.setValues({
+        ...formik.values,
+        sender_first_name: selectedClient.first_name || '',
+        sender_last_name: selectedClient.last_name || '',
+        sender_patronymic: selectedClient.patronymic || '',
+        sender_phone: selectedClient.phone || ''
+      });
+    }
+  };
 
   const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
@@ -167,9 +177,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
             }
             placeholder="Select contact"
             searchPlaceholder="Search contact"
-            onChange={(val) => {
-              formik.setFieldValue('sender_contact_id', val);
-            }}
+            onChange={(val) => handleClientChange(String(val))}
             error={formik.errors.sender_contact_id as string}
             touched={formik.touched.sender_contact_id}
             searchTerm={clientSearchTerm}

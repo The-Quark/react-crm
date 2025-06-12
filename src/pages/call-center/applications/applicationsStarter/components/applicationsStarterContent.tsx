@@ -38,6 +38,15 @@ export const formSchema = Yup.object().shape({
     otherwise: (schema) => schema.optional()
   }),
   patronymic: Yup.string().optional(),
+  bin: Yup.string().when('client_type', {
+    is: 'legal',
+    then: (schema) =>
+      schema
+        .length(12, 'BIN must be exactly 12 digits')
+        .matches(/^\d+$/, 'BIN must contain only digits')
+        .required('Bin is required'),
+    otherwise: (schema) => schema.optional()
+  }),
   company_name: Yup.string().when('client_type', {
     is: 'legal',
     then: (schema) => schema.required('Company name is required'),
@@ -60,6 +69,7 @@ const getInitialValues = (
   if (isEditMode && applicationData) {
     return {
       email: applicationData.email || '',
+      bin: applicationData.bin || '',
       phone: applicationData.phone || '',
       message: applicationData.message || '',
       source: applicationData.source.code || 'insta',
@@ -81,6 +91,7 @@ const getInitialValues = (
     last_name: '',
     patronymic: '',
     company_name: '',
+    bin: '',
     client_type: 'individual',
     client_id: clientId ?? '',
     status: 'new' as unknown as ApplicationsStatus
@@ -105,6 +116,7 @@ export const ApplicationsStarterContent = ({
       last_name: '',
       patronymic: '',
       company_name: '',
+      bin: '',
       client_type: 'individual',
       phone: '',
       email: '',
@@ -289,7 +301,10 @@ export const ApplicationsStarterContent = ({
           )}
 
           {formik.values.client_type === 'legal' ? (
-            <SharedInput name="company_name" label="Company name" formik={formik} />
+            <>
+              <SharedInput name="company_name" label="Company name" formik={formik} />
+              <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
+            </>
           ) : (
             <>
               <SharedInput name="first_name" label="First name" formik={formik} />

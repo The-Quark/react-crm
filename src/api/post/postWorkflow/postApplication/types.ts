@@ -1,6 +1,7 @@
 export interface IApplicationPostFormValues {
   source: string;
   company_name?: string;
+  bin?: string;
   first_name?: string;
   last_name?: string;
   patronymic?: string;

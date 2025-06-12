@@ -87,7 +87,6 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
                     aria-setsize={allSteps.length}
                     aria-selected={isActive}
                     className="flex size-10 items-center justify-center rounded-full"
-                    onClick={() => stepper.goTo(step.id)}
                   >
                     {index + 1}
                   </Button>

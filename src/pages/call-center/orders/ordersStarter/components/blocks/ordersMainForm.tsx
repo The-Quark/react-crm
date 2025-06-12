@@ -11,13 +11,7 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import {
-  getApplications,
-  getDeliveryTypes,
-  getPackageTypes,
-  getSources,
-  postOrderCalculate
-} from '@/api';
+import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
@@ -35,12 +29,7 @@ interface Props {
 }
 
 const formSchema = Yup.object().shape({
-  application_id: Yup.number().optional(),
-  source_id: Yup.string().when('application_id', {
-    is: (application_id: number) => !application_id,
-    then: (schema) => schema.required('Source is required when application is not selected'),
-    otherwise: (schema) => schema.optional()
-  }),
+  application_id: Yup.number().required('Application required'),
   delivery_type: Yup.number()
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
@@ -67,7 +56,6 @@ const getInitialValues = (
   applicationId: string | number,
   mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  console.log('Application Id: ', applicationId);
   if (isEditMode && orderData) {
     return {
       id: orderData.id || 0,
@@ -171,17 +159,6 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
   });
 
   const {
-    data: sourcesData,
-    isLoading: sourcesLoading,
-    isError: sourcesIsError,
-    error: sourcesError
-  } = useQuery({
-    queryKey: ['sources'],
-    queryFn: () => getSources({}),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
     data: deliveryTypesData,
     isLoading: deliveryTypesLoading,
     isError: deliveryTypesIsError,
@@ -206,16 +183,11 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     staleTime: 1000 * 60 * 5
   });
 
-  const isFormLoading =
-    deliveryTypesLoading || packageTypesLoading || applicationsLoading || sourcesLoading;
-  const isFormError =
-    deliveryTypesIsError || packageTypesIsError || applicationsIsError || sourcesIsError;
-  const formErrors = [
-    deliveryTypesError,
-    packageTypesError,
-    applicationsError,
-    sourcesError
-  ].filter((error) => error !== null);
+  const isFormLoading = deliveryTypesLoading || packageTypesLoading || applicationsLoading;
+  const isFormError = deliveryTypesIsError || packageTypesIsError || applicationsIsError;
+  const formErrors = [deliveryTypesError, packageTypesError, applicationsError].filter(
+    (error) => error !== null
+  );
 
   if (isFormLoading) {
     return <SharedLoading simple />;
@@ -259,19 +231,6 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
-          {!formik.values.application_id && (
-            <SharedSelect
-              name="source_id"
-              label="Source"
-              formik={formik}
-              options={
-                sourcesData?.result?.map((source) => ({
-                  label: source.name,
-                  value: source.id
-                })) || []
-              }
-            />
-          )}
           <SharedSelect
             name="delivery_type"
             label="Delivery Type"

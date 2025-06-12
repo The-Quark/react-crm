@@ -29,10 +29,10 @@ const validateSchema = Yup.object().shape({
     .length(12, 'BIN must be exactly 12 digits')
     .matches(/^\d+$/, 'BIN must contain only digits')
     .required('Company bin is required'),
-  business_type: Yup.string().required('Company field of activity is required'),
-  legal_address: Yup.string().required('Company legal address is required'),
-  representative_first_name: Yup.string().required('Representative name is required'),
-  representative_last_name: Yup.string().required('Representative surname is required'),
+  business_type: Yup.string().optional(),
+  legal_address: Yup.string().optional(),
+  representative_first_name: Yup.string().optional(),
+  representative_last_name: Yup.string().optional(),
   representative_phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
   representative_email: Yup.string().email('Invalid email address').optional(),
   notes: Yup.string().max(500, 'Maximum 500 symbols'),
