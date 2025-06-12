@@ -35,7 +35,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
       {
         accessorFn: (row) =>
           [row?.first_name, row?.last_name, row?.patronymic].filter(Boolean).join(' '),
-        id: 'client_name',
+        id: 'client name',
         header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
         enableSorting: true,
         cell: (info) => {
@@ -67,7 +67,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'client phone',
+        id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -83,7 +83,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
       },
       {
         accessorFn: (row) => row?.source?.name,
-        id: 'client source',
+        id: 'source',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -99,7 +99,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
       },
       {
         accessorFn: (row) => row?.email,
-        id: 'client email',
+        id: 'email',
         header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -113,7 +113,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
       },
       {
         accessorFn: (row) => row?.birth_date,
-        id: 'client birth date',
+        id: 'birth date',
         header: ({ column }) => <DataGridColumnHeader title="Birth date" column={column} />,
         enableSorting: true,
         cell: (info) => (

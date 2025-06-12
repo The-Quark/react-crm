@@ -20,6 +20,8 @@ export interface Client {
   registered_at: string;
   notes: string | null;
   source_id: number;
+  country_id?: number;
+  city_id?: number;
   last_name: string;
   first_name: string;
   patronymic: string | null;

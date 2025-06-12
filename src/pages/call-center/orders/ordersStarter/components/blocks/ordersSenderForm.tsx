@@ -25,8 +25,8 @@ const formSchema = Yup.object().shape({
   sender_first_name: Yup.string().required('First name is required'),
   sender_last_name: Yup.string().required('Last name is required'),
   sender_patronymic: Yup.string().optional(),
-  sender_city_id: Yup.number().typeError('City is required').required('City is required'),
-  sender_country_id: Yup.number().typeError('Country is required').required('Country is required'),
+  sender_city_id: Yup.number().required('City is required'),
+  sender_country_id: Yup.number().required('Country is required'),
   sender_phone: Yup.string()
     .matches(PHONE_REG_EXP, 'Invalid phone number')
     .required('Phone is required'),

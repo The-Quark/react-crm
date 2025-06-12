@@ -59,7 +59,7 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'company phone',
+        id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -75,7 +75,7 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
       },
       {
         accessorFn: (row) => row?.source?.name,
-        id: 'client source',
+        id: 'source',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
         enableSorting: true,
         cell: (info) => (
@@ -91,7 +91,7 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
       },
       {
         accessorFn: (row) => row?.email,
-        id: 'client email',
+        id: 'email',
         header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
         enableSorting: true,
         cell: (info) => (

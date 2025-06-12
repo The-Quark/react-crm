@@ -54,7 +54,7 @@ const ClientStarterContent = () => {
         <SharedLoading />
       ) : (
         <div className="grid gap-5 lg:gap-7.5">
-          <div className="card pb-2.5">
+          <div className="card pb-5">
             {!isEditMode ? (
               <div className="card-header" id="general_settings">
                 <div className="flex-col items-center gap-2.5">

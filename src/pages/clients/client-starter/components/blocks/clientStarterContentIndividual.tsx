@@ -14,14 +14,20 @@ import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
-import { postClient, putClient } from '@/api';
+import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
-import { SharedInput, SharedTextArea } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedTextArea
+} from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   clientData?: Client;
@@ -41,6 +47,8 @@ const validateSchema = Yup.object().shape({
 });
 
 const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {
+  const [countrySearchTerm, setCountrySearchTerm] = useState('');
+  const [citySearchTerm, setCitySearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -55,7 +63,10 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     email: clientData && clientData.email !== null ? clientData.email : undefined,
     phone: clientData ? clientData.phone : '',
     notes: clientData && clientData.notes !== null ? clientData.notes : undefined,
-    source_id: clientData ? clientData.source_id.toString() : ''
+    source_id: clientData ? clientData.source_id.toString() : '',
+    country_id:
+      clientData && clientData.country_id !== undefined ? clientData.country_id.toString() : '',
+    city_id: clientData && clientData.city_id !== undefined ? clientData.city_id.toString() : ''
   };
 
   const formik = useFormik({
@@ -89,6 +100,47 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       setSubmitting(false);
     }
   });
+
+  const {
+    data: countriesData,
+    isLoading: countriesLoading,
+    isError: countriesIsError,
+    error: countriesError
+  } = useQuery({
+    queryKey: ['clientCountries'],
+    queryFn: () => getCountries('id,iso2,name'),
+    staleTime: Infinity
+  });
+
+  const {
+    data: citiesData,
+    isLoading: citiesLoading,
+    isError: citiesIsError,
+    error: citiesError
+  } = useQuery({
+    queryKey: ['clientCities', formik.values.country_id],
+    queryFn: () => getCitiesByCountryCode(formik.values.country_id as string | number, 'id'),
+    enabled: !!formik.values.country_id,
+    staleTime: 1000 * 60 * 5
+  });
+
+  const isFormLoading = countriesLoading || (clientData && citiesLoading);
+  const isFormError = countriesIsError || (clientData && citiesIsError);
+  const formErrors = [countriesError, citiesError].filter((error) => error !== null);
+
+  if (isFormLoading) {
+    return <SharedLoading simple />;
+  }
+
+  if (isFormError) {
+    return (
+      <div>
+        {formErrors.map((error, index) => (
+          <SharedError key={index} error={error} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
@@ -184,6 +236,39 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
           )}
         </div>
       </div>
+
+      <SharedAutocomplete
+        label="Country"
+        value={formik.values.country_id ?? clientData?.country_id ?? ''}
+        options={countriesData?.data ?? []}
+        placeholder="Select country"
+        searchPlaceholder="Search country"
+        onChange={(val) => {
+          formik.setFieldValue('country_id', val);
+          formik.setFieldValue('city_id', '');
+        }}
+        error={formik.errors.country_id as string}
+        touched={formik.touched.country_id}
+        searchTerm={countrySearchTerm}
+        onSearchTermChange={setCountrySearchTerm}
+      />
+
+      <SharedAutocomplete
+        label="City"
+        value={formik.values.city_id ?? clientData?.city_id ?? ''}
+        options={citiesData?.data[0]?.cities ?? []}
+        placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
+        searchPlaceholder="Search city"
+        onChange={(val) => formik.setFieldValue('city_id', val)}
+        error={formik.errors.city_id as string}
+        touched={formik.touched.city_id}
+        searchTerm={citySearchTerm}
+        onSearchTermChange={setCitySearchTerm}
+        disabled={!formik.values.country_id}
+        loading={citiesLoading}
+        errorText={citiesIsError ? 'Failed to load cities' : undefined}
+        emptyText="No cities available"
+      />
 
       <SharedInput name="email" label="Email" formik={formik} type="email" />
       <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />

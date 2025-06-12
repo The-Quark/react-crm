@@ -4,6 +4,8 @@ export interface IClientFormValues {
   email?: string;
   notes?: string;
   source_id: string;
+  country_id?: string;
+  city_id?: string;
   last_name?: string;
   first_name?: string;
   patronymic?: string;
