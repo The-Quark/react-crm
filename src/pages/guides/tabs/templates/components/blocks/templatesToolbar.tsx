@@ -114,7 +114,7 @@ export const TemplatesToolbar: FC<Props> = ({
         </Select>
 
         <DataGridColumnVisibility table={table} />
-        {renderSearchInput('code', 'Search templates code', searchCode)}
+        {renderSearchInput('code', 'Search template code', searchCode)}
       </div>
 
       <TemplatesModal

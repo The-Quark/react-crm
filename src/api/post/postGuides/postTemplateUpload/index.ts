@@ -7,7 +7,7 @@ import {
 
 export const postTemplateUpload = async (
   id: number,
-  type: UploadType,
+  type: string,
   files: File[],
   language_code: string
 ): Promise<ITemplateUploadResponse> => {

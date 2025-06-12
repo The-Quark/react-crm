@@ -95,7 +95,7 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
           return (
             <div className="flex items-center gap-1.5">
               <a className="link" href={url} target="_blank" rel="noopener noreferrer">
-                hawb.pdf
+                HAWB
               </a>
             </div>
           );

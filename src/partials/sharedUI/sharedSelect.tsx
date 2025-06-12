@@ -16,6 +16,7 @@ interface Props<T> {
   placeholder?: string;
   isClearable?: boolean;
   disabled?: boolean;
+  onChange?: (value: string | number) => void;
 }
 
 export const SharedSelect = <T,>({
@@ -25,7 +26,8 @@ export const SharedSelect = <T,>({
   options,
   placeholder = 'Select...',
   isClearable = false,
-  disabled = false
+  disabled = false,
+  onChange
 }: Props<T>) => {
   const fieldName = name.toString();
   const currentValue = formik.values[name];
@@ -42,9 +44,11 @@ export const SharedSelect = <T,>({
           onValueChange={(value) => {
             if (isClearable && value === CLEAR_OPTION_VALUE) {
               formik.setFieldValue(fieldName, null);
+              onChange?.('');
             } else {
               const finalValue = isNaN(Number(value)) ? value : Number(value);
               formik.setFieldValue(fieldName, finalValue);
+              onChange?.(finalValue);
             }
           }}
         >

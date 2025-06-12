@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogBody,
@@ -10,13 +10,13 @@ import {
 import { KeenIcon } from '@/components';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { getTemplates, getLanguages, postTemplateUpload } from '@/api';
+import { getTemplates, getLanguages, postTemplateUpload, getFileTypes } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
-import { UploadType } from '@/api/post/postWorkflow/postCargoUpload/types.ts';
 import { Media } from '@/api/get/getGuides/getTemplates/types.ts';
 import { AxiosError } from 'axios';
 import Dropzone from 'shadcn-dropzone';
+import { extToMime } from '@/lib/helpers.ts';
 
 interface Props {
   open: boolean;
@@ -25,33 +25,54 @@ interface Props {
   selectedLanguage: string;
 }
 
-export const formSchema = Yup.object().shape({
-  type: Yup.string().required('Type is required'),
-  files: Yup.mixed()
-    .required('Files are required')
-    .test('fileSize', 'File size is too large', (value) => {
-      if (!value) return true;
-      const files = Array.isArray(value) ? value : [value];
-      return files.every((file) => file.size <= 5 * 1024 * 1024);
-    })
-    .test('fileType', 'Unsupported file type', (value) => {
-      if (!value) return true;
-      const files = Array.isArray(value) ? value : [value];
-      const allowedTypes = [
-        'image/jpeg',
-        'image/png',
-        'application/pdf',
-        'application/pdf',
-        'text/html'
-      ];
-      return files.every((file) => allowedTypes.includes(file.type));
-    }),
-  language_code: Yup.string().required('Type is required')
-});
+interface FormValues {
+  type: string;
+  files: File[];
+  language_code: string;
+}
 
 export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, selectedLanguage }) => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+
+  const formik = useFormik<FormValues>({
+    initialValues: {
+      type: '',
+      files: [],
+      language_code: selectedLanguage
+    },
+    validationSchema: Yup.object().shape({
+      type: Yup.string().required('File type is required'),
+      files: Yup.array().of(Yup.mixed<File>()).required('Files are required'),
+      // .test('fileType', 'Unsupported file type', function (files) {
+      //   if (!files || files.length === 0) return true;
+      //   const selectedType = fileTypeData?.result?.find((t) => t.id === this.parent.type);
+      //   if (!selectedType) return false;
+      //
+      //   return files.every((file) => {
+      //     const extension = file?.name.split('.').pop()?.toLowerCase();
+      //     return selectedType.types.includes(extension || '');
+      //   });
+      // }),
+      language_code: Yup.string().required('Language is required')
+    }),
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      if (!id || values.files.length === 0) return;
+      setLoading(true);
+      try {
+        await postTemplateUpload(Number(id), values.type, values.files, values.language_code);
+        onOpenChange(false);
+        queryClient.invalidateQueries({ queryKey: ['templateUpload', id] });
+        resetForm();
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        console.error(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+        setSubmitting(false);
+      }
+    }
+  });
 
   const {
     data: templateData,
@@ -76,50 +97,48 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
     enabled: open
   });
 
-  const formik = useFormik({
-    initialValues: {
-      type: 'photo' as UploadType,
-      files: [] as File[],
-      language_code: selectedLanguage
-    },
-    validationSchema: formSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      if (!id || values.files.length === 0) return;
-
-      setLoading(true);
-      try {
-        await postTemplateUpload(Number(id), values.type, values.files, values.language_code);
-        queryClient.invalidateQueries({ queryKey: ['templateUpload', id] });
-        resetForm();
-      } catch (err) {
-        const error = err as AxiosError<{ message?: string }>;
-        console.error(error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
-        setSubmitting(false);
-      }
-    }
+  const {
+    data: fileTypeData,
+    isLoading: fileTypeLoading,
+    isError: fileTypeIsError,
+    error: fileTypeError
+  } = useQuery({
+    queryKey: ['templatesFileType'],
+    queryFn: () => getFileTypes({}),
+    staleTime: 1000 * 60 * 2,
+    enabled: open
   });
+
+  const selectedFileType = useMemo(() => {
+    return fileTypeData?.result?.find((type) => String(type.id) === String(formik.values.type));
+  }, [formik.values.type, fileTypeData]);
+
+  const acceptedFileTypes = useMemo(() => {
+    if (!selectedFileType) return {};
+
+    const acceptMap: Record<string, string[]> = {};
+
+    selectedFileType.types.forEach((ext) => {
+      const mime = extToMime[ext.toLowerCase()];
+      if (!mime) return;
+      if (!acceptMap[mime]) acceptMap[mime] = [];
+      acceptMap[mime].push(`.${ext.toLowerCase()}`);
+    });
+
+    return acceptMap;
+  }, [selectedFileType]);
 
   const handleClose = () => {
     formik.resetForm();
     onOpenChange(false);
   };
 
-  const isFormLoading = id ? templateLoading || languageLoading : languageLoading;
-
-  const isFormError = id ? templateIsError || languageIsError : languageIsError;
-
-  const formErrors = [templateError, languageError].filter((error) => error !== null);
-
   const handleFileChange = (acceptedFiles: File[]) => {
     formik.setFieldValue('files', acceptedFiles);
   };
 
   const handleOpenFile = (url: string, mimeType: string) => {
-    if (mimeType.startsWith('image/')) {
-      window.open(url, '_blank');
-    } else if (mimeType === 'application/pdf') {
+    if (mimeType.startsWith('image/') || mimeType === 'application/pdf') {
       window.open(url, '_blank');
     } else {
       const link = document.createElement('a');
@@ -130,11 +149,19 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
     }
   };
 
-  const uploadTypeOptions = [
-    { value: 'photo', label: 'Photo' },
-    { value: 'invoice_doc', label: 'Invoice Document' },
-    { value: 'other', label: 'Other Document' }
-  ];
+  const isFormLoading = id
+    ? templateLoading || languageLoading || fileTypeLoading
+    : languageLoading || fileTypeLoading;
+
+  const isFormError = id
+    ? templateIsError || languageIsError || fileTypeIsError
+    : languageIsError || fileTypeIsError;
+
+  const formErrors = [templateError, languageError, fileTypeError].filter(
+    (error) => error !== null
+  );
+
+  console.log('types: ', acceptedFileTypes);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -172,27 +199,33 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                 name="type"
                 label="File type"
                 formik={formik}
-                options={uploadTypeOptions}
+                options={
+                  fileTypeData?.result?.map((file) => ({ label: file.name, value: file.id })) ?? []
+                }
                 placeholder="Select upload type"
+                onChange={(value: string | number) => {
+                  formik.setFieldValue('type', value);
+                  formik.setFieldValue('files', []);
+                }}
               />
 
               <div className="flex flex-col gap-2.5">
                 <label className="form-label">Files</label>
+                {selectedFileType && (
+                  <p className="text-sm text-gray-500">
+                    Allowed file types: {selectedFileType.types.join(', ')}
+                  </p>
+                )}
                 <Dropzone
                   containerClassName="w-full h-full"
                   dropZoneClassName="w-full h-40 border-2 border-dashed rounded-lg flex items-center justify-center"
                   multiple={true}
-                  accept={{
-                    'image/*': ['.jpeg', '.jpg', '.png', '.html'],
-                    'application/pdf': ['.pdf', '.html'],
-                    'text/html': ['.html']
-                  }}
+                  accept={acceptedFileTypes}
                   onDrop={handleFileChange}
+                  disabled={!formik.values.type}
                 />
                 {formik.touched.files && formik.errors.files && (
-                  <p className="text-red-500 text-sm">
-                    {typeof formik.errors.files === 'string' ? formik.errors.files : null}
-                  </p>
+                  <p className="text-red-500 text-sm">{formik.errors.files as string}</p>
                 )}
               </div>
 
