@@ -177,8 +177,9 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                   dropZoneClassName="w-full h-40 border-2 border-dashed rounded-lg flex items-center justify-center"
                   multiple={true}
                   accept={{
-                    'image/*': ['.jpeg', '.jpg', '.png'],
-                    'application/pdf': ['.pdf']
+                    'image/*': ['.jpeg', '.jpg', '.png', '.html'],
+                    'application/pdf': ['.pdf'],
+                    'text/html': ['.html']
                   }}
                   onDrop={handleFileChange}
                 />
