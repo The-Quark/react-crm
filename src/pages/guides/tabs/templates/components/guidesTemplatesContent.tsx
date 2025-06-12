@@ -12,7 +12,7 @@ import { TemplatesToolbar } from '@/pages/guides/tabs/templates/components/block
 export const GuidesTemplatesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchCodeTerm, setSearchCodeTerm] = useState('');
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -24,13 +24,14 @@ export const GuidesTemplatesContent = () => {
       selectedLanguage.code,
       pagination.pageIndex,
       pagination.pageSize,
-      searchTerm
+      searchCodeTerm
     ],
     queryFn: () =>
       getTemplates({
         language_code: selectedLanguage.code,
         page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize
+        per_page: pagination.pageSize,
+        code: searchCodeTerm
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true
@@ -60,8 +61,8 @@ export const GuidesTemplatesContent = () => {
     }));
   };
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
+  const handleSearchCode = (code: string) => {
+    setSearchCodeTerm(code);
     setPagination({
       pageIndex: 0,
       pageSize: 15
@@ -88,6 +89,7 @@ export const GuidesTemplatesContent = () => {
             currentLanguage={selectedLanguage.code}
             languages={languagesData?.result || []}
             onLanguageChange={handleLanguageChange}
+            onSearchCode={handleSearchCode}
           />
         }
         layout={{ card: true }}

@@ -8,6 +8,7 @@ interface ITemplatesFilters extends IPaginationParams {
   company_id?: number;
   type?: string;
   code?: string;
+  title?: string;
   language_code?: string;
 }
 
@@ -18,7 +19,8 @@ const getTemplates = async ({
   type,
   company_id,
   page,
-  per_page
+  per_page,
+  title
 }: ITemplatesFilters): Promise<ITemplatesResponse> => {
   const params = new URLSearchParams();
 
@@ -27,6 +29,7 @@ const getTemplates = async ({
   if (page) params.append('page', page.toString());
   if (language_code) params.append('language_code', language_code.toString());
   if (code) params.append('code', code.toString());
+  if (title) params.append('title', title.toString());
   if (type) params.append('type', type.toString());
   if (company_id) params.append('company_id', company_id.toString());
 
