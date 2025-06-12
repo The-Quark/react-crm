@@ -37,7 +37,13 @@ export const formSchema = Yup.object().shape({
     .test('fileType', 'Unsupported file type', (value) => {
       if (!value) return true;
       const files = Array.isArray(value) ? value : [value];
-      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'application/pdf',
+        'application/pdf',
+        'text/html'
+      ];
       return files.every((file) => allowedTypes.includes(file.type));
     }),
   language_code: Yup.string().required('Type is required')
@@ -178,7 +184,7 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                   multiple={true}
                   accept={{
                     'image/*': ['.jpeg', '.jpg', '.png', '.html'],
-                    'application/pdf': ['.pdf'],
+                    'application/pdf': ['.pdf', '.html'],
                     'text/html': ['.html']
                   }}
                   onDrop={handleFileChange}

@@ -3,7 +3,6 @@ import { DataGrid, Container } from '@/components';
 import { getFileTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { useUnitsColumns } from '@/pages/guides/tabs/units/components/blocks/unitsColumns.tsx';
 import { useState } from 'react';
 import { FileTypesToolbar } from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesToolbar.tsx';
 import { useFileTypesColumns } from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesColumns.tsx';
