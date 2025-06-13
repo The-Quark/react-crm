@@ -82,25 +82,21 @@ export enum CargoStatus {
 }
 
 export enum PackageStatus {
-  AWAITING_AIRPORT = 'awaiting_airport',
-  READY_SEND = 'ready_send',
-  READY_DELIVERY = 'ready_delivery',
-  HEADING_CLIENT = 'heading_client',
-  DONE_PACKAGING = 'done_packaging',
-  IN_CARGO = 'in_cargo',
-  AWAITING_CUSTOMS = 'awaiting_customs',
-  READY_ODD = 'ready_odd',
-  HEADING_ODD = 'heading_odd',
-  ARRIVED_ODD = 'arrived_odd',
-  ARRIVED_AIRPORT = 'arrived_airport',
-  ARRIVED_WAREHOUSE = 'arrived_warehouse',
-  ACCEPTED_WAREHOUSE = 'accepted_warehouse',
-  PASSED_CUSTOMS = 'passed_customs',
-  TRANSFERED_COURIER = 'transfered_courier',
+  READY_FOR_SHIPMENT = 'ready_for_shipment',
+  PACKED = 'packed',
+  DELIVERED_TO_PVZ = 'delivered_to_pvz',
+  START_CUSTOM_CLEARANCE = 'start_custom_clearance',
+  DONE_CUSTOM_CLEARANCE = 'done_custom_clearance',
+  AWAITING_CUSTOM_CLEARANCE_APPROVAL = 'awaiting_custom_clearance_approval',
+  READY_FOR_RECEIVE = 'ready_for_receive',
+  TRANSFERRED_TO_COURIER = 'transferred_to_courier',
+  READY_FOR_TRANSFER_TO_PVZ = 'ready_for_transfer_to_pvz',
+  HEADING_TO_PVZ = 'heading_to_pvz',
+  HEADING_TO_RECEIVER = 'heading_to_receiver',
+  READY_FOR_DELIVERY = 'ready_for_delivery',
   DELIVERED = 'delivered',
-  REJECT_DAMAGED = 'rejected_damaged',
-  REJECTED_CLIENT = 'rejected_client',
-  REJECT_OTHER = 'rejected_other'
+  DAMAGED = 'damaged',
+  DELAYED = 'delayed'
 }
 
 export enum OrderStatus {

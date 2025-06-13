@@ -1,55 +1,47 @@
 import React, { createContext, useContext, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
+import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types';
+import { ISenderOrderFormValues } from '@/api/post/postWorkflow/postOrderSender/types.ts';
+import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderReceiver/types.ts';
+
+interface IOrderWithRelationsFormValues extends IOrderFormValues {
+  sender?: ISenderOrderFormValues;
+  receiver?: IReceiverOrderFormValues;
+}
+
+interface IFastFormContext {
+  application?: IApplicationPostFormValues;
+  order?: IOrderWithRelationsFormValues;
+}
 
 interface FastFormContextType {
-  applicationId?: number | null;
-  setApplicationId: (id?: number) => void;
+  mainForm?: IFastFormContext;
+  setMainForm: (form?: IFastFormContext) => void;
   clearAll: () => void;
 }
 
 const FastFormContext = createContext<FastFormContextType>({
-  applicationId: null,
-  setApplicationId: () => {},
+  mainForm: undefined,
+  setMainForm: () => {},
   clearAll: () => {}
 });
 
-export const OrderCreationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [mainFormData, setMainFormDataState] = useState<IOrderFormValues | null>(null);
+export const FastFormCreatorProvider = ({ children }: { children: React.ReactNode }) => {
+  const [mainForm, setMainFormData] = useState<IFastFormContext | undefined>();
 
-  const [applicationId, setApplicationIdState] = useState<number | null>(
-    searchParams.get('application_id') ? Number(searchParams.get('application_id')) : null
-  );
-
-  const setApplicationId = (id?: number) => {
-    setApplicationIdState(id ?? null);
-    if (id !== undefined) {
-      searchParams.set('application_id', id.toString());
-    } else {
-      searchParams.delete('application_id');
-    }
-    setSearchParams(searchParams);
-  };
-
-  const setMainFormData = (data: IOrderFormValues) => {
-    setMainFormDataState(data);
-    setSearchParams(searchParams);
+  const setMainForm = (form?: IFastFormContext) => {
+    setMainFormData(form);
   };
 
   const clearAll = () => {
-    setApplicationIdState(null);
-    ['sender_id', 'receiver_id', 'application_id'].forEach((param) => {
-      searchParams.delete(param);
-    });
-    setSearchParams(searchParams);
+    setMainFormData(undefined);
   };
 
   return (
     <FastFormContext.Provider
       value={{
-        applicationId,
-        setApplicationId,
+        mainForm,
+        setMainForm,
         clearAll
       }}
     >
@@ -57,4 +49,5 @@ export const OrderCreationProvider = ({ children }: { children: React.ReactNode 
     </FastFormContext.Provider>
   );
 };
+
 export const useFastFormContext = () => useContext(FastFormContext);

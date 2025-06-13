@@ -287,16 +287,18 @@ export const CargoStarterContent = () => {
             touched={formik.touched.packages}
           />
 
-          <SharedSelect
-            name="status"
-            label="Status"
-            formik={formik}
-            disabled={true}
-            options={cargoStatusOptions.map((status) => ({
-              label: status.name,
-              value: status.value
-            }))}
-          />
+          {isEditMode && (
+            <SharedSelect
+              name="status"
+              label="Status"
+              formik={formik}
+              disabled={true}
+              options={cargoStatusOptions.map((status) => ({
+                label: status.name,
+                value: status.value
+              }))}
+            />
+          )}
 
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <label className="form-label max-w-56">Notes</label>

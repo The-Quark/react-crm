@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import * as Yup from 'yup';
 import {
-  SharedAutocomplete,
   SharedDecimalInput,
   SharedError,
   SharedInput,
@@ -11,25 +10,20 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useFormik } from 'formik';
-import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
+import { getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
-import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
-import { mockOrdersStatus } from '@/lib/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
-import { ApplicationsStatus } from '@/api/enums';
+import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 
 interface Props {
-  orderData?: Order;
   onNext: () => void;
-  orderId: string;
+  onBack: () => void;
 }
 
 const formSchema = Yup.object().shape({
-  application_id: Yup.number().required('Application required'),
   delivery_type: Yup.number()
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
@@ -50,20 +44,12 @@ const formSchema = Yup.object().shape({
   order_content: Yup.array().of(Yup.string()).optional()
 });
 
-const getInitialValues = (
-  isEditMode: boolean,
-  orderData: Order,
-  applicationId: string | number,
-  mainForm: IOrderFormValues | null
-): IOrderFormValues => {
-  if (isEditMode && orderData) {
+const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
+  if (orderData) {
     return {
-      id: orderData.id || 0,
-      application_id: orderData?.application_id || applicationId || '',
-      status: orderData?.status || undefined,
-      delivery_type: orderData?.delivery_type?.id || '',
+      delivery_type: orderData?.delivery_type || '',
       delivery_category: orderData?.delivery_category || 'b2b',
-      package_type: orderData?.package_type?.id || '',
+      package_type: orderData?.package_type || '',
       weight: orderData?.weight || '',
       width: orderData?.width || '',
       length: orderData?.length || '',
@@ -75,50 +61,46 @@ const getInitialValues = (
       price: orderData?.price || '',
       package_description: orderData?.package_description || '',
       special_wishes: orderData?.special_wishes || '',
-      source_id: orderData?.source?.id || '',
       order_content: orderData?.order_content || []
     };
   }
 
   return {
-    id: mainForm?.id || 0,
-    application_id: applicationId || mainForm?.application_id,
-    status: mainForm?.status || undefined,
-    delivery_type: mainForm?.delivery_type || '',
-    delivery_category: mainForm?.delivery_category || 'b2b',
-    package_type: mainForm?.package_type || '',
-    weight: mainForm?.weight || '',
-    width: mainForm?.width || '',
-    length: mainForm?.length || '',
-    height: mainForm?.height || '',
-    volume: mainForm?.volume || '',
-    places_count: mainForm?.places_count || 0,
-    customs_clearance: mainForm?.customs_clearance || false,
-    is_international: mainForm?.is_international || false,
-    price: mainForm?.price || '',
-    package_description: mainForm?.package_description || '',
-    special_wishes: mainForm?.special_wishes || '',
-    source_id: mainForm?.source_id || '',
-    order_content: mainForm?.order_content || []
+    delivery_type: '',
+    delivery_category: 'b2b',
+    package_type: '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    volume: '',
+    places_count: 0,
+    customs_clearance: false,
+    is_international: false,
+    price: '',
+    package_description: '',
+    special_wishes: '',
+    source_id: '',
+    order_content: []
   };
 };
 
-export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
-  const { setMainFormData, setApplicationId, applicationId, mainFormData } = useOrderCreation();
+export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
+  const { mainForm, setMainForm } = useFastFormContext();
   const { currentLanguage } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-  const isEditMode = !!orderId;
+
+  console.log('Order mainForm: ', mainForm);
 
   const formik = useFormik({
-    initialValues: getInitialValues(
-      isEditMode,
-      orderData as Order,
-      applicationId || '',
-      mainFormData
-    ),
+    initialValues: getInitialValues(mainForm?.order as IOrderFormValues),
     validationSchema: formSchema,
     onSubmit: (values) => {
-      setMainFormData({ ...mainFormData, ...values });
+      setMainForm({
+        ...mainForm,
+        order: {
+          ...values
+        }
+      });
       onNext();
     }
   });
@@ -147,23 +129,12 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
   }, [formik.values.weight, formik.values.width, formik.values.length, formik.values.height]);
 
   const {
-    data: applicationsData,
-    isLoading: applicationsLoading,
-    isError: applicationsIsError,
-    error: applicationsError
-  } = useQuery({
-    queryKey: ['applications'],
-    queryFn: () => getApplications({ status: ApplicationsStatus.NEW }),
-    staleTime: 1000 * 60 * 5
-  });
-
-  const {
     data: deliveryTypesData,
     isLoading: deliveryTypesLoading,
     isError: deliveryTypesIsError,
     error: deliveryTypesError
   } = useQuery({
-    queryKey: ['deliveryTypes'],
+    queryKey: ['fastFormDeliveryTypes'],
     queryFn: () => getDeliveryTypes({}),
     staleTime: 1000 * 60 * 5
   });
@@ -174,7 +145,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     isError: packageTypesIsError,
     error: packageTypesError
   } = useQuery({
-    queryKey: ['packageTypes'],
+    queryKey: ['fastFormPackageTypes'],
     queryFn: () =>
       getPackageTypes({
         language_code: currentLanguage.code
@@ -182,11 +153,9 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     staleTime: 1000 * 60 * 5
   });
 
-  const isFormLoading = deliveryTypesLoading || packageTypesLoading || applicationsLoading;
-  const isFormError = deliveryTypesIsError || packageTypesIsError || applicationsIsError;
-  const formErrors = [deliveryTypesError, packageTypesError, applicationsError].filter(
-    (error) => error !== null
-  );
+  const isFormLoading = deliveryTypesLoading || packageTypesLoading;
+  const isFormError = deliveryTypesIsError || packageTypesIsError;
+  const formErrors = [deliveryTypesError, packageTypesError].filter((error) => error !== null);
 
   if (isFormLoading) {
     return <SharedLoading simple />;
@@ -206,30 +175,6 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     <div className="grid gap-5 lg:gap-7.5">
       <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
-          <SharedAutocomplete
-            label="Application"
-            value={formik.values.application_id ?? ''}
-            options={
-              (applicationsData?.result?.map((app) => ({
-                id: app.id,
-                name:
-                  app.client_type === 'legal'
-                    ? app.company_name || ''
-                    : `${app.first_name} ${app.last_name} ${app.patronymic || ''}`.trim() || ''
-              })) as { id: number; name: string }[]) ?? []
-            }
-            placeholder="Select application"
-            searchPlaceholder="Search application"
-            onChange={(val) => {
-              formik.setFieldValue('application_id', val);
-              formik.setFieldValue('source_id', '');
-              setApplicationId(Number(val));
-            }}
-            error={formik.errors.application_id as string}
-            touched={formik.touched.application_id}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-          />
           <SharedSelect
             name="delivery_type"
             label="Delivery Type"
@@ -334,23 +279,15 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             disabled
           />
           <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
-          {orderData?.id && (
-            <SharedSelect
-              name="status"
-              label="Status"
-              formik={formik}
-              options={mockOrdersStatus.map((status) => ({
-                label: status.name,
-                value: status.value
-              }))}
-            />
-          )}
           <SharedTextArea name="package_description" label="Package Description" formik={formik} />
           <SharedTextArea name="special_wishes" label="Special Wishes" formik={formik} />
 
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <button className="btn btn-light" onClick={onBack}>
+              Back
+            </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              {orderData?.id ? 'Update' : 'Submit'}
+              Next
             </button>
           </div>
         </div>

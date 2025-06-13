@@ -1,59 +1,31 @@
-import { useEffect, Fragment, useState } from 'react';
-import { OrdersMainForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersMainForm.tsx';
-import {
-  OrderCreationProvider,
-  useOrderCreation
-} from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { useParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
-import { getOrders } from '@/api';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { Fragment } from 'react';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
-const { useStepper, utils } = defineStepper({ id: 'application', title: 'Application' });
+import { FastFormContentApplicationForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentApplicationForm.tsx';
+import { FastFormContentOrderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFromContentOrderForm.tsx';
+import { FastFormCreatorProvider } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
+import { FastFormContentSenderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentSenderForm.tsx';
+import { FastFormContentReceiverForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentReceiverForm.tsx';
+
+const { useStepper, utils } = defineStepper(
+  { id: 'application', title: 'Application' },
+  { id: 'order', title: 'Order' },
+  { id: 'sender', title: 'Sender' },
+  { id: 'receiver', title: 'Receiver' },
+  { id: 'package', title: 'Package' }
+);
 
 const FastFormFormSteps = () => {
-  const { id } = useParams<{ id: string }>();
-  const { clearAll, setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
   const allSteps = stepper.all;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const {
-    data: orderData,
-    isLoading,
-    error,
-    isError
-  } = useQuery({
-    queryKey: ['order', id],
-    queryFn: () => getOrders({ id: Number(id) }),
-    enabled: !!id
-  });
-
-  useEffect(() => {
-    if (orderData) {
-      setSenderId(orderData.result[0].sender_id);
-      setReceiverId(orderData.result[0].receiver_id);
-      // setApplicationId(orderData?.result[0]?.application_id);
-    }
-  }, [orderData]);
-
-  const handleOrderSubmitSuccess = () => {
-    if (!id) clearAll();
-  };
-
-  if (isLoading) return <SharedLoading />;
-
-  if (isError) return <SharedError error={error} />;
 
   return (
-    <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
+    <div className="space-y-6 p-6 border rounded-lg w-full mx-auto">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">{id ? 'Edit Order' : 'Create New Order'}</h2>
+        <h2 className="text-lg font-medium">Fast form</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
             Step {currentIndex + 1} of {allSteps.length}
@@ -97,54 +69,35 @@ const FastFormFormSteps = () => {
       </nav>
 
       <div className="space-y-4">
-        <StepContent
-          onOrderSubmit={handleOrderSubmitSuccess}
-          orderData={orderData?.result[0]}
-          stepper={stepper}
-          orderId={id ?? ''}
-          open={isModalOpen}
-          handleClose={() => setIsModalOpen(false)}
-          handleOpen={() => setIsModalOpen(true)}
-        />
+        <StepContent stepper={stepper} />
       </div>
     </div>
   );
 };
 
-const StepContent = ({
-  onOrderSubmit,
-  orderData,
-  stepper,
-  orderId,
-  open,
-  handleClose,
-  handleOpen
-}: {
-  onOrderSubmit: () => void;
-  orderData?: Order;
-  stepper: ReturnType<typeof useStepper>;
-  orderId: string;
-  open: boolean;
-  handleClose: () => void;
-  handleOpen: () => void;
-}) => {
+const StepContent = ({ stepper }: { stepper: ReturnType<typeof useStepper> }) => {
   return (
     <>
       {stepper.current.id === 'application' && (
-        <div className="grid gap-4">
-          <OrdersMainForm onNext={stepper.next} orderData={orderData} orderId={orderId} />
-        </div>
+        <FastFormContentApplicationForm onNext={stepper.next} />
       )}
-
-      {/*<OrdersConfirmModal open={open} handleClose={handleClose} onOrderSubmit={onOrderSubmit} />*/}
+      {stepper.current.id === 'order' && (
+        <FastFormContentOrderForm onNext={stepper.next} onBack={stepper.prev} />
+      )}
+      {stepper.current.id === 'sender' && (
+        <FastFormContentSenderForm onNext={stepper.next} onBack={stepper.prev} />
+      )}
+      {stepper.current.id === 'receiver' && (
+        <FastFormContentReceiverForm onNext={stepper.next} onBack={stepper.prev} />
+      )}
     </>
   );
 };
 
 export const FastFormStarterContent = () => {
   return (
-    <OrderCreationProvider>
+    <FastFormCreatorProvider>
       <FastFormFormSteps />
-    </OrderCreationProvider>
+    </FastFormCreatorProvider>
   );
 };

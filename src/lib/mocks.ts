@@ -356,25 +356,81 @@ export const mockOrdersStatus = [
 ];
 
 export const packageStatusOptions = [
-  { id: 1, name: 'Awaiting Airport', value: PackageStatus.AWAITING_AIRPORT },
-  { id: 2, name: 'Ready to Send', value: PackageStatus.READY_SEND },
-  { id: 3, name: 'Ready for Delivery', value: PackageStatus.READY_DELIVERY },
-  { id: 4, name: 'Heading to Client', value: PackageStatus.HEADING_CLIENT },
-  { id: 5, name: 'Done Packaging', value: PackageStatus.DONE_PACKAGING },
-  { id: 6, name: 'In Cargo', value: PackageStatus.IN_CARGO },
-  { id: 7, name: 'Awaiting Customs', value: PackageStatus.AWAITING_CUSTOMS },
-  { id: 8, name: 'Ready Odd', value: PackageStatus.READY_ODD },
-  { id: 9, name: 'Heading Odd', value: PackageStatus.HEADING_ODD },
-  { id: 10, name: 'Arrived Odd', value: PackageStatus.ARRIVED_ODD },
-  { id: 11, name: 'Arrived Airport', value: PackageStatus.ARRIVED_AIRPORT },
-  { id: 12, name: 'Arrived Warehouse', value: PackageStatus.ARRIVED_WAREHOUSE },
-  { id: 13, name: 'Accepted Warehouse', value: PackageStatus.ACCEPTED_WAREHOUSE },
-  { id: 14, name: 'Passed Customs', value: PackageStatus.PASSED_CUSTOMS },
-  { id: 15, name: 'Transferred to Courier', value: PackageStatus.TRANSFERED_COURIER },
-  { id: 16, name: 'Delivered', value: PackageStatus.DELIVERED },
-  { id: 17, name: 'Rejected (Damaged)', value: PackageStatus.REJECT_DAMAGED },
-  { id: 18, name: 'Rejected by Client', value: PackageStatus.REJECTED_CLIENT },
-  { id: 19, name: 'Rejected (Other)', value: PackageStatus.REJECT_OTHER }
+  {
+    id: 1,
+    name: 'Ready for shipment',
+    value: PackageStatus.READY_FOR_SHIPMENT
+  },
+  {
+    id: 2,
+    name: 'Packed',
+    value: PackageStatus.PACKED
+  },
+  {
+    id: 3,
+    name: 'Delivered to PVZ',
+    value: PackageStatus.DELIVERED_TO_PVZ
+  },
+  {
+    id: 4,
+    name: 'Customs clearance started',
+    value: PackageStatus.START_CUSTOM_CLEARANCE
+  },
+  {
+    id: 5,
+    name: 'Customs clearance completed',
+    value: PackageStatus.DONE_CUSTOM_CLEARANCE
+  },
+  {
+    id: 6,
+    name: 'Awaiting customs approval',
+    value: PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL
+  },
+  {
+    id: 7,
+    name: 'Ready for receive',
+    value: PackageStatus.READY_FOR_RECEIVE
+  },
+  {
+    id: 8,
+    name: 'Transferred to courier',
+    value: PackageStatus.TRANSFERRED_TO_COURIER
+  },
+  {
+    id: 9,
+    name: 'Ready for transfer to PVZ',
+    value: PackageStatus.READY_FOR_TRANSFER_TO_PVZ
+  },
+  {
+    id: 10,
+    name: 'Heading to PVZ',
+    value: PackageStatus.HEADING_TO_PVZ
+  },
+  {
+    id: 11,
+    name: 'Heading to receiver',
+    value: PackageStatus.HEADING_TO_RECEIVER
+  },
+  {
+    id: 12,
+    name: 'Ready for delivery',
+    value: PackageStatus.READY_FOR_DELIVERY
+  },
+  {
+    id: 13,
+    name: 'Delivered',
+    value: PackageStatus.DELIVERED
+  },
+  {
+    id: 14,
+    name: 'Damaged',
+    value: PackageStatus.DAMAGED
+  },
+  {
+    id: 15,
+    name: 'Delayed',
+    value: PackageStatus.DELAYED
+  }
 ];
 
 export const cargoStatusOptions = [
