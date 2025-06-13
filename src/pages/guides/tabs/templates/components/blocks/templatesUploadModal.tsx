@@ -42,18 +42,27 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
       language_code: selectedLanguage
     },
     validationSchema: Yup.object().shape({
-      type: Yup.string().required('File type is required'),
-      files: Yup.array().of(Yup.mixed<File>()).required('Files are required'),
-      // .test('fileType', 'Unsupported file type', function (files) {
-      //   if (!files || files.length === 0) return true;
-      //   const selectedType = fileTypeData?.result?.find((t) => t.id === this.parent.type);
-      //   if (!selectedType) return false;
-      //
-      //   return files.every((file) => {
-      //     const extension = file?.name.split('.').pop()?.toLowerCase();
-      //     return selectedType.types.includes(extension || '');
-      //   });
-      // }),
+      type: Yup.string()
+        .required('Please select file type first and upload file')
+        .test('type-selected-before-files', 'Please select file type first', function (value) {
+          if (this.parent.files?.length > 0 && !value) {
+            return false;
+          }
+          return true;
+        }),
+      files: Yup.array()
+        .of(Yup.mixed<File>())
+        .required('Files are required')
+        .test('fileType', 'Unsupported file type', function (files) {
+          if (!files || files.length === 0) return true;
+          const selectedType = fileTypeData?.result?.find((t) => t.id === Number(this.parent.type));
+          if (!selectedType) return false;
+
+          return files.every((file) => {
+            const extension = file?.name.split('.').pop()?.toLowerCase();
+            return selectedType.types.map((t) => t.toLowerCase()).includes(extension || '');
+          });
+        }),
       language_code: Yup.string().required('Language is required')
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -114,15 +123,16 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
   }, [formik.values.type, fileTypeData]);
 
   const acceptedFileTypes = useMemo(() => {
-    if (!selectedFileType) return {};
+    if (!selectedFileType) return undefined;
 
     const acceptMap: Record<string, string[]> = {};
 
     selectedFileType.types.forEach((ext) => {
-      const mime = extToMime[ext.toLowerCase()];
+      const lowerExt = ext.toLowerCase();
+      const mime = extToMime[lowerExt];
       if (!mime) return;
       if (!acceptMap[mime]) acceptMap[mime] = [];
-      acceptMap[mime].push(`.${ext.toLowerCase()}`);
+      acceptMap[mime].push(`.${lowerExt}`);
     });
 
     return acceptMap;
@@ -223,6 +233,7 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                   accept={acceptedFileTypes}
                   onDrop={handleFileChange}
                   disabled={!formik.values.type}
+                  noClick={!formik.values.type}
                 />
                 {formik.touched.files && formik.errors.files && (
                   <p className="text-red-500 text-sm">{formik.errors.files as string}</p>
@@ -290,7 +301,7 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={loading || formik.isSubmitting || formik.values.files.length === 0}
+                  disabled={loading || formik.isSubmitting}
                 >
                   {loading ? 'Uploading...' : 'Upload Files'}
                 </button>
