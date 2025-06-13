@@ -7,6 +7,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -127,7 +128,7 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.status}</div>
+            <SharedStatusBadge status={info.row.original.status} />{' '}
           </div>
         ),
         meta: {

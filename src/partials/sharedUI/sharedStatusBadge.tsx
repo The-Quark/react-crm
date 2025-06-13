@@ -6,7 +6,8 @@ import {
   VehicleStatus,
   ApplicationsStatus,
   OrderStatus,
-  CargoStatus
+  CargoStatus,
+  PackageStatus
 } from '@/api/enums';
 
 type StatusType =
@@ -16,6 +17,8 @@ type StatusType =
   | TaskStatus
   | VehicleStatus
   | OrderStatus
+  | CargoStatus
+  | PackageStatus
   | string;
 
 interface StatusBadgeProps {
@@ -123,6 +126,67 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Reweighing',
       color: 'badge-warning'
     },
+    // Package statuses
+    [PackageStatus.READY_FOR_SHIPMENT]: {
+      label: 'Ready for Shipment',
+      color: 'badge-info'
+    },
+    [PackageStatus.PACKED]: {
+      label: 'Packed',
+      color: 'badge-success'
+    },
+    [PackageStatus.DELIVERED_TO_PVZ]: {
+      label: 'Delivered to PVZ',
+      color: 'badge-success'
+    },
+    [PackageStatus.START_CUSTOM_CLEARANCE]: {
+      label: 'Custom Clearance Started',
+      color: 'badge-primary'
+    },
+    [PackageStatus.DONE_CUSTOM_CLEARANCE]: {
+      label: 'Custom Clearance Done',
+      color: 'badge-success'
+    },
+    [PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL]: {
+      label: 'Awaiting Clearance Approval',
+      color: 'badge-warning'
+    },
+    [PackageStatus.READY_FOR_RECEIVE]: {
+      label: 'Ready for Receive',
+      color: 'badge-info'
+    },
+    [PackageStatus.TRANSFERRED_TO_COURIER]: {
+      label: 'Transferred to Courier',
+      color: 'badge-primary'
+    },
+    [PackageStatus.READY_FOR_TRANSFER_TO_PVZ]: {
+      label: 'Ready for Transfer to PVZ',
+      color: 'badge-info'
+    },
+    [PackageStatus.HEADING_TO_PVZ]: {
+      label: 'Heading to PVZ',
+      color: 'badge-primary'
+    },
+    [PackageStatus.HEADING_TO_RECEIVER]: {
+      label: 'Heading to Receiver',
+      color: 'badge-primary'
+    },
+    [PackageStatus.READY_FOR_DELIVERY]: {
+      label: 'Ready for Delivery',
+      color: 'badge-info'
+    },
+    [PackageStatus.DELIVERED]: {
+      label: 'Delivered',
+      color: 'badge-success'
+    },
+    [PackageStatus.DAMAGED]: {
+      label: 'Damaged',
+      color: 'badge-danger'
+    },
+    [PackageStatus.DELAYED]: {
+      label: 'Delayed',
+      color: 'badge-warning'
+    },
     // Cargo statuses
     [CargoStatus.FORMED]: {
       label: 'Formed',
@@ -174,6 +238,7 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
     ...Object.values(VehicleStatus),
     ...Object.values(ApplicationsStatus),
     ...Object.values(OrderStatus),
+    ...Object.values(PackageStatus),
     ...Object.values(CargoStatus)
   ];
 

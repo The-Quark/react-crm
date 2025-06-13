@@ -450,7 +450,13 @@ export const cargoStatusOptions = [
 export const templateTypesOptions = [
   { id: 1, name: 'Email', value: TemplateType.EMAIL },
   { id: 2, name: 'SMS', value: TemplateType.SMS },
-  { id: 3, name: 'Print form', value: TemplateType.PRINT_FORM }
+  { id: 3, name: 'Print form', value: TemplateType.PRINT_FORM },
+  { id: 4, name: 'Whatsapp', value: TemplateType.WHATSAPP },
+  { id: 5, name: 'Telegram', value: TemplateType.TELEGRAM },
+  { id: 6, name: 'Push', value: TemplateType.PUSH },
+  { id: 7, name: 'Viber', value: TemplateType.VIBER },
+  { id: 8, name: 'Internal', value: TemplateType.INTERNAL },
+  { id: 9, name: 'Webhook', value: TemplateType.WEBHOOK }
 ];
 
 export const taskPriorityOptions = [

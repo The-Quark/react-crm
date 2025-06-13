@@ -68,7 +68,14 @@ export enum TaskType {
 export enum TemplateType {
   EMAIL = 'email',
   SMS = 'sms',
-  PRINT_FORM = 'print_form'
+  PRINT_FORM = 'print_form',
+  QR = 'qr',
+  WHATSAPP = 'whatsapp',
+  TELEGRAM = 'telegram',
+  PUSH = 'push',
+  VIBER = 'viber',
+  INTERNAL = 'internal',
+  WEBHOOK = 'webhook'
 }
 
 export enum CargoStatus {
