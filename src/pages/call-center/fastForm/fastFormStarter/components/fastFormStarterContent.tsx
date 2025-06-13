@@ -1,26 +1,40 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { FastFormContentApplicationForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentApplicationForm.tsx';
 import { FastFormContentOrderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFromContentOrderForm.tsx';
-import { FastFormCreatorProvider } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
+import {
+  FastFormCreatorProvider,
+  IFastFormContext
+} from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { FastFormContentSenderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentSenderForm.tsx';
 import { FastFormContentReceiverForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentReceiverForm.tsx';
+import { FastFormContentConfirmModal } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentConfirmModal.tsx';
 
 const { useStepper, utils } = defineStepper(
   { id: 'application', title: 'Application' },
   { id: 'order', title: 'Order' },
   { id: 'sender', title: 'Sender' },
-  { id: 'receiver', title: 'Receiver' },
-  { id: 'package', title: 'Package' }
+  { id: 'receiver', title: 'Receiver' }
 );
 
 const FastFormFormSteps = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
   const allSteps = stepper.all;
+
+  const handleFastFormSubmit = async (data: IFastFormContext) => {
+    try {
+      //test
+      console.log('Request body: ', data);
+    } catch (error) {
+      console.error('Error creating order:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full mx-auto">
@@ -51,7 +65,6 @@ const FastFormFormSteps = () => {
                     aria-setsize={allSteps.length}
                     aria-selected={isActive}
                     className="flex size-10 items-center justify-center rounded-full"
-                    onClick={() => stepper.goTo(step.id)}
                   >
                     {index + 1}
                   </Button>
@@ -69,13 +82,35 @@ const FastFormFormSteps = () => {
       </nav>
 
       <div className="space-y-4">
-        <StepContent stepper={stepper} />
+        <StepContent
+          stepper={stepper}
+          onFastFormSubmit={handleFastFormSubmit}
+          open={isModalOpen}
+          handleClose={() => setIsModalOpen(false)}
+          handleOpen={() => setIsModalOpen(true)}
+        />
       </div>
     </div>
   );
 };
 
-const StepContent = ({ stepper }: { stepper: ReturnType<typeof useStepper> }) => {
+const StepContent = ({
+  stepper,
+  onFastFormSubmit,
+  handleClose,
+  handleOpen,
+  open
+}: {
+  stepper: ReturnType<typeof useStepper>;
+  open: boolean;
+  handleClose: () => void;
+  handleOpen: () => void;
+  onFastFormSubmit: (formData: IFastFormContext) => Promise<void>;
+}) => {
+  const handleSubmit = async (data: IFastFormContext) => {
+    await onFastFormSubmit(data);
+  };
+
   return (
     <>
       {stepper.current.id === 'application' && (
@@ -88,8 +123,13 @@ const StepContent = ({ stepper }: { stepper: ReturnType<typeof useStepper> }) =>
         <FastFormContentSenderForm onNext={stepper.next} onBack={stepper.prev} />
       )}
       {stepper.current.id === 'receiver' && (
-        <FastFormContentReceiverForm onNext={stepper.next} onBack={stepper.prev} />
+        <FastFormContentReceiverForm onConfirmModal={handleOpen} onBack={stepper.prev} />
       )}
+      <FastFormContentConfirmModal
+        open={open}
+        onOrderSubmit={handleSubmit}
+        handleClose={handleClose}
+      />
     </>
   );
 };

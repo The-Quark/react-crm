@@ -9,7 +9,7 @@ interface IOrderWithRelationsFormValues extends IOrderFormValues {
   receiver?: IReceiverOrderFormValues;
 }
 
-interface IFastFormContext {
+export interface IFastFormContext {
   application?: IApplicationPostFormValues;
   order?: IOrderWithRelationsFormValues;
 }

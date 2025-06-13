@@ -15,7 +15,7 @@ import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter
 import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderReceiver/types.ts';
 
 interface Props {
-  onNext: () => void;
+  onConfirmModal?: () => void;
   onBack: () => void;
 }
 
@@ -67,7 +67,7 @@ const getInitialValues = (mainForm: IReceiverOrderFormValues | null): IReceiverO
   };
 };
 
-export const FastFormContentReceiverForm: FC<Props> = ({ onNext, onBack }) => {
+export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack }) => {
   const { mainForm, setMainForm } = useFastFormContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -98,7 +98,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onNext, onBack }) => {
           receiver: values
         }
       });
-      onNext();
+      onConfirmModal?.();
     }
   });
 
@@ -236,7 +236,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onNext, onBack }) => {
               Back
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              Next
+              Submit
             </button>
           </div>
         </div>

@@ -212,7 +212,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
   const isLoading = sourcesLoading || clientsLoading || clientLoading;
 
   if (isLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   if (sourcesIsError) {
