@@ -48,7 +48,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            Order Form Details
+            Fast Form Details
           </DialogTitle>
           <button
             className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
