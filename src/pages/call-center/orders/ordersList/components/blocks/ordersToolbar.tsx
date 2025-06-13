@@ -47,7 +47,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('order code')?.setFilterValue(value);
   }, 300);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
   const handleDeliveryCategoryChange = (value: string) => {
     const newDeliveryType = value === 'all' ? undefined : value;
 
-    table.getColumn('delivery_category')?.setFilterValue(newDeliveryType || '');
+    table.getColumn('delivery category')?.setFilterValue(newDeliveryType || '');
     if (onDeliveryCategory) {
       onDeliveryCategory(newDeliveryType);
     }
