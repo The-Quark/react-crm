@@ -116,7 +116,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
   const handleOrderChange = (orderId: string) => {
     formik.setFieldValue('order_id', orderId);
-    console.log('order_ID: ', orderId);
     const selectedOrder = ordersData?.result?.find((order) => order.id === Number(orderId));
     if (selectedOrder?.weight) {
       formik.setFieldValue('weight', selectedOrder.weight.toString());

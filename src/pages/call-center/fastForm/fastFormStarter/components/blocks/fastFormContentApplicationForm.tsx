@@ -92,8 +92,6 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { mainForm, setMainForm } = useFastFormContext();
 
-  console.log('Application mainForm: ', mainForm);
-
   const resetClientFields = useCallback(() => {
     return {
       first_name: '',

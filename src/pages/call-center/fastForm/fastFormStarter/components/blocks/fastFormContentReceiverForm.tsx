@@ -73,8 +73,6 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
 
-  console.log('Receiver mainForm: ', mainForm);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,

@@ -73,8 +73,6 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
 
-  console.log('Sender mainForm: ', mainForm);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,

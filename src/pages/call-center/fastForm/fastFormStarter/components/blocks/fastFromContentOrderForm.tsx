@@ -89,8 +89,6 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   const { mainForm, setMainForm } = useFastFormContext();
   const { currentLanguage } = useLanguage();
 
-  console.log('Order mainForm: ', mainForm);
-
   const formik = useFormik({
     initialValues: getInitialValues(mainForm?.order as IOrderFormValues),
     validationSchema: formSchema,

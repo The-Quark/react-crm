@@ -31,7 +31,6 @@ const FastFormFormSteps = () => {
   const handleFastFormSubmit = async (data: IFastFormContext) => {
     try {
       const formValues = data as unknown as IFastFormFormValues;
-      console.log('Request body: ', formValues);
       await postFastForm(formValues);
       setIsModalOpen(false);
     } catch (error) {

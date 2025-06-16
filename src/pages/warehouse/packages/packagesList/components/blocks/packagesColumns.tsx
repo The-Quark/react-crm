@@ -128,7 +128,7 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
         enableSorting: true,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
-            <SharedStatusBadge status={info.row.original.status} />{' '}
+            <SharedStatusBadge status={info.row.original.status} />
           </div>
         ),
         meta: {

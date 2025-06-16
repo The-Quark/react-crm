@@ -85,8 +85,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
   const { receiverId } = useOrderCreation();
   const isEditMode = !!receiverId;
 
-  console.log('Form: ', mainFormData);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,
@@ -103,7 +101,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log('receiver: ', values);
       setMainFormData({ ...mainFormData, ...values });
       onConfirmModal?.();
     }
