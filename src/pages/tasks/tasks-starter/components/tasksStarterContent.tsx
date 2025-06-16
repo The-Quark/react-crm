@@ -12,7 +12,7 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { taskPriorityOptions, taskStatusOptions, taskTypeOptions } from '@/lib/mocks.ts';
@@ -20,7 +20,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { getData, setData } from '@/utils/include/LocalStorage';
 import { Task } from '@/api/get/getTask/types.ts';
 
 interface Props {
@@ -51,8 +50,11 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const [searchPackageTerm, setSearchPackageTerm] = useState('');
   const [searchUserTerm, setSearchUserTerm] = useState('');
-  const orderIdFromOrders = getData('orderIdFromOrders') ? getData('orderIdFromOrders') : '';
+  const [searchParams] = useSearchParams();
+  const orderIdFromOrders = searchParams.get('order_id');
   const { data: currentUser } = useCurrentUser();
+
+  console.log('order: ', orderIdFromOrders);
 
   const {
     data: ordersData,
@@ -118,7 +120,6 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
           navigate('/tasks/list');
           resetForm();
         }
-        setData('orderIdFromOrders', '');
         setSearchUserTerm('');
         setSearchUserTerm('');
         setSearchPackageTerm('');

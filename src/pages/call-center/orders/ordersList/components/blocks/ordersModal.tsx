@@ -12,7 +12,6 @@ import { getOrders } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { setData } from '@/utils/include/LocalStorage';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 
@@ -35,9 +34,16 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
 
   const url = order?.hawb_pdf.startsWith('http') ? order.hawb_pdf : `https://${order?.hawb_pdf}`;
 
-  const handleClick = (orderId: number) => {
-    setData('orderIdFromOrders', orderId);
-    navigate('/tasks/starter');
+  const handleOrderToTask = (orderId: number | null) => {
+    if (orderId !== null) {
+      navigate(`/tasks/starter?order_id=${orderId}`);
+    }
+  };
+
+  const handleOrderToPakcage = (orderId: number | null) => {
+    if (orderId !== null) {
+      navigate(`/warehouse/packages/starter?order_id=${orderId}`);
+    }
   };
 
   return (
@@ -226,9 +232,15 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
             </a>
             <button
               className="btn btn-md btn-primary mr-3 mb-3"
-              onClick={() => id !== null && handleClick(id)}
+              onClick={() => handleOrderToTask(id)}
             >
               Create Task
+            </button>
+            <button
+              className="btn btn-md btn-primary mr-3 mb-3"
+              onClick={() => handleOrderToPakcage(id)}
+            >
+              Create Package
             </button>
           </DialogActions>
         )}

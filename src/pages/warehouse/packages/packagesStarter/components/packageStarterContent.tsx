@@ -12,7 +12,7 @@ import {
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/lib/mocks.ts';
@@ -35,6 +35,10 @@ export const formSchema = Yup.object().shape({
 
 export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Props) => {
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [orderId] = useState<number | null>(
+    searchParams.get('order_id') ? Number(searchParams.get('order_id')) : null
+  );
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
@@ -64,8 +68,10 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   });
 
   const initialValues: IPackageFormValues & { status?: PackageStatus; cargo_id?: string } = {
-    order_id: '',
-    weight: '',
+    order_id: orderId ? String(orderId) : '',
+    weight: orderId
+      ? ordersData?.result?.find((order) => order.id === orderId)?.weight?.toString() || ''
+      : '',
     dimensions: '',
     ...(isEditMode && { status: 'ready_send' as unknown as PackageStatus, cargo_id: '' })
   };
@@ -109,6 +115,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
   const handleOrderChange = (orderId: string) => {
     formik.setFieldValue('order_id', orderId);
+    console.log('order_ID: ', orderId);
     const selectedOrder = ordersData?.result?.find((order) => order.id === Number(orderId));
     if (selectedOrder?.weight) {
       formik.setFieldValue('weight', selectedOrder.weight.toString());
@@ -120,7 +127,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     if (packageData && isEditMode) {
       formik.setValues(
         {
-          order_id: packageData.order_id ?? '',
+          order_id: packageData.order_id ?? orderId,
           weight: parseFloat(packageData.weight) ?? 0,
           dimensions: packageData.dimensions ?? '',
           status: packageData.status as unknown as PackageStatus,
@@ -162,7 +169,9 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             }
             placeholder="Select order"
             searchPlaceholder="Search order"
-            onChange={(val: string | number) => handleOrderChange(String(val))}
+            onChange={(val: string | number) =>
+              handleOrderChange(orderId ? String(orderId) : String(val))
+            }
             error={formik.errors.order_id as string}
             touched={formik.touched.order_id}
             searchTerm={searchOrderTerm}
