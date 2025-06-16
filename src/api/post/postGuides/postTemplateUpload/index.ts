@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { TEMPLATE_UPLOAD_URL } from '@/api/url';
-import {
-  UploadType,
-  ITemplateUploadResponse
-} from '@/api/post/postGuides/postTemplateUpload/types.ts';
+import { ITemplateUploadResponse } from '@/api/post/postGuides/postTemplateUpload/types.ts';
 
 export const postTemplateUpload = async (
   id: number,

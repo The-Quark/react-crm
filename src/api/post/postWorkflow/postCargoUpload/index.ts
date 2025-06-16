@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { CARGO_UPLOAD_URL } from '@/api/url';
-import { UploadType, ICargoUploadResponse } from '@/api/post/postWorkflow/postCargoUpload/types.ts';
+import { ICargoUploadResponse } from '@/api/post/postWorkflow/postCargoUpload/types.ts';
 
 export const postCargoUpload = async (
   id: number,
-  type: UploadType,
+  type: string,
   files: File[]
 ): Promise<ICargoUploadResponse> => {
   const formData = new FormData();

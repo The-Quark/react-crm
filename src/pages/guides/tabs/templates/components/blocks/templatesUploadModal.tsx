@@ -171,8 +171,6 @@ export const TemplatesUploadModal: FC<Props> = ({ open, onOpenChange, id, select
     (error) => error !== null
   );
 
-  console.log('types: ', acceptedFileTypes);
-
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
