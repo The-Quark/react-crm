@@ -7,3 +7,4 @@ export * from './postOrderReceiver';
 export * from './postOrderSender';
 export * from './postPackageUpload';
 export * from './postOrderCalculate';
+export * from './postFastForm';

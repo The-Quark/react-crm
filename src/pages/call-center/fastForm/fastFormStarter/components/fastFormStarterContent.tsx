@@ -11,6 +11,8 @@ import {
 import { FastFormContentSenderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentSenderForm.tsx';
 import { FastFormContentReceiverForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentReceiverForm.tsx';
 import { FastFormContentConfirmModal } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentConfirmModal.tsx';
+import { postFastForm } from '@/api';
+import { IFastFormFormValues } from '@/api/post/postWorkflow/postFastForm/types.ts';
 
 const { useStepper, utils } = defineStepper(
   { id: 'application', title: 'Application' },
@@ -28,8 +30,10 @@ const FastFormFormSteps = () => {
 
   const handleFastFormSubmit = async (data: IFastFormContext) => {
     try {
-      //test
-      console.log('Request body: ', data);
+      const formValues = data as unknown as IFastFormFormValues;
+      console.log('Request body: ', formValues);
+      await postFastForm(formValues);
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Error creating order:', error);
       throw error;
