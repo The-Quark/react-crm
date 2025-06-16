@@ -109,7 +109,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: currencyError
   } = useQuery({
     queryKey: ['subdivisionsCurrency'],
-    queryFn: () => getCurrencies({}),
+    queryFn: () => getCurrencies({ is_active: true }),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });
@@ -121,7 +121,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
     error: languageError
   } = useQuery({
     queryKey: ['subdivisionsLanguage'],
-    queryFn: () => getLanguages({}),
+    queryFn: () => getLanguages({ is_active: true }),
     staleTime: 1000 * 60 * 2,
     enabled: open
   });

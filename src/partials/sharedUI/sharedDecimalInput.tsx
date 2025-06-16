@@ -12,9 +12,12 @@ export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: Shared
   const fieldName = name.toString();
   const [decimalDisplay, setDecimalDisplay] = useState('');
 
-  const formatDecimalDisplay = useCallback((value: string): string => {
-    if (!value) return '';
-    let cleaned = value.replace(/[^\d.]/g, '');
+  const formatDecimalDisplay = useCallback((value: string | number): string => {
+    if (value === undefined || value === null) return '';
+
+    const stringValue = typeof value === 'number' ? value.toString() : value;
+
+    let cleaned = stringValue.replace(/[^\d.]/g, '');
     const parts = cleaned.split('.');
     if (parts[0]) {
       parts[0] = parts[0].replace(/^0+/, '') || '0';
@@ -52,11 +55,11 @@ export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: Shared
     if (decimalDisplay) {
       let formattedValue = decimalDisplay;
 
-      // Если введено целое число, добавляем .00
+      // If it's a whole number, add .00
       if (!decimalDisplay.includes('.')) {
         formattedValue = `${decimalDisplay}.00`;
       }
-      // Если есть только одна цифра после точки, добавляем 0
+      // If there's only one digit after decimal, add 0
       else if (decimalDisplay.includes('.') && decimalDisplay.split('.')[1].length === 1) {
         formattedValue = `${decimalDisplay}0`;
       }

@@ -51,7 +51,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     error: ordersError
   } = useQuery({
     queryKey: ['packageOrders', searchOrderTerm],
-    queryFn: () => getOrders({ per_page: 50, searchorder: searchOrderTerm }),
+    queryFn: () =>
+      getOrders({ per_page: 50, searchorder: searchOrderTerm, status: 'package_awaiting' }),
     staleTime: 60 * 60 * 1000
   });
 

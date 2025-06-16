@@ -240,7 +240,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryKey: ['staff-departments', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsDepartments({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       }),
     staleTime: 60 * 60 * 1000
   });
@@ -254,7 +255,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryKey: ['staff-subdivisions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsSubdivisions({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       }),
     staleTime: 60 * 60 * 1000
   });
@@ -268,7 +270,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryKey: ['staff-positions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsPositions({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       }),
     staleTime: 60 * 60 * 1000
   });

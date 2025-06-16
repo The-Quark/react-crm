@@ -38,8 +38,8 @@ export const formSchema = Yup.object().shape({
   status: Yup.mixed<TaskStatus>().oneOf(Object.values(TaskStatus)).optional(),
   assigned_by: Yup.number().integer().required('Assigned by is required'),
   assigned_to: Yup.number().integer().required('Assigned to is required'),
-  order_id: Yup.number().integer().nullable(),
-  package_id: Yup.number().integer().nullable(),
+  order_id: Yup.string().optional(),
+  package_id: Yup.string().optional(),
   due_date: Yup.string().required('Due date is required')
 });
 
@@ -52,9 +52,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
   const [searchUserTerm, setSearchUserTerm] = useState('');
   const [searchParams] = useSearchParams();
   const orderIdFromOrders = searchParams.get('order_id');
+  const packageIdFromPackages = searchParams.get('package_id');
   const { data: currentUser } = useCurrentUser();
-
-  console.log('order: ', orderIdFromOrders);
 
   const {
     data: ordersData,
@@ -94,8 +93,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     assigned_to: '',
     description: '',
     due_date: '',
-    order_id: String(orderIdFromOrders) || '',
-    package_id: '',
+    order_id: orderIdFromOrders || '',
+    package_id: packageIdFromPackages || '',
     priority: TaskPriority.LOW,
     title: '',
     type: TaskType.INNER,

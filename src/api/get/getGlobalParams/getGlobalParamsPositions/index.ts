@@ -7,6 +7,7 @@ interface IGetGlobalParamsPositionsParams extends IPaginationParams {
   id?: number;
   company_id?: number;
   title?: string;
+  is_active?: boolean;
 }
 
 export const getGlobalParamsPositions = async ({
@@ -14,7 +15,8 @@ export const getGlobalParamsPositions = async ({
   per_page,
   page,
   company_id,
-  title
+  title,
+  is_active
 }: IGetGlobalParamsPositionsParams = {}): Promise<IGlobalParamsPositionModel> => {
   const params = new URLSearchParams();
 
@@ -23,6 +25,7 @@ export const getGlobalParamsPositions = async ({
   if (page) params.append('page', page.toString());
   if (company_id) params.append('company_id', company_id.toString());
   if (title) params.append('title', title.toString());
+  if (typeof is_active === 'boolean') params.append('is_active', is_active ? '1' : '0');
 
   return axios
     .get<IGlobalParamsPositionModel>(GLOBAL_PARAMS_POSITIONS, { params })

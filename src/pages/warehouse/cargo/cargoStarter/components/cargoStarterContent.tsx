@@ -62,7 +62,7 @@ export const CargoStarterContent = () => {
     error: airlinesError
   } = useQuery({
     queryKey: ['cargoAirlines'],
-    queryFn: () => getAirlines({}),
+    queryFn: () => getAirlines({ is_active: true }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -84,7 +84,7 @@ export const CargoStarterContent = () => {
     error: packagesError
   } = useQuery({
     queryKey: ['cargoPackages'],
-    queryFn: () => getPackages(),
+    queryFn: () => getPackages({ status: 'ready_for_shipment' }),
     staleTime: 60 * 60 * 1000
   });
 

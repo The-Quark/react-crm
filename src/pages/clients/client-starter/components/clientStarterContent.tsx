@@ -30,7 +30,7 @@ const ClientStarterContent = () => {
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources({}),
+    queryFn: () => getSources({ is_active: true }),
     staleTime: 60 * 60 * 1000
   });
 

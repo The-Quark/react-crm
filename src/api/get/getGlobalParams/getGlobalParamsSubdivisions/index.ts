@@ -7,6 +7,7 @@ interface IGetGlobalParamsSubdivisionsParams extends IPaginationParams {
   id?: number;
   company_id?: number;
   name?: string;
+  is_active?: boolean;
 }
 
 export const getGlobalParamsSubdivisions = async ({
@@ -14,7 +15,8 @@ export const getGlobalParamsSubdivisions = async ({
   per_page,
   page,
   company_id,
-  name
+  name,
+  is_active
 }: IGetGlobalParamsSubdivisionsParams = {}): Promise<ISubdivisionResponse> => {
   const params = new URLSearchParams();
 
@@ -23,6 +25,7 @@ export const getGlobalParamsSubdivisions = async ({
   if (page) params.append('page', page.toString());
   if (company_id) params.append('company_id', company_id.toString());
   if (name) params.append('name', name.toString());
+  if (typeof is_active === 'boolean') params.append('is_active', is_active ? '1' : '0');
 
   return axios
     .get<ISubdivisionResponse>(GLOBAL_PARAMS_SUBDIVISIONS, { params })

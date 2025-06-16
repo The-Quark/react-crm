@@ -13,6 +13,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   open: boolean;
@@ -23,6 +24,7 @@ interface Props {
 export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const navigate = useNavigate();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageID', id],
@@ -34,6 +36,12 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const url = packageData?.hawb_pdf.startsWith('http')
     ? packageData.hawb_pdf
     : `https://${packageData?.hawb_pdf}`;
+
+  const handlePackageToTask = (packageId: number | null) => {
+    if (packageId !== null) {
+      navigate(`/tasks/starter?package_id=${packageId}`);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -172,6 +180,12 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
             >
               Update Package
             </a>
+            <button
+              className="btn btn-md btn-primary mr-3 mb-3"
+              onClick={() => handlePackageToTask(id)}
+            >
+              Create Task
+            </button>
           </DialogActions>
         )}
       </DialogContent>
