@@ -456,7 +456,8 @@ export const templateTypesOptions = [
   { id: 6, name: 'Push', value: TemplateType.PUSH },
   { id: 7, name: 'Viber', value: TemplateType.VIBER },
   { id: 8, name: 'Internal', value: TemplateType.INTERNAL },
-  { id: 9, name: 'Webhook', value: TemplateType.WEBHOOK }
+  { id: 9, name: 'Webhook', value: TemplateType.WEBHOOK },
+  { id: 10, name: 'QR', value: TemplateType.QR }
 ];
 
 export const taskPriorityOptions = [
