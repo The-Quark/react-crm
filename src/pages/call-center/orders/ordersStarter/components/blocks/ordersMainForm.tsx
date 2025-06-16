@@ -177,7 +177,8 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     queryKey: ['packageTypes'],
     queryFn: () =>
       getPackageTypes({
-        language_code: currentLanguage.code
+        language_code: currentLanguage.code,
+        is_active: true
       }),
     staleTime: 1000 * 60 * 5
   });
@@ -278,9 +279,9 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             placeholder="Select package type"
             formik={formik}
             options={
-              packageTypesData?.result[0].language.map((type) => ({
-                label: type.name,
-                value: type.id
+              packageTypesData?.result.map((packageType) => ({
+                label: packageType.language[0]?.name || packageType.code,
+                value: packageType.id
               })) || []
             }
           />

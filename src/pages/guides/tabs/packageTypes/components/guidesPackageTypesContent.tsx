@@ -36,11 +36,7 @@ export const GuidesPackagesContent = () => {
     staleTime: 1000 * 60 * 60
   });
 
-  const {
-    data: languagesData,
-    isLoading: isLanguagesLoading,
-    error: isLanguageError
-  } = useQuery({
+  const { data: languagesData, error: isLanguageError } = useQuery({
     queryKey: ['guidesPackageTypeLanguages'],
     queryFn: () => getLanguages({}),
     refetchOnWindowFocus: false,

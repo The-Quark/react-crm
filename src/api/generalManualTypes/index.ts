@@ -20,4 +20,5 @@ export interface IPagination {
 export interface IPaginationParams {
   per_page?: number;
   page?: number;
+  sort_order?: 'asc' | 'desc';
 }
