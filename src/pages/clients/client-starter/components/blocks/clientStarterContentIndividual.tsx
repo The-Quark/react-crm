@@ -1,11 +1,4 @@
 import React, { FC, useState } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
@@ -29,7 +22,7 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { mockGenderUserOptions, taskTypeOptions } from '@/lib/mocks.ts';
+import { mockGenderUserOptions } from '@/lib/mocks.ts';
 
 interface Props {
   clientData?: Client;
@@ -121,8 +114,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
   } = useQuery({
     queryKey: ['clientCities', formik.values.country_id],
     queryFn: () => getCitiesByCountryCode(formik.values.country_id as string | number, 'id'),
-    enabled: !!formik.values.country_id,
-    staleTime: 1000 * 60 * 5
+    enabled: !!formik.values.country_id
   });
 
   const isFormLoading = countriesLoading || (clientData && citiesLoading);

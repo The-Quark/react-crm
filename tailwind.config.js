@@ -92,7 +92,7 @@ module.exports = {
               },
               light: {
                 default: '#ffffff',
-                active: '#FCFCFC',
+                active: '#ffffff',
                 light: '#ffffff',
                 clarity: 'rgba(255, 255, 255, 0.20)',
                 inverse: '#4B5675'
