@@ -3,7 +3,15 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/lib/helpers.ts';
-import { SharedAutocompleteBase } from '@/partials/sharedUI';
+import { useQuery } from '@tanstack/react-query';
+import { getClientsCities } from '@/api';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select.tsx';
 
 interface Props {
   clientType: 'individual' | 'legal';
@@ -13,19 +21,6 @@ interface Props {
   currentCityId?: number;
   onClientCity?: (city: number) => void;
 }
-
-const MOCK_CITIES = [
-  { id: 1, name: 'Москва' },
-  { id: 2, name: 'Санкт-Петербург' },
-  { id: 3, name: 'Новосибирск' },
-  { id: 4, name: 'Екатеринбург' },
-  { id: 5, name: 'Казань' },
-  { id: 6, name: 'Нижний Новгород' },
-  { id: 7, name: 'Челябинск' },
-  { id: 8, name: 'Самара' },
-  { id: 9, name: 'Омск' },
-  { id: 10, name: 'Ростов-на-Дону' }
-];
 
 export const ClientsListToolbar: FC<Props> = ({
   clientType,
@@ -38,12 +33,11 @@ export const ClientsListToolbar: FC<Props> = ({
   const [searchTermValue, setSearchTermValue] = useState('');
   const [searchPhoneValue, setSearchPhoneValue] = useState('');
   const [selectedClientCity, setSelectedClientCity] = useState<number | undefined>(currentCityId);
-  const [citySearchTerm, setCitySearchTerm] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
 
-  const nameColumn = clientType === 'individual' ? 'client name' : 'company name';
+  const nameColumn = clientType === 'individual' ? 'full name' : 'company name';
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
 
   const handleClientTypeChange = useCallback(
@@ -51,19 +45,27 @@ export const ClientsListToolbar: FC<Props> = ({
     [setClientType]
   );
 
-  const handleClientCityChange = useCallback(
-    (val: number) => {
-      setSelectedClientCity(val);
-      onClientCity?.(val);
-    },
-    [onClientCity]
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ['clientCities'],
+    queryFn: () => getClientsCities(),
+    refetchOnWindowFocus: true
+  });
 
-  const filteredCities = useMemo(() => {
-    return MOCK_CITIES.filter((city) =>
-      city.name.toLowerCase().includes(citySearchTerm.toLowerCase())
-    );
-  }, [citySearchTerm]);
+  const handleClientCityChange = useCallback(
+    (value: string) => {
+      if (value === '__CLEAR__') {
+        setSelectedClientCity(undefined);
+        onClientCity?.(null as unknown as number);
+        table.getColumn('city name')?.setFilterValue(undefined);
+      } else {
+        const cityId = value ? Number(value) : undefined;
+        setSelectedClientCity(cityId);
+        onClientCity?.(cityId as number);
+        table.getColumn('city name')?.setFilterValue(cityId);
+      }
+    },
+    [onClientCity, table]
+  );
 
   const debouncedSearch = useMemo(
     () =>
@@ -82,8 +84,21 @@ export const ClientsListToolbar: FC<Props> = ({
   const handleSearchChange = useCallback(
     (type: 'term' | 'phone') => (event: React.ChangeEvent<HTMLInputElement>) => {
       let value = event.target.value;
-      if (type === 'phone' && !value.startsWith('+7') && value.length > 0) {
-        value = '+7' + value.replace(/^\+7/, '');
+
+      if (type === 'phone') {
+        if (value === '') {
+          setSearchPhoneValue('');
+          debouncedSearch('phone', '');
+          return;
+        }
+        if (!value.startsWith('+7') && searchPhoneValue === '') {
+          value = '+7' + value;
+        }
+        value = value.replace(/[^\d+]/g, '');
+
+        if (value.length > 12) {
+          value = value.slice(0, 12);
+        }
       }
 
       if (type === 'term') {
@@ -94,7 +109,7 @@ export const ClientsListToolbar: FC<Props> = ({
 
       debouncedSearch(type, value);
     },
-    [debouncedSearch]
+    [debouncedSearch, searchPhoneValue]
   );
 
   return (
@@ -132,16 +147,34 @@ export const ClientsListToolbar: FC<Props> = ({
           </a>
         )}
         <div className="w-64">
-          <SharedAutocompleteBase
-            value={selectedClientCity ?? ''}
-            options={filteredCities}
-            placeholder="Select city"
-            searchPlaceholder="Search city"
-            onChange={handleClientCityChange}
-            onSearchTermChange={setCitySearchTerm}
-            searchTerm={citySearchTerm}
-            size="sm"
-          />
+          <Select
+            value={selectedClientCity ? String(selectedClientCity) : ''}
+            onValueChange={handleClientCityChange}
+            disabled={isLoading}
+          >
+            <SelectTrigger size="sm">
+              <SelectValue placeholder={isLoading ? 'Loading...' : 'Select city'} />
+            </SelectTrigger>
+            <SelectContent>
+              {selectedClientCity && (
+                <SelectItem value="__CLEAR__">
+                  <span className="text-muted-foreground">Clear selection</span>
+                </SelectItem>
+              )}
+
+              {data?.result?.length ? (
+                data.result.map((city) => (
+                  <SelectItem key={city.city_id} value={String(city.city_id)}>
+                    {city.city_name}
+                  </SelectItem>
+                ))
+              ) : (
+                <div className="py-1.5 pl-8 pr-2 text-sm text-muted-foreground">
+                  No cities available
+                </div>
+              )}
+            </SelectContent>
+          </Select>
         </div>
         <DataGridColumnVisibility table={table} />
         <div className="relative">

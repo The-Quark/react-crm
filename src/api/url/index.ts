@@ -44,6 +44,8 @@ export const ORDER_URL = `${api}/order/manage`;
 
 export const CLIENT_URL = `${api}/client/manage`;
 
+export const CLIENT_CITIES_URL = `${api}/client/cities`;
+
 export const PACKAGE_URL = `${api}/package/manage`;
 
 export const PACKAGE_UPLOAD_URL = `${api}/package/upload`;

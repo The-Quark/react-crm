@@ -38,7 +38,7 @@ export const ClientsListContent = () => {
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
         full_name: searchTerm,
-        phone: searchPhone,
+        phones: searchPhone,
         city_id: clientCityId
       }),
     staleTime: 1000 * 60 * 5,

@@ -8,7 +8,7 @@ interface IGetClientsParams extends IPaginationParams {
   type?: 'legal' | 'individual';
   city_id?: number;
   full_name?: string;
-  phone?: string;
+  phones?: string;
 }
 
 export const getClients = async ({
@@ -16,7 +16,7 @@ export const getClients = async ({
   type,
   full_name,
   city_id,
-  phone,
+  phones,
   page,
   per_page
 }: IGetClientsParams = {}): Promise<IClientResponse> => {
@@ -28,7 +28,9 @@ export const getClients = async ({
   if (page) params.append('page', page.toString());
   if (type) params.append('type', type.toString());
   if (full_name) params.append('fullname', full_name.toString());
-  if (phone) params.append('phone', phone.toString());
+  if (phones) params.append('phones', phones.toString());
 
   return axios.get<IClientResponse>(CLIENT_URL, { params }).then((res) => res.data);
 };
+
+export * from './getClientsCities';

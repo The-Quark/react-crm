@@ -61,9 +61,8 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
     source_id: clientData ? clientData.source_id.toString() : '',
     phone: clientData?.phone || '',
     email: clientData?.email || '',
-    country_id:
-      clientData && clientData.country_id !== undefined ? clientData.country_id.toString() : '',
-    city_id: clientData && clientData.city_id !== undefined ? clientData.city_id.toString() : ''
+    country_id: clientData && clientData.country_id != null ? clientData.country_id.toString() : '',
+    city_id: clientData && clientData.city_id != null ? clientData.city_id.toString() : ''
   };
 
   const formik = useFormik({
