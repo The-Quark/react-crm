@@ -1,5 +1,6 @@
 import { ApplicationsStatus } from '@/api/enums';
 import { IPagination } from '@/api/generalManualTypes';
+import { Client } from '@/api/get/getClients/types.ts';
 
 interface Source {
   id: number;
@@ -34,6 +35,7 @@ export interface Application {
   deleted_at: string | null;
   source: Source;
   status: ApplicationsStatus;
+  client: Client | null;
 }
 
 export interface ApplicationsResponse extends IPagination {

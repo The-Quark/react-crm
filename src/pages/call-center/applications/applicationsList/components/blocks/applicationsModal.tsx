@@ -26,6 +26,7 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
   const navigate = useNavigate();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['application', id],
     queryFn: () =>
@@ -57,53 +58,91 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
           {data?.result && (
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">
-                    {data.result[0].client_type === 'legal' ? 'Company name' : 'Full name'}
-                  </label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    {data.result[0].client_type === 'legal'
-                      ? data.result[0].company_name
-                      : `${data.result[0].first_name} ${data.result[0].last_name} ${data.result[0].patronymic || ''}`.trim()}
+                <div className="border-b pb-4">
+                  <h4 className="text-lg font-semibold mb-4">Application Information</h4>
+                  <div className="grid gap-3">
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Application</label>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {data.result[0].full_name}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Phone number</label>
+                      <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Source</label>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {data.result[0].source.name}
+                      </div>
+                    </div>
+
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Email</label>
+                      <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.email}</div>
+                    </div>
+
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Client</label>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {data.result[0].client_id}
+                      </div>
+                    </div>
+
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Status</label>
+                      <div className="flex columns-1 w-full flex-wrap">{data.result[0].status}</div>
+                    </div>
+
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Message</label>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {data.result[0].message}
+                      </div>
+                    </div>
+
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56">Created at</label>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {new Date(data.result[0].created_at).toLocaleDateString('ru-RU')}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Phone number</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Source</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    {data.result[0].source.name}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Email</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].email}</div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Message</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].message}</div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Client</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].client_id}</div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Status</label>
-                  <div className="flex columns-1 w-full flex-wrap">{data.result[0].status}</div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Created at</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    {new Date(data.result[0].created_at).toLocaleDateString('ru-RU')}
+                {/* Client Block */}
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Client Information</h4>
+                  <div className="grid gap-2.5">
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Type</label>
+                      <div className="flex columns-1 w-full">
+                        {data.result[0].client?.type || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {data.result[0].client?.type === 'legal' ? 'Company name' : 'Full name'}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {data.result[0].client?.fullname || '-'}
+                      </div>
+                    </div>
+                    {data.result[0].client?.type === 'legal' && (
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">BIN</label>
+                        <div className="flex columns-1 w-full">
+                          {data.result[0].client?.bin || '-'}
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Phone</label>
+                      <div className="flex columns-1 w-full">
+                        {data.result[0].client?.phone || '-'}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
