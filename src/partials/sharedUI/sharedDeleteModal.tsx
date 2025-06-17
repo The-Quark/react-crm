@@ -7,6 +7,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -35,17 +36,17 @@ export const SharedDeleteModal: React.FC<Props> = ({
         <DialogHeader>
           <DialogTitle className="text-xl">{title}</DialogTitle>
         </DialogHeader>
-        <DialogBody className="py-4">
-          <p className="text-gray-600">{description}</p>
-        </DialogBody>
-        <div className="flex justify-end gap-3 pt-2">
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>
-            {cancelText}
-          </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            {isLoading ? 'Loading' : confirmText}
-          </Button>
-        </div>
+        <DialogBody className="py-4">{description}</DialogBody>
+        <DialogActions>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" onClick={onClose} disabled={isLoading}>
+              {cancelText}
+            </Button>
+            <Button variant="destructive" onClick={onConfirm}>
+              {isLoading ? 'Loading' : confirmText}
+            </Button>
+          </div>
+        </DialogActions>
       </DialogContent>
     </Dialog>
   );

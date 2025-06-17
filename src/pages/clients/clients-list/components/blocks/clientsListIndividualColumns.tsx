@@ -22,7 +22,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -33,28 +33,19 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         }
       },
       {
-        accessorFn: (row) =>
-          [row?.first_name, row?.last_name, row?.patronymic].filter(Boolean).join(' '),
-        id: 'client name',
+        accessorFn: (row) => row?.fullname,
+        id: 'full name',
         header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
-          const fullName = [
-            info.row.original?.first_name,
-            info.row.original?.last_name,
-            info.row.original?.patronymic
-          ]
-            .filter(Boolean)
-            .join(' ');
-
           return (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-s2.5">
               <div className="flex flex-col gap-0.5">
                 <div
                   className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
                   onClick={() => onRowClick(info.row.original.id)}
                 >
-                  {fullName}
+                  {info.row.original.fullname}
                 </div>
               </div>
             </div>
@@ -69,12 +60,10 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <span className="badge badge-sm badge-light badge-outline">
-              {info.row.original.phone}
-            </span>
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
           </div>
         ),
         meta: {
@@ -85,7 +74,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         accessorFn: (row) => row?.source?.name,
         id: 'source',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -98,10 +87,26 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         }
       },
       {
+        accessorFn: (row) => row?.city_name,
+        id: 'city name',
+        header: ({ column }) => <DataGridColumnHeader title="City" column={column} />,
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.city_name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
         accessorFn: (row) => row?.email,
         id: 'email',
         header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original?.email}</div>
@@ -115,7 +120,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         accessorFn: (row) => row?.birth_date,
         id: 'birth date',
         header: ({ column }) => <DataGridColumnHeader title="Birth date" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -131,7 +136,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         accessorFn: (row) => row.application_count,
         id: 'applications',
         header: ({ column }) => <DataGridColumnHeader title="Applications" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -150,7 +155,7 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         header: ({ column }) => (
           <DataGridColumnHeader title="Applications packages" column={column} />
         ),
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">

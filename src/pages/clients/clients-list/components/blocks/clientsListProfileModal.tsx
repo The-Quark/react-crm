@@ -147,6 +147,18 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                     </>
                   )}
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label className="form-label max-w-56">Country</label>
+                    <div className="flex columns-1 w-full flex-wrap">
+                      {data.result[0].country_name}
+                    </div>
+                  </div>
+                  <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label className="form-label max-w-56">City</label>
+                    <div className="flex columns-1 w-full flex-wrap">
+                      {data.result[0].city_name}
+                    </div>
+                  </div>
+                  <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56">Phone number</label>
                     <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
                   </div>

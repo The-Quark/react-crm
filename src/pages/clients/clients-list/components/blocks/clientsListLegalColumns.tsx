@@ -63,10 +63,8 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
         enableSorting: true,
         cell: (info) => (
-          <div className="flex flex-wrap gap-2.5 mb-2">
-            <div className="badge badge-sm badge-light badge-outline">
-              {info.row.original.phone}
-            </div>
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
           </div>
         ),
         meta: {
@@ -82,6 +80,22 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
               {info.row.original?.source?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.city_name,
+        id: 'city name',
+        header: ({ column }) => <DataGridColumnHeader title="City" column={column} />,
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original?.city_name}
             </div>
           </div>
         ),
@@ -154,7 +168,7 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
                   {
                     name: 'offset',
                     options: {
-                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+                      offset: isRTL() ? [0, -10] : [0, 10]
                     }
                   }
                 ]

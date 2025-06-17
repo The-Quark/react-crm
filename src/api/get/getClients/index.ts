@@ -27,7 +27,7 @@ export const getClients = async ({
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
   if (type) params.append('type', type.toString());
-  if (full_name) params.append('full_name', full_name.toString());
+  if (full_name) params.append('fullname', full_name.toString());
   if (phone) params.append('phone', phone.toString());
 
   return axios.get<IClientResponse>(CLIENT_URL, { params }).then((res) => res.data);

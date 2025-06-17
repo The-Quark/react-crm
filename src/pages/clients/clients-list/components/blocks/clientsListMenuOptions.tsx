@@ -52,30 +52,28 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
   };
 
   return (
-    <>
-      <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-        {canManage && (
-          <>
-            <MenuItem>
-              <MenuLink path={`/clients/starter-clients/${id}`}>
-                <MenuIcon>
-                  <KeenIcon icon="user-edit" />
-                </MenuIcon>
-                <MenuTitle>Edit</MenuTitle>
-              </MenuLink>
-            </MenuItem>
-            <MenuSeparator />
-            <MenuItem onClick={handleDeleteClick}>
-              <MenuLink>
-                <MenuIcon>
-                  <KeenIcon icon="trash" className="text-danger !text-red-500" />
-                </MenuIcon>
-                <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
-              </MenuLink>
-            </MenuItem>
-          </>
-        )}
-      </MenuSub>
+    <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
+      {canManage && (
+        <>
+          <MenuItem>
+            <MenuLink path={`/clients/starter-clients/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="user-edit" />
+              </MenuIcon>
+              <MenuTitle>Edit</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+          <MenuSeparator />
+          <MenuItem onClick={handleDeleteClick}>
+            <MenuLink>
+              <MenuIcon>
+                <KeenIcon icon="trash" className="text-danger !text-red-500" />
+              </MenuIcon>
+              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+        </>
+      )}
       <SharedDeleteModal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
@@ -84,7 +82,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id }) => {
         description="Are you sure you want to delete this client? This action cannot be undone."
         isLoading={isDeleting}
       />
-    </>
+    </MenuSub>
   );
 };
 
