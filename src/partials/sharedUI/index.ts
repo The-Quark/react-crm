@@ -15,3 +15,4 @@ export * from './sharedPriorityBadge.tsx';
 export * from './sharedTypeBadge.tsx';
 export * from './sharedDecimalInput.tsx';
 export * from './sharedRadio.tsx';
+export * from './sharedDeleteModal.tsx';

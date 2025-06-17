@@ -10,16 +10,10 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select.tsx';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -121,8 +115,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   } = useQuery({
     queryKey: ['legalCities', formik.values.country_id],
     queryFn: () => getCitiesByCountryCode(formik.values.country_id as string | number, 'id'),
-    enabled: !!formik.values.country_id,
-    staleTime: 1000 * 60 * 5
+    enabled: !!formik.values.country_id
   });
 
   const isFormLoading = countriesLoading || (clientData && citiesLoading);
@@ -149,33 +142,16 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
       <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
       <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
       <SharedInput name="email" label="Email" formik={formik} type="email" />
-
       <SharedInput name="business_type" label="Business type" formik={formik} />
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Source</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <Select
-            value={formik.values.source_id}
-            onValueChange={(value) => formik.setFieldValue('source_id', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Source" />
-            </SelectTrigger>
-            <SelectContent>
-              {sourcesData?.map((source) => (
-                <SelectItem key={source.id} value={source.id.toString()}>
-                  {source.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {formik.touched.source_id && formik.errors.source_id && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.source_id}
-            </span>
-          )}
-        </div>
-      </div>
+
+      <SharedSelect
+        name="source_id"
+        label="Source"
+        formik={formik}
+        options={
+          sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
+        }
+      />
 
       <SharedAutocomplete
         label="Country"
