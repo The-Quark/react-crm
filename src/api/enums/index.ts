@@ -114,3 +114,8 @@ export enum OrderStatus {
   CANCELLED = 'cancelled',
   REWEIGHING = 'reweighing'
 }
+
+export enum GenderUser {
+  MALE = 'male',
+  FEMALE = 'female'
+}

@@ -10,7 +10,8 @@ import {
   TemplateType,
   CargoStatus,
   PackageStatus,
-  OrderStatus
+  OrderStatus,
+  GenderUser
 } from '@/api/enums';
 
 export const localesMock = [
@@ -522,6 +523,11 @@ export const mockApplicationsStatusOptions = [
   { id: 2, name: 'Completed', value: ApplicationsStatus.COMPLETED },
   { id: 3, name: 'Declined', value: ApplicationsStatus.DECLINED },
   { id: 4, name: 'Running', value: ApplicationsStatus.RUNNING }
+];
+
+export const mockGenderUserOptions = [
+  { id: 1, name: 'Female', value: GenderUser.FEMALE },
+  { id: 2, name: 'Male', value: GenderUser.MALE }
 ];
 
 export const mockLicenseCategoryOptions = [

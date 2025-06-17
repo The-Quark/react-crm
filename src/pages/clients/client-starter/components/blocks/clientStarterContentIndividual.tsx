@@ -21,6 +21,7 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +29,7 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { mockGenderUserOptions, taskTypeOptions } from '@/lib/mocks.ts';
 
 interface Props {
   clientData?: Client;
@@ -37,7 +39,6 @@ interface Props {
 const validateSchema = Yup.object().shape({
   first_name: Yup.string().required('First name is required'),
   last_name: Yup.string().required('Last name is required'),
-  gender: Yup.string().required('Gender date is required'),
   email: Yup.string().email('Invalid email address').optional().nullable(),
   phone: Yup.string()
     .matches(PHONE_REG_EXP, 'Phone number is not valid')
@@ -185,57 +186,24 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         </div>
       </div>
 
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Gender</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <Select
-            value={formik.values.gender}
-            onValueChange={(value) => formik.setFieldValue('gender', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select gender" />
-            </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto">
-              {['male', 'female', 'other'].map((gender) => (
-                <SelectItem key={gender} value={gender}>
-                  {gender}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {formik.touched.gender && formik.errors.gender && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.gender}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedSelect
+        name="gender"
+        label="Gender"
+        formik={formik}
+        options={mockGenderUserOptions.map((option) => ({
+          label: option.name,
+          value: option.value
+        }))}
+      />
 
-      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-        <label className="form-label max-w-56">Source</label>
-        <div className="flex columns-1 w-full flex-wrap">
-          <Select
-            value={formik.values.source_id}
-            onValueChange={(value) => formik.setFieldValue('source_id', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Source" />
-            </SelectTrigger>
-            <SelectContent>
-              {sourcesData?.map((source) => (
-                <SelectItem key={source.id} value={source.id.toString()}>
-                  {source.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {formik.touched.source_id && formik.errors.source_id && (
-            <span role="alert" className="text-danger text-xs mt-1">
-              {formik.errors.source_id}
-            </span>
-          )}
-        </div>
-      </div>
+      <SharedSelect
+        name="source_id"
+        label="Source"
+        formik={formik}
+        options={
+          sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
+        }
+      />
 
       <SharedAutocomplete
         label="Country"
