@@ -9,13 +9,18 @@ import { useUserPermissions } from '@/hooks';
 
 interface Props {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
-export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDef<Client>[] => {
+export const useClientsListIndividualColumns = ({
+  onRowClick,
+  onDeleteClick
+}: Props): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
+
   const columnsIndividual = useMemo<ColumnDef<Client>[]>(
     () => [
       {
@@ -173,37 +178,40 @@ export const useClientsListIndividualColumns = ({ onRowClick }: Props): ColumnDe
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <Menu className="items-stretch">
-            <MenuItem
-              toggle="dropdown"
-              trigger="click"
-              dropdownProps={{
-                placement: isRTL() ? 'bottom-start' : 'bottom-end',
-                modifiers: [
-                  {
-                    name: 'offset',
-                    options: {
-                      offset: isRTL() ? [0, -10] : [0, 10]
+          <>
+            <Menu className="items-stretch">
+              <MenuItem
+                toggle="dropdown"
+                trigger="click"
+                dropdownProps={{
+                  placement: isRTL() ? 'bottom-start' : 'bottom-end',
+                  modifiers: [
+                    {
+                      name: 'offset',
+                      options: {
+                        offset: isRTL() ? [0, -10] : [0, 10]
+                      }
                     }
-                  }
-                ]
-              }}
-            >
-              <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
-                <KeenIcon icon="dots-vertical" />
-              </MenuToggle>
-              {ClientsListMenuOptions({
-                id: info.row.original.id
-              })}
-            </MenuItem>
-          </Menu>
+                  ]
+                }}
+              >
+                <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
+                  <KeenIcon icon="dots-vertical" />
+                </MenuToggle>
+                {ClientsListMenuOptions({
+                  id: info.row.original.id,
+                  onDeleteClick: onDeleteClick
+                })}
+              </MenuItem>
+            </Menu>
+          </>
         ),
         meta: {
           headerClassName: 'w-[60px]'
         }
       }
     ],
-    [isRTL]
+    [isRTL, onRowClick, onDeleteClick]
   );
   return canManage ? columnsIndividual : columnsIndividual.slice(0, -1);
 };

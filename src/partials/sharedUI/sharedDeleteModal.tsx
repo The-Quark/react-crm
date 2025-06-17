@@ -7,7 +7,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { DialogActions } from '@mui/material';
+import { CircularProgress, DialogActions } from '@mui/material';
 
 interface Props {
   open: boolean;
@@ -36,7 +36,15 @@ export const SharedDeleteModal: React.FC<Props> = ({
         <DialogHeader>
           <DialogTitle className="text-xl">{title}</DialogTitle>
         </DialogHeader>
-        <DialogBody className="py-4">{description}</DialogBody>
+        <DialogBody className="py-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <CircularProgress />
+            </div>
+          ) : (
+            description
+          )}
+        </DialogBody>
         <DialogActions>
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" onClick={onClose} disabled={isLoading}>

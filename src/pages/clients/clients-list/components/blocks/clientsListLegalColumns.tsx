@@ -9,9 +9,13 @@ import { useUserPermissions } from '@/hooks';
 
 interface Props {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
-export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Client>[] => {
+export const useClientsListLegalColumns = ({
+  onRowClick,
+  onDeleteClick
+}: Props): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -178,7 +182,8 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {ClientsListMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>
@@ -188,7 +193,7 @@ export const useClientsListLegalColumns = ({ onRowClick }: Props): ColumnDef<Cli
         }
       }
     ],
-    [isRTL]
+    [isRTL, onRowClick, onDeleteClick]
   );
 
   return canManage ? columnsLegal : columnsLegal.slice(0, -1);

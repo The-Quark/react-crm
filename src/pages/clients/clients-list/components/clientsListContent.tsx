@@ -3,9 +3,9 @@ import { Container, DataGrid } from '@/components';
 import { ClientsListToolbar } from '@/pages/clients/clients-list/components/blocks/clientsListToolbar.tsx';
 import { useClientsListIndividualColumns } from '@/pages/clients/clients-list/components/blocks/clientsListIndividualColumns.tsx';
 import { useClientsListLegalColumns } from '@/pages/clients/clients-list/components/blocks/clientsListLegalColumns.tsx';
-import { useQuery } from '@tanstack/react-query';
-import { getClients } from '@/api';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteClient, getClients } from '@/api';
+import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
 
 type ClientType = 'individual' | 'legal';
@@ -13,6 +13,7 @@ type ClientType = 'individual' | 'legal';
 export const ClientsListContent = () => {
   const [clientType, setClientType] = useState<ClientType>('individual');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
@@ -21,6 +22,8 @@ export const ClientsListContent = () => {
     pageIndex: 0,
     pageSize: 15
   });
+  const [isDeleting, setIsDeleting] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -45,18 +48,40 @@ export const ClientsListContent = () => {
     refetchOnWindowFocus: true
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteClient(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['clients'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting client:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const columnsIndividual = useClientsListIndividualColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const columnsLegal = useClientsListLegalColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -127,6 +152,15 @@ export const ClientsListContent = () => {
         open={isModalOpen}
         id={selectedId}
         handleClose={() => setIsModalOpen(false)}
+      />
+
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Client"
+        description="Are you sure you want to delete this client? This action cannot be undone."
+        isLoading={isDeleting}
       />
     </Container>
   );
