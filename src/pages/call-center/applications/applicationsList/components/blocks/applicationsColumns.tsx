@@ -11,10 +11,12 @@ import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 interface UseApplicationsColumnsProps {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
 export const useApplicationsColumns = ({
-  onRowClick
+  onRowClick,
+  onDeleteClick
 }: UseApplicationsColumnsProps): ColumnDef<Application>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
@@ -165,7 +167,8 @@ export const useApplicationsColumns = ({
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {ApplicationsMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>

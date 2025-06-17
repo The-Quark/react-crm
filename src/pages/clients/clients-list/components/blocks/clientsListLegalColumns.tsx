@@ -26,7 +26,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -40,7 +40,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row.company_name,
         id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -65,7 +65,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
@@ -79,7 +79,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row?.source?.name,
         id: 'source',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -111,7 +111,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row?.email,
         id: 'email',
         header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original?.email}</div>
@@ -125,7 +125,7 @@ export const useClientsListLegalColumns = ({
         accessorFn: (row) => row.application_count,
         id: 'applications',
         header: ({ column }) => <DataGridColumnHeader title="Applications" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -144,7 +144,7 @@ export const useClientsListLegalColumns = ({
         header: ({ column }) => (
           <DataGridColumnHeader title="Applications packages" column={column} />
         ),
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">

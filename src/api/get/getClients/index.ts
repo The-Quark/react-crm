@@ -9,6 +9,7 @@ interface IGetClientsParams extends IPaginationParams {
   city_id?: number;
   full_name?: string;
   phones?: string;
+  search_application?: string;
 }
 
 export const getClients = async ({
@@ -18,7 +19,8 @@ export const getClients = async ({
   city_id,
   phones,
   page,
-  per_page
+  per_page,
+  search_application
 }: IGetClientsParams = {}): Promise<IClientResponse> => {
   const params = new URLSearchParams();
 
@@ -29,6 +31,7 @@ export const getClients = async ({
   if (type) params.append('type', type.toString());
   if (full_name) params.append('fullname', full_name.toString());
   if (phones) params.append('phones', phones.toString());
+  if (search_application) params.append('search_application', search_application.toString());
 
   return axios.get<IClientResponse>(CLIENT_URL, { params }).then((res) => res.data);
 };

@@ -5,11 +5,9 @@ interface SharedRadioProps<T> {
   name: keyof T;
   label: string;
   formik: FormikProps<T>;
-  options: Array<{
-    value: string;
-    label: string;
-  }>;
+  options: Array<{ value: string; label: string }>;
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const SharedRadio = <T,>({
@@ -17,11 +15,19 @@ export const SharedRadio = <T,>({
   label,
   formik,
   options,
-  disabled = false
+  disabled = false,
+  onChange
 }: SharedRadioProps<T>) => {
   const fieldValue = formik.values[name] as unknown as string;
   const error = formik.errors[name] as unknown as string | undefined;
   const touched = formik.touched[name] as unknown as boolean | undefined;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e);
+    }
+    formik.setFieldValue(name as string, e.target.value);
+  };
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -36,7 +42,7 @@ export const SharedRadio = <T,>({
                 type="radio"
                 value={option.value}
                 checked={fieldValue === option.value}
-                onChange={() => formik.setFieldValue(name as string, option.value)}
+                onChange={handleChange}
                 disabled={disabled}
               />
               <span className="radio-label">{option.label}</span>

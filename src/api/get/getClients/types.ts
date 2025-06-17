@@ -45,6 +45,7 @@ export interface Client {
   source: Source;
   application_count: number;
   applications_packages_count: number;
+  search_application: string | null;
 }
 
 export interface IClientResponse extends IPagination {

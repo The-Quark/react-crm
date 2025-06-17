@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Container, DataGrid } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getApplications } from '@/api';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteApplication, getApplications } from '@/api';
+import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useApplicationsColumns } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsColumns.tsx';
 import { ApplicationsToolbar } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsToolbar.tsx';
 import { useState } from 'react';
@@ -16,11 +16,15 @@ export const ApplicationListContent = () => {
   const [status, setStatus] = useState<ApplicationsStatus>();
   const [dateRange, setDateRange] = useState<DateRange>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -44,11 +48,32 @@ export const ApplicationListContent = () => {
     refetchOnWindowFocus: true
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteApplication(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['applications'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting application:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const columns = useApplicationsColumns({
     onRowClick: (id) => {
       setSelectedApplicationId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -118,6 +143,14 @@ export const ApplicationListContent = () => {
         open={isModalOpen}
         id={selectedApplicationId}
         handleClose={() => setIsModalOpen(false)}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Application"
+        description="Are you sure you want to delete this application? This action cannot be undone."
+        isLoading={isDeleting}
       />
     </Container>
   );

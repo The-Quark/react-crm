@@ -8,34 +8,18 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteApplication } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
 
 interface MenuOptionsProps {
   id?: number;
+  onDeleteClick: (id: number) => void;
 }
 
-const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
-  const queryClient = useQueryClient();
-
-  const handleDelete = async () => {
-    if (!id) {
-      toast.error('ID not provided');
-      return;
-    }
-    try {
-      await deleteApplication(id);
-      await queryClient.invalidateQueries({ queryKey: ['applications'] });
-    } catch (error) {
-      /* empty */
-    }
-  };
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
@@ -50,7 +34,7 @@ const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
-          <MenuItem onClick={handleDelete}>
+          <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />

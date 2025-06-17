@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
@@ -19,6 +19,7 @@ import {
 import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
+import { debounce } from '@/lib/helpers.ts';
 
 interface Props {
   isEditMode: boolean;
@@ -105,6 +106,7 @@ export const ApplicationsStarterContent = ({
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -142,7 +144,7 @@ export const ApplicationsStarterContent = ({
     error: clientsError
   } = useQuery({
     queryKey: ['applicationClients', searchTerm],
-    queryFn: () => getClients({}),
+    queryFn: () => getClients({ search_application: searchTerm }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -192,6 +194,16 @@ export const ApplicationsStarterContent = ({
     enabled: !!formik.values.client_id
   });
 
+  const debouncedSetSearchTerm = useMemo(
+    () => debounce((term: string) => setSearchTerm(term), 300),
+    []
+  );
+
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+    debouncedSetSearchTerm(value);
+  };
+
   const handleClientChange = useCallback(
     (val: string | number | null) => {
       if (formik.values.client_id === val) return;
@@ -205,6 +217,19 @@ export const ApplicationsStarterContent = ({
       }
     },
     [formik, resetClientFields, formik.values.client_id]
+  );
+
+  const handleClientTypeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newType = e.target.value as 'individual' | 'legal';
+      const currentClientType = formik.values.client_type;
+      formik.resetForm();
+      formik.setFieldValue('client_type', newType);
+      if (formik.values.client_id) {
+        formik.setFieldValue('client_id', formik.values.client_id);
+      }
+    },
+    [formik]
   );
 
   useEffect(() => {
@@ -231,13 +256,14 @@ export const ApplicationsStarterContent = ({
           client_type: client.type || 'individual',
           phone: client.phone || '',
           email: client.email || '',
-          source: client.source?.code || ''
+          source: client.source?.code || '',
+          bin: client.bin || ''
         }));
       }
     }
   }, [clientData, formik.values.client_id]);
 
-  const isLoading = sourcesLoading || clientsLoading || clientLoading;
+  const isLoading = sourcesLoading || clientLoading;
 
   if (isLoading) {
     return <SharedLoading />;
@@ -271,10 +297,7 @@ export const ApplicationsStarterContent = ({
                 options={
                   clientsData?.result?.map((client) => ({
                     id: client.id,
-                    name:
-                      (client.first_name &&
-                        `${client?.first_name} ${client?.last_name}  ${client?.patronymic}`) ||
-                      client.company_name
+                    name: client.search_application ?? ''
                   })) ?? []
                 }
                 placeholder="Select client"
@@ -282,8 +305,8 @@ export const ApplicationsStarterContent = ({
                 onChange={handleClientChange}
                 error={formik.errors.client_id as string}
                 touched={formik.touched.client_id}
-                searchTerm={searchTerm}
-                onSearchTermChange={setSearchTerm}
+                searchTerm={inputValue}
+                onSearchTermChange={handleSearchChange}
                 loading={clientsLoading || clientLoading}
               />
 
@@ -296,6 +319,7 @@ export const ApplicationsStarterContent = ({
                   { value: 'legal', label: 'Legal' }
                 ]}
                 disabled={!!formik.values.client_id}
+                onChange={handleClientTypeChange}
               />
             </>
           )}
