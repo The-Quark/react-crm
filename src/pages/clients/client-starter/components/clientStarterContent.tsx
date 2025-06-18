@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getClients, getSources } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { SEARCH_PER_PAGE } from '@/utils';
 
 const ClientStarterContent = () => {
   const [clientType, setClientType] = useState<'individual' | 'legal'>('individual');
@@ -30,7 +31,7 @@ const ClientStarterContent = () => {
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources({ is_active: true }),
+    queryFn: () => getSources({ is_active: true, per_page: SEARCH_PER_PAGE }),
     staleTime: 60 * 60 * 1000
   });
 

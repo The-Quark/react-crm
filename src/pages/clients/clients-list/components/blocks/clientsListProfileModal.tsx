@@ -121,13 +121,13 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative first name</label>
+                        <label className="form-label max-w-56">Representative last name</label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_last_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative first name</label>
+                        <label className="form-label max-w-56">Representative patronymic</label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_patronymic}
                         </div>
@@ -141,7 +141,7 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56">Representative email</label>
                         <div className="flex columns-1 w-full flex-wrap">
-                          {data.result[0]?.representative_phone}
+                          {data.result[0]?.representative_email}
                         </div>
                       </div>
                     </>

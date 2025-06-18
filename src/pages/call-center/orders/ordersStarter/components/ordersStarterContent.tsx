@@ -6,7 +6,6 @@ import {
   OrderCreationProvider,
   useOrderCreation
 } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { useParams } from 'react-router';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

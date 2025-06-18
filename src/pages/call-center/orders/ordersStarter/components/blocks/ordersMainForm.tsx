@@ -83,8 +83,8 @@ const getInitialValues = (
       price: orderData?.price || '',
       package_description: orderData?.package_description || '',
       special_wishes: orderData?.special_wishes || '',
-      source_id: orderData?.source?.id || '',
-      order_content: orderData?.order_content || []
+      order_content: orderData?.order_content || [],
+      sender_contact_id: orderData.sender.contact_id || ''
     };
   }
 
@@ -106,13 +106,13 @@ const getInitialValues = (
     price: mainForm?.price || '',
     package_description: mainForm?.package_description || '',
     special_wishes: mainForm?.special_wishes || '',
-    source_id: mainForm?.source_id || '',
-    order_content: mainForm?.order_content || []
+    order_content: mainForm?.order_content || [],
+    sender_contact_id: mainForm?.sender_contact_id || ''
   };
 };
 
 export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
-  const { setMainFormData, setApplicationId, applicationId, mainFormData } = useOrderCreation();
+  const { setMainFormData, applicationId, mainFormData } = useOrderCreation();
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const isEditMode = !!orderId;
@@ -161,7 +161,10 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     error: applicationsError
   } = useQuery({
     queryKey: ['applications'],
-    queryFn: () => getApplications({ status: ApplicationsStatus.NEW }),
+    queryFn: () =>
+      getApplications(
+        orderData ? { per_page: 50 } : { status: ApplicationsStatus.NEW, per_page: 50 }
+      ),
     staleTime: 1000 * 60 * 5
   });
 
@@ -224,15 +227,17 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
                 name:
                   app.client_type === 'legal'
                     ? app.company_name || ''
-                    : `${app.first_name} ${app.last_name} ${app.patronymic || ''}`.trim() || ''
+                    : app.full_name
+                      ? `${app.full_name}`
+                      : ''
               })) as { id: number; name: string }[]) ?? []
             }
             placeholder="Select application"
             searchPlaceholder="Search application"
             onChange={(val) => {
+              const selectedApp = applicationsData?.result?.find((app) => app.id === val);
               formik.setFieldValue('application_id', val);
-              formik.setFieldValue('source_id', '');
-              setApplicationId(Number(val));
+              formik.setFieldValue('sender_contact_id', selectedApp?.client_id || '');
             }}
             error={formik.errors.application_id as string}
             touched={formik.touched.application_id}
@@ -334,7 +339,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
           <SharedDecimalInput name="width" label="Width (cm)" formik={formik} />
           <SharedDecimalInput name="length" label="Length (cm)" formik={formik} />
           <SharedDecimalInput name="height" label="Height (cm)" formik={formik} />
-          <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
+          <SharedInput name="volume" label="Volume (см³)" type="number" formik={formik} disabled />
           <SharedInput
             name="places_count"
             label="Places Count"
@@ -359,7 +364,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
 
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              {orderData?.id ? 'Update' : 'Submit'}
+              Next
             </button>
           </div>
         </div>
