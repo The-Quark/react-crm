@@ -28,8 +28,7 @@ const { useStepper, utils } = defineStepper(
 );
 
 const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
-  const { id } = useParams<{ id: string }>();
-  const { setSenderId, setReceiverId, setApplicationId } = useOrderCreation();
+  const { setApplicationId } = useOrderCreation();
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
@@ -38,8 +37,6 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
 
   useEffect(() => {
     if (orderData) {
-      setSenderId(orderData.sender_id);
-      setReceiverId(orderData.receiver_id);
       setApplicationId(orderData?.application_id ?? undefined);
     }
   }, [orderData]);
@@ -61,7 +58,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">{id ? 'Edit Order' : 'Create New Order'}</h2>
+        <h2 className="text-lg font-medium">{orderId ? 'Edit Order' : 'Create New Order'}</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
             Step {currentIndex + 1} of {allSteps.length}
@@ -108,7 +105,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
           onOrderSubmit={handleOrderSubmit}
           orderData={orderData}
           stepper={stepper}
-          orderId={id ?? ''}
+          orderId={orderId ? String(orderId) : ''}
           open={isModalOpen}
           handleClose={() => setIsModalOpen(false)}
           handleOpen={() => setIsModalOpen(true)}

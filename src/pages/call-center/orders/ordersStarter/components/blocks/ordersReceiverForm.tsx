@@ -34,7 +34,7 @@ const formSchema = Yup.object().shape({
     .required('Phone is required'),
   receiver_street: Yup.string().required('Street is required'),
   receiver_house: Yup.string().required('House is required'),
-  receiver_apartment: Yup.string().required('Apartment is required'),
+  receiver_apartment: Yup.string().optional(),
   receiver_location_description: Yup.string().optional(),
   receiver_notes: Yup.string().optional()
 });
@@ -82,8 +82,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-  const { receiverId } = useOrderCreation();
-  const isEditMode = !!receiverId;
+  const isEditMode = !!orderData;
 
   const {
     data: clientsData,

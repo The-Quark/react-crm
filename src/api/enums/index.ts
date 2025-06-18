@@ -119,3 +119,10 @@ export enum GenderUser {
   MALE = 'male',
   FEMALE = 'female'
 }
+
+export enum DeliveryCategories {
+  B2B = 'b2b',
+  B2C = 'b2c',
+  C2C = 'c2c',
+  C2B = 'c2b'
+}

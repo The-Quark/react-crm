@@ -11,7 +11,8 @@ import {
   CargoStatus,
   PackageStatus,
   OrderStatus,
-  GenderUser
+  GenderUser,
+  DeliveryCategories
 } from '@/api/enums';
 
 export const timezoneMock = [
@@ -248,10 +249,10 @@ export const taskTypeOptions = [
 ];
 
 export const mockDeliveryCategories = [
-  { value: 'b2c', name: 'Business to Customer' },
-  { value: 'b2b', name: 'Business to Business' },
-  { value: 'c2b', name: 'Customer to Business' },
-  { value: 'c2c', name: 'Customer to Customer' }
+  { value: DeliveryCategories.B2C, name: 'Business to Customer' },
+  { value: DeliveryCategories.B2B, name: 'Business to Business' },
+  { value: DeliveryCategories.C2B, name: 'Customer to Business' },
+  { value: DeliveryCategories.C2C, name: 'Customer to Customer' }
 ];
 
 export const mockGenderOptions = [

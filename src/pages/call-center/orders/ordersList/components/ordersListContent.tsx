@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getOrders } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteOrder, getOrders } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { useOrdersColumns } from '@/pages/call-center/orders/ordersList/components/blocks/ordersColumns.tsx';
 import { OrdersToolbar } from '@/pages/call-center/orders/ordersList/components/blocks/ordersToolbar.tsx';
@@ -16,11 +16,14 @@ export const OrdersListContent = () => {
   const [dateRange, setDateRange] = useState<DateRange>();
   const [deliveryCategory, setDeliveryCategory] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -46,11 +49,32 @@ export const OrdersListContent = () => {
     refetchOnWindowFocus: true
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteOrder(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['orders'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const columns = useOrdersColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -127,6 +151,14 @@ export const OrdersListContent = () => {
         }}
       />
       <OrdersModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Order"
+        description="Are you sure you want to delete this order? This action cannot be undone."
+        isLoading={isDeleting}
+      />
     </Container>
   );
 };

@@ -32,7 +32,7 @@ const formSchema = Yup.object().shape({
     .required('Phone is required'),
   sender_street: Yup.string().required('Street is required'),
   sender_house: Yup.string().required('House is required'),
-  sender_apartment: Yup.string().required('Apartment is required'),
+  sender_apartment: Yup.string().optional(),
   sender_location_description: Yup.string().optional(),
   sender_notes: Yup.string().optional()
 });
@@ -80,8 +80,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-  const { senderId } = useOrderCreation();
-  const isEditMode = !!senderId;
+  const isEditMode = !!orderData;
 
   const {
     data: clientsData,

@@ -20,7 +20,7 @@ import { mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
-import { ApplicationsStatus } from '@/api/enums';
+import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
 
 interface Props {
   orderData?: Order;
@@ -34,7 +34,15 @@ const formSchema = Yup.object().shape({
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
   delivery_category: Yup.string()
-    .oneOf(['b2b', 'b2c', 'c2c', 'c2b'], 'Invalid delivery category')
+    .oneOf(
+      [
+        DeliveryCategories.B2B,
+        DeliveryCategories.B2C,
+        DeliveryCategories.C2C,
+        DeliveryCategories.C2B
+      ],
+      'Invalid delivery category'
+    )
     .required('Delivery category is required'),
   package_type: Yup.number()
     .typeError('Package type is required')
