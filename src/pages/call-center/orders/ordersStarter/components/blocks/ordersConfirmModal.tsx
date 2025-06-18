@@ -232,7 +232,7 @@ export const OrdersConfirmModal: FC<Props> = ({
               </div>
 
               {/* Receiver */}
-              <div className="border-b pb-4">
+              <div>
                 <h4 className="text-lg font-semibold mb-3">Receiver info</h4>
                 <div className="grid gap-2.5">
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

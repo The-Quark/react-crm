@@ -14,6 +14,7 @@ import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useNavigate } from 'react-router';
+import { ApplicationsStatus } from '@/api/enums';
 
 interface Props {
   open: boolean;
@@ -154,13 +155,15 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
             <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
               Update Application
             </a>
-            <button
-              className="btn btn-md btn-primary m-3"
-              onClick={() => handleCreateOrder(id)}
-              disabled={id === null}
-            >
-              Create Order
-            </button>
+            {data?.result[0].status === ApplicationsStatus.NEW && (
+              <button
+                className="btn btn-md btn-primary m-3"
+                onClick={() => handleCreateOrder(id)}
+                disabled={id === null}
+              >
+                Create Order
+              </button>
+            )}
           </DialogActions>
         )}
       </DialogContent>

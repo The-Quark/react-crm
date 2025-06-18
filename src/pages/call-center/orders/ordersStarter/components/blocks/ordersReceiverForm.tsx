@@ -292,7 +292,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             placeholder={formik.values.receiver_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"
             onChange={(val) => {
-              const selectedCity = citiesData?.data?.find((city) => city.id === val);
+              const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
               setModalInfoData({
                 ...modalInfo,
                 receiver_city_name: selectedCity?.name ?? ''

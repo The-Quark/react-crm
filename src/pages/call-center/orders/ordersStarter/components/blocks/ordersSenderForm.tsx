@@ -288,7 +288,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
             searchPlaceholder="Search city"
             onChange={(val) => {
               formik.setFieldValue('sender_city_id', val);
-              const selectedCity = citiesData?.data?.find((city) => city.id === val);
+              const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
               setModalInfoData({
                 ...modalInfo,
                 sender_city_name: selectedCity?.name ?? ''
