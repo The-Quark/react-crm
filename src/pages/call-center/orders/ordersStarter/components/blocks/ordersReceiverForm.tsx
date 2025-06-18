@@ -188,6 +188,11 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
         receiver_location_description: formik.values.receiver_location_description || '',
         receiver_notes: formik.values.receiver_notes || ''
       });
+      setModalInfoData({
+        ...modalInfo,
+        receiver_country_name: selectedClient?.country_name ?? '',
+        receiver_city_name: selectedClient?.city_name ?? ''
+      });
     }
   };
 
@@ -321,7 +326,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
           <SharedTextArea name="receiver_notes" label="Notes" formik={formik} />
 
           <div className="flex justify-between">
-            <button className="btn btn-primary" onClick={onBack}>
+            <button className="btn btn-light" onClick={onBack}>
               Back
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>

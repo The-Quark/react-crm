@@ -196,6 +196,21 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     staleTime: CACHE_TIME
   });
 
+  useEffect(() => {
+    if (formik.values.application_id && !formik.values.sender_contact_id) {
+      const selectedApp = applicationsData?.result?.find(
+        (app) => app.id === formik.values.application_id
+      );
+      if (selectedApp) {
+        formik.setFieldValue('sender_contact_id', selectedApp.client_id || '');
+        setModalInfoData({
+          ...modalInfo,
+          application_full_name: selectedApp?.full_name ?? ''
+        });
+      }
+    }
+  }, [applicationsData?.result, formik.values.application_id]);
+
   const isFormLoading = deliveryTypesLoading || packageTypesLoading || applicationsLoading;
   const isFormError = deliveryTypesIsError || packageTypesIsError || applicationsIsError;
   const formErrors = [deliveryTypesError, packageTypesError, applicationsError].filter(
@@ -226,12 +241,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             options={
               (applicationsData?.result?.map((app) => ({
                 id: app.id,
-                name:
-                  app.client_type === 'legal'
-                    ? app.company_name || ''
-                    : app.full_name
-                      ? `${app.full_name}`
-                      : ''
+                name: app.full_name
               })) as { id: number; name: string }[]) ?? []
             }
             placeholder="Select application"

@@ -183,6 +183,12 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
         sender_location_description: formik.values.sender_location_description || '',
         sender_notes: formik.values.sender_notes || ''
       });
+
+      setModalInfoData({
+        ...modalInfo,
+        sender_country_name: selectedClient?.country_name ?? '',
+        sender_city_name: selectedClient?.city_name ?? ''
+      });
     }
   };
 
