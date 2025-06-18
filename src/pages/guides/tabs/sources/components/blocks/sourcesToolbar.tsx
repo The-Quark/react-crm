@@ -3,7 +3,7 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import SourceModal from '@/pages/guides/tabs/sources/components/blocks/sourcesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;

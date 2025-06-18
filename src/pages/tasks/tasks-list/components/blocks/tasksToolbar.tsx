@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface TasksToolbarProps {
   onSearch?: (searchTerm: string) => void;

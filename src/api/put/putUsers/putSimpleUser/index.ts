@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IUserFormValues } from '@/api/post/postUser/types.ts';
 import { USERS_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const putSimpleUser = async (
   id: number,

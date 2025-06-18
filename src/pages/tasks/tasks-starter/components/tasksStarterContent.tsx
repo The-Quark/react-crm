@@ -15,9 +15,13 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
 import { Textarea } from '@/components/ui/textarea.tsx';
-import { taskPriorityOptions, taskStatusOptions, taskTypeOptions } from '@/lib/mocks.ts';
+import {
+  taskPriorityOptions,
+  taskStatusOptions,
+  taskTypeOptions
+} from '@/utils/enumsOptions/mocks.ts';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Task } from '@/api/get/getTask/types.ts';

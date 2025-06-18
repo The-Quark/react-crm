@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface Language {
   id: number;

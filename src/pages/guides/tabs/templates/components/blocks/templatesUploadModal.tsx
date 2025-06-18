@@ -16,7 +16,7 @@ import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/part
 import { Media } from '@/api/get/getGuides/getTemplates/types.ts';
 import { AxiosError } from 'axios';
 import Dropzone from 'shadcn-dropzone';
-import { extToMime } from '@/lib/helpers.ts';
+import { extToMime } from '@/utils/lib/helpers.ts';
 
 interface Props {
   open: boolean;

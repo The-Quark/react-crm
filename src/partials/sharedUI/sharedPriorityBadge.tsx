@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import { TaskPriority } from '@/api/enums';
 import { ArrowDown, Minus, ArrowUp, AlertTriangle } from 'lucide-react';
 

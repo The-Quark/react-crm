@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderReceiver/types.ts';
 import { ORDER_RECEIVER_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postOrderReceiver = async (
   data: Omit<IReceiverOrderFormValues, 'id' | 'created_at' | 'updated_at'>

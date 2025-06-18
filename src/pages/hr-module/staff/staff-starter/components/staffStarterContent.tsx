@@ -14,7 +14,7 @@ import { IUserFormValues } from '@/api/post/postUser/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
+import { PHONE_REG_EXP } from '@/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
 import {
@@ -27,11 +27,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { UserStatus } from '@/api/enums';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Gender } from '@/api/enums';
-import { mockGenderOptions, mockUserStatusOptions } from '@/lib/mocks.ts';
+import { mockGenderOptions, mockUserStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { format } from 'date-fns';
 import { IGetUserByParams } from '@/api/get/getUser/getUserByParams/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';

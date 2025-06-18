@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Dropzone from 'shadcn-dropzone';
 import { getFileTypes, getPackages, postPackageUpload } from '@/api';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
-import { extToMime } from '@/lib/helpers.ts';
+import { extToMime } from '@/utils/lib/helpers.ts';
 
 interface FormValues {
   type: string;

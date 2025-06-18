@@ -9,7 +9,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 
 const DataGridPagination = () => {
   const { table, props } = useDataGrid();

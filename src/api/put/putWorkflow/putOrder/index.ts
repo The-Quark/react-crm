@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ORDER_URL } from '@/api/url';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export interface IOrderPutFormValues extends IOrderFormValues {
   id: number;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
 import { APPLICATION_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postApplication = async (
   data: Omit<IApplicationPostFormValues, 'id' | 'created_at' | 'updated_at'>

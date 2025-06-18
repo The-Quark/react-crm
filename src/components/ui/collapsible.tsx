@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import React from 'react';
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { UNIFIED_CREATE } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 import { IFastFormFormValues } from '@/api/post/postWorkflow/postFastForm/types.ts';
 
 export const postFastForm = async (data: IFastFormFormValues): Promise<IFastFormFormValues> => {

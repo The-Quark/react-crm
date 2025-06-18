@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Task } from '@/api/get/getTask/types.ts';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/utils/lib/utils.ts';
 
 interface IGeneralSettingsProps {
   task: Task | null;

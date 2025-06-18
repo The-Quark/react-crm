@@ -2,7 +2,7 @@ import axios from 'axios';
 import { APPLICATION_URL } from '@/api/url';
 import { ApplicationsStatus } from '@/api/enums';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export interface IApplicationPutFormValues extends IApplicationPostFormValues {
   id: number;

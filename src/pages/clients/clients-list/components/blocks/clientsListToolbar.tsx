@@ -2,7 +2,7 @@ import React, { FC, useState, useCallback, useMemo } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 import { useQuery } from '@tanstack/react-query';
 import { getClientsCities } from '@/api';
 import {

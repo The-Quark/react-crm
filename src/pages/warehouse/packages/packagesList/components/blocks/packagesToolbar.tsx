@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { mockDeliveryCategories, packageStatusOptions } from '@/lib/mocks.ts';
+import { mockDeliveryCategories, packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 import { PackageStatus } from '@/api/enums';
 
 interface ToolbarProps {

@@ -3,7 +3,7 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;

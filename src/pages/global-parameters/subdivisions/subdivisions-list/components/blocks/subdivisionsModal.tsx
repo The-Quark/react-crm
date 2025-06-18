@@ -28,7 +28,7 @@ import {
   postGlobalParamsSubdivision,
   putGlobalParamsSubdivisions
 } from '@/api';
-import { timezoneMock } from '@/lib/mocks.ts';
+import { timezoneMock } from '@/utils/enumsOptions/mocks.ts';
 
 interface Props {
   open: boolean;

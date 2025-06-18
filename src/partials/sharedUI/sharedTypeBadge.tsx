@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import { TaskType, VehicleType } from '@/api/enums';
 import {
   Building2,

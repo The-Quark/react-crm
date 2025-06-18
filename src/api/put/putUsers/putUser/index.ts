@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { UserModel } from '@/api/put/putUsers/putUser/types.ts';
 import { USERS_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const putUser = async (
   data: UserModel,

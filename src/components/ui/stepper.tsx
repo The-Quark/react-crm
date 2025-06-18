@@ -3,7 +3,7 @@ import * as Stepperize from '@stepperize/react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/utils/lib/utils.ts';
 import { Button } from '@/components/ui/button.tsx';
 
 const StepperContext = React.createContext<Stepper.ConfigProps | null>(null);

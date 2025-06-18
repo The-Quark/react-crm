@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;

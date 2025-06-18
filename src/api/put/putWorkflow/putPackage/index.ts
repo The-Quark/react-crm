@@ -2,7 +2,7 @@ import axios from 'axios';
 import { PACKAGE_URL } from '@/api/url';
 import { PackageStatus } from '@/api/enums';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export interface IPackagePutFormValues extends IPackageFormValues {
   id: number;

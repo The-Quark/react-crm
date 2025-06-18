@@ -1,7 +1,7 @@
 import { DataGridEmpty, TDataGridLayoutCellSpacing } from '.';
 import { flexRender, HeaderGroup, Row, Cell } from '@tanstack/react-table';
 import { useDataGrid } from '.';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 
 const DataGridTable = <TData,>() => {
   const { table, props } = useDataGrid();

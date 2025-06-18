@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
-import { mockOrdersStatus } from '@/lib/mocks.ts';
+import { mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';

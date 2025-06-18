@@ -4,7 +4,7 @@ import {
   IPostCalculateFormResponse
 } from '@/api/post/postWorkflow/postOrderCalculate/types.ts';
 import { ORDER_CALCULATE } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postOrderCalculate = async (
   data: IPostCalculateFormFields

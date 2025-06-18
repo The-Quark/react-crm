@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
+import { PHONE_REG_EXP } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -22,7 +22,7 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { mockGenderUserOptions } from '@/lib/mocks.ts';
+import { mockGenderUserOptions } from '@/utils/enumsOptions/mocks.ts';
 
 interface Props {
   clientData?: Client;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IGlobalParamsDepartmentFormValues } from '@/api/post/postGlobalParams/postGlobalParamsDepartment/types.ts';
 import { GLOBAL_PARAMS_DEPARTMENTS } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 import { IPostPutResponse } from '@/api/generalManualTypes';
 
 export const postGlobalParamsDepartment = async (

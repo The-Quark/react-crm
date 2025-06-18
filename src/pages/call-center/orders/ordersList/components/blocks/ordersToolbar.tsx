@@ -7,15 +7,15 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
-import { mockDeliveryCategories, mockOrdersStatus } from '@/lib/mocks.ts';
+import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/utils/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 import { OrderStatus } from '@/api/enums';
 
 interface ToolbarProps {

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
+import { PHONE_REG_EXP } from '@/utils';
 import { useFormik } from 'formik';
 import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
 import { useQuery } from '@tanstack/react-query';

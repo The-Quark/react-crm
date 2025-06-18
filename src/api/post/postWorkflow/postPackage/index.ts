@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { PACKAGE_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postPackage = async (
   data: Omit<IPackageFormValues, 'id' | 'created_at' | 'updated_at'>

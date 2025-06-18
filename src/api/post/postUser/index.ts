@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IUserFormValues, IUserFormValuesResult } from '@/api/post/postUser/types.ts';
 import { USERS_REGISTER_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postCreateUser = async (userData: IUserFormValues): Promise<IUserFormValuesResult> => {
   const formData = new FormData();

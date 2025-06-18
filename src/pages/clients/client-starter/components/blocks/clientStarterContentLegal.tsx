@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
+import { PHONE_REG_EXP } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';

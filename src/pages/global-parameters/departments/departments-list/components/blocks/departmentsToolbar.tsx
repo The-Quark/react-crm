@@ -6,7 +6,7 @@ import { DepartmentsModal } from '@/pages/global-parameters/departments/departme
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface Props {
   initialCompanyId?: number;

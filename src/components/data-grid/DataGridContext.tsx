@@ -19,7 +19,8 @@ import {
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { DataGridInner } from './DataGridInner';
 import { TDataGridProps } from './DataGrid';
-import { deepMerge, debounce } from '@/lib/helpers';
+import { debounce } from '@/utils/lib/helpers.ts';
+import { deepMerge } from '@/utils';
 
 export interface IDataGridContextProps<TData extends object> {
   props: TDataGridProps<TData>;

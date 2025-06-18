@@ -3,7 +3,7 @@ import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplicat
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
+import { PHONE_REG_EXP } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState, useEffect, useCallback } from 'react';
 import {

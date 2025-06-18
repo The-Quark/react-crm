@@ -24,7 +24,7 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postWorkflow/postCargo/types.ts';
 import { CargoStatus } from '@/api/enums';
-import { cargoStatusOptions } from '@/lib/mocks.ts';
+import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { format } from 'date-fns';
 

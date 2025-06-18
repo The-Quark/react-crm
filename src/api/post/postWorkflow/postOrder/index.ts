@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { ORDER_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const postOrder = async (
   data: Omit<IOrderFormValues, 'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'status'>

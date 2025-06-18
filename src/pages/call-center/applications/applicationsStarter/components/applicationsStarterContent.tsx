@@ -4,7 +4,6 @@ import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils/validations/validations.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -18,8 +17,9 @@ import {
 } from '@/partials/sharedUI';
 import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { mockApplicationsStatusOptions } from '@/lib/mocks.ts';
-import { debounce } from '@/lib/helpers.ts';
+import { mockApplicationsStatusOptions } from '@/utils/enumsOptions/mocks.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
+import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Props {
   isEditMode: boolean;
@@ -43,7 +43,7 @@ export const formSchema = Yup.object().shape({
     is: 'legal',
     then: (schema) =>
       schema
-        .length(12, 'BIN must be exactly 12 digits')
+        .length(BIN_LENGTH, 'BIN must be exactly 12 digits')
         .matches(/^\d+$/, 'BIN must contain only digits')
         .required('Bin is required'),
     otherwise: (schema) => schema.optional()
@@ -69,16 +69,16 @@ const getInitialValues = (
 ): IApplicationPostFormValues => {
   if (isEditMode && applicationData) {
     return {
-      email: applicationData.email || '',
-      bin: applicationData.bin || '',
-      phone: applicationData.phone || '',
+      email: applicationData.client?.email || '',
+      bin: applicationData.client?.bin || '',
+      phone: applicationData.client?.phone || '',
       message: applicationData.message || '',
       source: applicationData.source.code || 'insta',
-      first_name: applicationData.first_name || '',
-      last_name: applicationData.last_name || '',
-      patronymic: applicationData.patronymic || '',
-      company_name: applicationData.company_name || '',
-      client_type: applicationData.client_type || 'individual',
+      first_name: applicationData.client?.first_name || '',
+      last_name: applicationData.client?.last_name || '',
+      patronymic: applicationData.client?.patronymic || '',
+      company_name: applicationData.client?.company_name || '',
+      client_type: applicationData.client?.type || 'individual',
       client_id: applicationData.client_id || clientId,
       status: applicationData.status || ('new' as unknown as ApplicationsStatus)
     };
@@ -134,7 +134,7 @@ export const ApplicationsStarterContent = ({
   } = useQuery({
     queryKey: ['sources'],
     queryFn: () => getSources({ is_active: true }),
-    staleTime: 60 * 60 * 1000
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -145,7 +145,7 @@ export const ApplicationsStarterContent = ({
   } = useQuery({
     queryKey: ['applicationClients', searchTerm],
     queryFn: () => getClients({ search_application: searchTerm }),
-    staleTime: 60 * 60 * 1000
+    staleTime: CACHE_TIME
   });
 
   const formik = useFormik({
@@ -161,23 +161,21 @@ export const ApplicationsStarterContent = ({
             ...putData,
             status: status as ApplicationsStatus
           });
-          queryClient.invalidateQueries({ queryKey: ['applications'] });
-          navigate('/call-center/applications/list');
-          resetForm();
-          setSearchTerm('');
         } else {
           await postApplication(values);
-          queryClient.invalidateQueries({ queryKey: ['applications'] });
-          navigate('/call-center/applications/list');
-          resetForm();
-          setSearchTerm('');
         }
+        await queryClient.invalidateQueries({ queryKey: ['applications'] });
+        resetForm();
+        setSearchTerm('');
+        setInputValue('');
+        navigate('/call-center/applications/list');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+        setSubmitting(false);
       }
-      setLoading(false);
-      setSubmitting(false);
     }
   });
 
@@ -190,19 +188,22 @@ export const ApplicationsStarterContent = ({
     queryKey: ['clientDetails', formik.values.client_id],
     queryFn: () =>
       getClients({ id: formik.values.client_id ? Number(formik.values.client_id) : undefined }),
-    staleTime: 60 * 60 * 1000,
-    enabled: !!formik.values.client_id
+    staleTime: CACHE_TIME,
+    enabled: !!formik.values.client_id && !isNaN(Number(formik.values.client_id))
   });
 
   const debouncedSetSearchTerm = useMemo(
-    () => debounce((term: string) => setSearchTerm(term), 300),
+    () => debounce((term: string) => setSearchTerm(term), SEARCH_DEBOUNCE_DELAY),
     []
   );
 
-  const handleSearchChange = (value: string) => {
-    setInputValue(value);
-    debouncedSetSearchTerm(value);
-  };
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setInputValue(value);
+      debouncedSetSearchTerm(value);
+    },
+    [debouncedSetSearchTerm]
+  );
 
   const handleClientChange = useCallback(
     (val: string | number | null) => {
@@ -213,72 +214,70 @@ export const ApplicationsStarterContent = ({
         Object.entries(resetFields).forEach(([field, value]) => {
           formik.setFieldValue(field, value);
         });
-        formik.setFieldValue('company_name', '');
       }
     },
-    [formik, resetClientFields, formik.values.client_id]
+    [formik, resetClientFields]
   );
 
   const handleClientTypeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newType = e.target.value as 'individual' | 'legal';
-      const currentClientType = formik.values.client_type;
+      const currentClientId = formik.values.client_id;
       formik.resetForm();
       formik.setFieldValue('client_type', newType);
-      if (formik.values.client_id) {
-        formik.setFieldValue('client_id', formik.values.client_id);
+      if (currentClientId) {
+        formik.setFieldValue('client_id', currentClientId);
       }
     },
     [formik]
   );
 
   useEffect(() => {
-    if (clientData?.result?.[0] && formik.values.client_id) {
-      const client = clientData.result[0];
+    if (!clientData?.result?.[0] || !formik.values.client_id) return;
 
-      const shouldUpdate =
-        formik.values.first_name !== (client.first_name || '') ||
-        formik.values.last_name !== (client.last_name || '') ||
-        formik.values.patronymic !== (client.patronymic || '') ||
-        formik.values.company_name !== (client.company_name || '') ||
-        formik.values.client_type !== (client.type || 'individual') ||
-        formik.values.phone !== (client.phone || '') ||
-        formik.values.email !== (client.email || '') ||
-        formik.values.source !== (client.source?.code || '');
+    const client = clientData.result[0];
+    const currentValues = formik.values;
 
-      if (shouldUpdate) {
-        formik.setValues((prevValues) => ({
-          ...prevValues,
-          first_name: client.first_name || '',
-          last_name: client.last_name || '',
-          patronymic: client.patronymic || '',
-          company_name: client.company_name || '',
-          client_type: client.type || 'individual',
-          phone: client.phone || '',
-          email: client.email || '',
-          source: client.source?.code || '',
-          bin: client.bin || ''
-        }));
-      }
+    const fieldsToUpdate = {
+      first_name: client.first_name || '',
+      last_name: client.last_name || '',
+      patronymic: client.patronymic || '',
+      company_name: client.company_name || '',
+      client_type: client.type || 'individual',
+      phone: client.phone || '',
+      email: client.email || '',
+      source: client.source?.code || '',
+      bin: client.bin || ''
+    };
+
+    const hasChanges = Object.entries(fieldsToUpdate).some(
+      ([key, value]) => currentValues[key as keyof typeof currentValues] !== value
+    );
+
+    if (hasChanges) {
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        ...fieldsToUpdate
+      }));
     }
-  }, [clientData, formik.values.client_id]);
+  }, [clientData?.result, formik.values.client_id]);
 
   const isLoading = sourcesLoading || clientLoading;
+
+  const renderError = () => {
+    if (sourcesIsError) return <SharedError error={sourcesError} />;
+    if (clientsIsError) return <SharedError error={clientsError} />;
+    if (clientIsError) return <SharedError error={clientError} />;
+    return null;
+  };
 
   if (isLoading) {
     return <SharedLoading />;
   }
 
-  if (sourcesIsError) {
-    return <SharedError error={sourcesError} />;
-  }
-
-  if (clientsIsError) {
-    return <SharedError error={clientsError} />;
-  }
-
-  if (clientIsError) {
-    return <SharedError error={clientError} />;
+  const errorComponent = renderError();
+  if (errorComponent) {
+    return errorComponent;
   }
 
   return (

@@ -22,7 +22,7 @@ import {
 import { ITemplatesResponse } from '@/api/get/getGuides/getTemplates/types.ts';
 import { TemplateType } from '@/api/enums';
 import { ITemplatesFormValues } from '@/api/post/postGuides/postTemplate/types.ts';
-import { templateTypesOptions } from '@/lib/mocks.ts';
+import { templateTypesOptions } from '@/utils/enumsOptions/mocks.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 
 interface Props {

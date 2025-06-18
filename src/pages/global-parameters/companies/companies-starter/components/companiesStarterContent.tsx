@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import { useLanguage } from '@/i18n';
-import { timezoneMock } from '@/lib/mocks.ts';
+import { timezoneMock } from '@/utils/enumsOptions/mocks.ts';
 import {
   getCurrencies,
   getLanguages,

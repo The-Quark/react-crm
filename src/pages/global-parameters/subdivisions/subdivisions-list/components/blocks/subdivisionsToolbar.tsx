@@ -6,7 +6,7 @@ import { SubdivisionModal } from '@/pages/global-parameters/subdivisions/subdivi
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
-import { debounce } from '@/lib/helpers.ts';
+import { debounce } from '@/utils/lib/helpers.ts';
 
 interface Props {
   initialCompanyId?: number;

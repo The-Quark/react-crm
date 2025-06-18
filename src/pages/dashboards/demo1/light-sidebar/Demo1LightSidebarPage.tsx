@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { DateRange } from 'react-day-picker';
 import { addDays, format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components/keenicons';
 
 const Demo1LightSidebarPage = () => {

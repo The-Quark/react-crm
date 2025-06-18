@@ -5,7 +5,7 @@ import { CalendarIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { FormikProps } from 'formik';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';

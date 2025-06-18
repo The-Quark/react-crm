@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { CLIENT_URL } from '@/api/url';
-import { cleanValues } from '@/lib/helpers.ts';
+import { cleanValues } from '@/utils/lib/helpers.ts';
 import { IPostPutResponse } from '@/api/generalManualTypes';
 
 export const putClient = async (id: number, data: IClientFormValues): Promise<IPostPutResponse> => {

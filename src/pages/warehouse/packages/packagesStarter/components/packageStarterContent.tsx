@@ -15,7 +15,7 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { PackageStatus } from '@/api/enums';
-import { packageStatusOptions } from '@/lib/mocks.ts';
+import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 

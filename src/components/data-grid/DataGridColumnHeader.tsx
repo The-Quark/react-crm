@@ -1,7 +1,7 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import { ChevronsUpDown, ArrowUp, ArrowDown, EyeOff, Check } from 'lucide-react';
 import { Column } from '@tanstack/react-table';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/lib/utils.ts';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
