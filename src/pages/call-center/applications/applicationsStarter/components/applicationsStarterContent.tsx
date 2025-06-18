@@ -19,7 +19,13 @@ import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { debounce } from '@/utils/lib/helpers.ts';
-import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_DEBOUNCE_DELAY } from '@/utils';
+import {
+  BIN_LENGTH,
+  CACHE_TIME,
+  PHONE_REG_EXP,
+  SEARCH_DEBOUNCE_DELAY,
+  SEARCH_PER_PAGE
+} from '@/utils';
 
 interface Props {
   isEditMode: boolean;
@@ -144,7 +150,7 @@ export const ApplicationsStarterContent = ({
     error: clientsError
   } = useQuery({
     queryKey: ['applicationClients', searchTerm],
-    queryFn: () => getClients({ search_application: searchTerm }),
+    queryFn: () => getClients({ search_application: searchTerm, per_page: SEARCH_PER_PAGE }),
     staleTime: CACHE_TIME
   });
 

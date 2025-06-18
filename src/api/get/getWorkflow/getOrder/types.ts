@@ -77,7 +77,7 @@ interface Person {
   full_name: string;
   first_name: string;
   last_name: string;
-  patronymic?: string;
+  patronymic: string | null;
   city_id: number;
   city: City | null;
   phone: string;
@@ -89,6 +89,9 @@ interface Person {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+  type: 'legal' | 'individual';
+  company_name: string | null;
+  bin: string | null;
 }
 
 export interface Order {

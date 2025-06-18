@@ -1,6 +1,6 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils';
+import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getCitiesByCountryCode, getClients, getCountries } from '@/api';
 import { useFormik } from 'formik';
@@ -14,6 +14,7 @@ import {
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
+import { Client } from '@/api/get/getClients/types.ts';
 
 interface Props {
   onBack: () => void;
@@ -22,9 +23,31 @@ interface Props {
 }
 
 const formSchema = Yup.object().shape({
-  receiver_first_name: Yup.string().required('First name is required'),
-  receiver_last_name: Yup.string().required('Last name is required'),
+  receiver_first_name: Yup.string().when('client_type', {
+    is: 'individual',
+    then: (schema) => schema.required('First name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
+  receiver_last_name: Yup.string().when('client_type', {
+    is: 'individual',
+    then: (schema) => schema.required('Last name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
   receiver_patronymic: Yup.string().optional(),
+  receiver_bin: Yup.string().when('client_type', {
+    is: 'legal',
+    then: (schema) =>
+      schema
+        .length(BIN_LENGTH, 'BIN must be exactly 12 digits')
+        .matches(/^\d+$/, 'BIN must contain only digits')
+        .required('Bin is required'),
+    otherwise: (schema) => schema.optional()
+  }),
+  receiver_name: Yup.string().when('client_type', {
+    is: 'legal',
+    then: (schema) => schema.required('Company name is required'),
+    otherwise: (schema) => schema.optional()
+  }),
   receiver_city_id: Yup.number().typeError('City is required').required('City is required'),
   receiver_country_id: Yup.number()
     .typeError('Country is required')
@@ -49,6 +72,9 @@ const getInitialValues = (
       receiver_first_name: orderData.receiver.first_name || '',
       receiver_last_name: orderData.receiver.last_name || '',
       receiver_patronymic: orderData.receiver.patronymic || '',
+      receiver_company_name: orderData.receiver.company_name || '',
+      receiver_bin: orderData.receiver.bin || '',
+      receiver_type: orderData.receiver.type || (orderData.receiver.bin ? 'legal' : 'individual'),
       receiver_country_id: orderData.receiver.city?.country_id || '',
       receiver_city_id: orderData.receiver.city_id || '',
       receiver_phone: orderData.receiver.phone || '',
@@ -65,6 +91,9 @@ const getInitialValues = (
     receiver_first_name: mainForm?.receiver_first_name || '',
     receiver_last_name: mainForm?.receiver_last_name || '',
     receiver_patronymic: mainForm?.receiver_patronymic || '',
+    receiver_company_name: mainForm?.receiver_company_name || '',
+    receiver_bin: mainForm?.receiver_bin || '',
+    receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
     receiver_country_id: mainForm?.receiver_country_id || '',
     receiver_city_id: mainForm?.receiver_city_id || '',
     receiver_phone: mainForm?.receiver_phone || '',
@@ -78,10 +107,15 @@ const getInitialValues = (
 };
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModal }) => {
-  const { setMainFormData, mainFormData } = useOrderCreation();
+  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
+  const [selectedClientId, setSelectedClientId] = useState<string>(
+    orderData?.receiver.contact_id?.toString() ||
+      mainFormData?.receiver_contact_id?.toString() ||
+      ''
+  );
   const isEditMode = !!orderData;
 
   const {
@@ -91,8 +125,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     error: clientsError
   } = useQuery({
     queryKey: ['orderReceiverClients', clientSearchTerm],
-    queryFn: () => getClients({ per_page: 50 }),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm }),
+    staleTime: CACHE_TIME
   });
 
   const formik = useFormik({
@@ -125,23 +159,55 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
     queryKey: ['orderReceiverCities', formik.values.receiver_country_id],
     queryFn: () =>
       getCitiesByCountryCode(formik.values.receiver_country_id as string | number, 'id'),
-    enabled: !!formik.values.receiver_country_id,
-    staleTime: 1000 * 60 * 5
+    enabled: !!formik.values.receiver_country_id
   });
 
-  const handleClientChange = (clientId: string) => {
-    formik.setFieldValue('receiver_contact_id', clientId);
-    const selectedClient = clientsData?.result?.find((client) => client.id === Number(clientId));
+  const handleClientChange = (clientId: string, clientData?: Client) => {
+    setSelectedClientId(clientId);
+    const selectedClient =
+      clientData || clientsData?.result?.find((client) => client.id === Number(clientId));
+
     if (selectedClient) {
+      const isLegalClient = selectedClient.type === 'legal';
+
       formik.setValues({
         ...formik.values,
-        receiver_first_name: selectedClient.first_name || '',
-        receiver_last_name: selectedClient.last_name || '',
-        receiver_patronymic: selectedClient.patronymic || '',
-        receiver_phone: selectedClient.phone || ''
+        receiver_contact_id: clientId,
+        receiver_first_name: isLegalClient ? '' : selectedClient.first_name || '',
+        receiver_last_name: isLegalClient ? '' : selectedClient.last_name || '',
+        receiver_patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
+        receiver_company_name: isLegalClient ? selectedClient.company_name || '' : '',
+        receiver_bin: isLegalClient ? selectedClient.bin || '' : '',
+        receiver_type: selectedClient.type || 'individual',
+        receiver_phone: selectedClient.phone || '',
+        receiver_country_id: selectedClient.country_id || '',
+        receiver_city_id: selectedClient.city_id || '',
+        receiver_street: formik.values.receiver_street || '',
+        receiver_house: formik.values.receiver_house || '',
+        receiver_apartment: formik.values.receiver_apartment || '',
+        receiver_location_description: formik.values.receiver_location_description || '',
+        receiver_notes: formik.values.receiver_notes || ''
       });
     }
   };
+
+  useEffect(() => {
+    if (formik.values.receiver_contact_id && !orderData) {
+      const fetchClientData = async () => {
+        try {
+          const response = await getClients({ id: Number(formik.values.receiver_contact_id) });
+          const client = response.result?.[0];
+          if (client) {
+            handleClientChange(String(client.id), client);
+          }
+        } catch (error) {
+          console.error('Failed to fetch client data:', error);
+        }
+      };
+
+      fetchClientData();
+    }
+  }, [formik.values.receiver_contact_id]);
 
   const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
@@ -163,7 +229,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
+      <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
           <SharedAutocomplete
             label="Contact"
@@ -171,10 +237,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             options={
               clientsData?.result?.map((client) => ({
                 id: client.id,
-                name:
-                  [client.first_name, client.last_name, client.patronymic]
-                    .filter(Boolean)
-                    .join(' ') || client.company_name
+                name: client.search_application ?? ''
               })) ?? []
             }
             placeholder="Select contact"
@@ -186,9 +249,19 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             onSearchTermChange={setClientSearchTerm}
           />
 
-          <SharedInput name="receiver_first_name" label="First name" formik={formik} />
-          <SharedInput name="receiver_last_name" label="Last name" formik={formik} />
-          <SharedInput name="receiver_patronymic" label="Patronymic" formik={formik} />
+          {formik.values.receiver_type === 'legal' ? (
+            <>
+              <SharedInput name="receiver_company_name" label="Company name" formik={formik} />
+              <SharedInput name="receiver_bin" label="BIN" formik={formik} />
+            </>
+          ) : (
+            <>
+              <SharedInput name="receiver_first_name" label="First name" formik={formik} />
+              <SharedInput name="receiver_last_name" label="Last name" formik={formik} />
+              <SharedInput name="receiver_patronymic" label="Patronymic" formik={formik} />
+            </>
+          )}
+
           <SharedInput name="receiver_phone" label="Phone" formik={formik} type="tel" />
 
           <SharedAutocomplete
@@ -198,8 +271,13 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             placeholder="Select country"
             searchPlaceholder="Search country"
             onChange={(val) => {
+              const selectedCountry = countriesData?.data?.find((country) => country.id === val);
               formik.setFieldValue('receiver_country_id', val);
               formik.setFieldValue('receiver_city_id', '');
+              setModalInfoData({
+                ...modalInfo,
+                receiver_country_name: selectedCountry?.name ?? ''
+              });
             }}
             error={formik.errors.receiver_country_id as string}
             touched={formik.touched.receiver_country_id}
@@ -213,7 +291,14 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, orderData, onConfirmModa
             options={citiesData?.data[0]?.cities ?? []}
             placeholder={formik.values.receiver_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"
-            onChange={(val) => formik.setFieldValue('receiver_city_id', val)}
+            onChange={(val) => {
+              const selectedCity = citiesData?.data?.find((city) => city.id === val);
+              setModalInfoData({
+                ...modalInfo,
+                receiver_city_name: selectedCity?.name ?? ''
+              });
+              formik.setFieldValue('receiver_city_id', val);
+            }}
             error={formik.errors.receiver_city_id as string}
             touched={formik.touched.receiver_city_id}
             searchTerm={citySearchTerm}

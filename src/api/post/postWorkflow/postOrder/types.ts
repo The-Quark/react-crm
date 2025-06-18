@@ -23,6 +23,9 @@ export interface IOrderFormValues {
   sender_first_name?: string;
   sender_last_name?: string;
   sender_patronymic?: string;
+  sender_bin?: string;
+  sender_type?: 'individual' | 'legal';
+  sender_company_name?: string;
   sender_country_id?: number | string;
   sender_city_id?: number | string;
   sender_phone?: string;
@@ -35,6 +38,9 @@ export interface IOrderFormValues {
   receiver_first_name?: string;
   receiver_last_name?: string;
   receiver_patronymic?: string;
+  receiver_bin?: string;
+  receiver_type?: 'individual' | 'legal';
+  receiver_company_name?: string;
   receiver_country_id?: number | string;
   receiver_city_id?: number | string;
   receiver_phone?: string;

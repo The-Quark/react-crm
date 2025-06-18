@@ -4,7 +4,7 @@ import { MenuItem, MenuLink, MenuTitle, MenuIcon, MenuBadge, MenuSub } from '@/c
 import clsx from 'clsx';
 import { useLanguage } from '@/i18n';
 import { useEffect, useState } from 'react';
-import { toAbsoluteUrl } from '@/utils';
+import { LOCAL_STORAGE_CURRENCY_KEY, toAbsoluteUrl } from '@/utils';
 
 interface IDropdownUserCurrenciesProps {
   menuItemRef: any;
@@ -30,14 +30,12 @@ const CURRENCIES = [
 
 type Currency = (typeof CURRENCIES)[number];
 
-const LOCAL_STORAGE_KEY = 'app_currency';
-
 const DropdownUserCurrency = ({ menuItemRef }: IDropdownUserCurrenciesProps) => {
   const { isRTL } = useLanguage();
   const [currentCurrency, setCurrentCurrency] = useState<Currency>(CURRENCIES[0]);
 
   useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const saved = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
     const found = CURRENCIES.find((item) => item.code === saved);
     if (found) {
       setCurrentCurrency(found);
@@ -46,7 +44,7 @@ const DropdownUserCurrency = ({ menuItemRef }: IDropdownUserCurrenciesProps) => 
 
   const handleCurrency = (currency: Currency) => {
     setCurrentCurrency(currency);
-    localStorage.setItem(LOCAL_STORAGE_KEY, currency.code);
+    localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, currency.code);
     if (menuItemRef.current) {
       menuItemRef.current.hide();
     }

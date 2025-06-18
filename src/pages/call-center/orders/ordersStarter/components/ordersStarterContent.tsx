@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
-import { IOrderPutFormValues, postOrder, putOrder } from '@/api';
+import { IOrderPutFormValues, postOrder, postOrderDraft, putOrder } from '@/api';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
@@ -50,6 +50,15 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
       }
     } catch (error) {
       console.error('Error creating order:', error);
+      throw error;
+    }
+  };
+
+  const handleOrderDraftSubmit = async (data: IOrderFormValues) => {
+    try {
+      await postOrderDraft(data);
+    } catch (error) {
+      console.error('Error creating draft:', error);
       throw error;
     }
   };
@@ -102,6 +111,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
       <div className="space-y-4">
         <StepContent
           onOrderSubmit={handleOrderSubmit}
+          onOrderDraftSubmit={handleOrderDraftSubmit}
           orderData={orderData}
           stepper={stepper}
           orderId={orderId ? String(orderId) : ''}
@@ -116,6 +126,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
 
 const StepContent = ({
   onOrderSubmit,
+  onOrderDraftSubmit,
   orderData,
   stepper,
   orderId,
@@ -124,6 +135,7 @@ const StepContent = ({
   handleOpen
 }: {
   onOrderSubmit: (orderData: IOrderFormValues) => Promise<void>;
+  onOrderDraftSubmit: (orderData: IOrderFormValues) => Promise<void>;
   orderData?: Order;
   stepper: ReturnType<typeof useStepper>;
   orderId: string;
@@ -135,6 +147,11 @@ const StepContent = ({
 
   const handleSubmit = async (data: IOrderFormValues) => {
     await onOrderSubmit(data);
+    if (!orderId) clearAll();
+  };
+
+  const handleDraftSubmit = async (data: IOrderFormValues) => {
+    await onOrderDraftSubmit(data);
     if (!orderId) clearAll();
   };
 
@@ -165,6 +182,7 @@ const StepContent = ({
         open={open}
         handleClose={handleClose}
         onOrderSubmit={handleSubmit}
+        onOrderDraftSubmit={handleDraftSubmit}
         orderData={mainFormData as IOrderFormValues}
       />
     </>

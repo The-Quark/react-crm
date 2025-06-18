@@ -11,3 +11,4 @@ export * from './lib/utils.ts';
 export * from './lib/helpers.ts';
 export * from './enumsOptions/mocks.ts';
 export * from './constants/settings.ts';
+export * from './localStorage/localStorageStore.ts';

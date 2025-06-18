@@ -17,7 +17,7 @@ import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
-import { decimalValidation } from '@/utils';
+import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
@@ -112,10 +112,12 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
-  const { setMainFormData, applicationId, mainFormData } = useOrderCreation();
+  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo } =
+    useOrderCreation();
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const isEditMode = !!orderId;
+  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
   const formik = useFormik({
     initialValues: getInitialValues(
@@ -165,7 +167,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
       getApplications(
         orderData ? { per_page: 50 } : { status: ApplicationsStatus.NEW, per_page: 50 }
       ),
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -176,7 +178,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
   } = useQuery({
     queryKey: ['deliveryTypes'],
     queryFn: () => getDeliveryTypes({}),
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -191,7 +193,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
         language_code: currentLanguage.code,
         is_active: true
       }),
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   const isFormLoading = deliveryTypesLoading || packageTypesLoading || applicationsLoading;
@@ -238,6 +240,10 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
               const selectedApp = applicationsData?.result?.find((app) => app.id === val);
               formik.setFieldValue('application_id', val);
               formik.setFieldValue('sender_contact_id', selectedApp?.client_id || '');
+              setModalInfoData({
+                ...modalInfo,
+                application_full_name: selectedApp?.full_name ?? ''
+              });
             }}
             error={formik.errors.application_id as string}
             touched={formik.touched.application_id}
@@ -255,6 +261,14 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
                 value: type.id
               })) || []
             }
+            onChange={(value) => {
+              formik.setFieldValue('delivery_type', value);
+              const selectedType = deliveryTypesData?.result?.find((type) => type.id === value);
+              setModalInfoData({
+                ...modalInfo,
+                delivery_type_name: selectedType?.name ?? ''
+              });
+            }}
           />
           <SharedSelect
             name="delivery_category"
@@ -297,6 +311,14 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
                 value: packageType.id
               })) || []
             }
+            onChange={(value) => {
+              formik.setFieldValue('package_type', value);
+              const selectedType = packageTypesData?.result?.find((type) => type.id === value);
+              setModalInfoData({
+                ...modalInfo,
+                package_type_name: selectedType?.language[0]?.name || selectedType?.code || ''
+              });
+            }}
           />
           <SharedInputTags
             value={
@@ -347,7 +369,13 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             formik={formik}
             disabled
           />
-          <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
+          <SharedInput
+            name="price"
+            label={`Price (${currentCurrency})`}
+            formik={formik}
+            type="text"
+            disabled
+          />
           {orderData?.id && (
             <SharedSelect
               name="status"

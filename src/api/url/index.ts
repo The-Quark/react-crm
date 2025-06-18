@@ -79,3 +79,5 @@ export const ORDER_CALCULATE = `${api}/order/calculate`;
 export const FILE_TYPE = `${api}/filetype/manage`;
 
 export const UNIFIED_CREATE = `${api}/unified/create`;
+
+export const ORDER_DRAFT = `${api}/order/draft`;
