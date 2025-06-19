@@ -115,8 +115,6 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
             return prev;
           });
         }
-      } else {
-        clearAll();
       }
 
       setIsLoading(false);

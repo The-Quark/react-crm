@@ -132,12 +132,12 @@ const StepContent = ({
 
   const handleSubmit = async (data: IOrderFormValues) => {
     await onOrderSubmit(data);
-    if (!isEditMode) clearAll();
+    clearAll();
   };
 
   const handleDraftSubmit = async (data: IOrderFormValues) => {
     await onOrderDraftSubmit(data);
-    if (!isEditMode) clearAll();
+    clearAll();
   };
 
   return (
