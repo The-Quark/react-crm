@@ -33,7 +33,6 @@ interface Props {
 }
 
 export const formSchema = Yup.object().shape({
-  title: Yup.string().optional(),
   description: Yup.string().required('Description is required'),
   type: Yup.mixed<TaskType>().oneOf(Object.values(TaskType)).required('Type is required'),
   priority: Yup.mixed<TaskPriority>()
@@ -180,7 +179,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
         </div>
 
         <div className="card-body grid gap-5">
-          <SharedInput name="title" label="Title" formik={formik} />
+          {isEditMode && <SharedInput name="title" label="Title" formik={formik} disabled />}
 
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <label className="form-label max-w-56">Description</label>

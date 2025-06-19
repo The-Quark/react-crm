@@ -13,13 +13,12 @@ import {
 } from '@/partials/sharedUI';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
 
 interface Props {
   onNext: () => void;
   onBack: () => void;
-  orderData?: Order;
+  isEditMode: boolean;
 }
 
 const formSchema = Yup.object().shape({
@@ -61,27 +60,27 @@ const formSchema = Yup.object().shape({
 });
 
 const getInitialValues = (
+  isLoading: boolean,
   isEditMode: boolean,
-  orderData: Order,
   mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  if (isEditMode && orderData) {
+  if (!isEditMode || isLoading || !mainForm) {
     return {
-      sender_first_name: orderData.sender.first_name || '',
-      sender_last_name: orderData.sender.last_name || '',
-      sender_patronymic: orderData.sender.patronymic || '',
-      sender_company_name: orderData.sender.company_name || '',
-      sender_bin: orderData.sender.bin || '',
-      sender_type: orderData.sender.type || (orderData.sender.bin ? 'legal' : 'individual'),
-      sender_country_id: orderData.sender.city?.country_id || '',
-      sender_city_id: orderData.sender.city_id || '',
-      sender_phone: orderData.sender.phone || '',
-      sender_street: orderData.sender.street || '',
-      sender_house: orderData.sender.house || '',
-      sender_apartment: orderData.sender.apartment || '',
-      sender_location_description: orderData.sender.location_description || '',
-      sender_notes: orderData.sender.notes || '',
-      sender_contact_id: orderData.sender.contact_id || ''
+      sender_first_name: '',
+      sender_last_name: '',
+      sender_patronymic: '',
+      sender_company_name: '',
+      sender_bin: '',
+      sender_type: 'individual',
+      sender_country_id: '',
+      sender_city_id: '',
+      sender_phone: '',
+      sender_street: '',
+      sender_house: '',
+      sender_apartment: '',
+      sender_location_description: '',
+      sender_notes: '',
+      sender_contact_id: ''
     };
   }
 
@@ -104,15 +103,18 @@ const getInitialValues = (
   };
 };
 
-export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
-  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
+export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
+  const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
+    useOrderCreation();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
   const [selectedClientId, setSelectedClientId] = useState<string>(
-    orderData?.sender.contact_id?.toString() || mainFormData?.sender_contact_id?.toString() || ''
+    mainFormData?.sender_contact_id?.toString() || ''
   );
-  const isEditMode = !!orderData;
+
+  console.log('Sender mainFormData: ', mainFormData);
+  console.log('Sender loading: ', isLoading);
 
   const {
     data: clientsData,
@@ -126,7 +128,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, orderData as Order, mainFormData),
+    initialValues: getInitialValues(isLoading, isEditMode, mainFormData),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -193,7 +195,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
   };
 
   useEffect(() => {
-    if (formik.values.sender_contact_id && !orderData) {
+    if (formik.values.sender_contact_id && !isEditMode) {
       const fetchClientData = async () => {
         try {
           const response = await getClients({ id: Number(formik.values.sender_contact_id) });
@@ -234,7 +236,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
         <div className="card-body grid gap-5">
           <SharedAutocomplete
             label="Contact"
-            value={formik.values.sender_contact_id ?? orderData?.sender.contact_id ?? ''}
+            value={formik.values.sender_contact_id ?? ''}
             options={
               clientsData?.result?.map((client) => ({
                 id: client.id,
@@ -267,7 +269,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
 
           <SharedAutocomplete
             label="Country"
-            value={formik.values.sender_country_id ?? orderData?.sender.city?.country_id ?? ''}
+            value={formik.values.sender_country_id ?? ''}
             options={countriesData?.data ?? []}
             placeholder="Select country"
             searchPlaceholder="Search country"
@@ -288,7 +290,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, orderData }) => {
 
           <SharedAutocomplete
             label="City"
-            value={formik.values.sender_city_id ?? orderData?.sender.city_id ?? ''}
+            value={formik.values.sender_city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
             placeholder={formik.values.sender_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"

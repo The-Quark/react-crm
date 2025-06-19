@@ -1,22 +1,17 @@
-import { useEffect, Fragment, useState, FC } from 'react';
+import { Fragment, useState, FC } from 'react';
 import { OrdersSenderForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersSenderForm.tsx';
 import { OrdersReceiverForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersReceiverForm.tsx';
 import { OrdersMainForm } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersMainForm.tsx';
-import {
-  OrderCreationProvider,
-  useOrderCreation
-} from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
+import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
 import { IOrderPutFormValues, postOrder, postOrderDraft, putOrder } from '@/api';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
   isEditMode: boolean;
-  orderData?: Order;
   orderId?: number;
 }
 
@@ -26,19 +21,12 @@ const { useStepper, utils } = defineStepper(
   { id: 'receiver', title: 'Receiver Information' }
 );
 
-const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
-  const { setApplicationId } = useOrderCreation();
+const OrderFormSteps: FC<Props> = ({ isEditMode, orderId }) => {
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
   const allSteps = stepper.all;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (orderData) {
-      setApplicationId(orderData?.application_id ?? undefined);
-    }
-  }, [orderData]);
 
   const handleOrderSubmit = async (data: IOrderFormValues) => {
     try {
@@ -66,10 +54,10 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">{orderId ? 'Edit Order' : 'Create New Order'}</h2>
+        <h2 className="text-lg font-medium">{isEditMode ? 'Edit Order' : 'Create New Order'}</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Step {currentIndex + 1} of {allSteps.length}
+            s Step {currentIndex + 1} of {allSteps.length}
           </span>
         </div>
       </div>
@@ -112,10 +100,9 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
         <StepContent
           onOrderSubmit={handleOrderSubmit}
           onOrderDraftSubmit={handleOrderDraftSubmit}
-          orderData={orderData}
           stepper={stepper}
-          orderId={orderId ? String(orderId) : ''}
           open={isModalOpen}
+          isEditMode={isEditMode}
           handleClose={() => setIsModalOpen(false)}
           handleOpen={() => setIsModalOpen(true)}
         />
@@ -127,19 +114,17 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId, orderData }) => {
 const StepContent = ({
   onOrderSubmit,
   onOrderDraftSubmit,
-  orderData,
   stepper,
-  orderId,
   open,
   handleClose,
-  handleOpen
+  handleOpen,
+  isEditMode
 }: {
   onOrderSubmit: (orderData: IOrderFormValues) => Promise<void>;
   onOrderDraftSubmit: (orderData: IOrderFormValues) => Promise<void>;
-  orderData?: Order;
   stepper: ReturnType<typeof useStepper>;
-  orderId: string;
   open: boolean;
+  isEditMode: boolean;
   handleClose: () => void;
   handleOpen: () => void;
 }) => {
@@ -147,25 +132,25 @@ const StepContent = ({
 
   const handleSubmit = async (data: IOrderFormValues) => {
     await onOrderSubmit(data);
-    if (!orderId) clearAll();
+    if (!isEditMode) clearAll();
   };
 
   const handleDraftSubmit = async (data: IOrderFormValues) => {
     await onOrderDraftSubmit(data);
-    if (!orderId) clearAll();
+    if (!isEditMode) clearAll();
   };
 
   return (
     <>
       {stepper.current.id === 'main' && (
         <div className="grid gap-4">
-          <OrdersMainForm onNext={stepper.next} orderData={orderData} orderId={orderId} />
+          <OrdersMainForm onNext={stepper.next} isEditMode={isEditMode} />
         </div>
       )}
 
       {stepper.current.id === 'sender' && (
         <div className="grid gap-4">
-          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} orderData={orderData} />
+          <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} isEditMode={isEditMode} />
         </div>
       )}
 
@@ -174,7 +159,7 @@ const StepContent = ({
           <OrdersReceiverForm
             onBack={stepper.prev}
             onConfirmModal={handleOpen}
-            orderData={orderData}
+            isEditMode={isEditMode}
           />
         </div>
       )}
@@ -189,10 +174,6 @@ const StepContent = ({
   );
 };
 
-export const OrdersStarterContent: FC<Props> = ({ orderId, orderData, isEditMode }) => {
-  return (
-    <OrderCreationProvider>
-      <OrderFormSteps orderData={orderData} orderId={orderId} isEditMode={isEditMode} />
-    </OrderCreationProvider>
-  );
+export const OrdersStarterContent: FC<Props> = ({ isEditMode, orderId }) => {
+  return <OrderFormSteps isEditMode={isEditMode} orderId={orderId} />;
 };

@@ -15,7 +15,6 @@ import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate 
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
@@ -23,9 +22,8 @@ import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalcu
 import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
 
 interface Props {
-  orderData?: Order;
   onNext: () => void;
-  orderId: string;
+  isEditMode: boolean;
 }
 
 const formSchema = Yup.object().shape({
@@ -59,78 +57,76 @@ const formSchema = Yup.object().shape({
 });
 
 const getInitialValues = (
-  isEditMode: boolean,
-  orderData: Order,
+  isLoading: boolean,
   applicationId: string | number,
-  mainForm: IOrderFormValues | null
+  mainForm: IOrderFormValues | null,
+  isEditMode: boolean
 ): IOrderFormValues => {
-  if (isEditMode && orderData) {
+  if (!isEditMode || isLoading || !mainForm) {
     return {
-      id: orderData.id || 0,
-      application_id: orderData?.application_id || applicationId || '',
-      status: orderData?.status || undefined,
-      delivery_type: orderData?.delivery_type?.id || '',
-      delivery_category: orderData?.delivery_category || 'b2b',
-      package_type: orderData?.package_type?.id || '',
-      weight: orderData?.weight || '',
-      width: orderData?.width || '',
-      length: orderData?.length || '',
-      height: orderData?.height || '',
-      volume: orderData?.volume || '',
-      places_count: orderData?.places_count || 0,
-      customs_clearance: orderData?.customs_clearance || false,
-      is_international: orderData?.is_international || false,
-      price: orderData?.price || '',
-      package_description: orderData?.package_description || '',
-      special_wishes: orderData?.special_wishes || '',
-      order_content: orderData?.order_content || [],
-      sender_contact_id: orderData.sender.contact_id || ''
+      id: 0,
+      application_id: applicationId || '',
+      status: undefined,
+      delivery_type: '',
+      delivery_category: 'b2b',
+      package_type: '',
+      weight: '',
+      width: '',
+      length: '',
+      height: '',
+      volume: '',
+      places_count: 0,
+      customs_clearance: false,
+      is_international: false,
+      price: '',
+      package_description: '',
+      special_wishes: '',
+      order_content: [],
+      sender_contact_id: ''
     };
   }
 
   return {
-    id: mainForm?.id || 0,
-    application_id: applicationId || mainForm?.application_id,
-    status: mainForm?.status || undefined,
-    delivery_type: mainForm?.delivery_type || '',
-    delivery_category: mainForm?.delivery_category || 'b2b',
-    package_type: mainForm?.package_type || '',
-    weight: mainForm?.weight || '',
-    width: mainForm?.width || '',
-    length: mainForm?.length || '',
-    height: mainForm?.height || '',
-    volume: mainForm?.volume || '',
-    places_count: mainForm?.places_count || 0,
-    customs_clearance: mainForm?.customs_clearance || false,
-    is_international: mainForm?.is_international || false,
-    price: mainForm?.price || '',
-    package_description: mainForm?.package_description || '',
-    special_wishes: mainForm?.special_wishes || '',
-    order_content: mainForm?.order_content || [],
-    sender_contact_id: mainForm?.sender_contact_id || ''
+    id: mainForm.id || 0,
+    application_id: mainForm.application_id || applicationId || '',
+    status: mainForm.status || undefined,
+    delivery_type: mainForm.delivery_type || '',
+    delivery_category: mainForm.delivery_category || 'b2b',
+    package_type: mainForm.package_type || '',
+    weight: mainForm.weight || '',
+    width: mainForm.width || '',
+    length: mainForm.length || '',
+    height: mainForm.height || '',
+    volume: mainForm.volume || '',
+    places_count: mainForm.places_count || 0,
+    customs_clearance: mainForm.customs_clearance || false,
+    is_international: mainForm.is_international || false,
+    price: mainForm.price || '',
+    package_description: mainForm.package_description || '',
+    special_wishes: mainForm.special_wishes || '',
+    order_content: mainForm.order_content || [],
+    sender_contact_id: mainForm.sender_contact_id || ''
   };
 };
 
-export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
-  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo } =
+export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
+  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
   const { currentLanguage } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
-  const isEditMode = !!orderId;
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
+  console.log('MAin mainFormData: ', mainFormData);
+  console.log('MAin loading: ', isLoading);
+
   const formik = useFormik({
-    initialValues: getInitialValues(
-      isEditMode,
-      orderData as Order,
-      applicationId || '',
-      mainFormData
-    ),
+    initialValues: getInitialValues(isLoading, applicationId || '', mainFormData, isEditMode),
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData({ ...mainFormData, ...values });
       onNext();
-    }
+    },
+    enableReinitialize: true
   });
 
   useEffect(() => {
@@ -165,7 +161,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
     queryKey: ['applications'],
     queryFn: () =>
       getApplications(
-        orderData ? { per_page: 50 } : { status: ApplicationsStatus.NEW, per_page: 50 }
+        isEditMode ? { per_page: 50 } : { status: ApplicationsStatus.NEW, per_page: 50 }
       ),
     staleTime: CACHE_TIME
   });
@@ -386,7 +382,7 @@ export const OrdersMainForm: FC<Props> = ({ orderData, onNext, orderId }) => {
             type="text"
             disabled
           />
-          {orderData?.id && (
+          {isEditMode && (
             <SharedSelect
               name="status"
               label="Status"
