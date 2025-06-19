@@ -12,7 +12,6 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
 
@@ -67,42 +66,64 @@ const getInitialValues = (
   isEditMode: boolean,
   mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  if (!isEditMode || isLoading || !mainForm) {
+  if (!isEditMode && mainForm) {
     return {
-      receiver_first_name: '',
-      receiver_last_name: '',
-      receiver_patronymic: '',
-      receiver_company_name: '',
-      receiver_bin: '',
-      receiver_type: 'individual',
-      receiver_country_id: '',
-      receiver_city_id: '',
-      receiver_phone: '',
-      receiver_street: '',
-      receiver_house: '',
-      receiver_apartment: '',
-      receiver_location_description: '',
-      receiver_notes: '',
-      receiver_contact_id: ''
+      receiver_first_name: mainForm?.receiver_first_name || '',
+      receiver_last_name: mainForm?.receiver_last_name || '',
+      receiver_patronymic: mainForm?.receiver_patronymic || '',
+      receiver_company_name: mainForm?.receiver_company_name || '',
+      receiver_bin: mainForm?.receiver_bin || '',
+      receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
+      receiver_country_id: mainForm?.receiver_country_id
+        ? Number(mainForm.receiver_country_id)
+        : '',
+      receiver_city_id: mainForm?.receiver_city_id ? Number(mainForm.receiver_city_id) : '',
+      receiver_phone: mainForm?.receiver_phone || '',
+      receiver_street: mainForm?.receiver_street || '',
+      receiver_house: mainForm?.receiver_house || '',
+      receiver_apartment: mainForm?.receiver_apartment || '',
+      receiver_location_description: mainForm?.receiver_location_description || '',
+      receiver_notes: mainForm?.receiver_notes || '',
+      receiver_contact_id: mainForm?.receiver_contact_id || ''
     };
   }
-
+  if (isEditMode && mainForm) {
+    return {
+      receiver_first_name: mainForm?.receiver_first_name || '',
+      receiver_last_name: mainForm?.receiver_last_name || '',
+      receiver_patronymic: mainForm?.receiver_patronymic || '',
+      receiver_company_name: mainForm?.receiver_company_name || '',
+      receiver_bin: mainForm?.receiver_bin || '',
+      receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
+      receiver_country_id: mainForm?.receiver_country_id
+        ? Number(mainForm.receiver_country_id)
+        : '',
+      receiver_city_id: mainForm?.receiver_city_id ? Number(mainForm.receiver_city_id) : '',
+      receiver_phone: mainForm?.receiver_phone || '',
+      receiver_street: mainForm?.receiver_street || '',
+      receiver_house: mainForm?.receiver_house || '',
+      receiver_apartment: mainForm?.receiver_apartment || '',
+      receiver_location_description: mainForm?.receiver_location_description || '',
+      receiver_notes: mainForm?.receiver_notes || '',
+      receiver_contact_id: mainForm?.receiver_contact_id || ''
+    };
+  }
   return {
-    receiver_first_name: mainForm?.receiver_first_name || '',
-    receiver_last_name: mainForm?.receiver_last_name || '',
-    receiver_patronymic: mainForm?.receiver_patronymic || '',
-    receiver_company_name: mainForm?.receiver_company_name || '',
-    receiver_bin: mainForm?.receiver_bin || '',
-    receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
-    receiver_country_id: mainForm?.receiver_country_id || '',
-    receiver_city_id: mainForm?.receiver_city_id || '',
-    receiver_phone: mainForm?.receiver_phone || '',
-    receiver_street: mainForm?.receiver_street || '',
-    receiver_house: mainForm?.receiver_house || '',
-    receiver_apartment: mainForm?.receiver_apartment || '',
-    receiver_location_description: mainForm?.receiver_location_description || '',
-    receiver_notes: mainForm?.receiver_notes || '',
-    receiver_contact_id: mainForm?.receiver_contact_id || ''
+    receiver_first_name: '',
+    receiver_last_name: '',
+    receiver_patronymic: '',
+    receiver_company_name: '',
+    receiver_bin: '',
+    receiver_type: 'individual',
+    receiver_country_id: '',
+    receiver_city_id: '',
+    receiver_phone: '',
+    receiver_street: '',
+    receiver_house: '',
+    receiver_apartment: '',
+    receiver_location_description: '',
+    receiver_notes: '',
+    receiver_contact_id: ''
   };
 };
 
@@ -278,11 +299,12 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             searchPlaceholder="Search country"
             onChange={(val) => {
               const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-              formik.setFieldValue('receiver_country_id', val);
+              formik.setFieldValue('receiver_country_id', val ? Number(val) : '');
               formik.setFieldValue('receiver_city_id', '');
               setModalInfoData({
                 ...modalInfo,
-                receiver_country_name: selectedCountry?.name ?? ''
+                receiver_country_name: selectedCountry?.name ?? '',
+                receiver_city_name: ''
               });
             }}
             error={formik.errors.receiver_country_id as string}
@@ -298,12 +320,12 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             placeholder={formik.values.receiver_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"
             onChange={(val) => {
+              formik.setFieldValue('receiver_city_id', val ? Number(val) : '');
               const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
               setModalInfoData({
                 ...modalInfo,
                 receiver_city_name: selectedCity?.name ?? ''
               });
-              formik.setFieldValue('receiver_city_id', val);
             }}
             error={formik.errors.receiver_city_id as string}
             touched={formik.touched.receiver_city_id}

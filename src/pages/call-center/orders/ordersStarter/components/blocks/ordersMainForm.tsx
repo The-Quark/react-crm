@@ -62,50 +62,73 @@ const getInitialValues = (
   mainForm: IOrderFormValues | null,
   isEditMode: boolean
 ): IOrderFormValues => {
-  if (!isEditMode || isLoading || !mainForm) {
+  if (!isEditMode && mainForm) {
     return {
       id: 0,
-      application_id: applicationId || '',
+      application_id: mainForm.application_id || applicationId || '',
       status: undefined,
-      delivery_type: '',
-      delivery_category: 'b2b',
-      package_type: '',
-      weight: '',
-      width: '',
-      length: '',
-      height: '',
-      volume: '',
-      places_count: 0,
-      customs_clearance: false,
-      is_international: false,
-      price: '',
-      package_description: '',
-      special_wishes: '',
-      order_content: [],
-      sender_contact_id: ''
+      delivery_type: mainForm.delivery_type || '',
+      delivery_category: mainForm.delivery_category || 'b2b',
+      package_type: mainForm.package_type || '',
+      weight: mainForm.weight || '',
+      width: mainForm.width || '',
+      length: mainForm.length || '',
+      height: mainForm.height || '',
+      volume: mainForm.volume || '',
+      places_count: mainForm.places_count || 0,
+      customs_clearance: mainForm.customs_clearance || false,
+      is_international: mainForm.is_international || false,
+      price: mainForm.price || '',
+      package_description: mainForm.package_description || '',
+      special_wishes: mainForm.special_wishes || '',
+      order_content: mainForm.order_content || [],
+      sender_contact_id: mainForm.sender_contact_id || ''
+    };
+  }
+  if (isEditMode && mainForm) {
+    return {
+      id: mainForm.id || 0,
+      application_id: mainForm.application_id || applicationId || '',
+      status: mainForm.status || undefined,
+      delivery_type: mainForm.delivery_type || '',
+      delivery_category: mainForm.delivery_category || 'b2b',
+      package_type: mainForm.package_type || '',
+      weight: mainForm.weight || '',
+      width: mainForm.width || '',
+      length: mainForm.length || '',
+      height: mainForm.height || '',
+      volume: mainForm.volume || '',
+      places_count: mainForm.places_count || 0,
+      customs_clearance: mainForm.customs_clearance || false,
+      is_international: mainForm.is_international || false,
+      price: mainForm.price || '',
+      package_description: mainForm.package_description || '',
+      special_wishes: mainForm.special_wishes || '',
+      order_content: mainForm.order_content || [],
+      sender_contact_id: mainForm.sender_contact_id || ''
     };
   }
 
   return {
-    id: mainForm.id || 0,
-    application_id: mainForm.application_id || applicationId || '',
-    status: mainForm.status || undefined,
-    delivery_type: mainForm.delivery_type || '',
-    delivery_category: mainForm.delivery_category || 'b2b',
-    package_type: mainForm.package_type || '',
-    weight: mainForm.weight || '',
-    width: mainForm.width || '',
-    length: mainForm.length || '',
-    height: mainForm.height || '',
-    volume: mainForm.volume || '',
-    places_count: mainForm.places_count || 0,
-    customs_clearance: mainForm.customs_clearance || false,
-    is_international: mainForm.is_international || false,
-    price: mainForm.price || '',
-    package_description: mainForm.package_description || '',
-    special_wishes: mainForm.special_wishes || '',
-    order_content: mainForm.order_content || [],
-    sender_contact_id: mainForm.sender_contact_id || ''
+    id: 0,
+    application_id: applicationId || '',
+    status: undefined,
+    delivery_type: '',
+    delivery_category: 'b2b',
+    package_type: '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    volume: '',
+    places_count: 0,
+    customs_clearance: false,
+    is_international: false,
+    price: '',
+    package_description: '',
+    special_wishes: '',
+    order_content: [],
+    sender_contact_id: ''
   };
 };
 

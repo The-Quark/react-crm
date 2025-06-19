@@ -64,42 +64,62 @@ const getInitialValues = (
   isEditMode: boolean,
   mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  if (!isEditMode || isLoading || !mainForm) {
+  if (!isEditMode && mainForm) {
     return {
-      sender_first_name: '',
-      sender_last_name: '',
-      sender_patronymic: '',
-      sender_company_name: '',
-      sender_bin: '',
-      sender_type: 'individual',
-      sender_country_id: '',
-      sender_city_id: '',
-      sender_phone: '',
-      sender_street: '',
-      sender_house: '',
-      sender_apartment: '',
-      sender_location_description: '',
-      sender_notes: '',
-      sender_contact_id: ''
+      sender_first_name: mainForm?.sender_first_name || '',
+      sender_last_name: mainForm?.sender_last_name || '',
+      sender_patronymic: mainForm?.sender_patronymic || '',
+      sender_company_name: mainForm?.sender_company_name || '',
+      sender_bin: mainForm?.sender_bin || '',
+      sender_type: mainForm?.sender_type || (mainForm?.sender_bin ? 'legal' : 'individual'),
+      sender_country_id: mainForm?.sender_country_id ? Number(mainForm.sender_country_id) : '',
+      sender_city_id: mainForm?.sender_city_id ? Number(mainForm.sender_city_id) : '',
+      sender_phone: mainForm?.sender_phone || '',
+      sender_street: mainForm?.sender_street || '',
+      sender_house: mainForm?.sender_house || '',
+      sender_apartment: mainForm?.sender_apartment || '',
+      sender_location_description: mainForm?.sender_location_description || '',
+      sender_notes: mainForm?.sender_notes || '',
+      sender_contact_id: mainForm?.sender_contact_id || ''
+    };
+  }
+
+  if (isEditMode && mainForm) {
+    return {
+      sender_first_name: mainForm?.sender_first_name || '',
+      sender_last_name: mainForm?.sender_last_name || '',
+      sender_patronymic: mainForm?.sender_patronymic || '',
+      sender_company_name: mainForm?.sender_company_name || '',
+      sender_bin: mainForm?.sender_bin || '',
+      sender_type: mainForm?.sender_type || (mainForm?.sender_bin ? 'legal' : 'individual'),
+      sender_country_id: mainForm?.sender_country_id ? Number(mainForm.sender_country_id) : '',
+      sender_city_id: mainForm?.sender_city_id ? Number(mainForm.sender_city_id) : '',
+      sender_phone: mainForm?.sender_phone || '',
+      sender_street: mainForm?.sender_street || '',
+      sender_house: mainForm?.sender_house || '',
+      sender_apartment: mainForm?.sender_apartment || '',
+      sender_location_description: mainForm?.sender_location_description || '',
+      sender_notes: mainForm?.sender_notes || '',
+      sender_contact_id: mainForm?.sender_contact_id || ''
     };
   }
 
   return {
-    sender_first_name: mainForm?.sender_first_name || '',
-    sender_last_name: mainForm?.sender_last_name || '',
-    sender_patronymic: mainForm?.sender_patronymic || '',
-    sender_company_name: mainForm?.sender_company_name || '',
-    sender_bin: mainForm?.sender_bin || '',
-    sender_type: mainForm?.sender_type || (mainForm?.sender_bin ? 'legal' : 'individual'),
-    sender_country_id: mainForm?.sender_country_id || '',
-    sender_city_id: mainForm?.sender_city_id || '',
-    sender_phone: mainForm?.sender_phone || '',
-    sender_street: mainForm?.sender_street || '',
-    sender_house: mainForm?.sender_house || '',
-    sender_apartment: mainForm?.sender_apartment || '',
-    sender_location_description: mainForm?.sender_location_description || '',
-    sender_notes: mainForm?.sender_notes || '',
-    sender_contact_id: mainForm?.sender_contact_id || ''
+    sender_first_name: '',
+    sender_last_name: '',
+    sender_patronymic: '',
+    sender_company_name: '',
+    sender_bin: '',
+    sender_type: 'individual',
+    sender_country_id: '',
+    sender_city_id: '',
+    sender_phone: '',
+    sender_street: '',
+    sender_house: '',
+    sender_apartment: '',
+    sender_location_description: '',
+    sender_notes: '',
+    sender_contact_id: ''
   };
 };
 
@@ -275,11 +295,12 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             searchPlaceholder="Search country"
             onChange={(val) => {
               const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-              formik.setFieldValue('sender_country_id', val);
+              formik.setFieldValue('sender_country_id', val ? Number(val) : '');
               formik.setFieldValue('sender_city_id', '');
               setModalInfoData({
                 ...modalInfo,
-                sender_country_name: selectedCountry?.name ?? ''
+                sender_country_name: selectedCountry?.name ?? '',
+                sender_city_name: ''
               });
             }}
             error={formik.errors.sender_country_id as string}
@@ -295,7 +316,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             placeholder={formik.values.sender_city_id ? 'Select city' : 'Select country first'}
             searchPlaceholder="Search city"
             onChange={(val) => {
-              formik.setFieldValue('sender_city_id', val);
+              formik.setFieldValue('sender_city_id', val ? Number(val) : '');
               const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
               setModalInfoData({
                 ...modalInfo,
