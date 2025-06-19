@@ -34,7 +34,7 @@ const FastFormFormSteps = () => {
       await postFastForm(formValues);
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error creating order:', error);
+      console.error('Creating error:', error);
       throw error;
     }
   };

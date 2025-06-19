@@ -18,7 +18,7 @@ interface SharedAutocompleteProps {
   options: Option[];
   placeholder?: string;
   searchPlaceholder?: string;
-  onChange: (value: number | string) => void; // Изменено для поддержки строки
+  onChange: (value: number | string) => void;
   error?: string;
   touched?: boolean;
   searchTerm: string;

@@ -3,9 +3,15 @@ import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplicat
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils';
+import {
+  CACHE_TIME,
+  debounce,
+  PHONE_REG_EXP,
+  SEARCH_DEBOUNCE_DELAY,
+  SEARCH_PER_PAGE
+} from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
@@ -90,6 +96,7 @@ const getInitialValues = (
 
 export const FastFormContentApplicationForm = ({ onNext }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const { mainForm, setMainForm } = useFastFormContext();
 
   const resetClientFields = useCallback(() => {
@@ -102,7 +109,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
       client_type: 'individual',
       phone: '',
       email: '',
-      source: ''
+      source: '',
+      client_id: ''
     };
   }, []);
 
@@ -113,8 +121,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources({}),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getSources({ is_active: true }),
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -124,8 +132,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
     error: clientsError
   } = useQuery({
     queryKey: ['fastFormClients', searchTerm],
-    queryFn: () => getClients({}),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getClients({ search_application: searchTerm, per_page: SEARCH_PER_PAGE }),
+    staleTime: CACHE_TIME
   });
 
   const formik = useFormik({
@@ -140,6 +148,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
             ...values
           }
         });
+        setSearchTerm('');
+        setInputValue('');
         onNext();
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
@@ -158,9 +168,22 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
     queryKey: ['fastFormClientDetails', formik.values.client_id],
     queryFn: () =>
       getClients({ id: formik.values.client_id ? Number(formik.values.client_id) : undefined }),
-    staleTime: 60 * 60 * 1000,
+    staleTime: CACHE_TIME,
     enabled: !!formik.values.client_id
   });
+
+  const debouncedSetSearchTerm = useMemo(
+    () => debounce((term: string) => setSearchTerm(term), SEARCH_DEBOUNCE_DELAY),
+    []
+  );
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setInputValue(value);
+      debouncedSetSearchTerm(value);
+    },
+    [debouncedSetSearchTerm]
+  );
 
   const handleClientChange = useCallback(
     (val: string | number | null) => {
@@ -171,58 +194,70 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
         Object.entries(resetFields).forEach(([field, value]) => {
           formik.setFieldValue(field, value);
         });
-        formik.setFieldValue('company_name', '');
       }
     },
     [formik, resetClientFields, formik.values.client_id]
   );
 
-  useEffect(() => {
-    if (clientData?.result?.[0] && formik.values.client_id) {
-      const client = clientData.result[0];
-
-      const shouldUpdate =
-        formik.values.first_name !== (client.first_name || '') ||
-        formik.values.last_name !== (client.last_name || '') ||
-        formik.values.patronymic !== (client.patronymic || '') ||
-        formik.values.company_name !== (client.company_name || '') ||
-        formik.values.client_type !== (client.type || 'individual') ||
-        formik.values.phone !== (client.phone || '') ||
-        formik.values.email !== (client.email || '') ||
-        formik.values.source !== (client.source?.code || '');
-
-      if (shouldUpdate) {
-        formik.setValues((prevValues) => ({
-          ...prevValues,
-          first_name: client.first_name || '',
-          last_name: client.last_name || '',
-          patronymic: client.patronymic || '',
-          company_name: client.company_name || '',
-          client_type: client.type || 'individual',
-          phone: client.phone || '',
-          email: client.email || '',
-          source: client.source?.code || ''
-        }));
+  const handleClientTypeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newType = e.target.value as 'individual' | 'legal';
+      const currentClientId = formik.values.client_id;
+      formik.resetForm();
+      formik.setFieldValue('client_type', newType);
+      if (currentClientId) {
+        formik.setFieldValue('client_id', currentClientId);
       }
-    }
-  }, [clientData, formik.values.client_id]);
+    },
+    [formik]
+  );
 
-  const isLoading = sourcesLoading || clientsLoading || clientLoading;
+  useEffect(() => {
+    if (!clientData?.result?.[0] || !formik.values.client_id) return;
+
+    const client = clientData.result[0];
+    const currentValues = formik.values;
+
+    const fieldsToUpdate = {
+      first_name: client.first_name || '',
+      last_name: client.last_name || '',
+      patronymic: client.patronymic || '',
+      company_name: client.company_name || '',
+      client_type: client.type || 'individual',
+      phone: client.phone || '',
+      email: client.email || '',
+      source: client.source?.code || '',
+      bin: client.bin || ''
+    };
+
+    const hasChanges = Object.entries(fieldsToUpdate).some(
+      ([key, value]) => currentValues[key as keyof typeof currentValues] !== value
+    );
+
+    if (hasChanges) {
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        ...fieldsToUpdate
+      }));
+    }
+  }, [clientData?.result, formik.values.client_id]);
+
+  const isLoading = sourcesLoading || clientLoading;
+
+  const renderError = () => {
+    if (sourcesIsError) return <SharedError error={sourcesError} />;
+    if (clientsIsError) return <SharedError error={clientsError} />;
+    if (clientIsError) return <SharedError error={clientError} />;
+    return null;
+  };
 
   if (isLoading) {
     return <SharedLoading simple />;
   }
 
-  if (sourcesIsError) {
-    return <SharedError error={sourcesError} />;
-  }
-
-  if (clientsIsError) {
-    return <SharedError error={clientsError} />;
-  }
-
-  if (clientIsError) {
-    return <SharedError error={clientError} />;
+  const errorComponent = renderError();
+  if (errorComponent) {
+    return errorComponent;
   }
 
   return (
@@ -235,10 +270,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
             options={
               clientsData?.result?.map((client) => ({
                 id: client.id,
-                name:
-                  (client.first_name &&
-                    `${client?.first_name} ${client?.last_name}  ${client?.patronymic}`) ||
-                  client.company_name
+                name: client.search_application ?? ''
               })) ?? []
             }
             placeholder="Select client"
@@ -246,8 +278,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
             onChange={handleClientChange}
             error={formik.errors.client_id as string}
             touched={formik.touched.client_id}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
+            searchTerm={inputValue}
+            onSearchTermChange={handleSearchChange}
             loading={clientsLoading || clientLoading}
           />
 
@@ -260,20 +292,24 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
               { value: 'legal', label: 'Legal' }
             ]}
             disabled={!!formik.values.client_id}
+            onChange={handleClientTypeChange}
           />
 
-          {formik.values.client_type === 'legal' ? (
-            <>
-              <SharedInput name="company_name" label="Company name" formik={formik} />
-              <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
-            </>
-          ) : (
-            <>
-              <SharedInput name="first_name" label="First name" formik={formik} />
-              <SharedInput name="last_name" label="Last name" formik={formik} />
-              <SharedInput name="patronymic" label="Patronymic" formik={formik} />
-            </>
-          )}
+          <>
+            {formik.values.client_type === 'legal' && (
+              <>
+                <SharedInput name="company_name" label="Company name" formik={formik} />
+                <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
+              </>
+            )}
+            {formik.values.client_type === 'individual' && (
+              <>
+                <SharedInput name="first_name" label="First name" formik={formik} />
+                <SharedInput name="last_name" label="Last name" formik={formik} />
+                <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+              </>
+            )}
+          </>
 
           <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
 

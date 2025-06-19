@@ -128,7 +128,8 @@ export const ApplicationsStarterContent = ({
       client_type: 'individual',
       phone: '',
       email: '',
-      source: ''
+      source: '',
+      client_id: ''
     };
   }, []);
 
@@ -278,7 +279,7 @@ export const ApplicationsStarterContent = ({
   };
 
   if (isLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   const errorComponent = renderError();
@@ -329,18 +330,21 @@ export const ApplicationsStarterContent = ({
             </>
           )}
 
-          {formik.values.client_type === 'legal' ? (
-            <>
-              <SharedInput name="company_name" label="Company name" formik={formik} />
-              <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
-            </>
-          ) : (
-            <>
-              <SharedInput name="first_name" label="First name" formik={formik} />
-              <SharedInput name="last_name" label="Last name" formik={formik} />
-              <SharedInput name="patronymic" label="Patronymic" formik={formik} />
-            </>
-          )}
+          <>
+            {formik.values.client_type === 'legal' && (
+              <>
+                <SharedInput name="company_name" label="Company name" formik={formik} />
+                <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
+              </>
+            )}
+            {formik.values.client_type === 'individual' && (
+              <>
+                <SharedInput name="first_name" label="First name" formik={formik} />
+                <SharedInput name="last_name" label="Last name" formik={formik} />
+                <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+              </>
+            )}
+          </>
 
           <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
 
