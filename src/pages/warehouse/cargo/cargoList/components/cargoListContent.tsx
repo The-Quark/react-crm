@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getCargo } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteCargo, getCargo } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { CargoToolbar } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoToolbar.tsx';
 import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoColumns.tsx';
@@ -12,14 +12,17 @@ import { CargoStatus } from '@/api/enums';
 export const CargoListContent = () => {
   const [searchTermCode, setSearchTermCode] = useState('');
   const [searchTermPackage, setSearchTermPackage] = useState('');
+  const [status, setStatus] = useState<CargoStatus>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
-  const [status, setStatus] = useState<CargoStatus>();
-  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -44,11 +47,32 @@ export const CargoListContent = () => {
     refetchOnWindowFocus: true
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteCargo(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['cargo'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting cargo:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const columns = useCargoColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -124,6 +148,14 @@ export const CargoListContent = () => {
         }}
       />
       <CargoModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Cargo"
+        description="Are you sure you want to delete this cargo? This action cannot be undone."
+        isLoading={isDeleting}
+      />
     </Container>
   );
 };

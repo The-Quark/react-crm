@@ -11,9 +11,13 @@ import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
-export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Cargo>[] => {
+export const useCargoColumns = ({
+  onRowClick,
+  onDeleteClick
+}: UseColumnsProps): ColumnDef<Cargo>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -166,7 +170,8 @@ export const useCargoColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Carg
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {CargoMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>

@@ -8,11 +8,8 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deletePackage } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
 
 interface MenuOptionsProps {
   id?: number;
