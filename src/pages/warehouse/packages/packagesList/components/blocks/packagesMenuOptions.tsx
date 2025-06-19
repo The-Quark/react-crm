@@ -16,27 +16,13 @@ import { useQueryClient } from '@tanstack/react-query';
 
 interface MenuOptionsProps {
   id?: number;
+  onDeleteClick: (id: number) => void;
 }
 
-export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
-  const queryClient = useQueryClient();
-
-  const handleDelete = async () => {
-    if (!id) {
-      toast.error('ID not provided');
-      return;
-    }
-    try {
-      await deletePackage(id);
-      await queryClient.invalidateQueries({ queryKey: ['packages'] });
-      toast.success('Package deleted');
-    } catch {
-      toast.error('Failed to delete package');
-    }
-  };
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
@@ -60,7 +46,7 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
-          <MenuItem onClick={handleDelete}>
+          <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />

@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getPackages } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deletePackage, getPackages } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesColumns.tsx';
 import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesToolbar.tsx';
@@ -11,14 +11,17 @@ import { PackageStatus } from '@/api/enums';
 
 export const PackagesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [status, setStatus] = useState<PackageStatus>();
+  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
-  const [status, setStatus] = useState<PackageStatus>();
-  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -41,11 +44,32 @@ export const PackagesListContent = () => {
     refetchOnWindowFocus: true
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deletePackage(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['packages'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting package:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const columns = usePackagesColumns({
     onRowClick: (id) => {
       setSelectedId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -112,6 +136,14 @@ export const PackagesListContent = () => {
         }}
       />
       <PackagesModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Package"
+        description="Are you sure you want to delete this package? This action cannot be undone."
+        isLoading={isDeleting}
+      />
     </Container>
   );
 };
