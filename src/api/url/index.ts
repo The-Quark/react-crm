@@ -81,3 +81,5 @@ export const FILE_TYPE = `${api}/filetype/manage`;
 export const UNIFIED_CREATE = `${api}/unified/create`;
 
 export const ORDER_DRAFT = `${api}/order/draft`;
+
+export const ORDER_STATUS_CHANGE = `${api}/order/status_change`;

@@ -13,7 +13,8 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import { PackageStatus } from '@/api/enums';
 
 interface Props {
   open: boolean;
@@ -37,9 +38,9 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
     ? packageData.hawb_pdf
     : `https://${packageData?.hawb_pdf}`;
 
-  const handlePackageToTask = (packageId: number | null) => {
-    if (packageId !== null) {
-      navigate(`/tasks/starter?package_id=${packageId}`);
+  const handleCreateCargo = (applicationId: number | null) => {
+    if (applicationId !== null) {
+      navigate(`/warehouse/cargo/starter?package_id=${applicationId}`);
     }
   };
 
@@ -90,7 +91,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                   </div>
                 </div>
                 {packageData?.client && packageData.client.type === 'legal' ? (
-                  <div className="border-b pb-4">
+                  <div className="">
                     <h4 className="text-lg font-semibold mb-3">Company</h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -174,18 +175,20 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
         </DialogBody>
         {canManage && (
           <DialogActions>
-            <a
-              className="btn btn-md btn-light mr-3 mb-3"
-              href={`/warehouse/packages/starter/${id}`}
-            >
-              Update Package
-            </a>
-            <button
-              className="btn btn-md btn-primary mr-3 mb-3"
-              onClick={() => handlePackageToTask(id)}
-            >
-              Create Task
-            </button>
+            <div className="flex gap-4 mb-2 mr-3">
+              <a className="btn btn-md btn-light" href={`/warehouse/packages/starter/${id}`}>
+                Update Package
+              </a>
+              {data?.result[0].status === PackageStatus.READY_FOR_SHIPMENT && (
+                <button
+                  className="btn btn-md btn-primary"
+                  onClick={() => handleCreateCargo(id)}
+                  disabled={id === null}
+                >
+                  Create Cargo
+                </button>
+              )}
+            </div>
           </DialogActions>
         )}
       </DialogContent>

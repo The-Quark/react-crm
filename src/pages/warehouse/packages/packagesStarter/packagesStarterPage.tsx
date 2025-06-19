@@ -24,6 +24,7 @@ export const PackagesStarterPage = () => {
   if (isEditMode && packageIsError) {
     return <SharedError error={packageError} />;
   }
+
   return (
     <Container>
       {isEditMode && packageLoading ? (

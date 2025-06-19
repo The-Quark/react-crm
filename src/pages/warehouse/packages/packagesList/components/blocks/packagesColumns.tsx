@@ -122,6 +122,22 @@ export const usePackagesColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<P
         }
       },
       {
+        accessorFn: (row) => row?.assigned_user,
+        id: 'assigned user',
+        header: ({ column }) => <DataGridColumnHeader title="Assigned user" column={column} />,
+        enableSorting: true,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original?.assigned_user}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,

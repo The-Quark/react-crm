@@ -85,11 +85,18 @@ interface Client {
 export interface Package {
   id: number;
   hawb: string;
+  assigned_user: string | null;
   delivery_category: string;
   status: PackageStatus;
   order_id: number;
   cargo_id: number | null;
-  weight: string;
+  weight: string | null;
+  width: string | null;
+  length: string | null;
+  height: string | null;
+  volume: string | null;
+  places_count: string | null;
+  price: string | null;
   dimensions: string;
   has_photo: boolean;
   has_invoice_pdf: boolean;

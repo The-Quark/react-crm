@@ -14,6 +14,7 @@ import { DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { OrderStatus } from '@/api/enums';
 
 interface Props {
   open: boolean;
@@ -33,12 +34,6 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const order = data?.result?.[0];
 
   const url = order?.hawb_pdf.startsWith('http') ? order.hawb_pdf : `https://${order?.hawb_pdf}`;
-
-  const handleOrderToTask = (orderId: number | null) => {
-    if (orderId !== null) {
-      navigate(`/tasks/starter?order_id=${orderId}`);
-    }
-  };
 
   const handleOrderToPakcage = (orderId: number | null) => {
     if (orderId !== null) {
@@ -71,19 +66,27 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Full Name</label>
-                      <div className="flex columns-1 w-full">{order.sender.first_name || '-'}</div>
+                      <div className="flex columns-1 w-full">{order.sender.full_name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Phone</label>
                       <div className="flex columns-1 w-full">{order.sender.phone || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Address</label>
-                      <div className="flex columns-1 w-full">
-                        {`${order.sender.street || ''}, ${order.sender.house || ''}, Apt ${
-                          order.sender.apartment || ''
-                        }, City ID: ${order.sender.city_id || '-'}`}
-                      </div>
+                      <label className="form-label max-w-56 text-gray-600">City</label>
+                      <div className="flex columns-1 w-full">{order.sender.city?.name || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Street</label>
+                      <div className="flex columns-1 w-full">{order.sender?.street || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">House</label>
+                      <div className="flex columns-1 w-full">{order.sender?.house || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Apartment</label>
+                      <div className="flex columns-1 w-full">{order.sender?.apartment || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Notes</label>
@@ -98,20 +101,30 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Full Name</label>
-                      <div className="flex columns-1 w-full">
-                        {order.receiver.first_name || '-'}
-                      </div>
+                      <div className="flex columns-1 w-full">{order.receiver.full_name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Phone</label>
                       <div className="flex columns-1 w-full">{order.receiver.phone || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Address</label>
+                      <label className="form-label max-w-56 text-gray-600">City</label>
                       <div className="flex columns-1 w-full">
-                        {`${order.receiver.street || ''}, ${order.receiver.house || ''}, Apt ${
-                          order.receiver.apartment || ''
-                        }, City ID: ${order.receiver.city_id || '-'}`}
+                        {order.receiver.city?.name || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Street</label>
+                      <div className="flex columns-1 w-full">{order.receiver?.street || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">House</label>
+                      <div className="flex columns-1 w-full">{order.receiver?.house || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Apartment</label>
+                      <div className="flex columns-1 w-full">
+                        {order.receiver?.apartment || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -230,18 +243,14 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
             >
               Update Order
             </a>
-            <button
-              className="btn btn-md btn-primary mr-3 mb-3"
-              onClick={() => handleOrderToTask(id)}
-            >
-              Create Task
-            </button>
-            <button
-              className="btn btn-md btn-primary mr-3 mb-3"
-              onClick={() => handleOrderToPakcage(id)}
-            >
-              Create Package
-            </button>
+            {order?.status === OrderStatus.PACKAGE_AWAITING && (
+              <button
+                className="btn btn-md btn-primary mr-3 mb-3"
+                onClick={() => handleOrderToPakcage(id)}
+              >
+                Create Package
+              </button>
+            )}
           </DialogActions>
         )}
       </DialogContent>

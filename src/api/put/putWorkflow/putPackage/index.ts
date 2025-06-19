@@ -7,12 +7,11 @@ import { cleanValues } from '@/utils/lib/helpers.ts';
 export interface IPackagePutFormValues extends IPackageFormValues {
   id: number;
   status: PackageStatus;
-  cargo_id: number | string;
 }
 
 export const putPackage = async (
   id: number,
-  data: Omit<IPackagePutFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: IPackagePutFormValues
 ): Promise<IPackagePutFormValues> => {
   const cleanedData = cleanValues(data);
   return await axios
