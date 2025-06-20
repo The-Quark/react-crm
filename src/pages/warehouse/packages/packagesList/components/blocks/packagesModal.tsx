@@ -75,14 +75,42 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                       <div className="flex columns-1 w-full">{packageData.status || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Weight</label>
-                      <div className="flex columns-1 w-full">{packageData.weight || '-'}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Document</label>
                       <a className="link" href={url} target="_blank" rel="noopener noreferrer">
                         hawb.pdf
                       </a>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Weight</label>
+                      <div className="flex columns-1 w-full">{packageData.weight || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Width</label>
+                      <div className="flex columns-1 w-full">{packageData.width || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Height</label>
+                      <div className="flex columns-1 w-full">{packageData.height || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Length</label>
+                      <div className="flex columns-1 w-full">{packageData.length || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Width</label>
+                      <div className="flex columns-1 w-full">{packageData.width || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Volume</label>
+                      <div className="flex columns-1 w-full">{packageData.volume || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Place count</label>
+                      <div className="flex columns-1 w-full">{packageData.places_count || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">Price</label>
+                      <div className="flex columns-1 w-full">{packageData.price || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Dimensions</label>
@@ -164,6 +192,36 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                         <label className="form-label max-w-56 text-gray-600">Email</label>
                         <div className="flex columns-1 w-full">
                           {packageData.client?.email || '-'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {packageData?.assigned_user && (
+                  <div className="">
+                    <h4 className="text-lg font-semibold mb-3">Assigned User</h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Full name</label>
+                        <div className="flex columns-1 w-full">
+                          {(packageData.assigned_user?.last_name || '-') +
+                            ' ' +
+                            (packageData.assigned_user?.first_name || '-') +
+                            ' ' +
+                            (packageData.assigned_user?.patronymic || '-')}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <div className="flex columns-1 w-full">
+                          {packageData.assigned_user?.phone || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">Email</label>
+                        <div className="flex columns-1 w-full">
+                          {packageData.assigned_user?.email || '-'}
                         </div>
                       </div>
                     </div>

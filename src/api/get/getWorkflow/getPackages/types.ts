@@ -96,7 +96,7 @@ export interface Package {
   length: string | null;
   height: string | null;
   volume: string | null;
-  places_count: string | null;
+  places_count: number | null;
   price: string | null;
   dimensions: string;
   has_photo: boolean;

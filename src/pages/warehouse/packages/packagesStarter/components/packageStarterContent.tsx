@@ -18,7 +18,6 @@ import { OrderStatus, PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
-import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types.ts';
 
 interface Props {
   isEditMode: boolean;
