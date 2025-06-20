@@ -202,12 +202,6 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <div className="flex columns-1 w-full">{order.weight || '-'} kg</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Document</label>
-                      <a className="link" href={url} target="_blank" rel="noopener noreferrer">
-                        hawb.pdf
-                      </a>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">Dimensions</label>
                       <div className="flex columns-1 w-full">
                         {`${order.width || '-'} x ${order.length || '-'} x ${order.volume || '-'} cm`}
@@ -229,6 +223,43 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <label className="form-label max-w-56 text-gray-600">Delivery Category</label>
                       <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>
                     </div>
+                  </div>
+                </div>
+
+                {/* SVG */}
+
+                <div className="border-t pt-4">
+                  <h4 className="text-lg font-semibold mb-3">QR Code</h4>
+                  <div className="flex flex-col items-start">
+                    {order.hawb_pdf ? (
+                      <>
+                        <img
+                          src={url}
+                          alt="Order QR Code"
+                          className="w-48 h-48 object-contain border border-gray-200 rounded-lg p-2"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.outerHTML = `
+                              <div class="text-red-500 text-center">
+                                Failed to load QR code. 
+                                <a href="${url}" target="_blank" rel="noopener noreferrer" class="link ml-1">
+                                  Open directly
+                                </a>
+                              </div>`;
+                          }}
+                        />
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 text-sm text-blue-600 hover:underline"
+                        >
+                          Download QR Code
+                        </a>
+                      </>
+                    ) : (
+                      <div className="text-gray-500">No QR code available</div>
+                    )}
                   </div>
                 </div>
               </div>

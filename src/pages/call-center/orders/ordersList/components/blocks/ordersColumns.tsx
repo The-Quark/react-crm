@@ -120,10 +120,16 @@ export const useOrdersColumns = ({
             : `https://${info.row.original.hawb_pdf}`;
 
           return (
-            <div className="flex items-center gap-1.5">
-              <a className="link" href={url} target="_blank" rel="noopener noreferrer">
-                qr.pdf
-              </a>
+            <div className="flex items-center gap-1.5 group justify-center">
+              <img
+                src={url}
+                alt="QR Code"
+                className="w-14 h-14 object-contain transition-transform group-hover:scale-150 self-center"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.outerHTML = `<a class="link" href="${url}" target="_blank" rel="noopener noreferrer">qr.svg</a>`;
+                }}
+              />
             </div>
           );
         },
