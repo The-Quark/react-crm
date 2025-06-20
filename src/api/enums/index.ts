@@ -80,7 +80,6 @@ export enum TemplateType {
 
 export enum CargoStatus {
   FORMED = 'formed',
-  ARRIVED_AIRPORT_SENDER = 'arrived_airport_sender',
   ACCEPTED_AIRPORT_SENDER = 'accepted_airport_sender',
   ARRIVED_AIRPORT_RECEIVER = 'arrived_airport_receiver',
   AWAITING_ACCEPT_AIRPORT_SENDER = 'awaiting_accept_airport_sender',
@@ -103,7 +102,8 @@ export enum PackageStatus {
   READY_FOR_DELIVERY = 'ready_for_delivery',
   DELIVERED = 'delivered',
   DAMAGED = 'damaged',
-  DELAYED = 'delayed'
+  DELAYED = 'delayed',
+  PACKAGE_RECEIVED = 'package_received'
 }
 
 export enum OrderStatus {
