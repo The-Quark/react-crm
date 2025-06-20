@@ -9,3 +9,4 @@ export * from './postPackageUpload';
 export * from './postOrderCalculate';
 export * from './postFastForm';
 export * from './postOrderDraft';
+export * from './postPackageAssignUser';
