@@ -5,7 +5,7 @@ import { CargoListContent } from '@/pages/warehouse/cargo/cargoList/components/c
 export const CargoListPage = () => {
   return (
     <>
-      <SharedHeader />
+      <SharedHeader />s
       <CargoListContent />
     </>
   );

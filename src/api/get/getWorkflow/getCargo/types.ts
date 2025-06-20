@@ -66,6 +66,7 @@ export interface Cargo {
   media: Media[];
   company: Company;
   packages: any[];
+  delivery_category: string[] | null;
 }
 
 export interface CargoResponse extends IPagination {

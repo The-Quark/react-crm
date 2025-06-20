@@ -60,7 +60,7 @@ export const useCargoColumns = ({
         }
       },
       {
-        accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '), // Для сортировки/фильтрации
+        accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '),
         id: 'hawb',
         header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
         enableSorting: false,
@@ -93,6 +93,25 @@ export const useCargoColumns = ({
         meta: {
           headerClassName: 'min-w-[100px]',
           cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row?.delivery_category?.map((category) => category).join(', ') ?? '',
+        id: 'delivery category',
+        header: ({ column }) => <DataGridColumnHeader title="Delivery Category" column={column} />,
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex flex-col gap-1">
+            {info.row?.original?.delivery_category?.map((category, index) => (
+              <div key={`${category}-${index}`} className="flex items-center gap-1.5">
+                <div className="leading-none text-gray-800 font-normal">{category}</div>
+              </div>
+            )) ?? null}
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal py-2'
         }
       },
       {
