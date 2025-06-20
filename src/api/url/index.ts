@@ -85,3 +85,5 @@ export const ORDER_DRAFT = `${api}/order/draft`;
 export const ORDER_STATUS_CHANGE = `${api}/order/status_change`;
 
 export const PACKAGE_ASSIGN_USER = `${api}/package/assign-user`;
+
+export const ORDER_MY_DRAFTS = `${api}/order/my-drafts`;

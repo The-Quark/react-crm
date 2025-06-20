@@ -98,7 +98,8 @@ import {
   ApplicationsStarterPage,
   OrdersStarterPage,
   OrdersListPage,
-  FastFormStarterPage
+  FastFormStarterPage,
+  MyDraftsPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -175,6 +176,7 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/my-drafts" element={<MyDraftsPage />} />
         <Route path="/call-center/fast-form/start" element={<FastFormStarterPage />} />
         <Route path="/warehouse/packages/starter" element={<PackagesStarterPage />} />
         <Route path="/warehouse/packages/starter/:id" element={<PackagesStarterPage />} />

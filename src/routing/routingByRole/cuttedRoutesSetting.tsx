@@ -40,6 +40,7 @@ import {
   ApplicationsListPage,
   ApplicationsStarterPage,
   FastFormStarterPage,
+  MyDraftsPage,
   OrdersListPage,
   OrdersStarterPage
 } from '@/pages/call-center';
@@ -227,6 +228,7 @@ const routeConfig = [
         element: <OrdersStarterPage />
       },
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/my-drafts', element: <MyDraftsPage /> },
       { path: '/call-center/fast-form/starter', element: <FastFormStarterPage /> },
       { path: '/warehouse/packages/starter', element: <PackagesStarterPage /> },
       {

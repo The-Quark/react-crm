@@ -5,9 +5,11 @@ import { Menu, MenuItem, MenuLink, MenuToggle } from '@/components';
 import { DropdownUser } from '@/partials/dropdowns/user';
 import { DropdownNotifications } from '@/partials/dropdowns/notifications';
 import { useLanguage } from '@/i18n';
-import { getUserNotifications, useCurrentUser } from '@/api/get';
+import { getUserNotifications } from '@/api/get';
 import { useQuery } from '@tanstack/react-query';
 import { INotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
@@ -15,9 +17,11 @@ const HeaderTopbar = () => {
   const { isRTL } = useLanguage();
   const itemUserRef = useRef<any>(null);
   const itemNotificationsRef = useRef<any>(null);
-  const { data: currentUser } = useCurrentUser();
   const [notificationType, setNotificationType] = useState<'task' | 'application'>('task');
   const [pageIndex, setPageIndex] = useState<number>(0);
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading, isError } = useQuery<INotificationResponse>({
     queryKey: ['notifications', notificationType, pageIndex],
@@ -48,16 +52,30 @@ const HeaderTopbar = () => {
 
   return (
     <div className="flex items-center gap-2 lg:gap-3.5">
-      <Menu>
-        <MenuItem>
-          <MenuLink
-            path="/call-center/fast-form/start"
-            className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
-          >
-            <KeenIcon icon="rocket" />
-          </MenuLink>
-        </MenuItem>
-      </Menu>
+      {canManage && (
+        <>
+          <Menu>
+            <MenuItem>
+              <MenuLink
+                path="/call-center/my-drafts"
+                className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
+              >
+                <KeenIcon icon="trash" />
+              </MenuLink>
+            </MenuItem>
+          </Menu>
+          <Menu>
+            <MenuItem>
+              <MenuLink
+                path="/call-center/fast-form/start"
+                className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
+              >
+                <KeenIcon icon="rocket" />
+              </MenuLink>
+            </MenuItem>
+          </Menu>
+        </>
+      )}
 
       <Menu>
         <MenuItem
