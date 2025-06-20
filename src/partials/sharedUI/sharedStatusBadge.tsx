@@ -192,10 +192,6 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Formed',
       color: 'badge-success'
     },
-    [CargoStatus.ARRIVED_AIRPORT_SENDER]: {
-      label: 'Arrived at Sender Airport',
-      color: 'badge-info'
-    },
     [CargoStatus.ARRIVED_AIRPORT_RECEIVER]: {
       label: 'Arrived at Receiver Airport',
       color: 'badge-info'

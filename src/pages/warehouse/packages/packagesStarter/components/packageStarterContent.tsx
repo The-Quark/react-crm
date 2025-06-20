@@ -248,7 +248,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
           {isEditMode && (
             <>
-              s
               <SharedSelect
                 name="status"
                 label="Status"
