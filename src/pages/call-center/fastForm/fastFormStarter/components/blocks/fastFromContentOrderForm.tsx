@@ -13,10 +13,17 @@ import { useFormik } from 'formik';
 import { getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
-import { decimalValidation } from '@/utils';
+import {
+  CACHE_TIME,
+  cleanValues,
+  decimalValidation,
+  LOCAL_STORAGE_CURRENCY_KEY,
+  mockDeliveryCategories
+} from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
+import { DeliveryCategories } from '@/api/enums';
 
 interface Props {
   onNext: () => void;
@@ -28,7 +35,15 @@ const formSchema = Yup.object().shape({
     .typeError('Delivery type is required')
     .required('Delivery type is required'),
   delivery_category: Yup.string()
-    .oneOf(['b2b', 'b2c', 'c2c', 'c2b'], 'Invalid delivery category')
+    .oneOf(
+      [
+        DeliveryCategories.B2B,
+        DeliveryCategories.B2C,
+        DeliveryCategories.C2C,
+        DeliveryCategories.C2B
+      ],
+      'Invalid delivery category'
+    )
     .required('Delivery category is required'),
   package_type: Yup.number()
     .typeError('Package type is required')
@@ -67,7 +82,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
 
   return {
     delivery_type: '',
-    delivery_category: 'b2b',
+    delivery_category: DeliveryCategories.B2B,
     package_type: '',
     weight: '',
     width: '',
@@ -86,17 +101,22 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
 };
 
 export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
-  const { mainForm, setMainForm } = useFastFormContext();
+  const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
   const { currentLanguage } = useLanguage();
+  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+
+  console.log('Context order: ', mainForm);
 
   const formik = useFormik({
     initialValues: getInitialValues(mainForm?.order as IOrderFormValues),
     validationSchema: formSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
+      const cleanData = cleanValues(values);
       setMainForm({
         ...mainForm,
         order: {
-          ...values
+          ...(cleanData as IOrderFormValues)
         }
       });
       onNext();
@@ -134,7 +154,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   } = useQuery({
     queryKey: ['fastFormDeliveryTypes'],
     queryFn: () => getDeliveryTypes({}),
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -148,7 +168,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
       getPackageTypes({
         language_code: currentLanguage.code
       }),
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   const isFormLoading = deliveryTypesLoading || packageTypesLoading;
@@ -184,15 +204,23 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
                 value: type.id
               })) || []
             }
+            onChange={(value) => {
+              formik.setFieldValue('delivery_type', value);
+              const selectedType = deliveryTypesData?.result?.find((type) => type.id === value);
+              setModalInfoData({
+                ...modalInfo,
+                delivery_type_name: selectedType?.name ?? ''
+              });
+            }}
           />
           <SharedSelect
             name="delivery_category"
             label="Delivery Category"
             placeholder="Select delivery category"
             formik={formik}
-            options={['b2b', 'b2c', 'c2c', 'c2b'].map((category) => ({
-              label: category,
-              value: category
+            options={mockDeliveryCategories.map((category) => ({
+              label: category.name,
+              value: category.value
             }))}
           />
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
@@ -226,6 +254,14 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
                 value: type.id
               })) || []
             }
+            onChange={(value) => {
+              formik.setFieldValue('package_type', value);
+              const selectedType = packageTypesData?.result?.find((type) => type.id === value);
+              setModalInfoData({
+                ...modalInfo,
+                package_type_name: selectedType?.language[0]?.name || selectedType?.code || ''
+              });
+            }}
           />
           <SharedInputTags
             value={
@@ -276,7 +312,13 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             formik={formik}
             disabled
           />
-          <SharedInput name="price" label="Price" formik={formik} type="text" disabled />
+          <SharedInput
+            name="price"
+            label={`Price (${currentCurrency})`}
+            formik={formik}
+            type="text"
+            disabled
+          />
           <SharedTextArea name="package_description" label="Package Description" formik={formik} />
           <SharedTextArea name="special_wishes" label="Special Wishes" formik={formik} />
 

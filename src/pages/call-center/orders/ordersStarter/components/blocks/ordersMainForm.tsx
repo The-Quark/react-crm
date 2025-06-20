@@ -15,7 +15,7 @@ import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate 
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
-import { mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
+import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
@@ -114,7 +114,7 @@ const getInitialValues = (
     application_id: applicationId || '',
     status: undefined,
     delivery_type: '',
-    delivery_category: 'b2b',
+    delivery_category: DeliveryCategories.B2B,
     package_type: '',
     weight: '',
     width: '',
@@ -305,9 +305,9 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             label="Delivery Category"
             placeholder="Select delivery category"
             formik={formik}
-            options={['b2b', 'b2c', 'c2c', 'c2b'].map((category) => ({
-              label: category,
-              value: category
+            options={mockDeliveryCategories.map((category) => ({
+              label: category.name,
+              value: category.value
             }))}
           />
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">

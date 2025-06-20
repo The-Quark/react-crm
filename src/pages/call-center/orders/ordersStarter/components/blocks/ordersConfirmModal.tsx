@@ -146,7 +146,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                     <div className="flex columns-1 w-full">{mainFormData?.height || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Volume</label>
+                    <label className="form-label max-w-56 text-gray-600">Volume (см³)</label>
                     <div className="flex columns-1 w-full">{mainFormData?.volume || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -181,11 +181,13 @@ export const OrdersConfirmModal: FC<Props> = ({
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Full name</label>
                     <div className="flex columns-1 w-full">
-                      {formatFullName(
-                        mainFormData?.sender_first_name,
-                        mainFormData?.sender_last_name,
-                        mainFormData?.sender_patronymic
-                      )}
+                      {mainFormData?.sender_type === 'legal'
+                        ? mainFormData?.sender_company_name
+                        : formatFullName(
+                            mainFormData?.sender_first_name,
+                            mainFormData?.sender_last_name,
+                            mainFormData?.sender_patronymic
+                          )}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -238,11 +240,13 @@ export const OrdersConfirmModal: FC<Props> = ({
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Full name</label>
                     <div className="flex columns-1 w-full">
-                      {formatFullName(
-                        mainFormData?.receiver_first_name,
-                        mainFormData?.receiver_last_name,
-                        mainFormData?.receiver_patronymic
-                      )}
+                      {mainFormData?.receiver_type === 'legal'
+                        ? mainFormData?.receiver_company_name
+                        : formatFullName(
+                            mainFormData?.receiver_first_name,
+                            mainFormData?.receiver_last_name,
+                            mainFormData?.receiver_patronymic
+                          )}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

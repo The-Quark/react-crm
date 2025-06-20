@@ -13,6 +13,7 @@ import {
   IFastFormContext,
   useFastFormContext
 } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
+import { LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -22,8 +23,9 @@ interface Props {
 
 export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mainForm } = useFastFormContext();
+  const { mainForm, modalInfo } = useFastFormContext();
   const navigate = useNavigate();
+  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
@@ -66,10 +68,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                 <h4 className="text-lg font-semibold mb-3">Application info</h4>
                 <div className="grid gap-2.5">
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">
-                      {mainForm?.application?.client_type === 'legal' ? 'Company' : 'Full name'}
-                      Application
-                    </label>
+                    <label className="form-label max-w-56 text-gray-600">Application</label>
                     <div className="flex columns-1 w-full">
                       {mainForm?.application?.client_type === 'legal'
                         ? mainForm.application.company_name
@@ -127,7 +126,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Delivery type</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.delivery_type || '-'}
+                      {modalInfo?.delivery_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -145,7 +144,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Package Type</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.package_type || '-'}
+                      {modalInfo?.package_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -165,19 +164,19 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                     <div className="flex columns-1 w-full">{mainForm?.order?.weight || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Width (m)</label>
+                    <label className="form-label max-w-56 text-gray-600">Width (cm)</label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.width || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Length (m)</label>
+                    <label className="form-label max-w-56 text-gray-600">Length (cm)</label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.length || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Height (m)</label>
+                    <label className="form-label max-w-56 text-gray-600">Height (cm)</label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.height || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Volume</label>
+                    <label className="form-label max-w-56 text-gray-600">Volume (см³)</label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.volume || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -187,7 +186,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56 text-gray-600">Price ($)</label>
+                    <label className="form-label max-w-56 text-gray-600">{`Price (${currentCurrency})`}</label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.price || '-'}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -212,23 +211,25 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Full name</label>
                     <div className="flex columns-1 w-full">
-                      {formatFullName(
-                        mainForm?.order?.sender?.first_name,
-                        mainForm?.order?.sender?.last_name,
-                        mainForm?.order?.sender?.patronymic
-                      )}
+                      {mainForm?.order?.sender?.type === 'legal'
+                        ? mainForm?.order.sender.company_name
+                        : formatFullName(
+                            mainForm?.order?.sender?.first_name,
+                            mainForm?.order?.sender?.last_name,
+                            mainForm?.order?.sender?.patronymic
+                          )}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Country</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.sender?.country_id || '-'}
+                      {modalInfo?.sender_country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">City</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.sender?.city_id || '-'}
+                      {modalInfo?.sender_city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -267,29 +268,31 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
               </div>
 
               {/* Receiver */}
-              <div className="border-b pb-4">
+              <div className="">
                 <h4 className="text-lg font-semibold mb-3">Receiver info</h4>
                 <div className="grid gap-2.5">
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Full name</label>
                     <div className="flex columns-1 w-full">
-                      {formatFullName(
-                        mainForm?.order?.receiver?.first_name,
-                        mainForm?.order?.receiver?.last_name,
-                        mainForm?.order?.receiver?.patronymic
-                      )}
+                      {mainForm?.order?.receiver?.type === 'legal'
+                        ? mainForm?.order.receiver.company_name
+                        : formatFullName(
+                            mainForm?.order?.receiver?.first_name,
+                            mainForm?.order?.receiver?.last_name,
+                            mainForm?.order?.receiver?.patronymic
+                          )}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">Country</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.receiver?.country_id || '-'}
+                      {modalInfo?.receiver_country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">City</label>
                     <div className="flex columns-1 w-full">
-                      {mainForm?.order?.receiver?.city_id || '-'}
+                      {modalInfo?.receiver_city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -330,7 +333,6 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
           </div>
         </DialogBody>
         <DialogActions>
-          <button className="btn btn-md btn-light mr-3 mb-3">Send To Drafts</button>
           <button
             className="btn btn-md btn-primary mr-3 mb-3"
             onClick={handleConfirm}

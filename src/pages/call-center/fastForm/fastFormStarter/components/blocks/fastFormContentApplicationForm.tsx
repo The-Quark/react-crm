@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import {
   CACHE_TIME,
+  cleanValues,
   debounce,
   PHONE_REG_EXP,
   SEARCH_DEBOUNCE_DELAY,
@@ -99,6 +100,8 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
   const [inputValue, setInputValue] = useState('');
   const { mainForm, setMainForm } = useFastFormContext();
 
+  console.log('Context application: ', mainForm);
+
   const resetClientFields = useCallback(() => {
     return {
       first_name: '',
@@ -141,11 +144,12 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting }) => {
+      const cleanData = cleanValues(values);
       try {
         setMainForm({
           ...mainForm,
           application: {
-            ...values
+            ...(cleanData as IApplicationPostFormValues)
           }
         });
         setSearchTerm('');
