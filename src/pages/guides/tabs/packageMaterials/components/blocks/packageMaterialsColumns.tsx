@@ -21,7 +21,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -35,7 +35,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -50,7 +50,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
@@ -64,7 +64,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.price,
         id: 'price',
         header: ({ column }) => <DataGridColumnHeader title="Price" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.price}</div>
@@ -79,7 +79,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.unit.name,
         id: 'unit name',
         header: ({ column }) => <DataGridColumnHeader title="Unit" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -96,7 +96,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.company.map((c) => c.company_name).join(', '),
         id: 'company_name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const companyNames = info.row.original.company.map((c) => c.company_name);
           return (
@@ -116,7 +116,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

@@ -21,7 +21,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -35,7 +35,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -50,7 +50,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
@@ -64,7 +64,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

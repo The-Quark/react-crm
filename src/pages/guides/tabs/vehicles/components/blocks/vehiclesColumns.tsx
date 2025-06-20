@@ -22,7 +22,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -36,7 +36,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.plate_number,
         id: 'plate number',
         header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -53,7 +53,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.type,
         id: 'type',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedTypeBadge type={info.row.original.type} />
@@ -67,7 +67,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.brand,
         id: 'brand',
         header: ({ column }) => <DataGridColumnHeader title="Brand" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.brand}</div>
@@ -82,7 +82,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.model,
         id: 'model',
         header: ({ column }) => <DataGridColumnHeader title="Model" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.model}</div>
@@ -99,7 +99,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         header: ({ column }) => (
           <DataGridColumnHeader title="Average fuel consumption" column={column} />
         ),
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -116,7 +116,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />

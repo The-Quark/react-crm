@@ -18,7 +18,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -33,7 +33,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'user',
         header: ({ column }) => <DataGridColumnHeader title="User" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
             info.row.original.patronymic ? ` ${info.row.original.patronymic}` : ''
@@ -75,7 +75,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.roles[0].name,
         id: 'role',
         header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
             <div className="badge badge-sm badge-light badge-outline">
@@ -91,7 +91,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.company?.company_name,
         id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -108,7 +108,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />
@@ -122,7 +122,7 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.updated_at,
         id: 'recentlyActivity',
         header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         sortingFn: 'datetime',
         cell: (info) => (
           <div className="flex items-center gap-1.5">

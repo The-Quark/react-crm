@@ -18,7 +18,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -32,7 +32,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.company_name,
         id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -57,7 +57,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.timezone,
         id: 'timezone',
         header: ({ column }) => <DataGridColumnHeader title="Timezone" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
             <span className="badge badge-sm badge-light badge-outline">
@@ -73,7 +73,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.legal_address,
         id: 'legal address',
         header: ({ column }) => <DataGridColumnHeader title="Legal address" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -90,7 +90,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.warehouse_address,
         id: 'warehouse address',
         header: ({ column }) => <DataGridColumnHeader title="Warehouse address" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -107,7 +107,7 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
         accessorFn: (row) => row.airlines,
         id: 'airlines',
         header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const airlines = info.row.original.airlines;
           return (

@@ -21,7 +21,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -35,7 +35,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -50,7 +50,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.code}</span>
@@ -64,7 +64,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.symbol,
         id: 'symbol',
         header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.symbol}</div>
@@ -79,7 +79,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.rate_to_base,
         id: 'rate to base',
         header: ({ column }) => <DataGridColumnHeader title="Rate to base" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -96,7 +96,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.is_base,
         id: 'is base',
         header: ({ column }) => <DataGridColumnHeader title="Base" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_base} />
@@ -111,7 +111,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

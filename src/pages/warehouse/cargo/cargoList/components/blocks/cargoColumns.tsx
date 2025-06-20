@@ -29,7 +29,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -43,7 +43,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="MAWB" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div
@@ -63,7 +63,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '), // Для сортировки/фильтрации
         id: 'hawb',
         header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-1">
             {info.row.original.packages.map((pkg, index) => (
@@ -82,7 +82,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.document_count,
         id: 'documents count',
         header: ({ column }) => <DataGridColumnHeader title="Documents count" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -99,7 +99,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />
@@ -114,7 +114,7 @@ export const useCargoColumns = ({
         accessorFn: (row) => row.created_at,
         id: 'created at',
         header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;
           const date = new Date(row.getValue(columnId));

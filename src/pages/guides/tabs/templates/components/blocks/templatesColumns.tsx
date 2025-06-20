@@ -32,7 +32,7 @@ export const useTemplatesColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -46,7 +46,7 @@ export const useTemplatesColumns = ({
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
@@ -60,7 +60,7 @@ export const useTemplatesColumns = ({
         accessorFn: (row) => row.type,
         id: 'type',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.type}</div>
@@ -75,7 +75,7 @@ export const useTemplatesColumns = ({
         accessorFn: (row) => row.company_name,
         id: 'company name',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">

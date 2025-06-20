@@ -19,7 +19,7 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -33,7 +33,7 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -50,7 +50,7 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
         accessorFn: (row) => row.company?.company_name,
         id: 'company',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -66,7 +66,7 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
         accessorFn: (row) => row.is_active,
         id: 'is active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <SharedStatusBadge status={info.row.original.is_active} />

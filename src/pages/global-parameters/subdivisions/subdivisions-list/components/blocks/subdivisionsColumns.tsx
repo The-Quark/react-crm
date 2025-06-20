@@ -19,7 +19,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -33,7 +33,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -48,7 +48,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.company?.company_name,
         id: 'company',
         header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -64,7 +64,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.currency.name,
         id: 'currency',
         header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -80,7 +80,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.language.name,
         id: 'language',
         header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -96,7 +96,7 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

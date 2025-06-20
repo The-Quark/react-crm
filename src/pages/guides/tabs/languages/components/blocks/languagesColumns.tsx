@@ -21,7 +21,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -35,7 +35,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -50,7 +50,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.native_name,
         id: 'native name',
         header: ({ column }) => <DataGridColumnHeader title="Language native" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -67,7 +67,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
@@ -81,7 +81,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.direction,
         id: 'direction',
         header: ({ column }) => <DataGridColumnHeader title="Direction" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -98,7 +98,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.locale,
         id: 'locale',
         header: ({ column }) => <DataGridColumnHeader title="Locale" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.locale}</div>
@@ -113,7 +113,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

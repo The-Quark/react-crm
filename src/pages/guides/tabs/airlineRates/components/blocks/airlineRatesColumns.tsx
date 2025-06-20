@@ -21,7 +21,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -35,7 +35,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.airline.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Airline" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -52,7 +52,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.price_per_kg,
         id: 'price per kg',
         header: ({ column }) => <DataGridColumnHeader title="Price per kg" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -68,7 +68,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.from_city.name,
         id: 'from city',
         header: ({ column }) => <DataGridColumnHeader title="From city" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -85,7 +85,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.to_city.name,
         id: 'to city',
         header: ({ column }) => <DataGridColumnHeader title="To city" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -101,7 +101,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

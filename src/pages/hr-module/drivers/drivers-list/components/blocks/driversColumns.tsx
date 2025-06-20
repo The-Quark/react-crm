@@ -17,7 +17,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -32,7 +32,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'driver',
         header: ({ column }) => <DataGridColumnHeader title="Driver" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
             info.row.original.patronymic ? ` ${info.row.original.patronymic}` : ''
@@ -74,7 +74,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
@@ -89,7 +89,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row?.license_category,
         id: 'license category',
         header: ({ column }) => <DataGridColumnHeader title="License category" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -106,7 +106,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.vehicle?.plate_number,
         id: 'delivery_count',
         header: ({ column }) => <DataGridColumnHeader title="Delivery count" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">mock</div>
@@ -123,7 +123,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         header: ({ column }) => (
           <DataGridColumnHeader title="Active delivery count" column={column} />
         ),
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">mock</div>
@@ -138,7 +138,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row?.driver_status,
         id: 'driver status',
         header: ({ column }) => <DataGridColumnHeader title="Driver status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original?.driver_status ?? ''} />
@@ -152,7 +152,7 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.updated_at,
         id: 'recentlyActivity',
         header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         sortingFn: 'datetime',
         cell: (info) => (
           <div className="flex items-center gap-1.5">

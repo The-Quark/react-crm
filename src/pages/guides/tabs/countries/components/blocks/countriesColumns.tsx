@@ -12,7 +12,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -26,7 +26,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Country" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -41,7 +41,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.iso2,
         id: 'iso2',
         header: ({ column }) => <DataGridColumnHeader title="ISO" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.iso2}</div>
@@ -56,7 +56,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.phone_code,
         id: 'phone code',
         header: ({ column }) => <DataGridColumnHeader title="Phone code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -72,7 +72,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.currency.name,
         id: 'currency',
         header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -89,7 +89,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
         accessorFn: (row) => row.timezones,
         id: 'timezones',
         header: ({ column }) => <DataGridColumnHeader title="Timezones" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const timezones = info.row.original.timezones;
           const visible = timezones

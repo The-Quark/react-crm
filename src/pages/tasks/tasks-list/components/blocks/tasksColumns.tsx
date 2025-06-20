@@ -33,7 +33,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
@@ -47,7 +47,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.title,
         id: 'title',
         header: ({ column }) => <DataGridColumnHeader title="Title" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -69,7 +69,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.order?.order_code,
         id: 'order',
         header: ({ column }) => <DataGridColumnHeader title="Order" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -91,7 +91,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => formatUserName(row.assigned_by),
         id: 'assigned_by',
         header: ({ column }) => <DataGridColumnHeader title="Assigned by" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -108,7 +108,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => formatUserName(row.assigned_to),
         id: 'assigned_to',
         header: ({ column }) => <DataGridColumnHeader title="Assigned to" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -125,7 +125,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.type,
         id: 'type',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedTypeBadge type={info.row.original.type} />
@@ -139,7 +139,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.priority,
         id: 'priority',
         header: ({ column }) => <DataGridColumnHeader title="Priority" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedPriorityBadge priority={info.row.original.priority} />
@@ -154,7 +154,7 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />

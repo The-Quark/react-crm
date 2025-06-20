@@ -35,7 +35,7 @@ export const usePackageTypesColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -52,7 +52,7 @@ export const usePackageTypesColumns = ({
         },
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Package type" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const lang = info.row.original.language.find(
             (l) => l.crm_language?.code === selectedLanguage
@@ -72,7 +72,7 @@ export const usePackageTypesColumns = ({
         accessorFn: (row) => row.code,
         id: 'code',
         header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
@@ -90,7 +90,7 @@ export const usePackageTypesColumns = ({
             .join(', '),
         id: 'language_code',
         header: ({ column }) => <DataGridColumnHeader title="Language Codes" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const languageCodes = info.row.original.language
             .map((lang) => lang.crm_language?.code)
@@ -114,7 +114,7 @@ export const usePackageTypesColumns = ({
         },
         id: 'description',
         header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const lang = info.row.original.language.find(
             (l) => l.crm_language?.code === selectedLanguage
@@ -136,7 +136,7 @@ export const usePackageTypesColumns = ({
         accessorFn: (row) => row.is_active,
         id: 'active',
         header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.is_active} />

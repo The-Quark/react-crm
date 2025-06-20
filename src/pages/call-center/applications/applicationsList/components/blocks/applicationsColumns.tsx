@@ -29,7 +29,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -43,7 +43,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row?.full_name,
         id: 'full name',
         header: ({ column }) => <DataGridColumnHeader title="Application" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           return (
             <div className="flex flex-col gap-0.5">
@@ -65,7 +65,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row.phone,
         id: 'phone',
         header: ({ column }) => <DataGridColumnHeader title="Phone number" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.phone}</div>
@@ -80,7 +80,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row.source.name,
         id: 'source name',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -96,7 +96,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />
@@ -111,7 +111,7 @@ export const useApplicationsColumns = ({
         accessorFn: (row) => row.created_at,
         id: 'created at',
         header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;
           const date = new Date(row.getValue(columnId));

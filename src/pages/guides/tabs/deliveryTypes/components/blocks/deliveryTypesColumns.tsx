@@ -20,7 +20,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -34,7 +34,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -49,7 +49,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
         accessorFn: (row) => row.description,
         id: 'description',
         header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">

@@ -20,7 +20,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.id}</span>
@@ -34,7 +34,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
         accessorFn: (row) => row.name,
         id: 'name',
         header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
@@ -49,7 +49,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
         accessorFn: (row) => row.step,
         id: 'step',
         header: ({ column }) => <DataGridColumnHeader title="Step" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">{info.row.original.step}</span>
@@ -63,7 +63,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
         accessorFn: (row) => row.types,
         id: 'types',
         header: ({ column }) => <DataGridColumnHeader title="Types" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const types = info.row.original.types;
           return (

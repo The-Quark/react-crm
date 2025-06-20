@@ -29,7 +29,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.id,
         id: 'id',
         header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
             <div className="leading-none text-gray-800 font-normal ">{info.row.original.id}</div>
@@ -43,7 +43,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.order_code,
         id: 'order code',
         header: ({ column }) => <DataGridColumnHeader title="Order code" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div
@@ -63,7 +63,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.sender?.full_name,
         id: 'sender full name',
         header: ({ column }) => <DataGridColumnHeader title="Sender" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -80,7 +80,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.receiver?.full_name,
         id: 'receiver full name',
         header: ({ column }) => <DataGridColumnHeader title="Receiver" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
             <div className="leading-none text-gray-800 font-normal">
@@ -97,7 +97,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.delivery_category,
         id: 'delivery category',
         header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
@@ -113,7 +113,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.hawb_pdf,
         id: 'hawb pdf',
         header: ({ column }) => <DataGridColumnHeader title="QR" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => {
           const url = info.row.original.hawb_pdf.startsWith('http')
             ? info.row.original.hawb_pdf
@@ -135,7 +135,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.status,
         id: 'status',
         header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />
@@ -150,7 +150,7 @@ export const useOrdersColumns = ({
         accessorFn: (row) => row.created_at,
         id: 'created at',
         header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
-        enableSorting: true,
+        enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;
           const date = new Date(row.getValue(columnId));
