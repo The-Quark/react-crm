@@ -130,13 +130,18 @@ export const usePackagesColumns = ({
         id: 'assigned user',
         header: ({ column }) => <DataGridColumnHeader title="Assigned user" column={column} />,
         enableSorting: false,
-        cell: (info) => (
-          <div className="flex items-center gap-1.5">
-            <span className="leading-none text-gray-800 font-normal">
-              {info.row.original?.assigned_user}
-            </span>
-          </div>
-        ),
+        cell: (info) => {
+          const user = info.row.original?.assigned_user;
+          const fullName = [user?.first_name, user?.last_name, user?.patronymic]
+            .filter(Boolean)
+            .join(' ');
+
+          return (
+            <div className="flex items-center gap-1.5">
+              <span className="leading-none text-gray-800 font-normal">{fullName}</span>
+            </div>
+          );
+        },
         meta: {
           headerClassName: 'min-w-[100px]'
         }

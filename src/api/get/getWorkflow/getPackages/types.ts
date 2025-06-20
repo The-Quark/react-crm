@@ -1,5 +1,6 @@
 import { PackageStatus } from '@/api/enums';
 import { IPagination } from '@/api/generalManualTypes';
+import { User } from '@/api/get/getUser/getCurrentUser/types.ts';
 
 interface Media {
   id: number;
@@ -85,7 +86,7 @@ interface Client {
 export interface Package {
   id: number;
   hawb: string;
-  assigned_user: string | null;
+  assigned_user: User | null;
   delivery_category: string;
   status: PackageStatus;
   order_id: number;
