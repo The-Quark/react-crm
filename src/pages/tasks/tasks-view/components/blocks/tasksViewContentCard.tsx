@@ -16,8 +16,8 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
     email: string;
     phone: string;
   }) => (
-    <div className="bg-muted p-3 rounded-md">
-      <p className="font-medium">{`${user?.first_name} ${user?.last_name} ${user?.patronymic}`}</p>
+    <div>
+      <p className="capitalize text-sm">{`${user?.first_name} ${user?.last_name} ${user?.patronymic}`}</p>
       <p className="text-sm text-muted-foreground">{user?.email}</p>
       <p className="text-sm text-muted-foreground">{user?.phone}</p>
     </div>
@@ -32,98 +32,95 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Title:</label>
-              <div className="font-medium">{task.title}</div>
+              <label className="text-md font-bold min-w-32">Title:</label>
+              <div className="font-medium text-sm">{task.title}</div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Status:</label>
-              <div className="capitalize">{task.status.replace('_', ' ')}</div>
+              <label className="text-md font-bold min-w-32">Status:</label>
+              <div className="capitalize text-sm">{task.status.replace('_', ' ')}</div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Priority:</label>
-              <div className="capitalize">{task.priority}</div>
+              <label className="text-md font-bold min-w-32">Priority:</label>
+              <div className="capitalize text-sm">{task.priority}</div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Type:</label>
-              <div className="capitalize">{task.type}</div>
+              <label className="text-md font-bold min-w-32">Type:</label>
+              <div className="capitalize text-sm">{task.type}</div>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Due Date:</label>
-              <div>{formatDate(task.due_date)}</div>
+              <label className="text-md font-bold min-w-32">Due Date:</label>
+              <div className="capitalize text-sm">{formatDate(task.due_date)}</div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Created:</label>
-              <div>{formatDate(task.created_at)}</div>
+              <label className="text-md font-bold min-w-32">Created:</label>
+              <div className="capitalize text-sm">{formatDate(task.created_at)}</div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
-              <label className="text-sm font-medium min-w-32">Last Updated:</label>
-              <div>{formatDate(task.updated_at)}</div>
+              <label className="text-md font-bold min-w-32">Last Updated:</label>
+              <div className="capitalize text-sm">{formatDate(task.updated_at)}</div>
             </div>
           </div>
         </div>
 
-        {/* Описание */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Description:</label>
-          <div className="bg-muted p-3 rounded-md">
-            {task.description || 'No description provided'}
-          </div>
+          <label className="text-md font-bold">Description:</label>
+          <div className="capitalize text-sm">{task.description || 'No description provided'}</div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Assigned By:</label>
+            <label className="text-md font-bold">Assigned By:</label>
             {renderUserInfo(task.assigned_by)}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Assigned To:</label>
+            <label className="text-md font-bold">Assigned To:</label>
             {renderUserInfo(task?.assigned_to)}
           </div>
         </div>
 
         {task.order && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">Related Order:</label>
-            <div className="bg-muted p-3 rounded-md space-y-1">
-              <p className="font-medium">{task.order.order_code}</p>
-              <p>Status: {task.order.status}</p>
-              <p>Delivery: {task.order.delivery_category}</p>
-              <p>Created: {formatDate(task.order.created_at)}</p>
+            <label className="text-md font-bold">Related Order:</label>
+            <div className="space-y-1">
+              <p className="capitalize text-sm">{task.order.order_code}</p>
+              <p className="capitalize text-sm">Status: {task.order.status}</p>
+              <p className="capitalize text-sm">Delivery: {task.order.delivery_category}</p>
+              <p className="capitalize text-sm">Created: {formatDate(task.order.created_at)}</p>
             </div>
           </div>
         )}
 
         {task.client && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">Related Client:</label>
-            <div className="bg-muted p-3 rounded-md space-y-1">
-              <p className="font-medium">
+            <label className="text-md font-bold">Related Client:</label>
+            <div className="space-y-1">
+              <p className="capitalize text-sm">
                 {task.client.first_name} {task.client.last_name}
                 {task.client.company_name && ` (${task.client.company_name})`}
               </p>
-              <p>{task.client.phone}</p>
-              <p>{task.client.email}</p>
+              <p className="capitalize text-sm">{task.client.phone}</p>
+              <p className="capitalize text-sm">{task.client.email}</p>
             </div>
           </div>
         )}
 
         {task.package && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">Related Package:</label>
-            <div className="bg-muted p-3 rounded-md space-y-1">
-              <p className="font-medium">HAWB: {task.package.hawb}</p>
-              <p>Weight: {task.package.weight}</p>
-              <p>Dimensions: {task.package.dimensions}</p>
-              <p>Status: {task.package.status}</p>
+            <label className="text-md font-bold">Related Package:</label>
+            <div className="space-y-1">
+              <p className="capitalize text-sm">HAWB: {task.package.hawb}</p>
+              <p className="capitalize text-sm">Weight: {task.package.weight}</p>
+              <p className="capitalize text-sm">Dimensions: {task.package.dimensions}</p>
+              <p className="capitalize text-sm">Status: {task.package.status}</p>
             </div>
           </div>
         )}

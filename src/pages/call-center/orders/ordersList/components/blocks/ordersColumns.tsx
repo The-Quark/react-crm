@@ -116,7 +116,7 @@ export const useOrdersColumns = ({
         enableSorting: false,
         cell: (info) => {
           if (!info.row.original.hawb_pdf || info.row.original.hawb_pdf.trim() === '') {
-            return <div className="text-gray-400">No QR</div>;
+            return <div className="text-gray-400 text-center">No QR</div>;
           }
 
           const url = info.row.original.hawb_pdf.startsWith('http')
