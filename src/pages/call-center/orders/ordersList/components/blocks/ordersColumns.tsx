@@ -115,6 +115,10 @@ export const useOrdersColumns = ({
         header: ({ column }) => <DataGridColumnHeader title="QR" column={column} />,
         enableSorting: false,
         cell: (info) => {
+          if (!info.row.original.hawb_pdf || info.row.original.hawb_pdf.trim() === '') {
+            return <div className="text-gray-400">No QR</div>;
+          }
+
           const url = info.row.original.hawb_pdf.startsWith('http')
             ? info.row.original.hawb_pdf
             : `https://${info.row.original.hawb_pdf}`;
