@@ -1,13 +1,10 @@
 import axios from 'axios';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { CLIENT_URL } from '@/api/url';
-import { cleanValues } from '@/utils/lib/helpers.ts';
 import { IPostPutResponse } from '@/api/generalManualTypes';
 
 export const putClient = async (id: number, data: IClientFormValues): Promise<IPostPutResponse> => {
-  console.log('putClient', data);
-  const cleanData = cleanValues(data);
-  const response = await axios.put<IPostPutResponse>(`${CLIENT_URL}?id=${id}`, cleanData, {
+  const response = await axios.put<IPostPutResponse>(`${CLIENT_URL}?id=${id}`, data, {
     headers: { 'Content-Type': 'application/json' }
   });
   return response.data;
