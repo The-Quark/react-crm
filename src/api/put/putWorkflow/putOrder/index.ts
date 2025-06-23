@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { ORDER_URL } from '@/api/url';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
-import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export interface IOrderPutFormValues extends IOrderFormValues {
   id: number;
@@ -12,9 +11,8 @@ export const putOrder = async (
   id: number,
   data: IOrderPutFormValues
 ): Promise<IOrderPutFormValues> => {
-  const cleanedData = cleanValues(data);
   return await axios
-    .put<IOrderPutFormValues>(`${ORDER_URL}?id=${id}`, cleanedData, {
+    .put<IOrderPutFormValues>(`${ORDER_URL}?id=${id}`, data, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

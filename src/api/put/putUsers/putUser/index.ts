@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { UserModel } from '@/api/put/putUsers/putUser/types.ts';
 import { USERS_URL } from '@/api/url';
-import { cleanValues } from '@/utils/lib/helpers.ts';
 
 export const putUser = async (
   data: UserModel,
   removeAvatar: boolean = false
 ): Promise<UserModel> => {
   const formData = new FormData();
-  const cleanData = cleanValues(data);
 
-  Object.entries(cleanData).forEach(([key, value]) => {
+  Object.entries(data).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       formData.append(key, value instanceof Blob ? value : String(value));
     }
