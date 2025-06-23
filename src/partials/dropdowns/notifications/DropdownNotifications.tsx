@@ -50,7 +50,7 @@ const DropdownNotifications = ({
 
   const buildTabs = () => {
     return (
-      <Tabs defaultValue={currentType === 'task' ? 1 : 2} className="" onChange={handleTabChange}>
+      <Tabs value={currentType === 'task' ? 1 : 2} className="" onChange={handleTabChange}>
         <TabsList className="justify-between px-5 mb-2">
           <div className="flex items-center gap-5">
             <Tab value={1}>Tasks</Tab>

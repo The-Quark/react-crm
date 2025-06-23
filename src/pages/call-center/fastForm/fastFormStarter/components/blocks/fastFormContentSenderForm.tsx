@@ -12,7 +12,10 @@ import {
   SharedTextArea
 } from '@/partials/sharedUI';
 import { ISenderOrderFormValues } from '@/api/post/postWorkflow/postOrderSender/types.ts';
-import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
+import {
+  IFastFormContext,
+  useFastFormContext
+} from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { Client } from '@/api/get/getClients/types.ts';
 
 interface Props {
@@ -56,24 +59,27 @@ const formSchema = Yup.object().shape({
   notes: Yup.string().optional()
 });
 
-const getInitialValues = (mainForm: ISenderOrderFormValues | null): ISenderOrderFormValues => {
+const getInitialValues = (
+  mainFormSender: ISenderOrderFormValues | null,
+  mainForm: IFastFormContext | null
+) => {
   if (mainForm) {
     return {
-      first_name: mainForm.first_name || '',
-      last_name: mainForm.last_name || '',
-      patronymic: mainForm.patronymic || '',
-      bin: mainForm.bin || '',
-      company_name: mainForm.company_name || '',
-      type: mainForm.type || 'individual',
-      country_id: mainForm.country_id || '',
-      city_id: mainForm.city_id || '',
-      phone: mainForm.phone || '',
-      street: mainForm.street || '',
-      house: mainForm.house || '',
-      apartment: mainForm.apartment || '',
-      location_description: mainForm.location_description || '',
-      notes: mainForm.notes || '',
-      contact_id: mainForm.contact_id || ''
+      first_name: mainFormSender?.first_name || mainForm.application?.first_name || '',
+      last_name: mainFormSender?.last_name || mainForm.application?.last_name || '',
+      patronymic: mainFormSender?.patronymic || mainForm.application?.patronymic || '',
+      bin: mainFormSender?.bin || mainForm.application?.bin || '',
+      company_name: mainFormSender?.company_name || mainForm.application?.company_name || '',
+      type: mainFormSender?.type || mainForm.application?.client_type || 'individual',
+      country_id: mainFormSender?.country_id ? Number(mainFormSender.country_id) : '',
+      city_id: mainFormSender?.city_id ? Number(mainFormSender.city_id) : '',
+      phone: mainFormSender?.phone || mainForm.application?.phone || '',
+      street: mainFormSender?.street || '',
+      house: mainFormSender?.house || '',
+      apartment: mainFormSender?.apartment || '',
+      location_description: mainFormSender?.location_description || '',
+      notes: mainFormSender?.notes || '',
+      contact_id: mainForm.application?.client_id || mainFormSender?.contact_id || ''
     };
   }
 
@@ -116,7 +122,10 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(mainForm?.order?.sender as ISenderOrderFormValues),
+    initialValues: getInitialValues(
+      mainForm?.order?.sender as ISenderOrderFormValues,
+      mainForm as IFastFormContext
+    ),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: (values) => {

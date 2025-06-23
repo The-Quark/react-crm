@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteClient, getClients } from '@/api';
 import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
+import { CACHE_TIME } from '@/utils';
 
 type ClientType = 'individual' | 'legal';
 
@@ -44,8 +45,7 @@ export const ClientsListContent = () => {
         phones: searchPhone,
         city_id: clientCityId
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const handleDeleteClick = (id: number) => {

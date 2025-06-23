@@ -10,8 +10,16 @@ import {
   TranslationProvider
 } from '@/providers';
 import { HelmetProvider } from 'react-helmet-async';
+import { CACHE_TIME_ZERO } from '@/utils';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: CACHE_TIME_ZERO,
+      refetchOnWindowFocus: true
+    }
+  }
+});
 
 const ProvidersWrapper = ({ children }: PropsWithChildren) => {
   return (

@@ -279,7 +279,13 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
           {formik.values.receiver_type === 'legal' ? (
             <>
               <SharedInput name="receiver_company_name" label="Company name" formik={formik} />
-              <SharedInput name="receiver_bin" label="BIN" formik={formik} />
+              <SharedInput
+                name="receiver_bin"
+                label="BIN"
+                formik={formik}
+                type="number"
+                maxlength={12}
+              />
             </>
           ) : (
             <>

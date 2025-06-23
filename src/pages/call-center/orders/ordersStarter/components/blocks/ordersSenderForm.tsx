@@ -275,7 +275,13 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
           {formik.values.sender_type === 'legal' ? (
             <>
               <SharedInput name="sender_company_name" label="Company name" formik={formik} />
-              <SharedInput name="sender_bin" label="BIN" formik={formik} />
+              <SharedInput
+                name="sender_bin"
+                label="BIN"
+                formik={formik}
+                type="number"
+                maxlength={12}
+              />
             </>
           ) : (
             <>

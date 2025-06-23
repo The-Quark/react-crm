@@ -41,9 +41,7 @@ export const PackagesListContent = () => {
         status: status,
         hawb: searchTerm,
         delivery_category: deliveryCategory
-      }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+      })
   });
 
   const handleDeleteClick = (id: number) => {

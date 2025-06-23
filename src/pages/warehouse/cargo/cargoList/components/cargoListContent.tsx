@@ -42,9 +42,7 @@ export const CargoListContent = () => {
         hawb: searchTermPackage,
         delivery_category: deliveryCategory,
         status: status
-      }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+      })
   });
 
   const handleDeleteClick = (id: number) => {

@@ -12,6 +12,7 @@ import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   open: boolean;
@@ -32,6 +33,7 @@ export const OrdersConfirmModal: FC<Props> = ({
   const { mainFormData, modalInfo } = useOrderCreation();
   const navigate = useNavigate();
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+  const queryClient = useQueryClient();
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
@@ -39,6 +41,7 @@ export const OrdersConfirmModal: FC<Props> = ({
       if (!mainFormData) throw new Error('mainFormData is null');
       await onOrderSubmit(mainFormData);
       handleClose();
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
       navigate('/call-center/orders/list');
     } catch (error) {
       console.error('Error submitting order:', error);
@@ -53,6 +56,7 @@ export const OrdersConfirmModal: FC<Props> = ({
       if (!mainFormData) throw new Error('mainFormData is null');
       await onOrderDraftSubmit(mainFormData);
       handleClose();
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
       navigate('/call-center/orders/list');
     } catch (error) {
       console.error('Error submitting draft:', error);
