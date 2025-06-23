@@ -7,12 +7,15 @@ import { useSubdivisionsColumns } from '@/pages/global-parameters/subdivisions/s
 import { SubdivisionToolbar } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsToolbar.tsx';
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
+import { SubdivisionsViewModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsViewModal.tsx';
 
 export const SubdivisionsListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSubId, setSelectedSubId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -36,7 +39,12 @@ export const SubdivisionsListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
-  const columns = useSubdivisionsColumns();
+  const columns = useSubdivisionsColumns({
+    onRowClick: (id) => {
+      setSelectedSubId(id);
+      setIsModalOpen(true);
+    }
+  });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -83,6 +91,11 @@ export const SubdivisionsListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <SubdivisionsViewModal
+        open={isModalOpen}
+        id={selectedSubId}
+        handleClose={() => setIsModalOpen(false)}
       />
     </Container>
   );

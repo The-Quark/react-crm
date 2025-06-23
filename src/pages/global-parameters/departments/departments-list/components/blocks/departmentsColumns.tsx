@@ -8,7 +8,11 @@ import { useUserPermissions } from '@/hooks';
 import { DepartmentsMenuOptions } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
-export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
+interface UseColumnsProps {
+  onRowClick: (id: number) => void;
+}
+
+export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Department>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -37,7 +41,12 @@ export const useDepartmentsColumns = (): ColumnDef<Department>[] => {
         cell: (info) => (
           <div className="flex items-center gap-2.5">
             <div className="flex flex-col gap-0.5">
-              <div className="leading-none font-medium text-sm ">{info.row.original.name}</div>
+              <div
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+                onClick={() => onRowClick(info.row.original.id)}
+              >
+                {info.row.original.name}
+              </div>
             </div>
           </div>
         ),

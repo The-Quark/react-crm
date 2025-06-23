@@ -8,7 +8,13 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
-export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
+interface UseColumnsProps {
+  onRowClick: (id: number) => void;
+}
+
+export const useSubdivisionsColumns = ({
+  onRowClick
+}: UseColumnsProps): ColumnDef<Subdivision>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -36,7 +42,12 @@ export const useSubdivisionsColumns = (): ColumnDef<Subdivision>[] => {
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
+            <div
+              className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+              onClick={() => onRowClick(info.row.original.id)}
+            >
+              {info.row.original.name}
+            </div>
           </div>
         ),
         meta: {

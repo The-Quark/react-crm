@@ -9,7 +9,7 @@ export interface IClientFormValues {
   last_name?: string;
   first_name?: string;
   patronymic?: string;
-  birth_date?: string;
+  birth_date?: string | null;
   gender?: 'male' | 'female' | 'other';
   company_name?: string;
   business_type?: string;

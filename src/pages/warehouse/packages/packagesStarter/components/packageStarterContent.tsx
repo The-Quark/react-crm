@@ -40,7 +40,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const navigate = useNavigate();
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
-  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   const orderIdFromUrl = useMemo(() => {
     const id = searchParams.get('order_id');
@@ -98,7 +99,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setLoading(true);
+      setSubmitLoading(true);
       try {
         if (isEditMode && packageId) {
           const { status, ...putData } = values;
@@ -119,7 +120,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
       } finally {
-        setLoading(false);
+        setSubmitLoading(false);
         setSubmitting(false);
       }
     }
@@ -175,7 +176,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     if (!formik.values.order_id) return;
 
     try {
-      setLoading(true);
+      setCancelLoading(true);
       await putOrderStatus({
         id: Number(formik.values.order_id),
         status: OrderStatus.CANCELLED
@@ -186,7 +187,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
       const error = err as AxiosError<{ message?: string }>;
       console.error(error.response?.data?.message || error.message);
     } finally {
-      setLoading(false);
+      setCancelLoading(false);
     }
   }, [formik.values.order_id, navigate, queryClient]);
 
@@ -264,16 +265,16 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
               className="btn btn-danger"
               onClick={handleCancel}
               type="button"
-              disabled={loading || !formik.values.order_id}
+              disabled={cancelLoading || !formik.values.order_id}
             >
-              {loading ? 'Cancelling...' : 'Cancel'}
+              {cancelLoading ? 'Cancelling...' : 'Cancel'}
             </button>
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
+              disabled={submitLoading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Create'}
+              {submitLoading ? 'Please wait...' : 'Create'}
             </button>
           </div>
         </div>

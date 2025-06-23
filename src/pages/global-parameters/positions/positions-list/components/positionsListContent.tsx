@@ -7,12 +7,15 @@ import { usePositionsColumns } from '@/pages/global-parameters/positions/positio
 import { PositionsToolbar } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsToolbar.tsx';
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
+import { PositionsViewModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsViewModal.tsx';
 
 export const PositionsListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -36,7 +39,12 @@ export const PositionsListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
-  const columns = usePositionsColumns();
+  const columns = usePositionsColumns({
+    onRowClick: (id) => {
+      setSelectedPositionId(id);
+      setIsModalOpen(true);
+    }
+  });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -82,6 +90,11 @@ export const PositionsListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <PositionsViewModal
+        open={isModalOpen}
+        id={selectedPositionId}
+        handleClose={() => setIsModalOpen(false)}
       />
     </Container>
   );

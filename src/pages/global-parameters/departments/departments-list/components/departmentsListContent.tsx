@@ -7,12 +7,16 @@ import { useDepartmentsColumns } from '@/pages/global-parameters/departments/dep
 import { DepartmentsToolbar } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsToolbar.tsx';
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
+import { DepartmentsViewModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsViewModal.tsx';
 
 export const DepartmentsListContent = () => {
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState<number | null>(null);
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -36,7 +40,12 @@ export const DepartmentsListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
-  const columns = useDepartmentsColumns();
+  const columns = useDepartmentsColumns({
+    onRowClick: (id) => {
+      setSelectedDepartmentId(id);
+      setIsModalOpen(true);
+    }
+  });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -82,6 +91,11 @@ export const DepartmentsListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <DepartmentsViewModal
+        open={isModalOpen}
+        id={selectedDepartmentId}
+        handleClose={() => setIsModalOpen(false)}
       />
     </Container>
   );

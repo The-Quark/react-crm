@@ -74,7 +74,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
           ...values,
           birth_date: values.birth_date
             ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
-            : ''
+            : null
         };
 
         if (clientData) {

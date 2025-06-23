@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog.tsx';
@@ -56,6 +57,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
           >
             <KeenIcon icon="cross" />
           </button>
+          <DialogDescription />
         </DialogHeader>
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
           {isLoading && <SharedLoading />}
