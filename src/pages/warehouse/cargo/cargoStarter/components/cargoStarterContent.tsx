@@ -21,7 +21,7 @@ import {
   SharedSelect
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postWorkflow/postCargo/types.ts';
 import { CargoStatus } from '@/api/enums';
 import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
@@ -52,6 +52,8 @@ export const CargoStarterContent = () => {
   const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const packageIdsParam = searchParams.get('package_id');
   const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
   const [searchCompanyOrderTerm, setSearchCompanyOrderTerm] = useState('');
 
@@ -121,6 +123,14 @@ export const CargoStarterContent = () => {
     }));
   }, [packagesData, cargoData, isEditMode]);
 
+  const initialPackageIds = useMemo(() => {
+    if (!packageIdsParam) return [];
+    if (packageIdsParam.includes(',')) {
+      return packageIdsParam.split(',').map((id) => id.trim());
+    }
+    return [packageIdsParam];
+  }, [packageIdsParam]);
+
   const initialValues: ICargoPostFormValues & { status?: string } = {
     airline: '',
     arrival_date: '',
@@ -129,7 +139,7 @@ export const CargoStarterContent = () => {
     from_airport: '',
     to_airport: '',
     departure_date: '',
-    packages: [],
+    packages: initialPackageIds.map((id) => Number(id)).filter((id) => !isNaN(id)) || [],
     is_international: false,
     company_id: '',
     status: 'formed'
@@ -177,6 +187,10 @@ export const CargoStarterContent = () => {
 
   useEffect(() => {
     formik.resetForm();
+
+    if (!isEditMode && initialPackageIds.length > 0) {
+      formik.setFieldValue('packages', initialPackageIds);
+    }
     if (cargoData && isEditMode) {
       const packageIds = cargoData.result[0].packages.map((pkg) => pkg.id.toString());
 
@@ -197,7 +211,7 @@ export const CargoStarterContent = () => {
         false
       );
     }
-  }, [isEditMode, cargoData]);
+  }, [isEditMode, cargoData, initialPackageIds]);
 
   if (airlinesLoading || companiesLoading || packagesLoading || (isEditMode && cargoLoading)) {
     return <SharedLoading />;
@@ -227,6 +241,16 @@ export const CargoStarterContent = () => {
         </div>
 
         <div className="card-body grid gap-5">
+          <SharedMultiSelect
+            options={packageOptions}
+            selectedValues={formik.values.packages.map(String)}
+            onChange={(values) => formik.setFieldValue('packages', values)}
+            placeholder="Select packages..."
+            searchPlaceholder="Search packages..."
+            label="Packages"
+            error={formik.errors.packages as string}
+            touched={formik.touched.packages}
+          />
           <SharedInput name="code" label="Code" formik={formik} />
 
           <SharedAutocomplete
@@ -275,17 +299,6 @@ export const CargoStarterContent = () => {
           <SharedDateTimePicker name="arrival_date" label="Arrival date" formik={formik} />
 
           <SharedInput name="to_airport" label="To Airport" formik={formik} />
-
-          <SharedMultiSelect
-            options={packageOptions}
-            selectedValues={formik.values.packages.map(String)}
-            onChange={(values) => formik.setFieldValue('packages', values)}
-            placeholder="Select packages..."
-            searchPlaceholder="Search packages..."
-            label="Packages"
-            error={formik.errors.packages as string}
-            touched={formik.touched.packages}
-          />
 
           {isEditMode && (
             <SharedSelect
