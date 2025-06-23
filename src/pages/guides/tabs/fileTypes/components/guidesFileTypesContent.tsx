@@ -6,6 +6,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { FileTypesToolbar } from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesToolbar.tsx';
 import { useFileTypesColumns } from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesColumns.tsx';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesFileTypesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesFileTypesContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useFileTypesColumns();

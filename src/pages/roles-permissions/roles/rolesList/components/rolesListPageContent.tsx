@@ -7,6 +7,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { RolesListCard } from '@/pages/roles-permissions/roles/rolesList/components/rolesListCard.tsx';
 import { getRoles } from '@/api/get/getACL';
+import { CACHE_TIME } from '@/utils';
 
 export const RolesListPageContent = () => {
   const { currentUser } = useAuthContext();
@@ -16,7 +17,7 @@ export const RolesListPageContent = () => {
     queryKey: ['roles'],
     queryFn: () => getRoles(),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    staleTime: CACHE_TIME
   });
 
   if (isError) {

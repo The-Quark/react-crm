@@ -6,6 +6,7 @@ import { LanguagesToolbar } from '@/pages/guides/tabs/languages/components/block
 import { useQuery } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesLanguagesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesLanguagesContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useLanguagesColumns();

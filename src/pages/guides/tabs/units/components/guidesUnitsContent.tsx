@@ -6,6 +6,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useUnitsColumns } from '@/pages/guides/tabs/units/components/blocks/unitsColumns.tsx';
 import { UnitsToolbar } from '@/pages/guides/tabs/units/components/blocks/unitsToolbar.tsx';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesUnitsContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesUnitsContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useUnitsColumns();

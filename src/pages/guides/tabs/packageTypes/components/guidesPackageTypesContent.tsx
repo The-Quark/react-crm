@@ -8,6 +8,7 @@ import { usePackageTypesColumns } from '@/pages/guides/tabs/packageTypes/compone
 import { useLanguage } from '@/providers';
 import { useState } from 'react';
 import { TLanguageCode } from '@/i18n';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesPackagesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,14 +34,12 @@ export const GuidesPackagesContent = () => {
         code: searchTerm,
         language_code: selectedLanguage.code
       }),
-    staleTime: 1000 * 60 * 60
+    staleTime: CACHE_TIME
   });
 
   const { data: languagesData, error: isLanguageError } = useQuery({
     queryKey: ['guidesPackageTypeLanguages'],
-    queryFn: () => getLanguages({}),
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getLanguages({})
   });
 
   const columns = usePackageTypesColumns({

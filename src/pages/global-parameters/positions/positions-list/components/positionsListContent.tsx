@@ -33,8 +33,6 @@ export const PositionsListContent = () => {
         per_page: pagination.pageSize,
         title: searchTerm
       }),
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 60 * 5,
     enabled: selectedCompanyId !== undefined
   });
 

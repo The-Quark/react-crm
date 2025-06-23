@@ -6,6 +6,7 @@ import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/
 import { getCurrencies } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesCurrenciesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesCurrenciesContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useCurrenciesColumns();

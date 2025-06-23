@@ -6,6 +6,7 @@ import { VehiclesToolbar } from '@/pages/guides/tabs/vehicles/components/blocks/
 import { getVehicles } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesVehiclesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesVehiclesContent = () => {
         per_page: pagination.pageSize,
         plate_number: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useVehiclesColumns();

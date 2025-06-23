@@ -6,6 +6,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useDeliveryTypesColumns } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesColumns.tsx';
 import { DeliveryTypesToolbar } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesToolbar.tsx';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesDeliveryTypesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesDeliveryTypesContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useDeliveryTypesColumns();

@@ -6,6 +6,7 @@ import { useAirlinesColumns } from '@/pages/guides/tabs/airlines/components/bloc
 import { AirlinesToolbar } from '@/pages/guides/tabs/airlines/components/blocks/airlinesToolbar.tsx';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesAirlinesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesAirlinesContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = useAirlinesColumns();

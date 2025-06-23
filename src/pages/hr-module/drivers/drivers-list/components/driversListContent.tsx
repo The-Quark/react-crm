@@ -27,8 +27,6 @@ export const DriversListContent = () => {
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true,
     enabled: selectedCompanyId !== undefined
   });
 

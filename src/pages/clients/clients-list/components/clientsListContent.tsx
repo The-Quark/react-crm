@@ -44,8 +44,7 @@ export const ClientsListContent = () => {
         full_name: searchTerm,
         phones: searchPhone,
         city_id: clientCityId
-      }),
-    staleTime: CACHE_TIME
+      })
   });
 
   const handleDeleteClick = (id: number) => {

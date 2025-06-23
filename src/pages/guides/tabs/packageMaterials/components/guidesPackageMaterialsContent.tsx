@@ -6,6 +6,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { usePackageMaterialsColumns } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsColumns.tsx';
 import { PackageMaterialsToolbar } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsToolbar.tsx';
 import { useState } from 'react';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesPackageMaterialsContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,8 +23,7 @@ export const GuidesPackageMaterialsContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    staleTime: 1000 * 60 * 60,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const columns = usePackageMaterialsColumns();

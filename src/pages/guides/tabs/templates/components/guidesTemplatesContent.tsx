@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { TLanguageCode } from '@/i18n';
 import { useTemplatesColumns } from '@/pages/guides/tabs/templates/components/blocks/templatesColumns.tsx';
 import { TemplatesToolbar } from '@/pages/guides/tabs/templates/components/blocks/templatesToolbar.tsx';
+import { CACHE_TIME } from '@/utils';
 
 export const GuidesTemplatesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
@@ -33,8 +34,7 @@ export const GuidesTemplatesContent = () => {
         per_page: pagination.pageSize,
         code: searchCodeTerm
       }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+    staleTime: CACHE_TIME
   });
 
   const {

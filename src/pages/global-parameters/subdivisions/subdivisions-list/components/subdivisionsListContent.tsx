@@ -33,8 +33,6 @@ export const SubdivisionsListContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
-    refetchOnWindowFocus: true,
-    staleTime: 1000 * 60 * 5,
     enabled: selectedCompanyId !== undefined
   });
 

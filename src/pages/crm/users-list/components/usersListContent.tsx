@@ -21,9 +21,7 @@ export const UsersListContent = () => {
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
         full_name: searchTerm
-      }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+      })
   });
 
   const columns = useUsersColumns();
