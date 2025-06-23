@@ -43,7 +43,8 @@ export const OrdersListContent = () => {
         delivery_category: deliveryCategory,
         status: status,
         start_date: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,
-        end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined
+        end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined,
+        is_draft: false
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true

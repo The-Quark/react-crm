@@ -10,6 +10,7 @@ interface IGetOrders extends IPaginationParams {
   start_date?: string;
   end_date?: string;
   searchorder?: string;
+  is_draft?: boolean;
 }
 
 const getOrders = async ({
@@ -20,7 +21,8 @@ const getOrders = async ({
   status,
   start_date,
   end_date,
-  searchorder
+  searchorder,
+  is_draft
 }: IGetOrders): Promise<IOrdersResponse> => {
   const params = new URLSearchParams();
 
@@ -32,6 +34,7 @@ const getOrders = async ({
   if (delivery_category) params.append('delivery_category', delivery_category.toString());
   if (start_date) params.append('start_date', start_date);
   if (end_date) params.append('end_date', end_date);
+  if (is_draft !== undefined) params.append('is_draft', is_draft ? '1' : '0');
 
   return await axios.get<IOrdersResponse>(ORDER_URL, { params }).then((res) => res.data);
 };

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteOrder, getOrderDrafts } from '@/api';
+import { deleteOrder, getOrders } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -34,14 +34,15 @@ export const MyDraftsContent = () => {
       dateRange
     ],
     queryFn: () =>
-      getOrderDrafts({
+      getOrders({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
         searchorder: searchTerm,
         delivery_category: deliveryCategory,
         status: status,
         start_date: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,
-        end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined
+        end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined,
+        is_draft: true
       }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true

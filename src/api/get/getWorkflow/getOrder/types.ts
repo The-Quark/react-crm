@@ -128,6 +128,7 @@ export interface Order {
   source: Source | null;
   order_content?: string[];
   hawb_pdf: string;
+  is_draft: boolean;
 }
 
 export interface IOrdersResponse extends IPagination {
