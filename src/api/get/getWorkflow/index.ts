@@ -5,3 +5,4 @@ export * from './getPackages';
 export * from './getOrderReceivers';
 export * from './getOrderSenders';
 export * from './getOrderDrafts';
+export * from './getCargoNotification';

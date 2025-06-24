@@ -19,6 +19,7 @@ interface ToolbarProps {
   currentStatus?: PackageStatus;
   onDeliveryCategoryChange?: (status: string | undefined) => void;
   currentDeliveryCategory?: string;
+  onCreateCargo?: () => void;
 }
 
 export const PackagesToolbar: FC<ToolbarProps> = ({
@@ -26,7 +27,8 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
   currentStatus,
   onStatusChange,
   currentDeliveryCategory,
-  onDeliveryCategoryChange
+  onDeliveryCategoryChange,
+  onCreateCargo
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
@@ -70,9 +72,14 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
       <h3 className="card-title">Packages</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
-          <a href="/warehouse/packages/starter" className="btn btn-sm btn-primary">
-            New Package
-          </a>
+          <>
+            <button type="button" className="btn btn-sm btn-primary" onClick={onCreateCargo}>
+              <KeenIcon icon="delivery" /> Collect Cargo
+            </button>
+            <a href="/warehouse/packages/starter" className="btn btn-sm btn-primary">
+              New Package
+            </a>
+          </>
         )}
         <Select value={currentDeliveryCategory || 'all'} onValueChange={handleDeliveryTypeChange}>
           <SelectTrigger className="w-32" size="sm">

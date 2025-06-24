@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { deletePackage, getPackages, postPackageAssignUser } from '@/api';
+import { deletePackage, getPackages } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesColumns.tsx';
 import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesToolbar.tsx';
 import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesModal.tsx';
 import { PackageStatus } from '@/api/enums';
-import { useAuthContext } from '@/auth';
+import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesCargoCreateModal.tsx';
 
 export const PackagesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,6 +16,7 @@ export const PackagesListContent = () => {
   const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCargoCreateModalOpen, setIsCargoCreateModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -123,6 +124,7 @@ export const PackagesListContent = () => {
             onStatusChange={handleStatusChange}
             currentDeliveryCategory={deliveryCategory}
             onDeliveryCategoryChange={handleDeliveryCategoryChange}
+            onCreateCargo={() => setIsCargoCreateModalOpen(true)}
           />
         }
         pagination={{
@@ -143,6 +145,10 @@ export const PackagesListContent = () => {
         title="Delete Package"
         description="Are you sure you want to delete this package? This action cannot be undone."
         isLoading={isDeleting}
+      />
+      <PackagesCargoCreateModal
+        open={isCargoCreateModalOpen}
+        handleClose={() => setIsCargoCreateModalOpen(false)}
       />
     </Container>
   );
