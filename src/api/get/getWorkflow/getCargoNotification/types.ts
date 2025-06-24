@@ -5,7 +5,6 @@ export interface CargoNotification {
   receiver_city_name: string;
   package_ids: number[];
   count: number;
-  s;
 }
 
 export interface CargoNotificationsResponse {
