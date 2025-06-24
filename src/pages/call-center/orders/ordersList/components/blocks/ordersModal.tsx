@@ -44,7 +44,6 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      s
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">Order Details</DialogTitle>

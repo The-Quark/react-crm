@@ -1,5 +1,6 @@
 import { FormikProps } from 'formik';
 import React, { useState, useEffect, useCallback } from 'react';
+import { clsx } from 'clsx';
 
 interface SharedInputProps<T> {
   name: keyof T;
@@ -11,6 +12,7 @@ interface SharedInputProps<T> {
 export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: SharedInputProps<T>) => {
   const fieldName = name.toString();
   const [decimalDisplay, setDecimalDisplay] = useState('');
+  const hasError = formik.touched[name] && formik.errors[name];
 
   const formatDecimalDisplay = useCallback((value: string | number): string => {
     if (value === undefined || value === null) return '';
@@ -79,12 +81,16 @@ export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: Shared
     }
   }, [formik.values[name], name, formatDecimalDisplay]);
 
+  const inputClasses = clsx('input w-full', {
+    'border-danger focus:border-danger': hasError
+  });
+
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <input
-          className="input w-full"
+          className={inputClasses}
           type="text"
           inputMode="decimal"
           placeholder="0.00"
