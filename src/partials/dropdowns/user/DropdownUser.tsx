@@ -52,7 +52,7 @@ const DropdownUser = ({ menuItemRef }: IDropdownUserProps) => {
           />
           <div className="flex flex-col gap-1.5">
             <Link
-              to={`/crm/users/public-profile/${currentUser?.id}`}
+              to={`/profile`}
               className="text-sm text-gray-800 hover:text-primary font-semibold leading-none"
             >
               {currentUser

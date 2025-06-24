@@ -137,9 +137,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     mainFormData?.receiver_contact_id?.toString() || ''
   );
 
-  console.log('Receiver mainFormData: ', mainFormData);
-  console.log('Receiver loading: ', isLoading);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,

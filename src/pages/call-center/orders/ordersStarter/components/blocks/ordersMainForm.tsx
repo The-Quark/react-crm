@@ -139,10 +139,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
-  console.log('MAin applicationID: ', applicationId);
-  console.log('MAin mainFormData: ', mainFormData);
-  console.log('MAin loading: ', isLoading);
-
   const formik = useFormik({
     initialValues: getInitialValues(isLoading, applicationId || '', mainFormData, isEditMode),
     validationSchema: formSchema,

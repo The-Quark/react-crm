@@ -267,7 +267,7 @@ export const CuttedMenuSideBar: TMenuConfig = [
   },
   //"view clients"
   {
-    title: 'MENU.MEGAMENU.CLIENTS.CLIENTS',
+    title: 'MENU.MEGAMENU.CLIENTS',
     icon: 'badge',
     path: '/clients',
     requiredPermissions: ['view clients']
@@ -287,16 +287,6 @@ export const CuttedMenuSideBar: TMenuConfig = [
         title: 'MENU.MEGAMENU.CALL_CENTER.ORDERS',
         requiredPermissions: ['manage orders'],
         path: '/call-center/orders/list'
-      },
-      {
-        title: 'MENU.MEGAMENU.CALL_CENTER.PACKAGES',
-        requiredPermissions: ['manage orders'],
-        path: '/call-center/packages/list'
-      },
-      {
-        title: 'MENU.MEGAMENU.CALL_CENTER.CARGO',
-        requiredPermissions: ['manage orders'],
-        path: '/call-center/cargo/list'
       }
     ]
   },

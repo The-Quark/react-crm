@@ -105,8 +105,6 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   const { currentLanguage } = useLanguage();
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
-  console.log('Context order: ', mainForm);
-
   const formik = useFormik({
     initialValues: getInitialValues(mainForm?.order as IOrderFormValues),
     validationSchema: formSchema,

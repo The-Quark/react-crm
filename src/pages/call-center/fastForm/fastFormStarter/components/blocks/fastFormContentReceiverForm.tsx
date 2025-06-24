@@ -102,8 +102,6 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
 
-  console.log('Context receiver: ', mainForm);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,

@@ -133,9 +133,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     mainFormData?.sender_contact_id?.toString() || ''
   );
 
-  console.log('Sender mainFormData: ', mainFormData);
-  console.log('Sender loading: ', isLoading);
-
   const {
     data: clientsData,
     isLoading: clientsLoading,
