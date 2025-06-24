@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import React, { FC } from 'react';
 import {
   Dialog,
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const navigate = useNavigate();
   const { has } = useUserPermissions();
@@ -46,7 +48,7 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            Application Details
+            {formatMessage({ id: 'SYSTEM.APPLICATION_DETAILS' })}
           </DialogTitle>
           <DialogDescription />
           <button
@@ -64,51 +66,69 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-4">Application Information</h4>
+                  <h4 className="text-lg font-semibold mb-4">
+                    {formatMessage({ id: 'SYSTEM.APPLICATION_INFO' })}
+                  </h4>
                   <div className="grid gap-3">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 tex">Application</label>
-                      <div className="flex columns-1 w-full flex-wrap ">
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.APPLICATION' })}
+                      </label>
+                      <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].full_name}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Phone number</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Source</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.SOURCE' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].source.name}
                       </div>
                     </div>
 
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Email</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.email}</div>
                     </div>
 
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Client</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.CLIENT' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].client_id}
                       </div>
                     </div>
 
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Status</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">{data.result[0].status}</div>
                     </div>
 
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Message</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.MESSAGE' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].message}
                       </div>
                     </div>
 
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Created at</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {new Date(data.result[0].created_at).toLocaleDateString('ru-RU')}
                       </div>
@@ -118,17 +138,23 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
 
                 {/* Client Block */}
                 <div>
-                  <h4 className="text-lg font-semibold mb-4">Client Information</h4>
+                  <h4 className="text-lg font-semibold mb-4">
+                    {formatMessage({ id: 'SYSTEM.CLIENT_INFO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Type</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.TYPE' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].client?.type || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {data.result[0].client?.type === 'legal' ? 'Company name' : 'Full name'}
+                        {data.result[0].client?.type === 'legal'
+                          ? formatMessage({ id: 'SYSTEM.COMPANY_NAME' })
+                          : formatMessage({ id: 'SYSTEM.FULL_NAME' })}
                       </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].client?.fullname || '-'}
@@ -136,14 +162,18 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                     {data.result[0].client?.type === 'legal' && (
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">BIN</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.BIN' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {data.result[0].client?.bin || '-'}
                         </div>
                       </div>
                     )}
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Phone</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PHONE' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].client?.phone || '-'}
                       </div>
@@ -157,7 +187,7 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
         {canManage && (
           <DialogActions>
             <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
-              Update Application
+              {formatMessage({ id: 'SYSTEM.UPDATE_APPLICATION' })}
             </a>
             {data?.result[0].status === ApplicationsStatus.NEW && (
               <button
@@ -165,7 +195,7 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                 onClick={() => handleCreateOrder(id)}
                 disabled={id === null}
               >
-                Create Order
+                {formatMessage({ id: 'SYSTEM.CREATE_ORDER' })}
               </button>
             )}
           </DialogActions>

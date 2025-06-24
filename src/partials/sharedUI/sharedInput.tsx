@@ -2,6 +2,7 @@ import { FormikProps } from 'formik';
 import React, { useState, useEffect, useCallback } from 'react';
 import { KeenIcon } from '@/components';
 import clsx from 'clsx';
+import { useIntl } from 'react-intl';
 
 interface SharedInputProps<T> {
   name: keyof T;
@@ -20,6 +21,7 @@ export const SharedInput = <T,>({
   maxlength,
   disabled
 }: SharedInputProps<T>) => {
+  const { formatMessage } = useIntl();
   const fieldName = name.toString();
   const [showPassword, setShowPassword] = useState(false);
   const [phoneDisplay, setPhoneDisplay] = useState('');
@@ -197,7 +199,7 @@ export const SharedInput = <T,>({
 
         {formik.touched[name] && formik.errors[name] && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {formik.errors[name] as string}
+            {formatMessage({ id: formik.errors[name] as string })}
           </span>
         )}
       </div>

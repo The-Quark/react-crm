@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { postApplication, getSources, putApplication, getClients } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
 import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
@@ -36,12 +37,12 @@ interface Props {
 export const formSchema = Yup.object().shape({
   first_name: Yup.string().when('client_type', {
     is: 'individual',
-    then: (schema) => schema.required('First name is required'),
+    then: (schema) => schema.required('SYSTEM.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   last_name: Yup.string().when('client_type', {
     is: 'individual',
-    then: (schema) => schema.required('Last name is required'),
+    then: (schema) => schema.required('SYSTEM.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   patronymic: Yup.string().optional(),
@@ -49,20 +50,22 @@ export const formSchema = Yup.object().shape({
     is: 'legal',
     then: (schema) =>
       schema
-        .length(BIN_LENGTH, 'BIN must be exactly 12 digits')
-        .matches(/^\d+$/, 'BIN must contain only digits')
-        .required('Bin is required'),
+        .length(BIN_LENGTH, 'SYSTEM.FORM_VALIDATION_BIN_LENGTH')
+        .matches(/^\d+$/, 'SYSTEM.FORM_VALIDATION_BIN_DIGITS')
+        .required('SYSTEM.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   company_name: Yup.string().when('client_type', {
     is: 'legal',
-    then: (schema) => schema.required('Company name is required'),
+    then: (schema) => schema.required('SYSTEM.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  source: Yup.string().required('Source is required'),
-  client_type: Yup.string().required('Client type is required'),
-  phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
-  email: Yup.string().email('Invalid email address').optional(),
+  source: Yup.string().required('SYSTEM.FORM_VALIDATION_SOURCE_REQUIRED'),
+  client_type: Yup.string().required('SYSTEM.FORM_VALIDATION_CLIENT_TYPE_REQUIRED'),
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'SYSTEM.FORM_VALIDATION_PHONE_INVALID')
+    .required('SYSTEM.FORM_VALIDATION_PHONE_REQUIRED'),
+  email: Yup.string().email('SYSTEM.FORM_VALIDATION_EMAIL_INVALID').optional(),
   client_id: Yup.string().optional().nullable(),
   message: Yup.string().optional(),
   status: Yup.string().optional()
@@ -110,6 +113,7 @@ export const ApplicationsStarterContent = ({
   applicationId,
   applicationData
 }: Props) => {
+  const { formatMessage } = useIntl();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -291,14 +295,20 @@ export const ApplicationsStarterContent = ({
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit Application' : 'New Application'}</h3>
+          <h3 className="card-title">
+            {isEditMode
+              ? formatMessage({ id: 'SYSTEM.EDIT' }) +
+                ' ' +
+                formatMessage({ id: 'SYSTEM.APPLICATION' })
+              : formatMessage({ id: 'SYSTEM.NEW_APPLICATION' })}
+          </h3>
         </div>
 
         <div className="card-body grid gap-5">
           {!isEditMode && (
             <>
               <SharedAutocomplete
-                label="Client"
+                label={formatMessage({ id: 'SYSTEM.CLIENT' })}
                 value={formik.values.client_id ?? ''}
                 options={
                   clientsData?.result?.map((client) => ({
@@ -306,8 +316,8 @@ export const ApplicationsStarterContent = ({
                     name: client.search_application ?? ''
                   })) ?? []
                 }
-                placeholder="Select client"
-                searchPlaceholder="Search client"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_CLIENT' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CLIENT' })}
                 onChange={handleClientChange}
                 error={formik.errors.client_id as string}
                 touched={formik.touched.client_id}
@@ -318,11 +328,14 @@ export const ApplicationsStarterContent = ({
 
               <SharedRadio
                 name="client_type"
-                label="Client Type"
+                label={formatMessage({ id: 'SYSTEM.CLIENT_TYPE' })}
                 formik={formik}
                 options={[
-                  { value: 'individual', label: 'Individual' },
-                  { value: 'legal', label: 'Legal' }
+                  {
+                    value: 'individual',
+                    label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_INDIVIDUAL' })
+                  },
+                  { value: 'legal', label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
                 ]}
                 disabled={!!formik.values.client_id}
                 onChange={handleClientTypeChange}
@@ -333,24 +346,51 @@ export const ApplicationsStarterContent = ({
           <>
             {formik.values.client_type === 'legal' && (
               <>
-                <SharedInput name="company_name" label="Company name" formik={formik} />
-                <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
+                <SharedInput
+                  name="company_name"
+                  label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                  formik={formik}
+                />
+                <SharedInput
+                  name="bin"
+                  label={formatMessage({ id: 'SYSTEM.BIN' })}
+                  formik={formik}
+                  type="number"
+                  maxlength={12}
+                />
               </>
             )}
             {formik.values.client_type === 'individual' && (
               <>
-                <SharedInput name="first_name" label="First name" formik={formik} />
-                <SharedInput name="last_name" label="Last name" formik={formik} />
-                <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+                <SharedInput
+                  name="first_name"
+                  label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+                  formik={formik}
+                />
+                <SharedInput
+                  name="last_name"
+                  label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+                  formik={formik}
+                />
+                <SharedInput
+                  name="patronymic"
+                  label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+                  formik={formik}
+                />
               </>
             )}
           </>
 
-          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
+          <SharedInput
+            name="phone"
+            label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+            formik={formik}
+            type="tel"
+          />
 
           <SharedSelect
             name="source"
-            label="Source"
+            label={formatMessage({ id: 'SYSTEM.SOURCE' })}
             formik={formik}
             options={
               sourcesData?.result?.map((source) => ({ label: source.name, value: source.code })) ||
@@ -358,13 +398,23 @@ export const ApplicationsStarterContent = ({
             }
           />
 
-          <SharedInput name="email" label="Email" formik={formik} type="email" />
-          <SharedTextArea name="message" label="Message" formik={formik} />
+          <SharedInput
+            name="email"
+            label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+            formik={formik}
+            type="email"
+          />
+
+          <SharedTextArea
+            name="message"
+            label={formatMessage({ id: 'SYSTEM.MESSAGE' })}
+            formik={formik}
+          />
 
           {isEditMode && (
             <SharedSelect
               name="status"
-              label="Status"
+              label={formatMessage({ id: 'SYSTEM.STATUS' })}
               formik={formik}
               options={mockApplicationsStatusOptions.map((opt) => ({
                 label: opt.name,
@@ -379,7 +429,9 @@ export const ApplicationsStarterContent = ({
               className="btn btn-primary"
               disabled={loading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Save'}
+              {loading
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

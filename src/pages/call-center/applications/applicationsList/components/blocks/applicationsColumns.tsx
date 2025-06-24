@@ -8,6 +8,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseApplicationsColumnsProps {
   onRowClick: (id: number) => void;
@@ -18,6 +19,7 @@ export const useApplicationsColumns = ({
   onRowClick,
   onDeleteClick
 }: UseApplicationsColumnsProps): ColumnDef<Application>[] => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -28,7 +30,9 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -42,7 +46,12 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row?.full_name,
         id: 'full name',
-        header: ({ column }) => <DataGridColumnHeader title="Application" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.APPLICATION' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => {
           return (
@@ -64,7 +73,12 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row.phone,
         id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone number" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -79,7 +93,9 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row.source.name,
         id: 'source name',
-        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -95,7 +111,9 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -110,7 +128,12 @@ export const useApplicationsColumns = ({
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',
-        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;

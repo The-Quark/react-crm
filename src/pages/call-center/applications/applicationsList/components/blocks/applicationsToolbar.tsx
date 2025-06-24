@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import {
@@ -33,6 +34,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
   onDateRangeChange,
   currentDateRange
 }) => {
+  const { formatMessage } = useIntl();
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
@@ -70,19 +72,19 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Applications</h3>
+      <h3 className="card-title"> {formatMessage({ id: 'SYSTEM.APPLICATIONS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/call-center/applications/starter" className="btn btn-sm btn-primary">
-            New application
+            {formatMessage({ id: 'SYSTEM.NEW_APPLICATION' })}
           </a>
         )}
         <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select status" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_STATUS' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all"> {formatMessage({ id: 'SYSTEM.ALL_STATUSES' })}</SelectItem>
             {mockApplicationsStatus.map((status) => (
               <SelectItem key={status.id} value={status.value}>
                 {status.name}
@@ -110,7 +112,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
                   format(currentDateRange.from, 'LLL dd, y')
                 )
               ) : (
-                <span>Pick a date range</span>
+                <span>{formatMessage({ id: 'SYSTEM.PICK_DATE_RANGE' })}</span>
               )}
             </button>
           </PopoverTrigger>
@@ -134,7 +136,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
           {/*search by id search by client full name select status date created time*/}
           <input
             type="text"
-            placeholder="Search application"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_APPLICATION' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

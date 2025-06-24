@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { useIntl } from 'react-intl';
 import { Container, DataGrid } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteApplication, getApplications } from '@/api';
@@ -12,6 +13,7 @@ import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 
 export const ApplicationListContent = () => {
+  const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<ApplicationsStatus>();
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -146,8 +148,8 @@ export const ApplicationListContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Application"
-        description="Are you sure you want to delete this application? This action cannot be undone."
+        title={formatMessage({ id: 'SYSTEM.DELETE_APPLICATION' })}
+        description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_APPLICATION_DESCRIPTION' })}
         isLoading={isDeleting}
       />
     </Container>

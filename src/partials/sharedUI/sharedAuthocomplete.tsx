@@ -7,6 +7,7 @@ import {
   SelectItem
 } from '@/components/ui/select';
 import clsx from 'clsx';
+import { useIntl } from 'react-intl';
 
 interface Option {
   id: number | string;
@@ -52,6 +53,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   clearable = true,
   clearText = 'Clear selection'
 }) => {
+  const { formatMessage } = useIntl();
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const selectTriggerClasses = clsx('w-full', {
@@ -176,7 +178,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
         </Select>
         {touched && error && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {error}
+            {formatMessage({ id: error as string })}
           </span>
         )}
       </div>

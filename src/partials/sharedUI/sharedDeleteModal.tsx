@@ -4,10 +4,12 @@ import {
   DialogBody,
   DialogContent,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
+  DialogDescription
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { CircularProgress, DialogActions } from '@mui/material';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -30,11 +32,15 @@ export const SharedDeleteModal: React.FC<Props> = ({
   cancelText = 'Cancel',
   isLoading = false
 }) => {
+  const { formatMessage } = useIntl();
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">{title}</DialogTitle>
+          <DialogTitle className="text-xl">
+            {title || formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_TITLE' })}
+          </DialogTitle>
+          <DialogDescription />
         </DialogHeader>
         <DialogBody className="py-4">
           {isLoading ? (
@@ -42,16 +48,18 @@ export const SharedDeleteModal: React.FC<Props> = ({
               <CircularProgress />
             </div>
           ) : (
-            description
+            description || formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_DESCRIPTION' })
           )}
         </DialogBody>
         <DialogActions>
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" onClick={onClose} disabled={isLoading}>
-              {cancelText}
+              {cancelText || formatMessage({ id: 'SYSTEM.DELETE_CANCEL' })}
             </Button>
             <Button variant="destructive" onClick={onConfirm}>
-              {isLoading ? 'Loading' : confirmText}
+              {isLoading
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : confirmText || formatMessage({ id: 'SYSTEM.DELETE_CONFIRM' })}
             </Button>
           </div>
         </DialogActions>

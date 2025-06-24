@@ -2,6 +2,7 @@ import { FormikProps } from 'formik';
 import React from 'react';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import clsx from 'clsx';
+import { useIntl } from 'react-intl';
 
 interface SharedInputProps<T> {
   name: keyof T;
@@ -10,6 +11,7 @@ interface SharedInputProps<T> {
 }
 
 export const SharedTextArea = <T,>({ name, label, formik }: SharedInputProps<T>) => {
+  const { formatMessage } = useIntl();
   const fieldName = name.toString();
   const hasError = formik.touched[name] && formik.errors[name];
 
@@ -26,7 +28,7 @@ export const SharedTextArea = <T,>({ name, label, formik }: SharedInputProps<T>)
         />
         {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {formik.errors[name] as string}
+            {formatMessage({ id: formik.errors[name] as string })}
           </span>
         )}
       </div>

@@ -1,4 +1,5 @@
 import { FormikProps } from 'formik';
+import { useIntl } from 'react-intl';
 import React from 'react';
 import {
   Select,
@@ -25,11 +26,12 @@ export const SharedSelect = <T,>({
   label,
   formik,
   options,
-  placeholder = 'Select...',
+  placeholder,
   isClearable = false,
   disabled = false,
   onChange
 }: Props<T>) => {
+  const { formatMessage } = useIntl();
   const fieldName = name.toString();
   const currentValue = formik.values[name];
   const hasError = formik.touched[name] && formik.errors[name];
@@ -59,7 +61,7 @@ export const SharedSelect = <T,>({
           }}
         >
           <SelectTrigger className={selectTriggerClasses}>
-            <SelectValue placeholder={placeholder} />
+            <SelectValue placeholder={placeholder || formatMessage({ id: 'SYSTEM.SELECT' })} />
           </SelectTrigger>
           <SelectContent>
             {isClearable && currentValue !== null && currentValue !== undefined && (
@@ -76,7 +78,7 @@ export const SharedSelect = <T,>({
         </Select>
         {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {formik.errors[name] as string}
+            {formatMessage({ id: formik.errors[name] as string })}
           </span>
         )}
       </div>
