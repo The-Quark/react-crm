@@ -1,9 +1,11 @@
 import Menu from './components/menu';
 import System from './components/system';
+import Dashboard from './components/dashboard';
 
 const ar = {
   ...Menu,
-  ...System
+  ...System,
+  ...Dashboard
 };
 
 export default ar;

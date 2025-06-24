@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { useCurrentUser } from '@/api';
 
 interface IGeneralInfoItem {
@@ -8,22 +9,56 @@ interface IGeneralInfoItem {
 interface IGeneralInfoItems extends Array<IGeneralInfoItem> {}
 
 const ProfilePageContentGeneralInfo = () => {
+  const { formatMessage } = useIntl();
   const { data: currentUser } = useCurrentUser();
+
   const items: IGeneralInfoItems = [
-    { label: 'Phone:', info: String(currentUser?.phone), type: 1 },
-    { label: 'Email:', info: String(currentUser?.email), type: 2 },
     {
-      label: 'Status:',
+      label: `${formatMessage({ id: 'SYSTEM.PHONE' })}:`,
+      info: String(currentUser?.phone),
+      type: 1
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.EMAIL' })}:`,
+      info: String(currentUser?.email),
+      type: 2
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.STATUS' })}:`,
       info: `<span class="badge badge-sm badge-success badge-outline">${String(currentUser?.status)}</span>`
     },
-    { label: 'Role:', info: String(currentUser?.roles[0].name) },
-    { label: 'Company:', info: String(currentUser?.company?.company_name) },
-    { label: 'Department:', info: String(currentUser?.department?.name) },
-    { label: 'Subdivision:', info: String(currentUser?.subdivision?.name) },
-    { label: 'Position:', info: String(currentUser?.position?.title) },
-    { label: 'Gender:', info: String(currentUser?.gender) },
-    { label: 'Country:', info: String(currentUser?.location?.country.name) },
-    { label: 'City:', info: String(currentUser?.location?.name) }
+    {
+      label: `${formatMessage({ id: 'SYSTEM.ROLE' })}:`,
+      info: String(currentUser?.roles[0].name)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.COMPANY' })}:`,
+      info: String(currentUser?.company?.company_name)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.DEPARTMENT' })}:`,
+      info: String(currentUser?.department?.name)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.SUBDIVISION' })}:`,
+      info: String(currentUser?.subdivision?.name)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.POSITION' })}:`,
+      info: String(currentUser?.position?.title)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.GENDER' })}:`,
+      info: String(currentUser?.gender)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.COUNTRY' })}:`,
+      info: String(currentUser?.location?.country.name)
+    },
+    {
+      label: `${formatMessage({ id: 'SYSTEM.CITY' })}:`,
+      info: String(currentUser?.location?.name)
+    }
   ];
 
   const renderItems = (item: IGeneralInfoItem, index: number) => {
@@ -46,7 +81,7 @@ const ProfilePageContentGeneralInfo = () => {
   return (
     <div className="card">
       <div className="card-header">
-        <h3 className="card-title">General Info</h3>
+        <h3 className="card-title">{formatMessage({ id: 'SYSTEM.GENERAL_INFO_TITLE' })}</h3>
       </div>
 
       <div className="card-body pt-3.5 pb-3.5">
