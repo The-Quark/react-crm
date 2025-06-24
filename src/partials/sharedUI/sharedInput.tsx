@@ -26,6 +26,8 @@ export const SharedInput = <T,>({
   const [numberDisplay, setNumberDisplay] = useState('');
   const [decimalDisplay, setDecimalDisplay] = useState('');
 
+  const hasError = formik.touched[name] && formik.errors[name];
+
   const formatPhoneDisplay = useCallback((value: string): string => {
     const digits = value.replace(/\D/g, '');
     if (digits.length === 0) return '';
@@ -117,14 +119,24 @@ export const SharedInput = <T,>({
     setShowPassword(!showPassword);
   };
 
+  const inputClasses = clsx('input w-full', {
+    'border-danger': hasError,
+    'focus:border-danger': hasError
+  });
+
+  const passwordInputClasses = clsx('w-full', {
+    'border-danger': hasError,
+    'focus:border-danger': hasError
+  });
+
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         {type === 'password' ? (
-          <label className="input w-full">
+          <label className={inputClasses}>
             <input
-              className="w-full"
+              className={passwordInputClasses}
               autoComplete="off"
               type={showPassword ? 'text' : 'password'}
               placeholder={label}
@@ -141,7 +153,7 @@ export const SharedInput = <T,>({
           </label>
         ) : type === 'tel' ? (
           <input
-            className="input w-full"
+            className={inputClasses}
             type="tel"
             placeholder="+7 (777) 777-77-77"
             value={phoneDisplay}
@@ -151,7 +163,7 @@ export const SharedInput = <T,>({
           />
         ) : type === 'decimal' ? (
           <input
-            className="input w-full"
+            className={inputClasses}
             type="text"
             inputMode="decimal"
             placeholder="0.00"
@@ -162,7 +174,7 @@ export const SharedInput = <T,>({
           />
         ) : type === 'number' && maxlength ? (
           <input
-            className="input w-full"
+            className={inputClasses}
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
@@ -175,7 +187,7 @@ export const SharedInput = <T,>({
           />
         ) : (
           <input
-            className="input w-full"
+            className={inputClasses}
             type={type}
             placeholder={label}
             {...formik.getFieldProps(fieldName)}

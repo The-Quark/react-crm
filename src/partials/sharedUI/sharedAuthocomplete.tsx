@@ -6,6 +6,7 @@ import {
   SelectContent,
   SelectItem
 } from '@/components/ui/select';
+import clsx from 'clsx';
 
 interface Option {
   id: number | string;
@@ -52,6 +53,10 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   clearText = 'Clear selection'
 }) => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  const selectTriggerClasses = clsx('w-full', {
+    'border-danger focus:border-danger': touched && error
+  });
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -142,7 +147,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <Select value={value?.toString()} onValueChange={handleValueChange} disabled={disabled}>
-          <SelectTrigger>
+          <SelectTrigger className={selectTriggerClasses}>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent

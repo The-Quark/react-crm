@@ -1,6 +1,7 @@
 'use client';
 import * as React from 'react';
 import { MultiSelect } from '@/components';
+import clsx from 'clsx';
 
 export type Option = {
   value: string;
@@ -34,6 +35,11 @@ export function SharedMultiSelect({
   disabled = false,
   label
 }: MultiSelectProps) {
+  const hasError = touched && error;
+  const multiSelectClasses = clsx(className, {
+    'border-destructive focus:border-destructive': hasError
+  });
+
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
       <label className="form-label max-w-56">{label}</label>
@@ -45,9 +51,10 @@ export function SharedMultiSelect({
           placeholder={placeholder}
           modalPopover={modalPopover}
           disabled={disabled}
+          className={multiSelectClasses}
         />
-        {touched && error && (
-          <span className="text-xs text-destructive">
+        {hasError && (
+          <span className="text-xs text-destructive mt-1">
             {Array.isArray(error) ? error[0] : error}
           </span>
         )}

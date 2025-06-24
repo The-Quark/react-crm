@@ -18,7 +18,8 @@ import {
   SharedInput,
   SharedLoading,
   SharedMultiSelect,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { useParams } from 'react-router';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -313,17 +314,7 @@ export const CargoStarterContent = () => {
             />
           )}
 
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Notes</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <Textarea rows={4} placeholder="Notes" {...formik.getFieldProps('notes')} />
-              {formik.touched.notes && formik.errors.notes && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.notes}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedTextArea name="notes" label="Notes" formik={formik} />
 
           <div className="flex justify-end">
             <button

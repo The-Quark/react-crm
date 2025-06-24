@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import clsx from 'clsx';
 
 interface Props<T> {
   name: keyof T;
@@ -31,8 +32,13 @@ export const SharedSelect = <T,>({
 }: Props<T>) => {
   const fieldName = name.toString();
   const currentValue = formik.values[name];
+  const hasError = formik.touched[name] && formik.errors[name];
 
   const CLEAR_OPTION_VALUE = '__CLEAR__';
+
+  const selectTriggerClasses = clsx({
+    'border-danger focus:border-danger': hasError
+  });
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -52,7 +58,7 @@ export const SharedSelect = <T,>({
             }
           }}
         >
-          <SelectTrigger>
+          <SelectTrigger className={selectTriggerClasses}>
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent>
@@ -68,7 +74,7 @@ export const SharedSelect = <T,>({
             ))}
           </SelectContent>
         </Select>
-        {formik.touched[name] && formik.errors[name] && (
+        {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">
             {formik.errors[name] as string}
           </span>
