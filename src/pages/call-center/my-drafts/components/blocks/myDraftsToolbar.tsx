@@ -13,8 +13,7 @@ import { format } from 'date-fns';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { cn } from '@/utils/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
-import { useAuthContext } from '@/auth';
-import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { OrderStatus } from '@/api/enums';
 
@@ -38,9 +37,8 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
   currentDateRange
 }) => {
   const [searchValue, setSearchValue] = useState('');
+  const { formatMessage } = useIntl();
   const { table } = useDataGrid();
-  const { currentUser } = useAuthContext();
-  const { has } = useUserPermissions();
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
@@ -82,17 +80,17 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Orders</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.DRAFTS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         <Select
           value={currentDeliveryCategory || 'all'}
           onValueChange={handleDeliveryCategoryChange}
         >
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
                 {category.name}
@@ -102,10 +100,10 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
         </Select>
         <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select status" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_STATUS' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_STATUSES' })}</SelectItem>
             {mockOrdersStatus.map((status) => (
               <SelectItem key={status.id} value={status.value}>
                 {status.name}
@@ -133,7 +131,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
                   format(currentDateRange.from, 'LLL dd, y')
                 )
               ) : (
-                <span>Pick a date range</span>
+                <span>{formatMessage({ id: 'SYSTEM.PICK_DATE_RANGE' })}</span>
               )}
             </button>
           </PopoverTrigger>
@@ -156,7 +154,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
           />
           <input
             type="text"
-            placeholder="Search order"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

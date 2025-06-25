@@ -10,6 +10,7 @@ import {
 import { FC } from 'react';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 
 interface MenuOptionsProps {
   id?: number;
@@ -18,6 +19,7 @@ interface MenuOptionsProps {
 
 export const MyDraftsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
+  const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
@@ -30,7 +32,7 @@ export const MyDraftsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="pencil" />
               </MenuIcon>
-              <MenuTitle>Edit</MenuTitle>
+              <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
@@ -39,7 +41,9 @@ export const MyDraftsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />
               </MenuIcon>
-              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+              <MenuTitle className="text-danger !text-red-500">
+                {formatMessage({ id: 'SYSTEM.DELETE' })}
+              </MenuTitle>
             </MenuLink>
           </MenuItem>
         </>

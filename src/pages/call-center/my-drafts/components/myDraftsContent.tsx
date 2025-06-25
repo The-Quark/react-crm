@@ -8,8 +8,10 @@ import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { useMyDraftsColumn } from '@/pages/call-center/my-drafts/components/blocks/myDraftsColumns.tsx';
 import { MyDraftsToolbar } from '@/pages/call-center/my-drafts/components/blocks/myDraftsToolbar.tsx';
+import { useIntl } from 'react-intl';
 
 export const MyDraftsContent = () => {
+  const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<string>();
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -147,8 +149,6 @@ export const MyDraftsContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Order"
-        description="Are you sure you want to delete this order? This action cannot be undone."
         isLoading={isDeleting}
       />
     </Container>

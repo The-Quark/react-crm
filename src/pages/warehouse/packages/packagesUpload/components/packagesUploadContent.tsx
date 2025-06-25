@@ -177,7 +177,7 @@ export const PackagesUploadContent = () => {
 
           {formik.values.files.length > 0 && (
             <div className="grid gap-2">
-              <h4 className="font-medium"> {formatMessage({ id: 'SYSTEM.FILES_TO_UPLOAD' })}</h4>
+              <h4 className="font-medium">{formatMessage({ id: 'SYSTEM.FILES_TO_UPLOAD' })}</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {formik.values.files.map((file, index) => (
                   <SharedFileCard

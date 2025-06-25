@@ -216,7 +216,11 @@ const System = {
   'SYSTEM.SEARCH_AIRLINE': 'البحث عن شركة الطيران',
   'SYSTEM.FROM_AIRPORT': 'من المطار',
   'SYSTEM.TO_AIRPORT': 'إلى المطار',
-  'SYSTEM.CHOOSE_DATE_AND_TIME': 'اختر التاريخ والوقت'
+  'SYSTEM.CHOOSE_DATE_AND_TIME': 'اختر التاريخ والوقت',
+  'SYSTEM.DRAFTS': 'المسودات',
+  'SYSTEM.FAST_FORM': 'نموذج سريع',
+  'SYSTEM.FAST_FORM_DETAILS': 'تفاصيل النموذج السريع',
+  'SYSTEM.SUBMIT': 'إرسال'
 };
 
 export default System;

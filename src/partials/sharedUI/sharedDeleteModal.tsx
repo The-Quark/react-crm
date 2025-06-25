@@ -26,8 +26,8 @@ export const SharedDeleteModal: React.FC<Props> = ({
   open,
   onClose,
   onConfirm,
-  title = 'Confirm deletion',
-  description = 'Are you sure you want to delete this item? This action cannot be undone.',
+  title,
+  description,
   confirmText,
   cancelText,
   isLoading = false

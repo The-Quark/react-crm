@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { defineStepper } from '@stepperize/react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useIntl } from 'react-intl';
 import { FastFormContentApplicationForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFormContentApplicationForm.tsx';
 import { FastFormContentOrderForm } from '@/pages/call-center/fastForm/fastFormStarter/components/blocks/fastFromContentOrderForm.tsx';
 import {
@@ -15,13 +16,14 @@ import { postFastForm } from '@/api';
 import { IFastFormFormValues } from '@/api/post/postWorkflow/postFastForm/types.ts';
 
 const { useStepper, utils } = defineStepper(
-  { id: 'application', title: 'Application' },
-  { id: 'order', title: 'Order' },
-  { id: 'sender', title: 'Sender' },
-  { id: 'receiver', title: 'Receiver' }
+  { id: 'application', title: 'SYSTEM.APPLICATION' },
+  { id: 'order', title: 'SYSTEM.ORDER' },
+  { id: 'sender', title: 'SYSTEM.SENDER' },
+  { id: 'receiver', title: 'SYSTEM.RECEIVER' }
 );
 
 const FastFormFormSteps = () => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const stepper = useStepper();
   const currentStep = stepper.current;
@@ -42,10 +44,11 @@ const FastFormFormSteps = () => {
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full mx-auto">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">Fast form</h2>
+        <h2 className="text-lg font-medium">{formatMessage({ id: 'SYSTEM.FAST_FORM' })}</h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Step {currentIndex + 1} of {allSteps.length}
+            {formatMessage({ id: 'SYSTEM.STEP' })} {currentIndex + 1}{' '}
+            {formatMessage({ id: 'SYSTEM.OF' })} {allSteps.length}
           </span>
         </div>
       </div>
@@ -72,7 +75,7 @@ const FastFormFormSteps = () => {
                     {index + 1}
                   </Button>
                   <span className={`text-sm font-medium ${isActive ? 'text-primary' : ''}`}>
-                    {step.title}
+                    {formatMessage({ id: step.title })}
                   </span>
                 </li>
                 {index < array.length - 1 && (

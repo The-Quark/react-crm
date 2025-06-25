@@ -216,7 +216,11 @@ const System = {
   'SYSTEM.SEARCH_AIRLINE': 'Search airline',
   'SYSTEM.FROM_AIRPORT': 'From Airport',
   'SYSTEM.TO_AIRPORT': 'To Airport',
-  'SYSTEM.CHOOSE_DATE_AND_TIME': 'Choose date and time'
+  'SYSTEM.CHOOSE_DATE_AND_TIME': 'Choose date and time',
+  'SYSTEM.DRAFTS': 'Drafts',
+  'SYSTEM.FAST_FORM': 'Fast Form',
+  'SYSTEM.FAST_FORM_DETAILS': 'Fast Form Details',
+  'SYSTEM.SUBMIT': 'Submit'
 };
 
 export default System;

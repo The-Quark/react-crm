@@ -24,6 +24,7 @@ import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { DeliveryCategories } from '@/api/enums';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onNext: () => void;
@@ -32,8 +33,8 @@ interface Props {
 
 const formSchema = Yup.object().shape({
   delivery_type: Yup.number()
-    .typeError('Delivery type is required')
-    .required('Delivery type is required'),
+    .typeError('VALIDATION.DELIVERY_TYPE_REQUIRED')
+    .required('VALIDATION.DELIVERY_TYPE_TYPE_ERROR'),
   delivery_category: Yup.string()
     .oneOf(
       [
@@ -42,18 +43,18 @@ const formSchema = Yup.object().shape({
         DeliveryCategories.C2C,
         DeliveryCategories.C2B
       ],
-      'Invalid delivery category'
+      'VALIDATION.DELIVERY_CATEGORY_INVALID'
     )
-    .required('Delivery category is required'),
+    .required('VALIDATION.DELIVERY_CATEGORY_REQUIRED'),
   package_type: Yup.number()
-    .typeError('Package type is required')
-    .required('Package type is required'),
-  weight: decimalValidation.required('Weight is required'),
-  width: decimalValidation.required('Width is required'),
-  length: decimalValidation.required('Length is required'),
-  height: decimalValidation.required('Height is required'),
-  customs_clearance: Yup.boolean().required('Customs clearance is required'),
-  is_international: Yup.boolean().required('Is international is required'),
+    .typeError('VALIDATION.PACKAGE_TYPE_TYPE_ERROR')
+    .required('VALIDATION.PACKAGE_TYPE_REQUIRED'),
+  weight: decimalValidation.required('VALIDATION.WEIGHT_REQUIRED'),
+  width: decimalValidation.required('VALIDATION.WIDTH_REQUIRED'),
+  length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
+  height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
+  customs_clearance: Yup.boolean().required('VALIDATION.CLEARANCE_REQUIRED'),
+  is_international: Yup.boolean().required('VALIDATION.IS_INTERNATIONAL_REQUIRED'),
   package_description: Yup.string().optional(),
   special_wishes: Yup.string().optional(),
   order_content: Yup.array().of(Yup.string()).optional()
@@ -102,6 +103,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
 
 export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
+  const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
@@ -194,8 +196,8 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
         <div className="card-body grid gap-5">
           <SharedSelect
             name="delivery_type"
-            label="Delivery Type"
-            placeholder="Select delivery type"
+            label={formatMessage({ id: 'SYSTEM.DELIVERY_TYPE' })}
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
             formik={formik}
             options={
               deliveryTypesData?.result?.map((type) => ({
@@ -214,8 +216,8 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
           />
           <SharedSelect
             name="delivery_category"
-            label="Delivery Category"
-            placeholder="Select delivery category"
+            label={formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })}
             formik={formik}
             options={mockDeliveryCategories.map((category) => ({
               label: category.name,
@@ -223,7 +225,9 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             }))}
           />
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">International</label>
+            <label className="form-label max-w-56">
+              {formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
+            </label>
             <div className="flex columns-1 w-full flex-wrap">
               <label className="checkbox-group flex items-center gap-2">
                 <input
@@ -233,7 +237,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
                   onChange={(e) => formik.setFieldValue('is_international', e.target.checked)}
                   className="checkbox-sm"
                 />
-                <span className="checkbox-label">Yes</span>
+                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
               </label>
               {formik.touched.is_international && formik.errors.is_international && (
                 <span role="alert" className="text-danger text-xs mt-1">
@@ -244,8 +248,8 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
           </div>
           <SharedSelect
             name="package_type"
-            label="Package Type"
-            placeholder="Select package type"
+            label={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
             formik={formik}
             options={
               packageTypesData?.result.map((packageType) => ({
@@ -275,12 +279,14 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             onChange={(value) =>
               formik.setFieldValue('order_content', value as typeof formik.values.order_content)
             }
-            label="Order Content"
+            label={formatMessage({ id: 'SYSTEM.ORDER_CONTENT' })}
             error={formik.errors.order_content as string}
             touched={formik.touched.order_content}
           />
           <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Custom Clearance</label>
+            <label className="form-label max-w-56">
+              {formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
+            </label>
             <div className="flex columns-1 w-full flex-wrap">
               <label className="checkbox-group flex items-center gap-2">
                 <input
@@ -290,7 +296,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
                   onChange={(e) => formik.setFieldValue('customs_clearance', e.target.checked)}
                   className="checkbox-sm"
                 />
-                <span className="checkbox-label">Yes</span>
+                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
               </label>
               {formik.touched.customs_clearance && formik.errors.customs_clearance && (
                 <span role="alert" className="text-danger text-xs mt-1">
@@ -299,34 +305,64 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
               )}
             </div>
           </div>
-          <SharedDecimalInput name="weight" label="Weight (kg)" formik={formik} />
-          <SharedDecimalInput name="width" label="Width (cm)" formik={formik} />
-          <SharedDecimalInput name="length" label="Length (cm)" formik={formik} />
-          <SharedDecimalInput name="height" label="Height (cm)" formik={formik} />
-          <SharedInput name="volume" label="Volume" type="number" formik={formik} disabled />
+          <SharedDecimalInput
+            name="weight"
+            label={`${formatMessage({ id: 'SYSTEM.WEIGHT' })} (kg)`}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="width"
+            label={`${formatMessage({ id: 'SYSTEM.WIDTH' })} (cm)`}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="length"
+            label={`${formatMessage({ id: 'SYSTEM.LENGTH' })} (cm)`}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="height"
+            label={`${formatMessage({ id: 'SYSTEM.HEIGHT' })} (cm)`}
+            formik={formik}
+          />
+          <SharedInput
+            name="volume"
+            label={`${formatMessage({ id: 'SYSTEM.VOLUME' })} (см³)`}
+            type="number"
+            formik={formik}
+            disabled
+          />
           <SharedInput
             name="places_count"
-            label="Places Count"
+            label={formatMessage({ id: 'SYSTEM.PLACES_COUNT' })}
             type="number"
             formik={formik}
             disabled
           />
           <SharedInput
             name="price"
-            label={`Price (${currentCurrency})`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency})`}
             formik={formik}
             type="text"
             disabled
           />
-          <SharedTextArea name="package_description" label="Package Description" formik={formik} />
-          <SharedTextArea name="special_wishes" label="Special Wishes" formik={formik} />
+          <SharedTextArea
+            name="package_description"
+            label={formatMessage({ id: 'SYSTEM.PACKAGE_DESCRIPTION' })}
+            formik={formik}
+          />
+          <SharedTextArea
+            name="special_wishes"
+            label={formatMessage({ id: 'SYSTEM.SPECIAL_WISHES' })}
+            formik={formik}
+          />
 
           <div className="flex justify-between">
             <button className="btn btn-light" onClick={onBack}>
-              Back
+              {formatMessage({ id: 'SYSTEM.BACK' })}
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              Next
+              {formatMessage({ id: 'SYSTEM.NEXT' })}
             </button>
           </div>
         </div>

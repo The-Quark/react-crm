@@ -14,6 +14,7 @@ import {
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderReceiver/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onConfirmModal?: () => void;
@@ -23,12 +24,12 @@ interface Props {
 const formSchema = Yup.object().shape({
   first_name: Yup.string().when('type', {
     is: 'individual',
-    then: (schema) => schema.required('First name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   last_name: Yup.string().when('type', {
     is: 'individual',
-    then: (schema) => schema.required('Last name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   patronymic: Yup.string().optional(),
@@ -36,21 +37,23 @@ const formSchema = Yup.object().shape({
     is: 'legal',
     then: (schema) =>
       schema
-        .length(BIN_LENGTH, 'BIN must be exactly 12 digits')
-        .matches(/^\d+$/, 'BIN must contain only digits')
-        .required('Bin is required'),
+        .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
+        .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
+        .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   company_name: Yup.string().when('type', {
     is: 'legal',
-    then: (schema) => schema.required('Company name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  city_id: Yup.number().required('City is required'),
-  country_id: Yup.number().required('Country is required'),
-  phone: Yup.string().matches(PHONE_REG_EXP, 'Invalid phone number').required('Phone is required'),
-  street: Yup.string().required('Street is required'),
-  house: Yup.string().required('House is required'),
+  city_id: Yup.number().required('VALIDATION.CITY_REQUIRED'),
+  country_id: Yup.number().required('VALIDATION.COUNTRY_REQUIRED'),
+  phone: Yup.string()
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  street: Yup.string().required('VALIDATION.STREET_REQUIRED'),
+  house: Yup.string().required('VALIDATION.HOUSE_REQUIRED'),
   apartment: Yup.string().optional(),
   location_description: Yup.string().optional(),
   notes: Yup.string().optional()
@@ -98,6 +101,7 @@ const getInitialValues = (mainForm: IReceiverOrderFormValues | null): IReceiverO
 
 export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack }) => {
   const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
+  const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
@@ -226,7 +230,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
       <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
           <SharedAutocomplete
-            label="Contact"
+            label={formatMessage({ id: 'SYSTEM.CONTACT' })}
             value={formik.values.contact_id ?? ''}
             options={
               clientsData?.result?.map((client) => ({
@@ -234,8 +238,8 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
                 name: client.search_application ?? ''
               })) ?? []
             }
-            placeholder="Select contact"
-            searchPlaceholder="Search contact"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_CONTACT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CONTACT' })}
             onChange={(val) => handleClientChange(String(val))}
             error={formik.errors.contact_id as string}
             touched={formik.touched.contact_id}
@@ -245,25 +249,46 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
 
           {formik.values.type === 'legal' ? (
             <>
-              <SharedInput name="company_name" label="Company name" formik={formik} />
-              <SharedInput name="bin" label="BIN" formik={formik} />
+              <SharedInput
+                name="company_name"
+                label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                formik={formik}
+              />
+              <SharedInput name="bin" label={formatMessage({ id: 'SYSTEM.BIN' })} formik={formik} />
             </>
           ) : (
             <>
-              <SharedInput name="first_name" label="First name" formik={formik} />
-              <SharedInput name="last_name" label="Last name" formik={formik} />
-              <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+              <SharedInput
+                name="first_name"
+                label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="last_name"
+                label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="patronymic"
+                label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+                formik={formik}
+              />
             </>
           )}
 
-          <SharedInput name="phone" label="Phone" formik={formik} type="tel" />
+          <SharedInput
+            name="phone"
+            label={formatMessage({ id: 'SYSTEM.PHONE' })}
+            formik={formik}
+            type="tel"
+          />
 
           <SharedAutocomplete
-            label="Country"
+            label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.country_id ?? ''}
             options={countriesData?.data ?? []}
-            placeholder="Select country"
-            searchPlaceholder="Search country"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
             onChange={(val) => {
               const selectedCountry = countriesData?.data?.find((country) => country.id === val);
               formik.setFieldValue('country_id', val ? Number(val) : '');
@@ -281,10 +306,14 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
           />
 
           <SharedAutocomplete
-            label="City"
+            label={formatMessage({ id: 'SYSTEM.CITY' })}
             value={formik.values.city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
-            placeholder={formik.values.city_id ? 'Select city' : 'Select country first'}
+            placeholder={
+              formik.values.city_id
+                ? formatMessage({ id: 'SYSTEM.SELECT' })
+                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+            }
             searchPlaceholder="Search city"
             onChange={(val) => {
               formik.setFieldValue('city_id', val ? Number(val) : '');
@@ -300,27 +329,41 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
             onSearchTermChange={setCitySearchTerm}
             disabled={!formik.values.country_id}
             loading={citiesLoading}
-            errorText={citiesIsError ? 'Failed to load cities' : undefined}
-            emptyText="No cities available"
+            errorText={
+              citiesIsError ? formatMessage({ id: 'SYSTEM.FAILED_LOAD_CITIES' }) : undefined
+            }
+            emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
           />
 
-          <SharedInput name="street" label="Street" formik={formik} />
-          <SharedInput name="house" label="House" formik={formik} />
-          <SharedInput name="apartment" label="Apartment" formik={formik} />
+          <SharedInput
+            name="street"
+            label={formatMessage({ id: 'SYSTEM.STREET' })}
+            formik={formik}
+          />
+          <SharedInput name="house" label={formatMessage({ id: 'SYSTEM.HOUSE' })} formik={formik} />
+          <SharedInput
+            name="apartment"
+            label={formatMessage({ id: 'SYSTEM.APARTMENT' })}
+            formik={formik}
+          />
 
           <SharedTextArea
             name="location_description"
-            label="Location description"
+            label={formatMessage({ id: 'SYSTEM.LOCATION_DESCRIPTION' })}
             formik={formik}
           />
-          <SharedTextArea name="notes" label="Notes" formik={formik} />
+          <SharedTextArea
+            name="notes"
+            label={formatMessage({ id: 'SYSTEM.NOTES' })}
+            formik={formik}
+          />
 
           <div className="flex justify-between">
             <button className="btn btn-light" onClick={onBack}>
-              Back
+              {formatMessage({ id: 'SYSTEM.BACK' })}
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              Submit
+              {formatMessage({ id: 'SYSTEM.SUBMIT' })}
             </button>
           </div>
         </div>

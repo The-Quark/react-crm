@@ -8,6 +8,7 @@ import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { MyDraftsMenuOptions } from '@/pages/call-center/my-drafts/components/blocks/myDraftsMenuOptions.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onDeleteClick: (id: number) => void;
@@ -15,6 +16,7 @@ interface UseColumnsProps {
 
 export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef<Order>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -24,7 +26,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -38,7 +42,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.order_code,
         id: 'order code',
-        header: ({ column }) => <DataGridColumnHeader title="Order code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -55,7 +61,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.sender?.full_name,
         id: 'sender full name',
-        header: ({ column }) => <DataGridColumnHeader title="Sender" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SENDER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -72,7 +80,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.receiver?.full_name,
         id: 'receiver full name',
-        header: ({ column }) => <DataGridColumnHeader title="Receiver" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.RECEIVER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -89,7 +99,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.delivery_category,
         id: 'delivery category',
-        header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CATEGORY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -105,7 +117,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.hawb_pdf,
         id: 'hawb pdf',
-        header: ({ column }) => <DataGridColumnHeader title="QR" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.QR' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const url = info.row.original.hawb_pdf.startsWith('http')
@@ -133,7 +147,9 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -148,7 +164,12 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',
-        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;

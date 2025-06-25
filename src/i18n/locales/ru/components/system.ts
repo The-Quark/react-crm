@@ -216,7 +216,11 @@ const System = {
   'SYSTEM.SEARCH_AIRLINE': 'Поиск авиакомпании',
   'SYSTEM.FROM_AIRPORT': 'Из аэропорта',
   'SYSTEM.TO_AIRPORT': 'В аэропорт',
-  'SYSTEM.CHOOSE_DATE_AND_TIME': 'Выберите дату и время'
+  'SYSTEM.CHOOSE_DATE_AND_TIME': 'Выберите дату и время',
+  'SYSTEM.DRAFTS': 'Черновики',
+  'SYSTEM.FAST_FORM': 'Быстрая форма',
+  'SYSTEM.FAST_FORM_DETAILS': 'Детали быстрой формы',
+  'SYSTEM.SUBMIT': 'Отправить'
 };
 
 export default System;

@@ -9,6 +9,7 @@ import Dropzone from 'shadcn-dropzone';
 import { getCargo, getFileTypes, postCargoUpload } from '@/api';
 import { SharedError, SharedFileCard, SharedLoading, SharedSelect } from '@/partials/sharedUI';
 import { extToMime } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
 
 interface FormValues {
   type: string;
@@ -19,6 +20,7 @@ export const CargoUploadContent = () => {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { formatMessage } = useIntl();
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -27,8 +29,8 @@ export const CargoUploadContent = () => {
     },
     validationSchema: Yup.object().shape({
       type: Yup.string()
-        .required('Please select file type first and upload file')
-        .test('type-selected-before-files', 'Please select file type first', function (value) {
+        .required('VALIDATION.FILE_TYPE_REQUIRED')
+        .test('type-selected-before-files', 'VALIDATION.FILE_TYPE_BEFORE_FILES', function (value) {
           if (this.parent.files?.length > 0 && !value) {
             return false;
           }
@@ -36,8 +38,8 @@ export const CargoUploadContent = () => {
         }),
       files: Yup.array()
         .of(Yup.mixed<File>())
-        .required('Files are required')
-        .test('fileType', 'Unsupported file type', function (files) {
+        .required('VALIDATION.FILES_REQUIRED')
+        .test('fileType', 'VALIDATION.UNSUPPORTED_FILE_TYPE', function (files) {
           if (!files || files.length === 0) return true;
           const selectedType = fileTypeData?.result?.find((t) => t.id === Number(this.parent.type));
           if (!selectedType) return false;
@@ -131,18 +133,18 @@ export const CargoUploadContent = () => {
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">Upload Documents/Photos</h3>
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.UPLOAD_DOCUMENTS_PHOTOS' })}</h3>
         </div>
 
         <div className="card-body grid gap-5">
           <SharedSelect
             name="type"
-            label="File type"
+            label={formatMessage({ id: 'SYSTEM.FILE_TYPE' })}
             formik={formik}
             options={
               fileTypeData?.result?.map((file) => ({ label: file.name, value: file.id })) ?? []
             }
-            placeholder="Select upload type"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_UPLOAD_TYPE' })}
             onChange={(value: string | number) => {
               formik.setFieldValue('type', value);
               formik.setFieldValue('files', []);
@@ -150,10 +152,11 @@ export const CargoUploadContent = () => {
           />
 
           <div className="flex flex-col gap-2.5">
-            <label className="form-label">Files</label>
+            <label className="form-label">{formatMessage({ id: 'SYSTEM.FILES' })}</label>
             {selectedFileType && (
               <p className="text-sm text-gray-500">
-                Allowed file types: {selectedFileType.types.join(', ')}
+                {formatMessage({ id: 'SYSTEM.ALLOWED_FILE_TYPES' })}:{' '}
+                {selectedFileType.types.join(', ')}
               </p>
             )}
             <Dropzone
@@ -166,13 +169,15 @@ export const CargoUploadContent = () => {
               noClick={!formik.values.type}
             />
             {formik.touched.files && formik.errors.files && (
-              <p className="text-red-500 text-sm">{formik.errors.files as string}</p>
+              <p className="text-red-500 text-sm">
+                {formatMessage({ id: formik.errors.files as string })}
+              </p>
             )}
           </div>
 
           {formik.values.files.length > 0 && (
             <div className="grid gap-2">
-              <h4 className="font-medium">Files to upload</h4>
+              <h4 className="font-medium">{formatMessage({ id: 'SYSTEM.FILES_TO_UPLOAD' })}</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {formik.values.files.map((file, index) => (
                   <SharedFileCard
@@ -194,7 +199,7 @@ export const CargoUploadContent = () => {
 
           {cargoData?.result?.[0]?.media && cargoData.result[0].media.length > 0 && (
             <div className="grid gap-2">
-              <h4 className="font-medium">Uploaded files:</h4>
+              <h4 className="font-medium">{formatMessage({ id: 'SYSTEM.UPLOADED_FILES' })}:</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {cargoData.result[0].media.map((media) => (
                   <SharedFileCard
@@ -209,14 +214,16 @@ export const CargoUploadContent = () => {
 
           <div className="flex justify-end gap-2.5">
             <button type="button" className="btn btn-light" onClick={() => navigate(-1)}>
-              Cancel
+              {formatMessage({ id: 'SYSTEM.CANCEL' })}
             </button>
             <button
               type="submit"
               className="btn btn-primary"
               disabled={formik.isSubmitting || formik.values.files.length === 0}
             >
-              {formik.isSubmitting ? 'Uploading...' : 'Upload Files'}
+              {formik.isSubmitting
+                ? formatMessage({ id: 'SYSTEM.UPLOADING' })
+                : formatMessage({ id: 'SYSTEM.UPLOAD_FILES' })}
             </button>
           </div>
         </div>
