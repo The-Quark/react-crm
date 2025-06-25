@@ -16,6 +16,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useNavigate } from 'react-router';
 import { PackageStatus } from '@/api/enums';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
@@ -49,7 +51,9 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">Package Details</DialogTitle>
+          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+            {formatMessage({ id: 'SYSTEM.PACKAGE_DETAILS' })}
+          </DialogTitle>
           <button
             className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
             data-modal-dismiss="true"
@@ -66,84 +70,114 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-3">Base</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.BASE' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">HAWB</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.HAWB' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.hawb || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Status</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.status || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Document</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DOCUMENT' })}
+                      </label>
                       <a className="link" href={url} target="_blank" rel="noopener noreferrer">
-                        hawb.pdf
+                        {formatMessage({ id: 'SYSTEM.HAWB_DOC' })}
                       </a>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Weight</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.WEIGHT' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.weight || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Width</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.WIDTH' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.width || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Height</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.HEIGHT' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.height || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Length</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.LENGTH' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.length || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Width</label>
-                      <div className="flex columns-1 w-full">{packageData.width || '-'}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Volume</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.VOLUME' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.volume || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Place count</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PLACE_COUNT' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.places_count || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Price</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PRICE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.price || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Dimensions</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DIMENSIONS' })}
+                      </label>
                       <div className="flex columns-1 w-full">{packageData.dimensions || '-'}</div>
                     </div>
                   </div>
                 </div>
                 {packageData?.client && packageData.client.type === 'legal' ? (
                   <div className="">
-                    <h4 className="text-lg font-semibold mb-3">Company</h4>
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.COMPANY_INFO' })}
+                    </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Name</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.company_name || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.PHONE' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.phone || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Email</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.email || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Representative</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {(packageData.client.representative_last_name || '-') +
                             ' ' +
@@ -154,7 +188,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">
-                          Representative phone
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PHONE' })}
                         </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.representative_phone || '-'}
@@ -162,7 +196,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">
-                          Representative email
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_EMAIL' })}
                         </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.representative_email || '-'}
@@ -172,10 +206,14 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                   </div>
                 ) : (
                   <div className="border-b pb-4">
-                    <h4 className="text-lg font-semibold mb-3">Client</h4>
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.CLIENT' })}
+                    </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Full name</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {(packageData.client?.last_name || '-') +
                             ' ' +
@@ -185,13 +223,17 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.PHONE' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client?.phone || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Email</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client?.email || '-'}
                         </div>
@@ -202,10 +244,14 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
 
                 {packageData?.assigned_user && (
                   <div className="">
-                    <h4 className="text-lg font-semibold mb-3">Assigned User</h4>
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.ASSIGNED_USER_INFO' })}
+                    </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Full name</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {(packageData.assigned_user?.last_name || '-') +
                             ' ' +
@@ -215,13 +261,17 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.PHONE' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.assigned_user?.phone || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Email</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {packageData.assigned_user?.email || '-'}
                         </div>
@@ -237,7 +287,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
           <DialogActions>
             <div className="flex gap-4 mb-2 mr-3">
               <a className="btn btn-md btn-light" href={`/warehouse/packages/starter/${id}`}>
-                Update Package
+                {formatMessage({ id: 'SYSTEM.UPDATE_PACKAGE' })}
               </a>
               {data?.result[0].status === PackageStatus.READY_FOR_SHIPMENT && (
                 <button
@@ -245,7 +295,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                   onClick={() => handleCreateCargo(id)}
                   disabled={id === null}
                 >
-                  Create Cargo
+                  {formatMessage({ id: 'SYSTEM.CREATE_CARGO' })}
                 </button>
               )}
             </div>

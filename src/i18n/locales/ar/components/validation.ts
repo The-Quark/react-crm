@@ -28,7 +28,12 @@ const Validation = {
   'VALIDATION.CITY_REQUIRED': 'المدينة مطلوبة',
   'VALIDATION.COUNTRY_REQUIRED': 'الدولة مطلوبة',
   'VALIDATION.STREET_REQUIRED': 'الشارع مطلوب',
-  'VALIDATION.HOUSE_REQUIRED': 'المنزل مطلوب'
+  'VALIDATION.HOUSE_REQUIRED': 'المنزل مطلوب',
+  'VALIDATION.FILE_TYPE_REQUIRED': 'يرجى تحديد نوع الملف أولاً ورفع الملف',
+  'VALIDATION.FILE_TYPE_BEFORE_FILES': 'يرجى تحديد نوع الملف أولاً',
+  'VALIDATION.FILES_REQUIRED': 'الملفات مطلوبة',
+  'VALIDATION.UNSUPPORTED_FILE_TYPE': 'نوع الملف غير مدعوم',
+  'VALIDATION.ORDER_ID_REQUIRED': 'الطلب مطلوب'
 };
 
 export default Validation;

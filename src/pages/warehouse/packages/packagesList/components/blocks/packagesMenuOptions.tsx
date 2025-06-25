@@ -8,6 +8,7 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,6 +21,7 @@ interface MenuOptionsProps {
 
 export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
+  const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const queryClient = useQueryClient();
@@ -46,7 +48,7 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="file-up" />
               </MenuIcon>
-              <MenuTitle>Upload file</MenuTitle>
+              <MenuTitle>{formatMessage({ id: 'SYSTEM.UPLOAD_FILE' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
@@ -55,7 +57,11 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="user-tick" />
               </MenuIcon>
-              <MenuTitle>{assignMutation.isPending ? 'Assigning...' : 'Assign to me'}</MenuTitle>
+              <MenuTitle>
+                {assignMutation.isPending
+                  ? formatMessage({ id: 'SYSTEM.ASSIGNING' })
+                  : formatMessage({ id: 'SYSTEM.ASSIGN_TO_ME' })}
+              </MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
@@ -64,7 +70,7 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="pencil" />
               </MenuIcon>
-              <MenuTitle>Edit</MenuTitle>
+              <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
@@ -73,7 +79,9 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />
               </MenuIcon>
-              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+              <MenuTitle className="text-danger !text-red-500">
+                {formatMessage({ id: 'SYSTEM.DELETE' })}
+              </MenuTitle>
             </MenuLink>
           </MenuItem>
         </>

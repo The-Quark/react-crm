@@ -8,6 +8,7 @@ import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -18,6 +19,7 @@ export const usePackagesColumns = ({
   onRowClick,
   onDeleteClick
 }: UseColumnsProps): ColumnDef<Package>[] => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -28,7 +30,9 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -42,7 +46,9 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row.hawb,
         id: 'hawb',
-        header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -67,7 +73,9 @@ export const usePackagesColumns = ({
             : client?.company_name || '';
         },
         id: 'client full name',
-        header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CLIENT' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const client = info.row.original.client;
@@ -90,7 +98,9 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row.hawb_pdf,
         id: 'hawb pdf',
-        header: ({ column }) => <DataGridColumnHeader title="HAWB doc" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB_DOC' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const url = info.row.original.hawb_pdf.startsWith('http')
@@ -112,7 +122,9 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row?.delivery_category,
         id: 'delivery category',
-        header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CATEGORY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -128,7 +140,12 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row?.assigned_user,
         id: 'assigned user',
-        header: ({ column }) => <DataGridColumnHeader title="Assigned user" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.ASSIGNED_USER' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => {
           const user = info.row.original?.assigned_user;
@@ -149,7 +166,9 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -164,7 +183,12 @@ export const usePackagesColumns = ({
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',
-        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;

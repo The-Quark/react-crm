@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
+import { useIntl } from 'react-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deletePackage, getPackages } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
@@ -12,6 +13,7 @@ import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesLis
 
 export const PackagesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { formatMessage } = useIntl();
   const [status, setStatus] = useState<PackageStatus>();
   const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,8 +144,8 @@ export const PackagesListContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Package"
-        description="Are you sure you want to delete this package? This action cannot be undone."
+        title={formatMessage({ id: 'SYSTEM.DELETE_PACKAGE' })}
+        description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_PACKAGE_DESCRIPTION' })}
         isLoading={isDeleting}
       />
       <PackagesCargoCreateModal

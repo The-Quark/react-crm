@@ -12,6 +12,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { PackageStatus } from '@/api/enums';
+import { useIntl } from 'react-intl';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -30,6 +31,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
   onDeliveryCategoryChange,
   onCreateCargo
 }) => {
+  const { formatMessage } = useIntl();
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
@@ -69,24 +71,24 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Packages</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.PACKAGES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <>
             <button type="button" className="btn btn-sm btn-primary" onClick={onCreateCargo}>
-              <KeenIcon icon="delivery" /> Collect Cargo
+              <KeenIcon icon="delivery" /> {formatMessage({ id: 'SYSTEM.COLLECT_CARGO' })}
             </button>
             <a href="/warehouse/packages/starter" className="btn btn-sm btn-primary">
-              New Package
+              {formatMessage({ id: 'SYSTEM.NEW_PACKAGE' })}
             </a>
           </>
         )}
         <Select value={currentDeliveryCategory || 'all'} onValueChange={handleDeliveryTypeChange}>
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
                 {category.name}
@@ -96,10 +98,10 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
         </Select>
         <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select status" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_STATUS' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_STATUSES' })}</SelectItem>
             {packageStatusOptions.map((status) => (
               <SelectItem key={status.id} value={status.value}>
                 {status.name}
@@ -115,7 +117,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
           />
           <input
             type="text"
-            placeholder="Search hawb"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_HAWB' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

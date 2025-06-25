@@ -29,7 +29,12 @@ const Validation = {
   'VALIDATION.CITY_REQUIRED': 'Город обязателен',
   'VALIDATION.COUNTRY_REQUIRED': 'Страна обязательна',
   'VALIDATION.STREET_REQUIRED': 'Улица обязательна',
-  'VALIDATION.HOUSE_REQUIRED': 'Дом обязателен'
+  'VALIDATION.HOUSE_REQUIRED': 'Дом обязателен',
+  'VALIDATION.FILE_TYPE_REQUIRED': 'Пожалуйста, сначала выберите тип файла и загрузите файл',
+  'VALIDATION.FILE_TYPE_BEFORE_FILES': 'Пожалуйста, сначала выберите тип файла',
+  'VALIDATION.FILES_REQUIRED': 'Файлы обязательны',
+  'VALIDATION.UNSUPPORTED_FILE_TYPE': 'Неподдерживаемый тип файла',
+  'VALIDATION.ORDER_ID_REQUIRED': 'Заказ обязателен'
 };
 
 export default Validation;

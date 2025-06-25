@@ -11,6 +11,7 @@ const Validation = {
   'VALIDATION.FORM_VALIDATION_PHONE_INVALID': 'Invalid phone number',
   'VALIDATION.FORM_VALIDATION_EMAIL_INVALID': 'Invalid email address',
   'VALIDATION.APPLICATION_ID_REQUIRED': 'Application required',
+  'VALIDATION.ORDER_ID_REQUIRED': 'Order required',
   'VALIDATION.DELIVERY_TYPE_REQUIRED': 'Delivery type is required',
   'VALIDATION.DELIVERY_TYPE_TYPE_ERROR': 'Delivery type is required',
   'VALIDATION.DELIVERY_CATEGORY_REQUIRED': 'Delivery category is required',
@@ -28,7 +29,11 @@ const Validation = {
   'VALIDATION.CITY_REQUIRED': 'City is required',
   'VALIDATION.COUNTRY_REQUIRED': 'Country is required',
   'VALIDATION.STREET_REQUIRED': 'Street is required',
-  'VALIDATION.HOUSE_REQUIRED': 'House is required'
+  'VALIDATION.HOUSE_REQUIRED': 'House is required',
+  'VALIDATION.FILE_TYPE_REQUIRED': 'Please select file type first and upload file',
+  'VALIDATION.FILE_TYPE_BEFORE_FILES': 'Please select file type first',
+  'VALIDATION.FILES_REQUIRED': 'Files are required',
+  'VALIDATION.UNSUPPORTED_FILE_TYPE': 'Unsupported file type'
 };
 
 export default Validation;

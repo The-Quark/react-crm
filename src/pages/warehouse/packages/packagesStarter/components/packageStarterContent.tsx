@@ -18,6 +18,7 @@ import { OrderStatus, PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   isEditMode: boolean;
@@ -26,16 +27,17 @@ interface Props {
 }
 
 export const formSchema = Yup.object().shape({
-  order_id: Yup.string().required('Order is required'),
-  weight: decimalValidation.required('Weight is required'),
-  width: decimalValidation.required('Width is required'),
-  length: decimalValidation.required('Length is required'),
-  height: decimalValidation.required('Height is required'),
+  order_id: Yup.string().required('VALIDATION.ORDER_ID_REQUIRED'),
+  weight: decimalValidation.required('VALIDATION.WEIGHT_REQUIRED'),
+  width: decimalValidation.required('VALIDATION.WIDTH_REQUIRED'),
+  length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
+  height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
   status: Yup.string().optional()
 });
 
 export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Props) => {
   const [searchParams] = useSearchParams();
+  const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
@@ -203,12 +205,16 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit Package' : 'New Package'}</h3>
+          <h3 className="card-title">
+            {isEditMode
+              ? formatMessage({ id: 'SYSTEM.EDIT_PACKAGE' })
+              : formatMessage({ id: 'SYSTEM.NEW_PACKAGE' })}
+          </h3>
         </div>
 
         <div className="card-body grid gap-5">
           <SharedAutocomplete
-            label="Order"
+            label={formatMessage({ id: 'SYSTEM.ORDER' })}
             value={formik.values.order_id ?? ''}
             options={
               ordersData?.result?.map((app) => ({
@@ -216,8 +222,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
                 name: String(app.order_code || app.id)
               })) ?? []
             }
-            placeholder="Select order"
-            searchPlaceholder="Search order"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
             onChange={handleOrderChange}
             error={formik.errors.order_id as string}
             touched={formik.touched.order_id}
@@ -226,21 +232,43 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             disabled={!!orderIdFromUrl}
           />
 
-          <SharedDecimalInput name="weight" label="Weight (kg)" formik={formik} />
-          <SharedDecimalInput name="width" label="Width (cm)" formik={formik} />
-          <SharedDecimalInput name="length" label="Length (cm)" formik={formik} />
-          <SharedDecimalInput name="height" label="Height (cm)" formik={formik} />
-          <SharedInput name="volume" label="Volume (см³)" type="number" formik={formik} disabled />
+          <SharedDecimalInput
+            name="weight"
+            label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="width"
+            label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="length"
+            label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="height"
+            label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+            formik={formik}
+          />
+          <SharedInput
+            name="volume"
+            label={formatMessage({ id: 'SYSTEM.VOLUME' }) + ' см³'}
+            type="number"
+            formik={formik}
+            disabled
+          />
           <SharedInput
             name="places_count"
-            label="Places Count"
+            label={formatMessage({ id: 'SYSTEM.PLACE_COUNT' })}
             type="number"
             formik={formik}
             disabled
           />
           <SharedInput
             name="price"
-            label={`Price (${currentCurrency})`}
+            label={formatMessage({ id: 'SYSTEM.PRICE' }) + ' ' + currentCurrency}
             formik={formik}
             type="text"
             disabled
@@ -250,7 +278,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             <>
               <SharedSelect
                 name="status"
-                label="Status"
+                label={formatMessage({ id: 'SYSTEM.STATUS' })}
                 formik={formik}
                 options={packageStatusOptions.map((status) => ({
                   label: status.name,
@@ -267,14 +295,18 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
               type="button"
               disabled={cancelLoading || !formik.values.order_id}
             >
-              {cancelLoading ? 'Cancelling...' : 'Cancel'}
+              {cancelLoading
+                ? formatMessage({ id: 'SYSTEM.CANCELLING' })
+                : formatMessage({ id: 'SYSTEM.CANCEL' })}
             </button>
             <button
               type="submit"
               className="btn btn-primary"
               disabled={submitLoading || formik.isSubmitting}
             >
-              {submitLoading ? 'Please wait...' : 'Create'}
+              {submitLoading
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.CREATE' })}
             </button>
           </div>
         </div>
