@@ -27,7 +27,10 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
   const queryClient = useQueryClient();
 
   const assignMutation = useMutation({
-    mutationFn: postPackageAssignUser
+    mutationFn: postPackageAssignUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['packages'] });
+    }
   });
 
   const handleAssignToMe = () => {
@@ -35,7 +38,6 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
       assignMutation.mutate({
         id: id
       });
-      queryClient.invalidateQueries({ queryKey: ['packages'] });
     }
   };
 

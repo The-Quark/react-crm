@@ -8,8 +8,12 @@ export const postPackage = async (
 ): Promise<IPackageFormValues> => {
   const cleanedData = cleanValues(data);
   return await axios
-    .post<IPackageFormValues>(PACKAGE_URL, cleanedData, {
-      headers: { 'Content-Type': 'application/json' }
-    })
+    .post<IPackageFormValues>(
+      PACKAGE_URL,
+      { ...cleanedData, frontcrm: true },
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    )
     .then((res) => res.data);
 };

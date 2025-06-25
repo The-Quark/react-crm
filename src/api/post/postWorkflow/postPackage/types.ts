@@ -8,4 +8,5 @@ export interface IPackageFormValues {
   places_count?: number | string;
   price?: number | string;
   dimensions?: string;
+  frontcrm?: boolean;
 }
