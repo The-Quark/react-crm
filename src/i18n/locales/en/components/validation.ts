@@ -44,7 +44,18 @@ const Validation = {
   'VALIDATION.ARRIVAL_DATE_REQUIRED': 'Arrival date is required',
   'VALIDATION.FROM_AIRPORT_REQUIRED': 'From airport date is required',
   'VALIDATION.TO_AIRPORT_REQUIRED': 'To airport is required',
-  'VALIDATION.NOTES_REQUIRED': 'Notes is required'
+  'VALIDATION.NOTES_REQUIRED': 'Notes is required',
+  'VALIDATION.BIRTH_DATE_REQUIRED': 'Birth date is required',
+  'VALIDATION.SUBDIVISION_REQUIRED': 'Subdivision is required',
+  'VALIDATION.DEPARTMENT_REQUIRED': 'Department is required',
+  'VALIDATION.POSITION_REQUIRED': 'Position is required',
+  'VALIDATION.EMAIL_REQUIRED': 'Email is required',
+  'VALIDATION.PASSWORD_REQUIRED': 'Password is required',
+  'VALIDATION.PASSWORD_MIN': 'Minimum 10 symbols',
+  'VALIDATION.PASSWORD_MAX': 'Maximum 100 symbols',
+  'VALIDATION.PASSWORD_UPPERCASE': 'Must contain at least one uppercase letter',
+  'VALIDATION.PASSWORD_NUMBER': 'Must contain at least one number',
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Must contain at least one special character'
 };
 
 export default Validation;

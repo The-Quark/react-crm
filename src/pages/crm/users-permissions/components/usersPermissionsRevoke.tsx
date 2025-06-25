@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { putPermissionsDistribute } from '@/api';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIntl } from 'react-intl';
 
 interface Props {
   data?: Permission[];
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const UsersPermissionsRevoke: FC<Props> = ({ data = [], userId }) => {
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const formik = useFormik({
@@ -45,15 +47,19 @@ export const UsersPermissionsRevoke: FC<Props> = ({ data = [], userId }) => {
   };
 
   return (
-    <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+    <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
       <div className="flex w-full flex-col gap-5">
-        <div className="card">
+        <div>
           <div className="card-table scrollable-x-auto">
             <table className="table">
               <thead>
                 <tr>
-                  <th className="text-start text-gray-300 font-normal min-w-[300px]">Permission</th>
-                  <th className="min-w-24 text-gray-700 font-normal text-center">Enabled</th>
+                  <th className="text-start text-gray-300 font-normal min-w-[300px]">
+                    {formatMessage({ id: 'SYSTEM.PERMISSION' })}
+                  </th>
+                  <th className="min-w-24 text-gray-700 font-normal text-center">
+                    {formatMessage({ id: 'SYSTEM.ENABLED' })}
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-gray-900 font-medium">
@@ -88,10 +94,12 @@ export const UsersPermissionsRevoke: FC<Props> = ({ data = [], userId }) => {
               onClick={handleRestoreDefaults}
               disabled={formik.isSubmitting}
             >
-              Restore Defaults
+              {formatMessage({ id: 'SYSTEM.RESTORE_DEFAULTS' })}
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              {formik.isSubmitting ? 'Saving...' : 'Save Changes'}
+              {formik.isSubmitting
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

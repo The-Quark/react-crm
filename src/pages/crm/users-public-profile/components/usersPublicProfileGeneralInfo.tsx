@@ -1,4 +1,5 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 interface IGeneralInfoItem {
   label: string;
@@ -25,45 +26,46 @@ interface UsersPublicProfileGeneralInfoProps {
 }
 
 export const UsersPublicProfileGeneralInfo = ({ data }: UsersPublicProfileGeneralInfoProps) => {
+  const { formatMessage } = useIntl();
   const items: IGeneralInfoItem[] = [
-    { label: 'Phone:', info: data.phone || 'N/A', type: 1 },
-    { label: 'Email:', info: data.email || 'N/A', type: 2 },
+    { label: `${formatMessage({ id: 'SYSTEM.PHONE' })}:`, info: data.phone || 'N/A', type: 1 },
+    { label: `${formatMessage({ id: 'SYSTEM.EMAIL' })}:`, info: data.email || 'N/A', type: 2 },
     {
-      label: 'Status:',
+      label: `${formatMessage({ id: 'SYSTEM.STATUS' })}:`,
       info: (
         <span className="badge badge-sm badge-success badge-outline">{data.status || 'N/A'}</span>
       )
     },
     {
-      label: 'Role:',
+      label: `${formatMessage({ id: 'SYSTEM.ROLE' })}:`,
       info: data.roles?.[0]?.name || 'N/A'
     },
     {
-      label: 'Company:',
+      label: `${formatMessage({ id: 'SYSTEM.COMPANY' })}:`,
       info: data.company?.company_name || 'N/A'
     },
     {
-      label: 'Department:',
+      label: `${formatMessage({ id: 'SYSTEM.DEPARTMENT' })}:`,
       info: data.department?.name || 'N/A'
     },
     {
-      label: 'Subdivision:',
+      label: `${formatMessage({ id: 'SYSTEM.SUBDIVISION' })}:`,
       info: data.subdivision?.name || 'N/A'
     },
     {
-      label: 'Position:',
+      label: `${formatMessage({ id: 'SYSTEM.POSITION' })}:`,
       info: data.position?.title || 'N/A'
     },
     {
-      label: 'Gender:',
+      label: `${formatMessage({ id: 'SYSTEM.GENDER' })}:`,
       info: data.gender || 'N/A'
     },
     {
-      label: 'Country:',
+      label: `${formatMessage({ id: 'SYSTEM.COUNTRY' })}:`,
       info: data.location?.country?.name || 'N/A'
     },
     {
-      label: 'City:',
+      label: `${formatMessage({ id: 'SYSTEM.CITY' })}:`,
       info: data.location?.name || 'N/A'
     }
   ];
@@ -71,7 +73,7 @@ export const UsersPublicProfileGeneralInfo = ({ data }: UsersPublicProfileGenera
   return (
     <div className="card">
       <div className="card-header">
-        <h3 className="card-title">General Info</h3>
+        <h3 className="card-title">{formatMessage({ id: 'SYSTEM.GENERAL_INFO_TITLE' })}</h3>
       </div>
 
       <div className="card-body pt-3.5 pb-3.5">

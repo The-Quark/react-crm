@@ -6,18 +6,25 @@ import { UserModel } from '@/api/get/getUser/getUsersList/types.ts';
 import { UsersMenuOptions } from '@/pages/crm/users-list/components/blocks/usersMenuOptions.tsx';
 import { toAbsoluteUrl } from '@/utils';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
-export const useUsersColumns = (): ColumnDef<UserModel>[] => {
-  const { isRTL } = useLanguage();
+interface UseColumnsProps {
+  onDeleteClick: (id: number) => void;
+}
 
+export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<UserModel>[] => {
+  const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -32,7 +39,9 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'user',
-        header: ({ column }) => <DataGridColumnHeader title="User" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.USER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -74,7 +83,9 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.roles[0].name,
         id: 'role',
-        header: ({ column }) => <DataGridColumnHeader title="Role" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ROLE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
@@ -90,7 +101,9 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.company?.company_name,
         id: 'company name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -107,7 +120,9 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -121,7 +136,12 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.updated_at,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         sortingFn: 'datetime',
         cell: (info) => (
@@ -162,7 +182,8 @@ export const useUsersColumns = (): ColumnDef<UserModel>[] => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {UsersMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>

@@ -1,12 +1,14 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
 }
 
 export const UsersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+  const { formatMessage } = useIntl();
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
 
@@ -25,10 +27,10 @@ export const UsersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Users</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.USERS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         <a href="/crm/users/starter" className="btn btn-sm btn-primary">
-          New user
+          {formatMessage({ id: 'SYSTEM.NEW_USER' })}
         </a>
         <DataGridColumnVisibility table={table} />
         <div className="relative">
@@ -38,7 +40,7 @@ export const UsersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search user"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_USER' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

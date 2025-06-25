@@ -44,7 +44,18 @@ const Validation = {
   'VALIDATION.ARRIVAL_DATE_REQUIRED': 'تاريخ الوصول مطلوب',
   'VALIDATION.FROM_AIRPORT_REQUIRED': 'مطار المغادرة مطلوب',
   'VALIDATION.TO_AIRPORT_REQUIRED': 'مطار الوصول مطلوب',
-  'VALIDATION.NOTES_REQUIRED': 'الملاحظات مطلوبة'
+  'VALIDATION.NOTES_REQUIRED': 'الملاحظات مطلوبة',
+  'VALIDATION.BIRTH_DATE_REQUIRED': 'تاريخ الميلاد مطلوب',
+  'VALIDATION.SUBDIVISION_REQUIRED': 'القسم الفرعي مطلوب',
+  'VALIDATION.DEPARTMENT_REQUIRED': 'القسم مطلوب',
+  'VALIDATION.POSITION_REQUIRED': 'المنصب مطلوب',
+  'VALIDATION.EMAIL_REQUIRED': 'البريد الإلكتروني مطلوب',
+  'VALIDATION.PASSWORD_REQUIRED': 'كلمة المرور مطلوبة',
+  'VALIDATION.PASSWORD_MIN': 'الحد الأدنى 10 رموز',
+  'VALIDATION.PASSWORD_MAX': 'الحد الأقصى 100 رمز',
+  'VALIDATION.PASSWORD_UPPERCASE': 'يجب أن يحتوي على حرف كبير واحد على الأقل',
+  'VALIDATION.PASSWORD_NUMBER': 'يجب أن يحتوي على رقم واحد على الأقل',
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'يجب أن يحتوي على رمز خاص واحد على الأقل'
 };
 
 export default Validation;

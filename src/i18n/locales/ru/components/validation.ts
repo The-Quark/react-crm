@@ -45,7 +45,18 @@ const Validation = {
   'VALIDATION.ARRIVAL_DATE_REQUIRED': 'Дата прибытия обязательна',
   'VALIDATION.FROM_AIRPORT_REQUIRED': 'Аэропорт отправления обязателен',
   'VALIDATION.TO_AIRPORT_REQUIRED': 'Аэропорт назначения обязателен',
-  'VALIDATION.NOTES_REQUIRED': 'Примечания обязательны'
+  'VALIDATION.NOTES_REQUIRED': 'Примечания обязательны',
+  'VALIDATION.BIRTH_DATE_REQUIRED': 'Дата рождения обязательна',
+  'VALIDATION.SUBDIVISION_REQUIRED': 'Подразделение обязательно',
+  'VALIDATION.DEPARTMENT_REQUIRED': 'Отдел обязателен',
+  'VALIDATION.POSITION_REQUIRED': 'Должность обязательна',
+  'VALIDATION.EMAIL_REQUIRED': 'Электронная почта обязательна',
+  'VALIDATION.PASSWORD_REQUIRED': 'Пароль обязателен',
+  'VALIDATION.PASSWORD_MIN': 'Минимум 10 символов',
+  'VALIDATION.PASSWORD_MAX': 'Максимум 100 символов',
+  'VALIDATION.PASSWORD_UPPERCASE': 'Должен содержать хотя бы одну заглавную букву',
+  'VALIDATION.PASSWORD_NUMBER': 'Должен содержать хотя бы одну цифру',
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Должен содержать хотя бы один специальный символ'
 };
 
 export default Validation;
