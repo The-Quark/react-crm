@@ -33,7 +33,18 @@ const Validation = {
   'VALIDATION.FILE_TYPE_REQUIRED': 'Please select file type first and upload file',
   'VALIDATION.FILE_TYPE_BEFORE_FILES': 'Please select file type first',
   'VALIDATION.FILES_REQUIRED': 'Files are required',
-  'VALIDATION.UNSUPPORTED_FILE_TYPE': 'Unsupported file type'
+  'VALIDATION.UNSUPPORTED_FILE_TYPE': 'Unsupported file type',
+  'VALIDATION.CODE_REQUIRED': 'Code is required',
+  'VALIDATION.CODE_FORMAT': 'Code must be in format XXX-XXXXXXXX',
+  'VALIDATION.AIRLINE_REQUIRED': 'Airline is required',
+  'VALIDATION.COMPANY_REQUIRED': 'Company is required',
+  'VALIDATION.PACKAGES_REQUIRED': 'Packages is required',
+  'VALIDATION.PACKAGES_MIN': 'At least one package must be selected',
+  'VALIDATION.DEPARTURE_DATE_REQUIRED': 'Departure date is required',
+  'VALIDATION.ARRIVAL_DATE_REQUIRED': 'Arrival date is required',
+  'VALIDATION.FROM_AIRPORT_REQUIRED': 'From airport date is required',
+  'VALIDATION.TO_AIRPORT_REQUIRED': 'To airport is required',
+  'VALIDATION.NOTES_REQUIRED': 'Notes is required'
 };
 
 export default Validation;

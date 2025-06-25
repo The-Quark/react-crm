@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { MultiSelect } from '@/components';
 import clsx from 'clsx';
+import { useIntl } from 'react-intl';
 
 export type Option = {
   value: string;
@@ -35,6 +36,7 @@ export function SharedMultiSelect({
   disabled = false,
   label
 }: MultiSelectProps) {
+  const { formatMessage } = useIntl();
   const hasError = touched && error;
   const multiSelectClasses = clsx(className, {
     'border-destructive focus:border-destructive': hasError
@@ -55,7 +57,7 @@ export function SharedMultiSelect({
         />
         {hasError && (
           <span className="text-xs text-destructive mt-1">
-            {Array.isArray(error) ? error[0] : error}
+            {Array.isArray(error) ? formatMessage({ id: error[0] }) : formatMessage({ id: error })}
           </span>
         )}
       </div>

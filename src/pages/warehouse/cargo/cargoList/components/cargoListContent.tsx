@@ -8,8 +8,10 @@ import { CargoToolbar } from '@/pages/warehouse/cargo/cargoList/components/block
 import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoColumns.tsx';
 import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoModal.tsx';
 import { CargoStatus } from '@/api/enums';
+import { useIntl } from 'react-intl';
 
 export const CargoListContent = () => {
+  const { formatMessage } = useIntl();
   const [searchTermCode, setSearchTermCode] = useState('');
   const [searchTermPackage, setSearchTermPackage] = useState('');
   const [status, setStatus] = useState<CargoStatus>();
@@ -150,8 +152,8 @@ export const CargoListContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Cargo"
-        description="Are you sure you want to delete this cargo? This action cannot be undone."
+        title={formatMessage({ id: 'SYSTEM.DELETE_CARGO' })}
+        description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_CARGO_DESCRIPTION' })}
         isLoading={isDeleting}
       />
     </Container>

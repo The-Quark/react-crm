@@ -33,7 +33,18 @@ const Validation = {
   'VALIDATION.FILE_TYPE_BEFORE_FILES': 'يرجى تحديد نوع الملف أولاً',
   'VALIDATION.FILES_REQUIRED': 'الملفات مطلوبة',
   'VALIDATION.UNSUPPORTED_FILE_TYPE': 'نوع الملف غير مدعوم',
-  'VALIDATION.ORDER_ID_REQUIRED': 'الطلب مطلوب'
+  'VALIDATION.ORDER_ID_REQUIRED': 'الطلب مطلوب',
+  'VALIDATION.CODE_REQUIRED': 'الرمز مطلوب',
+  'VALIDATION.CODE_FORMAT': 'يجب أن يكون الرمز بالصيغة XXX-XXXXXXXX',
+  'VALIDATION.AIRLINE_REQUIRED': 'شركة الطيران مطلوبة',
+  'VALIDATION.COMPANY_REQUIRED': 'الشركة مطلوبة',
+  'VALIDATION.PACKAGES_REQUIRED': 'الطرود مطلوبة',
+  'VALIDATION.PACKAGES_MIN': 'يجب تحديد طرد واحد على الأقل',
+  'VALIDATION.DEPARTURE_DATE_REQUIRED': 'تاريخ المغادرة مطلوب',
+  'VALIDATION.ARRIVAL_DATE_REQUIRED': 'تاريخ الوصول مطلوب',
+  'VALIDATION.FROM_AIRPORT_REQUIRED': 'مطار المغادرة مطلوب',
+  'VALIDATION.TO_AIRPORT_REQUIRED': 'مطار الوصول مطلوب',
+  'VALIDATION.NOTES_REQUIRED': 'الملاحظات مطلوبة'
 };
 
 export default Validation;

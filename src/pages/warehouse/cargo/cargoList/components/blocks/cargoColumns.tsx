@@ -8,6 +8,7 @@ import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { CargoMenuOptions } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -18,6 +19,7 @@ export const useCargoColumns = ({
   onRowClick,
   onDeleteClick
 }: UseColumnsProps): ColumnDef<Cargo>[] => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -28,7 +30,9 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -42,7 +46,9 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="MAWB" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.MAWB' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -62,7 +68,9 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '),
         id: 'hawb',
-        header: ({ column }) => <DataGridColumnHeader title="HAWB" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-1">
@@ -81,7 +89,12 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.document_count,
         id: 'documents count',
-        header: ({ column }) => <DataGridColumnHeader title="Documents count" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DOCUMENT_COUNT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -98,7 +111,12 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row?.delivery_category?.map((category) => category).join(', ') ?? '',
         id: 'delivery category',
-        header: ({ column }) => <DataGridColumnHeader title="Delivery Category" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-1">
@@ -117,7 +135,9 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -132,7 +152,12 @@ export const useCargoColumns = ({
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',
-        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;

@@ -9,5 +9,5 @@ export interface ICargoPostFormValues {
   company_id: number | string;
   status: string;
   is_international: boolean;
-  packages: number[];
+  packages: number[] | string[];
 }

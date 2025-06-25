@@ -34,7 +34,18 @@ const Validation = {
   'VALIDATION.FILE_TYPE_BEFORE_FILES': 'Пожалуйста, сначала выберите тип файла',
   'VALIDATION.FILES_REQUIRED': 'Файлы обязательны',
   'VALIDATION.UNSUPPORTED_FILE_TYPE': 'Неподдерживаемый тип файла',
-  'VALIDATION.ORDER_ID_REQUIRED': 'Заказ обязателен'
+  'VALIDATION.ORDER_ID_REQUIRED': 'Заказ обязателен',
+  'VALIDATION.CODE_REQUIRED': 'Код обязателен',
+  'VALIDATION.CODE_FORMAT': 'Код должен быть в формате XXX-XXXXXXXX',
+  'VALIDATION.AIRLINE_REQUIRED': 'Авиакомпания обязательна',
+  'VALIDATION.COMPANY_REQUIRED': 'Компания обязательна',
+  'VALIDATION.PACKAGES_REQUIRED': 'Посылки обязательны',
+  'VALIDATION.PACKAGES_MIN': 'Должна быть выбрана хотя бы одна посылка',
+  'VALIDATION.DEPARTURE_DATE_REQUIRED': 'Дата отправления обязательна',
+  'VALIDATION.ARRIVAL_DATE_REQUIRED': 'Дата прибытия обязательна',
+  'VALIDATION.FROM_AIRPORT_REQUIRED': 'Аэропорт отправления обязателен',
+  'VALIDATION.TO_AIRPORT_REQUIRED': 'Аэропорт назначения обязателен',
+  'VALIDATION.NOTES_REQUIRED': 'Примечания обязательны'
 };
 
 export default Validation;

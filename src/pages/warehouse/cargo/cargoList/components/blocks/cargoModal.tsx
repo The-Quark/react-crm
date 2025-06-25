@@ -14,6 +14,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -36,7 +38,9 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">Cargo Details</DialogTitle>
+          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+            {formatMessage({ id: 'SYSTEM.CARGO_DETAILS' })}
+          </DialogTitle>
           <DialogDescription />
           <button
             className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
@@ -53,59 +57,141 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-3">Base</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.CARGO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Code</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CODE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.code || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Status</label>
-                      <div className="flex columns-1 w-full">{cargo.status || '-'}</div>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.HAWB' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.packages?.length
+                          ? cargo.packages.map((pkg, idx) => (
+                              <span key={idx} className="block">
+                                {pkg.hawb || '-'}
+                              </span>
+                            ))
+                          : '-'}
+                      </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.delivery_category?.map((cat) => cat) || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.AIRLINE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.airline || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DEPARTURE_AIRPORT' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{cargo.from_airport || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.ARRIVAL_AIRPORT' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{cargo.to_airport || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DEPARTURE_DATE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.departure_date || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.ARRIVAL_DATE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.arrival_date || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{cargo.status || '-'}</div>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold mb-3">Company</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.COMPANY' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Name</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {cargo.company.company_name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">TimeZone</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.TIMEZONE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.company.timezone || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Currency</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CURRENCY' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.company.currency || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Language</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.LANGUAGE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{cargo.company.language || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Legal address</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.TIMEZONE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{cargo.company.timezone || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DIMENSIONS_PER_PLACE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.company.dimensions_per_place || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.COST_PER_PLACE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {cargo.company.cost_per_airplace || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {cargo.company.legal_address || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Warehouse address</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {cargo.company.warehouse_address || '-'}
                       </div>
@@ -119,7 +205,7 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
         {canManage && (
           <DialogActions>
             <a className="btn btn-md btn-light mr-3 mb-3" href={`/warehouse/cargo/starter/${id}`}>
-              Update Cargo
+              {formatMessage({ id: 'SYSTEM.UPDATE_CARGO' })}
             </a>
           </DialogActions>
         )}

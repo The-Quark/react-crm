@@ -26,29 +26,29 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postWorkflow/postCargo/types.ts';
 import { CargoStatus } from '@/api/enums';
 import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import { format } from 'date-fns';
+import { useIntl } from 'react-intl';
 
 export const formSchema = Yup.object().shape({
   code: Yup.string()
-    .required('Code is required')
-    .matches(/^[0-9]{3}-[0-9]{8}$/, 'Code must be in format XXX-XXXXXXXX'),
-  airline: Yup.string().required('Airline is required'),
-  company_id: Yup.string().required('Company is required'),
+    .required('VALIDATION.CODE_REQUIRED')
+    .matches(/^[0-9]{3}-[0-9]{8}$/, 'VALIDATION.CODE_FORMAT'),
+  airline: Yup.string().required('VALIDATION.AIRLINE_REQUIRED'),
+  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
   packages: Yup.array()
     .of(Yup.string().required())
-    .min(1, 'At least one package must be selected')
-    .required('Packages is required'),
-  departure_date: Yup.string().required('Departure date is required'),
-  arrival_date: Yup.string().required('Arrival date is required'),
-  from_airport: Yup.string().required('From airport date is required'),
-  to_airport: Yup.string().required('To airport is required'),
-  is_international: Yup.boolean().required('Is international is required'),
-  notes: Yup.string().required('Notes is required')
+    .min(1, 'VALIDATION.PACKAGES_MIN')
+    .required('VALIDATION.PACKAGES_REQUIRED'),
+  departure_date: Yup.string().required('VALIDATION.DEPARTURE_DATE_REQUIRED'),
+  arrival_date: Yup.string().required('VALIDATION.ARRIVAL_DATE_REQUIRED'),
+  from_airport: Yup.string().required('VALIDATION.FROM_AIRPORT_REQUIRED'),
+  to_airport: Yup.string().required('VALIDATION.TO_AIRPORT_REQUIRED'),
+  notes: Yup.string().required('VALIDATION.NOTES_REQUIRED')
 });
 
 export const CargoStarterContent = () => {
   const { id } = useParams<{ id: string }>();
+  const { formatMessage } = useIntl();
   const [loading, setLoading] = useState(false);
   const isEditMode = !!id;
   const queryClient = useQueryClient();
@@ -238,7 +238,11 @@ export const CargoStarterContent = () => {
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit Cargo' : 'NewCargo'}</h3>
+          <h3 className="card-title">
+            {isEditMode
+              ? formatMessage({ id: 'SYSTEM.EDIT_CARGO' })
+              : formatMessage({ id: 'SYSTEM.NEW_CARGO' })}
+          </h3>
         </div>
 
         <div className="card-body grid gap-5">
@@ -246,16 +250,16 @@ export const CargoStarterContent = () => {
             options={packageOptions}
             selectedValues={formik.values.packages.map(String)}
             onChange={(values) => formik.setFieldValue('packages', values)}
-            placeholder="Select packages..."
-            searchPlaceholder="Search packages..."
-            label="Packages"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_PACKAGES' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_PACKAGES' })}
+            label={formatMessage({ id: 'SYSTEM.PACKAGES' })}
             error={formik.errors.packages as string}
             touched={formik.touched.packages}
           />
-          <SharedInput name="code" label="Code" formik={formik} />
+          <SharedInput name="code" label={formatMessage({ id: 'SYSTEM.CODE' })} formik={formik} />
 
           <SharedAutocomplete
-            label="Company"
+            label={formatMessage({ id: 'SYSTEM.COMPANY' })}
             value={formik.values.company_id ?? ''}
             options={
               companiesData?.result?.map((app) => ({
@@ -263,8 +267,8 @@ export const CargoStarterContent = () => {
                 name: app.company_name
               })) ?? []
             }
-            placeholder="Select company"
-            searchPlaceholder="Search company"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
             onChange={(val) => {
               formik.setFieldValue('company_id', val);
             }}
@@ -274,7 +278,7 @@ export const CargoStarterContent = () => {
             onSearchTermChange={setSearchCompanyOrderTerm}
           />
           <SharedAutocomplete
-            label="Airline"
+            label={formatMessage({ id: 'SYSTEM.AIRLINE' })}
             value={formik.values.airline ?? ''}
             options={
               airlinesData?.result?.map((app) => ({
@@ -282,8 +286,8 @@ export const CargoStarterContent = () => {
                 name: app.name
               })) ?? []
             }
-            placeholder="Select airline"
-            searchPlaceholder="Search airline"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRLINE' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRLINE' })}
             onChange={(val) => {
               formik.setFieldValue('airline', val);
             }}
@@ -293,18 +297,34 @@ export const CargoStarterContent = () => {
             onSearchTermChange={setSearchAirlineTerm}
           />
 
-          <SharedDateTimePicker name="departure_date" label="Departure date" formik={formik} />
+          <SharedDateTimePicker
+            name="departure_date"
+            label={formatMessage({ id: 'SYSTEM.DEPARTURE_DATE' })}
+            formik={formik}
+          />
 
-          <SharedInput name="from_airport" label="From Airport" formik={formik} />
+          <SharedInput
+            name="from_airport"
+            label={formatMessage({ id: 'SYSTEM.FROM_AIRPORT' })}
+            formik={formik}
+          />
 
-          <SharedDateTimePicker name="arrival_date" label="Arrival date" formik={formik} />
+          <SharedDateTimePicker
+            name="arrival_date"
+            label={formatMessage({ id: 'SYSTEM.ARRIVAL_DATE' })}
+            formik={formik}
+          />
 
-          <SharedInput name="to_airport" label="To Airport" formik={formik} />
+          <SharedInput
+            name="to_airport"
+            label={formatMessage({ id: 'SYSTEM.TO_AIRPORT' })}
+            formik={formik}
+          />
 
           {isEditMode && (
             <SharedSelect
               name="status"
-              label="Status"
+              label={formatMessage({ id: 'SYSTEM.STATUS' })}
               formik={formik}
               disabled={true}
               options={cargoStatusOptions.map((status) => ({
@@ -314,7 +334,11 @@ export const CargoStarterContent = () => {
             />
           )}
 
-          <SharedTextArea name="notes" label="Notes" formik={formik} />
+          <SharedTextArea
+            name="notes"
+            label={formatMessage({ id: 'SYSTEM.NOTES' })}
+            formik={formik}
+          />
 
           <div className="flex justify-end">
             <button
@@ -322,7 +346,9 @@ export const CargoStarterContent = () => {
               className="btn btn-primary"
               disabled={loading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Save'}
+              {loading
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

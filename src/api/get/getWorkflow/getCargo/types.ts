@@ -1,5 +1,6 @@
 import { CargoStatus } from '@/api/enums';
 import { IPagination } from '@/api/generalManualTypes';
+import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 
 interface Media {
   id: number;
@@ -65,7 +66,7 @@ export interface Cargo {
   medias: Media[];
   media: Media[];
   company: Company;
-  packages: any[];
+  packages: Package[];
   delivery_category: string[] | null;
 }
 

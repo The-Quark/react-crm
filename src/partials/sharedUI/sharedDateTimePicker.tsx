@@ -4,6 +4,7 @@ import * as React from 'react';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { FormikProps } from 'formik';
+import { useIntl } from 'react-intl';
 
 import { cn } from '@/utils/lib/utils.ts';
 import { Button } from '@/components/ui/button';
@@ -22,8 +23,9 @@ export const SharedDateTimePicker = <T extends Record<string, any>>({
   name,
   label,
   formik,
-  placeholder = 'Choose date and time'
+  placeholder
 }: Props<T>) => {
+  const { formatMessage } = useIntl();
   const [isOpen, setIsOpen] = React.useState(false);
   const fieldValue = formik.values[name];
   const dateValue = fieldValue ? new Date(fieldValue) : undefined;
@@ -95,7 +97,11 @@ export const SharedDateTimePicker = <T extends Record<string, any>>({
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateValue ? format(dateValue, 'MM/dd/yyyy hh:mm aa') : <span>{placeholder}</span>}
+                {dateValue ? (
+                  format(dateValue, 'MM/dd/yyyy hh:mm aa')
+                ) : (
+                  <span>{placeholder || formatMessage({ id: 'SYSTEM.CHOOSE_DATE_AND_TIME' })}</span>
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -172,7 +178,7 @@ export const SharedDateTimePicker = <T extends Record<string, any>>({
           </Popover>
           {isError && (
             <span className="text-destructive text-xs mt-1">
-              {typeof error === 'string' ? error : ''}
+              {typeof error === 'string' ? formatMessage({ id: error }) : ''}
             </span>
           )}
         </div>
