@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useIntl } from 'react-intl';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
 import { useLanguage } from '@/providers';
@@ -18,6 +19,7 @@ export const useOrdersColumns = ({
   onRowClick,
   onDeleteClick
 }: UseColumnsProps): ColumnDef<Order>[] => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -28,7 +30,9 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -42,7 +46,12 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.order_code,
         id: 'order code',
-        header: ({ column }) => <DataGridColumnHeader title="Order code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.ORDER_CODE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -62,7 +71,9 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.sender?.full_name,
         id: 'sender full name',
-        header: ({ column }) => <DataGridColumnHeader title="Sender" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SENDER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -79,7 +90,9 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.receiver?.full_name,
         id: 'receiver full name',
-        header: ({ column }) => <DataGridColumnHeader title="Receiver" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.RECEIVER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -96,7 +109,9 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.delivery_category,
         id: 'delivery category',
-        header: ({ column }) => <DataGridColumnHeader title="Category" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CATEGORY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -112,11 +127,17 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.hawb_pdf,
         id: 'hawb pdf',
-        header: ({ column }) => <DataGridColumnHeader title="QR" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.QR' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           if (!info.row.original.hawb_pdf || info.row.original.hawb_pdf.trim() === '') {
-            return <div className="text-gray-400 text-center">No QR</div>;
+            return (
+              <div className="text-gray-400 text-center">
+                {formatMessage({ id: 'SYSTEM.NO_QR' })}
+              </div>
+            );
           }
 
           const url = info.row.original.hawb_pdf.startsWith('http')
@@ -144,7 +165,9 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -159,7 +182,12 @@ export const useOrdersColumns = ({
       {
         accessorFn: (row) => row.created_at,
         id: 'created at',
-        header: ({ column }) => <DataGridColumnHeader title="Created at" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         filterFn: (row, columnId, filterValue: DateRange) => {
           if (!filterValue) return true;

@@ -9,8 +9,10 @@ import { OrdersToolbar } from '@/pages/call-center/orders/ordersList/components/
 import { OrdersModal } from '@/pages/call-center/orders/ordersList/components/blocks/ordersModal.tsx';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
+import { useIntl } from 'react-intl';
 
 export const OrdersListContent = () => {
+  const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<string>();
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -154,8 +156,8 @@ export const OrdersListContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Order"
-        description="Are you sure you want to delete this order? This action cannot be undone."
+        title={formatMessage({ id: 'SYSTEM.DELETE_ORDER' })}
+        description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_ORDER_DESCRIPTION' })}
         isLoading={isDeleting}
       />
     </Container>

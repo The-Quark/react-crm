@@ -15,6 +15,7 @@ import { DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 import { OrderStatus } from '@/api/enums';
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -46,7 +48,9 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">Order Details</DialogTitle>
+          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+            {formatMessage({ id: 'SYSTEM.ORDER_DETAILS' })}
+          </DialogTitle>
           <DialogDescription />
           <button
             className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
@@ -64,34 +68,50 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
               <div className="card-body grid gap-5">
                 {/* Sender Block */}
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-3">Sender Information</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.SENDER_INFO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Full Name</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender.full_name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Phone</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PHONE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender.phone || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">City</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CITY' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender.city?.name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Street</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STREET' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender?.street || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">House</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.HOUSE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender?.house || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Apartment</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.APARTMENT' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender?.apartment || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.NOTES' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.sender.notes || '-'}</div>
                     </div>
                   </div>
@@ -99,38 +119,54 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
 
                 {/* Receiver Block */}
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-3">Receiver Information</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.RECEIVER_INFO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Full Name</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.receiver.full_name || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Phone</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PHONE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.receiver.phone || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">City</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CITY' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {order.receiver.city?.name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Street</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STREET' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.receiver?.street || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">House</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.HOUSE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.receiver?.house || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Apartment</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.APARTMENT' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {order.receiver?.apartment || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Notes</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.NOTES' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.receiver.notes || '-'}</div>
                     </div>
                   </div>
@@ -139,28 +175,38 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                 {/* Application Block */}
                 {order.application && (
                   <div className="border-b pb-4">
-                    <h4 className="text-lg font-semibold mb-3">Application Information</h4>
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.APPLICATION_INFO' })}
+                    </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Full Name</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {order.application.full_name || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Phone</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.PHONE' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {order.application.phone || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Status</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.STATUS' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {order.application.status || '-'}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">Created At</label>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+                        </label>
                         <div className="flex columns-1 w-full">
                           {order.application.created_at
                             ? new Date(order.application.created_at).toLocaleDateString('ru-RU')
@@ -173,48 +219,68 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
 
                 {/* Order Block */}
                 <div>
-                  <h4 className="text-lg font-semibold mb-3">Order Information</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.ORDER_INFO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Order Code</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.ORDER_CODE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.order_code || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Delivery Type</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DELIVERY_TYPE' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {order?.delivery_type?.name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Package Type</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.package_type.code || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Status</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.status || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Order content</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.ORDER_CONTENT' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {order.order_content?.map((index) => index) || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Weight</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.WEIGHT' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.weight || '-'} kg</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Dimensions</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DIMENSIONS' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {`${order.width || '-'} x ${order.length || '-'} x ${order.volume || '-'} cm`}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Price</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PRICE' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.price || '-'} USD</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Created At</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {order.created_at
                           ? new Date(order.created_at).toLocaleDateString('ru-RU')
@@ -222,16 +288,19 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Delivery Category</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
+                      </label>
                       <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>
                     </div>
                   </div>
                 </div>
 
-                {/* SVG */}
-
+                {/* QR Code Block */}
                 <div className="border-t pt-4">
-                  <h4 className="text-lg font-semibold mb-3">QR Code</h4>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.QR_CODE' })}
+                  </h4>
                   <div className="flex flex-col items-start">
                     {order.hawb_pdf ? (
                       <>
@@ -243,9 +312,9 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.outerHTML = `
                               <div class="text-red-500 text-center">
-                                Failed to load QR code. 
+                                ${formatMessage({ id: 'SYSTEM.QR_CODE_LOAD_ERROR' })} 
                                 <a href="${url}" target="_blank" rel="noopener noreferrer" class="link ml-1">
-                                  Open directly
+                                  ${formatMessage({ id: 'SYSTEM.OPEN_DIRECTLY' })}
                                 </a>
                               </div>`;
                           }}
@@ -256,11 +325,11 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                           rel="noopener noreferrer"
                           className="mt-2 text-sm text-blue-600 hover:underline"
                         >
-                          Download QR Code
+                          {formatMessage({ id: 'SYSTEM.DOWNLOAD_QR' })}
                         </a>
                       </>
                     ) : (
-                      <div className="text-gray-500">No QR code available</div>
+                      <div className="text-gray-500">{formatMessage({ id: 'SYSTEM.NO_QR' })}</div>
                     )}
                   </div>
                 </div>
@@ -274,14 +343,14 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
               className="btn btn-md btn-light mr-3 mb-3"
               href={`/call-center/orders/starter/${id}`}
             >
-              Update Order
+              {formatMessage({ id: 'SYSTEM.UPDATE_ORDER' })}
             </a>
             {order?.status === OrderStatus.PACKAGE_AWAITING && (
               <button
                 className="btn btn-md btn-primary mr-3 mb-3"
                 onClick={() => handleOrderToPakcage(id)}
               >
-                Create Package
+                {formatMessage({ id: 'SYSTEM.CREATE_PACKAGE' })}
               </button>
             )}
           </DialogActions>

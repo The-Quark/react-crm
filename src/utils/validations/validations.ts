@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export const decimalValidation = Yup.string()
-  .matches(/^\d+\.\d{2}$/, 'Should be decimal with two digits after dot (e.g. 12.34)')
-  .test('non-negative', 'Should not be negative', (value) => {
+  .matches(/^\d+\.\d{2}$/, 'VALIDATION.DECIMAL_FORMAT')
+  .test('non-negative', 'VALIDATION.DECIMAL_NON_NEGATIVE', (value) => {
     if (!value) return false;
     const numValue = parseFloat(value);
     return !isNaN(numValue) && numValue >= 0;

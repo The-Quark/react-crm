@@ -1,6 +1,7 @@
 import { FormikProps } from 'formik';
 import React, { useState, useEffect, useCallback } from 'react';
 import { clsx } from 'clsx';
+import { useIntl } from 'react-intl';
 
 interface SharedInputProps<T> {
   name: keyof T;
@@ -10,6 +11,7 @@ interface SharedInputProps<T> {
 }
 
 export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: SharedInputProps<T>) => {
+  const { formatMessage } = useIntl();
   const fieldName = name.toString();
   const [decimalDisplay, setDecimalDisplay] = useState('');
   const hasError = formik.touched[name] && formik.errors[name];
@@ -102,7 +104,7 @@ export const SharedDecimalInput = <T,>({ name, label, formik, disabled }: Shared
 
         {formik.touched[name] && formik.errors[name] && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {formik.errors[name] as string}
+            {formatMessage({ id: formik.errors[name] as string })}
           </span>
         )}
       </div>

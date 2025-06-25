@@ -11,6 +11,7 @@ import {
   SharedLoading,
   SharedTextArea
 } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
@@ -24,12 +25,12 @@ interface Props {
 const formSchema = Yup.object().shape({
   receiver_first_name: Yup.string().when('client_type', {
     is: 'individual',
-    then: (schema) => schema.required('First name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_last_name: Yup.string().when('client_type', {
     is: 'individual',
-    then: (schema) => schema.required('Last name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_patronymic: Yup.string().optional(),
@@ -37,25 +38,23 @@ const formSchema = Yup.object().shape({
     is: 'legal',
     then: (schema) =>
       schema
-        .length(BIN_LENGTH, 'BIN must be exactly 12 digits')
-        .matches(/^\d+$/, 'BIN must contain only digits')
-        .required('Bin is required'),
+        .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
+        .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
+        .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_name: Yup.string().when('client_type', {
     is: 'legal',
-    then: (schema) => schema.required('Company name is required'),
+    then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  receiver_city_id: Yup.number().typeError('City is required').required('City is required'),
-  receiver_country_id: Yup.number()
-    .typeError('Country is required')
-    .required('Country is required'),
+  receiver_city_id: Yup.number().required('VALIDATION.CITY_REQUIRED'),
+  receiver_country_id: Yup.number().required('VALIDATION.COUNTRY_REQUIRED'),
   receiver_phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'Invalid phone number')
-    .required('Phone is required'),
-  receiver_street: Yup.string().required('Street is required'),
-  receiver_house: Yup.string().required('House is required'),
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  receiver_street: Yup.string().required('VALIDATION.STREET_REQUIRED'),
+  receiver_house: Yup.string().required('VALIDATION.HOUSE_REQUIRED'),
   receiver_apartment: Yup.string().optional(),
   receiver_location_description: Yup.string().optional(),
   receiver_notes: Yup.string().optional()
@@ -130,6 +129,7 @@ const getInitialValues = (
 export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmModal }) => {
   const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
+  const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
@@ -256,7 +256,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
       <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
           <SharedAutocomplete
-            label="Contact"
+            label={formatMessage({ id: 'SYSTEM.CONTACT' })}
             value={formik.values.receiver_contact_id ?? ''}
             options={
               clientsData?.result?.map((client) => ({
@@ -264,8 +264,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
                 name: client.search_application ?? ''
               })) ?? []
             }
-            placeholder="Select contact"
-            searchPlaceholder="Search contact"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_CONTACT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CONTACT' })}
             onChange={(val) => handleClientChange(String(val))}
             error={formik.errors.receiver_contact_id as string}
             touched={formik.touched.receiver_contact_id}
@@ -275,10 +275,14 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
 
           {formik.values.receiver_type === 'legal' ? (
             <>
-              <SharedInput name="receiver_company_name" label="Company name" formik={formik} />
+              <SharedInput
+                name="receiver_company_name"
+                label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                formik={formik}
+              />
               <SharedInput
                 name="receiver_bin"
-                label="BIN"
+                label={formatMessage({ id: 'SYSTEM.BIN' })}
                 formik={formik}
                 type="number"
                 maxlength={12}
@@ -286,20 +290,37 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             </>
           ) : (
             <>
-              <SharedInput name="receiver_first_name" label="First name" formik={formik} />
-              <SharedInput name="receiver_last_name" label="Last name" formik={formik} />
-              <SharedInput name="receiver_patronymic" label="Patronymic" formik={formik} />
+              <SharedInput
+                name="receiver_first_name"
+                label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="receiver_last_name"
+                label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="receiver_patronymic"
+                label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+                formik={formik}
+              />
             </>
           )}
 
-          <SharedInput name="receiver_phone" label="Phone" formik={formik} type="tel" />
+          <SharedInput
+            name="receiver_phone"
+            label={formatMessage({ id: 'SYSTEM.PHONE' })}
+            formik={formik}
+            type="tel"
+          />
 
           <SharedAutocomplete
-            label="Country"
+            label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.receiver_country_id ?? ''}
             options={countriesData?.data ?? []}
-            placeholder="Select country"
-            searchPlaceholder="Search country"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
             onChange={(val) => {
               const selectedCountry = countriesData?.data?.find((country) => country.id === val);
               formik.setFieldValue('receiver_country_id', val ? Number(val) : '');
@@ -317,11 +338,15 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
           />
 
           <SharedAutocomplete
-            label="City"
+            label={formatMessage({ id: 'SYSTEM.CITY' })}
             value={formik.values.receiver_city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
-            placeholder={formik.values.receiver_city_id ? 'Select city' : 'Select country first'}
-            searchPlaceholder="Search city"
+            placeholder={
+              formik.values.receiver_city_id
+                ? formatMessage({ id: 'SYSTEM.SELECT' })
+                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+            }
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             onChange={(val) => {
               formik.setFieldValue('receiver_city_id', val ? Number(val) : '');
               const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
@@ -336,27 +361,47 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             onSearchTermChange={setCitySearchTerm}
             disabled={!formik.values.receiver_country_id}
             loading={citiesLoading}
-            errorText={citiesIsError ? 'Failed to load cities' : undefined}
-            emptyText="No cities available"
+            errorText={
+              citiesIsError ? formatMessage({ id: 'SYSTEM.FAILED_LOAD_CITIES' }) : undefined
+            }
+            emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
           />
 
-          <SharedInput name="receiver_street" label="Street" formik={formik} />
-          <SharedInput name="receiver_house" label="House" formik={formik} />
-          <SharedInput name="receiver_apartment" label="Apartment" formik={formik} />
+          <SharedInput
+            name="receiver_street"
+            label={formatMessage({ id: 'SYSTEM.STREET' })}
+            formik={formik}
+          />
+          <SharedInput
+            name="receiver_house"
+            label={formatMessage({ id: 'SYSTEM.HOUSE' })}
+            formik={formik}
+          />
+          <SharedInput
+            name="receiver_apartment"
+            label={formatMessage({ id: 'SYSTEM.APARTMENT' })}
+            formik={formik}
+          />
 
           <SharedTextArea
             name="receiver_location_description"
-            label="Location description"
+            label={formatMessage({ id: 'SYSTEM.LOCATION_DESCRIPTION' })}
             formik={formik}
           />
-          <SharedTextArea name="receiver_notes" label="Notes" formik={formik} />
+          <SharedTextArea
+            name="receiver_notes"
+            label={formatMessage({ id: 'SYSTEM.NOTES' })}
+            formik={formik}
+          />
 
           <div className="flex justify-between">
             <button className="btn btn-light" onClick={onBack}>
-              Back
+              {formatMessage({ id: 'SYSTEM.BACK' })}
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              {formik.isSubmitting ? 'Please wait...' : 'Next'}
+              {formik.isSubmitting
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.NEXT' })}
             </button>
           </div>
         </div>

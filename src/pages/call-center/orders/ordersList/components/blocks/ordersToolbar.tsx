@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
+import { useIntl } from 'react-intl';
 import {
   Select,
   SelectContent,
@@ -37,6 +38,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
   onDateRangeChange,
   currentDateRange
 }) => {
+  const { formatMessage } = useIntl();
   const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
@@ -83,11 +85,11 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Orders</h3>
+      <h3 className="card-title"> {formatMessage({ id: 'SYSTEM.ORDERS_TITLE' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/call-center/orders/starter" className="btn btn-sm btn-primary">
-            New order
+            {formatMessage({ id: 'SYSTEM.NEW_ORDER' })}
           </a>
         )}
         <Select
@@ -95,10 +97,10 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
           onValueChange={handleDeliveryCategoryChange}
         >
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
                 {category.name}
@@ -108,10 +110,10 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
         </Select>
         <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
           <SelectTrigger className="w-32" size="sm">
-            <SelectValue placeholder="Select status" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.STATUS' })} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_STATUSES' })}</SelectItem>
             {mockOrdersStatus.map((status) => (
               <SelectItem key={status.id} value={status.value}>
                 {status.name}
@@ -139,7 +141,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
                   format(currentDateRange.from, 'LLL dd, y')
                 )
               ) : (
-                <span>Pick a date range</span>
+                <span>{formatMessage({ id: 'SYSTEM.PICK_DATE_RANGE' })}</span>
               )}
             </button>
           </PopoverTrigger>
@@ -162,7 +164,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
           />
           <input
             type="text"
-            placeholder="Search order"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

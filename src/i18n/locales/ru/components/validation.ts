@@ -1,0 +1,35 @@
+const Validation = {
+  'VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED': 'Имя обязательно для заполнения',
+  'VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED': 'Фамилия обязательна для заполнения',
+  'VALIDATION.FORM_VALIDATION_BIN_REQUIRED': 'БИН обязателен для заполнения',
+  'VALIDATION.FORM_VALIDATION_BIN_LENGTH': 'БИН должен содержать ровно 12 цифр',
+  'VALIDATION.FORM_VALIDATION_BIN_DIGITS': 'БИН должен содержать только цифры',
+  'VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED': 'Название компании обязательно',
+  'VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED': 'Источник обязателен',
+  'VALIDATION.FORM_VALIDATION_CLIENT_TYPE_REQUIRED': 'Тип клиента обязателен',
+  'VALIDATION.FORM_VALIDATION_PHONE_REQUIRED': 'Номер телефона обязателен',
+  'VALIDATION.FORM_VALIDATION_PHONE_INVALID': 'Недействительный номер телефона',
+  'VALIDATION.FORM_VALIDATION_EMAIL_INVALID': 'Недействительный адрес электронной почты',
+  'VALIDATION.APPLICATION_ID_REQUIRED': 'Требуется заявка',
+  'VALIDATION.DELIVERY_TYPE_REQUIRED': 'Требуется тип доставки',
+  'VALIDATION.DELIVERY_TYPE_TYPE_ERROR': 'Требуется тип доставки',
+  'VALIDATION.DELIVERY_CATEGORY_REQUIRED': 'Требуется категория доставки',
+  'VALIDATION.DELIVERY_CATEGORY_INVALID': 'Недопустимая категория доставки',
+  'VALIDATION.PACKAGE_TYPE_REQUIRED': 'Требуется тип упаковки',
+  'VALIDATION.PACKAGE_TYPE_TYPE_ERROR': 'Требуется тип упаковки',
+  'VALIDATION.WEIGHT_REQUIRED': 'Требуется вес',
+  'VALIDATION.WIDTH_REQUIRED': 'Требуется ширина',
+  'VALIDATION.LENGTH_REQUIRED': 'Требуется длина',
+  'VALIDATION.HEIGHT_REQUIRED': 'Требуется высота',
+  'VALIDATION.CLEARANCE_REQUIRED': 'Требуется таможенное оформление',
+  'VALIDATION.IS_INTERNATIONAL_REQUIRED': 'Требуется указать, международный ли',
+  'VALIDATION.DECIMAL_FORMAT':
+    'Должно быть десятичным числом с двумя знаками после точки (например, 12.34)',
+  'VALIDATION.DECIMAL_NON_NEGATIVE': 'Не должно быть отрицательным',
+  'VALIDATION.CITY_REQUIRED': 'Город обязателен',
+  'VALIDATION.COUNTRY_REQUIRED': 'Страна обязательна',
+  'VALIDATION.STREET_REQUIRED': 'Улица обязательна',
+  'VALIDATION.HOUSE_REQUIRED': 'Дом обязателен'
+};
+
+export default Validation;

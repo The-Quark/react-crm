@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { OrdersConfirmModal } from '@/pages/call-center/orders/ordersStarter/components/blocks/ordersConfirmModal.tsx';
 import { IOrderPutFormValues, postOrder, postOrderDraft, putOrder } from '@/api';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   isEditMode: boolean;
@@ -16,12 +17,13 @@ interface Props {
 }
 
 const { useStepper, utils } = defineStepper(
-  { id: 'main', title: 'Order Details' },
-  { id: 'sender', title: 'Sender Information' },
-  { id: 'receiver', title: 'Receiver Information' }
+  { id: 'main', title: 'SYSTEM.ORDER_DETAILS' },
+  { id: 'sender', title: 'SYSTEM.SENDER_DETAILS' },
+  { id: 'receiver', title: 'SYSTEM.RECEIVER_DETAILS' }
 );
 
 const OrderFormSteps: FC<Props> = ({ isEditMode, orderId }) => {
+  const { formatMessage } = useIntl();
   const stepper = useStepper();
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
@@ -54,10 +56,15 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId }) => {
   return (
     <div className="space-y-6 p-6 border rounded-lg w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-medium">{isEditMode ? 'Edit Order' : 'Create New Order'}</h2>
+        <h2 className="text-lg font-medium">
+          {isEditMode
+            ? formatMessage({ id: 'SYSTEM.EDIT_ORDER' })
+            : formatMessage({ id: 'SYSTEM.CREATE_NEW_ORDER' })}
+        </h2>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            s Step {currentIndex + 1} of {allSteps.length}
+            {formatMessage({ id: 'SYSTEM.STEP' })} {currentIndex + 1}{' '}
+            {formatMessage({ id: 'SYSTEM.OF' })} {allSteps.length}
           </span>
         </div>
       </div>
@@ -84,7 +91,7 @@ const OrderFormSteps: FC<Props> = ({ isEditMode, orderId }) => {
                     {index + 1}
                   </Button>
                   <span className={`text-sm font-medium ${isActive ? 'text-primary' : ''}`}>
-                    {step.title}
+                    {formatMessage({ id: step.title })}
                   </span>
                 </li>
                 {index < array.length - 1 && (

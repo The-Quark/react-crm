@@ -28,8 +28,8 @@ export const SharedDeleteModal: React.FC<Props> = ({
   onConfirm,
   title = 'Confirm deletion',
   description = 'Are you sure you want to delete this item? This action cannot be undone.',
-  confirmText = 'Delete',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   isLoading = false
 }) => {
   const { formatMessage } = useIntl();
