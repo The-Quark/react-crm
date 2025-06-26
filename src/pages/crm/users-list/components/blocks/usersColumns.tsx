@@ -194,7 +194,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
         }
       }
     ],
-    [isRTL]
+    [isRTL, onDeleteClick]
   );
   return columns;
 };

@@ -333,7 +333,13 @@ const System = {
   'SYSTEM.COURIERS': 'السعاة',
   'SYSTEM.SEARCH_COURIER': 'البحث عن ساعي',
   'SYSTEM.NEW_COURIER': 'ساعي جديد',
-  'SYSTEM.EDIT_COURIER': 'تعديل الساعي'
+  'SYSTEM.EDIT_COURIER': 'تعديل الساعي',
+  'SYSTEM.ROWS_PER_PAGE': 'الصفوف في الصفحة',
+  'SYSTEM.GO_TO_PREVIOUS_PAGE': 'الانتقال إلى الصفحة السابقة',
+  'SYSTEM.GO_TO_NEXT_PAGE': 'الانتقال إلى الصفحة التالية',
+  'SYSTEM.PAGINATION_INFO': '{from} - {to} من {count}',
+  'SYSTEM.DASHBOARD_TITLE': 'لوحة التحكم',
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'مركز رئيسي للتخصيص الشخصي'
 };
 
 export default System;

@@ -17,7 +17,7 @@ interface MenuOptionsProps {
   onDeleteClick: (id: number) => void;
 }
 
-export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
+const UsersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -67,3 +67,5 @@ export const UsersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =>
     </MenuSub>
   );
 };
+
+export { UsersMenuOptions };

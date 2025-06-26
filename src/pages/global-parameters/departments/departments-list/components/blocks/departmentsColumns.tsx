@@ -115,7 +115,7 @@ export const useDepartmentsColumns = ({
         }
       }
     ],
-    [isRTL, canManage]
+    [isRTL, canManage, onDeleteClick]
   );
   return canManage ? columns : columns.slice(0, -1);
 };

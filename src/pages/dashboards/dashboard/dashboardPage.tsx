@@ -8,18 +8,22 @@ import { addDays, format } from 'date-fns';
 import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components/keenicons';
 import { DashboardContent } from '@/pages/dashboards/dashboard/components/dashboardContent.tsx';
+import { useIntl } from 'react-intl';
 
 export const DashboardPage = () => {
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2025, 0, 20),
     to: addDays(new Date(2025, 0, 20), 20)
   });
-
+  const { formatMessage, locale } = useIntl();
   return (
     <Fragment>
       <Container>
         <Toolbar>
-          <ToolbarHeading title="Dashboard" description="Central Hub for Personal Customization" />
+          <ToolbarHeading
+            title={formatMessage({ id: 'SYSTEM.DASHBOARD_TITLE' })}
+            description={formatMessage({ id: 'SYSTEM.DASHBOARD_DESCRIPTION' })}
+          />
           <ToolbarActions>
             <Popover>
               <PopoverTrigger asChild>
@@ -40,7 +44,7 @@ export const DashboardPage = () => {
                       format(date.from, 'LLL dd, y')
                     )
                   ) : (
-                    <span>Pick a date range</span>
+                    <span>{formatMessage({ id: 'SYSTEM.PICK_DATE_RANGE' })}</span>
                   )}
                 </button>
               </PopoverTrigger>

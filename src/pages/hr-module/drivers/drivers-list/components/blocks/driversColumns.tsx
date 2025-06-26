@@ -260,7 +260,7 @@ export const useDriversColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef
         }
       }
     ],
-    [isRTL]
+    [isRTL, onDeleteClick]
   );
   return columns;
 };

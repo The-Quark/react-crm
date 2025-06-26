@@ -10,12 +10,13 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/lib/utils.ts';
+import { useIntl } from 'react-intl';
 
 const DataGridPagination = () => {
   const { table, props } = useDataGrid();
   const btnBaseClasses = 'size-7 p-0 text-[13px]';
   const btnArrowClasses = btnBaseClasses + ' rtl:transform rtl:rotate-180';
-
+  const { formatMessage } = useIntl();
   const totalRows = props.pagination?.total || 0;
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
@@ -23,12 +24,14 @@ const DataGridPagination = () => {
   const to = Math.min((pageIndex + 1) * pageSize, totalRows);
 
   // Replace placeholders in paginationInfo
-  const paginationInfo = props.pagination?.info
-    ? props.pagination.info
-        .replace('{from}', from.toString())
-        .replace('{to}', to.toString())
-        .replace('{count}', totalRows.toString())
-    : `${from} - ${to} of ${totalRows}`;
+  const paginationInfo = formatMessage(
+    { id: 'SYSTEM.PAGINATION_INFO' },
+    {
+      from: from.toString(),
+      to: to.toString(),
+      count: totalRows.toString()
+    }
+  );
 
   // Pagination limit logic
   const pageCount = table.getPageCount();
@@ -96,7 +99,9 @@ const DataGridPagination = () => {
       data-pagination
     >
       <div className="flex items-center space-x-2 order-2 md:order-1 pb-2 md:pb-0">
-        <div className="text-sm text-muted-foreground">Rows per page</div>
+        <div className="text-sm text-muted-foreground">
+          {formatMessage({ id: 'SYSTEM.ROWS_PER_PAGE' })}
+        </div>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
@@ -124,7 +129,7 @@ const DataGridPagination = () => {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Go to previous page</span>
+            <span className="sr-only">{formatMessage({ id: 'SYSTEM.GO_TO_PREVIOUS_PAGE' })}</span>
             <ChevronLeftIcon className="size-4" />
           </Button>
 
@@ -140,7 +145,7 @@ const DataGridPagination = () => {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Go to next page</span>
+            <span className="sr-only">{formatMessage({ id: 'SYSTEM.GO_TO_NEXT_PAGE' })}</span>
             <ChevronRightIcon className="size-4" />
           </Button>
         </div>

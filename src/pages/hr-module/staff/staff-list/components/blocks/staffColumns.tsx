@@ -268,7 +268,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
         }
       }
     ],
-    [isRTL]
+    [isRTL, onDeleteClick]
   );
   return columns;
 };

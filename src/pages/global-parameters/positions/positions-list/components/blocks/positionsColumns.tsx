@@ -110,7 +110,7 @@ export const usePositionsColumns = ({
         }
       }
     ],
-    [isRTL]
+    [isRTL, canManage, onDeleteClick]
   );
   return canManage ? columns : columns.slice(0, -1);
 };

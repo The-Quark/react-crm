@@ -260,7 +260,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
         }
       }
     ],
-    [isRTL]
+    [isRTL, onDeleteClick]
   );
   return columns;
 };

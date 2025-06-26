@@ -333,7 +333,13 @@ const System = {
   'SYSTEM.COURIERS': 'Курьеры',
   'SYSTEM.SEARCH_COURIER': 'Поиск курьера',
   'SYSTEM.NEW_COURIER': 'Новый курьер',
-  'SYSTEM.EDIT_COURIER': 'Редактировать курьера'
+  'SYSTEM.EDIT_COURIER': 'Редактировать курьера',
+  'SYSTEM.ROWS_PER_PAGE': 'Строк на странице',
+  'SYSTEM.GO_TO_PREVIOUS_PAGE': 'Перейти на предыдущую страницу',
+  'SYSTEM.GO_TO_NEXT_PAGE': 'Перейти на следующую страницу',
+  'SYSTEM.PAGINATION_INFO': '{from} - {to} из {count}',
+  'SYSTEM.DASHBOARD_TITLE': 'Панель управления',
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'Центральный узел для персональной настройки'
 };
 
 export default System;

@@ -333,7 +333,13 @@ const System = {
   'SYSTEM.COURIERS': 'Couriers',
   'SYSTEM.SEARCH_COURIER': 'Search Courier',
   'SYSTEM.NEW_COURIER': 'New Courier',
-  'SYSTEM.EDIT_COURIER': 'Edit Courier'
+  'SYSTEM.EDIT_COURIER': 'Edit Courier',
+  'SYSTEM.ROWS_PER_PAGE': 'Rows per page',
+  'SYSTEM.GO_TO_PREVIOUS_PAGE': 'Go to previous page',
+  'SYSTEM.GO_TO_NEXT_PAGE': 'Go to next page',
+  'SYSTEM.PAGINATION_INFO': '{from} - {to} of {count}',
+  'SYSTEM.DASHBOARD_TITLE': 'Dashboard',
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'Central Hub for Personal Customization'
 };
 
 export default System;

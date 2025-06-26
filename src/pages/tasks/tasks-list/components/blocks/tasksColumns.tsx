@@ -229,7 +229,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
         }
       }
     ],
-    [isRTL, canManage]
+    [isRTL, canManage, onDeleteClick]
   );
 
   return canManage ? columns : columns.slice(0, -1);
