@@ -10,7 +10,8 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
@@ -25,6 +26,7 @@ import { cn } from '@/utils/lib/utils.ts';
 import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Task } from '@/api/get/getTask/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   isEditMode: boolean;
@@ -33,20 +35,21 @@ interface Props {
 }
 
 export const formSchema = Yup.object().shape({
-  description: Yup.string().required('Description is required'),
-  type: Yup.mixed<TaskType>().oneOf(Object.values(TaskType)).required('Type is required'),
+  description: Yup.string().required('VALIDATION.DESCRIPTION_REQUIRED'),
+  type: Yup.mixed<TaskType>().oneOf(Object.values(TaskType)).required('VALIDATION.TYPE_REQUIRED'),
   priority: Yup.mixed<TaskPriority>()
     .oneOf(Object.values(TaskPriority))
-    .required('Priority is required'),
+    .required('VALIDATION.PRIORITY_REQUIRED'),
   status: Yup.mixed<TaskStatus>().oneOf(Object.values(TaskStatus)).optional(),
-  assigned_by: Yup.number().integer().required('Assigned by is required'),
-  assigned_to: Yup.number().integer().required('Assigned to is required'),
+  assigned_by: Yup.number().integer().required('VALIDATION.ASSIGNED_BY_REQUIRED'),
+  assigned_to: Yup.number().integer().required('VALIDATION.ASSIGNED_TO_REQUIRED'),
   order_id: Yup.string().optional(),
   package_id: Yup.string().optional(),
-  due_date: Yup.string().required('Due date is required')
+  due_date: Yup.string().required('VALIDATION.DUE_DATE_REQUIRED')
 });
 
 export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode }) => {
+  const { formatMessage } = useIntl();
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -113,15 +116,12 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
       try {
         if (isEditMode && taskId) {
           await putTask(Number(taskId), values);
-          queryClient.invalidateQueries({ queryKey: ['tasks'] });
-          navigate('/tasks/list');
-          resetForm();
         } else {
           await postTask(values);
-          queryClient.invalidateQueries({ queryKey: ['tasks'] });
-          navigate('/tasks/list');
-          resetForm();
         }
+        navigate('/tasks/list');
+        queryClient.invalidateQueries({ queryKey: ['tasks'] });
+        resetForm();
         setSearchUserTerm('');
         setSearchUserTerm('');
         setSearchPackageTerm('');
@@ -175,31 +175,26 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit Task' : 'New Task'}</h3>
+          <h3 className="card-title">
+            {isEditMode
+              ? formatMessage({ id: 'SYSTEM.EDIT_TASK' })
+              : formatMessage({ id: 'SYSTEM.NEW_TASK' })}
+          </h3>
         </div>
 
         <div className="card-body grid gap-5">
-          {isEditMode && <SharedInput name="title" label="Title" formik={formik} disabled />}
-
-          <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Description</label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <Textarea
-                rows={4}
-                placeholder="Description"
-                {...formik.getFieldProps('description')}
-              />
-              {formik.touched.description && formik.errors.description && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.description}
-                </span>
-              )}
-            </div>
-          </div>
+          {isEditMode && (
+            <SharedInput
+              name="title"
+              label={formatMessage({ id: 'SYSTEM.TASK' })}
+              formik={formik}
+              disabled
+            />
+          )}
 
           <SharedSelect
             name="type"
-            label="Type"
+            label={formatMessage({ id: 'SYSTEM.TYPE' })}
             formik={formik}
             options={taskTypeOptions.map((option) => ({
               label: option.name,
@@ -209,7 +204,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
 
           <SharedSelect
             name="priority"
-            label="Priority"
+            label={formatMessage({ id: 'SYSTEM.PRIORITY' })}
             formik={formik}
             options={taskPriorityOptions.map((option) => ({
               label: option.name,
@@ -219,7 +214,9 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
 
           <div className="w-full">
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label flex- items-center gap-1 max-w-56">Due date</label>
+              <label className="form-label flex- items-center gap-1 max-w-56">
+                {formatMessage({ id: 'SYSTEM.DUE_DATE' })}
+              </label>
               <div className="w-full flex columns-1 flex-wrap">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -228,7 +225,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
                       <span>
                         {formik.values.due_date
                           ? new Date(formik.values.due_date).toLocaleDateString()
-                          : 'Pick a date'}
+                          : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
                       </span>
                     </button>
                   </PopoverTrigger>
@@ -247,15 +244,21 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
                 </Popover>
                 {formik.touched.due_date && formik.errors.due_date && (
                   <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.due_date}
+                    {formatMessage({ id: formik.errors.due_date })}
                   </span>
                 )}
               </div>
             </div>
           </div>
 
+          <SharedTextArea
+            name="description"
+            label={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+            formik={formik}
+          />
+
           <SharedAutocomplete
-            label="Assigned to"
+            label={formatMessage({ id: 'SYSTEM.ASSIGNED_TO' })}
             value={formik.values.assigned_to ?? ''}
             options={
               usersData?.result?.map((app) => ({
@@ -263,8 +266,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
                 name: `${app.first_name} ${app.last_name} ${app.patronymic}`
               })) ?? []
             }
-            placeholder="Select user"
-            searchPlaceholder="Search user"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_USER' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_USER' })}
             onChange={(val) => {
               formik.setFieldValue('assigned_to', val);
             }}
@@ -275,7 +278,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
           />
 
           <SharedAutocomplete
-            label="Order"
+            label={formatMessage({ id: 'SYSTEM.ORDER' })}
             value={formik.values.order_id ?? ''}
             options={
               ordersData?.result?.map((app) => ({
@@ -283,8 +286,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
                 name: app.order_code
               })) ?? []
             }
-            placeholder="Select order"
-            searchPlaceholder="Search order"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
             onChange={(val) => {
               formik.setFieldValue('order_id', val);
             }}
@@ -296,7 +299,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
           />
 
           <SharedAutocomplete
-            label="Package"
+            label={formatMessage({ id: 'SYSTEM.PACKAGE' })}
             value={formik.values.package_id ?? ''}
             options={
               packagesData?.result?.map((app) => ({
@@ -304,8 +307,8 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
                 name: app.hawb
               })) ?? []
             }
-            placeholder="Select package"
-            searchPlaceholder="Search package"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_PACKAGE' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_PACKAGE' })}
             onChange={(val) => {
               formik.setFieldValue('package_id', val);
             }}
@@ -318,7 +321,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
           {isEditMode && (
             <SharedSelect
               name="status"
-              label="Status"
+              label={formatMessage({ id: 'SYSTEM.STATUS' })}
               formik={formik}
               options={taskStatusOptions.map((option) => ({
                 label: option.name,
@@ -333,7 +336,9 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
               className="btn btn-primary"
               disabled={loading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Save'}
+              {loading
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

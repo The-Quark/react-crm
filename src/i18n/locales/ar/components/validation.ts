@@ -55,7 +55,13 @@ const Validation = {
   'VALIDATION.PASSWORD_MAX': 'الحد الأقصى 100 رمز',
   'VALIDATION.PASSWORD_UPPERCASE': 'يجب أن يحتوي على حرف كبير واحد على الأقل',
   'VALIDATION.PASSWORD_NUMBER': 'يجب أن يحتوي على رقم واحد على الأقل',
-  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'يجب أن يحتوي على رمز خاص واحد على الأقل'
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'يجب أن يحتوي على رمز خاص واحد على الأقل',
+  'VALIDATION.DESCRIPTION_REQUIRED': 'الوصف مطلوب',
+  'VALIDATION.TYPE_REQUIRED': 'النوع مطلوب',
+  'VALIDATION.PRIORITY_REQUIRED': 'الأولوية مطلوبة',
+  'VALIDATION.ASSIGNED_BY_REQUIRED': 'معين من قبل مطلوب',
+  'VALIDATION.ASSIGNED_TO_REQUIRED': 'معين إلى مطلوب',
+  'VALIDATION.DUE_DATE_REQUIRED': 'تاريخ الاستحقاق مطلوب'
 };
 
 export default Validation;

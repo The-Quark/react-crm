@@ -8,6 +8,11 @@ import { useUserPermissions } from '@/hooks';
 import { TasksMenuOptions } from '@/pages/tasks/tasks-list/components/blocks/tasksMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { SharedPriorityBadge, SharedTypeBadge } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
+
+interface UseColumnsProps {
+  onDeleteClick: (id: number) => void;
+}
 
 const formatUserName = (user?: {
   first_name?: string | null;
@@ -21,7 +26,8 @@ const formatUserName = (user?: {
   return parts.join(' ');
 };
 
-export const useTasksColumns = (): ColumnDef<Task>[] => {
+export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<Task>[] => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -32,7 +38,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -46,7 +54,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.title,
         id: 'title',
-        header: ({ column }) => <DataGridColumnHeader title="Title" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TASK' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -68,7 +78,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.order?.order_code,
         id: 'order',
-        header: ({ column }) => <DataGridColumnHeader title="Order" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ORDER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -90,7 +102,12 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => formatUserName(row.assigned_by),
         id: 'assigned_by',
-        header: ({ column }) => <DataGridColumnHeader title="Assigned by" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.ASSIGNED_BY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -107,7 +124,12 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => formatUserName(row.assigned_to),
         id: 'assigned_to',
-        header: ({ column }) => <DataGridColumnHeader title="Assigned to" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.ASSIGNED_TO' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -124,7 +146,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.type,
         id: 'type',
-        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -138,7 +162,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.priority,
         id: 'priority',
-        header: ({ column }) => <DataGridColumnHeader title="Priority" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRIORITY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -153,7 +179,9 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -190,7 +218,8 @@ export const useTasksColumns = (): ColumnDef<Task>[] => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {TasksMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>

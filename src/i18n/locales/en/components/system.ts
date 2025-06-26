@@ -248,7 +248,23 @@ const System = {
   'SYSTEM.GENDER_MALE': 'Male',
   'SYSTEM.GENDER_FEMALE': 'Female',
   'SYSTEM.STATUS_ACTIVE': 'Active',
-  'SYSTEM.STATUS_INACTIVE': 'Inactive'
+  'SYSTEM.STATUS_INACTIVE': 'Inactive',
+  'SYSTEM.TASK': 'Task',
+  'SYSTEM.ASSIGNED_BY': 'Assigned By',
+  'SYSTEM.ASSIGNED_TO': 'Assigned To',
+  'SYSTEM.PRIORITY': 'Priority',
+  'SYSTEM.VIEW': 'View',
+  'SYSTEM.NEW_TASK': 'New Task',
+  'SYSTEM.EDIT_TASK': 'Edit Task',
+  'SYSTEM.SEARCH_TASK': 'Search Task',
+  'SYSTEM.TASKS': 'Tasks',
+  'SYSTEM.LAST_UPDATED': 'Last Updated',
+  'SYSTEM.DESCRIPTION': 'Description',
+  'SYSTEM.DUE_DATE': 'Due Date',
+  'SYSTEM.SELECT_USER': 'Select User',
+  'SYSTEM.SELECT_PACKAGE': 'Select Package',
+  'SYSTEM.SEARCH_PACKAGE': 'Search Package',
+  'SYSTEM.PACKAGE': 'Package'
 };
 
 export default System;

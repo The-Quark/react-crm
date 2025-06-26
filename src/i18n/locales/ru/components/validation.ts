@@ -56,7 +56,13 @@ const Validation = {
   'VALIDATION.PASSWORD_MAX': 'Максимум 100 символов',
   'VALIDATION.PASSWORD_UPPERCASE': 'Должен содержать хотя бы одну заглавную букву',
   'VALIDATION.PASSWORD_NUMBER': 'Должен содержать хотя бы одну цифру',
-  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Должен содержать хотя бы один специальный символ'
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Должен содержать хотя бы один специальный символ',
+  'VALIDATION.DESCRIPTION_REQUIRED': 'Описание обязательно',
+  'VALIDATION.TYPE_REQUIRED': 'Тип обязателен',
+  'VALIDATION.PRIORITY_REQUIRED': 'Приоритет обязателен',
+  'VALIDATION.ASSIGNED_BY_REQUIRED': 'Назначено обязательно',
+  'VALIDATION.ASSIGNED_TO_REQUIRED': 'Назначено для обязательно',
+  'VALIDATION.DUE_DATE_REQUIRED': 'Срок выполнения обязателен'
 };
 
 export default Validation;

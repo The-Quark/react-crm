@@ -248,7 +248,23 @@ const System = {
   'SYSTEM.GENDER_MALE': 'Мужской',
   'SYSTEM.GENDER_FEMALE': 'Женский',
   'SYSTEM.STATUS_ACTIVE': 'Активен',
-  'SYSTEM.STATUS_INACTIVE': 'Неактивен'
+  'SYSTEM.STATUS_INACTIVE': 'Неактивен',
+  'SYSTEM.TASK': 'Задача',
+  'SYSTEM.ASSIGNED_BY': 'Назначено',
+  'SYSTEM.ASSIGNED_TO': 'Назначено для',
+  'SYSTEM.PRIORITY': 'Приоритет',
+  'SYSTEM.VIEW': 'Просмотр',
+  'SYSTEM.NEW_TASK': 'Новая задача',
+  'SYSTEM.EDIT_TASK': 'Редактировать задачу',
+  'SYSTEM.SEARCH_TASK': 'Поиск задачи',
+  'SYSTEM.TASKS': 'Задачи',
+  'SYSTEM.LAST_UPDATED': 'Последнее обновление',
+  'SYSTEM.DESCRIPTION': 'Описание',
+  'SYSTEM.DUE_DATE': 'Срок выполнения',
+  'SYSTEM.SELECT_USER': 'Выберите пользователя',
+  'SYSTEM.SELECT_PACKAGE': 'Выберите посылку',
+  'SYSTEM.SEARCH_PACKAGE': 'Поиск посылки',
+  'SYSTEM.PACKAGE': 'Посылка'
 };
 
 export default System;

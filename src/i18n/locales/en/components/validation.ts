@@ -55,7 +55,13 @@ const Validation = {
   'VALIDATION.PASSWORD_MAX': 'Maximum 100 symbols',
   'VALIDATION.PASSWORD_UPPERCASE': 'Must contain at least one uppercase letter',
   'VALIDATION.PASSWORD_NUMBER': 'Must contain at least one number',
-  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Must contain at least one special character'
+  'VALIDATION.PASSWORD_SPECIAL_CHAR': 'Must contain at least one special character',
+  'VALIDATION.DESCRIPTION_REQUIRED': 'Description is required',
+  'VALIDATION.TYPE_REQUIRED': 'Type is required',
+  'VALIDATION.PRIORITY_REQUIRED': 'Priority is required',
+  'VALIDATION.ASSIGNED_BY_REQUIRED': 'Assigned by is required',
+  'VALIDATION.ASSIGNED_TO_REQUIRED': 'Assigned to is required',
+  'VALIDATION.DUE_DATE_REQUIRED': 'Due date is required'
 };
 
 export default Validation;

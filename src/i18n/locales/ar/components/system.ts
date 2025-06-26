@@ -248,7 +248,23 @@ const System = {
   'SYSTEM.GENDER_MALE': 'ذكر',
   'SYSTEM.GENDER_FEMALE': 'أنثى',
   'SYSTEM.STATUS_ACTIVE': 'نشط',
-  'SYSTEM.STATUS_INACTIVE': 'غير نشط'
+  'SYSTEM.STATUS_INACTIVE': 'غير نشط',
+  'SYSTEM.TASK': 'مهمة',
+  'SYSTEM.ASSIGNED_BY': 'معين من قبل',
+  'SYSTEM.ASSIGNED_TO': 'معين إلى',
+  'SYSTEM.PRIORITY': 'الأولوية',
+  'SYSTEM.VIEW': 'عرض',
+  'SYSTEM.NEW_TASK': 'مهمة جديدة',
+  'SYSTEM.EDIT_TASK': 'تعديل المهمة',
+  'SYSTEM.SEARCH_TASK': 'البحث عن مهمة',
+  'SYSTEM.TASKS': 'المهام',
+  'SYSTEM.LAST_UPDATED': 'آخر تحديث',
+  'SYSTEM.DESCRIPTION': 'الوصف',
+  'SYSTEM.DUE_DATE': 'تاريخ الاستحقاق',
+  'SYSTEM.SELECT_USER': 'اختر المستخدم',
+  'SYSTEM.SELECT_PACKAGE': 'اختر الطرد',
+  'SYSTEM.SEARCH_PACKAGE': 'البحث عن طرد',
+  'SYSTEM.PACKAGE': 'طرد'
 };
 
 export default System;
