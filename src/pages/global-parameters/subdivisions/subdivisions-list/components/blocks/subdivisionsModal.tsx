@@ -29,6 +29,7 @@ import {
   putGlobalParamsSubdivisions
 } from '@/api';
 import { timezoneMock } from '@/utils/enumsOptions/mocks.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -37,11 +38,13 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  company_id: Yup.string().required('Company is required'),
-  language_id: Yup.string().required('Language is required'),
-  currency_id: Yup.string().required('Currency is required'),
-  is_active: Yup.boolean().required('Active status is required')
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED'),
+  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
+  language_id: Yup.string().required('VALIDATION.LANGUAGE_REQUIRED'),
+  currency_id: Yup.string().required('VALIDATION.CURRENCY_REQUIRED'),
+  is_active: Yup.boolean().required('VALIDATION.ACTIVE_STATUS_REQUIRED'),
+  warehouse_address: Yup.string().required('VALIDATION.WAREHOUSE_ADDRESS_REQUIRED'),
+  legal_address: Yup.string().required('VALIDATION.LEGAL_ADDRESS_REQUIRED')
 });
 
 const getInitialValues = (
@@ -78,6 +81,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [searchLanguageTerm, setSearchLanguageTerm] = useState('');
   const [searchCurrencyTerm, setSearchCurrencyTerm] = useState('');
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
 
   const {
     data: subdivisionsData,
@@ -164,7 +168,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {id ? formatMessage({ id: 'SYSTEM.UPDATE' }) : formatMessage({ id: 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -185,13 +189,13 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedAutocomplete
-                label="Company"
+                label={formatMessage({ id: 'SYSTEM.COMPANY' })}
                 value={formik.values.company_id}
                 options={
                   companyData?.result.map((item) => ({ ...item, name: item.company_name })) ?? []
                 }
-                placeholder="Select company"
-                searchPlaceholder="Search company"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
                 onChange={(val) => {
                   formik.setFieldValue('company_id', val);
                 }}
@@ -200,14 +204,18 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCompanyTerm}
                 onSearchTermChange={setSearchCompanyTerm}
               />
-              <SharedInput name="name" label="Name" formik={formik} />
+              <SharedInput
+                name="name"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
 
               <SharedAutocomplete
-                label="Language"
+                label={formatMessage({ id: 'SYSTEM.LANGUAGE' })}
                 value={formik.values.language_id}
                 options={languageData?.result.map((item) => ({ ...item, name: item.name })) ?? []}
-                placeholder="Select language"
-                searchPlaceholder="Search language"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_LANGUAGE' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_LANGUAGE' })}
                 onChange={(val) => {
                   formik.setFieldValue('language_id', val);
                 }}
@@ -218,11 +226,11 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
               />
 
               <SharedAutocomplete
-                label="Currency"
+                label={formatMessage({ id: 'SYSTEM.CURRENCY' })}
                 value={formik.values.currency_id}
                 options={currencyData?.result.map((item) => ({ ...item, name: item.name })) ?? []}
-                placeholder="Select currency"
-                searchPlaceholder="Search currency"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_CURRENCY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CURRENCY' })}
                 onChange={(val) => {
                   formik.setFieldValue('currency_id', val);
                 }}
@@ -234,17 +242,27 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
 
               <SharedSelect
                 name="timezone"
-                label="Time zone"
+                label={formatMessage({ id: 'SYSTEM.TIMEZONE' })}
                 formik={formik}
                 options={timezoneMock.map((tz) => ({ label: tz.timezone, value: tz.timezone }))}
               />
 
-              <SharedInput name="legal_address" label="Legal Address" formik={formik} />
-              <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
+              <SharedInput
+                name="legal_address"
+                label={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="warehouse_address"
+                label={formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
+                formik={formik}
+              />
 
               {!!id && (
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Active</label>
+                  <label className="form-label max-w-56">
+                    {formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                  </label>
                   <div className="flex columns-1 w-full flex-wrap">
                     <div className="flex items-center gap-5">
                       <label className="checkbox-group flex items-center gap-2">
@@ -259,7 +277,7 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
                     </div>
                     {formik.touched.is_active && formik.errors.is_active && (
                       <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.is_active}
+                        {formatMessage({ id: formik.errors.is_active })}
                       </span>
                     )}
                   </div>
@@ -272,7 +290,9 @@ export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {loading
+                    ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                    : formatMessage({ id: 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

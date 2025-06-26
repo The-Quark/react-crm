@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getGlobalParamsPositions } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -25,13 +26,14 @@ export const PositionsViewModal: FC<Props> = ({ open, id, handleClose }) => {
     queryFn: () =>
       id !== null ? getGlobalParamsPositions({ id: Number(id) }) : Promise.reject('Invalid ID')
   });
+  const { formatMessage } = useIntl();
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            Position Details
+            {formatMessage({ id: 'SYSTEM.POSITION_DETAILS' })}
           </DialogTitle>
           <DialogDescription />
           <button
@@ -49,26 +51,38 @@ export const PositionsViewModal: FC<Props> = ({ open, id, handleClose }) => {
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
-                  <h4 className="text-lg font-semibold mb-4">Position Information</h4>
+                  <h4 className="text-lg font-semibold mb-4">
+                    {formatMessage({ id: 'SYSTEM.POSITION_INFO' })}
+                  </h4>
                   <div className="grid gap-3">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 tex">Position</label>
+                      <label className="form-label max-w-56 tex">
+                        {formatMessage({ id: 'SYSTEM.POSITION' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap ">{data.result[0].title}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Description</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].description}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Is Active</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.IS_ACTIVE' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {data.result[0].is_active ? 'Enabled' : 'Disabled'}
+                        {data.result[0].is_active
+                          ? formatMessage({ id: 'SYSTEM.ENABLED' })
+                          : formatMessage({ id: 'SYSTEM.DISABLED' })}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Created at</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].created_at}
                       </div>
@@ -76,42 +90,55 @@ export const PositionsViewModal: FC<Props> = ({ open, id, handleClose }) => {
                   </div>
                 </div>
 
-                {/* Client Block */}
                 <div>
-                  <h4 className="text-lg font-semibold mb-4">Company Information</h4>
+                  <h4 className="text-lg font-semibold mb-4">
+                    {formatMessage({ id: 'SYSTEM.COMPANY_INFO' })}
+                  </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Company</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.COMPANY' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.company_name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Currency</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CURRENCY' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.currency || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Language</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.LANGUAGE' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.language || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Timezone</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.TIMEZONE' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.timezone || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Legal address</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.legal_address || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">Warehouse address</label>
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
+                      </label>
                       <div className="flex columns-1 w-full">
                         {data.result[0].company?.warehouse_address || '-'}
                       </div>

@@ -290,7 +290,25 @@ const System = {
   'SYSTEM.NEW_DEPARTMENT': 'قسم جديد',
   'SYSTEM.EDIT_DEPARTMENT': 'تعديل القسم',
   'SYSTEM.SEARCH_DEPARTMENTS': 'البحث عن الأقسام',
-  'SYSTEM.SELECT_DEPARTMENTS': 'اختر القسم'
+  'SYSTEM.SELECT_DEPARTMENTS': 'اختر القسم',
+  'SYSTEM.DEPARTMENT_DETAILS': 'تفاصيل القسم',
+  'SYSTEM.DEPARTMENT_INFO': 'معلومات القسم',
+  'SYSTEM.IS_ACTIVE': 'نشط',
+  'SYSTEM.UPDATE': 'تحديث',
+  'SYSTEM.SUBDIVISIONS': 'الفروع',
+  'SYSTEM.NEW_SUBDIVISION': 'فرع جديد',
+  'SYSTEM.SELECT_LANGUAGE': 'اختر اللغة',
+  'SYSTEM.SEARCH_LANGUAGE': 'البحث عن لغة',
+  'SYSTEM.SELECT_CURRENCY': 'اختر العملة',
+  'SYSTEM.SEARCH_CURRENCY': 'البحث عن عملة',
+  'SYSTEM.SUBDIVISION_DETAILS': 'تفاصيل الفرع',
+  'SYSTEM.SUBDIVISION_INFO': 'معلومات الفرع',
+  'SYSTEM.CREATE_SUBDIVISION': 'إنشاء فرع',
+  'SYSTEM.POSITIONS': 'المناصب',
+  'SYSTEM.NEW_POSITION': 'منصب جديد',
+  'SYSTEM.POSITION_DETAILS': 'تفاصيل المنصب',
+  'SYSTEM.POSITION_INFO': 'معلومات المنصب',
+  'SYSTEM.CREATE_POSITION': 'إنشاء منصب'
 };
 
 export default System;

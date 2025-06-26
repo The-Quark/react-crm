@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   initialCompanyId?: number;
@@ -16,6 +17,7 @@ interface Props {
 
 export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
   const { table } = useDataGrid();
+  const { formatMessage } = useIntl();
   const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -71,11 +73,11 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Positions</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.POSITIONS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-            New Position
+            {formatMessage({ id: 'SYSTEM.NEW_POSITION' })}
           </button>
         )}
         {(isViewer || isSuperAdmin) && (
@@ -88,8 +90,8 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
                   name: item.company_name
                 })) ?? []
               }
-              placeholder="Select company"
-              searchPlaceholder="Search company"
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
               onChange={handleCompanyChange}
               onSearchTermChange={setSearchCompanyTerm}
               searchTerm={searchCompanyTerm}
@@ -106,7 +108,7 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
           />
           <input
             type="text"
-            placeholder="Search position"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_POSITION' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

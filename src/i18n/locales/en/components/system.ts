@@ -290,7 +290,25 @@ const System = {
   'SYSTEM.NEW_DEPARTMENT': 'New Department',
   'SYSTEM.EDIT_DEPARTMENT': 'Edit Department',
   'SYSTEM.SEARCH_DEPARTMENTS': 'Search Departments',
-  'SYSTEM.SELECT_DEPARTMENTS': 'Select Department'
+  'SYSTEM.SELECT_DEPARTMENTS': 'Select Department',
+  'SYSTEM.DEPARTMENT_DETAILS': ' Department Details',
+  'SYSTEM.DEPARTMENT_INFO': ' Department Information',
+  'SYSTEM.IS_ACTIVE': 'Is Active',
+  'SYSTEM.UPDATE': 'Update',
+  'SYSTEM.SUBDIVISIONS': 'Subdivisions',
+  'SYSTEM.NEW_SUBDIVISION': 'New Subdivision',
+  'SYSTEM.SELECT_LANGUAGE': 'Select Language',
+  'SYSTEM.SEARCH_LANGUAGE': 'Search Language',
+  'SYSTEM.SELECT_CURRENCY': 'Select Currency',
+  'SYSTEM.SEARCH_CURRENCY': 'Search Currency',
+  'SYSTEM.SUBDIVISION_DETAILS': 'Subdivision Details',
+  'SYSTEM.SUBDIVISION_INFO': 'Subdivision Information',
+  'SYSTEM.CREATE_SUBDIVISION': 'Create Subdivision',
+  'SYSTEM.POSITIONS': 'Positions',
+  'SYSTEM.NEW_POSITION': 'New Position',
+  'SYSTEM.POSITION_DETAILS': 'Position Details',
+  'SYSTEM.POSITION_INFO': 'Position Information',
+  'SYSTEM.CREATE_POSITION': 'Create Position'
 };
 
 export default System;

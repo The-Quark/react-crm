@@ -290,7 +290,25 @@ const System = {
   'SYSTEM.NEW_DEPARTMENT': 'Новый отдел',
   'SYSTEM.EDIT_DEPARTMENT': 'Редактировать отдел',
   'SYSTEM.SEARCH_DEPARTMENTS': 'Поиск отделов',
-  'SYSTEM.SELECT_DEPARTMENTS': 'Выберите отдел'
+  'SYSTEM.SELECT_DEPARTMENTS': 'Выберите отдел',
+  'SYSTEM.DEPARTMENT_DETAILS': 'Детали отдела',
+  'SYSTEM.DEPARTMENT_INFO': 'Информация об отделе',
+  'SYSTEM.IS_ACTIVE': 'Активен',
+  'SYSTEM.UPDATE': 'Обновить',
+  'SYSTEM.SUBDIVISIONS': 'Подразделения',
+  'SYSTEM.NEW_SUBDIVISION': 'Новое подразделение',
+  'SYSTEM.SELECT_LANGUAGE': 'Выберите язык',
+  'SYSTEM.SEARCH_LANGUAGE': 'Поиск языка',
+  'SYSTEM.SELECT_CURRENCY': 'Выберите валюту',
+  'SYSTEM.SEARCH_CURRENCY': 'Поиск валюты',
+  'SYSTEM.SUBDIVISION_DETAILS': 'Детали подразделения',
+  'SYSTEM.SUBDIVISION_INFO': 'Информация о подразделении',
+  'SYSTEM.CREATE_SUBDIVISION': 'Создать подразделение',
+  'SYSTEM.POSITIONS': 'Должности',
+  'SYSTEM.NEW_POSITION': 'Новая должность',
+  'SYSTEM.POSITION_DETAILS': 'Детали должности',
+  'SYSTEM.POSITION_INFO': 'Информация о должности',
+  'SYSTEM.CREATE_POSITION': 'Создать должность'
 };
 
 export default System;

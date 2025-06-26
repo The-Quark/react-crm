@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { getGlobalParamsPositions } from '@/api';
-import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { deleteGlobalParamsPosition, getGlobalParamsPositions } from '@/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { usePositionsColumns } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsColumns.tsx';
 import { PositionsToolbar } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsToolbar.tsx';
 import { useAuthContext } from '@/auth';
@@ -14,8 +14,11 @@ export const PositionsListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -39,11 +42,32 @@ export const PositionsListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
+  const handleConfirmDelete = async () => {
+    if (!selectedPositionId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteGlobalParamsPosition(selectedPositionId);
+      await queryClient.invalidateQueries({ queryKey: ['globalParamsPositions'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting position:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedPositionId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const columns = usePositionsColumns({
     onRowClick: (id) => {
       setSelectedPositionId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -95,6 +119,12 @@ export const PositionsListContent = () => {
         open={isModalOpen}
         id={selectedPositionId}
         handleClose={() => setIsModalOpen(false)}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

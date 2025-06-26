@@ -10,25 +10,24 @@ import {
   Menu
 } from '@/components';
 import React, { FC, useState } from 'react';
-import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteGlobalParamsSubdivision } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { SubdivisionModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsModal.tsx';
+import { useIntl } from 'react-intl';
 
 interface MenuOptionsProps {
   id?: number;
+  onDeleteClick: (id: number) => void;
 }
 
-export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const [activeModal, setActiveModal] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
+  const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
   const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const queryClient = useQueryClient();
   const { isRTL } = useLanguage();
 
   const handleOpen = () => {
@@ -37,20 +36,6 @@ export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
 
   const handleClose = () => {
     setActiveModal(false);
-  };
-
-  const handleDelete = async () => {
-    if (!id) {
-      toast.error('ID not provided');
-      return;
-    }
-    try {
-      await deleteGlobalParamsSubdivision(id);
-      await queryClient.invalidateQueries({ queryKey: ['globalParamsSubdivisions'] });
-      toast.success('Subdivision deleted');
-    } catch {
-      toast.error('Failed to delete subdivision');
-    }
   };
 
   return (
@@ -82,16 +67,18 @@ export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
                     <MenuIcon>
                       <KeenIcon icon="pencil" />
                     </MenuIcon>
-                    <MenuTitle>Edit</MenuTitle>
+                    <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={() => id && onDeleteClick(id)}>
                   <MenuLink>
                     <MenuIcon>
                       <KeenIcon icon="trash" className="text-danger !text-red-500" />
                     </MenuIcon>
-                    <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+                    <MenuTitle className="text-danger !text-red-500">
+                      {formatMessage({ id: 'SYSTEM.DELETE' })}
+                    </MenuTitle>
                   </MenuLink>
                 </MenuItem>
               </>

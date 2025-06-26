@@ -1,8 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { getGlobalParamsSubdivisions } from '@/api';
-import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import {
+  deleteGlobalParamsDepartments,
+  deleteGlobalParamsSubdivision,
+  getGlobalParamsSubdivisions
+} from '@/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useSubdivisionsColumns } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsColumns.tsx';
 import { SubdivisionToolbar } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsToolbar.tsx';
 import { useAuthContext } from '@/auth';
@@ -14,8 +18,11 @@ export const SubdivisionsListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubId, setSelectedSubId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
@@ -39,11 +46,32 @@ export const SubdivisionsListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
+  const handleConfirmDelete = async () => {
+    if (!selectedSubId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteGlobalParamsSubdivision(selectedSubId);
+      await queryClient.invalidateQueries({ queryKey: ['globalParamsSubdivisions'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting subdivision:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedSubId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const columns = useSubdivisionsColumns({
     onRowClick: (id) => {
       setSelectedSubId(id);
       setIsModalOpen(true);
-    }
+    },
+    onDeleteClick: handleDeleteClick
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -96,6 +124,12 @@ export const SubdivisionsListContent = () => {
         open={isModalOpen}
         id={selectedSubId}
         handleClose={() => setIsModalOpen(false)}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

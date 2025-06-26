@@ -7,15 +7,19 @@ import { SubdivisionsMenuOptions } from '@/pages/global-parameters/subdivisions/
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
 export const useSubdivisionsColumns = ({
-  onRowClick
+  onRowClick,
+  onDeleteClick
 }: UseColumnsProps): ColumnDef<Subdivision>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
@@ -24,7 +28,9 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -38,7 +44,12 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -58,7 +69,9 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.company?.company_name,
         id: 'company',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -74,7 +87,9 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.currency.name,
         id: 'currency',
-        header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -90,7 +105,9 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.language.name,
         id: 'language',
-        header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LANGUAGE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -106,7 +123,9 @@ export const useSubdivisionsColumns = ({
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -122,7 +141,9 @@ export const useSubdivisionsColumns = ({
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) => <SubdivisionsMenuOptions id={info.row.original.id} />,
+        cell: (info) => (
+          <SubdivisionsMenuOptions id={info.row.original.id} onDeleteClick={onDeleteClick} />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

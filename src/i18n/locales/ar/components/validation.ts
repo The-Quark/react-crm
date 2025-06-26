@@ -73,7 +73,8 @@ const Validation = {
   'VALIDATION.DIMENSIONS_PER_PLACE_REQUIRED': 'الأبعاد لكل مكان مطلوبة',
   'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'التكلفة لكل مكان مطلوبة',
   'VALIDATION.NAME_REQUIRED': 'الاسم مطلوب',
-  'VALIDATION.ACTIVE_STATUS_REQUIRED': 'حالة النشاط مطلوبة'
+  'VALIDATION.ACTIVE_STATUS_REQUIRED': 'حالة النشاط مطلوبة',
+  'VALIDATION.TITLE_REQUIRED': 'العنوان مطلوب'
 };
 
 export default Validation;

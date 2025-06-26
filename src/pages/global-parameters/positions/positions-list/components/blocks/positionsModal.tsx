@@ -13,7 +13,13 @@ import { useFormik } from 'formik';
 import { IGlobalParamsPositionFormValues } from '@/api/post/postGlobalParams/postGlobalParamsPosition/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { IGlobalParamsPositionModel } from '@/api/get/getGlobalParams/getGlobalParamsPositions/types.ts';
-import { SharedAutocomplete, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedAutocomplete,
+  SharedError,
+  SharedInput,
+  SharedLoading,
+  SharedTextArea
+} from '@/partials/sharedUI';
 import {
   getGlobalParameters,
   getGlobalParamsPositions,
@@ -21,6 +27,7 @@ import {
   putGlobalParamsPosition
 } from '@/api';
 import { Textarea } from '@/components/ui/textarea.tsx';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -29,10 +36,10 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  company_id: Yup.string().required('Company is required'),
+  title: Yup.string().required('VALIDATION.TITLE_REQUIRED'),
+  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
   description: Yup.string().optional(),
-  is_active: Yup.boolean().required('Active status is required')
+  is_active: Yup.boolean().required('VALIDATION.ACTIVE_STATUS_REQUIRED')
 });
 
 const getInitialValues = (
@@ -59,6 +66,7 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
 
   const {
     data: positionsData,
@@ -119,7 +127,7 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {id ? formatMessage({ id: 'SYSTEM.UPDATE' }) : formatMessage({ id: 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -138,13 +146,13 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedAutocomplete
-                label="Company"
+                label={formatMessage({ id: 'SYSTEM.COMPANY' })}
                 value={formik.values.company_id}
                 options={
                   companyData?.result.map((item) => ({ ...item, name: item.company_name })) ?? []
                 }
-                placeholder="Select company"
-                searchPlaceholder="Search company"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
                 onChange={(val) => {
                   formik.setFieldValue('company_id', val);
                 }}
@@ -153,27 +161,22 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCompanyTerm}
                 onSearchTermChange={setSearchCompanyTerm}
               />
-              <SharedInput name="title" label="Title" formik={formik} />
-
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Description</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <Textarea
-                    rows={4}
-                    placeholder="Description"
-                    {...formik.getFieldProps('description')}
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.description}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedInput
+                name="title"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
+              <SharedTextArea
+                name="description"
+                label={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+                formik={formik}
+              />
 
               {!!id && (
                 <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Active</label>
+                  <label className="form-label max-w-56">
+                    {formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                  </label>
                   <div className="flex columns-1 w-full flex-wrap">
                     <div className="flex items-center gap-5">
                       <label className="checkbox-group flex items-center gap-2">
@@ -188,7 +191,7 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                     </div>
                     {formik.touched.is_active && formik.errors.is_active && (
                       <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.is_active}
+                        {formatMessage({ id: formik.errors.is_active })}
                       </span>
                     )}
                   </div>
@@ -201,7 +204,9 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {loading
+                    ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                    : formatMessage({ id: 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

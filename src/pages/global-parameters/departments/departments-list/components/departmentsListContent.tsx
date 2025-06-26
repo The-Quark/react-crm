@@ -49,10 +49,10 @@ export const DepartmentsListContent = () => {
     setIsDeleting(true);
     try {
       await deleteGlobalParamsDepartments(selectedDepartmentId);
-      await queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
+      await queryClient.invalidateQueries({ queryKey: ['globalParamsDepartments'] });
       setIsDeleteModalOpen(false);
     } catch (error) {
-      console.error('Error deleting company:', error);
+      console.error('Error deleting department:', error);
     } finally {
       setIsDeleting(false);
     }
