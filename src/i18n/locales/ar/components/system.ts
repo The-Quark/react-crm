@@ -308,7 +308,32 @@ const System = {
   'SYSTEM.NEW_POSITION': 'منصب جديد',
   'SYSTEM.POSITION_DETAILS': 'تفاصيل المنصب',
   'SYSTEM.POSITION_INFO': 'معلومات المنصب',
-  'SYSTEM.CREATE_POSITION': 'إنشاء منصب'
+  'SYSTEM.CREATE_POSITION': 'إنشاء منصب',
+  'SYSTEM.STAFF': 'الموظفون',
+  'SYSTEM.NEW_STAFF': 'موظف جديد',
+  'SYSTEM.SEARCH_STAFF': 'البحث عن موظف',
+  'SYSTEM.EDIT_STAFF': 'تعديل الموظف',
+  'SYSTEM.DRIVER': 'سائق',
+  'SYSTEM.NEW_DRIVER': 'سائق جديد',
+  'SYSTEM.SEARCH_DRIVER': 'البحث عن سائق',
+  'SYSTEM.EDIT_DRIVER': 'تعديل السائق',
+  'SYSTEM.LICENSE_CATEGORY': 'فئة الرخصة',
+  'SYSTEM.PLATE_NUMBER': 'رقم اللوحة',
+  'SYSTEM.DELIVERY_COUNT': 'عدد التسليمات',
+  'SYSTEM.ACTIVE_DELIVERY_COUNT': 'عدد التسليمات النشطة',
+  'SYSTEM.DRIVER_STATUS': 'حالة السائق',
+  'SYSTEM.DRIVERS': 'السائقون',
+  'SYSTEM.VEHICLE': 'مركبة',
+  'SYSTEM.SEARCH_VEHICLE': 'البحث عن مركبة',
+  'SYSTEM.SELECT_VEHICLE': 'اختر مركبة',
+  'SYSTEM.DRIVER_DETAILS': 'تفاصيل السائق',
+  'SYSTEM.COURIER': 'ساعي',
+  'SYSTEM.COURIER_STATUS': 'حالة الساعي',
+  'SYSTEM.COURIER_TYPE': 'نوع الساعي',
+  'SYSTEM.COURIERS': 'السعاة',
+  'SYSTEM.SEARCH_COURIER': 'البحث عن ساعي',
+  'SYSTEM.NEW_COURIER': 'ساعي جديد',
+  'SYSTEM.EDIT_COURIER': 'تعديل الساعي'
 };
 
 export default System;

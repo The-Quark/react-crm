@@ -308,7 +308,32 @@ const System = {
   'SYSTEM.NEW_POSITION': 'Новая должность',
   'SYSTEM.POSITION_DETAILS': 'Детали должности',
   'SYSTEM.POSITION_INFO': 'Информация о должности',
-  'SYSTEM.CREATE_POSITION': 'Создать должность'
+  'SYSTEM.CREATE_POSITION': 'Создать должность',
+  'SYSTEM.STAFF': 'Персонал',
+  'SYSTEM.NEW_STAFF': 'Новый сотрудник',
+  'SYSTEM.SEARCH_STAFF': 'Поиск персонала',
+  'SYSTEM.EDIT_STAFF': 'Редактировать персонал',
+  'SYSTEM.DRIVER': 'Водитель',
+  'SYSTEM.NEW_DRIVER': 'Новый водитель',
+  'SYSTEM.SEARCH_DRIVER': 'Поиск водителя',
+  'SYSTEM.EDIT_DRIVER': 'Редактировать водителя',
+  'SYSTEM.LICENSE_CATEGORY': 'Категория водительских прав',
+  'SYSTEM.PLATE_NUMBER': 'Номерной знак',
+  'SYSTEM.DELIVERY_COUNT': 'Количество доставок',
+  'SYSTEM.ACTIVE_DELIVERY_COUNT': 'Количество активных доставок',
+  'SYSTEM.DRIVER_STATUS': 'Статус водителя',
+  'SYSTEM.DRIVERS': 'Водители',
+  'SYSTEM.VEHICLE': 'Транспортное средство',
+  'SYSTEM.SEARCH_VEHICLE': 'Поиск транспортного средства',
+  'SYSTEM.SELECT_VEHICLE': 'Выберите транспортное средство',
+  'SYSTEM.DRIVER_DETAILS': 'Детали водителя',
+  'SYSTEM.COURIER': 'Курьер',
+  'SYSTEM.COURIER_STATUS': 'Статус курьера',
+  'SYSTEM.COURIER_TYPE': 'Тип курьера',
+  'SYSTEM.COURIERS': 'Курьеры',
+  'SYSTEM.SEARCH_COURIER': 'Поиск курьера',
+  'SYSTEM.NEW_COURIER': 'Новый курьер',
+  'SYSTEM.EDIT_COURIER': 'Редактировать курьера'
 };
 
 export default System;

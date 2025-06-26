@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   initialCompanyId?: number;
@@ -23,6 +24,7 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchValue, setSearchValue] = useState('');
+  const { formatMessage } = useIntl();
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
@@ -60,11 +62,11 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Drivers</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.DRIVERS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageSettings && (
           <a href="/hr-module/drivers/starter" className="btn btn-sm btn-primary">
-            New driver
+            {formatMessage({ id: 'SYSTEM.NEW_DRIVER' })}
           </a>
         )}
         {(isViewer || isSuperAdmin) && (
@@ -77,8 +79,8 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
                   name: item.company_name
                 })) ?? []
               }
-              placeholder="Select company"
-              searchPlaceholder="Search company"
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
               onChange={handleCompanyChange}
               onSearchTermChange={setSearchCompanyTerm}
               searchTerm={searchCompanyTerm}
@@ -95,7 +97,7 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
           />
           <input
             type="text"
-            placeholder="Search driver"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_DRIVER' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

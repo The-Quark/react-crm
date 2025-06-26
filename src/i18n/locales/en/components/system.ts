@@ -308,7 +308,32 @@ const System = {
   'SYSTEM.NEW_POSITION': 'New Position',
   'SYSTEM.POSITION_DETAILS': 'Position Details',
   'SYSTEM.POSITION_INFO': 'Position Information',
-  'SYSTEM.CREATE_POSITION': 'Create Position'
+  'SYSTEM.CREATE_POSITION': 'Create Position',
+  'SYSTEM.STAFF': 'Staff',
+  'SYSTEM.NEW_STAFF': 'New Staff',
+  'SYSTEM.SEARCH_STAFF': 'Search Staff',
+  'SYSTEM.EDIT_STAFF': 'Edit Staff',
+  'SYSTEM.DRIVER': 'Driver',
+  'SYSTEM.NEW_DRIVER': 'New Driver',
+  'SYSTEM.SEARCH_DRIVER': 'Search Driver',
+  'SYSTEM.EDIT_DRIVER': 'Edit Driver',
+  'SYSTEM.LICENSE_CATEGORY': 'License Category',
+  'SYSTEM.PLATE_NUMBER': 'Plate Number',
+  'SYSTEM.DELIVERY_COUNT': 'Delivery Count',
+  'SYSTEM.ACTIVE_DELIVERY_COUNT': 'Active Delivery Count',
+  'SYSTEM.DRIVER_STATUS': 'Driver Status',
+  'SYSTEM.DRIVERS': 'Drivers',
+  'SYSTEM.VEHICLE': 'Vehicle',
+  'SYSTEM.SEARCH_VEHICLE': 'Search Vehicle',
+  'SYSTEM.SELECT_VEHICLE': 'Select Vehicle',
+  'SYSTEM.DRIVER_DETAILS': 'Driver Details',
+  'SYSTEM.COURIER': 'Courier',
+  'SYSTEM.COURIER_STATUS': 'Courier Status',
+  'SYSTEM.COURIER_TYPE': 'Courier Type',
+  'SYSTEM.COURIERS': 'Couriers',
+  'SYSTEM.SEARCH_COURIER': 'Search Courier',
+  'SYSTEM.NEW_COURIER': 'New Courier',
+  'SYSTEM.EDIT_COURIER': 'Edit Courier'
 };
 
 export default System;

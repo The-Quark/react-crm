@@ -6,17 +6,25 @@ import { UserModel } from '@/api/get/getUser/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
 import { DriversMenuOptions } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
-export const useDriversColumns = (): ColumnDef<UserModel>[] => {
+interface UseColumnsProps {
+  onDeleteClick: (id: number) => void;
+}
+
+export const useDriversColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -31,7 +39,9 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'driver',
-        header: ({ column }) => <DataGridColumnHeader title="Driver" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.DRIVER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -73,7 +83,9 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.phone,
         id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -88,7 +100,12 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.license_category,
         id: 'license category',
-        header: ({ column }) => <DataGridColumnHeader title="License category" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.LICENSE_CATEGORY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -105,7 +122,34 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.vehicle?.plate_number,
         id: 'delivery_count',
-        header: ({ column }) => <DataGridColumnHeader title="Delivery count" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PLATE_NUMBER' })}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.vehicle?.plate_number}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.vehicle?.plate_number,
+        id: 'delivery_count',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DELIVERY_COUNT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -121,7 +165,10 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) => row.vehicle?.plate_number,
         id: 'active_delivery_count',
         header: ({ column }) => (
-          <DataGridColumnHeader title="Active delivery count" column={column} />
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.ACTIVE_DELIVERY_COUNT' })}
+            column={column}
+          />
         ),
         enableSorting: false,
         cell: (info) => (
@@ -137,7 +184,12 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.driver_status,
         id: 'driver status',
-        header: ({ column }) => <DataGridColumnHeader title="Driver status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DRIVER_STATUS' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -151,7 +203,12 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.updated_at,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         sortingFn: 'datetime',
         cell: (info) => (
@@ -192,7 +249,8 @@ export const useDriversColumns = (): ColumnDef<UserModel>[] => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {DriversMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>

@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getUserByParams } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteUser, getUserByParams } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
 import { useCouriersColumns } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersColumns.tsx';
 import { CouriersToolbar } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersToolbar.tsx';
@@ -13,10 +13,14 @@ export const CouriersListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -36,7 +40,27 @@ export const CouriersListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
-  const columns = useCouriersColumns();
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteUser(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['couriers'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting courier:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const columns = useCouriersColumns({ onDeleteClick: handleDeleteClick });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -82,6 +106,12 @@ export const CouriersListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

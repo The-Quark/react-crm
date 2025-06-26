@@ -8,30 +8,20 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
-import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteUser } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
+import { useIntl } from 'react-intl';
 
 interface MenuOptionsProps {
   id?: number;
+  onDeleteClick: (id: number) => void;
 }
 
-export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
+export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
-  const queryClient = useQueryClient();
-
-  const handleDelete = () => {
-    if (id) {
-      deleteUser(id);
-      queryClient.invalidateQueries({ queryKey: ['couriers'] });
-    } else {
-      toast.error('Courier ID not provided');
-    }
-  };
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
@@ -40,7 +30,7 @@ export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
           <MenuIcon>
             <KeenIcon icon="user" />
           </MenuIcon>
-          <MenuTitle>View Profile</MenuTitle>
+          <MenuTitle>{formatMessage({ id: 'SYSTEM.VIEW' })}</MenuTitle>
         </MenuLink>
       </MenuItem>
       {canManage && (
@@ -50,16 +40,18 @@ export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id }) => {
               <MenuIcon>
                 <KeenIcon icon="user-edit" />
               </MenuIcon>
-              <MenuTitle>Edit</MenuTitle>
+              <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
-          <MenuItem onClick={handleDelete}>
+          <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>
               <MenuIcon>
                 <KeenIcon icon="trash" className="text-danger !text-red-500" />
               </MenuIcon>
-              <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+              <MenuTitle className="text-danger !text-red-500">
+                {formatMessage({ id: 'SYSTEM.DELETE' })}
+              </MenuTitle>
             </MenuLink>
           </MenuItem>
         </>

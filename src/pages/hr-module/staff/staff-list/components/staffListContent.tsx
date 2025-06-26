@@ -1,7 +1,7 @@
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteApplication, getUserByParams } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { deleteUser, getUserByParams } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { StaffToolbar } from '@/pages/hr-module/staff/staff-list/components/blocks/staffToolbar.tsx';
 import { useStaffColumns } from '@/pages/hr-module/staff/staff-list/components/blocks/staffColumns.tsx';
 import { useAuthContext } from '@/auth';
@@ -12,7 +12,6 @@ export const StaffListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -38,8 +37,8 @@ export const StaffListContent = () => {
 
     setIsDeleting(true);
     try {
-      await deleteApplication(selectedId);
-      await queryClient.invalidateQueries({ queryKey: ['applications'] });
+      await deleteUser(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['staff'] });
       setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('Error deleting staff:', error);
@@ -53,7 +52,7 @@ export const StaffListContent = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const columns = useStaffColumns();
+  const columns = useStaffColumns({ onDeleteClick: handleDeleteClick });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -99,6 +98,12 @@ export const StaffListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

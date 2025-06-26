@@ -42,6 +42,7 @@ import { format } from 'date-fns';
 import { IGetUserByParams } from '@/api/get/getUser/getUserByParams/types.ts';
 import { CrudAvatarUpload } from '@/partials/crud';
 import { useAuthContext } from '@/auth';
+import { useIntl } from 'react-intl';
 
 interface Props {
   isEditMode: boolean;
@@ -51,45 +52,49 @@ interface Props {
 
 export const formSchemaPost = Yup.object().shape({
   phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'Phone number is not valid')
-    .required('Phone number is required'),
-  first_name: Yup.string().required('First name is required'),
-  last_name: Yup.string().required('Last name is required'),
-  patronymic: Yup.string().required('Patronymic is required'),
-  birth_date: Yup.string().required('Birth date is required'),
-  subdivision_id: Yup.string().required('Subdivision is required'),
-  department_id: Yup.string().required('Department is required'),
-  position_id: Yup.string().required('Position is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  country_id: Yup.string().required('Country is required'),
-  city_id: Yup.string().required('City is required'),
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+  patronymic: Yup.string().optional(),
+  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+  email: Yup.string()
+    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+    .required('VALIDATION.EMAIL_REQUIRED'),
+  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
   license_category: Yup.string().optional(),
   vehicle_id: Yup.string().optional(),
   driver_status: Yup.string().optional(),
   courier_type: Yup.string().optional(),
   password: Yup.string()
-    .min(10, 'Minimum 10 symbols')
-    .max(100, 'Maximum 100 symbols')
-    .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
-    .matches(/\d/, 'Must contain at least one number')
-    .matches(/[^a-zA-Z0-9]/, 'Must contain at least one special character')
-    .required('Password is required')
+    .min(10, 'VALIDATION.PASSWORD_MIN')
+    .max(100, 'VALIDATION.PASSWORD_MAX')
+    .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
+    .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
+    .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
+    .required('VALIDATION.PASSWORD_REQUIRED')
 });
 
 export const formSchemaPut = Yup.object().shape({
   phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'Phone number is not valid')
-    .required('Phone number is required'),
-  first_name: Yup.string().required('First name is required'),
-  last_name: Yup.string().required('Last name is required'),
-  patronymic: Yup.string().required('Patronymic is required'),
-  birth_date: Yup.string().required('Birth date is required'),
-  subdivision_id: Yup.string().required('Subdivision is required'),
-  department_id: Yup.string().required('Department is required'),
-  position_id: Yup.string().required('Position is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  country_id: Yup.string().required('Country is required'),
-  city_id: Yup.string().required('City is required'),
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+  patronymic: Yup.string().optional(),
+  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+  email: Yup.string()
+    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+    .required('VALIDATION.EMAIL_REQUIRED'),
+  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
   courier_type: Yup.string().optional(),
   license_category: Yup.string().optional(),
   vehicle_id: Yup.string().optional(),
@@ -161,6 +166,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
   const isAdmin = currentUser?.roles[0].name === 'superadmin';
@@ -373,14 +379,21 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
-          <h3 className="card-title">{isEditMode ? 'Edit courier' : 'New courier'}</h3>
+          <h3 className="card-title">
+            {' '}
+            {isEditMode
+              ? formatMessage({ id: 'SYSTEM.EDIT_COURIER' })
+              : formatMessage({ id: 'SYSTEM.NEW_COURIER' })}
+          </h3>
         </div>
 
         <div className="card-body grid gap-5">
           <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">Photo</label>
+            <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.PHOTO' })}</label>
             <div className="flex items-center justify-between flex-wrap grow gap-2.5">
-              <span className="text-2sm font-medium text-gray-600">150x150px JPEG, PNG Image</span>
+              <span className="text-2sm font-medium text-gray-600">
+                {formatMessage({ id: 'SYSTEM.PHOTO_DIMENSIONS' })}
+              </span>
               <CrudAvatarUpload
                 avatarUser={formik.values.avatar}
                 onChange={(newAvatar) => formik.setFieldValue('avatar', newAvatar)}
@@ -391,15 +404,27 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
               />
             </div>
           </div>
-          <SharedInput name="first_name" label="First name" formik={formik} />
-          <SharedInput name="last_name" label="Last name" formik={formik} />
-          <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+          <SharedInput
+            name="first_name"
+            label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+            formik={formik}
+          />
+          <SharedInput
+            name="last_name"
+            label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+            formik={formik}
+          />
+          <SharedInput
+            name="patronymic"
+            label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+            formik={formik}
+          />
           <SharedAutocomplete
-            label="Country"
+            label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.country_id}
             options={countriesData?.data ?? []}
-            placeholder="Select country"
-            searchPlaceholder="Search country"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
             onChange={(val) => {
               formik.setFieldValue('country_id', val);
               formik.setFieldValue('city_id', '');
@@ -411,11 +436,15 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             loading={countriesLoading}
           />
           <SharedAutocomplete
-            label="City"
+            label={formatMessage({ id: 'SYSTEM.CITY' })}
             value={formik.values.city_id}
             options={citiesData?.data[0]?.cities ?? []}
-            placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
-            searchPlaceholder="Search city"
+            placeholder={
+              formik.values.country_id
+                ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+            }
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             onChange={(val) => formik.setFieldValue('city_id', val)}
             error={formik.errors.city_id as string}
             touched={formik.touched.city_id}
@@ -423,22 +452,24 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             onSearchTermChange={setSearchCityTerm}
             disabled={!formik.values.country_id}
             loading={citiesLoading}
-            errorText={citiesIsError ? 'Failed to load cities' : undefined}
-            emptyText="No cities available"
+            errorText={
+              citiesIsError ? formatMessage({ id: 'SYSTEM.FAILED_LOAD_CITIES' }) : undefined
+            }
+            emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
           />
           <SharedSelect
             name="gender"
-            label="Gender"
+            label={formatMessage({ id: 'SYSTEM.GENDER' })}
             formik={formik}
             options={mockGenderOptions.map((opt) => ({
-              label: opt.name,
+              label: formatMessage({ id: `SYSTEM.GENDER_${opt.value.toUpperCase()}` }),
               value: opt.value
             }))}
           />
           {isEditMode && (
             <SharedSelect
               name="status"
-              label="User status"
+              label={formatMessage({ id: 'SYSTEM.STATUS' })}
               formik={formik}
               options={mockUserStatusOptions.map((opt) => ({
                 label: opt.name,
@@ -448,7 +479,9 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           )}
           <div className="w-full">
             <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label flex- items-center gap-1 max-w-56">Birth Date</label>
+              <label className="form-label flex- items-center gap-1 max-w-56">
+                {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+              </label>
               <div className="w-full flex columns-1 flex-wrap">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -457,7 +490,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                       <span>
                         {formik.values.birth_date
                           ? new Date(formik.values.birth_date).toLocaleDateString()
-                          : 'Pick a date'}
+                          : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
                       </span>
                     </button>
                   </PopoverTrigger>
@@ -476,19 +509,29 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                 </Popover>
                 {formik.touched.birth_date && formik.errors.birth_date && (
                   <span role="alert" className="text-danger text-xs mt-1">
-                    {formik.errors.birth_date}
+                    {formatMessage({ id: formik.errors.birth_date })}{' '}
                   </span>
                 )}
               </div>
             </div>
           </div>
 
-          <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-          <SharedInput name="email" label="Email" formik={formik} type="email" />
+          <SharedInput
+            name="phone"
+            label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+            formik={formik}
+            type="tel"
+          />
+          <SharedInput
+            name="email"
+            label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+            formik={formik}
+            type="email"
+          />
 
           {isAdmin && (
             <SharedAutocomplete
-              label="Company"
+              label={formatMessage({ id: 'SYSTEM.COMPANY' })}
               value={formik.values.company_id ?? ''}
               options={
                 companiesData?.result?.map((company) => ({
@@ -496,8 +539,8 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                   name: company.company_name
                 })) ?? []
               }
-              placeholder="Select company"
-              searchPlaceholder="Search company"
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
               onChange={(val) => {
                 formik.setFieldValue('company_id', val);
                 formik.setFieldValue('department_id', '');
@@ -515,7 +558,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           )}
 
           <SharedAutocomplete
-            label="Department"
+            label={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
             value={formik.values.department_id ?? ''}
             options={
               departmentsData?.result?.map((app) => ({
@@ -523,8 +566,8 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                 name: app.name
               })) ?? []
             }
-            placeholder="Select department"
-            searchPlaceholder="Search department"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_DEPARTMENT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_DEPARTMENT' })}
             onChange={(val) => {
               formik.setFieldValue('department_id', val);
             }}
@@ -535,9 +578,8 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
             onSearchTermChange={setSearchDepartmentTerm}
             loading={departmentsLoading}
           />
-
           <SharedAutocomplete
-            label="Subdivision"
+            label={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
             value={formik.values.subdivision_id ?? ''}
             options={
               subdivisionsData?.result?.map((app) => ({
@@ -545,8 +587,8 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                 name: app.name
               })) ?? []
             }
-            placeholder="Select subdivision"
-            searchPlaceholder="Search subdivision"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_SUBDIVISION' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_SUBDIVISION' })}
             onChange={(val) => {
               formik.setFieldValue('subdivision_id', val);
             }}
@@ -559,16 +601,16 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           />
 
           <SharedAutocomplete
-            label="Position"
-            value={formik.values.position_id ?? ''}
+            label={formatMessage({ id: 'SYSTEM.POSITION' })}
+            value={formik.values.position_id}
             options={
               positionsData?.result?.map((app) => ({
                 id: app.id,
                 name: app.title
               })) ?? []
             }
-            placeholder="Select position"
-            searchPlaceholder="Search position"
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_POSITION' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_POSITION' })}
             onChange={(val) => {
               formik.setFieldValue('position_id', val);
             }}
@@ -582,7 +624,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
 
           <SharedSelect
             name="driver_status"
-            label="Courier status"
+            label={formatMessage({ id: 'SYSTEM.DRIVER_STATUS' })}
             formik={formik}
             options={mockDriverStatusOptions.map((opt) => ({
               label: opt.name,
@@ -592,7 +634,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
 
           <SharedSelect
             name="courier_type"
-            label="Courier type"
+            label={formatMessage({ id: 'SYSTEM.COURIER_TYPE' })}
             formik={formik}
             options={mockCourierTypeOptions.map((opt) => ({
               label: opt.name,
@@ -602,7 +644,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
 
           {formik.values.courier_type !== UserCourierType.PEDESTRIAN && (
             <SharedAutocomplete
-              label="Vehicle"
+              label={formatMessage({ id: 'SYSTEM.VEHICLE' })}
               value={formik.values.vehicle_id ?? ''}
               options={
                 vehiclesData?.result?.map((app) => ({
@@ -610,8 +652,8 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
                   name: app.plate_number
                 })) ?? []
               }
-              placeholder="Select vehicle"
-              searchPlaceholder="Search vehicle"
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_VEHICLE' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_VEHICLE' })}
               onChange={(val) => {
                 formik.setFieldValue('vehicle_id', val);
               }}
@@ -623,16 +665,25 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
           )}
           <SharedSelect
             name="license_category"
-            label="License category"
+            label={formatMessage({ id: 'SYSTEM.LICENSE_CATEGORY' })}
             formik={formik}
             options={mockLicenseCategoryOptions.map((opt) => ({
               label: opt.name,
               value: opt.value
             }))}
           />
-          <SharedTextArea name="driver_details" label="Details" formik={formik} />
+          <SharedTextArea
+            name="driver_details"
+            label={formatMessage({ id: 'SYSTEM.DRIVER_DETAILS' })}
+            formik={formik}
+          />
           {!isEditMode && (
-            <SharedInput name="password" label="Password" formik={formik} type="password" />
+            <SharedInput
+              name="password"
+              label={formatMessage({ id: 'SYSTEM.PASSWORD' })}
+              formik={formik}
+              type="password"
+            />
           )}
           <div className="flex justify-end">
             <button
@@ -640,7 +691,9 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
               className="btn btn-primary"
               disabled={loading || formik.isSubmitting}
             >
-              {loading ? 'Please wait...' : 'Save'}
+              {loading
+                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

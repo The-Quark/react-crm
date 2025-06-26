@@ -43,7 +43,7 @@ export const formSchema = Yup.object().shape({
   arrival_date: Yup.string().required('VALIDATION.ARRIVAL_DATE_REQUIRED'),
   from_airport: Yup.string().required('VALIDATION.FROM_AIRPORT_REQUIRED'),
   to_airport: Yup.string().required('VALIDATION.TO_AIRPORT_REQUIRED'),
-  notes: Yup.string().required('VALIDATION.NOTES_REQUIRED')
+  notes: Yup.string().optional()
 });
 
 export const CargoStarterContent = () => {

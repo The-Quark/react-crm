@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getUserByParams } from '@/api';
-import { SharedLoading, SharedError } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteUser, getUserByParams } from '@/api';
+import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
 import { useDriversColumns } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversColumns.tsx';
 import { DriversToolbar } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversToolbar.tsx';
@@ -13,10 +13,14 @@ export const DriversListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['drivers', selectedCompanyId, pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -30,7 +34,27 @@ export const DriversListContent = () => {
     enabled: selectedCompanyId !== undefined
   });
 
-  const columns = useDriversColumns();
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteUser(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['drivers'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting driver:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const columns = useDriversColumns({ onDeleteClick: handleDeleteClick });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -76,6 +100,12 @@ export const DriversListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

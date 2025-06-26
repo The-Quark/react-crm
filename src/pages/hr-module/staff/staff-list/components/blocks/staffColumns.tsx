@@ -6,17 +6,25 @@ import { UserModel } from '@/api/get/getUser/getUsersList/types.ts';
 import { StaffMenuOptions } from '@/pages/hr-module/staff/staff-list/components/blocks/staffMenuOptions.tsx';
 import { toAbsoluteUrl } from '@/utils';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_AVATAR_URL;
 
-export const useStaffColumns = (): ColumnDef<UserModel>[] => {
+interface UseColumnsProps {
+  onDeleteClick: (id: number) => void;
+}
+
+export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -31,7 +39,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
         id: 'staff',
-        header: ({ column }) => <DataGridColumnHeader title="Staff" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.USER' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const fullName = `${info.row.original.first_name} ${info.row.original.last_name}${
@@ -73,7 +83,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.phone,
         id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -88,7 +100,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.email,
         id: 'email',
-        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.EMAIL' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -103,7 +117,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.company?.company_name,
         id: 'company',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -119,7 +135,12 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.department?.name,
         id: 'department',
-        header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -135,7 +156,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.subdivision?.name,
         id: 'subdivision',
-        header: ({ column }) => <DataGridColumnHeader title="Position" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.POSITION' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -151,7 +174,12 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row?.position?.title,
         id: 'position',
-        header: ({ column }) => <DataGridColumnHeader title="Subdivision" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -167,7 +195,9 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
@@ -181,7 +211,12 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
       {
         accessorFn: (row) => row.updated_at,
         id: 'recentlyActivity',
-        header: ({ column }) => <DataGridColumnHeader title="Recent activity" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         sortingFn: 'datetime',
         cell: (info) => (
@@ -222,7 +257,8 @@ export const useStaffColumns = (): ColumnDef<UserModel>[] => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {StaffMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>
