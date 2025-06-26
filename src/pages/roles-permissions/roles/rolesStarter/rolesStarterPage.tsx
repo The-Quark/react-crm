@@ -6,11 +6,13 @@ import { getPermissionsMap } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { RolesStarterGiveContent } from '@/pages/roles-permissions/roles/rolesStarter/components/rolesStarterGiveContent.tsx';
 import { RolesStarterRevokeContent } from '@/pages/roles-permissions/roles/rolesStarter/components/rolesStarterRevokeContent.tsx';
+import { useIntl } from 'react-intl';
 
 export const RolesStarterPage = () => {
   const [modeType, setModeType] = useState<'give' | 'revoke'>('give');
   const { role } = useParams<{ role: string }>();
   const isEditMode = !!role;
+  const { formatMessage } = useIntl();
 
   const {
     data: permissionsData,
@@ -36,7 +38,9 @@ export const RolesStarterPage = () => {
           <div className="card pb-2.5">
             <div className="card-header" id="general_settings">
               <div className="flex-col items-center gap-2.5">
-                <label className="form-label max-w-56 text-base mb-2.5">Mode</label>
+                <label className="form-label max-w-56 text-base mb-2.5">
+                  {formatMessage({ id: 'SYSTEM.MODE' })}
+                </label>
 
                 <div className="flex items-center gap-5">
                   <label className="radio-group">
@@ -48,7 +52,7 @@ export const RolesStarterPage = () => {
                       checked={modeType === 'give'}
                       onChange={() => setModeType('give')}
                     />
-                    <span className="radio-label">Give</span>
+                    <span className="radio-label">{formatMessage({ id: 'SYSTEM.GIVE' })}</span>
                   </label>
                   <label className="radio-group">
                     <input
@@ -59,7 +63,7 @@ export const RolesStarterPage = () => {
                       checked={modeType === 'revoke'}
                       onChange={() => setModeType('revoke')}
                     />
-                    <span className="radio-label">Revoke</span>
+                    <span className="radio-label">{formatMessage({ id: 'SYSTEM.REVOKE' })}</span>
                   </label>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import {
 } from '@/components';
 import { CommonHexagonBadge } from '@/partials/common';
 import React, { ReactNode } from 'react';
+import { useIntl } from 'react-intl';
 
 interface Badge {
   size: string;
@@ -41,6 +42,7 @@ export const RolesListCard = ({
   disableMenu,
   roleName
 }: IRoleProps) => {
+  const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const navigate = useNavigate();
 
@@ -87,7 +89,7 @@ export const RolesListCard = ({
                     <MenuIcon>
                       <KeenIcon icon="setting-4" />
                     </MenuIcon>
-                    <MenuTitle>Edit Permissions</MenuTitle>
+                    <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT_PERMISSIONS' })}</MenuTitle>
                   </MenuLink>
                 </MenuItem>
               </MenuSub>

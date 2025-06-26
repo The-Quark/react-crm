@@ -8,8 +8,10 @@ import { useUserPermissions } from '@/hooks';
 import { RolesListCard } from '@/pages/roles-permissions/roles/rolesList/components/rolesListCard.tsx';
 import { getRoles } from '@/api/get/getACL';
 import { CACHE_TIME } from '@/utils';
+import { useIntl } from 'react-intl';
 
 export const RolesListPageContent = () => {
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage role') || currentUser?.roles[0].name === 'superadmin';
@@ -32,7 +34,7 @@ export const RolesListPageContent = () => {
         description={
           item.description ? item.description : item.permissions.map((perm) => perm.name).join(', ')
         }
-        subTitle={`${item.users_count} users`}
+        subTitle={`${item.users_count} ${formatMessage({ id: 'SYSTEM.USERS' })}`}
         path={
           canManage
             ? `/roles-permissions/roles/starter/${item.name}`

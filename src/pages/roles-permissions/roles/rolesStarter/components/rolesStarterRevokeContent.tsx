@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { putPermissionsDistribute } from '@/api';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIntl } from 'react-intl';
 
 interface Props {
   data?: Permission[];
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const RolesStarterRevokeContent: FC<Props> = ({ data = [], role }) => {
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const formik = useFormik({
@@ -50,8 +52,8 @@ export const RolesStarterRevokeContent: FC<Props> = ({ data = [], role }) => {
         <div className="">
           <div className="card-header gap-2">
             <h3 className="card-title">
+              {formatMessage({ id: 'SYSTEM.PERMISSIONS' })} &nbsp;
               <span className="link">{role?.toUpperCase()}</span>
-              &nbsp; Role Permissions
             </h3>
           </div>
 
@@ -59,8 +61,12 @@ export const RolesStarterRevokeContent: FC<Props> = ({ data = [], role }) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th className="text-start text-gray-300 font-normal min-w-[300px]">Permission</th>
-                  <th className="min-w-24 text-gray-700 font-normal text-center">Enabled</th>
+                  <th className="text-start text-gray-300 font-normal min-w-[300px]">
+                    {formatMessage({ id: 'SYSTEM.PERMISSION' })}
+                  </th>
+                  <th className="min-w-24 text-gray-700 font-normal text-center">
+                    {formatMessage({ id: 'SYSTEM.ENABLED' })}
+                  </th>
                 </tr>
               </thead>
               <tbody className="text-gray-900 font-medium">
@@ -95,10 +101,12 @@ export const RolesStarterRevokeContent: FC<Props> = ({ data = [], role }) => {
               onClick={handleRestoreDefaults}
               disabled={formik.isSubmitting}
             >
-              Restore Defaults
+              {formatMessage({ id: 'SYSTEM.RESTORE_DEFAULTS' })}
             </button>
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-              {formik.isSubmitting ? 'Saving...' : 'Save Changes'}
+              {formik.isSubmitting
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formatMessage({ id: 'SYSTEM.SAVE' })}
             </button>
           </div>
         </div>

@@ -48,11 +48,6 @@ export const ApplicationListContent = () => {
       })
   });
 
-  const handleDeleteClick = (id: number) => {
-    setSelectedId(id);
-    setIsDeleteModalOpen(true);
-  };
-
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
 
@@ -66,6 +61,11 @@ export const ApplicationListContent = () => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
   };
 
   const columns = useApplicationsColumns({
