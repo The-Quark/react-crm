@@ -6,14 +6,16 @@ import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getClients, getSources } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { SEARCH_PER_PAGE } from '@/utils';
+import { CACHE_TIME, SEARCH_PER_PAGE } from '@/utils';
 import { useIntl } from 'react-intl';
+import { ClientType } from '@/api/generalManualTypes';
 
 const ClientStarterContent = () => {
-  const [clientType, setClientType] = useState<'individual' | 'legal'>('individual');
   const { id } = useParams<{ id: string }>();
-  const isEditMode = !!id;
   const { formatMessage } = useIntl();
+  const [clientType, setClientType] = useState<ClientType>('individual');
+
+  const isEditMode = !!id;
 
   const {
     data: clientData,
@@ -34,7 +36,7 @@ const ClientStarterContent = () => {
   } = useQuery({
     queryKey: ['sources'],
     queryFn: () => getSources({ is_active: true, per_page: SEARCH_PER_PAGE }),
-    staleTime: 60 * 60 * 1000
+    staleTime: CACHE_TIME
   });
 
   useEffect(() => {
@@ -96,7 +98,9 @@ const ClientStarterContent = () => {
             ) : (
               <div className="card-header" id="general_settings">
                 <h3 className="card-title">
-                  {clientType === 'individual' ? 'Individual client' : 'Legal client'}
+                  {clientType === 'individual'
+                    ? formatMessage({ id: 'SYSTEM.INDIVIDUAL' })
+                    : formatMessage({ id: 'SYSTEM.LEGAL' })}
                 </h3>
               </div>
             )}

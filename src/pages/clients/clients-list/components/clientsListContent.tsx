@@ -7,8 +7,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteClient, getClients } from '@/api';
 import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
-
-type ClientType = 'individual' | 'legal';
+import { ClientType } from '@/api/generalManualTypes';
+import { initialPagination } from '@/utils';
 
 export const ClientsListContent = () => {
   const [clientType, setClientType] = useState<ClientType>('individual');
@@ -18,10 +18,7 @@ export const ClientsListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
   const [clientCityId, setClientCityId] = useState<number>();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
   const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
 
@@ -59,8 +56,6 @@ export const ClientsListContent = () => {
       await deleteClient(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['clients'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting client:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -92,26 +87,17 @@ export const ClientsListContent = () => {
 
   const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleSearchPhone = (phone: string) => {
     setSearchPhone(phone);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleClientCity = (cityId: number) => {
     setClientCityId(cityId);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

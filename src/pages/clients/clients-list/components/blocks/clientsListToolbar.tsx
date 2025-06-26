@@ -13,10 +13,12 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useIntl } from 'react-intl';
+import { ClientType } from '@/api/generalManualTypes';
+import { PHONE_MAX_LENGTH, SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Props {
-  clientType: 'individual' | 'legal';
-  setClientType: React.Dispatch<React.SetStateAction<'individual' | 'legal'>>;
+  clientType: ClientType;
+  setClientType: React.Dispatch<React.SetStateAction<ClientType>>;
   onSearchTerm?: (searchTerm: string) => void;
   onSearchPhone?: (searchPhone: string) => void;
   currentCityId?: number;
@@ -31,13 +33,14 @@ export const ClientsListToolbar: FC<Props> = ({
   onClientCity,
   currentCityId
 }) => {
-  const [searchTermValue, setSearchTermValue] = useState('');
-  const [searchPhoneValue, setSearchPhoneValue] = useState('');
-  const [selectedClientCity, setSelectedClientCity] = useState<number | undefined>(currentCityId);
+  const { formatMessage } = useIntl();
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const { formatMessage } = useIntl();
+
+  const [searchTermValue, setSearchTermValue] = useState('');
+  const [searchPhoneValue, setSearchPhoneValue] = useState('');
+  const [selectedClientCity, setSelectedClientCity] = useState<number | undefined>(currentCityId);
 
   const nameColumn = clientType === 'individual' ? 'full name' : 'company name';
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
@@ -79,7 +82,7 @@ export const ClientsListToolbar: FC<Props> = ({
           onSearchPhone?.(value);
           table.getColumn('phone')?.setFilterValue(value);
         }
-      }, 300),
+      }, SEARCH_DEBOUNCE_DELAY),
     [onSearchTerm, onSearchPhone, table, nameColumn]
   );
 
@@ -98,8 +101,8 @@ export const ClientsListToolbar: FC<Props> = ({
         }
         value = value.replace(/[^\d+]/g, '');
 
-        if (value.length > 12) {
-          value = value.slice(0, 12);
+        if (value.length > PHONE_MAX_LENGTH) {
+          value = value.slice(0, PHONE_MAX_LENGTH);
         }
       }
 
@@ -115,39 +118,34 @@ export const ClientsListToolbar: FC<Props> = ({
   );
 
   return (
-    <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
+    <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-3">
       <div className="flex items-center gap-2.5">
         <div className="flex items-center gap-5">
-          <label className="radio-group">
-            <input
-              className="radio-sm"
-              name="clientType"
-              type="radio"
-              value="individual"
-              checked={clientType === 'individual'}
-              onChange={handleClientTypeChange('individual')}
-            />
-            <span className="radio-label">{formatMessage({ id: 'SYSTEM.INDIVIDUAL' })}</span>
-          </label>
-          <label className="radio-group">
-            <input
-              className="radio-sm"
-              name="clientType"
-              type="radio"
-              value="legal"
-              checked={clientType === 'legal'}
-              onChange={handleClientTypeChange('legal')}
-            />
-            <span className="radio-label">{formatMessage({ id: 'SYSTEM.LEGAL' })}</span>
-          </label>
+          {(['individual', 'legal'] as ClientType[]).map((type) => (
+            <label key={type} className="radio-group">
+              <input
+                className="radio-sm"
+                name="clientType"
+                type="radio"
+                value={type}
+                checked={clientType === type}
+                onChange={handleClientTypeChange(type)}
+              />
+              <span className="radio-label">
+                {formatMessage({ id: `SYSTEM.${type.toUpperCase()}` })}
+              </span>
+            </label>
+          ))}
         </div>
       </div>
+
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/clients/starter-clients" className="btn btn-sm btn-primary">
             {formatMessage({ id: 'SYSTEM.NEW_CLIENT' })}
           </a>
         )}
+
         <div className="w-64">
           <Select
             value={selectedClientCity ? String(selectedClientCity) : ''}
@@ -186,7 +184,9 @@ export const ClientsListToolbar: FC<Props> = ({
             </SelectContent>
           </Select>
         </div>
+
         <DataGridColumnVisibility table={table} />
+
         <div className="relative">
           <KeenIcon
             icon="magnifier"
@@ -201,6 +201,7 @@ export const ClientsListToolbar: FC<Props> = ({
             maxLength={16}
           />
         </div>
+
         <div className="relative">
           <KeenIcon
             icon="magnifier"

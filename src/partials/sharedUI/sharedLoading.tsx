@@ -9,7 +9,7 @@ export const SharedLoading: FC<Props> = ({ simple }) => {
   return (
     <>
       {simple ? (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full p-3">
           <CircularProgress />
         </div>
       ) : (

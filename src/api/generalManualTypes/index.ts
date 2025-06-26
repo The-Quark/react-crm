@@ -22,3 +22,5 @@ export interface IPaginationParams {
   page?: number;
   sort_order?: 'asc' | 'desc';
 }
+
+export type ClientType = 'individual' | 'legal';
