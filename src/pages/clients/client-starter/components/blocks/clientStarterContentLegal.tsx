@@ -25,19 +25,22 @@ interface Props {
 }
 
 const validateSchema = Yup.object().shape({
-  company_name: Yup.string().required('Company name is required'),
+  company_name: Yup.string().required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
   bin: Yup.string()
-    .length(12, 'BIN must be exactly 12 digits')
-    .matches(/^\d+$/, 'BIN must contain only digits')
-    .required('Company bin is required'),
-  representative_phone: Yup.string().matches(PHONE_REG_EXP, 'Phone number is not valid'),
-  representative_email: Yup.string().email('Invalid email address').optional(),
-  notes: Yup.string().max(500, 'Maximum 500 symbols'),
-  source_id: Yup.string().required('Source is required'),
+    .length(12, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
+    .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
+    .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
+  representative_phone: Yup.string().matches(
+    PHONE_REG_EXP,
+    'VALIDATION.FORM_VALIDATION_PHONE_INVALID'
+  ),
+  representative_email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
+  notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
+  source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
   phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'Phone number is not valid')
-    .required('Phone is required'),
-  email: Yup.string().email('Invalid email address').optional()
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional()
 });
 
 const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {

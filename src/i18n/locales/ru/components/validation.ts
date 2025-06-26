@@ -62,7 +62,19 @@ const Validation = {
   'VALIDATION.PRIORITY_REQUIRED': 'Приоритет обязателен',
   'VALIDATION.ASSIGNED_BY_REQUIRED': 'Назначено обязательно',
   'VALIDATION.ASSIGNED_TO_REQUIRED': 'Назначено для обязательно',
-  'VALIDATION.DUE_DATE_REQUIRED': 'Срок выполнения обязателен'
+  'VALIDATION.DUE_DATE_REQUIRED': 'Срок выполнения обязателен',
+  'VALIDATION.MAXIMUM_500_SYMBOLS': 'Максимум 500 символов',
+  'VALIDATION.TIMEZONE_REQUIRED': 'Часовой пояс обязателен',
+  'VALIDATION.CURRENCY_REQUIRED': 'Валюта обязательна',
+  'VALIDATION.LANGUAGE_REQUIRED': 'Язык обязателен',
+  'VALIDATION.LEGAL_ADDRESS_REQUIRED': 'Юридический адрес обязателен',
+  'VALIDATION.WAREHOUSE_ADDRESS_REQUIRED': 'Адрес склада обязателен',
+  'VALIDATION.AIRLINES_REQUIRED': 'Авиакомпании обязательны',
+  'VALIDATION.AIRLINES_MIN': 'Должна быть выбрана хотя бы одна авиакомпания',
+  'VALIDATION.DIMENSIONS_PER_PLACE_REQUIRED': 'Габариты на место обязательны',
+  'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'Стоимость за место обязательна',
+  'VALIDATION.NAME_REQUIRED': 'Имя обязательно',
+  'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Статус активности обязателен'
 };
 
 export default Validation;

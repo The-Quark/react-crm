@@ -280,7 +280,17 @@ const System = {
   'SYSTEM.REPRESENTATIVE_PATRONYMIC': 'Отчество представителя',
   'SYSTEM.UPDATE_CLIENT': 'Обновить клиента',
   'SYSTEM.CREATE_APPLICATION': 'Создать заявку',
-  'SYSTEM.SELECT_COUNTRY': 'Выберите страну'
+  'SYSTEM.SELECT_COUNTRY': 'Выберите страну',
+  'SYSTEM.AIRLINES': 'Авиакомпании',
+  'SYSTEM.NEW_COMPANY': 'Новая компания',
+  'SYSTEM.SELECT_AIRLINES': 'Выберите авиакомпании',
+  'SYSTEM.SEARCH_AIRLINES': 'Поиск авиакомпаний',
+  'SYSTEM.ACTIVE': 'Активен',
+  'SYSTEM.DEPARTMENTS': 'Отделы',
+  'SYSTEM.NEW_DEPARTMENT': 'Новый отдел',
+  'SYSTEM.EDIT_DEPARTMENT': 'Редактировать отдел',
+  'SYSTEM.SEARCH_DEPARTMENTS': 'Поиск отделов',
+  'SYSTEM.SELECT_DEPARTMENTS': 'Выберите отдел'
 };
 
 export default System;

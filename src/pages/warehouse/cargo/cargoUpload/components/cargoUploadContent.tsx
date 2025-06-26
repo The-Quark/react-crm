@@ -85,7 +85,7 @@ export const CargoUploadContent = () => {
     error: fileTypeError
   } = useQuery({
     queryKey: ['packagesFileType'],
-    queryFn: () => getFileTypes({}),
+    queryFn: () => getFileTypes({ cargo_id: id ? parseInt(id) : undefined }),
     staleTime: 1000 * 60 * 2
   });
 

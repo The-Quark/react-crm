@@ -61,7 +61,19 @@ const Validation = {
   'VALIDATION.PRIORITY_REQUIRED': 'Priority is required',
   'VALIDATION.ASSIGNED_BY_REQUIRED': 'Assigned by is required',
   'VALIDATION.ASSIGNED_TO_REQUIRED': 'Assigned to is required',
-  'VALIDATION.DUE_DATE_REQUIRED': 'Due date is required'
+  'VALIDATION.DUE_DATE_REQUIRED': 'Due date is required',
+  'VALIDATION.MAXIMUM_500_SYMBOLS': 'Maximum 500 symbols',
+  'VALIDATION.TIMEZONE_REQUIRED': 'Timezone is required',
+  'VALIDATION.CURRENCY_REQUIRED': 'Currency is required',
+  'VALIDATION.LANGUAGE_REQUIRED': 'Language is required',
+  'VALIDATION.LEGAL_ADDRESS_REQUIRED': 'Legal address is required',
+  'VALIDATION.WAREHOUSE_ADDRESS_REQUIRED': 'Warehouse address is required',
+  'VALIDATION.AIRLINES_REQUIRED': 'Airlines is required',
+  'VALIDATION.AIRLINES_MIN': 'At least one airline must be selected',
+  'VALIDATION.DIMENSIONS_PER_PLACE_REQUIRED': 'Dimensions per place is required',
+  'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'Cost per airplace is required',
+  'VALIDATION.NAME_REQUIRED': 'Name is required',
+  'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Active status is required'
 };
 
 export default Validation;

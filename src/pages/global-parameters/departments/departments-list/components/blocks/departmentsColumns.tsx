@@ -7,13 +7,19 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DepartmentsMenuOptions } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
-export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDef<Department>[] => {
+export const useDepartmentsColumns = ({
+  onRowClick,
+  onDeleteClick
+}: UseColumnsProps): ColumnDef<Department>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
@@ -22,7 +28,9 @@ export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDe
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -36,7 +44,12 @@ export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDe
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Department" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -58,7 +71,9 @@ export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDe
       {
         accessorFn: (row) => row.company?.company_name,
         id: 'company',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -74,7 +89,9 @@ export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDe
       {
         accessorFn: (row) => row.is_active,
         id: 'is active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -90,7 +107,9 @@ export const useDepartmentsColumns = ({ onRowClick }: UseColumnsProps): ColumnDe
         id: 'click',
         header: () => '',
         enableSorting: false,
-        cell: (info) => <DepartmentsMenuOptions id={info.row.original.id} />,
+        cell: (info) => (
+          <DepartmentsMenuOptions id={info.row.original.id} onDeleteClick={onDeleteClick} />
+        ),
         meta: {
           headerClassName: 'w-[60px]'
         }

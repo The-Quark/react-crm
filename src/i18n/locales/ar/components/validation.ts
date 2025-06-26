@@ -61,7 +61,19 @@ const Validation = {
   'VALIDATION.PRIORITY_REQUIRED': 'الأولوية مطلوبة',
   'VALIDATION.ASSIGNED_BY_REQUIRED': 'معين من قبل مطلوب',
   'VALIDATION.ASSIGNED_TO_REQUIRED': 'معين إلى مطلوب',
-  'VALIDATION.DUE_DATE_REQUIRED': 'تاريخ الاستحقاق مطلوب'
+  'VALIDATION.DUE_DATE_REQUIRED': 'تاريخ الاستحقاق مطلوب',
+  'VALIDATION.MAXIMUM_500_SYMBOLS': 'الحد الأقصى 500 رمز',
+  'VALIDATION.TIMEZONE_REQUIRED': 'المنطقة الزمنية مطلوبة',
+  'VALIDATION.CURRENCY_REQUIRED': 'العملة مطلوبة',
+  'VALIDATION.LANGUAGE_REQUIRED': 'اللغة مطلوبة',
+  'VALIDATION.LEGAL_ADDRESS_REQUIRED': 'العنوان القانوني مطلوب',
+  'VALIDATION.WAREHOUSE_ADDRESS_REQUIRED': 'عنوان المستودع مطلوب',
+  'VALIDATION.AIRLINES_REQUIRED': 'شركات الطيران مطلوبة',
+  'VALIDATION.AIRLINES_MIN': 'يجب تحديد شركة طيران واحدة على الأقل',
+  'VALIDATION.DIMENSIONS_PER_PLACE_REQUIRED': 'الأبعاد لكل مكان مطلوبة',
+  'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'التكلفة لكل مكان مطلوبة',
+  'VALIDATION.NAME_REQUIRED': 'الاسم مطلوب',
+  'VALIDATION.ACTIVE_STATUS_REQUIRED': 'حالة النشاط مطلوبة'
 };
 
 export default Validation;

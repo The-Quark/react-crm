@@ -3,6 +3,7 @@ import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -10,6 +11,7 @@ interface ToolbarProps {
 
 export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
   const { table } = useDataGrid();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const [searchValue, setSearchValue] = useState('');
@@ -34,7 +36,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">
-            New company
+            {formatMessage({ id: 'SYSTEM.NEW_COMPANY' })}
           </a>
         )}
         <DataGridColumnVisibility table={table} />
@@ -45,7 +47,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search company"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

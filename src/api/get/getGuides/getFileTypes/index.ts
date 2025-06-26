@@ -7,6 +7,7 @@ interface IGetFileTypes extends IPaginationParams {
   id?: number;
   name?: string;
   step?: string;
+  cargo_id?: number;
 }
 
 const getFileTypes = async ({
@@ -14,11 +15,13 @@ const getFileTypes = async ({
   name,
   step,
   per_page,
-  page
+  page,
+  cargo_id
 }: IGetFileTypes): Promise<FileTypesResponse> => {
   const params = new URLSearchParams();
 
   if (id) params.append('id', id.toString());
+  if (cargo_id) params.append('cargo_id', cargo_id.toString());
   if (per_page) params.append('per_page', per_page.toString());
   if (page) params.append('page', page.toString());
   if (name) params.append('name', name.toString());

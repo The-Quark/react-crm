@@ -280,7 +280,17 @@ const System = {
   'SYSTEM.REPRESENTATIVE_PATRONYMIC': ' Representative Patronymic',
   'SYSTEM.UPDATE_CLIENT': 'Update Client',
   'SYSTEM.CREATE_APPLICATION': 'Create application',
-  'SYSTEM.SELECT_COUNTRY': 'Select country'
+  'SYSTEM.SELECT_COUNTRY': 'Select country',
+  'SYSTEM.AIRLINES': 'Airlines',
+  'SYSTEM.NEW_COMPANY': 'New Company',
+  'SYSTEM.SELECT_AIRLINES': 'Select Airlines',
+  'SYSTEM.SEARCH_AIRLINES': 'Search Airlines',
+  'SYSTEM.ACTIVE': 'Active',
+  'SYSTEM.DEPARTMENTS': 'Departments',
+  'SYSTEM.NEW_DEPARTMENT': 'New Department',
+  'SYSTEM.EDIT_DEPARTMENT': 'Edit Department',
+  'SYSTEM.SEARCH_DEPARTMENTS': 'Search Departments',
+  'SYSTEM.SELECT_DEPARTMENTS': 'Select Department'
 };
 
 export default System;

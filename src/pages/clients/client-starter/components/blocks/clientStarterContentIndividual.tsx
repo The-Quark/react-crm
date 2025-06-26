@@ -31,14 +31,14 @@ interface Props {
 }
 
 const validateSchema = Yup.object().shape({
-  first_name: Yup.string().required('First name is required'),
-  last_name: Yup.string().required('Last name is required'),
-  email: Yup.string().email('Invalid email address').optional().nullable(),
+  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+  email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
   phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'Phone number is not valid')
-    .required('Phone is required'),
-  notes: Yup.string().max(500, 'Maximum 500 symbols').nullable(),
-  source_id: Yup.string().required('Source is required')
+    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
+  source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED')
 });
 
 const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {

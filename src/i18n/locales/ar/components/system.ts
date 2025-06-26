@@ -280,7 +280,17 @@ const System = {
   'SYSTEM.REPRESENTATIVE_PATRONYMIC': 'اسم الأب للممثل',
   'SYSTEM.UPDATE_CLIENT': 'تحديث العميل',
   'SYSTEM.CREATE_APPLICATION': 'إنشاء طلب',
-  'SYSTEM.SELECT_COUNTRY': 'اختر الدولة'
+  'SYSTEM.SELECT_COUNTRY': 'اختر الدولة',
+  'SYSTEM.AIRLINES': 'شركات الطيران',
+  'SYSTEM.NEW_COMPANY': 'شركة جديدة',
+  'SYSTEM.SELECT_AIRLINES': 'اختر شركات الطيران',
+  'SYSTEM.SEARCH_AIRLINES': 'البحث عن شركات الطيران',
+  'SYSTEM.ACTIVE': 'نشط',
+  'SYSTEM.DEPARTMENTS': 'الأقسام',
+  'SYSTEM.NEW_DEPARTMENT': 'قسم جديد',
+  'SYSTEM.EDIT_DEPARTMENT': 'تعديل القسم',
+  'SYSTEM.SEARCH_DEPARTMENTS': 'البحث عن الأقسام',
+  'SYSTEM.SELECT_DEPARTMENTS': 'اختر القسم'
 };
 
 export default System;

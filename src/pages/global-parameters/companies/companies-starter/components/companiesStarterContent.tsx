@@ -21,6 +21,7 @@ import {
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router';
 import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   isEditMode: boolean;
@@ -29,18 +30,18 @@ interface Props {
 }
 
 const createParameterSchema = Yup.object().shape({
-  company_name: Yup.string().required('Company name is required'),
-  timezone: Yup.string().required('Timezone is required'),
-  currency: Yup.string().required('Currency is required'),
-  language: Yup.string().required('Language is required'),
-  legal_address: Yup.string().required('Legal address is required'),
-  warehouse_address: Yup.string().required('Warehouse address is required'),
+  company_name: Yup.string().required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
+  timezone: Yup.string().required('VALIDATION.TIMEZONE_REQUIRED'),
+  currency: Yup.string().required('VALIDATION.CURRENCY_REQUIRED'),
+  language: Yup.string().required('VALIDATION.LANGUAGE_REQUIRED'),
+  legal_address: Yup.string().required('VALIDATION.LEGAL_ADDRESS_REQUIRED'),
+  warehouse_address: Yup.string().required('VALIDATION.WAREHOUSE_ADDRESS_REQUIRED'),
   airlines: Yup.array()
     .of(Yup.string().required())
-    .min(1, 'At least one airline must be selected')
-    .required('Airlines is required'),
-  dimensions_per_place: Yup.string().required('Dimensions per place is required'),
-  cost_per_airplace: Yup.number().required('Cost per airplace is required')
+    .min(1, 'VALIDATION.AIRLINES_MIN')
+    .required('VALIDATION.AIRLINES_REQUIRED'),
+  dimensions_per_place: Yup.string().required('VALIDATION.DIMENSIONS_PER_PLACE_REQUIRED'),
+  cost_per_airplace: Yup.number().required('VALIDATION.COST_PER_AIRPLACE_REQUIRED')
 });
 
 interface IParameterFormValues {
@@ -88,6 +89,7 @@ const getInitialValues = (
 
 export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId }: Props) => {
   const [loading, setLoading] = useState(false);
+  const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const navigate = useNavigate();
   const {
@@ -196,14 +198,18 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
       ) : (
         <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
           <div className="card-header" id="general_settings">
-            <h3 className="card-title">Company</h3>
+            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.COMPANY' })}</h3>
           </div>
           <div className="card-body grid gap-5">
-            <SharedInput name="company_name" label="Company Name" formik={formik} />
+            <SharedInput
+              name="company_name"
+              label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+              formik={formik}
+            />
 
             <SharedSelect
               name="currency"
-              label="Currency"
+              label={formatMessage({ id: 'SYSTEM.CURRENCY' })}
               formik={formik}
               options={
                 currencyData?.result?.map((currency) => ({
@@ -214,7 +220,7 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
             />
             <SharedSelect
               name="language"
-              label="Language"
+              label={formatMessage({ id: 'SYSTEM.LANGUAGE' })}
               formik={formik}
               options={
                 languagesData?.result?.map((lang) => ({ label: lang.name, value: lang.code })) || []
@@ -223,7 +229,7 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
 
             <SharedSelect
               name="timezone"
-              label="Timezone"
+              label={formatMessage({ id: 'SYSTEM.TIMEZONE' })}
               formik={formik}
               options={
                 timezoneMock.map((time) => ({
@@ -233,9 +239,17 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
               }
             />
 
-            <SharedInput name="legal_address" label="Legal Address" formik={formik} />
+            <SharedInput
+              name="legal_address"
+              label={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+              formik={formik}
+            />
 
-            <SharedInput name="warehouse_address" label="Warehouse Address" formik={formik} />
+            <SharedInput
+              name="warehouse_address"
+              label={formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
+              formik={formik}
+            />
 
             <SharedMultiSelect
               options={
@@ -246,17 +260,25 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
               }
               selectedValues={formik.values.airlines}
               onChange={(values) => formik.setFieldValue('airlines', values)}
-              placeholder="Select airlines..."
-              searchPlaceholder="Search airlines..."
-              label="Airlines"
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRLINES' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRLINES' })}
+              label={formatMessage({ id: 'SYSTEM.AIRLINES' })}
               error={formik.errors.airlines as string}
               touched={formik.touched.airlines}
               key={parameterId}
             />
 
-            <SharedInput name="dimensions_per_place" label="Dimension Per Place" formik={formik} />
+            <SharedInput
+              name="dimensions_per_place"
+              label={formatMessage({ id: 'SYSTEM.DIMENSIONS_PER_PLACE' })}
+              formik={formik}
+            />
 
-            <SharedInput name="cost_per_airplace" label="Cost Per Airplace" formik={formik} />
+            <SharedInput
+              name="cost_per_airplace"
+              label={formatMessage({ id: 'SYSTEM.COST_PER_PLACE' })}
+              formik={formik}
+            />
 
             <div className="flex justify-end">
               <button
@@ -264,7 +286,9 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
                 className="btn btn-primary"
                 disabled={loading || formik.isSubmitting}
               >
-                {loading ? 'Please wait...' : 'Save'}
+                {loading
+                  ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                  : formatMessage({ id: 'SYSTEM.SAVE' })}
               </button>
             </div>
           </div>

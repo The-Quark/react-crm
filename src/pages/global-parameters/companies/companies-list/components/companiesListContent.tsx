@@ -1,18 +1,23 @@
 /* eslint-disable prettier/prettier */
 import { Container, DataGrid } from '@/components';
 import { getGlobalParameters } from '@/api/get';
-import { useQuery } from '@tanstack/react-query';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { CompaniesToolbar } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesToolbar.tsx';
 import { useParametersColumns } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesColumns.tsx';
 import { useState } from 'react';
+import { deleteGlobalParameter } from '@/api';
 
 export const CompaniesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['global-parameters', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -24,7 +29,29 @@ export const CompaniesListContent = () => {
       })
   });
 
-  const columns = useParametersColumns();
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteGlobalParameter(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting company:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const columns = useParametersColumns({
+    onDeleteClick: handleDeleteClick
+  });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -64,6 +91,12 @@ export const CompaniesListContent = () => {
           empty: isPending && <SharedLoading simple />,
           loading: isFetching && <SharedLoading simple />
         }}
+      />
+      <SharedDeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </Container>
   );

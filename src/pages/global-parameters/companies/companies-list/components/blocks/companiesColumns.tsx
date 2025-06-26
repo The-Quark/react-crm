@@ -6,9 +6,17 @@ import { ParameterMenuOptions } from '@/pages/global-parameters/companies/compan
 import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 
-export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
+interface UseColumnsProps {
+  onDeleteClick: (id: number) => void;
+}
+
+export const useParametersColumns = ({
+  onDeleteClick
+}: UseColumnsProps): ColumnDef<ParametersModel>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
@@ -17,7 +25,9 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -31,7 +41,9 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.company_name,
         id: 'company name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-2.5">
@@ -56,7 +68,9 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.timezone,
         id: 'timezone',
-        header: ({ column }) => <DataGridColumnHeader title="Timezone" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TIMEZONE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-wrap gap-2.5 mb-2">
@@ -72,7 +86,12 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.legal_address,
         id: 'legal address',
-        header: ({ column }) => <DataGridColumnHeader title="Legal address" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -89,7 +108,12 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.warehouse_address,
         id: 'warehouse address',
-        header: ({ column }) => <DataGridColumnHeader title="Warehouse address" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -106,7 +130,9 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
       {
         accessorFn: (row) => row.airlines,
         id: 'airlines',
-        header: ({ column }) => <DataGridColumnHeader title="Airlines" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.AIRLINES' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const airlines = info.row.original.airlines;
@@ -146,7 +172,8 @@ export const useParametersColumns = (): ColumnDef<ParametersModel>[] => {
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
               {ParameterMenuOptions({
-                id: info.row.original.id
+                id: info.row.original.id,
+                onDeleteClick: onDeleteClick
               })}
             </MenuItem>
           </Menu>
