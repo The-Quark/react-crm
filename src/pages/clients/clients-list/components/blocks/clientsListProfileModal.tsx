@@ -15,6 +15,7 @@ import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useNavigate } from 'react-router';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -24,6 +25,7 @@ interface Props {
 
 export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { has } = useUserPermissions();
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
@@ -42,7 +44,9 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-lg p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
-          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">Info</DialogTitle>
+          <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
+            {formatMessage({ id: 'SYSTEM.CLIENT' })}
+          </DialogTitle>
           <DialogDescription />
           <button
             className="btn btn-sm btn-icon btn-light btn-outline absolute top-0 end-0 me-3 mt-3 lg:me-3 shadow-default"
@@ -62,31 +66,41 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                   {data.result[0].type === 'individual' ? (
                     <>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap  gap-2.5">
-                        <label className="form-label max-w-56">First name</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0].first_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Last name</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0].last_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Patronymic</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.patronymic}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Birth date</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.birth_date}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Gender</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.GENDER' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.gender}
                         </div>
@@ -95,53 +109,71 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                   ) : (
                     <>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Company name</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.company_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">BIN</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.BIN' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.bin}</div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Business type</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.BUSINESS_TYPE' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.business_type}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Legal address</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.legal_address}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative first name</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_FIRST_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_first_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative last name</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_LAST_NAME' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_last_name}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative patronymic</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PATRONYMIC' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_patronymic}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative phone</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PHONE' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_phone}
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56">Representative email</label>
+                        <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_EMAIL' })}
+                        </label>
                         <div className="flex columns-1 w-full flex-wrap">
                           {data.result[0]?.representative_email}
                         </div>
@@ -149,39 +181,53 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                     </>
                   )}
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Country</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.COUNTRY' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">
                       {data.result[0].country_name}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">City</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.CITY' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">
                       {data.result[0].city_name}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Phone number</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Email</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.email}</div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Notes</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.NOTES' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.notes}</div>
                   </div>
 
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Source</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.SOURCE' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">
                       {data.result[0].source.name}
                     </div>
                   </div>
 
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                    <label className="form-label max-w-56">Created at</label>
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
+                    </label>
                     <div className="flex columns-1 w-full flex-wrap">
                       {new Date(data.result[0].created_at).toLocaleDateString('ru-RU')}
                     </div>
@@ -192,13 +238,17 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                 <div className="card pb-2.5">
                   <div className="card-body grid gap-5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Applications</label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.APPLICATIONS' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0].application_count}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">Applications packages </label>
+                      <label className="form-label max-w-56">
+                        {formatMessage({ id: 'SYSTEM.PACKAGES' })}
+                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
                         {data.result[0]?.applications_packages_count}
                       </div>
@@ -212,14 +262,14 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
         {canManage && (
           <DialogActions>
             <a className="btn btn-md btn-light" href={`/clients/starter-clients/${id}`}>
-              Update client
+              {formatMessage({ id: 'SYSTEM.UPDATE_CLIENT' })}
             </a>
             <button
               className="btn btn-md btn-primary m-3"
               disabled={id === null}
               onClick={() => handleCreateApplication(id)}
             >
-              Create Application
+              {formatMessage({ id: 'SYSTEM.CREATE_APPLICATION' })}
             </button>
           </DialogActions>
         )}

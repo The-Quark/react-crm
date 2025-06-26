@@ -264,7 +264,23 @@ const System = {
   'SYSTEM.SELECT_USER': 'Выберите пользователя',
   'SYSTEM.SELECT_PACKAGE': 'Выберите посылку',
   'SYSTEM.SEARCH_PACKAGE': 'Поиск посылки',
-  'SYSTEM.PACKAGE': 'Посылка'
+  'SYSTEM.PACKAGE': 'Посылка',
+  'SYSTEM.INDIVIDUAL': 'Физическое лицо',
+  'SYSTEM.LEGAL': 'Юридическое лицо',
+  'SYSTEM.CLIENTS': 'Клиенты',
+  'SYSTEM.NEW_CLIENT': 'Новый клиент',
+  'SYSTEM.EDIT_CLIENT': 'Редактировать клиента',
+  'SYSTEM.SELECT_CITY': 'Выберите город',
+  'SYSTEM.CLEAR_SELECTION': 'Очистить выбор',
+  'SYSTEM.NO_VALUES': 'Значения не найдены',
+  'SYSTEM.SEARCH': 'Поиск',
+  'SYSTEM.BUSINESS_TYPE': 'Тип бизнеса',
+  'SYSTEM.REPRESENTATIVE_FIRST_NAME': 'Имя представителя',
+  'SYSTEM.REPRESENTATIVE_LAST_NAME': 'Фамилия представителя',
+  'SYSTEM.REPRESENTATIVE_PATRONYMIC': 'Отчество представителя',
+  'SYSTEM.UPDATE_CLIENT': 'Обновить клиента',
+  'SYSTEM.CREATE_APPLICATION': 'Создать заявку',
+  'SYSTEM.SELECT_COUNTRY': 'Выберите страну'
 };
 
 export default System;

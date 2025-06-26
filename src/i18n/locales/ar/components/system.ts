@@ -264,7 +264,23 @@ const System = {
   'SYSTEM.SELECT_USER': 'اختر المستخدم',
   'SYSTEM.SELECT_PACKAGE': 'اختر الطرد',
   'SYSTEM.SEARCH_PACKAGE': 'البحث عن طرد',
-  'SYSTEM.PACKAGE': 'طرد'
+  'SYSTEM.PACKAGE': 'طرد',
+  'SYSTEM.INDIVIDUAL': 'فرد',
+  'SYSTEM.LEGAL': 'قانوني',
+  'SYSTEM.CLIENTS': 'العملاء',
+  'SYSTEM.NEW_CLIENT': 'عميل جديد',
+  'SYSTEM.EDIT_CLIENT': 'تعديل العميل',
+  'SYSTEM.SELECT_CITY': 'اختر المدينة',
+  'SYSTEM.CLEAR_SELECTION': 'مسح التحديد',
+  'SYSTEM.NO_VALUES': 'لم يتم العثور على قيم',
+  'SYSTEM.SEARCH': 'بحث',
+  'SYSTEM.BUSINESS_TYPE': 'نوع الأعمال',
+  'SYSTEM.REPRESENTATIVE_FIRST_NAME': 'الاسم الأول للممثل',
+  'SYSTEM.REPRESENTATIVE_LAST_NAME': 'الاسم الأخير للممثل',
+  'SYSTEM.REPRESENTATIVE_PATRONYMIC': 'اسم الأب للممثل',
+  'SYSTEM.UPDATE_CLIENT': 'تحديث العميل',
+  'SYSTEM.CREATE_APPLICATION': 'إنشاء طلب',
+  'SYSTEM.SELECT_COUNTRY': 'اختر الدولة'
 };
 
 export default System;

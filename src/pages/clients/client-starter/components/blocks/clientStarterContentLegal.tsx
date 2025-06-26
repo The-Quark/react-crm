@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useIntl } from 'react-intl';
 
 interface Props {
   clientData?: Client;
@@ -45,6 +46,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
 
   const initialValues: IClientFormValues = {
     type: 'legal',
@@ -137,15 +139,39 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
 
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-      <SharedInput name="company_name" label="Company name" formik={formik} />
-      <SharedInput name="bin" label="BIN" formik={formik} type="number" maxlength={12} />
-      <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-      <SharedInput name="email" label="Email" formik={formik} type="email" />
-      <SharedInput name="business_type" label="Business type" formik={formik} />
+      <SharedInput
+        name="company_name"
+        label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+        formik={formik}
+      />
+      <SharedInput
+        name="bin"
+        label={formatMessage({ id: 'SYSTEM.BIN' })}
+        formik={formik}
+        type="number"
+        maxlength={12}
+      />
+      <SharedInput
+        name="phone"
+        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+        formik={formik}
+        type="tel"
+      />
+      <SharedInput
+        name="email"
+        label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+        formik={formik}
+        type="email"
+      />
+      <SharedInput
+        name="business_type"
+        label={formatMessage({ id: 'SYSTEM.BUSINESS_TYPE' })}
+        formik={formik}
+      />
 
       <SharedSelect
         name="source_id"
-        label="Source"
+        label={formatMessage({ id: 'SYSTEM.SOURCE' })}
         formik={formik}
         options={
           sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
@@ -153,11 +179,11 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
       />
 
       <SharedAutocomplete
-        label="Country"
+        label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
         value={formik.values.country_id ?? clientData?.country_id ?? ''}
         options={countriesData?.data ?? []}
-        placeholder="Select country"
-        searchPlaceholder="Search country"
+        placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
+        searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
         onChange={(val) => {
           formik.setFieldValue('country_id', val);
           formik.setFieldValue('city_id', '');
@@ -169,11 +195,14 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
       />
 
       <SharedAutocomplete
-        label="City"
+        label={formatMessage({ id: 'SYSTEM.CITY' })}
         value={formik.values.city_id ?? clientData?.city_id ?? ''}
         options={citiesData?.data[0]?.cities ?? []}
-        placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
-        searchPlaceholder="Search city"
+        placeholder={
+          formik.values.country_id
+            ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+            : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+        }
         onChange={(val) => formik.setFieldValue('city_id', val)}
         error={formik.errors.city_id as string}
         touched={formik.touched.city_id}
@@ -181,37 +210,50 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         onSearchTermChange={setCitySearchTerm}
         disabled={!formik.values.country_id}
         loading={citiesLoading}
-        errorText={citiesIsError ? 'Failed to load cities' : undefined}
-        emptyText="No cities available"
+        searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
+        emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
       />
-      <SharedInput name="legal_address" label="Legal address" formik={formik} />
+
+      <SharedInput
+        name="legal_address"
+        label={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
+        formik={formik}
+      />
+
       <SharedInput
         name="representative_first_name"
-        label="Representative first name"
+        label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_FIRST_NAME' })}
         formik={formik}
       />
       <SharedInput
         name="representative_last_name"
-        label="Representative last name"
+        label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_LAST_NAME' })}
         formik={formik}
       />
       <SharedInput
         name="representative_patronymic"
-        label="Representative patronymic"
+        label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PATRONYMIC' })}
         formik={formik}
       />
       <SharedInput
         name="representative_phone"
-        label="Representative phone number"
+        label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PHONE' })}
         formik={formik}
         type="tel"
       />
-      <SharedInput name="representative_email" label="Representative email" formik={formik} />
-      <SharedTextArea name="notes" label="Notes" formik={formik} />
+      <SharedInput
+        name="representative_email"
+        label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_EMAIL' })}
+        formik={formik}
+      />
+
+      <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
 
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>
-          {loading ? 'Please wait...' : 'Save'}
+          {loading
+            ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+            : formatMessage({ id: 'SYSTEM.SAVE' })}
         </button>
       </div>
     </form>

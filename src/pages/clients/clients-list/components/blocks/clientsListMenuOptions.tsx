@@ -8,6 +8,7 @@ import {
   MenuTitle
 } from '@/components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 
 interface ParameterMenuOptionsProps {
   id?: number;
@@ -15,6 +16,7 @@ interface ParameterMenuOptionsProps {
 }
 
 const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, onDeleteClick }) => {
+  const { formatMessage } = useIntl();
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
       <MenuItem>
@@ -22,7 +24,7 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, onDeleteCli
           <MenuIcon>
             <KeenIcon icon="user-edit" />
           </MenuIcon>
-          <MenuTitle>Edit</MenuTitle>
+          <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
         </MenuLink>
       </MenuItem>
       <MenuSeparator />
@@ -31,7 +33,9 @@ const ClientsListMenuOptions: FC<ParameterMenuOptionsProps> = ({ id, onDeleteCli
           <MenuIcon>
             <KeenIcon icon="trash" className="text-danger !text-red-500" />
           </MenuIcon>
-          <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+          <MenuTitle className="text-danger !text-red-500">
+            {formatMessage({ id: 'SYSTEM.DELETE' })}
+          </MenuTitle>
         </MenuLink>
       </MenuItem>
     </MenuSub>

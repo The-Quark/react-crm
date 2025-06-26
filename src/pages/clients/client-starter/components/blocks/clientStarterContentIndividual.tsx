@@ -23,6 +23,7 @@ import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { mockGenderUserOptions } from '@/utils/enumsOptions/mocks.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   clientData?: Client;
@@ -46,6 +47,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
 
   const initialValues: IClientFormValues = {
     type: 'individual',
@@ -136,13 +138,27 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
 
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-      <SharedInput name="first_name" label="First name" formik={formik} />
-      <SharedInput name="last_name" label="Last name" formik={formik} />
-      <SharedInput name="patronymic" label="Patronymic" formik={formik} />
+      <SharedInput
+        name="first_name"
+        label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+        formik={formik}
+      />
+      <SharedInput
+        name="last_name"
+        label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+        formik={formik}
+      />
+      <SharedInput
+        name="patronymic"
+        label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+        formik={formik}
+      />
 
       <div className="w-full">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label flex- items-center gap-1 max-w-56">Birth Date</label>
+          <label className="form-label flex- items-center gap-1 max-w-56">
+            {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+          </label>
           <div className="w-full flex columns-1 flex-wrap">
             <Popover>
               <PopoverTrigger asChild>
@@ -151,7 +167,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
                   <span>
                     {formik.values.birth_date
                       ? new Date(formik.values.birth_date).toLocaleDateString()
-                      : 'Pick a date'}
+                      : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
                   </span>
                 </button>
               </PopoverTrigger>
@@ -170,7 +186,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
             </Popover>
             {formik.touched.birth_date && formik.errors.birth_date && (
               <span role="alert" className="text-danger text-xs mt-1">
-                {formik.errors.birth_date}
+                {formatMessage({ id: formik.errors.birth_date })}
               </span>
             )}
           </div>
@@ -179,7 +195,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
 
       <SharedSelect
         name="gender"
-        label="Gender"
+        label={formatMessage({ id: 'SYSTEM.GENDER' })}
         formik={formik}
         options={mockGenderUserOptions.map((option) => ({
           label: option.name,
@@ -189,7 +205,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
 
       <SharedSelect
         name="source_id"
-        label="Source"
+        label={formatMessage({ id: 'SYSTEM.SOURCE' })}
         formik={formik}
         options={
           sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
@@ -197,11 +213,11 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       />
 
       <SharedAutocomplete
-        label="Country"
+        label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
         value={formik.values.country_id ?? clientData?.country_id ?? ''}
         options={countriesData?.data ?? []}
-        placeholder="Select country"
-        searchPlaceholder="Search country"
+        placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
+        searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
         onChange={(val) => {
           formik.setFieldValue('country_id', val);
           formik.setFieldValue('city_id', '');
@@ -213,11 +229,14 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       />
 
       <SharedAutocomplete
-        label="City"
+        label={formatMessage({ id: 'SYSTEM.CITY' })}
         value={formik.values.city_id ?? clientData?.city_id ?? ''}
         options={citiesData?.data[0]?.cities ?? []}
-        placeholder={formik.values.country_id ? 'Select city' : 'Select country first'}
-        searchPlaceholder="Search city"
+        placeholder={
+          formik.values.country_id
+            ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+            : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+        }
         onChange={(val) => formik.setFieldValue('city_id', val)}
         error={formik.errors.city_id as string}
         touched={formik.touched.city_id}
@@ -225,17 +244,29 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         onSearchTermChange={setCitySearchTerm}
         disabled={!formik.values.country_id}
         loading={citiesLoading}
-        errorText={citiesIsError ? 'Failed to load cities' : undefined}
-        emptyText="No cities available"
+        searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
+        emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
       />
 
-      <SharedInput name="email" label="Email" formik={formik} type="email" />
-      <SharedInput name="phone" label="Phone number" formik={formik} type="tel" />
-      <SharedTextArea name="notes" label="Notes" formik={formik} />
+      <SharedInput
+        name="email"
+        label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+        formik={formik}
+        type="email"
+      />
+      <SharedInput
+        name="phone"
+        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+        formik={formik}
+        type="tel"
+      />
+      <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
 
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>
-          {loading ? 'Please wait...' : 'Save'}
+          {loading
+            ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+            : formatMessage({ id: 'SYSTEM.SAVE' })}
         </button>
       </div>
     </form>

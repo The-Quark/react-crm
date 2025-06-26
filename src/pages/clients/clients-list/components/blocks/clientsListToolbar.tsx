@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import { useIntl } from 'react-intl';
 
 interface Props {
   clientType: 'individual' | 'legal';
@@ -36,6 +37,7 @@ export const ClientsListToolbar: FC<Props> = ({
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
 
   const nameColumn = clientType === 'individual' ? 'full name' : 'company name';
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
@@ -125,7 +127,7 @@ export const ClientsListToolbar: FC<Props> = ({
               checked={clientType === 'individual'}
               onChange={handleClientTypeChange('individual')}
             />
-            <span className="radio-label">Individual</span>
+            <span className="radio-label">{formatMessage({ id: 'SYSTEM.INDIVIDUAL' })}</span>
           </label>
           <label className="radio-group">
             <input
@@ -136,14 +138,14 @@ export const ClientsListToolbar: FC<Props> = ({
               checked={clientType === 'legal'}
               onChange={handleClientTypeChange('legal')}
             />
-            <span className="radio-label">Legal</span>
+            <span className="radio-label">{formatMessage({ id: 'SYSTEM.LEGAL' })}</span>
           </label>
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/clients/starter-clients" className="btn btn-sm btn-primary">
-            New client
+            {formatMessage({ id: 'SYSTEM.NEW_CLIENT' })}
           </a>
         )}
         <div className="w-64">
@@ -153,12 +155,20 @@ export const ClientsListToolbar: FC<Props> = ({
             disabled={isLoading}
           >
             <SelectTrigger size="sm">
-              <SelectValue placeholder={isLoading ? 'Loading...' : 'Select city'} />
+              <SelectValue
+                placeholder={
+                  isLoading
+                    ? formatMessage({ id: 'SYSTEM.LOADING' })
+                    : formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               {selectedClientCity && (
                 <SelectItem value="__CLEAR__">
-                  <span className="text-muted-foreground">Clear selection</span>
+                  <span className="text-muted-foreground">
+                    {formatMessage({ id: 'SYSTEM.CLEAR_SELECTION' })}
+                  </span>
                 </SelectItem>
               )}
 
@@ -170,7 +180,7 @@ export const ClientsListToolbar: FC<Props> = ({
                 ))
               ) : (
                 <div className="py-1.5 pl-8 pr-2 text-sm text-muted-foreground">
-                  No cities available
+                  {formatMessage({ id: 'SYSTEM.NO_VALUES' })}
                 </div>
               )}
             </SelectContent>
@@ -198,7 +208,7 @@ export const ClientsListToolbar: FC<Props> = ({
           />
           <input
             type="text"
-            placeholder={`Search ${clientType === 'individual' ? 'client' : 'company'}`}
+            placeholder={`${formatMessage({ id: 'SYSTEM.SEARCH' })} ${clientType === 'individual' ? formatMessage({ id: 'SYSTEM.CLIENT' }) : formatMessage({ id: 'SYSTEM.COMPANY' })}`}
             className="input input-sm ps-8"
             value={searchTermValue}
             onChange={handleSearchChange('term')}

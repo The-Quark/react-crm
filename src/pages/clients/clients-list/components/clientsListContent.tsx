@@ -7,7 +7,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteClient, getClients } from '@/api';
 import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
-import { CACHE_TIME } from '@/utils';
 
 type ClientType = 'individual' | 'legal';
 
@@ -157,8 +156,6 @@ export const ClientsListContent = () => {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Client"
-        description="Are you sure you want to delete this client? This action cannot be undone."
         isLoading={isDeleting}
       />
     </Container>

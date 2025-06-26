@@ -264,7 +264,23 @@ const System = {
   'SYSTEM.SELECT_USER': 'Select User',
   'SYSTEM.SELECT_PACKAGE': 'Select Package',
   'SYSTEM.SEARCH_PACKAGE': 'Search Package',
-  'SYSTEM.PACKAGE': 'Package'
+  'SYSTEM.PACKAGE': 'Package',
+  'SYSTEM.INDIVIDUAL': 'Individual',
+  'SYSTEM.LEGAL': 'Legal',
+  'SYSTEM.CLIENTS': 'Clients',
+  'SYSTEM.NEW_CLIENT': 'New Client',
+  'SYSTEM.EDIT_CLIENT': 'Edit Client',
+  'SYSTEM.SELECT_CITY': ' Select City',
+  'SYSTEM.CLEAR_SELECTION': ' Clear Selection',
+  'SYSTEM.NO_VALUES': ' No values found',
+  'SYSTEM.SEARCH': ' Search',
+  'SYSTEM.BUSINESS_TYPE': ' Business Type',
+  'SYSTEM.REPRESENTATIVE_FIRST_NAME': ' Representative First Name',
+  'SYSTEM.REPRESENTATIVE_LAST_NAME': ' Representative Last Name',
+  'SYSTEM.REPRESENTATIVE_PATRONYMIC': ' Representative Patronymic',
+  'SYSTEM.UPDATE_CLIENT': 'Update Client',
+  'SYSTEM.CREATE_APPLICATION': 'Create application',
+  'SYSTEM.SELECT_COUNTRY': 'Select country'
 };
 
 export default System;

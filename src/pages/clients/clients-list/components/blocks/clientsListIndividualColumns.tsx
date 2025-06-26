@@ -6,6 +6,7 @@ import { useLanguage } from '@/providers';
 import { Client } from '@/api/get/getClients/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onRowClick: (id: number) => void;
@@ -17,6 +18,7 @@ export const useClientsListIndividualColumns = ({
   onDeleteClick
 }: Props): ColumnDef<Client>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
@@ -26,7 +28,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -40,7 +44,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row?.fullname,
         id: 'full name',
-        header: ({ column }) => <DataGridColumnHeader title="Client" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CLIENT' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           return (
@@ -64,7 +70,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row.phone,
         id: 'phone',
-        header: ({ column }) => <DataGridColumnHeader title="Phone" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -78,7 +86,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row?.source?.name,
         id: 'source',
-        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -94,7 +104,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row?.city_name,
         id: 'city name',
-        header: ({ column }) => <DataGridColumnHeader title="City" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CITY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -110,7 +122,9 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row?.email,
         id: 'email',
-        header: ({ column }) => <DataGridColumnHeader title="Email" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.EMAIL' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -124,7 +138,12 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row?.birth_date,
         id: 'birth date',
-        header: ({ column }) => <DataGridColumnHeader title="Birth date" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -140,7 +159,12 @@ export const useClientsListIndividualColumns = ({
       {
         accessorFn: (row) => row.application_count,
         id: 'applications',
-        header: ({ column }) => <DataGridColumnHeader title="Applications" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.APPLICATIONS' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -158,7 +182,7 @@ export const useClientsListIndividualColumns = ({
         accessorFn: (row) => row.applications_packages_count,
         id: 'applications packages',
         header: ({ column }) => (
-          <DataGridColumnHeader title="Applications packages" column={column} />
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PACKAGES' })} column={column} />
         ),
         enableSorting: false,
         cell: (info) => (

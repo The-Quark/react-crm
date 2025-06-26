@@ -7,11 +7,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getClients, getSources } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { SEARCH_PER_PAGE } from '@/utils';
+import { useIntl } from 'react-intl';
 
 const ClientStarterContent = () => {
   const [clientType, setClientType] = useState<'individual' | 'legal'>('individual');
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
+  const { formatMessage } = useIntl();
 
   const {
     data: clientData,
@@ -59,7 +61,9 @@ const ClientStarterContent = () => {
             {!isEditMode ? (
               <div className="card-header" id="general_settings">
                 <div className="flex-col items-center gap-2.5">
-                  <label className="form-label max-w-56 text-base mb-2.5">Client type</label>
+                  <label className="form-label max-w-56 text-base mb-2.5">
+                    {formatMessage({ id: 'SYSTEM.CLIENT_TYPE' })}
+                  </label>
 
                   <div className="flex items-center gap-5">
                     <label className="radio-group">
@@ -71,7 +75,9 @@ const ClientStarterContent = () => {
                         checked={clientType === 'individual'}
                         onChange={() => setClientType('individual')}
                       />
-                      <span className="radio-label">Individual</span>
+                      <span className="radio-label">
+                        {formatMessage({ id: 'SYSTEM.INDIVIDUAL' })}
+                      </span>
                     </label>
                     <label className="radio-group">
                       <input
@@ -82,7 +88,7 @@ const ClientStarterContent = () => {
                         checked={clientType === 'legal'}
                         onChange={() => setClientType('legal')}
                       />
-                      <span className="radio-label">Legal</span>
+                      <span className="radio-label">{formatMessage({ id: 'SYSTEM.LEGAL' })}</span>
                     </label>
                   </div>
                 </div>
