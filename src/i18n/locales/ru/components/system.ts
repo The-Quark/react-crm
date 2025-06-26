@@ -339,7 +339,12 @@ const System = {
   'SYSTEM.GO_TO_NEXT_PAGE': 'Перейти на следующую страницу',
   'SYSTEM.PAGINATION_INFO': '{from} - {to} из {count}',
   'SYSTEM.DASHBOARD_TITLE': 'Панель управления',
-  'SYSTEM.DASHBOARD_DESCRIPTION': 'Центральный узел для персональной настройки'
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'Центральный узел для персональной настройки',
+  'SYSTEM.NOTIFICATIONS': 'Уведомления',
+  'NOTIFICATION.LOADING': 'Загрузка уведомлений...',
+  'NOTIFICATION.FAILED': 'Не удалось загрузить уведомления',
+  'NOTIFICATION.EMPTY': 'Уведомления не найдены',
+  'NOTIFICATION.PAGE_LABEL': 'Страница {current} из {total}'
 };
 
 export default System;

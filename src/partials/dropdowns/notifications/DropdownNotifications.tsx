@@ -4,6 +4,7 @@ import { INotificationResponse } from '@/api/get/getUser/getUserNotifications/ty
 import { DropdownNotificationsTask } from '@/partials/dropdowns/notifications/DropdownNotificationsTask.tsx';
 import { DropdownNotificationsApplication } from '@/partials/dropdowns/notifications/DropdownNotificationsApplication.tsx';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 interface IDropdownNotificationProps {
   menuTtemRef: any;
@@ -26,6 +27,8 @@ const DropdownNotifications = ({
   onPageChange,
   currentPage
 }: IDropdownNotificationProps) => {
+  const { formatMessage } = useIntl();
+
   const handleClose = () => {
     if (menuTtemRef.current) {
       menuTtemRef.current.hide();
@@ -40,7 +43,7 @@ const DropdownNotifications = ({
   const buildHeader = () => {
     return (
       <div className="flex items-center justify-between gap-2.5 text-sm text-gray-900 font-semibold px-5 py-2.5 border-b border-b-gray-200">
-        Notifications
+        {formatMessage({ id: 'SYSTEM.NOTIFICATIONS' })}
         <button className="btn btn-sm btn-icon btn-light btn-clear shrink-0" onClick={handleClose}>
           <KeenIcon icon="cross" />
         </button>
@@ -53,8 +56,8 @@ const DropdownNotifications = ({
       <Tabs value={currentType === 'task' ? 1 : 2} className="" onChange={handleTabChange}>
         <TabsList className="justify-between px-5 mb-2">
           <div className="flex items-center gap-5">
-            <Tab value={1}>Tasks</Tab>
-            <Tab value={2}>Applications</Tab>
+            <Tab value={1}>{formatMessage({ id: 'SYSTEM.TASKS' })}</Tab>
+            <Tab value={2}>{formatMessage({ id: 'SYSTEM.APPLICATIONS' })}</Tab>
           </div>
         </TabsList>
         <TabPanel value={1}>

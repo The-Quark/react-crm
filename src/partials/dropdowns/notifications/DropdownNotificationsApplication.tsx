@@ -4,6 +4,7 @@ import { useViewport } from '@/hooks';
 import { NotificationResponse } from '@/api/get/getUser/getUserNotifications/types.ts';
 import { DropdownNotificationsApplicationCard } from '@/partials/dropdowns/notifications/items/DropdownNotificationsApplicationCard.tsx';
 import { KeenIcon } from '@/components';
+import { useIntl } from 'react-intl';
 
 interface IDropdownNotificationsApplicationProps {
   notifications?: NotificationResponse[];
@@ -26,6 +27,7 @@ const DropdownNotificationsApplication: FC<IDropdownNotificationsApplicationProp
 }) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const [listHeight, setListHeight] = useState<number>(0);
+  const { formatMessage } = useIntl();
   const [viewportHeight] = useViewport();
   const offset = 300;
 
@@ -61,7 +63,7 @@ const DropdownNotificationsApplication: FC<IDropdownNotificationsApplicationProp
     if (isError) {
       return (
         <div className="flex justify-center items-center h-32 text-danger">
-          Failed to load notifications
+          {formatMessage({ id: 'NOTIFICATION.FAILED' })}
         </div>
       );
     }
@@ -69,7 +71,7 @@ const DropdownNotificationsApplication: FC<IDropdownNotificationsApplicationProp
     if (notifications?.length === 0) {
       return (
         <div className="flex justify-center items-center h-32 text-gray-500">
-          No notifications found
+          {formatMessage({ id: 'NOTIFICATION.EMPTY' })}
         </div>
       );
     }
@@ -96,7 +98,10 @@ const DropdownNotificationsApplication: FC<IDropdownNotificationsApplicationProp
             <KeenIcon icon="arrow-left" />
           </button>
           <div className="text-center text-sm text-gray-500">
-            Page {currentPage} of {lastPage}
+            {formatMessage(
+              { id: 'NOTIFICATION.PAGE_LABEL' },
+              { current: currentPage, total: lastPage }
+            )}
           </div>
           <button
             className="btn btn-sm btn-light justify-center"

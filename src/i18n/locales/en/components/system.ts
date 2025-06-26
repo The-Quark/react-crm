@@ -339,7 +339,12 @@ const System = {
   'SYSTEM.GO_TO_NEXT_PAGE': 'Go to next page',
   'SYSTEM.PAGINATION_INFO': '{from} - {to} of {count}',
   'SYSTEM.DASHBOARD_TITLE': 'Dashboard',
-  'SYSTEM.DASHBOARD_DESCRIPTION': 'Central Hub for Personal Customization'
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'Central Hub for Personal Customization',
+  'SYSTEM.NOTIFICATIONS': 'Notifications',
+  'NOTIFICATION.LOADING': 'Loading notifications...',
+  'NOTIFICATION.FAILED': 'Failed to load notifications',
+  'NOTIFICATION.EMPTY': 'No notifications found',
+  'NOTIFICATION.PAGE_LABEL': 'Page {current} of {total}'
 };
 
 export default System;

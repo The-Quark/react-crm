@@ -339,7 +339,12 @@ const System = {
   'SYSTEM.GO_TO_NEXT_PAGE': 'الانتقال إلى الصفحة التالية',
   'SYSTEM.PAGINATION_INFO': '{from} - {to} من {count}',
   'SYSTEM.DASHBOARD_TITLE': 'لوحة التحكم',
-  'SYSTEM.DASHBOARD_DESCRIPTION': 'مركز رئيسي للتخصيص الشخصي'
+  'SYSTEM.DASHBOARD_DESCRIPTION': 'مركز رئيسي للتخصيص الشخصي',
+  'SYSTEM.NOTIFICATIONS': 'الإشعارات',
+  'NOTIFICATION.LOADING': 'جارٍ تحميل الإشعارات...',
+  'NOTIFICATION.FAILED': 'فشل في تحميل الإشعارات',
+  'NOTIFICATION.EMPTY': 'لم يتم العثور على إشعارات',
+  'NOTIFICATION.PAGE_LABEL': 'الصفحة {current} من {total}'
 };
 
 export default System;
