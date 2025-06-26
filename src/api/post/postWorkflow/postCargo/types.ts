@@ -1,5 +1,5 @@
 export interface ICargoPostFormValues {
-  code: string;
+  code?: string;
   airline: number | string;
   departure_date: string;
   arrival_date: string;

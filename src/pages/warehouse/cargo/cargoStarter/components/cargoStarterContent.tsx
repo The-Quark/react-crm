@@ -31,7 +31,7 @@ import { useIntl } from 'react-intl';
 
 export const formSchema = Yup.object().shape({
   code: Yup.string()
-    .required('VALIDATION.CODE_REQUIRED')
+    .optional()
     .matches(/^[0-9]{3}-[0-9]{8}$/, 'VALIDATION.CODE_FORMAT'),
   airline: Yup.string().required('VALIDATION.AIRLINE_REQUIRED'),
   company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),

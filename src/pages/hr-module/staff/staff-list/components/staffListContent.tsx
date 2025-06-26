@@ -1,6 +1,6 @@
 import { DataGrid, Container } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getUserByParams } from '@/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteApplication, getUserByParams } from '@/api';
 import { SharedLoading, SharedError } from '@/partials/sharedUI';
 import { StaffToolbar } from '@/pages/hr-module/staff/staff-list/components/blocks/staffToolbar.tsx';
 import { useStaffColumns } from '@/pages/hr-module/staff/staff-list/components/blocks/staffColumns.tsx';
@@ -12,10 +12,15 @@ export const StaffListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15
   });
+  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['staff', selectedCompanyId, pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -27,6 +32,26 @@ export const StaffListContent = () => {
       }),
     enabled: selectedCompanyId !== undefined
   });
+
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteApplication(selectedId);
+      await queryClient.invalidateQueries({ queryKey: ['applications'] });
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting staff:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
 
   const columns = useStaffColumns();
 
