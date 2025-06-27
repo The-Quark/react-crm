@@ -261,8 +261,7 @@ export const mockDeliveryCategories = [
 
 export const mockGenderOptions = [
   { id: 1, name: 'Male', value: Gender.MALE },
-  { id: 2, name: 'Female', value: Gender.FEMALE },
-  { id: 3, name: 'Other', value: Gender.OTHER }
+  { id: 2, name: 'Female', value: Gender.FEMALE }
 ];
 
 export const mockUserStatusOptions = [

@@ -32,13 +32,15 @@ export const SharedInput = <T,>({
 
   const formatPhoneDisplay = useCallback((value: string): string => {
     const digits = value.replace(/\D/g, '');
-    if (digits.length === 0) return '';
-    if (digits.length === 1) return '+7';
-    if (digits.length <= 4) return `+7 (${digits.slice(1)}`;
-    if (digits.length <= 7) return `+7 (${digits.slice(1, 4)}) ${digits.slice(4)}`;
-    if (digits.length <= 9)
-      return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
-    return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`;
+    if (!digits) return '';
+    const cleanDigits = digits.startsWith('7') ? digits.slice(1) : digits;
+    let formatted = '+7';
+    if (cleanDigits.length > 0) formatted += ` (${cleanDigits.slice(0, 3)}`;
+    if (cleanDigits.length > 3) formatted += `) ${cleanDigits.slice(3, 6)}`;
+    if (cleanDigits.length > 6) formatted += `-${cleanDigits.slice(6, 8)}`;
+    if (cleanDigits.length > 8) formatted += `-${cleanDigits.slice(8, 10)}`;
+
+    return formatted;
   }, []);
 
   const formatDecimalDisplay = useCallback((value: string): string => {
@@ -110,11 +112,7 @@ export const SharedInput = <T,>({
     const limitedDigits = digits.slice(0, 11);
     const formatted = formatPhoneDisplay(limitedDigits);
     setPhoneDisplay(formatted);
-    if (limitedDigits.length === 11) {
-      formik.setFieldValue(fieldName, `+${limitedDigits}`);
-    } else {
-      formik.setFieldValue(fieldName, '');
-    }
+    formik.setFieldValue(fieldName, limitedDigits ? `+${limitedDigits}` : '');
   };
 
   const togglePassword = () => {

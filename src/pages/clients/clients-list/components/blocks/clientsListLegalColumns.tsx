@@ -21,7 +21,9 @@ export const useClientsListLegalColumns = ({
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
+
   const columnsLegal = useMemo<ColumnDef<Client>[]>(
     () => [
       {

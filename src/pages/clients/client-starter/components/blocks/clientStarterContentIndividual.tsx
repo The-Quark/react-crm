@@ -1,16 +1,13 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/utils/lib/utils.ts';
-import { KeenIcon } from '@/components';
-import { CalendarDate } from '@/components/ui/calendarDate.tsx';
-import { PHONE_REG_EXP } from '@/utils';
+import { mockGenderOptions, PHONE_REG_EXP } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
 import {
   SharedAutocomplete,
+  SharedDateDayPicker,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -22,7 +19,6 @@ import { Client } from '@/api/get/getClients/types.ts';
 import { Source } from '@/api/get/getGuides/getSources/types.ts';
 import { format } from 'date-fns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { mockGenderUserOptions } from '@/utils/enumsOptions/mocks.ts';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -42,12 +38,13 @@ const validateSchema = Yup.object().shape({
 });
 
 const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {
-  const [countrySearchTerm, setCountrySearchTerm] = useState('');
-  const [citySearchTerm, setCitySearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { formatMessage } = useIntl();
+
+  const [countrySearchTerm, setCountrySearchTerm] = useState('');
+  const [citySearchTerm, setCitySearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const initialValues: IClientFormValues = {
     type: 'individual',
@@ -153,56 +150,12 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
         formik={formik}
       />
-
-      <div className="w-full">
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label flex- items-center gap-1 max-w-56">
-            {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
-          </label>
-          <div className="w-full flex columns-1 flex-wrap">
-            <Popover>
-              <PopoverTrigger asChild>
-                <button id="date" className={cn('input data-[state=open]:border-primary')}>
-                  <KeenIcon icon="calendar" className="-ms-0.5" />
-                  <span>
-                    {formik.values.birth_date
-                      ? new Date(formik.values.birth_date).toLocaleDateString()
-                      : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
-                  </span>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarDate
-                  initialFocus
-                  mode="single"
-                  captionLayout="dropdown"
-                  fromYear={1900}
-                  toYear={new Date().getFullYear()}
-                  defaultMonth={new Date(2000, 0)}
-                  selected={formik.getFieldProps('birth_date').value}
-                  onSelect={(value) => formik.setFieldValue('birth_date', value)}
-                />
-              </PopoverContent>
-            </Popover>
-            {formik.touched.birth_date && formik.errors.birth_date && (
-              <span role="alert" className="text-danger text-xs mt-1">
-                {formatMessage({ id: formik.errors.birth_date })}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <SharedSelect
-        name="gender"
-        label={formatMessage({ id: 'SYSTEM.GENDER' })}
+      <SharedInput
+        name="phone"
+        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
         formik={formik}
-        options={mockGenderUserOptions.map((option) => ({
-          label: option.name,
-          value: option.value
-        }))}
+        type="tel"
       />
-
       <SharedSelect
         name="source_id"
         label={formatMessage({ id: 'SYSTEM.SOURCE' })}
@@ -211,7 +164,26 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
           sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
         }
       />
-
+      <SharedInput
+        name="email"
+        label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+        formik={formik}
+        type="email"
+      />
+      <SharedDateDayPicker
+        name="birth_date"
+        label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+        formik={formik}
+      />
+      <SharedSelect
+        name="gender"
+        label={formatMessage({ id: 'SYSTEM.GENDER' })}
+        formik={formik}
+        options={mockGenderOptions.map((opt) => ({
+          label: formatMessage({ id: `SYSTEM.GENDER_${opt.value.toUpperCase()}` }),
+          value: opt.value
+        }))}
+      />
       <SharedAutocomplete
         label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
         value={formik.values.country_id ?? clientData?.country_id ?? ''}
@@ -227,7 +199,6 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         searchTerm={countrySearchTerm}
         onSearchTermChange={setCountrySearchTerm}
       />
-
       <SharedAutocomplete
         label={formatMessage({ id: 'SYSTEM.CITY' })}
         value={formik.values.city_id ?? clientData?.city_id ?? ''}
@@ -246,19 +217,6 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         loading={citiesLoading}
         searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
         emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
-      />
-
-      <SharedInput
-        name="email"
-        label={formatMessage({ id: 'SYSTEM.EMAIL' })}
-        formik={formik}
-        type="email"
-      />
-      <SharedInput
-        name="phone"
-        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
-        formik={formik}
-        type="tel"
       />
       <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
 

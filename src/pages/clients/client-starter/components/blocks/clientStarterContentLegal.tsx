@@ -44,12 +44,13 @@ const validateSchema = Yup.object().shape({
 });
 
 const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
-  const [countrySearchTerm, setCountrySearchTerm] = useState('');
-  const [citySearchTerm, setCitySearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { formatMessage } = useIntl();
+
+  const [countrySearchTerm, setCountrySearchTerm] = useState('');
+  const [citySearchTerm, setCitySearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const initialValues: IClientFormValues = {
     type: 'legal',
@@ -160,6 +161,14 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         formik={formik}
         type="tel"
       />
+      <SharedSelect
+        name="source_id"
+        label={formatMessage({ id: 'SYSTEM.SOURCE' })}
+        formik={formik}
+        options={
+          sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
+        }
+      />
       <SharedInput
         name="email"
         label={formatMessage({ id: 'SYSTEM.EMAIL' })}
@@ -171,16 +180,6 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         label={formatMessage({ id: 'SYSTEM.BUSINESS_TYPE' })}
         formik={formik}
       />
-
-      <SharedSelect
-        name="source_id"
-        label={formatMessage({ id: 'SYSTEM.SOURCE' })}
-        formik={formik}
-        options={
-          sourcesData?.map((source) => ({ label: source.name, value: source.id.toString() })) || []
-        }
-      />
-
       <SharedAutocomplete
         label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
         value={formik.values.country_id ?? clientData?.country_id ?? ''}
@@ -216,13 +215,11 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
         emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
       />
-
       <SharedInput
         name="legal_address"
         label={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
         formik={formik}
       />
-
       <SharedInput
         name="representative_first_name"
         label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_FIRST_NAME' })}
@@ -249,9 +246,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_EMAIL' })}
         formik={formik}
       />
-
       <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
-
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>
           {loading

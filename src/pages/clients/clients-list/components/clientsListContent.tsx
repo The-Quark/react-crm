@@ -11,6 +11,8 @@ import { ClientType } from '@/api/generalManualTypes';
 import { initialPagination } from '@/utils';
 
 export const ClientsListContent = () => {
+  const queryClient = useQueryClient();
+
   const [clientType, setClientType] = useState<ClientType>('individual');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -20,7 +22,6 @@ export const ClientsListContent = () => {
   const [clientCityId, setClientCityId] = useState<number>();
   const [pagination, setPagination] = useState(initialPagination);
   const [isDeleting, setIsDeleting] = useState(false);
-  const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -132,6 +133,7 @@ export const ClientsListContent = () => {
           loading: isFetching && <SharedLoading simple />
         }}
       />
+
       <ClientsListProfileModal
         open={isModalOpen}
         id={selectedId}
