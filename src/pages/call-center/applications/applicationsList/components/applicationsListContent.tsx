@@ -11,9 +11,12 @@ import { ApplicationsModal } from '@/pages/call-center/applications/applications
 import { ApplicationsStatus } from '@/api/enums';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
+import { initialPagination } from '@/utils';
 
 export const ApplicationListContent = () => {
   const { formatMessage } = useIntl();
+  const queryClient = useQueryClient();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<ApplicationsStatus>();
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -22,11 +25,7 @@ export const ApplicationListContent = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -48,24 +47,21 @@ export const ApplicationListContent = () => {
       })
   });
 
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setIsDeleteModalOpen(true);
+  };
+
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
-
     setIsDeleting(true);
     try {
       await deleteApplication(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['applications'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting application:', error);
     } finally {
       setIsDeleting(false);
     }
-  };
-
-  const handleDeleteClick = (id: number) => {
-    setSelectedId(id);
-    setIsDeleteModalOpen(true);
   };
 
   const columns = useApplicationsColumns({
@@ -86,26 +82,17 @@ export const ApplicationListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleStatusChange = (newStatus: ApplicationsStatus | undefined) => {
     setStatus(newStatus);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

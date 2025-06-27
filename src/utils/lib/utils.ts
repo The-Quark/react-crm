@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { DateRange } from 'react-day-picker';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,3 +29,21 @@ export function formatDate(
     return 'Invalid date';
   }
 }
+
+export const filterDateRange = (rowDate: string, filterValue: DateRange) => {
+  if (!filterValue) return true;
+
+  const date = new Date(rowDate);
+  const { from, to } = filterValue;
+
+  if (from && to) {
+    return date >= from && date <= to;
+  }
+  if (from) {
+    return date >= from;
+  }
+  if (to) {
+    return date <= to;
+  }
+  return true;
+};

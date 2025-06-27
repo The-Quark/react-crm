@@ -114,12 +114,14 @@ export const ApplicationsStarterContent = ({
   applicationData
 }: Props) => {
   const { formatMessage } = useIntl();
-  const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [inputValue, setInputValue] = useState('');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
+
   const clientId = searchParams.get('client_id');
 
   const resetClientFields = useCallback(() => {
@@ -165,15 +167,27 @@ export const ApplicationsStarterContent = ({
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
+      const payload = {
+        ...values,
+        ...(values.client_type === 'individual' && {
+          company_name: undefined,
+          bin: undefined
+        }),
+        ...(values.client_type === 'legal' && {
+          first_name: undefined,
+          last_name: undefined,
+          patronymic: undefined
+        })
+      };
       try {
         if (isEditMode && applicationId) {
-          const { status, ...putData } = values;
+          const { status, ...putData } = payload;
           await putApplication(Number(applicationId), {
             ...putData,
             status: status as ApplicationsStatus
           });
         } else {
-          await postApplication(values);
+          await postApplication(payload);
         }
         await queryClient.invalidateQueries({ queryKey: ['applications'] });
         resetForm();

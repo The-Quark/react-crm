@@ -29,6 +29,7 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
   const navigate = useNavigate();
   const { has } = useUserPermissions();
+
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading, isError, error } = useQuery({

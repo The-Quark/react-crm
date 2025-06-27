@@ -51,7 +51,6 @@ export const ClientsListContent = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
-
     setIsDeleting(true);
     try {
       await deleteClient(selectedId);
@@ -133,13 +132,11 @@ export const ClientsListContent = () => {
           loading: isFetching && <SharedLoading simple />
         }}
       />
-
       <ClientsListProfileModal
         open={isModalOpen}
         id={selectedId}
         handleClose={() => setIsModalOpen(false)}
       />
-
       <SharedDeleteModal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

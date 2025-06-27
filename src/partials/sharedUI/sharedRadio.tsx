@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormikProps } from 'formik';
+import { useIntl } from 'react-intl';
 
 interface SharedRadioProps<T> {
   name: keyof T;
@@ -18,6 +19,8 @@ export const SharedRadio = <T,>({
   disabled = false,
   onChange
 }: SharedRadioProps<T>) => {
+  const { formatMessage } = useIntl();
+
   const fieldValue = formik.values[name] as unknown as string;
   const error = formik.errors[name] as unknown as string | undefined;
   const touched = formik.touched[name] as unknown as boolean | undefined;
@@ -51,7 +54,7 @@ export const SharedRadio = <T,>({
         </div>
         {touched && error && (
           <span role="alert" className="text-danger text-xs mt-1">
-            {error}
+            {formatMessage({ id: error })}
           </span>
         )}
       </div>

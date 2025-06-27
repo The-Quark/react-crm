@@ -18,6 +18,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { ApplicationsStatus } from '@/api/enums';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -39,6 +40,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage applications') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearch = debounce((value: string) => {
@@ -46,7 +48,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
       onSearch(value);
     }
     table.getColumn('full name')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -133,7 +135,6 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
             icon="magnifier"
             className="leading-none text-md text-gray-500 absolute top-1/2 start-0 -translate-y-1/2 ms-3"
           />
-          {/*search by id search by client full name select status date created time*/}
           <input
             type="text"
             placeholder={formatMessage({ id: 'SYSTEM.SEARCH_APPLICATION' })}
