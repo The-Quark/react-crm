@@ -349,7 +349,8 @@ const System = {
   'SYSTEM.DELIVERY_CATEGORY_B2B': 'Бизнес для бизнеса',
   'SYSTEM.DELIVERY_CATEGORY_C2B': 'Клиент для бизнеса',
   'SYSTEM.DELIVERY_CATEGORY_C2C': 'Клиент для клиента',
-  'SYSTEM.NO_OPTIONS': 'Варианты отсутствуют'
+  'SYSTEM.NO_OPTIONS': 'Варианты отсутствуют',
+  'SYSTEM.PHONE_NUMBER_HISTORY': 'История номеров телефона'
 };
 
 export default System;

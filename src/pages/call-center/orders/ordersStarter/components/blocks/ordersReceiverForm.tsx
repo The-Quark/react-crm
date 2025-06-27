@@ -233,7 +233,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     }
   }, [formik.values.receiver_contact_id]);
 
-  const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
+  const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
   const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
 
@@ -271,6 +271,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             touched={formik.touched.receiver_contact_id}
             searchTerm={clientSearchTerm}
             onSearchTermChange={setClientSearchTerm}
+            loading={clientsLoading}
           />
 
           {formik.values.receiver_type === 'legal' ? (

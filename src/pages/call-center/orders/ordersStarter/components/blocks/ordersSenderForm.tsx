@@ -232,7 +232,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     }
   }, [formik.values.sender_contact_id]);
 
-  const isFormLoading = countriesLoading || clientsLoading || (isEditMode && citiesLoading);
+  const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
   const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
 
@@ -270,6 +270,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             touched={formik.touched.sender_contact_id}
             searchTerm={clientSearchTerm}
             onSearchTermChange={setClientSearchTerm}
+            loading={clientsLoading}
           />
 
           {formik.values.sender_type === 'legal' ? (

@@ -349,7 +349,8 @@ const System = {
   'SYSTEM.DELIVERY_CATEGORY_B2B': 'من الأعمال إلى الأعمال',
   'SYSTEM.DELIVERY_CATEGORY_C2B': 'من العميل إلى الأعمال',
   'SYSTEM.DELIVERY_CATEGORY_C2C': 'من العميل إلى العميل',
-  'SYSTEM.NO_OPTIONS': 'لا توجد خيارات متاحة'
+  'SYSTEM.NO_OPTIONS': 'لا توجد خيارات متاحة',
+  'SYSTEM.PHONE_NUMBER_HISTORY': 'سجل أرقام الهاتف'
 };
 
 export default System;

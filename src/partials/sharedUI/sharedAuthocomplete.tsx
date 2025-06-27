@@ -55,19 +55,23 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   clearText
 }) => {
   const { formatMessage } = useIntl();
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
   const selectTriggerClasses = clsx('w-full', {
     'border-danger focus:border-danger': touched && error
   });
 
   useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
+      onSearchTermChange(localSearchTerm);
     }, SEARCH_DEBOUNCE_DELAY);
 
     return () => clearTimeout(handler);
-  }, [searchTerm]);
+  }, [localSearchTerm, onSearchTermChange]);
 
   const handleValueChange = useCallback(
     (val: string) => {
@@ -80,18 +84,15 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     [onChange]
   );
 
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      onSearchTermChange(e.target.value);
-    },
-    [onSearchTermChange]
-  );
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchTerm(e.target.value);
+  }, []);
 
   const filteredOptions = useMemo(() => {
-    if (!debouncedSearchTerm) return options;
-    const term = debouncedSearchTerm.toLowerCase();
+    if (!localSearchTerm) return options;
+    const term = localSearchTerm.toLowerCase();
     return options.filter((opt) => opt.name?.toLowerCase().includes(term));
-  }, [options, debouncedSearchTerm]);
+  }, [options, localSearchTerm]);
 
   const renderOptions = useMemo(() => {
     if (loading) {
@@ -111,7 +112,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     if (
       clearable &&
       value &&
-      (!debouncedSearchTerm || clearText?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+      (!localSearchTerm || clearText?.toLowerCase().includes(localSearchTerm.toLowerCase()))
     ) {
       optionsToRender.push(
         <SelectItem key="clear" value="__clear__" className="text-muted-foreground italic">
@@ -146,7 +147,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     clearable,
     value,
     clearText,
-    debouncedSearchTerm
+    localSearchTerm
   ]);
 
   return (
@@ -170,7 +171,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
                 type="text"
                 placeholder={searchPlaceholder || formatMessage({ id: 'SYSTEM.SEARCH' })}
                 className="input w-full"
-                value={searchTerm}
+                value={localSearchTerm}
                 onChange={handleSearchChange}
                 disabled={disabled}
                 onKeyDown={(e) => {
