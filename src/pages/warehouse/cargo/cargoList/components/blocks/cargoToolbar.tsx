@@ -13,6 +13,7 @@ import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { CargoStatus } from '@/api/enums';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearchCode?: (searchTerm: string) => void;
@@ -31,12 +32,14 @@ export const CargoToolbar: FC<ToolbarProps> = ({
   currentStatus,
   onStatusChange
 }) => {
-  const [searchValueCode, setSearchValueCode] = useState('');
-  const [searchValuePackage, setSearchValuePackage] = useState('');
   const { table } = useDataGrid();
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
+  const [searchValueCode, setSearchValueCode] = useState('');
+  const [searchValuePackage, setSearchValuePackage] = useState('');
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearchCode = debounce((value: string) => {
@@ -44,7 +47,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
       onSearchCode(value);
     }
     table.getColumn('code')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChangeCode = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -57,7 +60,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
       onSearchPackage(value);
     }
     table.getColumn('hawb')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChangePackage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -100,7 +103,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
             <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
-                {category.name}
+                {formatMessage({ id: category.name })}
               </SelectItem>
             ))}
           </SelectContent>

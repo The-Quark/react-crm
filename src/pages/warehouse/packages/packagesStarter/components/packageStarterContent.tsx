@@ -40,6 +40,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -193,10 +194,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     }
   }, [formik.values.order_id, navigate, queryClient]);
 
-  if (ordersLoading) {
-    return <SharedLoading />;
-  }
-
   if (ordersIsError) {
     return <SharedError error={ordersError} />;
   }
@@ -230,6 +227,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             searchTerm={searchOrderTerm}
             onSearchTermChange={setSearchOrderTerm}
             disabled={!!orderIdFromUrl}
+            loading={ordersLoading}
           />
 
           <SharedDecimalInput

@@ -28,6 +28,7 @@ import { CargoStatus } from '@/api/enums';
 import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
+import * as sea from 'node:sea';
 
 export const formSchema = Yup.object().shape({
   code: Yup.string()
@@ -49,14 +50,17 @@ export const formSchema = Yup.object().shape({
 export const CargoStarterContent = () => {
   const { id } = useParams<{ id: string }>();
   const { formatMessage } = useIntl();
-  const [loading, setLoading] = useState(false);
-  const isEditMode = !!id;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const packageIdsParam = searchParams.get('package_id');
+
+  const [loading, setLoading] = useState(false);
   const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
   const [searchCompanyOrderTerm, setSearchCompanyOrderTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const isEditMode = !!id;
+  const packageIdsParam = searchParams.get('package_id');
 
   const {
     data: airlinesData,
@@ -86,8 +90,8 @@ export const CargoStarterContent = () => {
     isError: packagesIsError,
     error: packagesError
   } = useQuery({
-    queryKey: ['cargoPackages'],
-    queryFn: () => getPackages({ status: 'ready_for_shipment' }),
+    queryKey: ['cargoPackages', searchTerm],
+    queryFn: () => getPackages({ status: 'ready_for_shipment', hawb: searchTerm }),
     staleTime: 60 * 60 * 1000
   });
 
@@ -214,7 +218,7 @@ export const CargoStarterContent = () => {
     }
   }, [isEditMode, cargoData, initialPackageIds]);
 
-  if (airlinesLoading || companiesLoading || packagesLoading || (isEditMode && cargoLoading)) {
+  if (airlinesLoading || companiesLoading || (isEditMode && cargoLoading)) {
     return <SharedLoading />;
   }
 
@@ -255,6 +259,9 @@ export const CargoStarterContent = () => {
             label={formatMessage({ id: 'SYSTEM.PACKAGES' })}
             error={formik.errors.packages as string}
             touched={formik.touched.packages}
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+            loading={packagesLoading}
           />
           <SharedInput name="code" label={formatMessage({ id: 'SYSTEM.CODE' })} formik={formik} />
 

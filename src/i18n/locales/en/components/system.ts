@@ -350,7 +350,10 @@ const System = {
   'SYSTEM.DELIVERY_CATEGORY_C2B': 'Customer to Business',
   'SYSTEM.DELIVERY_CATEGORY_C2C': 'Customer to Customer',
   'SYSTEM.NO_OPTIONS': 'No options available',
-  'SYSTEM.PHONE_NUMBER_HISTORY': 'Phone Number History'
+  'SYSTEM.PHONE_NUMBER_HISTORY': 'Phone Number History',
+  'SYSTEM.SELECT_ALL': 'Select All',
+  'SYSTEM.CLEAR': 'Clear',
+  'SYSTEM.CLOSE': 'Close'
 };
 
 export default System;

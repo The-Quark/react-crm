@@ -350,7 +350,10 @@ const System = {
   'SYSTEM.DELIVERY_CATEGORY_C2B': 'Клиент для бизнеса',
   'SYSTEM.DELIVERY_CATEGORY_C2C': 'Клиент для клиента',
   'SYSTEM.NO_OPTIONS': 'Варианты отсутствуют',
-  'SYSTEM.PHONE_NUMBER_HISTORY': 'История номеров телефона'
+  'SYSTEM.PHONE_NUMBER_HISTORY': 'История номеров телефона',
+  'SYSTEM.SELECT_ALL': 'Выбрать все',
+  'SYSTEM.CLEAR': 'Очистить',
+  'SYSTEM.CLOSE': 'Закрыть'
 };
 
 export default System;

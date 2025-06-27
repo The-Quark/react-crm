@@ -9,9 +9,12 @@ import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/bl
 import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoModal.tsx';
 import { CargoStatus } from '@/api/enums';
 import { useIntl } from 'react-intl';
+import { initialPagination } from '@/utils';
 
 export const CargoListContent = () => {
   const { formatMessage } = useIntl();
+  const queryClient = useQueryClient();
+
   const [searchTermCode, setSearchTermCode] = useState('');
   const [searchTermPackage, setSearchTermPackage] = useState('');
   const [status, setStatus] = useState<CargoStatus>();
@@ -20,11 +23,7 @@ export const CargoListContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -85,34 +84,22 @@ export const CargoListContent = () => {
 
   const handleSearchCode = (term: string) => {
     setSearchTermCode(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleStatusChange = (newStatus: CargoStatus | undefined) => {
     setStatus(newStatus);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleSearchPackage = (term: string) => {
     setSearchTermPackage(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleDeliveryCategoryChange = (newCategory: string | undefined) => {
     setDeliveryCategory(newCategory);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

@@ -350,7 +350,10 @@ const System = {
   'SYSTEM.DELIVERY_CATEGORY_C2B': 'من العميل إلى الأعمال',
   'SYSTEM.DELIVERY_CATEGORY_C2C': 'من العميل إلى العميل',
   'SYSTEM.NO_OPTIONS': 'لا توجد خيارات متاحة',
-  'SYSTEM.PHONE_NUMBER_HISTORY': 'سجل أرقام الهاتف'
+  'SYSTEM.PHONE_NUMBER_HISTORY': 'سجل أرقام الهاتف',
+  'SYSTEM.SELECT_ALL': 'تحديد الكل',
+  'SYSTEM.CLEAR': 'مسح',
+  'SYSTEM.CLOSE': 'إغلاق'
 };
 
 export default System;

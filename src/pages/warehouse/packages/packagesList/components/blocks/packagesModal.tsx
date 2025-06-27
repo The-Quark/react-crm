@@ -29,7 +29,9 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageID', id],
     queryFn: () => (id !== null ? getPackages({ id: Number(id) }) : Promise.reject('Invalid ID'))
@@ -205,7 +207,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="border-b pb-4">
+                  <div>
                     <h4 className="text-lg font-semibold mb-3">
                       {formatMessage({ id: 'SYSTEM.CLIENT' })}
                     </h4>

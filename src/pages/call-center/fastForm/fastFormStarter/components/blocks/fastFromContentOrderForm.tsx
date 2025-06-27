@@ -220,7 +220,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })}
             formik={formik}
             options={mockDeliveryCategories.map((category) => ({
-              label: category.name,
+              label: formatMessage({ id: category.name }),
               value: category.value
             }))}
           />

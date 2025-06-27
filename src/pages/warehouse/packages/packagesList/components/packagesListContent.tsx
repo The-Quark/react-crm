@@ -10,10 +10,13 @@ import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/compone
 import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesModal.tsx';
 import { PackageStatus } from '@/api/enums';
 import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesCargoCreateModal.tsx';
+import { initialPagination } from '@/utils';
 
 export const PackagesListContent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const { formatMessage } = useIntl();
+  const queryClient = useQueryClient();
+
+  const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<PackageStatus>();
   const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,12 +24,7 @@ export const PackagesListContent = () => {
   const [isCargoCreateModalOpen, setIsCargoCreateModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -60,8 +58,6 @@ export const PackagesListContent = () => {
       await deletePackage(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['packages'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting package:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -85,26 +81,17 @@ export const PackagesListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleStatusChange = (newStatus: PackageStatus | undefined) => {
     setStatus(newStatus);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleDeliveryCategoryChange = (newCategory: string | undefined) => {
     setDeliveryCategory(newCategory);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

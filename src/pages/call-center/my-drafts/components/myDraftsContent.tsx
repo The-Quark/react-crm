@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteOrder, getOrders } from '@/api';
@@ -8,10 +7,11 @@ import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { useMyDraftsColumn } from '@/pages/call-center/my-drafts/components/blocks/myDraftsColumns.tsx';
 import { MyDraftsToolbar } from '@/pages/call-center/my-drafts/components/blocks/myDraftsToolbar.tsx';
-import { useIntl } from 'react-intl';
+import { initialPagination } from '@/utils';
 
 export const MyDraftsContent = () => {
-  const { formatMessage } = useIntl();
+  const queryClient = useQueryClient();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<string>();
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -19,11 +19,7 @@ export const MyDraftsContent = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -45,9 +41,7 @@ export const MyDraftsContent = () => {
         start_date: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,
         end_date: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined,
         is_draft: true
-      }),
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: true
+      })
   });
 
   const handleDeleteClick = (id: number) => {
@@ -63,8 +57,6 @@ export const MyDraftsContent = () => {
       await deleteOrder(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['myDrafts'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting order:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -82,34 +74,22 @@ export const MyDraftsContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleStatus = (status: string | undefined) => {
     setStatus(status);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleDeliveryCategory = (delivery_category: string | undefined) => {
     setDeliveryCategory(delivery_category);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

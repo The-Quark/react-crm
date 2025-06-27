@@ -18,6 +18,8 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command';
+import { useIntl } from 'react-intl';
+import { CommandLoading } from 'cmdk';
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -106,6 +108,10 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+  searchTerm?: string;
+  onSearchTermChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  loading?: boolean;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -120,14 +126,30 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       maxCount = 3,
       modalPopover = false,
       asChild = false,
+      searchTerm,
+      searchPlaceholder,
+      onSearchTermChange,
       className,
+      loading,
       ...props
     },
     ref
   ) => {
+    const { formatMessage } = useIntl();
+
     const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const [localSearchTerm, setLocalSearchTerm] = React.useState(searchTerm);
+
+    React.useEffect(() => {
+      setLocalSearchTerm(searchTerm);
+    }, [searchTerm]);
+
+    const handleSearchChange = (value: string) => {
+      setLocalSearchTerm(value);
+      onSearchTermChange?.(value);
+    };
 
     const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
@@ -258,9 +280,22 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
           <Command>
-            <CommandInput placeholder="Search..." onKeyDown={handleInputKeyDown} />
+            <CommandInput
+              placeholder={searchPlaceholder || formatMessage({ id: 'SYSTEM.SEARCH' })}
+              value={localSearchTerm}
+              onValueChange={handleSearchChange}
+              onKeyDown={handleInputKeyDown}
+            />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              {loading ? (
+                <CommandLoading className="self-center text-center p-4">
+                  {formatMessage({ id: 'SYSTEM.LOADING' })}
+                </CommandLoading>
+              ) : (
+                <CommandEmpty>
+                  {formatMessage({ id: 'SYSTEM.NO_OPTIONS' }) || 'No results found.'}
+                </CommandEmpty>
+              )}
               <CommandGroup>
                 <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">
                   <div
@@ -273,7 +308,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                   >
                     <CheckIcon className="h-4 w-4" />
                   </div>
-                  <span>(Select All)</span>
+                  <span>{formatMessage({ id: 'SYSTEM.SELECT_ALL' }) || '(Select All)'}</span>
                 </CommandItem>
                 {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
@@ -310,7 +345,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                         onSelect={handleClear}
                         className="flex-1 justify-center cursor-pointer"
                       >
-                        Clear
+                        {formatMessage({ id: 'SYSTEM.CLEAR' })}
                       </CommandItem>
                       <Separator orientation="vertical" className="flex min-h-6 h-full" />
                     </>
@@ -319,7 +354,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                     onSelect={() => setIsPopoverOpen(false)}
                     className="flex-1 justify-center cursor-pointer max-w-full"
                   >
-                    Close
+                    {formatMessage({ id: 'SYSTEM.CLOSE' })}
                   </CommandItem>
                 </div>
               </CommandGroup>

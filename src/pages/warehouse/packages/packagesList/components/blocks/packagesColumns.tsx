@@ -9,6 +9,7 @@ import { DateRange } from 'react-day-picker';
 import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { useIntl } from 'react-intl';
+import { filterDateRange } from '@/utils';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -23,6 +24,7 @@ export const usePackagesColumns = ({
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const columns = useMemo<ColumnDef<Package>[]>(
@@ -190,21 +192,8 @@ export const usePackagesColumns = ({
           />
         ),
         enableSorting: false,
-        filterFn: (row, columnId, filterValue: DateRange) => {
-          if (!filterValue) return true;
-          const date = new Date(row.getValue(columnId));
-          const { from, to } = filterValue;
-          if (from && to) {
-            return date >= from && date <= to;
-          }
-          if (from) {
-            return date >= from;
-          }
-          if (to) {
-            return date <= to;
-          }
-          return true;
-        },
+        filterFn: (row, columnId, filterValue: DateRange) =>
+          filterDateRange(row.getValue(columnId), filterValue),
         cell: (info) => {
           const date = new Date(info.row.original.created_at);
           const formattedDate = date.toLocaleDateString('ru-RU');

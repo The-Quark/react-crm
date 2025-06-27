@@ -19,6 +19,7 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const columns = useMemo<ColumnDef<Order>[]>(

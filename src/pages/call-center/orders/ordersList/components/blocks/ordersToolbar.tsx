@@ -103,7 +103,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
             <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
-                {category.name}
+                {formatMessage({ id: category.name })}
               </SelectItem>
             ))}
           </SelectContent>

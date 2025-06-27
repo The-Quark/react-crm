@@ -207,7 +207,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
     }
   }, [formik.values.contact_id]);
 
-  const isFormLoading = countriesLoading || clientsLoading;
+  const isFormLoading = countriesLoading;
   const isFormError = countriesIsError || clientsIsError;
   const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
 
@@ -245,6 +245,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
             touched={formik.touched.contact_id}
             searchTerm={clientSearchTerm}
             onSearchTermChange={setClientSearchTerm}
+            loading={clientsLoading}
           />
 
           {formik.values.type === 'legal' ? (

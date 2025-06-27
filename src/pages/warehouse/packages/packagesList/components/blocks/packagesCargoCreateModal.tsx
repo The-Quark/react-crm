@@ -25,8 +25,9 @@ export const PackagesCargoCreateModal: FC<Props> = ({ open, handleClose }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
-  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
   const { formatMessage } = useIntl();
+
+  const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['createCargoNotifications'],

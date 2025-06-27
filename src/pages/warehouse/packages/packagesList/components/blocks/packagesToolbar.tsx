@@ -13,6 +13,7 @@ import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { PackageStatus } from '@/api/enums';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -32,10 +33,12 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
   onCreateCargo
 }) => {
   const { formatMessage } = useIntl();
-  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
+  const [searchValue, setSearchValue] = useState('');
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearch = debounce((value: string) => {
@@ -43,7 +46,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
       onSearch(value);
     }
     table.getColumn('hawb')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -91,7 +94,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
             <SelectItem value="all">{formatMessage({ id: 'SYSTEM.ALL_CATEGORIES' })}</SelectItem>
             {mockDeliveryCategories.map((category) => (
               <SelectItem key={category.value} value={category.value}>
-                {category.name}
+                {formatMessage({ id: category.name })}
               </SelectItem>
             ))}
           </SelectContent>

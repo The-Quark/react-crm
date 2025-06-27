@@ -3,6 +3,8 @@ import * as React from 'react';
 import { MultiSelect } from '@/components';
 import clsx from 'clsx';
 import { useIntl } from 'react-intl';
+import { useEffect, useState } from 'react';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 export type Option = {
   value: string;
@@ -14,33 +16,54 @@ interface MultiSelectProps {
   selectedValues: string[];
   onChange: (values: string[]) => void;
   placeholder?: string;
-  searchPlaceholder?: string;
   className?: string;
   error?: string | string[];
   touched?: boolean;
   label: string;
   modalPopover?: boolean;
   disabled?: boolean;
+  searchTerm?: string;
+  onSearchTermChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  loading?: boolean;
 }
 
 export function SharedMultiSelect({
   options,
   selectedValues,
   onChange,
-  placeholder = 'Select...',
-  searchPlaceholder = 'Search...',
+  placeholder,
+  searchPlaceholder,
+  searchTerm,
+  onSearchTermChange,
   error,
   className,
   touched,
   modalPopover = false,
   disabled = false,
+  loading,
   label
 }: MultiSelectProps) {
   const { formatMessage } = useIntl();
+
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+
   const hasError = touched && error;
   const multiSelectClasses = clsx(className, {
     'border-destructive focus:border-destructive': hasError
   });
+
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      onSearchTermChange?.(localSearchTerm ?? '');
+    }, SEARCH_DEBOUNCE_DELAY);
+
+    return () => clearTimeout(handler);
+  }, [localSearchTerm, onSearchTermChange]);
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -54,6 +77,10 @@ export function SharedMultiSelect({
           modalPopover={modalPopover}
           disabled={disabled}
           className={multiSelectClasses}
+          searchTerm={searchTerm}
+          onSearchTermChange={setLocalSearchTerm}
+          searchPlaceholder={searchPlaceholder}
+          loading={loading}
         />
         {hasError && (
           <span className="text-xs text-destructive mt-1">
