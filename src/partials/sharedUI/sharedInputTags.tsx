@@ -1,11 +1,12 @@
 'use client';
-
 import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { XIcon } from 'lucide-react';
 import { cn } from '@/utils/lib/utils.ts';
 import { type InputProps } from '@/components/ui/input.tsx';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 
 type InputTagsProps = Omit<InputProps, 'value' | 'onChange'> & {
   value: string[];
@@ -17,7 +18,8 @@ type InputTagsProps = Omit<InputProps, 'value' | 'onChange'> & {
 
 const SharedInputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
   ({ className, value, onChange, label, error, touched, ...props }, ref) => {
-    const [pendingDataPoint, setPendingDataPoint] = React.useState('');
+    const { formatMessage } = useIntl();
+    const [pendingDataPoint, setPendingDataPoint] = useState('');
 
     React.useEffect(() => {
       if (pendingDataPoint.includes(',')) {
@@ -88,7 +90,9 @@ const SharedInputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
           </div>
           {touched && error && (
             <span className="text-xs text-destructive">
-              {Array.isArray(error) ? error[0] : error}
+              {Array.isArray(error)
+                ? formatMessage({ id: error[0] })
+                : formatMessage({ id: error })}
             </span>
           )}
         </div>

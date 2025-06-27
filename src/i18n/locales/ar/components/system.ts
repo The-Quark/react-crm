@@ -344,7 +344,12 @@ const System = {
   'NOTIFICATION.LOADING': 'جارٍ تحميل الإشعارات...',
   'NOTIFICATION.FAILED': 'فشل في تحميل الإشعارات',
   'NOTIFICATION.EMPTY': 'لم يتم العثور على إشعارات',
-  'NOTIFICATION.PAGE_LABEL': 'الصفحة {current} من {total}'
+  'NOTIFICATION.PAGE_LABEL': 'الصفحة {current} من {total}',
+  'SYSTEM.DELIVERY_CATEGORY_B2C': 'من الأعمال إلى العميل',
+  'SYSTEM.DELIVERY_CATEGORY_B2B': 'من الأعمال إلى الأعمال',
+  'SYSTEM.DELIVERY_CATEGORY_C2B': 'من العميل إلى الأعمال',
+  'SYSTEM.DELIVERY_CATEGORY_C2C': 'من العميل إلى العميل',
+  'SYSTEM.NO_OPTIONS': 'لا توجد خيارات متاحة'
 };
 
 export default System;

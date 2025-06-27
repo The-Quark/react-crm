@@ -9,6 +9,7 @@ import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { OrdersMenuOptions } from '@/pages/call-center/orders/ordersList/components/blocks/ordersMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { filterDateRange } from '@/utils';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -23,6 +24,7 @@ export const useOrdersColumns = ({
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const columns = useMemo<ColumnDef<Order>[]>(
@@ -189,21 +191,8 @@ export const useOrdersColumns = ({
           />
         ),
         enableSorting: false,
-        filterFn: (row, columnId, filterValue: DateRange) => {
-          if (!filterValue) return true;
-          const date = new Date(row.getValue(columnId));
-          const { from, to } = filterValue;
-          if (from && to) {
-            return date >= from && date <= to;
-          }
-          if (from) {
-            return date >= from;
-          }
-          if (to) {
-            return date <= to;
-          }
-          return true;
-        },
+        filterFn: (row, columnId, filterValue: DateRange) =>
+          filterDateRange(row.getValue(columnId), filterValue),
         cell: (info) => {
           const date = new Date(info.row.original.created_at);
           const formattedDate = date.toLocaleDateString('ru-RU');
@@ -234,7 +223,7 @@ export const useOrdersColumns = ({
                   {
                     name: 'offset',
                     options: {
-                      offset: isRTL() ? [0, -10] : [0, 10] // [skid, distance]
+                      offset: isRTL() ? [0, -10] : [0, 10]
                     }
                   }
                 ]

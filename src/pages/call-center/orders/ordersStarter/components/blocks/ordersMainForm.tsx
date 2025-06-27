@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import {
   SharedAutocomplete,
+  SharedCheckBox,
   SharedDecimalInput,
   SharedError,
   SharedInput,
@@ -138,7 +139,9 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
   const { currentLanguage } = useLanguage();
+
   const [searchTerm, setSearchTerm] = useState('');
+
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
   const formik = useFormik({
@@ -304,32 +307,15 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             placeholder={formatMessage({ id: 'SYSTEM.SELECT_CATEGORY' })}
             formik={formik}
             options={mockDeliveryCategories.map((category) => ({
-              label: category.name,
+              label: formatMessage({ id: category.name }),
               value: category.value
             }))}
           />
-          <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">
-              {formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
-            </label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <label className="checkbox-group flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="is_international"
-                  checked={formik.values.is_international}
-                  onChange={(e) => formik.setFieldValue('is_international', e.target.checked)}
-                  className="checkbox-sm"
-                />
-                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
-              </label>
-              {formik.touched.is_international && formik.errors.is_international && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.is_international}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedCheckBox
+            name="is_international"
+            label={formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
+            formik={formik}
+          />
           <SharedSelect
             name="package_type"
             label={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
@@ -367,28 +353,11 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             error={formik.errors.order_content as string}
             touched={formik.touched.order_content}
           />
-          <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">
-              {formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
-            </label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <label className="checkbox-group flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="customs_clearance"
-                  checked={formik.values.customs_clearance}
-                  onChange={(e) => formik.setFieldValue('customs_clearance', e.target.checked)}
-                  className="checkbox-sm"
-                />
-                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
-              </label>
-              {formik.touched.customs_clearance && formik.errors.customs_clearance && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.customs_clearance}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedCheckBox
+            name="customs_clearance"
+            label={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
+            formik={formik}
+          />
           <SharedDecimalInput
             name="weight"
             label={`${formatMessage({ id: 'SYSTEM.WEIGHT' })} (kg)`}
@@ -451,7 +420,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             label={formatMessage({ id: 'SYSTEM.SPECIAL_WISHES' })}
             formik={formik}
           />
-
           <div className="flex justify-end">
             <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
               {formatMessage({ id: 'SYSTEM.NEXT' })}

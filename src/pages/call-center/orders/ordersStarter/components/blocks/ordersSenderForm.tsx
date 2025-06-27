@@ -128,6 +128,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
   const { formatMessage } = useIntl();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');

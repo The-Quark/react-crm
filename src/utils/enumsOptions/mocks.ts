@@ -253,10 +253,10 @@ export const taskTypeOptions = [
 ];
 
 export const mockDeliveryCategories = [
-  { value: DeliveryCategories.B2C, name: 'Business to Customer' },
-  { value: DeliveryCategories.B2B, name: 'Business to Business' },
-  { value: DeliveryCategories.C2B, name: 'Customer to Business' },
-  { value: DeliveryCategories.C2C, name: 'Customer to Customer' }
+  { value: DeliveryCategories.B2C, name: 'SYSTEM.DELIVERY_CATEGORY_B2C' },
+  { value: DeliveryCategories.B2B, name: 'SYSTEM.DELIVERY_CATEGORY_B2B' },
+  { value: DeliveryCategories.C2B, name: 'SYSTEM.DELIVERY_CATEGORY_C2B' },
+  { value: DeliveryCategories.C2C, name: 'SYSTEM.DELIVERY_CATEGORY_C2C' }
 ];
 
 export const mockGenderOptions = [

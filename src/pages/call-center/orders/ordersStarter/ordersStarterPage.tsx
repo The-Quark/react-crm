@@ -9,6 +9,7 @@ import { OrderCreationProvider } from '@/pages/call-center/orders/ordersStarter/
 
 export const OrdersStarterPage = () => {
   const { id } = useParams<{ id: string }>();
+
   const isEditMode = !!id;
 
   const {

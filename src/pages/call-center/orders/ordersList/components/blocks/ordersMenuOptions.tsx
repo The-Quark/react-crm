@@ -21,6 +21,7 @@ export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   return (

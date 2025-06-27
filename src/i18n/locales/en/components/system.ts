@@ -344,7 +344,12 @@ const System = {
   'NOTIFICATION.LOADING': 'Loading notifications...',
   'NOTIFICATION.FAILED': 'Failed to load notifications',
   'NOTIFICATION.EMPTY': 'No notifications found',
-  'NOTIFICATION.PAGE_LABEL': 'Page {current} of {total}'
+  'NOTIFICATION.PAGE_LABEL': 'Page {current} of {total}',
+  'SYSTEM.DELIVERY_CATEGORY_B2C': 'Business to Customer',
+  'SYSTEM.DELIVERY_CATEGORY_B2B': 'Business to Business',
+  'SYSTEM.DELIVERY_CATEGORY_C2B': 'Customer to Business',
+  'SYSTEM.DELIVERY_CATEGORY_C2C': 'Customer to Customer',
+  'SYSTEM.NO_OPTIONS': 'No options available'
 };
 
 export default System;

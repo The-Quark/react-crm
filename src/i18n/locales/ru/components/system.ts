@@ -344,7 +344,12 @@ const System = {
   'NOTIFICATION.LOADING': 'Загрузка уведомлений...',
   'NOTIFICATION.FAILED': 'Не удалось загрузить уведомления',
   'NOTIFICATION.EMPTY': 'Уведомления не найдены',
-  'NOTIFICATION.PAGE_LABEL': 'Страница {current} из {total}'
+  'NOTIFICATION.PAGE_LABEL': 'Страница {current} из {total}',
+  'SYSTEM.DELIVERY_CATEGORY_B2C': 'Бизнес для клиента',
+  'SYSTEM.DELIVERY_CATEGORY_B2B': 'Бизнес для бизнеса',
+  'SYSTEM.DELIVERY_CATEGORY_C2B': 'Клиент для бизнеса',
+  'SYSTEM.DELIVERY_CATEGORY_C2C': 'Клиент для клиента',
+  'SYSTEM.NO_OPTIONS': 'Варианты отсутствуют'
 };
 
 export default System;

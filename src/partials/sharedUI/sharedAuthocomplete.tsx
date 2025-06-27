@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/select';
 import clsx from 'clsx';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Option {
   id: number | string;
@@ -38,8 +39,8 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   label,
   value,
   options,
-  placeholder = 'Select...',
-  searchPlaceholder = 'Search...',
+  placeholder,
+  searchPlaceholder,
   onChange,
   error,
   touched,
@@ -47,11 +48,11 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   onSearchTermChange,
   disabled = false,
   loading = false,
-  loadingText = 'Loading...',
+  loadingText,
   errorText,
-  emptyText = 'No options available',
+  emptyText,
   clearable = true,
-  clearText = 'Clear selection'
+  clearText
 }) => {
   const { formatMessage } = useIntl();
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
@@ -63,7 +64,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300);
+    }, SEARCH_DEBOUNCE_DELAY);
 
     return () => clearTimeout(handler);
   }, [searchTerm]);
@@ -94,7 +95,11 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
 
   const renderOptions = useMemo(() => {
     if (loading) {
-      return <div className="p-2 text-center text-sm text-muted-foreground">{loadingText}</div>;
+      return (
+        <div className="p-2 text-center text-sm text-muted-foreground">
+          {loadingText || formatMessage({ id: 'SYSTEM.LOADING' })}
+        </div>
+      );
     }
 
     if (errorText) {
@@ -106,11 +111,11 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     if (
       clearable &&
       value &&
-      (!debouncedSearchTerm || clearText.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+      (!debouncedSearchTerm || clearText?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
     ) {
       optionsToRender.push(
         <SelectItem key="clear" value="__clear__" className="text-muted-foreground italic">
-          {clearText}
+          {clearText || formatMessage({ id: 'SYSTEM.CLEAR_SELECTION' })}
         </SelectItem>
       );
     }
@@ -126,7 +131,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     if (optionsToRender.length === 0) {
       optionsToRender.push(
         <div key="empty" className="p-2 text-center text-sm text-muted-foreground">
-          {emptyText}
+          {emptyText || formatMessage({ id: 'SYSTEM.NO_OPTIONS' })}
         </div>
       );
     }
@@ -150,7 +155,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
       <div className="flex columns-1 w-full flex-wrap">
         <Select value={value?.toString()} onValueChange={handleValueChange} disabled={disabled}>
           <SelectTrigger className={selectTriggerClasses}>
-            <SelectValue placeholder={placeholder} />
+            <SelectValue placeholder={placeholder || formatMessage({ id: 'SYSTEM.SELECT' })} />
           </SelectTrigger>
           <SelectContent
             avoidCollisions={false}
@@ -163,7 +168,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
             <div className="sticky top-0 z-10 bg-background p-2">
               <input
                 type="text"
-                placeholder={searchPlaceholder}
+                placeholder={searchPlaceholder || formatMessage({ id: 'SYSTEM.SEARCH' })}
                 className="input w-full"
                 value={searchTerm}
                 onChange={handleSearchChange}

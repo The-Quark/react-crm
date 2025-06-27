@@ -28,17 +28,18 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const navigate = useNavigate();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['order', id],
     queryFn: () => (id !== null ? getOrders({ id: Number(id) }) : Promise.reject('Invalid ID'))
   });
-  const navigate = useNavigate();
-  const order = data?.result?.[0];
 
+  const order = data?.result?.[0];
   const url = order?.hawb_pdf.startsWith('http') ? order.hawb_pdf : `https://${order?.hawb_pdf}`;
 
-  const handleOrderToPakcage = (orderId: number | null) => {
+  const handleOrderToPackage = (orderId: number | null) => {
     if (orderId !== null) {
       navigate(`/warehouse/packages/starter?order_id=${orderId}`);
     }
@@ -348,7 +349,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
             {order?.status === OrderStatus.PACKAGE_AWAITING && (
               <button
                 className="btn btn-md btn-primary mr-3 mb-3"
-                onClick={() => handleOrderToPakcage(id)}
+                onClick={() => handleOrderToPackage(id)}
               >
                 {formatMessage({ id: 'SYSTEM.CREATE_PACKAGE' })}
               </button>

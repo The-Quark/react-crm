@@ -18,6 +18,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { OrderStatus } from '@/api/enums';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -43,6 +44,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearch = debounce((value: string) => {
@@ -50,7 +52,7 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
       onSearch(value);
     }
     table.getColumn('order code')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -60,7 +62,6 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
 
   const handleStatusChange = (value: string) => {
     const newStatus = value === 'all' ? undefined : (value as OrderStatus);
-
     table.getColumn('status')?.setFilterValue(newStatus || '');
     if (onStatus) {
       onStatus(newStatus);
@@ -69,7 +70,6 @@ export const OrdersToolbar: FC<ToolbarProps> = ({
 
   const handleDeliveryCategoryChange = (value: string) => {
     const newDeliveryType = value === 'all' ? undefined : value;
-
     table.getColumn('delivery category')?.setFilterValue(newDeliveryType || '');
     if (onDeliveryCategory) {
       onDeliveryCategory(newDeliveryType);

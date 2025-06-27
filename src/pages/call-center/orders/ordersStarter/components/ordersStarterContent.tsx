@@ -25,10 +25,11 @@ const { useStepper, utils } = defineStepper(
 const OrderFormSteps: FC<Props> = ({ isEditMode, orderId }) => {
   const { formatMessage } = useIntl();
   const stepper = useStepper();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const currentStep = stepper.current;
   const currentIndex = utils.getIndex(currentStep.id);
   const allSteps = stepper.all;
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOrderSubmit = async (data: IOrderFormValues) => {
     try {
@@ -149,27 +150,22 @@ const StepContent = ({
 
   return (
     <>
-      {stepper.current.id === 'main' && (
-        <div className="grid gap-4">
+      <div className="grid gap-4">
+        {stepper.current.id === 'main' && (
           <OrdersMainForm onNext={stepper.next} isEditMode={isEditMode} />
-        </div>
-      )}
-
-      {stepper.current.id === 'sender' && (
-        <div className="grid gap-4">
+        )}
+        {stepper.current.id === 'sender' && (
           <OrdersSenderForm onNext={stepper.next} onBack={stepper.prev} isEditMode={isEditMode} />
-        </div>
-      )}
-
-      {stepper.current.id === 'receiver' && (
-        <div className="grid gap-4">
+        )}
+        {stepper.current.id === 'receiver' && (
           <OrdersReceiverForm
             onBack={stepper.prev}
             onConfirmModal={handleOpen}
             isEditMode={isEditMode}
           />
-        </div>
-      )}
+        )}
+      </div>
+
       <OrdersConfirmModal
         open={open}
         handleClose={handleClose}
