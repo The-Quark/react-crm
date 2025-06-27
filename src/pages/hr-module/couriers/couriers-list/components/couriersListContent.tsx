@@ -7,20 +7,19 @@ import { useAuthContext } from '@/auth';
 import { useCouriersColumns } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersColumns.tsx';
 import { CouriersToolbar } from '@/pages/hr-module/couriers/couriers-list/components/blocks/couriersToolbar.tsx';
 import { useState } from 'react';
+import { initialPagination } from '@/utils';
 
 export const CouriersListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -42,14 +41,11 @@ export const CouriersListContent = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
-
     setIsDeleting(true);
     try {
       await deleteUser(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['couriers'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting courier:', error);
     } finally {
       setIsDeleting(false);
     }

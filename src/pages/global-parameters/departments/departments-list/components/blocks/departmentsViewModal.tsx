@@ -21,12 +21,13 @@ interface Props {
 }
 
 export const DepartmentsViewModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['department', id],
     queryFn: () =>
       id !== null ? getGlobalParamsDepartments({ id: Number(id) }) : Promise.reject('Invalid ID')
   });
-  const { formatMessage } = useIntl();
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>

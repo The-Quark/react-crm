@@ -21,12 +21,14 @@ interface Props {
 }
 
 export const SubdivisionsViewModal: FC<Props> = ({ open, id, handleClose }) => {
+  const { formatMessage } = useIntl();
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['subdivision', id],
     queryFn: () =>
       id !== null ? getGlobalParamsSubdivisions({ id: Number(id) }) : Promise.reject('Invalid ID')
   });
-  const { formatMessage } = useIntl();
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">

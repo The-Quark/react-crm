@@ -15,6 +15,7 @@ export const UsersPermissionsGive: FC<Props> = ({ data = [], userId }) => {
   const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const formik = useFormik({
     initialValues: {
       permissions: data.map((permission) => ({

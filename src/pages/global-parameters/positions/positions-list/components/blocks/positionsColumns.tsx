@@ -22,7 +22,9 @@ export const usePositionsColumns = ({
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
+
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+
   const columns = useMemo<ColumnDef<Position>[]>(
     () => [
       {

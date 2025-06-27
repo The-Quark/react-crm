@@ -76,12 +76,13 @@ const getInitialValues = (
 };
 
 export const SubdivisionModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+
   const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchLanguageTerm, setSearchLanguageTerm] = useState('');
   const [searchCurrencyTerm, setSearchCurrencyTerm] = useState('');
-  const queryClient = useQueryClient();
-  const { formatMessage } = useIntl();
 
   const {
     data: subdivisionsData,

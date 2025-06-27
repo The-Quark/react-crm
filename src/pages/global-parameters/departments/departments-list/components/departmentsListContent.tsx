@@ -9,9 +9,11 @@ import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import { DepartmentsViewModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsViewModal.tsx';
 import { deleteGlobalParamsDepartments } from '@/api';
+import { initialPagination } from '@/utils';
 
 export const DepartmentsListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,11 +21,7 @@ export const DepartmentsListContent = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<number | null>(null);
-  const queryClient = useQueryClient();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -51,8 +49,6 @@ export const DepartmentsListContent = () => {
       await deleteGlobalParamsDepartments(selectedDepartmentId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsDepartments'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting department:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -81,10 +77,7 @@ export const DepartmentsListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

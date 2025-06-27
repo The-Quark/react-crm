@@ -21,6 +21,7 @@ export const StaffMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =>
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
+
   const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
 
   return (

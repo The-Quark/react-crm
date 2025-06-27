@@ -26,7 +26,6 @@ import {
   postGlobalParamsPosition,
   putGlobalParamsPosition
 } from '@/api';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -63,10 +62,11 @@ const getInitialValues = (
 };
 
 export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const queryClient = useQueryClient();
   const { formatMessage } = useIntl();
+
+  const [loading, setLoading] = useState(false);
+  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
 
   const {
     data: positionsData,

@@ -6,6 +6,7 @@ export const BIN_LENGTH = 12;
 export const PHONE_REG_EXP = /^\+7\d{10}$/;
 export const SEARCH_PER_PAGE = 50;
 export const PHONE_MAX_LENGTH = 12;
+export const DEFAULT_SEARCH_PAGE_NUMBER = 50;
 export const initialPagination = {
   pageIndex: 0,
   pageSize: 15

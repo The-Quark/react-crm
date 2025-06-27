@@ -353,7 +353,8 @@ const System = {
   'SYSTEM.PHONE_NUMBER_HISTORY': 'سجل أرقام الهاتف',
   'SYSTEM.SELECT_ALL': 'تحديد الكل',
   'SYSTEM.CLEAR': 'مسح',
-  'SYSTEM.CLOSE': 'إغلاق'
+  'SYSTEM.CLOSE': 'إغلاق',
+  'SYSTEM.COMPANIES': 'الشركات'
 };
 
 export default System;

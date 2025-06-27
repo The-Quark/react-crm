@@ -1,10 +1,5 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
-import {
-  deleteGlobalParamsDepartments,
-  deleteGlobalParamsSubdivision,
-  getGlobalParamsSubdivisions
-} from '@/api';
+import { deleteGlobalParamsSubdivision, getGlobalParamsSubdivisions } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useSubdivisionsColumns } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsColumns.tsx';
@@ -12,21 +7,20 @@ import { SubdivisionToolbar } from '@/pages/global-parameters/subdivisions/subdi
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import { SubdivisionsViewModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsViewModal.tsx';
+import { initialPagination } from '@/utils';
 
 export const SubdivisionsListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSubId, setSelectedSubId] = useState<number | null>(null);
-  const queryClient = useQueryClient();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -54,8 +48,6 @@ export const SubdivisionsListContent = () => {
       await deleteGlobalParamsSubdivision(selectedSubId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsSubdivisions'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting subdivision:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -84,10 +76,7 @@ export const SubdivisionsListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

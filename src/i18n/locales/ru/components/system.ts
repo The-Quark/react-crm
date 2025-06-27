@@ -353,7 +353,8 @@ const System = {
   'SYSTEM.PHONE_NUMBER_HISTORY': 'История номеров телефона',
   'SYSTEM.SELECT_ALL': 'Выбрать все',
   'SYSTEM.CLEAR': 'Очистить',
-  'SYSTEM.CLOSE': 'Закрыть'
+  'SYSTEM.CLOSE': 'Закрыть',
+  'SYSTEM.COMPANIES': 'Компании'
 };
 
 export default System;

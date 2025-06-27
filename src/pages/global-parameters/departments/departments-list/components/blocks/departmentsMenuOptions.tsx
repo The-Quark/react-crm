@@ -26,9 +26,10 @@ export const DepartmentsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
+  const { isRTL } = useLanguage();
+
   const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const { isRTL } = useLanguage();
 
   const handleOpen = () => {
     setActiveModal(true);

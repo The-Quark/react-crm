@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useEffect, useState } from 'react';
 import {
   SharedAutocomplete,
+  SharedDateDayPicker,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -15,7 +16,6 @@ import {
 } from '@/partials/sharedUI';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { TaskPriority, TaskStatus, TaskType } from '@/api/enums';
-import { Textarea } from '@/components/ui/textarea.tsx';
 import {
   taskPriorityOptions,
   taskStatusOptions,
@@ -27,6 +27,7 @@ import { KeenIcon } from '@/components';
 import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Task } from '@/api/get/getTask/types.ts';
 import { useIntl } from 'react-intl';
+import { DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 
 interface Props {
   isEditMode: boolean;
@@ -50,16 +51,17 @@ export const formSchema = Yup.object().shape({
 
 export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode }) => {
   const { formatMessage } = useIntl();
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [searchOrderTerm, setSearchOrderTerm] = useState('');
-  const [searchPackageTerm, setSearchPackageTerm] = useState('');
-  const [searchUserTerm, setSearchUserTerm] = useState('');
   const [searchParams] = useSearchParams();
   const orderIdFromOrders = searchParams.get('order_id');
   const packageIdFromPackages = searchParams.get('package_id');
   const { data: currentUser } = useCurrentUser();
+
+  const [loading, setLoading] = useState(false);
+  const [searchOrderTerm, setSearchOrderTerm] = useState('');
+  const [searchPackageTerm, setSearchPackageTerm] = useState('');
+  const [searchUserTerm, setSearchUserTerm] = useState('');
 
   const {
     data: ordersData,
@@ -68,8 +70,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     error: ordersError
   } = useQuery({
     queryKey: ['tasksOrders', searchOrderTerm],
-    queryFn: () => getOrders({ searchorder: searchOrderTerm, per_page: 50 }),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getOrders({ searchorder: searchOrderTerm, per_page: DEFAULT_SEARCH_PAGE_NUMBER })
   });
 
   const {
@@ -79,8 +80,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     error: usersError
   } = useQuery({
     queryKey: ['tasksUsers', searchUserTerm],
-    queryFn: () => getUserList({ full_name: searchOrderTerm, per_page: 50 }),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getUserList({ full_name: searchOrderTerm, per_page: DEFAULT_SEARCH_PAGE_NUMBER })
   });
 
   const {
@@ -90,8 +90,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
     error: packagesError
   } = useQuery({
     queryKey: ['tasksPackages', searchPackageTerm],
-    queryFn: () => getPackages({ hawb: searchOrderTerm, per_page: 50 }),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getPackages({ hawb: searchOrderTerm, per_page: DEFAULT_SEARCH_PAGE_NUMBER })
   });
 
   const initialValues: ITaskFormValues & { status?: TaskStatus } = {
@@ -212,44 +211,11 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
             }))}
           />
 
-          <div className="w-full">
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label flex- items-center gap-1 max-w-56">
-                {formatMessage({ id: 'SYSTEM.DUE_DATE' })}
-              </label>
-              <div className="w-full flex columns-1 flex-wrap">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button id="date" className={cn('input data-[state=open]:border-primary')}>
-                      <KeenIcon icon="calendar" className="-ms-0.5" />
-                      <span>
-                        {formik.values.due_date
-                          ? new Date(formik.values.due_date).toLocaleDateString()
-                          : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <CalendarDate
-                      initialFocus
-                      mode="single"
-                      captionLayout="dropdown"
-                      fromYear={new Date().getFullYear()}
-                      toYear={new Date().getFullYear() + 1}
-                      defaultMonth={new Date()}
-                      selected={formik.getFieldProps('due_date').value}
-                      onSelect={(value) => formik.setFieldValue('due_date', value)}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {formik.touched.due_date && formik.errors.due_date && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formatMessage({ id: formik.errors.due_date })}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+          <SharedDateDayPicker
+            name="due_date"
+            label={formatMessage({ id: 'SYSTEM.DUE_DATE' })}
+            formik={formik}
+          />
 
           <SharedTextArea
             name="description"

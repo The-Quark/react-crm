@@ -7,17 +7,16 @@ import { useUsersColumns } from '@/pages/crm/users-list/components/blocks/usersC
 import { UsersToolbar } from '@/pages/crm/users-list/components/blocks/usersToolbar.tsx';
 import { useState } from 'react';
 import { deleteUser } from '@/api';
+import { initialPagination } from '@/utils';
 
 export const UsersListContent = () => {
+  const queryClient = useQueryClient();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['users', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -37,8 +36,6 @@ export const UsersListContent = () => {
       await deleteUser(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting user:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -62,10 +59,7 @@ export const UsersListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

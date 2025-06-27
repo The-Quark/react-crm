@@ -19,6 +19,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
 import {
   SharedAutocomplete,
+  SharedDateDayPicker,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -141,11 +142,13 @@ const getInitialValues = (
 
 export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
   const { formatMessage } = useIntl();
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { currentUser } = useAuthContext();
+
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
+
+  const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
@@ -161,8 +164,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     error: companiesError
   } = useQuery({
     queryKey: ['users-companies'],
-    queryFn: () => getGlobalParameters(),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getGlobalParameters()
   });
 
   const {
@@ -172,8 +174,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     error: rolesError
   } = useQuery({
     queryKey: ['users-roles'],
-    queryFn: () => getRoles(currentUser ? Number(currentUser.id) : 0, true),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getRoles(currentUser ? Number(currentUser.id) : 0, true)
   });
 
   const formik = useFormik({
@@ -245,8 +246,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryFn: () =>
       getGlobalParamsDepartments({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -259,8 +259,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryFn: () =>
       getGlobalParamsSubdivisions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -273,8 +272,7 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryFn: () =>
       getGlobalParamsPositions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -451,44 +449,11 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               }))}
             />
           )}
-          <div className="w-full">
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label flex- items-center gap-1 max-w-56">
-                {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
-              </label>
-              <div className="w-full flex columns-1 flex-wrap">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button id="date" className={cn('input data-[state=open]:border-primary')}>
-                      <KeenIcon icon="calendar" className="-ms-0.5" />
-                      <span>
-                        {formik.values.birth_date
-                          ? new Date(formik.values.birth_date).toLocaleDateString()
-                          : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <CalendarDate
-                      initialFocus
-                      mode="single"
-                      captionLayout="dropdown"
-                      fromYear={1900}
-                      toYear={new Date().getFullYear()}
-                      defaultMonth={new Date(2000, 0)}
-                      selected={formik.getFieldProps('birth_date').value}
-                      onSelect={(value) => formik.setFieldValue('birth_date', value)}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {formik.touched.birth_date && formik.errors.birth_date && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formatMessage({ id: formik.errors.birth_date })}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+          <SharedDateDayPicker
+            name="birth_date"
+            label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+            formik={formik}
+          />
           <SharedInput
             name="phone"
             label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}

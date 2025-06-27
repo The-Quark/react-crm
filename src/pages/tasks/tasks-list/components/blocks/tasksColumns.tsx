@@ -20,9 +20,7 @@ const formatUserName = (user?: {
   patronymic?: string | null;
 }) => {
   if (!user) return '';
-
-  const parts = [user.first_name, user.last_name, user.patronymic].filter(Boolean); // Remove any null/undefined/empty strings
-
+  const parts = [user.first_name, user.last_name, user.patronymic].filter(Boolean);
   return parts.join(' ');
 };
 
@@ -31,6 +29,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage tasks') || currentUser?.roles[0].name === 'superadmin';
 
   const columns = useMemo<ColumnDef<Task>[]>(

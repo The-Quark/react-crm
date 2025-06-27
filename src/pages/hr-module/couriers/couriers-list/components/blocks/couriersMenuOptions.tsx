@@ -21,6 +21,7 @@ export const CouriersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const { formatMessage } = useIntl();
+
   const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
 
   return (

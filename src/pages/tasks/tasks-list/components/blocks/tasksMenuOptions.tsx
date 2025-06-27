@@ -21,6 +21,7 @@ const TasksMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManageGlobalSettings =
     has('manage tasks') || currentUser?.roles[0].name === 'superadmin';
 

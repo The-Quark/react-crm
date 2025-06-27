@@ -7,16 +7,14 @@ import { CompaniesToolbar } from '@/pages/global-parameters/companies/companies-
 import { useParametersColumns } from '@/pages/global-parameters/companies/companies-list/components/blocks/companiesColumns.tsx';
 import { useState } from 'react';
 import { deleteGlobalParameter } from '@/api';
+import { initialPagination } from '@/utils';
 
 export const CompaniesListContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
   const queryClient = useQueryClient();
 
   const { data, isError, error, isFetching, isPending } = useQuery({
@@ -37,8 +35,6 @@ export const CompaniesListContent = () => {
       await deleteGlobalParameter(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['global-parameters'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting company:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -63,10 +59,7 @@ export const CompaniesListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

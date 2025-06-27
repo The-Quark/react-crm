@@ -19,6 +19,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useEffect, useState } from 'react';
 import {
   SharedAutocomplete,
+  SharedDateDayPicker,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -163,13 +164,12 @@ const getInitialValues = (
 };
 
 export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
-  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
-  const isAdmin = currentUser?.roles[0].name === 'superadmin';
+
+  const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
   const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
@@ -179,6 +179,9 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
   const [searchVehicleTerm, setSearchVehicleTerm] = useState('');
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(false);
 
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
+  const isAdmin = currentUser?.roles[0].name === 'superadmin';
+
   const {
     data: vehiclesData,
     isLoading: vehiclesLoading,
@@ -186,8 +189,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
     error: vehiclesError
   } = useQuery({
     queryKey: ['staff-vehicles'],
-    queryFn: () => getVehicles({}),
-    staleTime: 60 * 60 * 1000
+    queryFn: () => getVehicles({})
   });
 
   const {
@@ -198,7 +200,6 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
   } = useQuery({
     queryKey: ['hrModuleCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 60 * 60 * 1000,
     enabled: isAdmin
   });
 
@@ -274,8 +275,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
       getGlobalParamsDepartments({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
         is_active: true
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -289,8 +289,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
       getGlobalParamsSubdivisions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
         is_active: true
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -304,8 +303,7 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
       getGlobalParamsPositions({
         company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
         is_active: true
-      }),
-    staleTime: 60 * 60 * 1000
+      })
   });
 
   const {
@@ -380,7 +378,6 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-header" id="general_settings">
           <h3 className="card-title">
-            {' '}
             {isEditMode
               ? formatMessage({ id: 'SYSTEM.EDIT_COURIER' })
               : formatMessage({ id: 'SYSTEM.NEW_COURIER' })}
@@ -477,45 +474,11 @@ export const CouriersStarterContent: FC<Props> = ({ isEditMode, usersData, userI
               }))}
             />
           )}
-          <div className="w-full">
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-              <label className="form-label flex- items-center gap-1 max-w-56">
-                {formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
-              </label>
-              <div className="w-full flex columns-1 flex-wrap">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button id="date" className={cn('input data-[state=open]:border-primary')}>
-                      <KeenIcon icon="calendar" className="-ms-0.5" />
-                      <span>
-                        {formik.values.birth_date
-                          ? new Date(formik.values.birth_date).toLocaleDateString()
-                          : formatMessage({ id: 'SYSTEM.PICK_DATE' })}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <CalendarDate
-                      initialFocus
-                      mode="single"
-                      captionLayout="dropdown"
-                      fromYear={1900}
-                      toYear={new Date().getFullYear()}
-                      defaultMonth={new Date(2000, 0)}
-                      selected={formik.getFieldProps('birth_date').value}
-                      onSelect={(value) => formik.setFieldValue('birth_date', value)}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {formik.touched.birth_date && formik.errors.birth_date && (
-                  <span role="alert" className="text-danger text-xs mt-1">
-                    {formatMessage({ id: formik.errors.birth_date })}{' '}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
+          <SharedDateDayPicker
+            name="birth_date"
+            label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
+            formik={formik}
+          />
           <SharedInput
             name="phone"
             label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}

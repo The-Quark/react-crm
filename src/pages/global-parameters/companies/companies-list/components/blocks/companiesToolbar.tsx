@@ -4,6 +4,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -15,6 +16,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const [searchValue, setSearchValue] = useState('');
+
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearch = debounce((value: string) => {
@@ -22,7 +24,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
       onSearch(value);
     }
     table.getColumn('company name')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -32,7 +34,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Companies</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.COMPANIES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManage && (
           <a href="/global-parameters/starter-parameters" className="btn btn-sm btn-primary">

@@ -10,11 +10,8 @@ import {
   Menu
 } from '@/components';
 import React, { FC, useState } from 'react';
-import { toast } from 'sonner';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { deleteGlobalParamsPosition } from '@/api';
-import { useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { PositionsModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsModal.tsx';
 import { useIntl } from 'react-intl';
@@ -25,13 +22,14 @@ interface MenuOptionsProps {
 }
 
 export const PositionsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
-  const [activeModal, setActiveModal] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
+  const { isRTL } = useLanguage();
+  const [activeModal, setActiveModal] = useState<boolean>(false);
+
   const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-  const { isRTL } = useLanguage();
 
   const handleOpen = () => {
     setActiveModal(true);

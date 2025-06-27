@@ -4,6 +4,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface TasksToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -14,7 +15,9 @@ export const TasksToolbar: React.FC<TasksToolbarProps> = ({ onSearch }) => {
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const [searchValue, setSearchValue] = useState('');
+
   const canManage = has('manage tasks') || currentUser?.roles[0].name === 'superadmin';
 
   const debouncedSearch = debounce((value: string) => {
@@ -22,7 +25,7 @@ export const TasksToolbar: React.FC<TasksToolbarProps> = ({ onSearch }) => {
       onSearch(value);
     }
     table.getColumn('title')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

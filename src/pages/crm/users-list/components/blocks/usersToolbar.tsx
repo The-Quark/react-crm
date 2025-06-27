@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -9,15 +10,16 @@ interface ToolbarProps {
 
 export const UsersToolbar: FC<ToolbarProps> = ({ onSearch }) => {
   const { formatMessage } = useIntl();
-  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
+
+  const [searchValue, setSearchValue] = useState('');
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
       onSearch(value);
     }
     table.getColumn('title')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

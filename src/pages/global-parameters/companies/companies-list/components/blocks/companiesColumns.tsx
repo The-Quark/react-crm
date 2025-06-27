@@ -19,7 +19,9 @@ export const useParametersColumns = ({
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+
   const columns = useMemo<ColumnDef<ParametersModel>[]>(
     () => [
       {

@@ -100,9 +100,7 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
   } = useQuery({
     queryKey: ['currencies'],
     queryFn: () => getCurrencies({ is_active: true }),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    retry: false
   });
 
   const {
@@ -113,9 +111,7 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
   } = useQuery({
     queryKey: ['languages'],
     queryFn: () => getLanguages({ is_active: true }),
-    retry: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    retry: false
   });
 
   const {
@@ -125,9 +121,7 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
     error: airlinesError
   } = useQuery({
     queryKey: ['globalParameterAirlines'],
-    queryFn: () => getAirlines({ is_active: true }),
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5
+    queryFn: () => getAirlines({ is_active: true })
   });
 
   const formik = useFormik({

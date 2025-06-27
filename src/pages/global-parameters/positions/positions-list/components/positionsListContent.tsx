@@ -8,21 +8,20 @@ import { PositionsToolbar } from '@/pages/global-parameters/positions/positions-
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import { PositionsViewModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsViewModal.tsx';
+import { initialPagination } from '@/utils';
 
 export const PositionsListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null);
-  const queryClient = useQueryClient();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -44,14 +43,11 @@ export const PositionsListContent = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedPositionId) return;
-
     setIsDeleting(true);
     try {
       await deleteGlobalParamsPosition(selectedPositionId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsPositions'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting position:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -80,10 +76,7 @@ export const PositionsListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

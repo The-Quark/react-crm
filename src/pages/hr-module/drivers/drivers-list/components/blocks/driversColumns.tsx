@@ -17,6 +17,7 @@ interface UseColumnsProps {
 export const useDriversColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<UserModel>[] => {
   const { isRTL } = useLanguage();
   const { formatMessage } = useIntl();
+
   const columns = useMemo<ColumnDef<UserModel>[]>(
     () => [
       {

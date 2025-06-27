@@ -6,20 +6,19 @@ import { StaffToolbar } from '@/pages/hr-module/staff/staff-list/components/bloc
 import { useStaffColumns } from '@/pages/hr-module/staff/staff-list/components/blocks/staffColumns.tsx';
 import { useAuthContext } from '@/auth';
 import { useState } from 'react';
+import { initialPagination } from '@/utils';
 
 export const StaffListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['staff', selectedCompanyId, pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -64,10 +63,7 @@ export const StaffListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

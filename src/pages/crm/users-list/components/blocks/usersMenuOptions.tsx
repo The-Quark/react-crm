@@ -21,6 +21,7 @@ const UsersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+
   const canManage = has('manage users') || currentUser?.roles[0].name === 'superadmin';
 
   return (

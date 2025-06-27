@@ -62,10 +62,11 @@ const getInitialValues = (
 };
 
 export const DepartmentsModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const { formatMessage } = useIntl();
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const queryClient = useQueryClient();
+
+  const [loading, setLoading] = useState(false);
+  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
 
   const {
     data: departmentsData,

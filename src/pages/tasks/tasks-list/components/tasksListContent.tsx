@@ -8,17 +8,16 @@ import { TasksToolbar } from '@/pages/tasks/tasks-list/components/blocks/tasksTo
 import { useState } from 'react';
 import { ITasksResponse } from '@/api/get/getTask/types.ts';
 import { deleteTask } from '@/api';
+import { initialPagination } from '@/utils';
 
 export const TasksListContent = () => {
+  const queryClient = useQueryClient();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery<ITasksResponse>({
     queryKey: ['tasks', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,8 +37,6 @@ export const TasksListContent = () => {
       await deleteTask(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['tasks'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting tasks:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -64,10 +61,7 @@ export const TasksListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

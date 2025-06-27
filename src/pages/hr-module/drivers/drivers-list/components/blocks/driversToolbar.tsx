@@ -7,6 +7,7 @@ import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Props {
   initialCompanyId?: number;
@@ -16,22 +17,24 @@ interface Props {
 
 export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
   const { table } = useDataGrid();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
-  const canManageSettings = has('manage users') || currentUser?.roles[0].name === 'superadmin';
-  const isSuperAdmin = currentUser?.roles[0].name === 'superadmin';
-  const isViewer = currentUser?.roles[0].name === 'viewer';
+
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchValue, setSearchValue] = useState('');
-  const { formatMessage } = useIntl();
+
+  const canManageSettings = has('manage users') || currentUser?.roles[0].name === 'superadmin';
+  const isSuperAdmin = currentUser?.roles[0].name === 'superadmin';
+  const isViewer = currentUser?.roles[0].name === 'viewer';
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
       onSearch(value);
     }
     table.getColumn('title')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -47,7 +50,6 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
   } = useQuery({
     queryKey: ['hrModuleCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 5,
     enabled: isViewer || isSuperAdmin
   });
 

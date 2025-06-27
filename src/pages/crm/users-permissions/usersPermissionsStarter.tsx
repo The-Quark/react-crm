@@ -9,10 +9,12 @@ import { UsersPermissionsRevoke } from '@/pages/crm/users-permissions/components
 import { useIntl } from 'react-intl';
 
 export const UsersPermissionsStarter = () => {
-  const [modeType, setModeType] = useState<'give' | 'revoke'>('give');
-  const { id } = useParams<{ id: string }>();
-  const isEditMode = !!id;
   const { formatMessage } = useIntl();
+  const { id } = useParams<{ id: string }>();
+
+  const [modeType, setModeType] = useState<'give' | 'revoke'>('give');
+
+  const isEditMode = !!id;
 
   const {
     data: permissionsData,

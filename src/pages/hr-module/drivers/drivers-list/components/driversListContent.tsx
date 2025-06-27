@@ -7,20 +7,19 @@ import { useAuthContext } from '@/auth';
 import { useDriversColumns } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversColumns.tsx';
 import { DriversToolbar } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversToolbar.tsx';
 import { useState } from 'react';
+import { initialPagination } from '@/utils';
 
 export const DriversListContent = () => {
   const { currentUser } = useAuthContext();
+  const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
-  const queryClient = useQueryClient();
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['drivers', selectedCompanyId, pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -42,8 +41,6 @@ export const DriversListContent = () => {
       await deleteUser(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['drivers'] });
       setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Error deleting driver:', error);
     } finally {
       setIsDeleting(false);
     }
@@ -66,10 +63,7 @@ export const DriversListContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {
