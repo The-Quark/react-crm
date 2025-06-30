@@ -8,7 +8,6 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 export const ApplicationsStarterPage = () => {
   const { id } = useParams<{ id: string }>();
-
   const isEditMode = !!id;
 
   const {

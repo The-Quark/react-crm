@@ -44,17 +44,17 @@ interface OrderCreationProviderProps {
 
 export const OrderCreationProvider = ({ children, initialData }: OrderCreationProviderProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const [mainFormData, setMainFormDataState] = useState<IOrderFormValues | null>(null);
   const [modalInfo, setModalInfo] = useState<IModalInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [applicationId, setApplicationIdState] = useState<number | null>(
     searchParams.get('application_id') ? Number(searchParams.get('application_id')) : null
   );
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initializeData = () => {
       setIsLoading(true);
-
       if (initialData) {
         setApplicationIdState(initialData?.application_id ?? null);
         setMainFormDataState({

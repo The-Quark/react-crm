@@ -136,7 +136,7 @@ const StepContent = ({
   handleClose: () => void;
   handleOpen: () => void;
 }) => {
-  const { mainFormData, clearAll } = useOrderCreation();
+  const { clearAll } = useOrderCreation();
 
   const handleSubmit = async (data: IOrderFormValues) => {
     await onOrderSubmit(data);
@@ -171,7 +171,6 @@ const StepContent = ({
         handleClose={handleClose}
         onOrderSubmit={handleSubmit}
         onOrderDraftSubmit={handleDraftSubmit}
-        orderData={mainFormData as IOrderFormValues}
       />
     </>
   );

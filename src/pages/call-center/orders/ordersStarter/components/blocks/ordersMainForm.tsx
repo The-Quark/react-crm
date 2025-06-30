@@ -17,13 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
-import {
-  CACHE_TIME,
-  debounce,
-  decimalValidation,
-  LOCAL_STORAGE_CURRENCY_KEY,
-  SEARCH_DEBOUNCE_DELAY
-} from '@/utils';
+import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';

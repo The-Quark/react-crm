@@ -315,7 +315,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             formik={formik}
             type="tel"
           />
-
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.receiver_country_id ?? ''}
@@ -337,7 +336,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
-
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.CITY' })}
             value={formik.values.receiver_city_id ?? ''}
@@ -367,7 +365,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             }
             emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
           />
-
           <SharedInput
             name="receiver_street"
             label={formatMessage({ id: 'SYSTEM.STREET' })}
@@ -383,7 +380,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             label={formatMessage({ id: 'SYSTEM.APARTMENT' })}
             formik={formik}
           />
-
           <SharedTextArea
             name="receiver_location_description"
             label={formatMessage({ id: 'SYSTEM.LOCATION_DESCRIPTION' })}

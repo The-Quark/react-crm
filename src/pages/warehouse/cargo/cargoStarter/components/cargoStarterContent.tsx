@@ -1,16 +1,9 @@
-import {
-  getAirlines,
-  getGlobalParameters,
-  getCargo,
-  postCargo,
-  putCargo,
-  getPackages
-} from '@/api';
+import React, { useState, useMemo } from 'react';
+import { getAirlines, getGlobalParameters, postCargo, putCargo, getPackages } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect, useMemo } from 'react';
 import {
   SharedAutocomplete,
   SharedDateTimePicker,
@@ -21,14 +14,20 @@ import {
   SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
-import { useParams } from 'react-router';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postWorkflow/postCargo/types.ts';
 import { CargoStatus } from '@/api/enums';
 import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
-import * as sea from 'node:sea';
+import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
+import { CACHE_TIME } from '@/utils';
+
+interface Props {
+  isEditMode: boolean;
+  cargoData?: Cargo;
+  cargoId?: number;
+}
 
 export const formSchema = Yup.object().shape({
   code: Yup.string()
@@ -47,8 +46,42 @@ export const formSchema = Yup.object().shape({
   notes: Yup.string().optional()
 });
 
-export const CargoStarterContent = () => {
-  const { id } = useParams<{ id: string }>();
+const getInitialValues = (
+  isEditMode: boolean,
+  cargoData: Cargo,
+  packageIds: string[]
+): ICargoPostFormValues => {
+  if (isEditMode && cargoData) {
+    return {
+      arrival_date: cargoData.arrival_date,
+      company_id: cargoData.company_id.toString(),
+      departure_date: cargoData.departure_date,
+      from_airport: cargoData.from_airport,
+      is_international: cargoData.is_international,
+      notes: cargoData.notes,
+      packages: cargoData.packages.map((pkg) => pkg.id.toString()),
+      to_airport: cargoData.to_airport,
+      code: cargoData.code,
+      airline: cargoData.airline.toString(),
+      status: cargoData.status as unknown as CargoStatus
+    };
+  }
+  return {
+    airline: '',
+    arrival_date: '',
+    code: '',
+    notes: '',
+    from_airport: '',
+    to_airport: '',
+    departure_date: '',
+    packages: packageIds,
+    is_international: false,
+    company_id: '',
+    status: 'formed'
+  };
+};
+
+export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -59,7 +92,6 @@ export const CargoStarterContent = () => {
   const [searchCompanyOrderTerm, setSearchCompanyOrderTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const isEditMode = !!id;
   const packageIdsParam = searchParams.get('package_id');
 
   const {
@@ -70,7 +102,7 @@ export const CargoStarterContent = () => {
   } = useQuery({
     queryKey: ['cargoAirlines'],
     queryFn: () => getAirlines({ is_active: true }),
-    staleTime: 60 * 60 * 1000
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -81,7 +113,7 @@ export const CargoStarterContent = () => {
   } = useQuery({
     queryKey: ['cargoCompanies'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 60 * 60 * 1000
+    staleTime: CACHE_TIME
   });
 
   const {
@@ -92,24 +124,13 @@ export const CargoStarterContent = () => {
   } = useQuery({
     queryKey: ['cargoPackages', searchTerm],
     queryFn: () => getPackages({ status: 'ready_for_shipment', hawb: searchTerm }),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const {
-    data: cargoData,
-    isLoading: cargoLoading,
-    isError: cargoIsError,
-    error: cargoError
-  } = useQuery({
-    queryKey: ['cargo', id],
-    queryFn: () => getCargo({ id: id ? parseInt(id) : undefined }),
-    enabled: isEditMode
+    staleTime: CACHE_TIME
   });
 
   const packageOptions = useMemo(() => {
     const allPackages = [
       ...(packagesData?.result || []),
-      ...(isEditMode && cargoData ? cargoData.result[0].packages : [])
+      ...(isEditMode && cargoData ? cargoData.packages : [])
     ];
 
     const uniquePackages = allPackages.reduce(
@@ -134,23 +155,10 @@ export const CargoStarterContent = () => {
       return packageIdsParam.split(',').map((id) => id.trim());
     }
     return [packageIdsParam];
-  }, [packageIdsParam]);
+  }, [packageIdsParam, cargoId]);
 
-  const initialValues: ICargoPostFormValues & { status?: string } = {
-    airline: '',
-    arrival_date: '',
-    code: '',
-    notes: '',
-    from_airport: '',
-    to_airport: '',
-    departure_date: '',
-    packages: initialPackageIds.map((id) => Number(id)).filter((id) => !isNaN(id)) || [],
-    is_international: false,
-    company_id: '',
-    status: 'formed'
-  };
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(isEditMode, cargoData || ({} as Cargo), initialPackageIds),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -165,22 +173,17 @@ export const CargoStarterContent = () => {
             ? format(new Date(values.departure_date), 'dd.MM.yyyy HH:mm:ss')
             : ''
         };
-        if (isEditMode && id) {
+        if (isEditMode && cargoId) {
           const { status, ...putData } = payload;
-          await putCargo(Number(id), { ...putData, status: status as CargoStatus });
-          queryClient.invalidateQueries({ queryKey: ['cargo'] });
-          navigate('/warehouse/cargo/list');
-          resetForm();
-          setSearchAirlineTerm('');
-          setSearchCompanyOrderTerm('');
+          await putCargo(Number(cargoId), { ...putData, status: status as CargoStatus });
         } else {
           await postCargo(payload);
-          queryClient.invalidateQueries({ queryKey: ['cargo'] });
-          navigate('/warehouse/cargo/list');
-          resetForm();
-          setSearchAirlineTerm('');
-          setSearchCompanyOrderTerm('');
         }
+        queryClient.invalidateQueries({ queryKey: ['cargo'] });
+        navigate('/warehouse/cargo/list');
+        resetForm();
+        setSearchAirlineTerm('');
+        setSearchCompanyOrderTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -190,52 +193,22 @@ export const CargoStarterContent = () => {
     }
   });
 
-  useEffect(() => {
-    formik.resetForm();
+  const isLoading = airlinesLoading || companiesLoading || packagesLoading;
 
-    if (!isEditMode && initialPackageIds.length > 0) {
-      formik.setFieldValue('packages', initialPackageIds);
-    }
-    if (cargoData && isEditMode) {
-      const packageIds = cargoData.result[0].packages.map((pkg) => pkg.id.toString());
+  const renderError = () => {
+    if (airlinesIsError) return <SharedError error={airlinesError} />;
+    if (companiesIsError) return <SharedError error={companiesError} />;
+    if (packagesIsError) return <SharedError error={packagesError} />;
+    return null;
+  };
 
-      formik.setValues(
-        {
-          arrival_date: cargoData.result[0].arrival_date,
-          company_id: cargoData.result[0].company_id.toString(),
-          departure_date: cargoData.result[0].departure_date,
-          from_airport: cargoData.result[0].from_airport,
-          is_international: cargoData.result[0].is_international,
-          notes: cargoData.result[0].notes,
-          packages: packageIds,
-          to_airport: cargoData.result[0].to_airport,
-          code: cargoData.result[0].code,
-          airline: cargoData.result[0].airline.toString(),
-          status: cargoData.result[0].status as unknown as CargoStatus
-        },
-        false
-      );
-    }
-  }, [isEditMode, cargoData, initialPackageIds]);
-
-  if (airlinesLoading || companiesLoading || (isEditMode && cargoLoading)) {
-    return <SharedLoading />;
+  if (isLoading) {
+    return <SharedLoading simple />;
   }
 
-  if (airlinesIsError) {
-    return <SharedError error={airlinesError} />;
-  }
-
-  if (companiesIsError) {
-    return <SharedError error={companiesError} />;
-  }
-
-  if (packagesIsError) {
-    return <SharedError error={packagesError} />;
-  }
-
-  if (isEditMode && cargoIsError) {
-    return <SharedError error={cargoError} />;
+  const errorComponent = renderError();
+  if (errorComponent) {
+    return errorComponent;
   }
 
   return (

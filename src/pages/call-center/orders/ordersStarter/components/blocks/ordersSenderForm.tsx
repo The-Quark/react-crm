@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { useIntl } from 'react-intl';
 import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
@@ -65,43 +65,24 @@ const getInitialValues = (
   isEditMode: boolean,
   mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  if (!isEditMode && mainForm) {
+  if (mainForm) {
     return {
-      sender_first_name: mainForm?.sender_first_name || '',
-      sender_last_name: mainForm?.sender_last_name || '',
-      sender_patronymic: mainForm?.sender_patronymic || '',
-      sender_company_name: mainForm?.sender_company_name || '',
-      sender_bin: mainForm?.sender_bin || '',
-      sender_type: mainForm?.sender_type || (mainForm?.sender_bin ? 'legal' : 'individual'),
-      sender_country_id: mainForm?.sender_country_id ? Number(mainForm.sender_country_id) : '',
-      sender_city_id: mainForm?.sender_city_id ? Number(mainForm.sender_city_id) : '',
-      sender_phone: mainForm?.sender_phone || '',
-      sender_street: mainForm?.sender_street || '',
-      sender_house: mainForm?.sender_house || '',
-      sender_apartment: mainForm?.sender_apartment || '',
-      sender_location_description: mainForm?.sender_location_description || '',
-      sender_notes: mainForm?.sender_notes || '',
-      sender_contact_id: mainForm?.sender_contact_id || ''
-    };
-  }
-
-  if (isEditMode && mainForm) {
-    return {
-      sender_first_name: mainForm?.sender_first_name || '',
-      sender_last_name: mainForm?.sender_last_name || '',
-      sender_patronymic: mainForm?.sender_patronymic || '',
-      sender_company_name: mainForm?.sender_company_name || '',
-      sender_bin: mainForm?.sender_bin || '',
-      sender_type: mainForm?.sender_type || (mainForm?.sender_bin ? 'legal' : 'individual'),
-      sender_country_id: mainForm?.sender_country_id ? Number(mainForm.sender_country_id) : '',
-      sender_city_id: mainForm?.sender_city_id ? Number(mainForm.sender_city_id) : '',
-      sender_phone: mainForm?.sender_phone || '',
-      sender_street: mainForm?.sender_street || '',
-      sender_house: mainForm?.sender_house || '',
-      sender_apartment: mainForm?.sender_apartment || '',
-      sender_location_description: mainForm?.sender_location_description || '',
-      sender_notes: mainForm?.sender_notes || '',
-      sender_contact_id: mainForm?.sender_contact_id || ''
+      ...mainForm,
+      sender_first_name: mainForm.sender_first_name || '',
+      sender_last_name: mainForm.sender_last_name || '',
+      sender_patronymic: mainForm.sender_patronymic || '',
+      sender_company_name: mainForm.sender_company_name || '',
+      sender_bin: mainForm.sender_bin || '',
+      sender_type: mainForm.sender_type || (mainForm.sender_bin ? 'legal' : 'individual'),
+      sender_country_id: mainForm.sender_country_id || '',
+      sender_city_id: mainForm.sender_city_id || '',
+      sender_phone: mainForm.sender_phone || '',
+      sender_street: mainForm.sender_street || '',
+      sender_house: mainForm.sender_house || '',
+      sender_apartment: mainForm.sender_apartment || '',
+      sender_location_description: mainForm.sender_location_description || '',
+      sender_notes: mainForm.sender_notes || '',
+      sender_contact_id: mainForm.sender_contact_id || ''
     };
   }
 
@@ -125,9 +106,9 @@ const getInitialValues = (
 };
 
 export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
+  const { formatMessage } = useIntl();
   const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
-  const { formatMessage } = useIntl();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -135,6 +116,9 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   const [selectedClientId, setSelectedClientId] = useState<string>(
     mainFormData?.sender_contact_id?.toString() || ''
   );
+
+  const isInitialMount = useRef(true);
+  const shouldLoadClientData = useRef(true);
 
   const {
     data: clientsData,
@@ -186,19 +170,26 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
 
     if (selectedClient) {
       const isLegalClient = selectedClient.type === 'legal';
+      const currentValues = formik.values;
 
       formik.setValues({
-        ...formik.values,
+        ...currentValues,
         sender_contact_id: clientId,
-        sender_first_name: isLegalClient ? '' : selectedClient.first_name || '',
-        sender_last_name: isLegalClient ? '' : selectedClient.last_name || '',
-        sender_patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
+        sender_first_name: isLegalClient
+          ? currentValues.sender_first_name
+          : selectedClient.first_name || currentValues.sender_first_name,
+        sender_last_name: isLegalClient
+          ? currentValues.sender_last_name
+          : selectedClient.last_name || currentValues.sender_last_name,
+        sender_patronymic: isLegalClient
+          ? currentValues.sender_patronymic
+          : selectedClient.patronymic || currentValues.sender_patronymic,
         sender_company_name: isLegalClient ? selectedClient.company_name || '' : '',
         sender_bin: isLegalClient ? selectedClient.bin || '' : '',
         sender_type: selectedClient.type || 'individual',
-        sender_phone: selectedClient.phone || '',
-        sender_country_id: selectedClient.country_id || '',
-        sender_city_id: selectedClient.city_id || '',
+        sender_phone: selectedClient.phone || currentValues.sender_phone,
+        sender_country_id: selectedClient.country_id || currentValues.sender_country_id,
+        sender_city_id: selectedClient.city_id || currentValues.sender_city_id,
         sender_street: formik.values.sender_street || '',
         sender_house: formik.values.sender_house || '',
         sender_apartment: formik.values.sender_apartment || '',
@@ -208,14 +199,20 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
 
       setModalInfoData({
         ...modalInfo,
-        sender_country_name: selectedClient?.country_name ?? '',
-        sender_city_name: selectedClient?.city_name ?? ''
+        sender_country_name: selectedClient?.country_name ?? modalInfo?.sender_country_name,
+        sender_city_name: selectedClient?.city_name ?? modalInfo?.sender_city_name
       });
     }
   };
 
   useEffect(() => {
-    if (formik.values.sender_contact_id && !isEditMode) {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (shouldLoadClientData.current && formik.values.sender_contact_id && !isEditMode) {
+      shouldLoadClientData.current = false;
+
       const fetchClientData = async () => {
         try {
           const response = await getClients({ id: Number(formik.values.sender_contact_id) });
@@ -230,7 +227,11 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
 
       fetchClientData();
     }
-  }, [formik.values.sender_contact_id]);
+  }, [formik.values.sender_contact_id, isEditMode]);
+
+  useEffect(() => {
+    shouldLoadClientData.current = true;
+  }, [clientSearchTerm]);
 
   const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
@@ -314,7 +315,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             formik={formik}
             type="tel"
           />
-
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.sender_country_id ?? ''}
@@ -336,7 +336,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />
-
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.CITY' })}
             value={formik.values.sender_city_id ?? ''}
@@ -366,7 +365,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             }
             emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
           />
-
           <SharedInput
             name="sender_street"
             label={formatMessage({ id: 'SYSTEM.STREET' })}
@@ -382,7 +380,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             label={formatMessage({ id: 'SYSTEM.APARTMENT' })}
             formik={formik}
           />
-
           <SharedTextArea
             name="sender_location_description"
             label={formatMessage({ id: 'SYSTEM.LOCATION_DESCRIPTION' })}

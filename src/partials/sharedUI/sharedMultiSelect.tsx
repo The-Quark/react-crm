@@ -45,7 +45,6 @@ export function SharedMultiSelect({
   label
 }: MultiSelectProps) {
   const { formatMessage } = useIntl();
-
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
   const hasError = touched && error;

@@ -20,22 +20,21 @@ interface Props {
   onOrderSubmit: (orderData: IOrderFormValues) => Promise<void>;
   onOrderDraftSubmit: (orderData: IOrderFormValues) => Promise<void>;
   handleClose: () => void;
-  orderData: IOrderFormValues;
 }
 
 export const OrdersConfirmModal: FC<Props> = ({
   open,
   handleClose,
   onOrderSubmit,
-  orderData,
   onOrderDraftSubmit
 }) => {
   const { formatMessage } = useIntl();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { mainFormData, modalInfo } = useOrderCreation();
   const navigate = useNavigate();
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
   const queryClient = useQueryClient();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
