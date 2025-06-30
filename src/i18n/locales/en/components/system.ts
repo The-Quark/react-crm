@@ -359,7 +359,8 @@ const System = {
   'SYSTEM.BOX_TYPE': 'Box Type',
   'SYSTEM.BOX_TYPES': 'Box Types',
   'SYSTEM.NEW_BOX_TYPE': 'New Box Type',
-  'SYSTEM.SEARCH_BOX_TYPE': 'Search Box Type'
+  'SYSTEM.SEARCH_BOX_TYPE': 'Search Box Type',
+  'SYSTEM.SELECT_BOX_TYPE': 'Select Box Type'
 };
 
 export default System;

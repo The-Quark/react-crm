@@ -30,6 +30,7 @@ import {
 } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useIntl } from 'react-intl';
+import { Divider } from '@mui/material';
 
 interface Props {
   isEditMode: boolean;
@@ -43,6 +44,22 @@ export const formSchema = Yup.object().shape({
   width: decimalValidation.required('VALIDATION.WIDTH_REQUIRED'),
   length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
   height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
+  box_type_id: Yup.string().required('VALIDATION.TYPE_REQUIRED'),
+  box_width: Yup.string().when('box_type_id', {
+    is: '',
+    then: (schema) => schema.required('VALIDATION.WIDTH_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
+  box_length: Yup.string().when('box_type_id', {
+    is: '',
+    then: (schema) => schema.required('VALIDATION.LENGTH_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
+  box_height: Yup.string().when('box_type_id', {
+    is: '',
+    then: (schema) => schema.required('VALIDATION.HEIGHT_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
   status: Yup.string().optional()
 });
 
@@ -57,6 +74,10 @@ const getInitialValues = (isEditMode: boolean, packageData: Package): IPackageFo
       volume: packageData?.volume?.toString() ?? '',
       places_count: packageData?.places_count?.toString() ?? '',
       price: packageData?.price?.toString() ?? '',
+      box_type_id: packageData?.box_type_id?.toString() ?? '',
+      box_width: packageData?.box_width?.toString() ?? '',
+      box_length: packageData?.box_length?.toString() ?? '',
+      box_height: packageData?.box_height?.toString() ?? '',
       status: packageData.status as unknown as PackageStatus
     };
   }
@@ -67,6 +88,10 @@ const getInitialValues = (isEditMode: boolean, packageData: Package): IPackageFo
     length: '',
     height: '',
     volume: '',
+    box_type_id: '',
+    box_width: '',
+    box_length: '',
+    box_height: '',
     places_count: '',
     price: '',
     status: 'ready_for_shipment'
@@ -80,6 +105,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const navigate = useNavigate();
 
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
+  const [searchBoxTypeTerm, setSearchBoxTypeTerm] = useState('');
   const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
@@ -109,10 +135,10 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     data: boxTypesData,
     isLoading: boxTypesLoading,
     isError: boxTypesIsError,
-    error: boxTypesErrors
+    error: boxTypesError
   } = useQuery({
     queryKey: ['cargoBoxTypes'],
-    queryFn: () => getBoxTypes({ page: DEFAULT_SEARCH_PAGE_NUMBER }),
+    queryFn: () => getBoxTypes({}),
     staleTime: CACHE_TIME
   });
 
@@ -147,6 +173,25 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
       }
     }
   });
+
+  const handleBoxTypeChange = useCallback(
+    (boxTypeId: string | number) => {
+      const id = typeof boxTypeId === 'number' ? boxTypeId.toString() : boxTypeId;
+      formik.setFieldValue('box', id);
+
+      const selectedBoxType = boxTypesData?.result?.find((box) => box.id === Number(id));
+      if (selectedBoxType) {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: id,
+          box_width: packageData?.box_width?.toString() ?? '',
+          box_height: packageData?.box_height?.toString() ?? '',
+          box_length: packageData?.box_length?.toString() ?? ''
+        });
+      }
+    },
+    [formik, packageData]
+  );
 
   const handleOrderChange = useCallback(
     (orderId: string | number) => {
@@ -215,8 +260,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     }
   }, [formik.values.order_id, navigate, queryClient]);
 
-  if (ordersIsError) {
-    return <SharedError error={ordersError} />;
+  if (ordersIsError || boxTypesIsError) {
+    return <SharedError error={ordersError || boxTypesError} />;
   }
 
   return (
@@ -303,6 +348,48 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
                   label: status.name,
                   value: status.value
                 }))}
+              />
+            </>
+          )}
+
+          <Divider />
+
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.BOX_TYPE' })}</h3>
+          <SharedAutocomplete
+            label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
+            value={formik.values.box_type_id ?? ''}
+            options={
+              boxTypesData?.result?.map((app) => ({
+                id: app.id,
+                name: String(app.name || app.id)
+              })) ?? []
+            }
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
+            onChange={handleBoxTypeChange}
+            error={formik.errors.box_type_id as string}
+            touched={formik.touched.box_type_id}
+            searchTerm={searchBoxTypeTerm}
+            onSearchTermChange={setSearchBoxTypeTerm}
+            loading={boxTypesLoading}
+          />
+
+          {!formik.values.box_type_id && (
+            <>
+              <SharedDecimalInput
+                name="box_width"
+                label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="box_length"
+                label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="box_height"
+                label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+                formik={formik}
               />
             </>
           )}

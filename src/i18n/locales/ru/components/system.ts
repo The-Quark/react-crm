@@ -359,7 +359,8 @@ const System = {
   'SYSTEM.BOX_TYPE': 'Тип коробки',
   'SYSTEM.BOX_TYPES': 'Типы коробок',
   'SYSTEM.NEW_BOX_TYPE': 'Новый тип коробки',
-  'SYSTEM.SEARCH_BOX_TYPE': 'Поиск типа коробки'
+  'SYSTEM.SEARCH_BOX_TYPE': 'Поиск типа коробки',
+  'SYSTEM.SELECT_BOX_TYPE': 'Выберите тип коробки'
 };
 
 export default System;

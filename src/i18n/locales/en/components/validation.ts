@@ -74,7 +74,8 @@ const Validation = {
   'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'Cost per airplace is required',
   'VALIDATION.NAME_REQUIRED': 'Name is required',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Active status is required',
-  'VALIDATION.TITLE_REQUIRED': 'Title is required'
+  'VALIDATION.TITLE_REQUIRED': 'Title is required',
+  'VALIDATION.BOX_TYPE_REQUIRED': 'Box type is required'
 };
 
 export default Validation;

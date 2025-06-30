@@ -74,7 +74,8 @@ const Validation = {
   'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'التكلفة لكل مكان مطلوبة',
   'VALIDATION.NAME_REQUIRED': 'الاسم مطلوب',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'حالة النشاط مطلوبة',
-  'VALIDATION.TITLE_REQUIRED': 'العنوان مطلوب'
+  'VALIDATION.TITLE_REQUIRED': 'العنوان مطلوب',
+  'VALIDATION.BOX_TYPE_REQUIRED': 'نوع الصندوق مطلوب'
 };
 
 export default Validation;

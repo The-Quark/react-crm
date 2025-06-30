@@ -87,6 +87,10 @@ interface Client {
 export interface Package {
   id: number;
   hawb: string;
+  box_height: string | null;
+  box_length: string | null;
+  box_width: string | null;
+  box_type_id: string | null;
   assigned_user: User | null;
   delivery_category: string;
   status: PackageStatus;

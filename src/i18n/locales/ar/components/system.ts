@@ -359,7 +359,8 @@ const System = {
   'SYSTEM.BOX_TYPE': 'نوع الصندوق',
   'SYSTEM.BOX_TYPES': 'أنواع الصناديق',
   'SYSTEM.NEW_BOX_TYPE': 'نوع صندوق جديد',
-  'SYSTEM.SEARCH_BOX_TYPE': 'البحث عن نوع الصندوق'
+  'SYSTEM.SEARCH_BOX_TYPE': 'البحث عن نوع الصندوق',
+  'SYSTEM.SELECT_BOX_TYPE': 'اختر نوع الصندوق'
 };
 
 export default System;

@@ -75,7 +75,8 @@ const Validation = {
   'VALIDATION.COST_PER_AIRPLACE_REQUIRED': 'Стоимость за место обязательна',
   'VALIDATION.NAME_REQUIRED': 'Имя обязательно',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Статус активности обязателен',
-  'VALIDATION.TITLE_REQUIRED': 'Название обязательно'
+  'VALIDATION.TITLE_REQUIRED': 'Название обязательно',
+  'VALIDATION.BOX_TYPE_REQUIRED': 'Тип каробки обязательно'
 };
 
 export default Validation;
