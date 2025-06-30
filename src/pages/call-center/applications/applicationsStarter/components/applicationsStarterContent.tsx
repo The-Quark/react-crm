@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { postApplication, getSources, putApplication, getClients } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
@@ -6,7 +7,6 @@ import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   SharedAutocomplete,
   SharedError,
@@ -311,9 +311,7 @@ export const ApplicationsStarterContent = ({
         <div className="card-header" id="general_settings">
           <h3 className="card-title">
             {isEditMode
-              ? formatMessage({ id: 'SYSTEM.EDIT' }) +
-                ' ' +
-                formatMessage({ id: 'SYSTEM.APPLICATION' })
+              ? formatMessage({ id: 'SYSTEM.EDIT' })
               : formatMessage({ id: 'SYSTEM.NEW_APPLICATION' })}
           </h3>
         </div>
@@ -339,7 +337,6 @@ export const ApplicationsStarterContent = ({
                 onSearchTermChange={handleSearchChange}
                 loading={clientsLoading || clientLoading}
               />
-
               <SharedRadio
                 name="client_type"
                 label={formatMessage({ id: 'SYSTEM.CLIENT_TYPE' })}
@@ -356,52 +353,47 @@ export const ApplicationsStarterContent = ({
               />
             </>
           )}
-
-          <>
-            {formik.values.client_type === 'legal' && (
-              <>
-                <SharedInput
-                  name="company_name"
-                  label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
-                  formik={formik}
-                />
-                <SharedInput
-                  name="bin"
-                  label={formatMessage({ id: 'SYSTEM.BIN' })}
-                  formik={formik}
-                  type="number"
-                  maxlength={12}
-                />
-              </>
-            )}
-            {formik.values.client_type === 'individual' && (
-              <>
-                <SharedInput
-                  name="first_name"
-                  label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
-                  formik={formik}
-                />
-                <SharedInput
-                  name="last_name"
-                  label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
-                  formik={formik}
-                />
-                <SharedInput
-                  name="patronymic"
-                  label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
-                  formik={formik}
-                />
-              </>
-            )}
-          </>
-
+          {formik.values.client_type === 'legal' && (
+            <>
+              <SharedInput
+                name="company_name"
+                label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="bin"
+                label={formatMessage({ id: 'SYSTEM.BIN' })}
+                formik={formik}
+                type="number"
+                maxlength={12}
+              />
+            </>
+          )}
+          {formik.values.client_type === 'individual' && (
+            <>
+              <SharedInput
+                name="first_name"
+                label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="last_name"
+                label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="patronymic"
+                label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+                formik={formik}
+              />
+            </>
+          )}
           <SharedInput
             name="phone"
             label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
             formik={formik}
             type="tel"
           />
-
           <SharedSelect
             name="source"
             label={formatMessage({ id: 'SYSTEM.SOURCE' })}
@@ -411,20 +403,17 @@ export const ApplicationsStarterContent = ({
               []
             }
           />
-
           <SharedInput
             name="email"
             label={formatMessage({ id: 'SYSTEM.EMAIL' })}
             formik={formik}
             type="email"
           />
-
           <SharedTextArea
             name="message"
             label={formatMessage({ id: 'SYSTEM.MESSAGE' })}
             formik={formik}
           />
-
           {isEditMode && (
             <SharedSelect
               name="status"
@@ -436,7 +425,6 @@ export const ApplicationsStarterContent = ({
               }))}
             />
           )}
-
           <div className="flex justify-end">
             <button
               type="submit"

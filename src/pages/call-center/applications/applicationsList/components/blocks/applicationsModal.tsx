@@ -93,14 +93,12 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                         {data.result[0].source.name}
                       </div>
                     </div>
-
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.EMAIL' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.email}</div>
                     </div>
-
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.CLIENT' })}
@@ -109,14 +107,12 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                         {data.result[0].client_id}
                       </div>
                     </div>
-
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.STATUS' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">{data.result[0].status}</div>
                     </div>
-
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.MESSAGE' })}
@@ -125,7 +121,6 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                         {data.result[0].message}
                       </div>
                     </div>
-
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
@@ -137,7 +132,6 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                   </div>
                 </div>
 
-                {/* Client Block */}
                 <div>
                   <h4 className="text-lg font-semibold mb-4">
                     {formatMessage({ id: 'SYSTEM.CLIENT_INFO' })}
