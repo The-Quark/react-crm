@@ -176,21 +176,38 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
   const handleBoxTypeChange = useCallback(
     (boxTypeId: string | number) => {
+      if (boxTypeId === '' || boxTypeId === '__clear__') {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: '',
+          box_width: '',
+          box_height: '',
+          box_length: ''
+        });
+        return;
+      }
       const id = typeof boxTypeId === 'number' ? boxTypeId.toString() : boxTypeId;
-      formik.setFieldValue('box', id);
-
+      formik.setFieldValue('box_type_id', id);
       const selectedBoxType = boxTypesData?.result?.find((box) => box.id === Number(id));
       if (selectedBoxType) {
         formik.setValues({
           ...formik.values,
           box_type_id: id,
-          box_width: packageData?.box_width?.toString() ?? '',
-          box_height: packageData?.box_height?.toString() ?? '',
-          box_length: packageData?.box_length?.toString() ?? ''
+          box_width: selectedBoxType.width?.toString() ?? '',
+          box_height: selectedBoxType.height?.toString() ?? '',
+          box_length: selectedBoxType.length?.toString() ?? ''
+        });
+      } else {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: id,
+          box_width: '',
+          box_height: '',
+          box_length: ''
         });
       }
     },
-    [formik, packageData]
+    [formik, boxTypesData?.result]
   );
 
   const handleOrderChange = useCallback(
