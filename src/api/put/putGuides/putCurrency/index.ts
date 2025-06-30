@@ -4,7 +4,7 @@ import { CURRENCY_URL } from '@/api/url';
 
 export const putCurrency = async (
   id: number,
-  data: Omit<ICurrencyFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: ICurrencyFormValues
 ): Promise<ICurrencyFormValues> => {
   return await axios
     .put<ICurrencyFormValues>(`${CURRENCY_URL}?id=${id}`, data, {

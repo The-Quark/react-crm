@@ -161,6 +161,10 @@ export const AllMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.FILE_TYPES',
         path: '/guides/file-types'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.BOX_TYPES',
+        path: '/guides/box-types'
       }
     ]
   },

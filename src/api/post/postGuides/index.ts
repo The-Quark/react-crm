@@ -11,3 +11,4 @@ export * from './postTemplate';
 export * from './postTemplateUpload';
 export * from './postVehicle';
 export * from './postFileType';
+export * from './postBoxType';

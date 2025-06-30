@@ -12,3 +12,4 @@ export * from './getVehicles';
 export * from './getPackageMaterials';
 export * from './getLanguages';
 export * from './getFileTypes';
+export * from './getBoxTypes';

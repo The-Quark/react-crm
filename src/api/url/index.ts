@@ -89,3 +89,5 @@ export const PACKAGE_ASSIGN_USER = `${api}/package/assign-user`;
 export const ORDER_MY_DRAFTS = `${api}/order/my-drafts`;
 
 export const CARGO_NOTIFICATIONS = `${api}/cargo-notifications`;
+
+export const BOX_TYPES = `${api}/box-types`;

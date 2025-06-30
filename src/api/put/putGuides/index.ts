@@ -10,3 +10,4 @@ export * from './putVehicle';
 export * from './putTemplate';
 export * from './putSource';
 export * from './putFileType';
+export * from './putBoxType';

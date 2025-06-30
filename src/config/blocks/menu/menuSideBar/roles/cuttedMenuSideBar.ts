@@ -98,6 +98,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.FILE_TYPES',
         path: '/guides/file-types'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.BOX_TYPES',
+        path: '/guides/box-types'
       }
     ]
   },
@@ -168,6 +172,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.FILE_TYPES',
         path: '/guides/file-types'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.BOX_TYPES',
+        path: '/guides/box-types'
       }
     ]
   },

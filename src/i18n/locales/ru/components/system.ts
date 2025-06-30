@@ -355,7 +355,11 @@ const System = {
   'SYSTEM.CLEAR': 'Очистить',
   'SYSTEM.CLOSE': 'Закрыть',
   'SYSTEM.COMPANIES': 'Компании',
-  'SYSTEM.IS_EXPRESS': 'Экспресс'
+  'SYSTEM.IS_EXPRESS': 'Экспресс',
+  'SYSTEM.BOX_TYPE': 'Тип коробки',
+  'SYSTEM.BOX_TYPES': 'Типы коробок',
+  'SYSTEM.NEW_BOX_TYPE': 'Новый тип коробки',
+  'SYSTEM.SEARCH_BOX_TYPE': 'Поиск типа коробки'
 };
 
 export default System;

@@ -355,7 +355,11 @@ const System = {
   'SYSTEM.CLEAR': 'Clear',
   'SYSTEM.CLOSE': 'Close',
   'SYSTEM.COMPANIES': 'Companies',
-  'SYSTEM.IS_EXPRESS': 'Express'
+  'SYSTEM.IS_EXPRESS': 'Express',
+  'SYSTEM.BOX_TYPE': 'Box Type',
+  'SYSTEM.BOX_TYPES': 'Box Types',
+  'SYSTEM.NEW_BOX_TYPE': 'New Box Type',
+  'SYSTEM.SEARCH_BOX_TYPE': 'Search Box Type'
 };
 
 export default System;

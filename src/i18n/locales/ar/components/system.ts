@@ -355,7 +355,11 @@ const System = {
   'SYSTEM.CLEAR': 'مسح',
   'SYSTEM.CLOSE': 'إغلاق',
   'SYSTEM.COMPANIES': 'الشركات',
-  'SYSTEM.IS_EXPRESS': 'سريع'
+  'SYSTEM.IS_EXPRESS': 'سريع',
+  'SYSTEM.BOX_TYPE': 'نوع الصندوق',
+  'SYSTEM.BOX_TYPES': 'أنواع الصناديق',
+  'SYSTEM.NEW_BOX_TYPE': 'نوع صندوق جديد',
+  'SYSTEM.SEARCH_BOX_TYPE': 'البحث عن نوع الصندوق'
 };
 
 export default System;
