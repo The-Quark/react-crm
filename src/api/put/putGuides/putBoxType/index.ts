@@ -7,7 +7,7 @@ export const putBoxType = async (
   data: IBoxTypeFormValues
 ): Promise<IBoxTypeFormValues> => {
   return await axios
-    .put<IBoxTypeFormValues>(`${BOX_TYPES}?id=${id}`, data, {
+    .put<IBoxTypeFormValues>(`${BOX_TYPES}/manage/?id=${id}`, data, {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

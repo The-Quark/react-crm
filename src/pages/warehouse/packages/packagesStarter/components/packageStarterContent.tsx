@@ -1,4 +1,11 @@
-import { getOrders, putPackage, postPackage, postOrderCalculate, putOrderStatus } from '@/api';
+import {
+  getOrders,
+  putPackage,
+  postPackage,
+  postOrderCalculate,
+  putOrderStatus,
+  getBoxTypes
+} from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -15,7 +22,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { OrderStatus, PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
-import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
+import {
+  CACHE_TIME,
+  decimalValidation,
+  DEFAULT_SEARCH_PAGE_NUMBER,
+  LOCAL_STORAGE_CURRENCY_KEY
+} from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useIntl } from 'react-intl';
 
@@ -33,6 +45,33 @@ export const formSchema = Yup.object().shape({
   height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
   status: Yup.string().optional()
 });
+
+const getInitialValues = (isEditMode: boolean, packageData: Package): IPackageFormValues => {
+  if (isEditMode && packageData) {
+    return {
+      order_id: packageData.order_id?.toString() ?? '',
+      weight: packageData?.weight?.toString() ?? '',
+      width: packageData?.width?.toString() ?? '',
+      length: packageData?.length?.toString() ?? '',
+      height: packageData?.height?.toString() ?? '',
+      volume: packageData?.volume?.toString() ?? '',
+      places_count: packageData?.places_count?.toString() ?? '',
+      price: packageData?.price?.toString() ?? '',
+      status: packageData.status as unknown as PackageStatus
+    };
+  }
+  return {
+    order_id: '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    volume: '',
+    places_count: '',
+    price: '',
+    status: 'ready_for_shipment'
+  };
+};
 
 export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Props) => {
   const [searchParams] = useSearchParams();
@@ -58,46 +97,27 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   } = useQuery({
     queryKey: ['packageOrders', searchOrderTerm],
     queryFn: () =>
-      getOrders({ per_page: 50, searchorder: searchOrderTerm, status: 'package_awaiting' }),
+      getOrders({
+        per_page: DEFAULT_SEARCH_PAGE_NUMBER,
+        searchorder: searchOrderTerm,
+        ...(isEditMode ? {} : { status: 'package_awaiting' })
+      }),
     staleTime: CACHE_TIME
   });
 
-  const selectedOrder = useMemo(() => {
-    if (orderIdFromUrl) {
-      return ordersData?.result?.find((order) => order.id === orderIdFromUrl);
-    }
-    return null;
-  }, [orderIdFromUrl, ordersData?.result]);
-
-  const initialValues = useMemo<IPackageFormValues & { status?: PackageStatus }>(() => {
-    if (isEditMode && packageData) {
-      return {
-        order_id: packageData.order_id?.toString() ?? '',
-        weight: packageData?.weight?.toString() ?? '',
-        width: packageData?.width?.toString() ?? '',
-        length: packageData?.length?.toString() ?? '',
-        height: packageData?.height?.toString() ?? '',
-        volume: packageData?.volume?.toString() ?? '',
-        places_count: packageData?.places_count?.toString() ?? '',
-        price: packageData?.price?.toString() ?? '',
-        status: packageData.status as unknown as PackageStatus
-      };
-    }
-
-    return {
-      order_id: orderIdFromUrl?.toString() ?? '',
-      weight: selectedOrder?.weight?.toString() ?? '',
-      width: selectedOrder?.width?.toString() ?? '',
-      length: selectedOrder?.length?.toString() ?? '',
-      height: selectedOrder?.height?.toString() ?? '',
-      volume: selectedOrder?.volume?.toString() ?? '',
-      places_count: selectedOrder?.places_count?.toString() ?? '',
-      price: selectedOrder?.price?.toString() ?? ''
-    };
-  }, [isEditMode, packageData, orderIdFromUrl, selectedOrder]);
+  const {
+    data: boxTypesData,
+    isLoading: boxTypesLoading,
+    isError: boxTypesIsError,
+    error: boxTypesErrors
+  } = useQuery({
+    queryKey: ['cargoBoxTypes'],
+    queryFn: () => getBoxTypes({ page: DEFAULT_SEARCH_PAGE_NUMBER }),
+    staleTime: CACHE_TIME
+  });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: getInitialValues(isEditMode, packageData || ({} as Package)),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -153,6 +173,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
   useEffect(() => {
     const calculateVolume = async () => {
+      const is_express = packageData?.order?.is_express;
       const { weight, width, length, height } = formik.values;
       if (weight && width && length && height) {
         try {
@@ -160,7 +181,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             weight,
             width,
             length,
-            height
+            height,
+            is_express
           });
           formik.setFieldValue('volume', response.volume);
           formik.setFieldValue('places_count', response.places_count);

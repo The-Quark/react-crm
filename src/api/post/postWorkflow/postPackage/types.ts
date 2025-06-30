@@ -9,4 +9,5 @@ export interface IPackageFormValues {
   price?: number | string;
   dimensions?: string;
   frontcrm?: boolean;
+  status?: string;
 }

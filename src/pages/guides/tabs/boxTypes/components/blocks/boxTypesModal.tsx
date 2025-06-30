@@ -33,9 +33,9 @@ interface Props {
 const validateSchema = Yup.object({
   name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
   description: Yup.string().optional(),
-  length: decimalValidation.required('VALIDATION.FORM_VALIDATION_FIRST_LENGTH_REQUIRED'),
-  width: decimalValidation.required('VALIDATION.FORM_VALIDATION_FIRST_WIDTH_REQUIRED'),
-  height: decimalValidation.required('VALIDATION.FORM_VALIDATION_FIRST_HEIGHT_REQUIRED')
+  length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
+  width: decimalValidation.required('VALIDATION.WIDTH_REQUIRED'),
+  height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED')
 });
 
 const getInitialValues = (isEditMode: boolean, boxTypeData: BoxType): IBoxTypeFormValues => {
