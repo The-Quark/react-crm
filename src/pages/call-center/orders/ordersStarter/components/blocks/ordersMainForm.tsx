@@ -72,6 +72,7 @@ const getInitialValues = (
       delivery_type: mainForm.delivery_type || '',
       delivery_category: mainForm.delivery_category || 'b2b',
       package_type: mainForm.package_type || '',
+      is_express: mainForm.is_express || false,
       weight: mainForm.weight || '',
       width: mainForm.width || '',
       length: mainForm.length || '',
@@ -95,6 +96,7 @@ const getInitialValues = (
       delivery_type: mainForm.delivery_type || '',
       delivery_category: mainForm.delivery_category || 'b2b',
       package_type: mainForm.package_type || '',
+      is_express: mainForm.is_express || false,
       weight: mainForm.weight || '',
       width: mainForm.width || '',
       length: mainForm.length || '',
@@ -118,6 +120,7 @@ const getInitialValues = (
     delivery_type: '',
     delivery_category: DeliveryCategories.B2B,
     package_type: '',
+    is_express: false,
     weight: '',
     width: '',
     length: '',
@@ -155,14 +158,15 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   });
 
   useEffect(() => {
-    const { weight, width, length, height } = formik.values;
+    const { weight, width, length, height, is_express } = formik.values;
 
-    if (weight && width && length && height) {
+    if (weight && width && length && height && is_express) {
       const calculateData: IPostCalculateFormFields = {
         weight,
         width,
         length,
-        height
+        height,
+        is_express: is_express ?? false
       };
 
       postOrderCalculate(calculateData)
@@ -359,6 +363,11 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           <SharedCheckBox
             name="customs_clearance"
             label={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
+            formik={formik}
+          />
+          <SharedCheckBox
+            name="is_express"
+            label={formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
             formik={formik}
           />
           <SharedDecimalInput

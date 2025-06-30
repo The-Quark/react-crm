@@ -100,6 +100,7 @@ export interface Order {
   order_code: string;
   application_id: number | null;
   sender_id: number;
+  is_express: boolean | null;
   receiver_id: number;
   delivery_type: DeliveryType;
   package_type: PackageType;

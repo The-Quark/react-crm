@@ -354,7 +354,8 @@ const System = {
   'SYSTEM.SELECT_ALL': 'Select All',
   'SYSTEM.CLEAR': 'Clear',
   'SYSTEM.CLOSE': 'Close',
-  'SYSTEM.COMPANIES': 'Companies'
+  'SYSTEM.COMPANIES': 'Companies',
+  'SYSTEM.IS_EXPRESS': 'Express'
 };
 
 export default System;

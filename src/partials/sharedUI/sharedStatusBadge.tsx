@@ -212,6 +212,10 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Transferred by TSW',
       color: 'badge-primary'
     },
+    express: {
+      label: 'Express',
+      color: 'badge-danger'
+    },
     // Boolean statuses
     true: {
       label: 'Active',

@@ -174,6 +174,7 @@ export const useOrdersColumns = ({
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <SharedStatusBadge status={info.row.original.status} />
+            {info.row.original.is_express && <SharedStatusBadge status="express" />}
           </div>
         ),
         meta: {

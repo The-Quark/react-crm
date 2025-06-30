@@ -354,7 +354,8 @@ const System = {
   'SYSTEM.SELECT_ALL': 'تحديد الكل',
   'SYSTEM.CLEAR': 'مسح',
   'SYSTEM.CLOSE': 'إغلاق',
-  'SYSTEM.COMPANIES': 'الشركات'
+  'SYSTEM.COMPANIES': 'الشركات',
+  'SYSTEM.IS_EXPRESS': 'سريع'
 };
 
 export default System;

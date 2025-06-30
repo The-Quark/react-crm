@@ -12,6 +12,7 @@ export interface IOrderFormValues {
   length?: number | string;
   height?: number | string;
   volume?: number | string;
+  is_express?: boolean;
   places_count?: number | string;
   customs_clearance?: boolean;
   price?: number | string;

@@ -37,6 +37,7 @@ interface Order {
   receiver_id: number;
   delivery_type: number;
   package_type: number;
+  is_express: boolean;
   weight: string;
   width: string;
   length: string;

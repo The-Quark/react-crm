@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import * as Yup from 'yup';
 import {
+  SharedCheckBox,
   SharedDecimalInput,
   SharedError,
   SharedInput,
@@ -66,6 +67,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
       delivery_type: orderData?.delivery_type || '',
       delivery_category: orderData?.delivery_category || 'b2b',
       package_type: orderData?.package_type || '',
+      is_express: orderData?.is_express || false,
       weight: orderData?.weight || '',
       width: orderData?.width || '',
       length: orderData?.length || '',
@@ -85,6 +87,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
     delivery_type: '',
     delivery_category: DeliveryCategories.B2B,
     package_type: '',
+    is_express: false,
     weight: '',
     width: '',
     length: '',
@@ -124,14 +127,15 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   });
 
   useEffect(() => {
-    const { weight, width, length, height } = formik.values;
+    const { weight, width, length, height, is_express } = formik.values;
 
     if (weight && width && length && height) {
       const calculateData: IPostCalculateFormFields = {
         weight,
         width,
         length,
-        height
+        height,
+        is_express: is_express ?? false
       };
 
       postOrderCalculate(calculateData)
@@ -283,28 +287,16 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             error={formik.errors.order_content as string}
             touched={formik.touched.order_content}
           />
-          <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">
-              {formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
-            </label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <label className="checkbox-group flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="customs_clearance"
-                  checked={formik.values.customs_clearance}
-                  onChange={(e) => formik.setFieldValue('customs_clearance', e.target.checked)}
-                  className="checkbox-sm"
-                />
-                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
-              </label>
-              {formik.touched.customs_clearance && formik.errors.customs_clearance && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.customs_clearance}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedCheckBox
+            name="customs_clearance"
+            label={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
+            formik={formik}
+          />
+          <SharedCheckBox
+            name="is_express"
+            label={formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
+            formik={formik}
+          />
           <SharedDecimalInput
             name="weight"
             label={`${formatMessage({ id: 'SYSTEM.WEIGHT' })} (kg)`}

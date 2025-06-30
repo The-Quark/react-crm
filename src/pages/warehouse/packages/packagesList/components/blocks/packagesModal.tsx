@@ -98,6 +98,16 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {formatMessage({
+                          id: packageData.order?.is_express ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
+                        })}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.WEIGHT' })}
                       </label>
                       <div className="flex columns-1 w-full">{packageData.weight || '-'}</div>

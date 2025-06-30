@@ -294,6 +294,16 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       </label>
                       <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>
                     </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {formatMessage({
+                          id: order.is_express ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
 

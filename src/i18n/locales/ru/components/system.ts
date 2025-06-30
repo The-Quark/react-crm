@@ -354,7 +354,8 @@ const System = {
   'SYSTEM.SELECT_ALL': 'Выбрать все',
   'SYSTEM.CLEAR': 'Очистить',
   'SYSTEM.CLOSE': 'Закрыть',
-  'SYSTEM.COMPANIES': 'Компании'
+  'SYSTEM.COMPANIES': 'Компании',
+  'SYSTEM.IS_EXPRESS': 'Экспресс'
 };
 
 export default System;
