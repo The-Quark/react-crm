@@ -3,7 +3,7 @@ export interface IPostCalculateFormFields {
   length: string | number;
   height: string | number;
   weight: string | number;
-  is_express: boolean;
+  is_express?: boolean;
 }
 
 export interface IPostCalculateFormResponse {
