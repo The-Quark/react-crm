@@ -63,7 +63,11 @@ export const formSchema = Yup.object().shape({
   status: Yup.string().optional()
 });
 
-const getInitialValues = (isEditMode: boolean, packageData: Package): IPackageFormValues => {
+const getInitialValues = (
+  isEditMode: boolean,
+  packageData: Package,
+  orderUrlId: number | null
+): IPackageFormValues => {
   if (isEditMode && packageData) {
     return {
       order_id: packageData.order_id?.toString() ?? '',
@@ -82,7 +86,7 @@ const getInitialValues = (isEditMode: boolean, packageData: Package): IPackageFo
     };
   }
   return {
-    order_id: '',
+    order_id: orderUrlId || '',
     weight: '',
     width: '',
     length: '',
@@ -143,7 +147,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   });
 
   const formik = useFormik({
-    initialValues: getInitialValues(isEditMode, packageData || ({} as Package)),
+    initialValues: getInitialValues(isEditMode, packageData || ({} as Package), orderIdFromUrl),
     validationSchema: formSchema,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -234,8 +238,16 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   );
 
   useEffect(() => {
+    if (!isEditMode && orderIdFromUrl && ordersData?.result?.length) {
+      const selectedOrder = ordersData.result.find((order) => order.id === orderIdFromUrl);
+      if (selectedOrder) {
+        handleOrderChange(orderIdFromUrl);
+      }
+    }
+  }, [isEditMode, orderIdFromUrl, ordersData?.result]);
+
+  useEffect(() => {
     const calculateVolume = async () => {
-      const is_express = packageData?.order?.is_express;
       const { weight, width, length, height } = formik.values;
       if (weight && width && length && height) {
         try {
@@ -243,8 +255,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             weight,
             width,
             length,
-            height,
-            is_express
+            height
           });
           formik.setFieldValue('volume', response.volume);
           formik.setFieldValue('places_count', response.places_count);
