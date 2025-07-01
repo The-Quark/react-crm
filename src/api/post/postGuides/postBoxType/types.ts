@@ -4,4 +4,5 @@ export interface IBoxTypeFormValues {
   length: string;
   width: string;
   height: string;
+  max_weight: string;
 }

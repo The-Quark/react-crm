@@ -106,6 +106,27 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
         }
       },
       {
+        accessorFn: (row) => row.max_weight,
+        id: 'max_weight',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.MAX_WEIGHT' })}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.max_weight}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
         id: 'click',
         header: () => '',
         enableSorting: false,

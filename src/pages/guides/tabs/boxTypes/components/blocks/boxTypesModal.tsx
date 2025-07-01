@@ -35,7 +35,8 @@ const validateSchema = Yup.object({
   description: Yup.string().optional(),
   length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
   width: decimalValidation.required('VALIDATION.WIDTH_REQUIRED'),
-  height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED')
+  height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
+  max_weight: Yup.string().optional()
 });
 
 const getInitialValues = (isEditMode: boolean, boxTypeData: BoxType): IBoxTypeFormValues => {
@@ -46,7 +47,8 @@ const getInitialValues = (isEditMode: boolean, boxTypeData: BoxType): IBoxTypeFo
       description: data.description || '',
       height: data.height || '',
       length: data.length || '',
-      width: data.width || ''
+      width: data.width || '',
+      max_weight: data.max_weight || ''
     };
   }
   return {
@@ -54,7 +56,8 @@ const getInitialValues = (isEditMode: boolean, boxTypeData: BoxType): IBoxTypeFo
     description: '',
     height: '',
     length: '',
-    width: ''
+    width: '',
+    max_weight: ''
   };
 };
 
@@ -140,6 +143,11 @@ const BoxTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
               <SharedDecimalInput
                 name="length"
                 label={formatMessage({ id: 'SYSTEM.LENGTH' }) + '(cm)'}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="max_weight"
+                label={formatMessage({ id: 'SYSTEM.MAX_WEIGHT' }) + '(kg)'}
                 formik={formik}
               />
               <SharedTextArea

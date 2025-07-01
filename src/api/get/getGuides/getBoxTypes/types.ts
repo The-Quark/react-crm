@@ -6,6 +6,7 @@ export interface BoxType {
   length: string;
   width: string;
   height: string;
+  max_weight: string;
   description: string;
   deleted_at: string | null;
   created_at: string;
