@@ -360,7 +360,25 @@ const System = {
   'SYSTEM.BOX_TYPES': 'Типы коробок',
   'SYSTEM.NEW_BOX_TYPE': 'Новый тип коробки',
   'SYSTEM.SEARCH_BOX_TYPE': 'Поиск типа коробки',
-  'SYSTEM.SELECT_BOX_TYPE': 'Выберите тип коробки'
+  'SYSTEM.SELECT_BOX_TYPE': 'Выберите тип коробки',
+  'SYSTEM.CURRENCIES': 'Валюты',
+  'SYSTEM.NEW_CURRENCY': 'Новая валюта',
+  'SYSTEM.SYMBOL': 'Символ',
+  'SYSTEM.RATE_TO_BASE': 'Курс к базовой валюте',
+  'SYSTEM.ISO': 'ISO',
+  'SYSTEM.PHONE_CODE': 'Телефонный код',
+  'SYSTEM.COUNTRIES': 'Страны',
+  'SYSTEM.SEARCH_COUNTRIES': 'Поиск стран',
+  'SYSTEM.PACKAGE_TYPES': 'Типы посылок',
+  'SYSTEM.LANGUAGE_NATIVE': 'Родной язык',
+  'SYSTEM.DIRECTION': 'Направление',
+  'SYSTEM.LOCALE': 'Локаль',
+  'SYSTEM.LANGUAGES': 'Языки',
+  'SYSTEM.NEW_LANGUAGE': 'Новый язык',
+  'SYSTEM.NATIVE_NAME': 'Родное название',
+  'SYSTEM.LANGUAGE_CODE': 'Код языка',
+  'SYSTEM.LTR': 'Слева направо',
+  'SYSTEM.RTL': 'Справа налево'
 };
 
 export default System;

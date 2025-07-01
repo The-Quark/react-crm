@@ -9,18 +9,22 @@ import LanguagesModal from '@/pages/guides/tabs/languages/components/blocks/lang
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 export const useLanguagesColumns = (): ColumnDef<Language>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Language>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -34,7 +38,9 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Language" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LANGUAGE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -49,7 +55,12 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.native_name,
         id: 'native name',
-        header: ({ column }) => <DataGridColumnHeader title="Language native" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.LANGUAGE_NATIVE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -66,7 +77,9 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -80,7 +93,9 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.direction,
         id: 'direction',
-        header: ({ column }) => <DataGridColumnHeader title="Direction" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.DIRECTION' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -97,7 +112,9 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.locale,
         id: 'locale',
-        header: ({ column }) => <DataGridColumnHeader title="Locale" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LOCALE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -112,7 +129,9 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

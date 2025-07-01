@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select.tsx';
+import { useIntl } from 'react-intl';
 
 interface Country {
   id: number;
@@ -22,14 +23,15 @@ interface Props {
 
 export const CitiesToolbar: FC<Props> = ({ currentCountry, onCountryChange, countries }) => {
   const { table } = useDataGrid();
+  const { formatMessage } = useIntl();
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Package Types</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.PACKAGE_TYPES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         <Select value={currentCountry} onValueChange={onCountryChange}>
           <SelectTrigger className="w-28" size="sm">
-            <SelectValue placeholder="Select country" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })} />
           </SelectTrigger>
           <SelectContent>
             {countries.map((country) => (
@@ -47,7 +49,7 @@ export const CitiesToolbar: FC<Props> = ({ currentCountry, onCountryChange, coun
           />
           <input
             type="text"
-            placeholder="Search city"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             className="input input-sm ps-8"
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}

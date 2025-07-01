@@ -14,8 +14,15 @@ import { ICurrencyFormValues } from '@/api/post/postGuides/postCurrency/types.ts
 import { getCurrencies, postCurrency, putCurrency } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CurrencyResponse } from '@/api/get/getGuides/getCurrencies/types.ts';
-import { SharedDecimalInput, SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedCheckBox,
+  SharedDecimalInput,
+  SharedError,
+  SharedInput,
+  SharedLoading
+} from '@/partials/sharedUI';
 import { decimalValidation } from '@/utils';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -24,10 +31,10 @@ interface Props {
 }
 
 const validateSchema = Yup.object({
-  code: Yup.string().required('Code is required'),
-  name: Yup.string().required('Name is required'),
-  symbol: Yup.string().required('Symbol is required').length(1, 'Symbol should be 1 character'),
-  rate_to_base: decimalValidation.required('Rate to base is required'),
+  code: Yup.string().required('VALIDATION.CODE_REQUIRED'),
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED'),
+  symbol: Yup.string().required('Symbol is required').length(1, 'VALIDATION.SYMBOL_LENGTH'),
+  rate_to_base: decimalValidation.required('VALIDATION.RATE_TO_BASE_REQUIRED'),
   is_base: Yup.boolean().required(),
   is_active: Yup.boolean().required()
 });
@@ -58,8 +65,9 @@ const getInitialValues = (
 };
 
 const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: currencyData,
@@ -107,7 +115,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -124,54 +132,36 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-              <SharedInput name="name" label="Name" formik={formik} />
-              <SharedInput name="symbol" label="Symbol" formik={formik} />
-              <SharedInput name="code" label="Code" formik={formik} />
-              <SharedDecimalInput name="rate_to_base" label="Rate to base" formik={formik} />
-
-              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Base</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <div className="flex items-center gap-5">
-                    <label className="checkbox-group flex items-center gap-2">
-                      <input
-                        className="checkbox"
-                        type="checkbox"
-                        name="is_base"
-                        checked={formik.values.is_base}
-                        onChange={(e) => formik.setFieldValue('is_base', e.target.checked)}
-                      />
-                    </label>
-                  </div>
-                  {formik.touched.is_base && formik.errors.is_base && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.is_base}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Active</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <div className="flex items-center gap-5">
-                    <label className="checkbox-group flex items-center gap-2">
-                      <input
-                        className="checkbox"
-                        type="checkbox"
-                        name="is_active"
-                        checked={formik.values.is_active}
-                        onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                      />
-                    </label>
-                  </div>
-                  {formik.touched.is_active && formik.errors.is_active && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.is_active}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedInput
+                name="name"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="symbol"
+                label={formatMessage({ id: 'SYSTEM.SYMBOL' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="code"
+                label={formatMessage({ id: 'SYSTEM.CODE' })}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="rate_to_base"
+                label={formatMessage({ id: 'SYSTEM.RATE_TO_BASE' })}
+                formik={formik}
+              />
+              <SharedCheckBox
+                name="is_base"
+                label={formatMessage({ id: 'SYSTEM.BASE' })}
+                formik={formik}
+              />
+              <SharedCheckBox
+                name="is_active"
+                label={formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                formik={formik}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -179,7 +169,7 @@ const CurrenciesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

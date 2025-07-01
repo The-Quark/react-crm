@@ -75,7 +75,11 @@ const Validation = {
   'VALIDATION.NAME_REQUIRED': 'Name is required',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Active status is required',
   'VALIDATION.TITLE_REQUIRED': 'Title is required',
-  'VALIDATION.BOX_TYPE_REQUIRED': 'Box type is required'
+  'VALIDATION.BOX_TYPE_REQUIRED': 'Box type is required',
+  'VALIDATION.SYMBOL_REQUIRED': 'Symbol is required',
+  'VALIDATION.SYMBOL_LENGTH': 'Symbol should be 1 character',
+  'VALIDATION.RATE_TO_BASE_REQUIRED': 'Rate to base is required',
+  'VALIDATION.IS_BASE_REQUIRED': 'Base status is required'
 };
 
 export default Validation;

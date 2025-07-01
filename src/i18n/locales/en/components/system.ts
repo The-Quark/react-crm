@@ -360,7 +360,25 @@ const System = {
   'SYSTEM.BOX_TYPES': 'Box Types',
   'SYSTEM.NEW_BOX_TYPE': 'New Box Type',
   'SYSTEM.SEARCH_BOX_TYPE': 'Search Box Type',
-  'SYSTEM.SELECT_BOX_TYPE': 'Select Box Type'
+  'SYSTEM.SELECT_BOX_TYPE': 'Select Box Type',
+  'SYSTEM.CURRENCIES': 'Currencies',
+  'SYSTEM.NEW_CURRENCY': 'New Currency',
+  'SYSTEM.SYMBOL': 'Symbol',
+  'SYSTEM.RATE_TO_BASE': 'Rate to Base',
+  'SYSTEM.ISO': 'ISO',
+  'SYSTEM.PHONE_CODE': 'Phone Code',
+  'SYSTEM.COUNTRIES': 'Countries',
+  'SYSTEM.SEARCH_COUNTRIES': 'Search Countries',
+  'SYSTEM.PACKAGE_TYPES': 'Package Types',
+  'SYSTEM.LANGUAGE_NATIVE': 'Native Language',
+  'SYSTEM.DIRECTION': 'Direction',
+  'SYSTEM.LOCALE': 'Locale',
+  'SYSTEM.LANGUAGES': 'Languages',
+  'SYSTEM.NEW_LANGUAGE': 'New Language',
+  'SYSTEM.NATIVE_NAME': 'Native Name',
+  'SYSTEM.LANGUAGE_CODE': 'Language Code',
+  'SYSTEM.LTR': 'LTR',
+  'SYSTEM.RTL': 'RTL'
 };
 
 export default System;

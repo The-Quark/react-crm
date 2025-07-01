@@ -3,15 +3,19 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Country } from '@/api/get/getGuides/getCountries/types.ts';
+import { useIntl } from 'react-intl';
 
 export const useCountriesColumns = (): ColumnDef<Country>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const columns = useMemo<ColumnDef<Country>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -25,7 +29,9 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Country" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -40,7 +46,9 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       {
         accessorFn: (row) => row.iso2,
         id: 'iso2',
-        header: ({ column }) => <DataGridColumnHeader title="ISO" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ISO' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -55,7 +63,12 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       {
         accessorFn: (row) => row.phone_code,
         id: 'phone code',
-        header: ({ column }) => <DataGridColumnHeader title="Phone code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PHONE_CODE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -71,7 +84,9 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       {
         accessorFn: (row) => row.currency.name,
         id: 'currency',
-        header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -88,7 +103,9 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       {
         accessorFn: (row) => row.timezones,
         id: 'timezones',
-        header: ({ column }) => <DataGridColumnHeader title="Timezones" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TIMEZONE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const timezones = info.row.original.timezones;

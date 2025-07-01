@@ -9,18 +9,22 @@ import CurrenciesModal from '@/pages/guides/tabs/currencies/components/blocks/cu
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Currency>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -34,7 +38,9 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Currency" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -49,7 +55,9 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -63,7 +71,9 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.symbol,
         id: 'symbol',
-        header: ({ column }) => <DataGridColumnHeader title="Symbol" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SYMBOL' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -78,7 +88,12 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.rate_to_base,
         id: 'rate to base',
-        header: ({ column }) => <DataGridColumnHeader title="Rate to base" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.RATE_TO_BASE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -95,7 +110,9 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.is_base,
         id: 'is base',
-        header: ({ column }) => <DataGridColumnHeader title="Base" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.BASE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -110,7 +127,9 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

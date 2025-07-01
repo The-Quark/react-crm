@@ -3,15 +3,19 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { City } from '@/api/get/getGuides/getCitiesByCountryCode/types.ts';
+import { useIntl } from 'react-intl';
 
 export const useCitiesColumns = (): ColumnDef<City>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const columns = useMemo<ColumnDef<City>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5 ">
@@ -25,7 +29,9 @@ export const useCitiesColumns = (): ColumnDef<City>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Country" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">

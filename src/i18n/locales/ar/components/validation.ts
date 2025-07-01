@@ -75,7 +75,11 @@ const Validation = {
   'VALIDATION.NAME_REQUIRED': 'الاسم مطلوب',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'حالة النشاط مطلوبة',
   'VALIDATION.TITLE_REQUIRED': 'العنوان مطلوب',
-  'VALIDATION.BOX_TYPE_REQUIRED': 'نوع الصندوق مطلوب'
+  'VALIDATION.BOX_TYPE_REQUIRED': 'نوع الصندوق مطلوب',
+  'VALIDATION.SYMBOL_REQUIRED': 'الرمز مطلوب',
+  'VALIDATION.SYMBOL_LENGTH': 'يجب أن يكون الرمز مكونًا من حرف واحد',
+  'VALIDATION.RATE_TO_BASE_REQUIRED': 'السعر إلى العملة الأساسية مطلوب',
+  'VALIDATION.IS_BASE_REQUIRED': 'حالة العملة الأساسية مطلوبة'
 };
 
 export default Validation;

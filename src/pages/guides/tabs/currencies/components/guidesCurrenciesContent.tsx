@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { CurrenciesToolbar } from '@/pages/guides/tabs/currencies/components/blocks/currenciesToolbar.tsx';
@@ -6,14 +5,11 @@ import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/
 import { getCurrencies } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesCurrenciesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['guidesCurrencies', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,10 +34,7 @@ export const GuidesCurrenciesContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

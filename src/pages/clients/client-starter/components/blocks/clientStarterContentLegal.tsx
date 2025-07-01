@@ -161,6 +161,22 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         formik={formik}
         type="tel"
       />
+      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
+        <label className="form-label max-w-56">
+          {formatMessage({ id: 'SYSTEM.PHONE_NUMBER_HISTORY' })}
+        </label>
+        <div className="flex columns-1 w-full flex-wrap">
+          {clientData?.phone_history?.length ? (
+            clientData.phone_history.map((phone, index) => (
+              <span key={index} className="badge badge-secondary mr-2 mb-2">
+                {phone}
+              </span>
+            ))
+          ) : (
+            <div>{formatMessage({ id: 'SYSTEM.NO_VALUES' })}</div>
+          )}
+        </div>
+      </div>
       <SharedSelect
         name="source_id"
         label={formatMessage({ id: 'SYSTEM.SOURCE' })}

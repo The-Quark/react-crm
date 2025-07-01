@@ -360,7 +360,25 @@ const System = {
   'SYSTEM.BOX_TYPES': 'أنواع الصناديق',
   'SYSTEM.NEW_BOX_TYPE': 'نوع صندوق جديد',
   'SYSTEM.SEARCH_BOX_TYPE': 'البحث عن نوع الصندوق',
-  'SYSTEM.SELECT_BOX_TYPE': 'اختر نوع الصندوق'
+  'SYSTEM.SELECT_BOX_TYPE': 'اختر نوع الصندوق',
+  'SYSTEM.CURRENCIES': 'العملات',
+  'SYSTEM.NEW_CURRENCY': 'عملة جديدة',
+  'SYSTEM.SYMBOL': 'الرمز',
+  'SYSTEM.RATE_TO_BASE': 'السعر إلى العملة الأساسية',
+  'SYSTEM.ISO': 'ISO',
+  'SYSTEM.PHONE_CODE': 'رمز الهاتف',
+  'SYSTEM.COUNTRIES': 'الدول',
+  'SYSTEM.SEARCH_COUNTRIES': 'البحث عن الدول',
+  'SYSTEM.PACKAGE_TYPES': 'أنواع الطرود',
+  'SYSTEM.LANGUAGE_NATIVE': 'اللغة الأم',
+  'SYSTEM.DIRECTION': 'الاتجاه',
+  'SYSTEM.LOCALE': 'الإعدادات المحلية',
+  'SYSTEM.LANGUAGES': 'اللغات',
+  'SYSTEM.NEW_LANGUAGE': 'لغة جديدة',
+  'SYSTEM.NATIVE_NAME': 'الاسم الأصلي',
+  'SYSTEM.LANGUAGE_CODE': 'رمز اللغة',
+  'SYSTEM.LTR': 'من اليسار إلى اليمين',
+  'SYSTEM.RTL': 'من اليمين إلى اليسار'
 };
 
 export default System;

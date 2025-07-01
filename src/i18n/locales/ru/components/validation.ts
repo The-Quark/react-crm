@@ -76,7 +76,11 @@ const Validation = {
   'VALIDATION.NAME_REQUIRED': 'Имя обязательно',
   'VALIDATION.ACTIVE_STATUS_REQUIRED': 'Статус активности обязателен',
   'VALIDATION.TITLE_REQUIRED': 'Название обязательно',
-  'VALIDATION.BOX_TYPE_REQUIRED': 'Тип каробки обязательно'
+  'VALIDATION.BOX_TYPE_REQUIRED': 'Тип каробки обязательно',
+  'VALIDATION.SYMBOL_REQUIRED': 'Символ обязателен',
+  'VALIDATION.SYMBOL_LENGTH': 'Символ должен состоять из 1 знака',
+  'VALIDATION.RATE_TO_BASE_REQUIRED': 'Курс к базовой валюте обязателен',
+  'VALIDATION.IS_BASE_REQUIRED': 'Статус базовой валюты обязателен'
 };
 
 export default Validation;
