@@ -212,7 +212,7 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
       label: 'Transferred by TSW',
       color: 'badge-primary'
     },
-    express: {
+    ['express']: {
       label: 'Express',
       color: 'badge-danger'
     },
@@ -246,7 +246,7 @@ export const SharedStatusBadge = ({ status, className }: StatusBadgeProps) => {
 
   if (typeof status === 'boolean') {
     normalizedStatus = status ? 'true' : 'false';
-  } else if (allStatuses.includes(status as any)) {
+  } else if (status in statusConfig) {
     normalizedStatus = status as keyof typeof statusConfig;
   } else {
     normalizedStatus = 'unknown';
