@@ -108,7 +108,9 @@ const Validation = {
   'VALIDATION.CONTENT_REQUIRED': 'Content is required',
   'VALIDATION.TYPES_REQUIRED': 'Types is required',
   'VALIDATION.TYPES_MIN': 'At least one type must be selected',
-  'VALIDATION.STEP_REQUIRED': 'Step is required'
+  'VALIDATION.STEP_REQUIRED': 'Step is required',
+  'VALIDATION.WEIGHT_FROM_REQUIRED': 'Weight from is required',
+  'VALIDATION.WEIGHT_TO_REQUIRED': 'Weight to is required'
 };
 
 export default Validation;

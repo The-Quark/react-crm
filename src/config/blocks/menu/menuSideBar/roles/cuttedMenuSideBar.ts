@@ -76,6 +76,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/airline-rates'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.TARIFFS',
+        path: '/guides/tariffs'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES',
         path: '/guides/delivery-types'
       },
@@ -148,6 +152,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINE_RATES',
         path: '/guides/airline-rates'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.TARIFFS',
+        path: '/guides/tariffs'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES',

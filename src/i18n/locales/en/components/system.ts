@@ -426,7 +426,13 @@ const System = {
   'SYSTEM.FILE_TYPES': 'File Types',
   'SYSTEM.NEW_FILE_TYPE': 'New File Type',
   'SYSTEM.SEARCH_FILE_TYPE': 'Search File Type',
-  'SYSTEM.TYPES': 'Types'
+  'SYSTEM.TYPES': 'Types',
+  'SYSTEM.SELECT_PACKAGE_TYPE': 'Select Package Type',
+  'SYSTEM.TARIFFS': 'Tariffs',
+  'SYSTEM.NEW_TARIFF': 'New Tariff',
+  'SYSTEM.SEARCH_PRICE': 'Search Price',
+  'SYSTEM.WEIGHT_FROM': 'Weight From',
+  'SYSTEM.WEIGHT_TO': 'Weight To'
 };
 
 export default System;

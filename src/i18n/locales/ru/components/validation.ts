@@ -109,7 +109,9 @@ const Validation = {
   'VALIDATION.CONTENT_REQUIRED': 'Содержимое обязательно',
   'VALIDATION.TYPES_REQUIRED': 'Типы обязательны',
   'VALIDATION.TYPES_MIN': 'Должен быть выбран хотя бы один тип',
-  'VALIDATION.STEP_REQUIRED': 'Шаг обязателен'
+  'VALIDATION.STEP_REQUIRED': 'Шаг обязателен',
+  'VALIDATION.WEIGHT_FROM_REQUIRED': 'Минимальный вес обязателен',
+  'VALIDATION.WEIGHT_TO_REQUIRED': 'Максимальный вес обязателен'
 };
 
 export default Validation;

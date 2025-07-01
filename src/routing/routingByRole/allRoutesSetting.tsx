@@ -120,7 +120,8 @@ import {
   GuidesTemplatesPage,
   GuidesUnitsPage,
   GuidesFileTypesPage,
-  GuidesBoxTypesPage
+  GuidesBoxTypesPage,
+  GuidesTariffPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
@@ -195,6 +196,7 @@ const AllRoutesSetting = () => {
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
+        <Route path="/guides/tariffs" element={<GuidesTariffPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />

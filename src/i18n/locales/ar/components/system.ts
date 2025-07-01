@@ -426,7 +426,13 @@ const System = {
   'SYSTEM.FILE_TYPES': 'أنواع الملفات',
   'SYSTEM.NEW_FILE_TYPE': 'نوع ملف جديد',
   'SYSTEM.SEARCH_FILE_TYPE': 'البحث عن نوع الملف',
-  'SYSTEM.TYPES': 'الأنواع'
+  'SYSTEM.TYPES': 'الأنواع',
+  'SYSTEM.SELECT_PACKAGE_TYPE': 'اختر نوع الطرد',
+  'SYSTEM.TARIFFS': 'التعريفات',
+  'SYSTEM.NEW_TARIFF': 'تعريفة جديدة',
+  'SYSTEM.SEARCH_PRICE': 'البحث عن السعر',
+  'SYSTEM.WEIGHT_FROM': 'الوزن من',
+  'SYSTEM.WEIGHT_TO': 'الوزن إلى'
 };
 
 export default System;

@@ -426,7 +426,13 @@ const System = {
   'SYSTEM.FILE_TYPES': 'Типы файлов',
   'SYSTEM.NEW_FILE_TYPE': 'Новый тип файла',
   'SYSTEM.SEARCH_FILE_TYPE': 'Поиск типа файла',
-  'SYSTEM.TYPES': 'Типы'
+  'SYSTEM.TYPES': 'Типы',
+  'SYSTEM.SELECT_PACKAGE_TYPE': 'Выберите тип посылки',
+  'SYSTEM.TARIFFS': 'Тарифы',
+  'SYSTEM.NEW_TARIFF': 'Новый тариф',
+  'SYSTEM.SEARCH_PRICE': 'Поиск цены',
+  'SYSTEM.WEIGHT_FROM': 'Вес от',
+  'SYSTEM.WEIGHT_TO': 'Вес до'
 };
 
 export default System;

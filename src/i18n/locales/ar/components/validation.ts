@@ -108,7 +108,9 @@ const Validation = {
   'VALIDATION.CONTENT_REQUIRED': 'المحتوى مطلوب',
   'VALIDATION.TYPES_REQUIRED': 'الأنواع مطلوبة',
   'VALIDATION.TYPES_MIN': 'يجب تحديد نوع واحد على الأقل',
-  'VALIDATION.STEP_REQUIRED': 'الخطوة مطلوبة'
+  'VALIDATION.STEP_REQUIRED': 'الخطوة مطلوبة',
+  'VALIDATION.WEIGHT_FROM_REQUIRED': 'الوزن من مطلوب',
+  'VALIDATION.WEIGHT_TO_REQUIRED': 'الوزن إلى مطلوب'
 };
 
 export default Validation;
