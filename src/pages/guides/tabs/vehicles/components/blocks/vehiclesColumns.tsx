@@ -10,18 +10,22 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { SharedTypeBadge } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -35,7 +39,12 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       {
         accessorFn: (row) => row.plate_number,
         id: 'plate number',
-        header: ({ column }) => <DataGridColumnHeader title="Plate number" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PLATE_NUMBER' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -52,7 +61,9 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       {
         accessorFn: (row) => row.type,
         id: 'type',
-        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -66,7 +77,9 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       {
         accessorFn: (row) => row.brand,
         id: 'brand',
-        header: ({ column }) => <DataGridColumnHeader title="Brand" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.BRAND' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -81,7 +94,9 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       {
         accessorFn: (row) => row.model,
         id: 'model',
-        header: ({ column }) => <DataGridColumnHeader title="Model" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.MODEL' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -97,7 +112,10 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         accessorFn: (row) => row.avg_fuel_consumption,
         id: 'avg fuel consumption',
         header: ({ column }) => (
-          <DataGridColumnHeader title="Average fuel consumption" column={column} />
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.AVERAGE_FUEL_CONSUMPTION' })}
+            column={column}
+          />
         ),
         enableSorting: false,
         cell: (info) => (
@@ -115,7 +133,9 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       {
         accessorFn: (row) => row.status,
         id: 'status',
-        header: ({ column }) => <DataGridColumnHeader title="Status" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

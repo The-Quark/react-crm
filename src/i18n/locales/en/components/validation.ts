@@ -79,7 +79,15 @@ const Validation = {
   'VALIDATION.SYMBOL_REQUIRED': 'Symbol is required',
   'VALIDATION.SYMBOL_LENGTH': 'Symbol should be 1 character',
   'VALIDATION.RATE_TO_BASE_REQUIRED': 'Rate to base is required',
-  'VALIDATION.IS_BASE_REQUIRED': 'Base status is required'
+  'VALIDATION.IS_BASE_REQUIRED': 'Base status is required',
+  'VALIDATION.PLATE_NUMBER_REQUIRED': 'Plate number is required',
+  'VALIDATION.VEHICLE_TYPE_REQUIRED': 'Vehicle type is required',
+  'VALIDATION.VEHICLE_TYPE_INVALID': 'Invalid vehicle type',
+  'VALIDATION.BRAND_REQUIRED': 'Brand is required',
+  'VALIDATION.MODEL_REQUIRED': 'Model is required',
+  'VALIDATION.VEHICLE_STATUS_REQUIRED': 'Status is required',
+  'VALIDATION.VEHICLE_STATUS_INVALID': 'Invalid status',
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Average fuel consumption is required'
 };
 
 export default Validation;

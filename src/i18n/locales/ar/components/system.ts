@@ -378,7 +378,18 @@ const System = {
   'SYSTEM.NATIVE_NAME': 'الاسم الأصلي',
   'SYSTEM.LANGUAGE_CODE': 'رمز اللغة',
   'SYSTEM.LTR': 'من اليسار إلى اليمين',
-  'SYSTEM.RTL': 'من اليمين إلى اليسار'
+  'SYSTEM.RTL': 'من اليمين إلى اليسار',
+  'SYSTEM.SOURCES': 'المصادر',
+  'SYSTEM.NEW_SOURCE': 'مصدر جديد',
+  'SYSTEM.SEARCH_SOURCE': 'البحث عن مصدر',
+  'SYSTEM.VEHICLES': 'المركبات',
+  'SYSTEM.NEW_VEHICLE': 'مركبة جديدة',
+  'SYSTEM.SEARCH_PLATE_NUMBER': 'البحث برقم اللوحة',
+  'SYSTEM.BRAND': 'العلامة التجارية',
+  'SYSTEM.MODEL': 'الطراز',
+  'SYSTEM.AVERAGE_FUEL_CONSUMPTION': 'متوسط استهلاك الوقود',
+  'SYSTEM.SELECT_TYPE': 'اختر النوع',
+  'SYSTEM.SELECT_VEHICLE_TYPE': 'اختر نوع المركبة'
 };
 
 export default System;

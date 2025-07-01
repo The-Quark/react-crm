@@ -13,6 +13,7 @@ import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/providers';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIntl } from 'react-intl';
 
 interface IMenuOptionsProps {
   id?: number;
@@ -31,9 +32,10 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
   renderModal,
   invalidateRequestKey
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const { isRTL } = useLanguage();
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleClose = () => {
     setModalOpen(false);
@@ -83,7 +85,7 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
                   <MenuIcon>
                     <KeenIcon icon="setting-4" />
                   </MenuIcon>
-                  <MenuTitle>Edit</MenuTitle>
+                  <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
                 </MenuLink>
               </MenuItem>
               <MenuSeparator />
@@ -92,7 +94,9 @@ const GuidesMenuOptions: FC<IMenuOptionsProps> = ({
                   <MenuIcon>
                     <KeenIcon icon="trash" className="text-danger !text-red-500" />
                   </MenuIcon>
-                  <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+                  <MenuTitle className="text-danger !text-red-500">
+                    {formatMessage({ id: 'SYSTEM.DELETE' })}
+                  </MenuTitle>
                 </MenuLink>
               </MenuItem>
             </>

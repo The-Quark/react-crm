@@ -22,7 +22,8 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { VehiclesResponse } from '@/api/get/getGuides/getVehicles/types.ts';
 import { VehicleStatus, VehicleType } from '@/api/enums';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { SharedError, SharedInput, SharedLoading, SharedSelect } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -42,16 +43,16 @@ const vehiclesStatus = [
 ];
 
 const validateSchema = Yup.object().shape({
-  plate_number: Yup.string().required('Plate number is required'),
+  plate_number: Yup.string().required('VALIDATION.PLATE_NUMBER_REQUIRED'),
   type: Yup.mixed<VehicleType>()
-    .oneOf(Object.values(VehicleType), 'Invalid vehicle type')
-    .required('Vehicle type is required'),
-  brand: Yup.string().required('Brand is required'),
-  model: Yup.string().required('Model is required'),
+    .oneOf(Object.values(VehicleType), 'VALIDATION.VEHICLE_TYPE_INVALID')
+    .required('VALIDATION.VEHICLE_TYPE_REQUIRED'),
+  brand: Yup.string().required('VALIDATION.BRAND_REQUIRED'),
+  model: Yup.string().required('VALIDATION.MODEL_REQUIRED'),
   status: Yup.mixed<VehicleStatus>()
-    .oneOf(Object.values(VehicleStatus), 'Invalid status')
-    .required('Status is required'),
-  avg_fuel_consumption: Yup.string().required('Average fuel consumption is required')
+    .oneOf(Object.values(VehicleStatus), 'VALIDATION.VEHICLE_STATUS_INVALID')
+    .required('VALIDATION.VEHICLE_STATUS_REQUIRED'),
+  avg_fuel_consumption: Yup.string().required('VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED')
 });
 
 const getInitialValues = (isEditMode: boolean, data: VehiclesResponse): IVehicleFormValues => {
@@ -77,8 +78,9 @@ const getInitialValues = (isEditMode: boolean, data: VehiclesResponse): IVehicle
 };
 
 const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: vehicleData,
@@ -127,7 +129,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update' : 'Create'}
+              {formatMessage({ id: id ? 'SYSTEM.EDIT' : 'SYSTEM.CREATE' })}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button
@@ -144,125 +146,46 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
               <SharedLoading simple />
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Plate number</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Plate number"
-                      {...formik.getFieldProps('plate_number')}
-                    />
-                    {formik.touched.plate_number && formik.errors.plate_number && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.plate_number}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput
+                  name="plate_number"
+                  label={formatMessage({ id: 'SYSTEM.PLATE_NUMBER' })}
+                  formik={formik}
+                />
+                <SharedSelect
+                  name="type"
+                  label={formatMessage({ id: 'SYSTEM.TYPE' })}
+                  formik={formik}
+                  options={vehiclesTypes.map((role) => ({
+                    label: role.name,
+                    value: role.name
+                  }))}
+                />
+                <SharedInput
+                  name="brand"
+                  label={formatMessage({ id: 'SYSTEM.BRAND' })}
+                  formik={formik}
+                />
+                <SharedInput
+                  name="model"
+                  label={formatMessage({ id: 'SYSTEM.MODEL' })}
+                  formik={formik}
+                />
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Type</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <Select
-                      value={formik.values.type?.toString()}
-                      onValueChange={(value) => formik.setFieldValue('type', String(value))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {vehiclesTypes.map((role) => (
-                          <SelectItem key={role.id} value={role.name.toString()}>
-                            {role.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {formik.touched.type && formik.errors.type && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.type}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedSelect
+                  name="status"
+                  label={formatMessage({ id: 'SYSTEM.SELECT_STATUS' })}
+                  formik={formik}
+                  options={vehiclesStatus.map((role) => ({
+                    label: role.name,
+                    value: role.name
+                  }))}
+                />
 
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Brand</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Brand"
-                      {...formik.getFieldProps('brand')}
-                    />
-                    {formik.touched.brand && formik.errors.brand && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.brand}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Model</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Model"
-                      {...formik.getFieldProps('model')}
-                    />
-                    {formik.touched.model && formik.errors.model && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.model}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Status</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <Select
-                      value={formik.values.status?.toString()}
-                      onValueChange={(value) => formik.setFieldValue('status', String(value))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {vehiclesStatus.map((role) => (
-                          <SelectItem key={role.id} value={role.name.toString()}>
-                            {role.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {formik.touched.status && formik.errors.status && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.status}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Average fuel consumption</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <input
-                      className="input w-full"
-                      type="text"
-                      placeholder="Average fuel consumption"
-                      {...formik.getFieldProps('avg_fuel_consumption')}
-                    />
-                    {formik.touched.avg_fuel_consumption && formik.errors.avg_fuel_consumption && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.avg_fuel_consumption}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedInput
+                  name="avg_fuel_consumption"
+                  label={formatMessage({ id: 'SYSTEM.AVERAGE_FUEL_CONSUMPTION' })}
+                  formik={formik}
+                />
 
                 <div className="flex justify-end">
                   <button
@@ -270,7 +193,7 @@ const VehicleModal: FC<Props> = ({ open, onOpenChange, id }) => {
                     className="btn btn-primary"
                     disabled={loading || formik.isSubmitting}
                   >
-                    {loading ? 'Please wait...' : 'Save'}
+                    {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                   </button>
                 </div>
               </form>

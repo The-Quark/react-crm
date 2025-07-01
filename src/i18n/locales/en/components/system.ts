@@ -378,7 +378,18 @@ const System = {
   'SYSTEM.NATIVE_NAME': 'Native Name',
   'SYSTEM.LANGUAGE_CODE': 'Language Code',
   'SYSTEM.LTR': 'LTR',
-  'SYSTEM.RTL': 'RTL'
+  'SYSTEM.RTL': 'RTL',
+  'SYSTEM.SOURCES': 'Sources',
+  'SYSTEM.NEW_SOURCE': 'New Source',
+  'SYSTEM.SEARCH_SOURCE': 'Search Source',
+  'SYSTEM.VEHICLES': 'Vehicles',
+  'SYSTEM.NEW_VEHICLE': 'New Vehicle',
+  'SYSTEM.SEARCH_PLATE_NUMBER': 'Search Plate Number',
+  'SYSTEM.BRAND': 'Brand',
+  'SYSTEM.MODEL': 'Model',
+  'SYSTEM.AVERAGE_FUEL_CONSUMPTION': 'Average Fuel Consumption',
+  'SYSTEM.SELECT_TYPE': 'Select Type',
+  'SYSTEM.SELECT_VEHICLE_TYPE': 'Select Vehicle Type'
 };
 
 export default System;

@@ -9,18 +9,22 @@ import SourcesModal from '@/pages/guides/tabs/sources/components/blocks/sourcesM
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 export const useSourcesColumns = (): ColumnDef<Source>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<Source>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -34,7 +38,9 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -49,7 +55,9 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -63,7 +71,9 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

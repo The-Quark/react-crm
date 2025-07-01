@@ -378,7 +378,18 @@ const System = {
   'SYSTEM.NATIVE_NAME': 'Родное название',
   'SYSTEM.LANGUAGE_CODE': 'Код языка',
   'SYSTEM.LTR': 'Слева направо',
-  'SYSTEM.RTL': 'Справа налево'
+  'SYSTEM.RTL': 'Справа налево',
+  'SYSTEM.SOURCES': 'Источники',
+  'SYSTEM.NEW_SOURCE': 'Новый источник',
+  'SYSTEM.SEARCH_SOURCE': 'Поиск источника',
+  'SYSTEM.VEHICLES': 'Транспортные средства',
+  'SYSTEM.NEW_VEHICLE': 'Новое транспортное средство',
+  'SYSTEM.SEARCH_PLATE_NUMBER': 'Поиск по номерному знаку',
+  'SYSTEM.BRAND': 'Марка',
+  'SYSTEM.MODEL': 'Модель',
+  'SYSTEM.AVERAGE_FUEL_CONSUMPTION': 'Средний расход топлива',
+  'SYSTEM.SELECT_TYPE': 'Выберите тип',
+  'SYSTEM.SELECT_VEHICLE_TYPE': 'Выберите тип транспортного средства'
 };
 
 export default System;

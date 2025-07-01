@@ -4,17 +4,21 @@ import VehicleModal from '@/pages/guides/tabs/vehicles/components/blocks/vehicle
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
 }
 
 export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
-  const [modalOpen, setModalOpen] = useState(false);
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const [searchValue, setSearchValue] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
@@ -30,8 +34,8 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
-  }, 300);
+    table.getColumn('plate number')?.setFilterValue(value);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -41,11 +45,11 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Vehicles</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.VEHICLES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-            New Vehicle
+            {formatMessage({ id: 'SYSTEM.NEW_VEHICLE' })}
           </button>
         )}
         <DataGridColumnVisibility table={table} />
@@ -56,7 +60,7 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search plate number"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_PLATE_NUMBER' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

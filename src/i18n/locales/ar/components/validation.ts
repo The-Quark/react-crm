@@ -79,7 +79,15 @@ const Validation = {
   'VALIDATION.SYMBOL_REQUIRED': 'الرمز مطلوب',
   'VALIDATION.SYMBOL_LENGTH': 'يجب أن يكون الرمز مكونًا من حرف واحد',
   'VALIDATION.RATE_TO_BASE_REQUIRED': 'السعر إلى العملة الأساسية مطلوب',
-  'VALIDATION.IS_BASE_REQUIRED': 'حالة العملة الأساسية مطلوبة'
+  'VALIDATION.IS_BASE_REQUIRED': 'حالة العملة الأساسية مطلوبة',
+  'VALIDATION.PLATE_NUMBER_REQUIRED': 'رقم اللوحة مطلوب',
+  'VALIDATION.VEHICLE_TYPE_REQUIRED': 'نوع المركبة مطلوب',
+  'VALIDATION.VEHICLE_TYPE_INVALID': 'نوع المركبة غير صالح',
+  'VALIDATION.BRAND_REQUIRED': 'العلامة التجارية مطلوبة',
+  'VALIDATION.MODEL_REQUIRED': 'الطراز مطلوب',
+  'VALIDATION.VEHICLE_STATUS_REQUIRED': 'الحالة مطلوبة',
+  'VALIDATION.VEHICLE_STATUS_INVALID': 'حالة غير صالحة',
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'متوسط استهلاك الوقود مطلوب'
 };
 
 export default Validation;

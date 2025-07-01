@@ -80,7 +80,15 @@ const Validation = {
   'VALIDATION.SYMBOL_REQUIRED': 'Символ обязателен',
   'VALIDATION.SYMBOL_LENGTH': 'Символ должен состоять из 1 знака',
   'VALIDATION.RATE_TO_BASE_REQUIRED': 'Курс к базовой валюте обязателен',
-  'VALIDATION.IS_BASE_REQUIRED': 'Статус базовой валюты обязателен'
+  'VALIDATION.IS_BASE_REQUIRED': 'Статус базовой валюты обязателен',
+  'VALIDATION.PLATE_NUMBER_REQUIRED': 'Номерной знак обязателен',
+  'VALIDATION.VEHICLE_TYPE_REQUIRED': 'Тип транспортного средства обязателен',
+  'VALIDATION.VEHICLE_TYPE_INVALID': 'Недопустимый тип транспортного средства',
+  'VALIDATION.BRAND_REQUIRED': 'Марка обязательна',
+  'VALIDATION.MODEL_REQUIRED': 'Модель обязательна',
+  'VALIDATION.VEHICLE_STATUS_REQUIRED': 'Статус обязателен',
+  'VALIDATION.VEHICLE_STATUS_INVALID': 'Недопустимый статус',
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Средний расход топлива обязателен'
 };
 
 export default Validation;

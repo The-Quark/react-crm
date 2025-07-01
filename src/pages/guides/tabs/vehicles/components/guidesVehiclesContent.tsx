@@ -6,14 +6,11 @@ import { VehiclesToolbar } from '@/pages/guides/tabs/vehicles/components/blocks/
 import { getVehicles } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesVehiclesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['guidesVehicles', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,10 +35,7 @@ export const GuidesVehiclesContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {
