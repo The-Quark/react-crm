@@ -8,16 +8,13 @@ import { useState } from 'react';
 import { TLanguageCode } from '@/i18n';
 import { useTemplatesColumns } from '@/pages/guides/tabs/templates/components/blocks/templatesColumns.tsx';
 import { TemplatesToolbar } from '@/pages/guides/tabs/templates/components/blocks/templatesToolbar.tsx';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesTemplatesContent = () => {
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
   const [searchCodeTerm, setSearchCodeTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -45,7 +42,7 @@ export const GuidesTemplatesContent = () => {
     queryKey: ['guidesTemplatesLanguages'],
     queryFn: () => getLanguages({}),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 60
+    staleTime: CACHE_TIME
   });
 
   const columns = useTemplatesColumns({
@@ -63,10 +60,7 @@ export const GuidesTemplatesContent = () => {
 
   const handleSearchCode = (code: string) => {
     setSearchCodeTerm(code);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleLanguageChange = (languageCode: string) => {

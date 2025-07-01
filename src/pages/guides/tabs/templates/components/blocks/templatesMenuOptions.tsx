@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { TemplatesModal } from '@/pages/guides/tabs/templates/components/blocks/templatesModal.tsx';
 import { TemplatesUploadModal } from '@/pages/guides/tabs/templates/components/blocks/templatesUploadModal.tsx';
 import { useLanguage } from '@/providers';
+import { useIntl } from 'react-intl';
 
 interface MenuOptionsProps {
   id?: number;
@@ -32,6 +33,7 @@ export const TemplatesMenuOptions: FC<MenuOptionsProps> = ({ id, selectedLanguag
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const queryClient = useQueryClient();
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
 
   const handleUploadOpen = () => {
     setActiveModal('upload');
@@ -88,7 +90,7 @@ export const TemplatesMenuOptions: FC<MenuOptionsProps> = ({ id, selectedLanguag
                     <MenuIcon>
                       <KeenIcon icon="file-up" />
                     </MenuIcon>
-                    <MenuTitle>Upload file</MenuTitle>
+                    <MenuTitle>{formatMessage({ id: 'SYSTEM.UPLOAD_FILE' })}</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -97,7 +99,7 @@ export const TemplatesMenuOptions: FC<MenuOptionsProps> = ({ id, selectedLanguag
                     <MenuIcon>
                       <KeenIcon icon="pencil" />
                     </MenuIcon>
-                    <MenuTitle>Edit</MenuTitle>
+                    <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
                   </MenuLink>
                 </MenuItem>
                 <MenuSeparator />
@@ -106,7 +108,9 @@ export const TemplatesMenuOptions: FC<MenuOptionsProps> = ({ id, selectedLanguag
                     <MenuIcon>
                       <KeenIcon icon="trash" className="text-danger !text-red-500" />
                     </MenuIcon>
-                    <MenuTitle className="text-danger !text-red-500">Delete</MenuTitle>
+                    <MenuTitle className="text-danger !text-red-500">
+                      {formatMessage({ id: 'SYSTEM.DELETE' })}
+                    </MenuTitle>
                   </MenuLink>
                 </MenuItem>
               </>

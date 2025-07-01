@@ -8,9 +8,11 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { FileType } from '@/api/get/getGuides/getFileTypes/types.ts';
 import FileTypeModal from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesModal.tsx';
+import { useIntl } from 'react-intl';
 
 export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
   const { isRTL } = useLanguage();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
@@ -19,7 +21,9 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -33,7 +37,9 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Source" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -48,7 +54,9 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       {
         accessorFn: (row) => row.step,
         id: 'step',
-        header: ({ column }) => <DataGridColumnHeader title="Step" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STEP' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -62,7 +70,9 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       {
         accessorFn: (row) => row.types,
         id: 'types',
-        header: ({ column }) => <DataGridColumnHeader title="Types" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPES' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const types = info.row.original.types;

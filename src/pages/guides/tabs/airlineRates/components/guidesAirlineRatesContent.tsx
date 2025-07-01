@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getAirlineRates } from '@/api';
@@ -6,14 +5,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useAirlineRatesColumns } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesColumns.tsx';
 import { AirlineRatesToolbar } from '@/pages/guides/tabs/airlineRates/components/blocks/airlineRatesToolbar.tsx';
 import { useState } from 'react';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesAirlineRatesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['guidesAirlineRates', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,10 +34,7 @@ export const GuidesAirlineRatesContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

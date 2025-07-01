@@ -22,13 +22,15 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   SharedAutocomplete,
+  SharedCheckBox,
   SharedDecimalInput,
   SharedError,
   SharedLoading
 } from '@/partials/sharedUI';
 import { IAirlineRatesResponse } from '@/api/get/getGuides/getAirlineRates/types.ts';
 import { IAirlineRateFormValues } from '@/api/post/postGuides/postAirlineRate/types.ts';
-import { decimalValidation } from '@/utils';
+import { CACHE_TIME_DEFAULT, decimalValidation } from '@/utils';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -37,21 +39,21 @@ interface Props {
 }
 
 const validateSchema = Yup.object({
-  airline_id: Yup.string().required('Airline is required'),
-  from_country_id: Yup.string().required('Departure country is required'),
-  to_country_id: Yup.string().required('Destination country is required'),
-  from_city_id: Yup.string().required('Departure city is required'),
-  to_city_id: Yup.string().required('Destination city is required'),
-  currency: Yup.string().required('Currency is required'),
-  price_per_kg: decimalValidation.required('Price per kg is required'),
-  min_weight: decimalValidation.required('Minimum weight is required'),
+  airline_id: Yup.string().required('VALIDATION.AIRLINE_REQUIRED'),
+  from_country_id: Yup.string().required('VALIDATION.DEPARTURE_COUNTRY_REQUIRED'),
+  to_country_id: Yup.string().required('VALIDATION.DESTINATION_COUNTRY_REQUIRED'),
+  from_city_id: Yup.string().required('VALIDATION.DEPARTURE_CITY_REQUIRED'),
+  to_city_id: Yup.string().required('VALIDATION.DESTINATION_CITY_REQUIRED'),
+  currency: Yup.string().required('VALIDATION.CURRENCY_REQUIRED'),
+  price_per_kg: decimalValidation.required('VALIDATION.PRICE_PER_KG_REQUIRED'),
+  min_weight: decimalValidation.required('VALIDATION.MIN_WEIGHT_REQUIRED'),
   max_weight: decimalValidation
-    .test('moreThan', 'Maximum weight must be greater than minimum weight', function (value) {
+    .test('moreThan', 'VALIDATION.MAX_WEIGHT_MORE_THAN_MIN', function (value) {
       const { min_weight } = this.parent;
       if (value === undefined || min_weight === undefined) return true;
       return Number(value) > Number(min_weight);
     })
-    .required('Maximum weight is required'),
+    .required('VALIDATION.MAX_WEIGHT_REQUIRED'),
   is_active: Yup.boolean()
 });
 
@@ -89,6 +91,8 @@ const getInitialValues = (
 };
 
 export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
+  const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
   const [loading, setLoading] = useState(false);
   const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
   const [searchFromCountryTerm, setSearchFromCountryTerm] = useState('');
@@ -96,7 +100,6 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const [searchToCountryTerm, setSearchToCountryTerm] = useState('');
   const [searchToCityTerm, setSearchToCityTerm] = useState('');
   const [searchCurrencyTerm, setSearchCurrencyTerm] = useState('');
-  const queryClient = useQueryClient();
 
   const {
     data: airlineRateData,
@@ -117,7 +120,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['airlineRatesAirline'],
     queryFn: () => getAirlines({}),
-    staleTime: 1000 * 60 * 2,
+    staleTime: CACHE_TIME_DEFAULT,
     enabled: open
   });
 
@@ -141,7 +144,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['airlineRatesCurrencies'],
     queryFn: () => getCurrencies({}),
-    staleTime: 1000 * 60 * 2,
+    staleTime: CACHE_TIME_DEFAULT,
     enabled: open
   });
 
@@ -263,7 +266,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -282,11 +285,11 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedAutocomplete
-                label="Airline"
+                label={formatMessage({ id: 'SYSTEM.AIRLINE' })}
                 value={formik.values.airline_id}
                 options={airlineData?.result ?? []}
-                placeholder="Select airline"
-                searchPlaceholder="Search airline"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRLINE' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRLINE' })}
                 onChange={(val) => {
                   formik.setFieldValue('airline_id', val);
                 }}
@@ -296,11 +299,11 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setSearchAirlineTerm}
               />
               <SharedAutocomplete
-                label="From Country"
+                label={formatMessage({ id: 'SYSTEM.FROM_COUNTRY' })}
                 value={formik.values.from_country_id}
                 options={countriesData?.data ?? []}
-                placeholder="Select country"
-                searchPlaceholder="Search country"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_FROM_COUNTRY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_FROM_COUNTRY' })}
                 onChange={(val) => {
                   formik.setFieldValue('from_country_id', val);
                   formik.setFieldValue('from_city_id', '');
@@ -311,11 +314,15 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setSearchFromCountryTerm}
               />
               <SharedAutocomplete
-                label="From City"
+                label={formatMessage({ id: 'SYSTEM.FROM_CITY' })}
                 value={formik.values.from_city_id}
                 options={fromCitiesData?.data[0]?.cities ?? []}
-                placeholder={formik.values.from_country_id ? 'Select city' : 'Select country first'}
-                searchPlaceholder="Search city"
+                placeholder={
+                  formik.values.from_country_id
+                    ? formatMessage({ id: 'SYSTEM.SELECT_FROM_CITY' })
+                    : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+                }
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
                 onChange={(val) => formik.setFieldValue('from_city_id', val)}
                 error={formik.errors.from_city_id as string}
                 touched={formik.touched.from_city_id}
@@ -323,15 +330,17 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setSearchFromCityTerm}
                 disabled={!formik.values.from_country_id}
                 loading={fromCitiesLoading}
-                errorText={fromCitiesIsError ? 'Failed to load cities' : undefined}
-                emptyText="No cities available"
+                errorText={
+                  fromCitiesIsError ? formatMessage({ id: 'SYSTEM.NO_VALUES' }) : undefined
+                }
+                emptyText={formatMessage({ id: 'SYSTEM.NO_OPTIONS' })}
               />
               <SharedAutocomplete
-                label="To Country"
+                label={formatMessage({ id: 'SYSTEM.TO_COUNTRY' })}
                 value={formik.values.to_country_id}
                 options={countriesData?.data ?? []}
-                placeholder="Select country"
-                searchPlaceholder="Search country"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
                 onChange={(val) => {
                   formik.setFieldValue('to_country_id', val);
                   formik.setFieldValue('to_city_id', '');
@@ -342,11 +351,15 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setSearchToCountryTerm}
               />
               <SharedAutocomplete
-                label="To City"
+                label={formatMessage({ id: 'SYSTEM.TO_CITY' })}
                 value={formik.values.to_city_id}
                 options={toCitiesData?.data[0]?.cities ?? []}
-                placeholder={formik.values.to_country_id ? 'Select city' : 'Select country first'}
-                searchPlaceholder="Search city"
+                placeholder={
+                  formik.values.to_country_id
+                    ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+                    : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+                }
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
                 onChange={(val) => formik.setFieldValue('to_city_id', val)}
                 error={formik.errors.to_city_id as string}
                 touched={formik.touched.to_city_id}
@@ -354,15 +367,15 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setSearchToCityTerm}
                 disabled={!formik.values.to_country_id}
                 loading={toCitiesLoading}
-                errorText={toCitiesIsError ? 'Failed to load cities' : undefined}
-                emptyText="No cities available"
+                errorText={toCitiesIsError ? formatMessage({ id: 'SYSTEM.NO_VALUES' }) : undefined}
+                emptyText={formatMessage({ id: 'SYSTEM.NO_OPTIONS' })}
               />
               <SharedAutocomplete
-                label="Currency"
+                label={formatMessage({ id: 'SYSTEM.CURRENCY' })}
                 value={formik.values.currency}
                 options={currenciesData?.result ?? []}
-                placeholder="Select currency"
-                searchPlaceholder="Search currency"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_CURRENCY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CURRENCY' })}
                 onChange={(val) => {
                   formik.setFieldValue('currency', val);
                 }}
@@ -371,31 +384,26 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 searchTerm={searchCurrencyTerm}
                 onSearchTermChange={setSearchCurrencyTerm}
               />
-              <SharedDecimalInput name="price_per_kg" label="Price per kg" formik={formik} />
-              <SharedDecimalInput name="min_weight" label="Min weight" formik={formik} />
-              <SharedDecimalInput name="max_weight" label="Max weight" formik={formik} />
-
-              <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Active</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <div className="flex items-center gap-5">
-                    <label className="checkbox-group flex items-center gap-2">
-                      <input
-                        className="checkbox"
-                        type="checkbox"
-                        name="is_active"
-                        checked={formik.values.is_active}
-                        onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                      />
-                    </label>
-                  </div>
-                  {formik.touched.is_active && formik.errors.is_active && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.is_active}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedDecimalInput
+                name="price_per_kg"
+                label={formatMessage({ id: 'SYSTEM.PRICE_PER_KG' })}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="min_weight"
+                label={formatMessage({ id: 'SYSTEM.MIN_WEIGHT' })}
+                formik={formik}
+              />
+              <SharedDecimalInput
+                name="max_weight"
+                label={formatMessage({ id: 'SYSTEM.MIN_WEIGHT' })}
+                formik={formik}
+              />
+              <SharedCheckBox
+                name="is_active"
+                label={formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                formik={formik}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -403,7 +411,7 @@ export const AirlineRatesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

@@ -87,7 +87,28 @@ const Validation = {
   'VALIDATION.MODEL_REQUIRED': 'الطراز مطلوب',
   'VALIDATION.VEHICLE_STATUS_REQUIRED': 'الحالة مطلوبة',
   'VALIDATION.VEHICLE_STATUS_INVALID': 'حالة غير صالحة',
-  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'متوسط استهلاك الوقود مطلوب'
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'متوسط استهلاك الوقود مطلوب',
+  'VALIDATION.CODE_MAX': 'الحد الأقصى للطول هو 10 أحرف',
+  'VALIDATION.DEPARTURE_COUNTRY_REQUIRED': 'بلد المغادرة مطلوب',
+  'VALIDATION.DESTINATION_COUNTRY_REQUIRED': 'بلد الوجهة مطلوب',
+  'VALIDATION.DEPARTURE_CITY_REQUIRED': 'مدينة المغادرة مطلوبة',
+  'VALIDATION.DESTINATION_CITY_REQUIRED': 'مدينة الوجهة مطلوبة',
+  'VALIDATION.PRICE_PER_KG_REQUIRED': 'السعر لكل كيلوغرام مطلوب',
+  'VALIDATION.MIN_WEIGHT_REQUIRED': 'الوزن الأدنى مطلوب',
+  'VALIDATION.MAX_WEIGHT_REQUIRED': 'الوزن الأقصى مطلوب',
+  'VALIDATION.MAX_WEIGHT_MORE_THAN_MIN': 'يجب أن يكون الوزن الأقصى أكبر من الوزن الأدنى',
+  'VALIDATION.CODE_FORMAT_ALPHANUMERIC_UNDERSCORE':
+    'الرمز يمكن أن يحتوي فقط على حروف، أرقام، وتسطير سفلي',
+  'VALIDATION.LANGUAGE_CODE_REQUIRED': 'رمز اللغة مطلوب',
+  'VALIDATION.COMPANY_MIN': 'يجب تحديد شركة واحدة على الأقل',
+  'VALIDATION.UNIT_REQUIRED': 'الوحدة مطلوبة',
+  'VALIDATION.PRICE_REQUIRED': 'السعر مطلوب',
+  'VALIDATION.TEMPLATE_TYPE_INVALID': 'نوع القالب غير صالح',
+  'VALIDATION.SUBJECT_REQUIRED': 'الموضوع مطلوب',
+  'VALIDATION.CONTENT_REQUIRED': 'المحتوى مطلوب',
+  'VALIDATION.TYPES_REQUIRED': 'الأنواع مطلوبة',
+  'VALIDATION.TYPES_MIN': 'يجب تحديد نوع واحد على الأقل',
+  'VALIDATION.STEP_REQUIRED': 'الخطوة مطلوبة'
 };
 
 export default Validation;

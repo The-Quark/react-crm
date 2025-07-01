@@ -9,6 +9,7 @@ import { PackageType } from '@/api/get/getGuides/getPackageTypes/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 interface Language {
   id: number;
@@ -28,13 +29,16 @@ export const usePackageTypesColumns = ({
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<PackageType>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -51,7 +55,12 @@ export const usePackageTypesColumns = ({
           return lang?.name || '';
         },
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Package type" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => {
           const lang = info.row.original.language.find(
@@ -71,7 +80,9 @@ export const usePackageTypesColumns = ({
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -89,7 +100,12 @@ export const usePackageTypesColumns = ({
             .filter(Boolean)
             .join(', '),
         id: 'language_code',
-        header: ({ column }) => <DataGridColumnHeader title="Language Codes" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.LANGUAGES_CODE' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => {
           const languageCodes = info.row.original.language
@@ -113,7 +129,12 @@ export const usePackageTypesColumns = ({
           return lang?.description || '';
         },
         id: 'description',
-        header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => {
           const lang = info.row.original.language.find(
@@ -135,7 +156,9 @@ export const usePackageTypesColumns = ({
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

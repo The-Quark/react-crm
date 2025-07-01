@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { getPackageMaterials } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -6,14 +5,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { usePackageMaterialsColumns } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsColumns.tsx';
 import { PackageMaterialsToolbar } from '@/pages/guides/tabs/packageMaterials/components/blocks/packageMaterialsToolbar.tsx';
 import { useState } from 'react';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesPackageMaterialsContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['packageMaterials', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,10 +34,7 @@ export const GuidesPackageMaterialsContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {

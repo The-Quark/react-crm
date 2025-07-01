@@ -9,18 +9,22 @@ import PackageMaterialsModal from '@/pages/guides/tabs/packageMaterials/componen
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<PackageMaterial>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -34,7 +38,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Name" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.NAME' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -49,7 +55,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.code,
         id: 'code',
-        header: ({ column }) => <DataGridColumnHeader title="Code" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -63,7 +71,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.price,
         id: 'price',
-        header: ({ column }) => <DataGridColumnHeader title="Price" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRICE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -78,7 +88,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.unit.name,
         id: 'unit name',
-        header: ({ column }) => <DataGridColumnHeader title="Unit" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.UNIT' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -95,7 +107,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.company.map((c) => c.company_name).join(', '),
         id: 'company_name',
-        header: ({ column }) => <DataGridColumnHeader title="Company" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => {
           const companyNames = info.row.original.company.map((c) => c.company_name);
@@ -115,7 +129,9 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

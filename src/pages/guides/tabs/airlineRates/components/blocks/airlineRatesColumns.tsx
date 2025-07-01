@@ -9,18 +9,22 @@ import { AirlineRatesModal } from '@/pages/guides/tabs/airlineRates/components/b
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { useIntl } from 'react-intl';
 
 export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<AirlineRate>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -34,7 +38,9 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       {
         accessorFn: (row) => row.airline.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Airline" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.AIRLINE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -51,7 +57,12 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       {
         accessorFn: (row) => row.price_per_kg,
         id: 'price per kg',
-        header: ({ column }) => <DataGridColumnHeader title="Price per kg" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PRICE_PER_KG' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -67,7 +78,9 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       {
         accessorFn: (row) => row.from_city.name,
         id: 'from city',
-        header: ({ column }) => <DataGridColumnHeader title="From city" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.FROM_CITY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -84,7 +97,9 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       {
         accessorFn: (row) => row.to_city.name,
         id: 'to city',
-        header: ({ column }) => <DataGridColumnHeader title="To city" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TO_CITY' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -100,7 +115,9 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       {
         accessorFn: (row) => row.is_active,
         id: 'active',
-        header: ({ column }) => <DataGridColumnHeader title="Active" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

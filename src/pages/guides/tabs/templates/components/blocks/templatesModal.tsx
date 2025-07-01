@@ -17,13 +17,15 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
-  SharedSelect
+  SharedSelect,
+  SharedTextArea
 } from '@/partials/sharedUI';
 import { ITemplatesResponse } from '@/api/get/getGuides/getTemplates/types.ts';
 import { TemplateType } from '@/api/enums';
 import { ITemplatesFormValues } from '@/api/post/postGuides/postTemplate/types.ts';
 import { templateTypesOptions } from '@/utils/enumsOptions/mocks.ts';
-import { Textarea } from '@/components/ui/textarea.tsx';
+import { useIntl } from 'react-intl';
+import { CACHE_TIME_DEFAULT } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -33,15 +35,15 @@ interface Props {
 }
 
 const validateSchema = Yup.object({
-  company_id: Yup.string().required('Company is required'),
-  language_code: Yup.string().required('Language code is required'),
+  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
+  language_code: Yup.string().required('VALIDATION.LANGUAGE_CODE_REQUIRED'),
   code: Yup.string()
-    .matches(/^[A-Za-z0-9_]+$/, 'Code can only contain letters, numbers, and underscores')
-    .required('Code is required'),
-  type: Yup.string().oneOf(Object.values(TemplateType), 'Invalid template type'),
-  title: Yup.string().required('Title is required'),
-  subject: Yup.string().required('Subject is required'),
-  content: Yup.string().required('Content is required')
+    .matches(/^[A-Za-z0-9_]+$/, 'VALIDATION.CODE_FORMAT_ALPHANUMERIC_UNDERSCORE')
+    .required('VALIDATION.CODE_REQUIRED'),
+  type: Yup.string().oneOf(Object.values(TemplateType), 'VALIDATION.TEMPLATE_TYPE_INVALID'),
+  title: Yup.string().required('VALIDATION.TITLE_REQUIRED'),
+  subject: Yup.string().required('VALIDATION.SUBJECT_REQUIRED'),
+  content: Yup.string().required('VALIDATION.CONTENT_REQUIRED')
 });
 
 const getInitialValues = (
@@ -72,10 +74,11 @@ const getInitialValues = (
 };
 
 export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLanguage }) => {
+  const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+
   const [loading, setLoading] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
-
-  const queryClient = useQueryClient();
 
   const {
     data: templateData,
@@ -96,7 +99,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
   } = useQuery({
     queryKey: ['templatesCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 2,
+    staleTime: CACHE_TIME_DEFAULT,
     enabled: open
   });
 
@@ -108,7 +111,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
   } = useQuery({
     queryKey: ['templatesLanguage'],
     queryFn: () => getLanguages({}),
-    staleTime: 1000 * 60 * 2,
+    staleTime: CACHE_TIME_DEFAULT,
     enabled: open
   });
 
@@ -158,7 +161,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -177,13 +180,13 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
               <SharedAutocomplete
-                label="Company"
+                label={formatMessage({ id: 'SYSTEM.COMPANY' })}
                 value={formik.values.company_id}
                 options={
                   companyData?.result.map((item) => ({ ...item, name: item.company_name })) ?? []
                 }
-                placeholder="Select company"
-                searchPlaceholder="Search company"
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
                 onChange={(val) => {
                   formik.setFieldValue('company_id', val);
                 }}
@@ -194,7 +197,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
               />
               <SharedSelect
                 name="language_code"
-                label="Language"
+                label={formatMessage({ id: 'SYSTEM.LANGUAGE' })}
                 formik={formik}
                 options={
                   languageData?.result?.map((lang) => ({ label: lang.name, value: lang.code })) ??
@@ -203,28 +206,33 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
               />
               <SharedSelect
                 name="type"
-                label="Type"
+                label={formatMessage({ id: 'SYSTEM.TYPE' })}
                 formik={formik}
                 options={
                   templateTypesOptions.map((type) => ({ label: type.name, value: type.value })) ??
                   []
                 }
               />
-              <SharedInput name="code" label="Code" formik={formik} />
-              <SharedInput name="title" label="Title" formik={formik} />
-              <SharedInput name="subject" label="Subject" formik={formik} />
-
-              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <label className="form-label max-w-56">Content</label>
-                <div className="flex columns-1 w-full flex-wrap">
-                  <Textarea rows={4} placeholder="Content" {...formik.getFieldProps('content')} />
-                  {formik.touched.content && formik.errors.content && (
-                    <span role="alert" className="text-danger text-xs mt-1">
-                      {formik.errors.content}
-                    </span>
-                  )}
-                </div>
-              </div>
+              <SharedInput
+                name="code"
+                label={formatMessage({ id: 'SYSTEM.CODE' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="title"
+                label={formatMessage({ id: 'SYSTEM.TITLE' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="subject"
+                label={formatMessage({ id: 'SYSTEM.SUBJECT' })}
+                formik={formik}
+              />
+              <SharedTextArea
+                name="content"
+                label={formatMessage({ id: 'SYSTEM.CONTENT' })}
+                formik={formik}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -232,7 +240,7 @@ export const TemplatesModal: FC<Props> = ({ open, onOpenChange, id, selectedLang
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

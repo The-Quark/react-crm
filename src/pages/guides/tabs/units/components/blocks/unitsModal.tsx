@@ -15,6 +15,7 @@ import { postUnit, putUnit, getUnits } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { UnitsResponse } from '@/api/get/getGuides/getUnits/types.ts';
 import { SharedError, SharedInput, SharedLoading } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -23,8 +24,8 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  code: Yup.string().required('Code is required'),
-  name: Yup.string().required('Name is required')
+  code: Yup.string().required('VALIDATION.CODE_REQUIRED'),
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED')
 });
 
 const getInitialValues = (isEditMode: boolean, data: UnitsResponse): IUnitsFormValues => {
@@ -41,8 +42,9 @@ const getInitialValues = (isEditMode: boolean, data: UnitsResponse): IUnitsFormV
 };
 
 const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: unitData,
@@ -90,7 +92,7 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -107,8 +109,16 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-              <SharedInput name="name" label="Name" formik={formik} />
-              <SharedInput name="code" label="Unit code" formik={formik} />
+              <SharedInput
+                name="name"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="code"
+                label={formatMessage({ id: 'SYSTEM.CODE' })}
+                formik={formik}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -116,7 +126,7 @@ const UnitModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

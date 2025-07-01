@@ -4,17 +4,20 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
 import FileTypeModal from '@/pages/guides/tabs/fileTypes/components/blocks/fileTypesModal.tsx';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
+import { useIntl } from 'react-intl';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
 }
 
 export const FileTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
-  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
+  const [searchValue, setSearchValue] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
@@ -31,7 +34,7 @@ export const FileTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
       onSearch(value);
     }
     table.getColumn('name')?.setFilterValue(value);
-  }, 300);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -41,11 +44,11 @@ export const FileTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">File Types</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.FILE_TYPES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-            New File type
+            {formatMessage({ id: 'SYSTEM.NEW_FILE_TYPE' })}
           </button>
         )}
         <DataGridColumnVisibility table={table} />
@@ -56,7 +59,7 @@ export const FileTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search file type"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_FILE_TYPE' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

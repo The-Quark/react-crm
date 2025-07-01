@@ -88,7 +88,28 @@ const Validation = {
   'VALIDATION.MODEL_REQUIRED': 'Модель обязательна',
   'VALIDATION.VEHICLE_STATUS_REQUIRED': 'Статус обязателен',
   'VALIDATION.VEHICLE_STATUS_INVALID': 'Недопустимый статус',
-  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Средний расход топлива обязателен'
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Средний расход топлива обязателен',
+  'VALIDATION.CODE_MAX': 'Максимальная длина 10 символов',
+  'VALIDATION.DEPARTURE_COUNTRY_REQUIRED': 'Страна отправления обязательна',
+  'VALIDATION.DESTINATION_COUNTRY_REQUIRED': 'Страна назначения обязательна',
+  'VALIDATION.DEPARTURE_CITY_REQUIRED': 'Город отправления обязателен',
+  'VALIDATION.DESTINATION_CITY_REQUIRED': 'Город назначения обязателен',
+  'VALIDATION.PRICE_PER_KG_REQUIRED': 'Цена за кг обязательна',
+  'VALIDATION.MIN_WEIGHT_REQUIRED': 'Минимальный вес обязателен',
+  'VALIDATION.MAX_WEIGHT_REQUIRED': 'Максимальный вес обязателен',
+  'VALIDATION.MAX_WEIGHT_MORE_THAN_MIN': 'Максимальный вес должен быть больше минимального',
+  'VALIDATION.CODE_FORMAT_ALPHANUMERIC_UNDERSCORE':
+    'Код может содержать только буквы, цифры и подчеркивания',
+  'VALIDATION.LANGUAGE_CODE_REQUIRED': 'Код языка обязателен',
+  'VALIDATION.COMPANY_MIN': 'Должна быть выбрана хотя бы одна компания',
+  'VALIDATION.UNIT_REQUIRED': 'Единица измерения обязательна',
+  'VALIDATION.PRICE_REQUIRED': 'Цена обязательна',
+  'VALIDATION.TEMPLATE_TYPE_INVALID': 'Недопустимый тип шаблона',
+  'VALIDATION.SUBJECT_REQUIRED': 'Тема обязательна',
+  'VALIDATION.CONTENT_REQUIRED': 'Содержимое обязательно',
+  'VALIDATION.TYPES_REQUIRED': 'Типы обязательны',
+  'VALIDATION.TYPES_MIN': 'Должен быть выбран хотя бы один тип',
+  'VALIDATION.STEP_REQUIRED': 'Шаг обязателен'
 };
 
 export default Validation;

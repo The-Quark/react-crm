@@ -8,18 +8,22 @@ import { DeliveryType } from '@/api/get/getGuides/getDeliveryTypes/types.ts';
 import { DeliveryTypesModal } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
 
 export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
   const columns = useMemo<ColumnDef<DeliveryType>[]>(
     () => [
       {
         accessorFn: (row) => row.id,
         id: 'id',
-        header: ({ column }) => <DataGridColumnHeader title="ID" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">
@@ -33,7 +37,9 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
       {
         accessorFn: (row) => row.name,
         id: 'name',
-        header: ({ column }) => <DataGridColumnHeader title="Type" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex flex-col gap-0.5">
@@ -48,7 +54,12 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
       {
         accessorFn: (row) => row.description,
         id: 'description',
-        header: ({ column }) => <DataGridColumnHeader title="Description" column={column} />,
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+            column={column}
+          />
+        ),
         enableSorting: false,
         cell: (info) => (
           <div className="flex items-center gap-1.5">

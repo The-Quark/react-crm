@@ -15,6 +15,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedError, SharedInput, SharedInputTags, SharedLoading } from '@/partials/sharedUI';
 import { FileTypesResponse } from '@/api/get/getGuides/getFileTypes/types.ts';
 import { IFileTypeFormValues } from '@/api/post/postGuides/postFileType/types.ts';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -23,12 +24,12 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED'),
   types: Yup.array()
     .of(Yup.string().required())
-    .min(1, 'At least one type must be selected')
-    .required('Types is required'),
-  step: Yup.number().required('Step is required')
+    .min(1, 'VALIDATION.TYPES_MIN')
+    .required('VALIDATION.TYPES_REQUIRED'),
+  step: Yup.number().required('VALIDATION.STEP_REQUIRED')
 });
 
 const getInitialValues = (isEditMode: boolean, data: FileTypesResponse): IFileTypeFormValues => {
@@ -47,8 +48,9 @@ const getInitialValues = (isEditMode: boolean, data: FileTypesResponse): IFileTy
 };
 
 const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: fileTypeData,
@@ -96,7 +98,7 @@ const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -113,8 +115,17 @@ const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-              <SharedInput name="name" label="Name" formik={formik} />
-              <SharedInput name="step" label="Step" formik={formik} type="number" />
+              <SharedInput
+                name="name"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
+              <SharedInput
+                name="step"
+                label={formatMessage({ id: 'SYSTEM.STEP' })}
+                formik={formik}
+                type="number"
+              />
 
               <SharedInputTags
                 value={
@@ -129,7 +140,7 @@ const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onChange={(value) =>
                   formik.setFieldValue('types', value as typeof formik.values.types)
                 }
-                label="Types"
+                label={formatMessage({ id: 'SYSTEM.TYPES' })}
                 error={formik.errors.types as string}
                 touched={formik.touched.types}
               />
@@ -140,7 +151,7 @@ const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

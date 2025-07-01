@@ -14,7 +14,8 @@ import { postPackageType, putPackageType, getPackageTypes } from '@/api';
 import { CircularProgress } from '@mui/material';
 import { IPackageTypeFormValues } from '@/api/post/postGuides/postPackageType/types.ts';
 import { useQueryClient } from '@tanstack/react-query';
-import { SharedInput, SharedSelect, SharedTextArea } from '@/partials/sharedUI';
+import { SharedCheckBox, SharedInput, SharedSelect, SharedTextArea } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 interface Language {
   code: string;
@@ -31,15 +32,17 @@ interface Props {
 
 const validateSchema = Yup.object().shape({
   code: Yup.string()
-    .matches(/^[A-Za-z0-9_]+$/, 'Code can only contain letters, numbers, and underscores')
-    .required('Code is required'),
-  name: Yup.string().required('Name is required'),
-  language_code: Yup.string().required('Language code is required'),
+    .matches(/^[A-Za-z0-9_]+$/, 'VALIDATION.CODE_FORMAT_ALPHANUMERIC_UNDERSCORE')
+    .required('VALIDATION.CODE_REQUIRED'),
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED'),
+  language_code: Yup.string().required('VALIDATION.LANGUAGE_CODE_REQUIRED'),
   description: Yup.string().notRequired(),
-  is_active: Yup.boolean().required('Active status is required')
+  is_active: Yup.boolean().required('VALIDATION.ACTIVE_STATUS_REQUIRED')
 });
 
 const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selectedLanguage }) => {
+  const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<IPackageTypeFormValues>({
@@ -49,7 +52,6 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
     description: '',
     is_active: true
   });
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id) {
@@ -112,7 +114,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
         <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
           <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
             <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-              {id ? 'Update' : 'Create'}
+              {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
             </DialogTitle>
             <DialogDescription></DialogDescription>
             <button
@@ -130,12 +132,20 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
               </div>
             ) : (
               <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-                <SharedInput name="name" label="Name" formik={formik} />
-                <SharedInput name="code" label="Code" formik={formik} />
+                <SharedInput
+                  name="name"
+                  label={formatMessage({ id: 'SYSTEM.NAME' })}
+                  formik={formik}
+                />
+                <SharedInput
+                  name="code"
+                  label={formatMessage({ id: 'SYSTEM.CODE' })}
+                  formik={formik}
+                />
 
                 <SharedSelect
                   name="language_code"
-                  label="Language code"
+                  label={formatMessage({ id: 'SYSTEM.LANGUAGES_CODE' })}
                   formik={formik}
                   options={languages.map((language) => ({
                     label: language.name,
@@ -143,29 +153,16 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
                   }))}
                 />
 
-                <SharedTextArea name="description" label="Description" formik={formik} />
-
-                <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">Active</label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <div className="flex items-center gap-5">
-                      <label className="checkbox-group flex items-center gap-2">
-                        <input
-                          className="checkbox"
-                          type="checkbox"
-                          name="is_active"
-                          checked={formik.values.is_active}
-                          onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                        />
-                      </label>
-                    </div>
-                    {formik.touched.is_active && formik.errors.is_active && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formik.errors.is_active}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedTextArea
+                  name="description"
+                  label={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+                  formik={formik}
+                />
+                <SharedCheckBox
+                  name="is_active"
+                  label={formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                  formik={formik}
+                />
 
                 <div className="flex justify-end">
                   <button
@@ -173,7 +170,7 @@ const PackageTypesModal: FC<Props> = ({ open, onOpenChange, id, languages, selec
                     className="btn btn-primary"
                     disabled={loading || formik.isSubmitting}
                   >
-                    {loading ? 'Please wait...' : 'Save'}
+                    {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                   </button>
                 </div>
               </form>

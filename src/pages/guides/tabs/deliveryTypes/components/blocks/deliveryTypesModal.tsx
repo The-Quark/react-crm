@@ -15,6 +15,7 @@ import { IDeliveryTypeFormValues } from '@/api/post/postGuides/postDeliveryType/
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DeliveryTypesResponse } from '@/api/get/getGuides/getDeliveryTypes/types.ts';
 import { SharedError, SharedInput, SharedLoading, SharedTextArea } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 interface Props {
   open: boolean;
@@ -23,7 +24,7 @@ interface Props {
 }
 
 const validateSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
+  name: Yup.string().required('VALIDATION.NAME_REQUIRED'),
   description: Yup.string().optional()
 });
 
@@ -44,8 +45,9 @@ const getInitialValues = (
 };
 
 export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { formatMessage } = useIntl();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: deliveryTypesData,
@@ -93,7 +95,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
       <DialogContent className="container-fixed max-w-screen-md p-0 [&>button]:hidden">
         <DialogHeader className="modal-rounded-t p-0 border-0 relative min-h-20 flex flex-col items-stretch justify-end bg-center bg-cover bg-no-repeat modal-bg">
           <DialogTitle className="absolute top-0 text-1.5xl ml-4 mt-3">
-            {id ? 'Update' : 'Create'}
+            {formatMessage({ id: id ? 'SYSTEM.UPDATE' : 'SYSTEM.CREATE' })}
           </DialogTitle>
           <DialogDescription></DialogDescription>
           <button
@@ -110,8 +112,16 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
-              <SharedInput name="name" label="Name" formik={formik} />
-              <SharedTextArea name="description" label="Description" formik={formik} />
+              <SharedInput
+                name="name"
+                label={formatMessage({ id: 'SYSTEM.NAME' })}
+                formik={formik}
+              />
+              <SharedTextArea
+                name="description"
+                label={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
+                formik={formik}
+              />
 
               <div className="flex justify-end">
                 <button
@@ -119,7 +129,7 @@ export const DeliveryTypesModal: FC<Props> = ({ open, onOpenChange, id }) => {
                   className="btn btn-primary"
                   disabled={loading || formik.isSubmitting}
                 >
-                  {loading ? 'Please wait...' : 'Save'}
+                  {formatMessage({ id: loading ? 'SYSTEM.PLEASE_WAIT' : 'SYSTEM.SAVE' })}
                 </button>
               </div>
             </form>

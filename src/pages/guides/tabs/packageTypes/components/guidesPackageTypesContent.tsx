@@ -8,14 +8,11 @@ import { usePackageTypesColumns } from '@/pages/guides/tabs/packageTypes/compone
 import { useLanguage } from '@/providers';
 import { useState } from 'react';
 import { TLanguageCode } from '@/i18n';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesPackagesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
   const { currentLanguage: defaultLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
@@ -57,10 +54,7 @@ export const GuidesPackagesContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   const handleLanguageChange = (languageCode: string) => {

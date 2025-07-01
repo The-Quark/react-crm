@@ -11,6 +11,8 @@ import { TemplatesModal } from '@/pages/guides/tabs/templates/components/blocks/
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Language {
   id: number;
@@ -31,11 +33,12 @@ export const TemplatesToolbar: FC<Props> = ({
   onLanguageChange,
   onSearchCode
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [searchCode, setSearchCode] = useState('');
   const { table } = useDataGrid();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [searchCode, setSearchCode] = useState('');
 
   const canManageGlobalSettings = useMemo(
     () => has('manage global settings') || currentUser?.roles[0].name === 'superadmin',
@@ -47,7 +50,7 @@ export const TemplatesToolbar: FC<Props> = ({
       code: debounce((value: string) => {
         onSearchCode?.(value);
         table.getColumn('code')?.setFilterValue(value);
-      }, 300)
+      }, SEARCH_DEBOUNCE_DELAY)
     }),
     [onSearchCode, table]
   );
@@ -92,17 +95,17 @@ export const TemplatesToolbar: FC<Props> = ({
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Templates</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.TEMPLATES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={() => handleModalToggle(true)}>
-            New Template
+            {formatMessage({ id: 'SYSTEM.NEW_TEMPLATE' })}
           </button>
         )}
 
         <Select value={currentLanguage} onValueChange={handleLanguageChange}>
           <SelectTrigger className="w-28" size="sm">
-            <SelectValue placeholder="Select language" />
+            <SelectValue placeholder={formatMessage({ id: 'SYSTEM.SELECT_LANGUAGE' })} />
           </SelectTrigger>
           <SelectContent>
             {languages.map((language) => (
@@ -114,7 +117,11 @@ export const TemplatesToolbar: FC<Props> = ({
         </Select>
 
         <DataGridColumnVisibility table={table} />
-        {renderSearchInput('code', 'Search template code', searchCode)}
+        {renderSearchInput(
+          'code',
+          formatMessage({ id: 'SYSTEM.SEARCH_TEMPLATE_CODE' }),
+          searchCode
+        )}
       </div>
 
       <TemplatesModal

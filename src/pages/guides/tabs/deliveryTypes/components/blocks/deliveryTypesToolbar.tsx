@@ -4,17 +4,20 @@ import { DeliveryTypesModal } from '@/pages/guides/tabs/deliveryTypes/components
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';
+import { useIntl } from 'react-intl';
+import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
 }
 
 export const DeliveryTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState('');
   const { table } = useDataGrid();
-  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
+  const [searchValue, setSearchValue] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
 
@@ -30,8 +33,8 @@ export const DeliveryTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
-  }, 300);
+    table.getColumn('name')?.setFilterValue(value);
+  }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -41,11 +44,11 @@ export const DeliveryTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
 
   return (
     <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-      <h3 className="card-title">Delivery Types</h3>
+      <h3 className="card-title">{formatMessage({ id: 'SYSTEM.DELIVERY_TYPES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
           <button className="btn btn-sm btn-primary" onClick={handleOpen}>
-            New delivery type
+            {formatMessage({ id: 'SYSTEM.NEW_DELIVERY_TYPE' })}
           </button>
         )}
         <DataGridColumnVisibility table={table} />
@@ -56,7 +59,7 @@ export const DeliveryTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
           <input
             type="text"
-            placeholder="Search delivery type"
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_DELIVERY_TYPE' })}
             className="input input-sm ps-8"
             value={searchValue}
             onChange={handleSearchChange}

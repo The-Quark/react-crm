@@ -87,7 +87,28 @@ const Validation = {
   'VALIDATION.MODEL_REQUIRED': 'Model is required',
   'VALIDATION.VEHICLE_STATUS_REQUIRED': 'Status is required',
   'VALIDATION.VEHICLE_STATUS_INVALID': 'Invalid status',
-  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Average fuel consumption is required'
+  'VALIDATION.AVG_FUEL_CONSUMPTION_REQUIRED': 'Average fuel consumption is required',
+  'VALIDATION.CODE_MAX': 'Maximum length is 10 characters',
+  'VALIDATION.DEPARTURE_COUNTRY_REQUIRED': 'Departure country is required',
+  'VALIDATION.DESTINATION_COUNTRY_REQUIRED': 'Destination country is required',
+  'VALIDATION.DEPARTURE_CITY_REQUIRED': 'Departure city is required',
+  'VALIDATION.DESTINATION_CITY_REQUIRED': 'Destination city is required',
+  'VALIDATION.PRICE_PER_KG_REQUIRED': 'Price per kg is required',
+  'VALIDATION.MIN_WEIGHT_REQUIRED': 'Minimum weight is required',
+  'VALIDATION.MAX_WEIGHT_REQUIRED': 'Maximum weight is required',
+  'VALIDATION.MAX_WEIGHT_MORE_THAN_MIN': 'Maximum weight must be greater than minimum weight',
+  'VALIDATION.CODE_FORMAT_ALPHANUMERIC_UNDERSCORE':
+    'Code can only contain letters, numbers, and underscores',
+  'VALIDATION.LANGUAGE_CODE_REQUIRED': 'Language code is required',
+  'VALIDATION.COMPANY_MIN': 'At least one company must be selected',
+  'VALIDATION.UNIT_REQUIRED': 'Unit is required',
+  'VALIDATION.PRICE_REQUIRED': 'Price is required',
+  'VALIDATION.TEMPLATE_TYPE_INVALID': 'Invalid template type',
+  'VALIDATION.SUBJECT_REQUIRED': 'Subject is required',
+  'VALIDATION.CONTENT_REQUIRED': 'Content is required',
+  'VALIDATION.TYPES_REQUIRED': 'Types is required',
+  'VALIDATION.TYPES_MIN': 'At least one type must be selected',
+  'VALIDATION.STEP_REQUIRED': 'Step is required'
 };
 
 export default Validation;

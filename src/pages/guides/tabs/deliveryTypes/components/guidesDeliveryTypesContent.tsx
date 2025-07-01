@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { getDeliveryTypes } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -6,14 +5,11 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useDeliveryTypesColumns } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesColumns.tsx';
 import { DeliveryTypesToolbar } from '@/pages/guides/tabs/deliveryTypes/components/blocks/deliveryTypesToolbar.tsx';
 import { useState } from 'react';
-import { CACHE_TIME } from '@/utils';
+import { CACHE_TIME, initialPagination } from '@/utils';
 
 export const GuidesDeliveryTypesContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 15
-  });
+  const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: ['guidesDeliveryTypes', pagination.pageIndex, pagination.pageSize, searchTerm],
@@ -38,10 +34,7 @@ export const GuidesDeliveryTypesContent = () => {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setPagination({
-      pageIndex: 0,
-      pageSize: 15
-    });
+    setPagination(initialPagination);
   };
 
   if (isError) {
