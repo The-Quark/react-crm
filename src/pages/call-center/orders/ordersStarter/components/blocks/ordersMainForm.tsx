@@ -158,17 +158,15 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   });
 
   useEffect(() => {
-    const { weight, width, length, height, is_express } = formik.values;
-
-    if (weight && width && length && height && is_express) {
+    const { weight, width, length, height } = formik.values;
+    if (weight && width && length && height) {
       const calculateData: IPostCalculateFormFields = {
         weight,
         width,
         length,
         height,
-        is_express: is_express ?? false
+        is_express: formik.values.is_express ?? false
       };
-
       postOrderCalculate(calculateData)
         .then((response) => {
           formik.setFieldValue('volume', response.volume);
@@ -179,7 +177,13 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           console.error('Error calculating order:', error);
         });
     }
-  }, [formik.values.weight, formik.values.width, formik.values.length, formik.values.height]);
+  }, [
+    formik.values.weight,
+    formik.values.width,
+    formik.values.length,
+    formik.values.height,
+    formik.values.is_express
+  ]);
 
   const {
     data: applicationsData,

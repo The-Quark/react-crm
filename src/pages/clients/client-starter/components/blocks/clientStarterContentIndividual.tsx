@@ -168,7 +168,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
               </span>
             ))
           ) : (
-            <div>{formatMessage({ id: 'SYSTEM.NO_VALUES' })}</div>
+            <div className="text-sm">{formatMessage({ id: 'SYSTEM.NO_VALUES' })}</div>
           )}
         </div>
       </div>

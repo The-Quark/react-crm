@@ -11,3 +11,4 @@ export * from './deleteUnit';
 export * from './deleteVehicle';
 export * from './deleteFileType';
 export * from './deleteBoxType';
+export * from './deleteTariff';

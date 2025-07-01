@@ -11,3 +11,4 @@ export * from './putTemplate';
 export * from './putSource';
 export * from './putFileType';
 export * from './putBoxType';
+export * from './putTariff';

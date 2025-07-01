@@ -155,7 +155,6 @@ const BoxTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 label={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
                 formik={formik}
               />
-
               <div className="flex justify-end">
                 <button
                   type="submit"
