@@ -434,7 +434,10 @@ const System = {
   'SYSTEM.WEIGHT_FROM': 'Вес от',
   'SYSTEM.WEIGHT_TO': 'Вес до',
   'SYSTEM.MAWB_CODE': 'Код MAWB',
-  'SYSTEM.NOMINAL_COST': 'Номинальная стоимость'
+  'SYSTEM.NOMINAL_COST': 'Номинальная стоимость',
+  'SYSTEM.FOLLOW_THE_LINK': 'Перейдите по ссылке',
+  'SYSTEM.PACKAGE_INFO': 'Информация о посылке',
+  'SYSTEM.CARGO_INFO': 'Информация о грузе'
 };
 
 export default System;

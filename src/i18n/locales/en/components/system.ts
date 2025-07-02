@@ -434,7 +434,10 @@ const System = {
   'SYSTEM.WEIGHT_FROM': 'Weight From',
   'SYSTEM.WEIGHT_TO': 'Weight To',
   'SYSTEM.MAWB_CODE': 'MAWB Code',
-  'SYSTEM.NOMINAL_COST': 'Nominal Cost'
+  'SYSTEM.NOMINAL_COST': 'Nominal Cost',
+  'SYSTEM.FOLLOW_THE_LINK': 'Follow The Link',
+  'SYSTEM.PACKAGE_INFO': 'Package Information',
+  'SYSTEM.CARGO_INFO': 'Cargo Information'
 };
 
 export default System;

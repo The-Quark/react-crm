@@ -1,4 +1,6 @@
 import { IPagination } from '@/api/generalManualTypes';
+import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
+import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
 
 interface DeliveryType {
   id: number;
@@ -129,6 +131,8 @@ export interface Order {
   receiver: Person;
   source: Source | null;
   order_content?: string[];
+  packages: Package[] | null;
+  cargo: Cargo | null;
   hawb_pdf: string;
   is_draft: boolean;
 }

@@ -17,6 +17,7 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useIntl } from 'react-intl';
 import { OrderStatus } from '@/api/enums';
+import { useCurrency } from '@/providers';
 
 interface Props {
   open: boolean;
@@ -27,6 +28,7 @@ interface Props {
 export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
+  const { currency } = useCurrency();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -240,15 +242,35 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+                        {formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
                       </label>
-                      <div className="flex columns-1 w-full">{order.package_type.code || '-'}</div>
+                      <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                        {formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
                       </label>
-                      <div className="flex columns-1 w-full">{order.status || '-'}</div>
+                      <div className="flex columns-1 w-full">
+                        {formatMessage({
+                          id: order.is_express ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
+                        })}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {formatMessage({
+                          id: order.is_international ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
+                        })}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{order.package_type.code || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
@@ -258,6 +280,26 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                         {order.order_content?.map((index) => index) || '-'}
                       </div>
                     </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {formatMessage({
+                          id: order?.customs_clearance ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
+                        })}
+                      </div>
+                    </div>
+                    {order?.customs_clearance && (
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.NOMINAL_COST' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {order?.nominal_cost || '-'} {` (${currency.code})`}
+                        </div>
+                      </div>
+                    )}
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.WEIGHT' })}
@@ -276,7 +318,29 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.PRICE' })}
                       </label>
-                      <div className="flex columns-1 w-full">{order.price || '-'} USD</div>
+                      <div className="flex columns-1 w-full">
+                        {order.price || '-'} {`(${currency.code})`}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.PACKAGE_DESCRIPTION' })}
+                      </label>
+                      <div className="flex columns-1 w-full">
+                        {order?.package_description || '-'}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.SPECIAL_WISHES' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{order?.special_wishes || '-'}</div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.STATUS' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{order.status || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
@@ -288,24 +352,54 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                           : '-'}
                       </div>
                     </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
-                      </label>
-                      <div className="flex columns-1 w-full">{order.delivery_category || '-'}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
-                      </label>
-                      <div className="flex columns-1 w-full">
-                        {formatMessage({
-                          id: order.is_express ? 'SYSTEM.ENABLED' : 'SYSTEM.DISABLED'
-                        })}
+                  </div>
+                </div>
+
+                {/* Package Block */}
+                {order.packages && (
+                  <div className="border-b pb-4">
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.PACKAGE_INFO' })}
+                    </h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <a
+                            className="link"
+                            href="/warehouse/packages/list"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {formatMessage({ id: 'SYSTEM.FOLLOW_THE_LINK' })}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Cargo Block */}
+                {order.cargo && (
+                  <div className="border-b pb-4">
+                    <h4 className="text-lg font-semibold mb-3">
+                      {formatMessage({ id: 'SYSTEM.CARGO_INFO' })}
+                    </h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <a
+                            className="link"
+                            href="/warehouse/cargo/list"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {formatMessage({ id: 'SYSTEM.FOLLOW_THE_LINK' })}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* QR Code Block */}
                 <div className="border-t pt-4">

@@ -184,7 +184,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
           : selectedClient.patronymic || currentValues.sender_patronymic,
         sender_company_name: isLegalClient ? selectedClient.company_name || '' : '',
         sender_bin: isLegalClient ? selectedClient.bin || '' : '',
-        sender_type: selectedClient.type || 'individual',
+        sender_type: selectedClient.sender_type || 'individual',
         sender_phone: selectedClient.phone || currentValues.sender_phone,
         sender_country_id: selectedClient.country_id || currentValues.sender_country_id,
         sender_city_id: selectedClient.city_id || currentValues.sender_city_id,

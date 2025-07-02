@@ -195,7 +195,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
         receiver_patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
         receiver_company_name: isLegalClient ? selectedClient.company_name || '' : '',
         receiver_bin: isLegalClient ? selectedClient.bin || '' : '',
-        receiver_type: selectedClient.type || 'individual',
+        receiver_type: selectedClient.receiver_type || 'individual',
         receiver_phone: selectedClient.phone || '',
         receiver_country_id: selectedClient.country_id || '',
         receiver_city_id: selectedClient.city_id || '',

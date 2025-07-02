@@ -15,6 +15,8 @@ interface Source {
 export interface Client {
   id: number;
   type: ClientType;
+  sender_type: ClientType;
+  receiver_type: ClientType;
   phone: string;
   email: string | null;
   registered_at: string;
