@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getCitiesByCountryCode, getClients, getCountries } from '@/api';
 import { useFormik } from 'formik';
