@@ -152,6 +152,8 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const { currentLanguage } = useLanguage();
   const { currency: currentCurrency } = useCurrency();
 
+  console.log('dweef: ', mainFormData?.nominal_cost);
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const formik = useFormik({

@@ -69,6 +69,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           length: initialData?.length || '',
           height: initialData?.height || '',
           volume: initialData?.volume || '',
+          nominal_cost: initialData?.nominal_cost || '',
           places_count: initialData?.places_count || 0,
           customs_clearance: initialData?.customs_clearance || false,
           is_international: initialData?.is_international || false,
