@@ -16,12 +16,14 @@ import {
   SharedAutocomplete,
   SharedDecimalInput,
   SharedError,
-  SharedLoading
+  SharedLoading,
+  SharedSelect
 } from '@/partials/sharedUI';
 import { useIntl } from 'react-intl';
 import { TariffsResponse } from '@/api/get/getGuides/getTariffs/types.ts';
 import { ITariffFormValues } from '@/api/post/postGuides/postTariff/types.ts';
-import { CACHE_TIME, decimalValidation } from '@/utils';
+import { decimalValidation } from '@/utils';
+import { useLanguage } from '@/providers';
 
 interface Props {
   open: boolean;
@@ -59,8 +61,8 @@ const getInitialValues = (isEditMode: boolean, data: TariffsResponse): ITariffFo
 const TariffModal: FC<Props> = ({ open, onOpenChange, id }) => {
   const queryClient = useQueryClient();
   const { formatMessage } = useIntl();
+  const { currentLanguage } = useLanguage();
   const [loading, setLoading] = useState(false);
-  const [packageTypeTerm, setPackageTerm] = useState('');
   const [countryTerm, setCountryTerm] = useState('');
 
   const {
@@ -82,6 +84,7 @@ const TariffModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['guidesTariffCountries'],
     queryFn: () => getCountries('id,iso2,name'),
+    enabled: open,
     staleTime: Infinity
   });
 
@@ -91,9 +94,13 @@ const TariffModal: FC<Props> = ({ open, onOpenChange, id }) => {
     isError: packageIsError,
     error: packageError
   } = useQuery({
-    queryKey: ['guidesTariffPackageTypes', packageTypeTerm],
-    queryFn: () => getPackageTypes({ code: packageTypeTerm }),
-    staleTime: CACHE_TIME
+    queryKey: ['guidesTariffPackageTypes'],
+    queryFn: () =>
+      getPackageTypes({
+        language_code: currentLanguage.code,
+        is_active: true
+      }),
+    enabled: open
   });
 
   const formik = useFormik({
@@ -146,7 +153,7 @@ const TariffModal: FC<Props> = ({ open, onOpenChange, id }) => {
           {id && tariffIsError && <SharedError error={tariffError} />}
           {countriesIsError && <SharedError error={countriesError} />}
           {packageIsError && <SharedError error={packageError} />}
-          {tariffLoading ? (
+          {tariffLoading || packageLoading || countriesLoading ? (
             <SharedLoading simple />
           ) : (
             <form className="grid gap-5" onSubmit={formik.handleSubmit} noValidate>
@@ -165,24 +172,20 @@ const TariffModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 onSearchTermChange={setCountryTerm}
                 loading={countriesLoading}
               />
-              <SharedAutocomplete
+              <SharedSelect
+                name="package_type_id"
                 label={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
-                value={formik.values.package_type_id}
-                options={(packageData?.result ?? []).map((pt) => ({
-                  id: pt.id,
-                  name: pt.code,
-                  value: pt.id
-                }))}
                 placeholder={formatMessage({ id: 'SYSTEM.SELECT_PACKAGE_TYPE' })}
-                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_PACKAGE_TYPE' })}
-                onChange={(val) => {
-                  formik.setFieldValue('package_type_id', val);
+                formik={formik}
+                options={
+                  packageData?.result.map((packageType) => ({
+                    label: packageType.language[0]?.name || packageType.code,
+                    value: packageType.id
+                  })) || []
+                }
+                onChange={(value) => {
+                  formik.setFieldValue('package_type', value);
                 }}
-                error={formik.errors.package_type_id as string}
-                touched={formik.touched.package_type_id}
-                searchTerm={packageTypeTerm}
-                onSearchTermChange={setPackageTerm}
-                loading={packageLoading}
               />
               <SharedDecimalInput
                 name="weight_from"

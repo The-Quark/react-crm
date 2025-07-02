@@ -5,6 +5,7 @@ import { GuidesTariffsContent } from '@/pages/guides/tabs/tariff/components/guid
 export const GuidesTariffPage = () => {
   return (
     <>
+      s
       <SharedHeader />
       <GuidesTariffsContent />
     </>

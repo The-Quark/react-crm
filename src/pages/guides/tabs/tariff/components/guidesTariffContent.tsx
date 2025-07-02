@@ -1,8 +1,6 @@
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
-import { CurrenciesToolbar } from '@/pages/guides/tabs/currencies/components/blocks/currenciesToolbar.tsx';
-import { useCurrenciesColumns } from '@/pages/guides/tabs/currencies/components/blocks/currenciesColumns.tsx';
-import { getCurrencies, getTariffs } from '@/api';
+import { getTariffs } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';
 import { CACHE_TIME, initialPagination } from '@/utils';
