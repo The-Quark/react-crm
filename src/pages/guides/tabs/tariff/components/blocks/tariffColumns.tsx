@@ -54,6 +54,28 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
         }
       },
       {
+        accessorFn: (row) => row.package_type?.code,
+        id: 'packager type',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.package_type?.code}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[200px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
         accessorFn: (row) => row.price,
         id: 'price',
         header: ({ column }) => (

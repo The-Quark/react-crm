@@ -11,6 +11,12 @@ interface Country {
   subregion: string;
 }
 
+interface Package {
+  id: number;
+  code: string;
+  is_active: boolean;
+}
+
 export interface Tariff {
   id: number;
   country_id: number;
@@ -19,7 +25,7 @@ export interface Tariff {
   weight_to: string;
   price: string;
   country: Country;
-  package_type: string | null;
+  package_type: Package | null;
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
