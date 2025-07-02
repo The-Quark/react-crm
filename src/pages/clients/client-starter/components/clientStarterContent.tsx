@@ -35,8 +35,7 @@ const ClientStarterContent = () => {
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources({ is_active: true, per_page: SEARCH_PER_PAGE }),
-    staleTime: CACHE_TIME
+    queryFn: () => getSources({ is_active: true, per_page: SEARCH_PER_PAGE })
   });
 
   useEffect(() => {

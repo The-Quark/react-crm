@@ -108,8 +108,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
     error: countriesError
   } = useQuery({
     queryKey: ['legalCountries'],
-    queryFn: () => getCountries('id,iso2,name'),
-    staleTime: Infinity
+    queryFn: () => getCountries('id,iso2,name')
   });
 
   const {
