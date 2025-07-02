@@ -433,7 +433,8 @@ const System = {
   'SYSTEM.SEARCH_PRICE': 'Поиск цены',
   'SYSTEM.WEIGHT_FROM': 'Вес от',
   'SYSTEM.WEIGHT_TO': 'Вес до',
-  'SYSTEM.MAWB_CODE': 'Код MAWB'
+  'SYSTEM.MAWB_CODE': 'Код MAWB',
+  'SYSTEM.NOMINAL_COST': 'Номинальная стоимость'
 };
 
 export default System;

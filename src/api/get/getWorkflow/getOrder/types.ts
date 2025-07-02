@@ -107,6 +107,8 @@ export interface Order {
   weight: string;
   height: string;
   width: string;
+  s;
+  nominal_cost: string | null;
   length: string;
   volume: string;
   places_count: number;

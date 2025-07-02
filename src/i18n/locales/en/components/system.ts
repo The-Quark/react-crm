@@ -433,7 +433,8 @@ const System = {
   'SYSTEM.SEARCH_PRICE': 'Search Price',
   'SYSTEM.WEIGHT_FROM': 'Weight From',
   'SYSTEM.WEIGHT_TO': 'Weight To',
-  'SYSTEM.MAWB_CODE': 'MAWB Code'
+  'SYSTEM.MAWB_CODE': 'MAWB Code',
+  'SYSTEM.NOMINAL_COST': 'Nominal Cost'
 };
 
 export default System;

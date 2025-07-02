@@ -127,8 +127,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     error: clientsError
   } = useQuery({
     queryKey: ['orderSenderClients', clientSearchTerm],
-    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm }),
-    staleTime: CACHE_TIME
+    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
   });
 
   const formik = useFormik({
@@ -148,8 +147,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     error: countriesError
   } = useQuery({
     queryKey: ['orderSenderCountries'],
-    queryFn: () => getCountries('id,iso2,name'),
-    staleTime: Infinity
+    queryFn: () => getCountries('id,iso2,name')
   });
 
   const {

@@ -6,14 +6,20 @@ interface SharedInputProps<T> {
   name: keyof T;
   label: string;
   formik: FormikProps<T>;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const SharedCheckBox = <T,>({ name, label, formik }: SharedInputProps<T>) => {
+export const SharedCheckBox = <T,>({ name, label, formik, onChange }: SharedInputProps<T>) => {
   const { formatMessage } = useIntl();
 
   const fieldName = name.toString();
   const hasError = formik.touched[name] && formik.errors[name];
   const value = formik.values[name] as unknown;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    formik.handleChange(e);
+    onChange?.(e);
+  };
 
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
@@ -23,7 +29,7 @@ export const SharedCheckBox = <T,>({ name, label, formik }: SharedInputProps<T>)
           <input
             type="checkbox"
             checked={!!value}
-            onChange={formik.handleChange}
+            onChange={handleChange}
             onBlur={formik.handleBlur}
             name={fieldName}
             className="checkbox-sm"

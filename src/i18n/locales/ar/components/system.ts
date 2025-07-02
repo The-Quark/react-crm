@@ -433,7 +433,8 @@ const System = {
   'SYSTEM.SEARCH_PRICE': 'البحث عن السعر',
   'SYSTEM.WEIGHT_FROM': 'الوزن من',
   'SYSTEM.WEIGHT_TO': 'الوزن إلى',
-  'SYSTEM.MAWB_CODE': 'رمز MAWB'
+  'SYSTEM.MAWB_CODE': 'رمز MAWB',
+  'SYSTEM.NOMINAL_COST': 'التكلفة الاسمية'
 };
 
 export default System;

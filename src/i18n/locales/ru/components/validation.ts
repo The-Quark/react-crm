@@ -111,7 +111,8 @@ const Validation = {
   'VALIDATION.TYPES_MIN': 'Должен быть выбран хотя бы один тип',
   'VALIDATION.STEP_REQUIRED': 'Шаг обязателен',
   'VALIDATION.WEIGHT_FROM_REQUIRED': 'Минимальный вес обязателен',
-  'VALIDATION.WEIGHT_TO_REQUIRED': 'Максимальный вес обязателен'
+  'VALIDATION.WEIGHT_TO_REQUIRED': 'Максимальный вес обязателен',
+  'VALIDATION.NOMINAL_COST_REQUIRED': 'Номинальная стоимость обязательна'
 };
 
 export default Validation;

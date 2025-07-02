@@ -17,7 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCurrency, useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
-import { CACHE_TIME, decimalValidation } from '@/utils';
+import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
@@ -52,6 +52,11 @@ const formSchema = Yup.object().shape({
   length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
   height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
   customs_clearance: Yup.boolean().required('VALIDATION.CLEARANCE_REQUIRED'),
+  nominal_cost: Yup.string().when('customs_clearance', {
+    is: true,
+    then: (schema) => schema.required('VALIDATION.NOMINAL_COST_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
   is_international: Yup.boolean().required('VALIDATION.IS_INTERNATIONAL_REQUIRED'),
   package_description: Yup.string().optional(),
   special_wishes: Yup.string().optional(),
@@ -70,9 +75,10 @@ const getInitialValues = (
       application_id: mainForm.application_id || applicationId || '',
       status: undefined,
       delivery_type: mainForm.delivery_type || '',
-      delivery_category: mainForm.delivery_category || 'b2b',
+      delivery_category: mainForm.delivery_category || DeliveryCategories.B2B,
       package_type: mainForm.package_type || '',
       is_express: mainForm.is_express || false,
+      nominal_cost: mainForm.nominal_cost || '',
       weight: mainForm.weight || '',
       width: mainForm.width || '',
       length: mainForm.length || '',
@@ -94,9 +100,10 @@ const getInitialValues = (
       application_id: mainForm.application_id || applicationId || '',
       status: mainForm.status || undefined,
       delivery_type: mainForm.delivery_type || '',
-      delivery_category: mainForm.delivery_category || 'b2b',
+      delivery_category: mainForm.delivery_category || DeliveryCategories.B2B,
       package_type: mainForm.package_type || '',
       is_express: mainForm.is_express || false,
+      nominal_cost: mainForm?.nominal_cost || '',
       weight: mainForm.weight || '',
       width: mainForm.width || '',
       length: mainForm.length || '',
@@ -126,6 +133,7 @@ const getInitialValues = (
     length: '',
     height: '',
     volume: '',
+    nominal_cost: '',
     places_count: 0,
     customs_clearance: false,
     is_international: false,
@@ -138,9 +146,9 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
-  const { formatMessage } = useIntl();
   const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
+  const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const { currency: currentCurrency } = useCurrency();
 
@@ -164,6 +172,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
         width,
         length,
         height,
+        nominal_cost: formik.values.nominal_cost ?? '',
         is_express: formik.values.is_express ?? false
       };
       postOrderCalculate(calculateData)
@@ -181,7 +190,8 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     formik.values.width,
     formik.values.length,
     formik.values.height,
-    formik.values.is_express
+    formik.values.is_express,
+    formik.values.nominal_cost
   ]);
 
   const {
@@ -194,10 +204,13 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     queryFn: () =>
       getApplications(
         isEditMode
-          ? { per_page: 50 }
-          : { status: ApplicationsStatus.NEW, per_page: 50, full_name: searchTerm }
-      ),
-    staleTime: CACHE_TIME
+          ? { per_page: DEFAULT_SEARCH_PAGE_NUMBER }
+          : {
+              status: ApplicationsStatus.NEW,
+              per_page: DEFAULT_SEARCH_PAGE_NUMBER,
+              full_name: searchTerm
+            }
+      )
   });
 
   const {
@@ -207,8 +220,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     error: deliveryTypesError
   } = useQuery({
     queryKey: ['deliveryTypes'],
-    queryFn: () => getDeliveryTypes({}),
-    staleTime: CACHE_TIME
+    queryFn: () => getDeliveryTypes({})
   });
 
   const {
@@ -222,8 +234,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
       getPackageTypes({
         language_code: currentLanguage.code,
         is_active: true
-      }),
-    staleTime: CACHE_TIME
+      })
   });
 
   useEffect(() => {
@@ -367,12 +378,25 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             name="customs_clearance"
             label={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
             formik={formik}
+            onChange={(e) => {
+              formik.setFieldValue('customs_clearance', e.target.checked);
+              if (!e.target.checked) {
+                formik.setFieldValue('nominal_cost', '');
+              }
+            }}
           />
           <SharedCheckBox
             name="is_express"
             label={formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
             formik={formik}
           />
+          {formik.values.customs_clearance && (
+            <SharedDecimalInput
+              name="nominal_cost"
+              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (${currentCurrency.code})`}
+              formik={formik}
+            />
+          )}
           <SharedDecimalInput
             name="weight"
             label={`${formatMessage({ id: 'SYSTEM.WEIGHT' })} (kg)`}

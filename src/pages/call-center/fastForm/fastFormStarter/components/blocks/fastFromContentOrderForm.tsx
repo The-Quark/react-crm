@@ -14,7 +14,7 @@ import { useFormik } from 'formik';
 import { getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import { useCurrency, useLanguage } from '@/providers';
-import { CACHE_TIME, cleanValues, decimalValidation, mockDeliveryCategories } from '@/utils';
+import { cleanValues, decimalValidation, mockDeliveryCategories } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
@@ -49,6 +49,11 @@ const formSchema = Yup.object().shape({
   length: decimalValidation.required('VALIDATION.LENGTH_REQUIRED'),
   height: decimalValidation.required('VALIDATION.HEIGHT_REQUIRED'),
   customs_clearance: Yup.boolean().required('VALIDATION.CLEARANCE_REQUIRED'),
+  nominal_cost: Yup.string().when('customs_clearance', {
+    is: true,
+    then: (schema) => schema.required('VALIDATION.NOMINAL_COST_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
   is_international: Yup.boolean().required('VALIDATION.IS_INTERNATIONAL_REQUIRED'),
   package_description: Yup.string().optional(),
   special_wishes: Yup.string().optional(),
@@ -59,9 +64,10 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
   if (orderData) {
     return {
       delivery_type: orderData?.delivery_type || '',
-      delivery_category: orderData?.delivery_category || 'b2b',
+      delivery_category: orderData?.delivery_category || DeliveryCategories.B2B,
       package_type: orderData?.package_type || '',
       is_express: orderData?.is_express || false,
+      nominal_cost: orderData?.nominal_cost || '',
       weight: orderData?.weight || '',
       width: orderData?.width || '',
       length: orderData?.length || '',
@@ -87,6 +93,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
     length: '',
     height: '',
     volume: '',
+    nominal_cost: '',
     places_count: 0,
     customs_clearance: false,
     is_international: false,
@@ -121,15 +128,15 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   });
 
   useEffect(() => {
-    const { weight, width, length, height, is_express } = formik.values;
-
+    const { weight, width, length, height } = formik.values;
     if (weight && width && length && height) {
       const calculateData: IPostCalculateFormFields = {
         weight,
         width,
         length,
         height,
-        is_express: is_express ?? false
+        nominal_cost: formik.values.nominal_cost ?? '',
+        is_express: formik.values.is_express ?? false
       };
 
       postOrderCalculate(calculateData)
@@ -142,7 +149,14 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
           console.error('Error calculating order:', error);
         });
     }
-  }, [formik.values.weight, formik.values.width, formik.values.length, formik.values.height]);
+  }, [
+    formik.values.weight,
+    formik.values.width,
+    formik.values.length,
+    formik.values.height,
+    formik.values.is_express,
+    formik.values.nominal_cost
+  ]);
 
   const {
     data: deliveryTypesData,
@@ -151,8 +165,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
     error: deliveryTypesError
   } = useQuery({
     queryKey: ['fastFormDeliveryTypes'],
-    queryFn: () => getDeliveryTypes({}),
-    staleTime: CACHE_TIME
+    queryFn: () => getDeliveryTypes({})
   });
 
   const {
@@ -166,8 +179,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
       getPackageTypes({
         language_code: currentLanguage.code,
         is_active: true
-      }),
-    staleTime: CACHE_TIME
+      })
   });
 
   const isFormLoading = deliveryTypesLoading || packageTypesLoading;
@@ -222,28 +234,11 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
               value: category.value
             }))}
           />
-          <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">
-              {formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
-            </label>
-            <div className="flex columns-1 w-full flex-wrap">
-              <label className="checkbox-group flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="is_international"
-                  checked={formik.values.is_international}
-                  onChange={(e) => formik.setFieldValue('is_international', e.target.checked)}
-                  className="checkbox-sm"
-                />
-                <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
-              </label>
-              {formik.touched.is_international && formik.errors.is_international && (
-                <span role="alert" className="text-danger text-xs mt-1">
-                  {formik.errors.is_international}
-                </span>
-              )}
-            </div>
-          </div>
+          <SharedCheckBox
+            name="is_international"
+            label={formatMessage({ id: 'SYSTEM.INTERNATIONAL' })}
+            formik={formik}
+          />
           <SharedSelect
             name="package_type"
             label={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
@@ -285,12 +280,25 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             name="customs_clearance"
             label={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
             formik={formik}
+            onChange={(e) => {
+              formik.setFieldValue('customs_clearance', e.target.checked);
+              if (!e.target.checked) {
+                formik.setFieldValue('nominal_cost', '');
+              }
+            }}
           />
           <SharedCheckBox
             name="is_express"
             label={formatMessage({ id: 'SYSTEM.IS_EXPRESS' })}
             formik={formik}
           />
+          {formik.values.customs_clearance && (
+            <SharedDecimalInput
+              name="nominal_cost"
+              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (${currentCurrency.code})`}
+              formik={formik}
+            />
+          )}
           <SharedDecimalInput
             name="weight"
             label={`${formatMessage({ id: 'SYSTEM.WEIGHT' })} (kg)`}

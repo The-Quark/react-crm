@@ -110,7 +110,8 @@ const Validation = {
   'VALIDATION.TYPES_MIN': 'يجب تحديد نوع واحد على الأقل',
   'VALIDATION.STEP_REQUIRED': 'الخطوة مطلوبة',
   'VALIDATION.WEIGHT_FROM_REQUIRED': 'الوزن من مطلوب',
-  'VALIDATION.WEIGHT_TO_REQUIRED': 'الوزن إلى مطلوب'
+  'VALIDATION.WEIGHT_TO_REQUIRED': 'الوزن إلى مطلوب',
+  'VALIDATION.NOMINAL_COST_REQUIRED': 'التكلفة الاسمية مطلوبة'
 };
 
 export default Validation;
