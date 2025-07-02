@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AuthProvider } from '@/auth/providers/JWTProvider';
 import {
+  CurrencyProvider,
   LayoutProvider,
   LoadersProvider,
   MenusProvider,
@@ -26,15 +27,17 @@ const ProvidersWrapper = ({ children }: PropsWithChildren) => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <SettingsProvider>
-          <TranslationProvider>
-            <HelmetProvider>
-              <LayoutProvider>
-                <LoadersProvider>
-                  <MenusProvider>{children}</MenusProvider>
-                </LoadersProvider>
-              </LayoutProvider>
-            </HelmetProvider>
-          </TranslationProvider>
+          <CurrencyProvider>
+            <TranslationProvider>
+              <HelmetProvider>
+                <LayoutProvider>
+                  <LoadersProvider>
+                    <MenusProvider>{children}</MenusProvider>
+                  </LoadersProvider>
+                </LayoutProvider>
+              </HelmetProvider>
+            </TranslationProvider>
+          </CurrencyProvider>
         </SettingsProvider>
       </AuthProvider>
     </QueryClientProvider>

@@ -432,7 +432,8 @@ const System = {
   'SYSTEM.NEW_TARIFF': 'Новый тариф',
   'SYSTEM.SEARCH_PRICE': 'Поиск цены',
   'SYSTEM.WEIGHT_FROM': 'Вес от',
-  'SYSTEM.WEIGHT_TO': 'Вес до'
+  'SYSTEM.WEIGHT_TO': 'Вес до',
+  'SYSTEM.MAWB_CODE': 'Код MAWB'
 };
 
 export default System;

@@ -16,7 +16,7 @@ const DropdownUserLanguages = ({ menuItemRef }: IDropdownUserLanguagesProps) => 
     changeLanguage(lang);
 
     if (menuItemRef.current) {
-      menuItemRef.current.hide(); // Call the closeMenu method to hide the submenu
+      menuItemRef.current.hide();
     }
   };
 
@@ -54,7 +54,7 @@ const DropdownUserLanguages = ({ menuItemRef }: IDropdownUserLanguagesProps) => 
           {
             name: 'offset',
             options: {
-              offset: isRTL() ? [-10, 0] : [10, 0] // [skid, distance]
+              offset: isRTL() ? [-10, 0] : [10, 0]
             }
           }
         ]

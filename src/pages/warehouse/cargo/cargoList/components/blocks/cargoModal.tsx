@@ -63,7 +63,7 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.CODE' })}
+                        {formatMessage({ id: 'SYSTEM.MAWB_CODE' })}
                       </label>
                       <div className="flex columns-1 w-full">{cargo.code || '-'}</div>
                     </div>

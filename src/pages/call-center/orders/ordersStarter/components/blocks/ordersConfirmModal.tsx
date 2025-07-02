@@ -11,9 +11,9 @@ import { DialogActions } from '@mui/material';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { useNavigate } from 'react-router-dom';
-import { LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useIntl } from 'react-intl';
+import { useCurrency } from '@/providers';
 
 interface Props {
   open: boolean;
@@ -31,7 +31,7 @@ export const OrdersConfirmModal: FC<Props> = ({
   const { formatMessage } = useIntl();
   const { mainFormData, modalInfo } = useOrderCreation();
   const navigate = useNavigate();
-  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+  const { currency: currentCurrency } = useCurrency();
   const queryClient = useQueryClient();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -192,7 +192,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">
-                      {formatMessage({ id: 'SYSTEM.PRICE' })} ({currentCurrency})
+                      {formatMessage({ id: 'SYSTEM.PRICE' }) + ` (${currentCurrency.code})`}
                     </label>
                     <div className="flex columns-1 w-full">{mainFormData?.price || '-'}</div>
                   </div>

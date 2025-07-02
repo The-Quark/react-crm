@@ -3,48 +3,21 @@ import { KeenIcon } from '@/components';
 import { MenuItem, MenuLink, MenuTitle, MenuIcon, MenuBadge, MenuSub } from '@/components/menu';
 import clsx from 'clsx';
 import { useLanguage } from '@/i18n';
-import { useEffect, useState } from 'react';
-import { LOCAL_STORAGE_CURRENCY_KEY, toAbsoluteUrl } from '@/utils';
+import { CURRENCIES } from '@/utils';
+import { useCurrency } from '@/providers';
 
 interface IDropdownUserCurrenciesProps {
   menuItemRef: any;
 }
 
-const CURRENCIES = [
-  {
-    code: 'USD',
-    label: 'USD',
-    flag: toAbsoluteUrl('/media/flags/united-states.svg')
-  },
-  {
-    code: 'RUB',
-    label: '₽',
-    flag: toAbsoluteUrl('/media/flags/russia.svg')
-  },
-  {
-    code: 'KZT',
-    label: '₸',
-    flag: toAbsoluteUrl('/media/flags/kazakhstan.svg')
-  }
-] as const;
-
 type Currency = (typeof CURRENCIES)[number];
 
 const DropdownUserCurrency = ({ menuItemRef }: IDropdownUserCurrenciesProps) => {
   const { isRTL } = useLanguage();
-  const [currentCurrency, setCurrentCurrency] = useState<Currency>(CURRENCIES[0]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
-    const found = CURRENCIES.find((item) => item.code === saved);
-    if (found) {
-      setCurrentCurrency(found);
-    }
-  }, []);
+  const { currency: currentCurrency, setCurrency } = useCurrency();
 
   const handleCurrency = (currency: Currency) => {
-    setCurrentCurrency(currency);
-    localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, currency.code);
+    setCurrency(currency);
     if (menuItemRef.current) {
       menuItemRef.current.hide();
     }

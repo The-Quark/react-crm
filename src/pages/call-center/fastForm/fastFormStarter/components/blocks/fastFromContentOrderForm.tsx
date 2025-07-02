@@ -13,14 +13,8 @@ import {
 import { useFormik } from 'formik';
 import { getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { useLanguage } from '@/providers';
-import {
-  CACHE_TIME,
-  cleanValues,
-  decimalValidation,
-  LOCAL_STORAGE_CURRENCY_KEY,
-  mockDeliveryCategories
-} from '@/utils';
+import { useCurrency, useLanguage } from '@/providers';
+import { CACHE_TIME, cleanValues, decimalValidation, mockDeliveryCategories } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
@@ -108,7 +102,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
   const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
-  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+  const { currency: currentCurrency } = useCurrency();
 
   const formik = useFormik({
     initialValues: getInitialValues(mainForm?.order as IOrderFormValues),
@@ -333,7 +327,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
           />
           <SharedInput
             name="price"
-            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency})`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
             formik={formik}
             type="text"
             disabled

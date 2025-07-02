@@ -14,6 +14,7 @@ import {
   GenderUser,
   DeliveryCategories
 } from '@/api/enums';
+import { toAbsoluteUrl } from '@/utils';
 
 export const timezoneMock = [
   {
@@ -314,3 +315,21 @@ export const mockLicenseCategoryOptions = [
   { id: 15, name: 'Tm — Trams', value: 'Tm' },
   { id: 16, name: 'Tb — Trolleybuses', value: 'Tb' }
 ];
+
+export const CURRENCIES = [
+  {
+    code: 'USD',
+    label: '$',
+    flag: toAbsoluteUrl('/media/flags/united-states.svg')
+  },
+  {
+    code: 'RUB',
+    label: '₽',
+    flag: toAbsoluteUrl('/media/flags/russia.svg')
+  },
+  {
+    code: 'KZT',
+    label: '₸',
+    flag: toAbsoluteUrl('/media/flags/kazakhstan.svg')
+  }
+] as const;

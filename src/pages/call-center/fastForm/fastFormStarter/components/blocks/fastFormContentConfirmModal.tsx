@@ -13,8 +13,8 @@ import {
   IFastFormContext,
   useFastFormContext
 } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
-import { LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { useIntl } from 'react-intl';
+import { useCurrency } from '@/providers';
 
 interface Props {
   open: boolean;
@@ -27,7 +27,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mainForm, modalInfo } = useFastFormContext();
   const navigate = useNavigate();
-  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+  const { currency: currentCurrency } = useCurrency();
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
@@ -231,7 +231,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56 text-gray-600">
-                      {formatMessage({ id: 'SYSTEM.PRICE' })} ({currentCurrency})
+                      {formatMessage({ id: 'SYSTEM.PRICE' }) + `(${currentCurrency.code})`}
                     </label>
                     <div className="flex columns-1 w-full">{mainForm?.order?.price || '-'}</div>
                   </div>

@@ -432,7 +432,8 @@ const System = {
   'SYSTEM.NEW_TARIFF': 'تعريفة جديدة',
   'SYSTEM.SEARCH_PRICE': 'البحث عن السعر',
   'SYSTEM.WEIGHT_FROM': 'الوزن من',
-  'SYSTEM.WEIGHT_TO': 'الوزن إلى'
+  'SYSTEM.WEIGHT_TO': 'الوزن إلى',
+  'SYSTEM.MAWB_CODE': 'رمز MAWB'
 };
 
 export default System;

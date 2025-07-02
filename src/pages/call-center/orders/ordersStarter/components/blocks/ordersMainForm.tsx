@@ -14,10 +14,10 @@ import {
 import { useFormik } from 'formik';
 import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { useLanguage } from '@/providers';
+import { useCurrency, useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
-import { CACHE_TIME, decimalValidation, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
+import { CACHE_TIME, decimalValidation } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
@@ -142,10 +142,9 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo, isLoading } =
     useOrderCreation();
   const { currentLanguage } = useLanguage();
+  const { currency: currentCurrency } = useCurrency();
 
   const [searchTerm, setSearchTerm] = useState('');
-
-  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
 
   const formik = useFormik({
     initialValues: getInitialValues(isLoading, applicationId || '', mainFormData, isEditMode),
@@ -410,7 +409,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           />
           <SharedInput
             name="price"
-            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency})`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
             formik={formik}
             type="text"
             disabled

@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   getOrders,
   putPackage,
@@ -10,7 +11,6 @@ import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   SharedAutocomplete,
   SharedDecimalInput,
@@ -22,15 +22,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { OrderStatus, PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
-import {
-  CACHE_TIME,
-  decimalValidation,
-  DEFAULT_SEARCH_PAGE_NUMBER,
-  LOCAL_STORAGE_CURRENCY_KEY
-} from '@/utils';
+import { CACHE_TIME, decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useIntl } from 'react-intl';
 import { Divider } from '@mui/material';
+import { useCurrency } from '@/providers';
 
 interface Props {
   isEditMode: boolean;
@@ -107,10 +103,10 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { currency: currentCurrency } = useCurrency();
 
   const [searchOrderTerm, setSearchOrderTerm] = useState('');
   const [searchBoxTypeTerm, setSearchBoxTypeTerm] = useState('');
-  const currentCurrency = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
 
@@ -346,7 +342,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           />
           <SharedInput
             name="volume"
-            label={formatMessage({ id: 'SYSTEM.VOLUME' }) + ' см³'}
+            label={formatMessage({ id: 'SYSTEM.VOLUME' }) + ' (см³)'}
             type="number"
             formik={formik}
             disabled
@@ -360,7 +356,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           />
           <SharedInput
             name="price"
-            label={formatMessage({ id: 'SYSTEM.PRICE' }) + ' ' + currentCurrency}
+            label={formatMessage({ id: 'SYSTEM.PRICE' }) + ` (${currentCurrency.code})`}
             formik={formik}
             type="text"
             disabled

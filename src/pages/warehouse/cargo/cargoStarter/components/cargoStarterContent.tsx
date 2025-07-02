@@ -34,7 +34,6 @@ export const formSchema = Yup.object().shape({
     .optional()
     .matches(/^[0-9]{3}-[0-9]{8}$/, 'VALIDATION.CODE_FORMAT'),
   airline: Yup.string().required('VALIDATION.AIRLINE_REQUIRED'),
-  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
   packages: Yup.array()
     .of(Yup.string().required())
     .min(1, 'VALIDATION.PACKAGES_MIN')
@@ -54,7 +53,6 @@ const getInitialValues = (
   if (isEditMode && cargoData) {
     return {
       arrival_date: cargoData.arrival_date,
-      company_id: cargoData.company_id.toString(),
       departure_date: cargoData.departure_date,
       from_airport: cargoData.from_airport,
       is_international: cargoData.is_international,
@@ -76,7 +74,6 @@ const getInitialValues = (
     departure_date: '',
     packages: packageIds,
     is_international: false,
-    company_id: '',
     status: 'formed'
   };
 };
@@ -89,7 +86,6 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
 
   const [loading, setLoading] = useState(false);
   const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
-  const [searchCompanyOrderTerm, setSearchCompanyOrderTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const packageIdsParam = searchParams.get('package_id');
@@ -102,17 +98,6 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
   } = useQuery({
     queryKey: ['cargoAirlines'],
     queryFn: () => getAirlines({ is_active: true }),
-    staleTime: CACHE_TIME
-  });
-
-  const {
-    data: companiesData,
-    isLoading: companiesLoading,
-    isError: companiesIsError,
-    error: companiesError
-  } = useQuery({
-    queryKey: ['cargoCompanies'],
-    queryFn: () => getGlobalParameters(),
     staleTime: CACHE_TIME
   });
 
@@ -183,7 +168,6 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
         navigate('/warehouse/cargo/list');
         resetForm();
         setSearchAirlineTerm('');
-        setSearchCompanyOrderTerm('');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -193,11 +177,10 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
     }
   });
 
-  const isLoading = airlinesLoading || companiesLoading || packagesLoading;
+  const isLoading = airlinesLoading || packagesLoading;
 
   const renderError = () => {
     if (airlinesIsError) return <SharedError error={airlinesError} />;
-    if (companiesIsError) return <SharedError error={companiesError} />;
     if (packagesIsError) return <SharedError error={packagesError} />;
     return null;
   };
@@ -236,26 +219,10 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
             onSearchTermChange={setSearchTerm}
             loading={packagesLoading}
           />
-          <SharedInput name="code" label={formatMessage({ id: 'SYSTEM.CODE' })} formik={formik} />
-
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.COMPANY' })}
-            value={formik.values.company_id ?? ''}
-            options={
-              companiesData?.result?.map((app) => ({
-                id: app.id,
-                name: app.company_name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
-            onChange={(val) => {
-              formik.setFieldValue('company_id', val);
-            }}
-            error={formik.errors.company_id as string}
-            touched={formik.touched.company_id}
-            searchTerm={searchCompanyOrderTerm}
-            onSearchTermChange={setSearchCompanyOrderTerm}
+          <SharedInput
+            name="code"
+            label={formatMessage({ id: 'SYSTEM.MAWB_CODE' })}
+            formik={formik}
           />
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.AIRLINE' })}
