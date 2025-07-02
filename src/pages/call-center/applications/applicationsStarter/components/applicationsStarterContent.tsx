@@ -45,7 +45,6 @@ export const formSchema = Yup.object().shape({
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  patronymic: Yup.string().optional(),
   bin: Yup.string().when('client_type', {
     is: 'legal',
     then: (schema) =>
@@ -66,9 +65,7 @@ export const formSchema = Yup.object().shape({
     .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
     .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
-  client_id: Yup.string().optional().nullable(),
-  message: Yup.string().optional(),
-  status: Yup.string().optional()
+  client_id: Yup.string().optional().nullable()
 });
 
 const getInitialValues = (
