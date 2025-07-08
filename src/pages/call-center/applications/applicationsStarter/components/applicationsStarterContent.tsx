@@ -113,6 +113,8 @@ const getInitialValues = (
       box_width: applicationData?.box_width?.toString() ?? '',
       box_length: applicationData?.box_length?.toString() ?? '',
       box_height: applicationData?.box_height?.toString() ?? '',
+      country_of_arrival: applicationData.country_of_arrival?.toString() ?? '',
+      country_of_departure: applicationData.country_of_departure?.toString() ?? '',
       status: applicationData.status || ('new' as unknown as ApplicationsStatus)
     };
   }
@@ -136,6 +138,8 @@ const getInitialValues = (
     box_width: '',
     box_length: '',
     box_height: '',
+    country_of_arrival: '',
+    country_of_departure: '',
     status: 'new' as unknown as ApplicationsStatus
   };
 };
@@ -500,6 +504,18 @@ export const ApplicationsStarterContent = ({
               }))}
             />
           )}
+          <Divider />
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.ROUTE' })}</h3>
+          <SharedInput
+            name="country_of_departure"
+            label={formatMessage({ id: 'SYSTEM.COUNTRY_OF_DEPARTURE' })}
+            formik={formik}
+          />
+          <SharedInput
+            name="country_of_arrival"
+            label={formatMessage({ id: 'SYSTEM.COUNTRY_OF_ARRIVAL' })}
+            formik={formik}
+          />
           <Divider />
           <h3 className="card-title">{formatMessage({ id: 'SYSTEM.SIZES' })}</h3>
           <SharedDecimalInput

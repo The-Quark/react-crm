@@ -438,7 +438,10 @@ const System = {
   'SYSTEM.FOLLOW_THE_LINK': 'اتبع الرابط',
   'SYSTEM.PACKAGE_INFO': 'معلومات الطرد',
   'SYSTEM.CARGO_INFO': 'معلومات الشحنة',
-  'SYSTEM.SIZES': 'الأحجام'
+  'SYSTEM.SIZES': 'الأحجام',
+  'SYSTEM.ROUTE': 'المسار',
+  'SYSTEM.COUNTRY_OF_DEPARTURE': 'بلد المغادرة',
+  'SYSTEM.COUNTRY_OF_ARRIVAL': 'بلد الوصول'
 };
 
 export default System;

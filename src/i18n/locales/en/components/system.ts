@@ -438,7 +438,10 @@ const System = {
   'SYSTEM.FOLLOW_THE_LINK': 'Follow The Link',
   'SYSTEM.PACKAGE_INFO': 'Package Information',
   'SYSTEM.CARGO_INFO': 'Cargo Information',
-  'SYSTEM.SIZES': 'Sizes'
+  'SYSTEM.SIZES': 'Sizes',
+  'SYSTEM.ROUTE': 'Route',
+  'SYSTEM.COUNTRY_OF_DEPARTURE': 'Country of Departure',
+  'SYSTEM.COUNTRY_OF_ARRIVAL': 'Country of Arrival'
 };
 
 export default System;

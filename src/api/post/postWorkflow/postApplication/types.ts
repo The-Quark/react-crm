@@ -19,4 +19,6 @@ export interface IApplicationPostFormValues {
   box_length?: string | number;
   box_width?: string | number;
   box_type_id?: string | number;
+  country_of_departure?: string;
+  country_of_arrival?: string;
 }

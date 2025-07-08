@@ -45,6 +45,8 @@ export interface Application {
   box_height: string | null;
   is_our_box: string | null;
   box_type_id: string | null;
+  country_of_departure: string | null;
+  country_of_arrival: string | null;
 }
 
 export interface ApplicationsResponse extends IPagination {
