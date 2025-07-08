@@ -437,7 +437,8 @@ const System = {
   'SYSTEM.NOMINAL_COST': 'Nominal Cost',
   'SYSTEM.FOLLOW_THE_LINK': 'Follow The Link',
   'SYSTEM.PACKAGE_INFO': 'Package Information',
-  'SYSTEM.CARGO_INFO': 'Cargo Information'
+  'SYSTEM.CARGO_INFO': 'Cargo Information',
+  'SYSTEM.SIZES': 'Sizes'
 };
 
 export default System;

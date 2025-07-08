@@ -437,7 +437,8 @@ const System = {
   'SYSTEM.NOMINAL_COST': 'التكلفة الاسمية',
   'SYSTEM.FOLLOW_THE_LINK': 'اتبع الرابط',
   'SYSTEM.PACKAGE_INFO': 'معلومات الطرد',
-  'SYSTEM.CARGO_INFO': 'معلومات الشحنة'
+  'SYSTEM.CARGO_INFO': 'معلومات الشحنة',
+  'SYSTEM.SIZES': 'الأحجام'
 };
 
 export default System;

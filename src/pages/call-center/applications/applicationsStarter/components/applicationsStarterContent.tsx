@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { postApplication, getSources, putApplication, getClients } from '@/api';
+import { postApplication, getSources, putApplication, getClients, getBoxTypes } from '@/api';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
 import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { useFormik } from 'formik';
@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   SharedAutocomplete,
+  SharedDecimalInput,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -20,13 +21,8 @@ import { ApplicationsStatus } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { mockApplicationsStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { debounce } from '@/utils/lib/helpers.ts';
-import {
-  BIN_LENGTH,
-  CACHE_TIME,
-  PHONE_REG_EXP,
-  SEARCH_DEBOUNCE_DELAY,
-  SEARCH_PER_PAGE
-} from '@/utils';
+import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_DEBOUNCE_DELAY, SEARCH_PER_PAGE } from '@/utils';
+import { Divider } from '@mui/material';
 
 interface Props {
   isEditMode: boolean;
@@ -65,7 +61,30 @@ export const formSchema = Yup.object().shape({
     .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
     .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
-  client_id: Yup.string().optional().nullable()
+  client_id: Yup.string().optional().nullable(),
+  box_type_id: Yup.string().test(
+    'box-type-or-dimensions',
+    'VALIDATION.TYPE_REQUIRED',
+    function (value) {
+      const { box_width, box_height, box_length } = this.parent;
+      return !!value || (!!box_width && !!box_height && !!box_length);
+    }
+  ),
+  box_width: Yup.string().when('box_type_id', {
+    is: (val: string) => !val,
+    then: (schema) => schema.required('VALIDATION.WIDTH_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
+  box_length: Yup.string().when('box_type_id', {
+    is: (val: string) => !val,
+    then: (schema) => schema.required('VALIDATION.LENGTH_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  }),
+  box_height: Yup.string().when('box_type_id', {
+    is: (val: string) => !val,
+    then: (schema) => schema.required('VALIDATION.HEIGHT_REQUIRED'),
+    otherwise: (schema) => schema.optional()
+  })
 });
 
 const getInitialValues = (
@@ -86,6 +105,14 @@ const getInitialValues = (
       company_name: applicationData.client?.company_name || '',
       client_type: applicationData.client?.type || 'individual',
       client_id: applicationData.client_id || clientId,
+      weight: applicationData?.weight?.toString() ?? '',
+      width: applicationData?.width?.toString() ?? '',
+      length: applicationData?.length?.toString() ?? '',
+      height: applicationData?.height?.toString() ?? '',
+      box_type_id: applicationData?.box_type_id?.toString() ?? '',
+      box_width: applicationData?.box_width?.toString() ?? '',
+      box_length: applicationData?.box_length?.toString() ?? '',
+      box_height: applicationData?.box_height?.toString() ?? '',
       status: applicationData.status || ('new' as unknown as ApplicationsStatus)
     };
   }
@@ -101,6 +128,14 @@ const getInitialValues = (
     bin: '',
     client_type: 'individual',
     client_id: clientId ?? '',
+    weight: '',
+    width: '',
+    length: '',
+    height: '',
+    box_type_id: '',
+    box_width: '',
+    box_length: '',
+    box_height: '',
     status: 'new' as unknown as ApplicationsStatus
   };
 };
@@ -118,6 +153,7 @@ export const ApplicationsStarterContent = ({
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const [searchBoxTypeTerm, setSearchBoxTypeTerm] = useState('');
 
   const clientId = searchParams.get('client_id');
 
@@ -143,8 +179,17 @@ export const ApplicationsStarterContent = ({
     error: sourcesError
   } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => getSources({ is_active: true }),
-    staleTime: CACHE_TIME
+    queryFn: () => getSources({ is_active: true })
+  });
+
+  const {
+    data: boxTypesData,
+    isLoading: boxTypesLoading,
+    isError: boxTypesIsError,
+    error: boxTypesError
+  } = useQuery({
+    queryKey: ['cargoBoxTypes'],
+    queryFn: () => getBoxTypes({})
   });
 
   const {
@@ -154,8 +199,7 @@ export const ApplicationsStarterContent = ({
     error: clientsError
   } = useQuery({
     queryKey: ['applicationClients', searchTerm],
-    queryFn: () => getClients({ search_application: searchTerm, per_page: SEARCH_PER_PAGE }),
-    staleTime: CACHE_TIME
+    queryFn: () => getClients({ search_application: searchTerm, per_page: SEARCH_PER_PAGE })
   });
 
   const formik = useFormik({
@@ -210,7 +254,6 @@ export const ApplicationsStarterContent = ({
     queryKey: ['clientDetails', formik.values.client_id],
     queryFn: () =>
       getClients({ id: formik.values.client_id ? Number(formik.values.client_id) : undefined }),
-    staleTime: CACHE_TIME,
     enabled: !!formik.values.client_id && !isNaN(Number(formik.values.client_id))
   });
 
@@ -252,6 +295,41 @@ export const ApplicationsStarterContent = ({
       }
     },
     [formik]
+  );
+
+  const handleBoxTypeChange = useCallback(
+    (boxTypeId: string | number) => {
+      if (boxTypeId === '' || boxTypeId === '__clear__') {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: '',
+          box_width: '',
+          box_height: '',
+          box_length: ''
+        });
+        return;
+      }
+      const id = typeof boxTypeId === 'number' ? boxTypeId.toString() : boxTypeId;
+      const selectedBoxType = boxTypesData?.result?.find((box) => box.id === Number(id));
+      if (selectedBoxType) {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: id,
+          box_width: selectedBoxType.width?.toString() ?? '',
+          box_height: selectedBoxType.height?.toString() ?? '',
+          box_length: selectedBoxType.length?.toString() ?? ''
+        });
+      } else {
+        formik.setValues({
+          ...formik.values,
+          box_type_id: id,
+          box_width: '',
+          box_height: '',
+          box_length: ''
+        });
+      }
+    },
+    [formik, boxTypesData?.result]
   );
 
   useEffect(() => {
@@ -422,6 +500,66 @@ export const ApplicationsStarterContent = ({
               }))}
             />
           )}
+          <Divider />
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.SIZES' })}</h3>
+          <SharedDecimalInput
+            name="weight"
+            label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="width"
+            label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="length"
+            label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+            formik={formik}
+          />
+          <SharedDecimalInput
+            name="height"
+            label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+            formik={formik}
+          />
+          <Divider />
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.BOX_TYPE' })}</h3>
+          <SharedAutocomplete
+            label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
+            value={formik.values.box_type_id ?? ''}
+            options={
+              boxTypesData?.result?.map((app) => ({
+                id: app.id,
+                name: String(app.name || app.id)
+              })) ?? []
+            }
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
+            onChange={handleBoxTypeChange}
+            error={formik.errors.box_type_id as string}
+            touched={formik.touched.box_type_id}
+            searchTerm={searchBoxTypeTerm}
+            onSearchTermChange={setSearchBoxTypeTerm}
+            loading={boxTypesLoading}
+          />
+          <SharedDecimalInput
+            name="box_width"
+            label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+            formik={formik}
+            disabled={!!formik.values.box_type_id}
+          />
+          <SharedDecimalInput
+            name="box_length"
+            label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+            formik={formik}
+            disabled={!!formik.values.box_type_id}
+          />
+          <SharedDecimalInput
+            name="box_height"
+            label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+            formik={formik}
+            disabled={!!formik.values.box_type_id}
+          />
           <div className="flex justify-end">
             <button
               type="submit"

@@ -437,7 +437,8 @@ const System = {
   'SYSTEM.NOMINAL_COST': 'Номинальная стоимость',
   'SYSTEM.FOLLOW_THE_LINK': 'Перейдите по ссылке',
   'SYSTEM.PACKAGE_INFO': 'Информация о посылке',
-  'SYSTEM.CARGO_INFO': 'Информация о грузе'
+  'SYSTEM.CARGO_INFO': 'Информация о грузе',
+  'SYSTEM.SIZES': 'Размеры'
 };
 
 export default System;

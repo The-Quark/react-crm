@@ -36,6 +36,15 @@ export interface Application {
   source: Source;
   status: ApplicationsStatus;
   client: Client | null;
+  length: string | null;
+  width: string | null;
+  height: string | null;
+  weight: string | null;
+  box_length: string | null;
+  box_width: string | null;
+  box_height: string | null;
+  is_our_box: string | null;
+  box_type_id: string | null;
 }
 
 export interface ApplicationsResponse extends IPagination {

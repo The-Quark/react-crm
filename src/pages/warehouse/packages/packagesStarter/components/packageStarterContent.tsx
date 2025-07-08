@@ -22,7 +22,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { IPackageFormValues } from '@/api/post/postWorkflow/postPackage/types.ts';
 import { OrderStatus, PackageStatus } from '@/api/enums';
 import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
-import { CACHE_TIME, decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
+import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useIntl } from 'react-intl';
 import { Divider } from '@mui/material';
@@ -322,7 +322,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             disabled={!!orderIdFromUrl}
             loading={ordersLoading}
           />
-
           <SharedDecimalInput
             name="weight"
             label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
