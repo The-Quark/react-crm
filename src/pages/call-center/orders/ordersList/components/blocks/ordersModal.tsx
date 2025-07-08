@@ -363,15 +363,24 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                     </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <div className="flex items-center gap-1.5">
-                          <a
-                            className="link"
-                            href={`/warehouse/packages/list/id=${order.packages[0].id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {formatMessage({ id: 'SYSTEM.FOLLOW_THE_LINK' })}
-                          </a>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.HAWB' })}
+                        </label>
+                        <a
+                          className="link"
+                          href={`/warehouse/packages/list/id=${order.packages[0].id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {order.packages[0].hawb || '-'}
+                        </a>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.STATUS' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {order.packages[0].status || '-'}
                         </div>
                       </div>
                     </div>
@@ -386,16 +395,23 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                     </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <div className="flex items-center gap-1.5">
-                          <a
-                            className="link"
-                            href={`/warehouse/cargo/list/id=${order.cargo.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {formatMessage({ id: 'SYSTEM.FOLLOW_THE_LINK' })}
-                          </a>
-                        </div>
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.MAWB' })}
+                        </label>
+                        <a
+                          className="link"
+                          href={`/warehouse/cargo/list/id=${order.cargo.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {order.cargo.code || '-'}
+                        </a>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.STATUS' })}
+                        </label>
+                        <div className="flex columns-1 w-full">{order.cargo.status || '-'}</div>
                       </div>
                     </div>
                   </div>
