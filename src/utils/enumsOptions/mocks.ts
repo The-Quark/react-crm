@@ -90,117 +90,275 @@ export const mockApplicationsStatus = [
 export const mockOrdersStatus = [
   {
     id: 1,
+    name: 'Draft',
+    value: OrderStatus.DRAFT
+  },
+  {
+    id: 2,
+    name: 'Created',
+    value: OrderStatus.CREATED
+  },
+  {
+    id: 3,
+    name: 'Confirmed',
+    value: OrderStatus.CONFIRMED
+  },
+  {
+    id: 4,
+    name: 'Payment pending',
+    value: OrderStatus.PAYMENT_PENDING
+  },
+  {
+    id: 5,
+    name: 'Paid',
+    value: OrderStatus.PAID
+  },
+  {
+    id: 6,
     name: 'Package awaiting',
     value: OrderStatus.PACKAGE_AWAITING
   },
   {
-    id: 2,
+    id: 7,
     name: 'Buy for someone',
     value: OrderStatus.BUY_FOR_SOMEONE
   },
   {
-    id: 3,
+    id: 8,
+    name: 'Reweighing',
+    value: OrderStatus.REWEIGHING
+  },
+  {
+    id: 9,
     name: 'Package received',
     value: OrderStatus.PACKAGE_RECEIVED
   },
   {
-    id: 4,
+    id: 10,
+    name: 'In processing',
+    value: OrderStatus.IN_PROCESSING
+  },
+  {
+    id: 11,
+    name: 'Ready for shipment',
+    value: OrderStatus.READY_FOR_SHIPMENT
+  },
+  {
+    id: 12,
+    name: 'Shipped',
+    value: OrderStatus.SHIPPED
+  },
+  {
+    id: 13,
+    name: 'In transit',
+    value: OrderStatus.IN_TRANSIT
+  },
+  {
+    id: 14,
+    name: 'Arrived destination',
+    value: OrderStatus.ARRIVED_DESTINATION
+  },
+  {
+    id: 15,
+    name: 'Ready for delivery',
+    value: OrderStatus.READY_FOR_DELIVERY
+  },
+  {
+    id: 16,
+    name: 'Completed',
+    value: OrderStatus.COMPLETED
+  },
+  {
+    id: 17,
+    name: 'Delivered',
+    value: OrderStatus.DELIVERED
+  },
+  {
+    id: 18,
+    name: 'Picked up',
+    value: OrderStatus.PICKED_UP
+  },
+  {
+    id: 19,
+    name: 'On hold',
+    value: OrderStatus.ON_HOLD
+  },
+  {
+    id: 20,
     name: 'Expired',
     value: OrderStatus.EXPIRED
   },
   {
-    id: 5,
-    name: 'Cancelled',
-    value: OrderStatus.CANCELLED
+    id: 21,
+    name: 'Cancelled by client',
+    value: OrderStatus.CANCELLED_BY_CLIENT
   },
   {
-    id: 6,
-    name: 'Reweighing',
-    value: OrderStatus.REWEIGHING
+    id: 22,
+    name: 'Cancelled by system',
+    value: OrderStatus.CANCELLED_BY_SYSTEM
+  },
+  {
+    id: 23,
+    name: 'Refunded',
+    value: OrderStatus.REFUNDED
+  },
+  {
+    id: 24,
+    name: 'Disputed',
+    value: OrderStatus.DISPUTED
   }
+  // Old status for compatibility (commented out as per your enum)
+  // {
+  //   id: 25,
+  //   name: 'Cancelled',
+  //   value: OrderStatus.CANCELLED
+  // }
 ];
 
 export const packageStatusOptions = [
+  // Phase 1: Synchronization with cargo
   {
     id: 1,
-    name: 'Ready for shipment',
-    value: PackageStatus.READY_FOR_SHIPMENT
+    name: 'Package received',
+    value: PackageStatus.PACKAGE_RECEIVED
   },
   {
     id: 2,
-    name: 'Packed',
-    value: PackageStatus.PACKED
+    name: 'Package formed',
+    value: PackageStatus.PACKAGE_FORMED
   },
   {
     id: 3,
-    name: 'Delivered to PVZ',
-    value: PackageStatus.DELIVERED_TO_PVZ
+    name: 'Awaiting airport acceptance',
+    value: PackageStatus.PACKAGE_AWAITING_AIRPORT
   },
   {
     id: 4,
+    name: 'Accepted at sender airport',
+    value: PackageStatus.PACKAGE_ACCEPTED_AIRPORT_SENDER
+  },
+  {
+    id: 5,
+    name: 'In transit',
+    value: PackageStatus.PACKAGE_IN_TRANSIT
+  },
+  {
+    id: 6,
+    name: 'Arrived at receiver airport',
+    value: PackageStatus.PACKAGE_ARRIVED_AIRPORT_RECEIVER
+  },
+  {
+    id: 7,
+    name: 'Accepted at TSW',
+    value: PackageStatus.PACKAGE_ACCEPTED_TSW
+  },
+  {
+    id: 8,
+    name: 'Transferred to warehouse',
+    value: PackageStatus.PACKAGE_TRANSFERRED_TSW
+  },
+
+  // Phase 2: Independent package statuses
+  {
+    id: 9,
     name: 'Customs clearance started',
     value: PackageStatus.START_CUSTOM_CLEARANCE
   },
   {
-    id: 5,
-    name: 'Customs clearance completed',
-    value: PackageStatus.DONE_CUSTOM_CLEARANCE
-  },
-  {
-    id: 6,
+    id: 10,
     name: 'Awaiting customs approval',
     value: PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL
   },
   {
-    id: 7,
+    id: 11,
+    name: 'Customs clearance completed',
+    value: PackageStatus.DONE_CUSTOM_CLEARANCE
+  },
+  {
+    id: 12,
     name: 'Ready for receive',
     value: PackageStatus.READY_FOR_RECEIVE
   },
   {
-    id: 8,
+    id: 13,
     name: 'Transferred to courier',
     value: PackageStatus.TRANSFERRED_TO_COURIER
   },
   {
-    id: 9,
+    id: 14,
     name: 'Ready for transfer to PVZ',
     value: PackageStatus.READY_FOR_TRANSFER_TO_PVZ
   },
   {
-    id: 10,
+    id: 15,
     name: 'Heading to PVZ',
     value: PackageStatus.HEADING_TO_PVZ
   },
   {
-    id: 11,
+    id: 16,
+    name: 'Delivered to PVZ',
+    value: PackageStatus.DELIVERED_TO_PVZ
+  },
+  {
+    id: 17,
     name: 'Heading to receiver',
     value: PackageStatus.HEADING_TO_RECEIVER
   },
   {
-    id: 12,
+    id: 18,
     name: 'Ready for delivery',
     value: PackageStatus.READY_FOR_DELIVERY
   },
   {
-    id: 13,
+    id: 19,
     name: 'Delivered',
     value: PackageStatus.DELIVERED
   },
   {
-    id: 14,
+    id: 20,
+    name: 'Partially delivered',
+    value: PackageStatus.PARTIALLY_DELIVERED
+  },
+
+  // Problem statuses
+  {
+    id: 21,
     name: 'Damaged',
     value: PackageStatus.DAMAGED
   },
   {
-    id: 15,
+    id: 22,
+    name: 'Lost',
+    value: PackageStatus.LOST
+  },
+  {
+    id: 23,
     name: 'Delayed',
     value: PackageStatus.DELAYED
   },
   {
-    id: 16,
-    name: 'Package received',
-    value: PackageStatus.PACKAGE_RECEIVED
+    id: 24,
+    name: 'Returned',
+    value: PackageStatus.RETURNED
+  },
+  {
+    id: 25,
+    name: 'Rejected by customs',
+    value: PackageStatus.REJECTED
   }
+
+  // Old statuses for compatibility (commented out as per your enum)
+  // {
+  //   id: 26,
+  //   name: 'Ready for shipment',
+  //   value: PackageStatus.READY_FOR_SHIPMENT
+  // },
+  // {
+  //   id: 27,
+  //   name: 'Packed',
+  //   value: PackageStatus.PACKED
+  // }
 ];
 
 export const cargoStatusOptions = [
