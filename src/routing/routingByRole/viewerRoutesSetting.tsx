@@ -69,7 +69,9 @@ const ViewerRoutesSetting = () => {
 
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/warehouse/packages/list/:id" element={<PackagesListPage />} />
         <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
+        <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
         <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
 
         <Route path="/crm/users/list" element={<UsersListPage />} />

@@ -276,7 +276,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
       setCancelLoading(true);
       await putOrderStatus({
         id: Number(formik.values.order_id),
-        status: OrderStatus.CANCELLED
+        status: OrderStatus.CANCELLED_BY_SYSTEM
       });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       navigate('/call-center/orders/list');

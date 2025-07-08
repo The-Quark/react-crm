@@ -301,7 +301,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
               <a className="btn btn-md btn-light" href={`/warehouse/packages/starter/${id}`}>
                 {formatMessage({ id: 'SYSTEM.UPDATE_PACKAGE' })}
               </a>
-              {data?.result[0].status === PackageStatus.READY_FOR_SHIPMENT && (
+              {data?.result[0].status === PackageStatus.PACKAGE_RECEIVED && (
                 <button
                   className="btn btn-md btn-primary"
                   onClick={() => handleCreateCargo(id)}

@@ -183,10 +183,12 @@ const AllRoutesSetting = () => {
         <Route path="/warehouse/packages/starter" element={<PackagesStarterPage />} />
         <Route path="/warehouse/packages/starter/:id" element={<PackagesStarterPage />} />
         <Route path="/warehouse/packages/upload/:id" element={<PackagesUploadPage />} />
+        <Route path="/warehouse/packages/list/:id" element={<PackagesListPage />} />
         <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
         <Route path="/warehouse/cargo/starter" element={<CargoStarterPage />} />
         <Route path="/warehouse/cargo/starter/:id" element={<CargoStarterPage />} />
         <Route path="/warehouse/cargo/upload/:id" element={<CargoUploadPage />} />
+        <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
         <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
         <Route path="/crm/users/starter" element={<UsersStarterPage />} />
         <Route path="/crm/users/starter/:id" element={<UsersStarterPage />} />

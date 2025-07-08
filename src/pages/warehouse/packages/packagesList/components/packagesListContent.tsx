@@ -10,18 +10,20 @@ import { PackagesModal } from '@/pages/warehouse/packages/packagesList/component
 import { PackageStatus } from '@/api/enums';
 import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesCargoCreateModal.tsx';
 import { initialPagination } from '@/utils';
+import { useParams } from 'react-router';
 
 export const PackagesListContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<PackageStatus>();
   const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(id ? true : false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCargoCreateModalOpen, setIsCargoCreateModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(id ? Number(id) : null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState(initialPagination);
 

@@ -10,19 +10,21 @@ import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/
 import { CargoStatus } from '@/api/enums';
 import { useIntl } from 'react-intl';
 import { initialPagination } from '@/utils';
+import { useParams } from 'react-router';
 
 export const CargoListContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>();
 
   const [searchTermCode, setSearchTermCode] = useState('');
   const [searchTermPackage, setSearchTermPackage] = useState('');
   const [status, setStatus] = useState<CargoStatus>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(id ? true : false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(id ? Number(id) : null);
   const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({

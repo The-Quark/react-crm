@@ -356,7 +356,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                 </div>
 
                 {/* Package Block */}
-                {order.packages && (
+                {order.packages && order.packages.length > 0 && (
                   <div className="border-b pb-4">
                     <h4 className="text-lg font-semibold mb-3">
                       {formatMessage({ id: 'SYSTEM.PACKAGE_INFO' })}
@@ -366,7 +366,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                         <div className="flex items-center gap-1.5">
                           <a
                             className="link"
-                            href="/warehouse/packages/list"
+                            href={`/warehouse/packages/list/id=${order.packages[0].id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -389,7 +389,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                         <div className="flex items-center gap-1.5">
                           <a
                             className="link"
-                            href="/warehouse/cargo/list"
+                            href={`/warehouse/cargo/list/id=${order.cargo.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

@@ -245,6 +245,7 @@ const routeConfig = [
         path: '/warehouse/packages/upload/:id',
         element: <PackagesUploadPage />
       },
+      { path: '/warehouse/packages/list/:id', element: <PackagesListPage /> },
       { path: '/warehouse/packages/list', element: <PackagesListPage /> },
       { path: '/warehouse/cargo/starter', element: <CargoStarterPage /> },
       {
@@ -255,6 +256,7 @@ const routeConfig = [
         path: '/warehouse/cargo/upload/:id',
         element: <CargoUploadPage />
       },
+      { path: '/warehouse/cargo/list/:id', element: <CargoListPage /> },
       { path: '/warehouse/cargo/list', element: <CargoListPage /> }
     ]
   },
@@ -262,7 +264,9 @@ const routeConfig = [
     permission: 'view orders',
     routes: [
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/warehouse/packages/list/:id', element: <PackagesListPage /> },
       { path: '/warehouse/packages/list', element: <PackagesListPage /> },
+      { path: '/warehouse/cargo/list/:id', element: <CargoListPage /> },
       { path: '/warehouse/cargo/list', element: <CargoListPage /> }
     ]
   }

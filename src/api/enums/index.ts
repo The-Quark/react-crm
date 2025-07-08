@@ -117,11 +117,11 @@ export enum PackageStatus {
   LOST = 'lost', // Потеряна
   DELAYED = 'delayed', // Задержана
   RETURNED = 'returned', // Возвращена
-  REJECTED = 'rejected', // Отклонена таможней
+  REJECTED = 'rejected' // Отклонена таможней
 
   // Old statuses for compatibility (to be removed after migration)
-  READY_FOR_SHIPMENT = 'ready_for_shipment',
-  PACKED = 'packed'
+  // READY_FOR_SHIPMENT = 'ready_for_shipment',
+  // PACKED = 'packed'
 }
 
 export enum OrderStatus {
@@ -155,10 +155,10 @@ export enum OrderStatus {
   CANCELLED_BY_CLIENT = 'cancelled_by_client', // Отменен клиентом
   CANCELLED_BY_SYSTEM = 'cancelled_by_system', // Отменен системой
   REFUNDED = 'refunded', // Возвращен
-  DISPUTED = 'disputed', // Спорный
+  DISPUTED = 'disputed' // Спорный
 
-  // Old statuses for compatibility (to be removed after migration)
-  CANCELLED = 'cancelled'
+  // // Old statuses for compatibility (to be removed after migration)
+  // CANCELLED = 'cancelled'
 }
 
 export enum GenderUser {
