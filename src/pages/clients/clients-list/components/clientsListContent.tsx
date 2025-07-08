@@ -9,14 +9,16 @@ import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/shared
 import { ClientsListProfileModal } from '@/pages/clients/clients-list/components/blocks/clientsListProfileModal.tsx';
 import { ClientType } from '@/api/generalManualTypes';
 import { initialPagination } from '@/utils';
+import { useParams } from 'react-router';
 
 export const ClientsListContent = () => {
   const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>();
 
   const [clientType, setClientType] = useState<ClientType>('individual');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(id ? true : false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(id ? Number(id) : null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
   const [clientCityId, setClientCityId] = useState<number>();

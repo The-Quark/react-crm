@@ -38,6 +38,8 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
       id !== null ? getApplications({ id: Number(id) }) : Promise.reject('Invalid ID')
   });
 
+  const applicationData = data?.result[0];
+
   const handleCreateOrder = (applicationId: number | null) => {
     if (applicationId !== null) {
       navigate(`/call-center/orders/starter?application_id=${applicationId}`);
@@ -63,10 +65,10 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
           {isLoading && <SharedLoading />}
           {isError && <SharedError error={error} />}
-          {data?.result && (
+          {applicationData && (
             <div className="card pb-2.5">
               <div className="card-body grid gap-5">
-                <div className="border-b pb-4">
+                <div>
                   <h4 className="text-lg font-semibold mb-4">
                     {formatMessage({ id: 'SYSTEM.APPLICATION_INFO' })}
                   </h4>
@@ -76,49 +78,47 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                         {formatMessage({ id: 'SYSTEM.APPLICATION' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {data.result[0].full_name}
+                        {applicationData?.full_name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
                       </label>
-                      <div className="flex columns-1 w-full flex-wrap">{data.result[0].phone}</div>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {applicationData?.phone || '-'}
+                      </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.SOURCE' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {data.result[0].source.name}
+                        {applicationData?.source.name || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.EMAIL' })}
                       </label>
-                      <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.email}</div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56">
-                        {formatMessage({ id: 'SYSTEM.CLIENT' })}
-                      </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {data.result[0].client_id}
+                        {applicationData?.email || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.STATUS' })}
                       </label>
-                      <div className="flex columns-1 w-full flex-wrap">{data.result[0].status}</div>
+                      <div className="flex columns-1 w-full flex-wrap">
+                        {applicationData.status || '-'}
+                      </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56">
                         {formatMessage({ id: 'SYSTEM.MESSAGE' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {data.result[0].message}
+                        {applicationData.message || '-'}
                       </div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -126,55 +126,172 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
                         {formatMessage({ id: 'SYSTEM.CREATED_AT' })}
                       </label>
                       <div className="flex columns-1 w-full flex-wrap">
-                        {new Date(data.result[0].created_at).toLocaleDateString('ru-RU')}
+                        {new Date(applicationData.created_at).toLocaleDateString('ru-RU') || '-'}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="text-lg font-semibold mb-4">
-                    {formatMessage({ id: 'SYSTEM.CLIENT_INFO' })}
-                  </h4>
-                  <div className="grid gap-2.5">
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.TYPE' })}
-                      </label>
-                      <div className="flex columns-1 w-full">
-                        {data.result[0].client?.type || '-'}
-                      </div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
-                        {data.result[0].client?.type === 'legal'
-                          ? formatMessage({ id: 'SYSTEM.COMPANY_NAME' })
-                          : formatMessage({ id: 'SYSTEM.FULL_NAME' })}
-                      </label>
-                      <div className="flex columns-1 w-full">
-                        {data.result[0].client?.fullname || '-'}
-                      </div>
-                    </div>
-                    {data.result[0].client?.type === 'legal' && (
+                {applicationData?.client && (
+                  <div className="border-t pt-4">
+                    <h4 className="text-lg font-semibold mb-4">
+                      {formatMessage({ id: 'SYSTEM.CLIENT_INFO' })}
+                    </h4>
+                    <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.BIN' })}
+                          {formatMessage({ id: 'SYSTEM.TYPE' })}
                         </label>
                         <div className="flex columns-1 w-full">
-                          {data.result[0].client?.bin || '-'}
+                          {applicationData?.client?.type || '-'}
                         </div>
                       </div>
-                    )}
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.PHONE' })}
-                      </label>
-                      <div className="flex columns-1 w-full">
-                        {data.result[0].client?.phone || '-'}
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {applicationData?.client?.type === 'legal'
+                            ? formatMessage({ id: 'SYSTEM.COMPANY_NAME' })
+                            : formatMessage({ id: 'SYSTEM.FULL_NAME' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          <a
+                            className="link"
+                            href={`/clients/id=${applicationData?.client?.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {applicationData?.client?.fullname || '-'}
+                          </a>
+                        </div>
+                      </div>
+                      {applicationData?.client?.type === 'legal' && (
+                        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                          <label className="form-label max-w-56 text-gray-600">
+                            {formatMessage({ id: 'SYSTEM.BIN' })}
+                          </label>
+                          <div className="flex columns-1 w-full">
+                            {applicationData?.client?.bin || '-'}
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.PHONE' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.client?.phone || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.EMAIL' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.client?.email || '-'}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {(applicationData?.country_of_arrival || applicationData?.country_of_departure) && (
+                  <div className="border-t pt-4">
+                    <h4 className="text-lg font-semibold mb-4">
+                      {formatMessage({ id: 'SYSTEM.ROUTE' })}
+                    </h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.COUNTRY_OF_DEPARTURE' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.country_of_departure || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.COUNTRY_OF_ARRIVAL' })}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.country_of_arrival || '-'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {(applicationData?.weight ||
+                  applicationData?.width ||
+                  applicationData?.length ||
+                  applicationData?.height) && (
+                  <div className="border-t pt-4">
+                    <h4 className="text-lg font-semibold mb-4">
+                      {formatMessage({ id: 'SYSTEM.SIZES' })}
+                    </h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.weight || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">{applicationData?.width || '-'}</div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.length || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.height || '-'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {(applicationData?.box_type_id || applicationData?.box_height) && (
+                  <div className="border-t pt-4">
+                    <h4 className="text-lg font-semibold mb-4">
+                      {formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
+                    </h4>
+                    <div className="grid gap-2.5">
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">{applicationData?.width || '-'}</div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.length || '-'}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        <label className="form-label max-w-56 text-gray-600">
+                          {formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+                        </label>
+                        <div className="flex columns-1 w-full">
+                          {applicationData?.height || '-'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

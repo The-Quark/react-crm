@@ -206,12 +206,16 @@ const routeConfig = [
     routes: [
       { path: '/clients/starter-clients', element: <ClientStarterPage /> },
       { path: '/clients', element: <ClientsListPage /> },
+      { path: '/clients/:id', element: <ClientsListPage /> },
       { path: '/clients/starter-clients/:id', element: <ClientStarterPage /> }
     ]
   },
   {
     permission: 'view clients',
-    routes: [{ path: '/clients', element: <ClientsListPage /> }]
+    routes: [
+      { path: '/clients', element: <ClientsListPage /> },
+      { path: '/clients/:id', element: <ClientsListPage /> }
+    ]
   },
   {
     permission: 'manage applications',

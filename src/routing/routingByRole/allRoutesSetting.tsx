@@ -161,6 +161,7 @@ const AllRoutesSetting = () => {
         <Route path="/tasks/starter/:id" element={<TasksStarterPage />} />
         <Route path="/tasks/view/:id" element={<TasksViewPage />} />
         <Route path="/clients" element={<ClientsListPage />} />
+        <Route path="/clients/:id" element={<ClientsListPage />} />
         <Route path="/clients/starter-clients" element={<ClientStarterPage />} />
         <Route path="/clients/starter-clients/:id" element={<ClientStarterPage />} />
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />

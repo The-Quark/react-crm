@@ -244,6 +244,10 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
       );
       if (selectedApp) {
         formik.setFieldValue('sender_contact_id', selectedApp.client_id || '');
+        formik.setFieldValue('weight', selectedApp.weight || '');
+        formik.setFieldValue('width', selectedApp.width || '');
+        formik.setFieldValue('length', selectedApp.length || '');
+        formik.setFieldValue('height', selectedApp.height || '');
         setModalInfoData({
           ...modalInfo,
           application_full_name: selectedApp?.full_name ?? ''
