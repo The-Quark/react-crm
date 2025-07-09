@@ -155,7 +155,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row?.subdivision?.name,
-        id: 'subdivision',
+        id: 'SUBDIVISION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
@@ -176,7 +176,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row?.position?.title,
-        id: 'position',
+        id: 'POSITION',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.POSITION' })} column={column} />
         ),
