@@ -46,7 +46,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
     if (onSearchCode) {
       onSearchCode(value);
     }
-    table.getColumn('code')?.setFilterValue(value);
+    table.getColumn('MAWB')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChangeCode = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +59,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
     if (onSearchPackage) {
       onSearchPackage(value);
     }
-    table.getColumn('hawb')?.setFilterValue(value);
+    table.getColumn('HAWB')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChangePackage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
   const handleStatusChange = (value: string) => {
     const newStatus = value === 'all' ? undefined : (value as CargoStatus);
 
-    table.getColumn('status')?.setFilterValue(newStatus || '');
+    table.getColumn('STATUS')?.setFilterValue(newStatus || '');
     if (onStatusChange) {
       onStatusChange(newStatus);
     }
@@ -80,7 +80,7 @@ export const CargoToolbar: FC<ToolbarProps> = ({
   const handleDeliveryTypeChange = (value: string) => {
     const newCategory = value === 'all' ? undefined : (value as string);
 
-    table.getColumn('delivery category')?.setFilterValue(newCategory || '');
+    table.getColumn('DELIVERY_CATEGORY')?.setFilterValue(newCategory || '');
     if (onDeliveryCategoryChange) {
       onDeliveryCategoryChange(newCategory);
     }

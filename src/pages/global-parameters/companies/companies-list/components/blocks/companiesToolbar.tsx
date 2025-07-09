@@ -23,7 +23,7 @@ export const CompaniesToolbar: React.FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('company name')?.setFilterValue(value);
+    table.getColumn('COMPANY')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

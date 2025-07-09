@@ -36,7 +36,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -52,7 +52,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => row.title,
-        id: 'title',
+        id: 'TASK',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TASK' })} column={column} />
         ),
@@ -76,7 +76,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => row.order?.order_code,
-        id: 'order',
+        id: 'ORDER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ORDER' })} column={column} />
         ),
@@ -100,7 +100,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => formatUserName(row.assigned_by),
-        id: 'assigned_by',
+        id: 'ASSIGNED_BY',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.ASSIGNED_BY' })}
@@ -122,7 +122,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => formatUserName(row.assigned_to),
-        id: 'assigned_to',
+        id: 'ASSIGNED_TO',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.ASSIGNED_TO' })}
@@ -144,7 +144,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => row.type,
-        id: 'type',
+        id: 'TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
         ),
@@ -160,7 +160,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => row.priority,
-        id: 'priority',
+        id: 'PRIORITY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRIORITY' })} column={column} />
         ),
@@ -177,7 +177,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),

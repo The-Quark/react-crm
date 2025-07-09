@@ -34,7 +34,7 @@ export const TariffToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('country')?.setFilterValue(value);
+    table.getColumn('PRICE')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

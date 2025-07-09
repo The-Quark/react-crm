@@ -33,7 +33,7 @@ export const FileTypesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('name')?.setFilterValue(value);
+    table.getColumn('SOURCE')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

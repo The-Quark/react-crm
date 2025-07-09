@@ -20,7 +20,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -36,7 +36,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'BOX_TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.BOX_TYPE' })} column={column} />
         ),
@@ -53,7 +53,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
       },
       {
         accessorFn: (row) => row.length,
-        id: 'length',
+        id: 'LENGTH',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LENGTH' })} column={column} />
         ),
@@ -71,7 +71,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
       },
       {
         accessorFn: (row) => row.width,
-        id: 'width',
+        id: 'WIDTH',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.WIDTH' })} column={column} />
         ),
@@ -89,7 +89,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
       },
       {
         accessorFn: (row) => row.height,
-        id: 'height',
+        id: 'HEIGHT',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HEIGHT' })} column={column} />
         ),
@@ -107,7 +107,7 @@ export const useBoxTypesColumns = (): ColumnDef<BoxType>[] => {
       },
       {
         accessorFn: (row) => row.max_weight,
-        id: 'max_weight',
+        id: 'MAX_WEIGHT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.MAX_WEIGHT' })}

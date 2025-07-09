@@ -35,7 +35,7 @@ export const usePackageTypesColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -54,7 +54,7 @@ export const usePackageTypesColumns = ({
           const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
           return lang?.name || '';
         },
-        id: 'name',
+        id: 'PACKAGE_TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
@@ -79,7 +79,7 @@ export const usePackageTypesColumns = ({
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -99,7 +99,7 @@ export const usePackageTypesColumns = ({
             .map((lang) => lang.crm_language?.code)
             .filter(Boolean)
             .join(', '),
-        id: 'language_code',
+        id: 'LANGUAGES_CODE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.LANGUAGES_CODE' })}
@@ -128,7 +128,7 @@ export const usePackageTypesColumns = ({
           const lang = row.language.find((l) => l.crm_language?.code === selectedLanguage);
           return lang?.description || '';
         },
-        id: 'description',
+        id: 'DESCRIPTION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}
@@ -155,7 +155,7 @@ export const usePackageTypesColumns = ({
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

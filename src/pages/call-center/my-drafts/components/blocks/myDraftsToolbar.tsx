@@ -45,7 +45,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('order code')?.setFilterValue(value);
+    table.getColumn('CODE')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
   const handleStatusChange = (value: string) => {
     const newStatus = value === 'all' ? undefined : (value as OrderStatus);
 
-    table.getColumn('status')?.setFilterValue(newStatus || '');
+    table.getColumn('STATUS')?.setFilterValue(newStatus || '');
     if (onStatus) {
       onStatus(newStatus);
     }
@@ -66,7 +66,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
   const handleDeliveryCategoryChange = (value: string) => {
     const newDeliveryType = value === 'all' ? undefined : value;
 
-    table.getColumn('delivery category')?.setFilterValue(newDeliveryType || '');
+    table.getColumn('CATEGORY')?.setFilterValue(newDeliveryType || '');
     if (onDeliveryCategory) {
       onDeliveryCategory(newDeliveryType);
     }
@@ -76,7 +76,7 @@ export const MyDraftsToolbar: FC<ToolbarProps> = ({
     if (onDateRangeChange) {
       onDateRangeChange(range);
     }
-    table.getColumn('created at')?.setFilterValue(range);
+    table.getColumn('CREATED_AT')?.setFilterValue(range);
   };
 
   return (

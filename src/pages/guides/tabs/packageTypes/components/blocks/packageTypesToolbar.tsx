@@ -56,7 +56,7 @@ export const PackageTypesToolbar: FC<Props> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('name')?.setFilterValue(value);
+    table.getColumn('PACKAGE_TYPE')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

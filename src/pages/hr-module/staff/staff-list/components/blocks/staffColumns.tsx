@@ -21,7 +21,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -38,7 +38,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'staff',
+        id: 'USER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.USER' })} column={column} />
         ),
@@ -82,7 +82,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'phone',
+        id: 'PHONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
         ),
@@ -99,7 +99,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row?.email,
-        id: 'email',
+        id: 'EMAIL',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.EMAIL' })} column={column} />
         ),
@@ -116,7 +116,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.company?.company_name,
-        id: 'company',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -134,7 +134,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row?.department?.name,
-        id: 'department',
+        id: 'DEPARTMENT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
@@ -157,7 +157,10 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
         accessorFn: (row) => row?.subdivision?.name,
         id: 'subdivision',
         header: ({ column }) => (
-          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.POSITION' })} column={column} />
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
+            column={column}
+          />
         ),
         enableSorting: false,
         cell: (info) => (
@@ -175,10 +178,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
         accessorFn: (row) => row?.position?.title,
         id: 'position',
         header: ({ column }) => (
-          <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
-            column={column}
-          />
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.POSITION' })} column={column} />
         ),
         enableSorting: false,
         cell: (info) => (
@@ -194,7 +194,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -210,7 +210,7 @@ export const useStaffColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.updated_at,
-        id: 'recentlyActivity',
+        id: 'RECENT_ACTIVITY',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}

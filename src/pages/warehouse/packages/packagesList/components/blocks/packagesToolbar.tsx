@@ -45,7 +45,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('hawb')?.setFilterValue(value);
+    table.getColumn('HAWB')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
   const handleStatusChange = (value: string) => {
     const newStatus = value === 'all' ? undefined : (value as PackageStatus);
 
-    table.getColumn('status')?.setFilterValue(newStatus || '');
+    table.getColumn('STATUS')?.setFilterValue(newStatus || '');
     if (onStatusChange) {
       onStatusChange(newStatus);
     }
@@ -66,7 +66,7 @@ export const PackagesToolbar: FC<ToolbarProps> = ({
   const handleDeliveryTypeChange = (value: string) => {
     const newCategory = value === 'all' ? undefined : (value as string);
 
-    table.getColumn('delivery category')?.setFilterValue(newCategory || '');
+    table.getColumn('DELIVERY_CATEGORY')?.setFilterValue(newCategory || '');
     if (onDeliveryCategoryChange) {
       onDeliveryCategoryChange(newCategory);
     }

@@ -28,7 +28,7 @@ export const useClientsListIndividualColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -44,7 +44,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row?.fullname,
-        id: 'full name',
+        id: 'CLIENT',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CLIENT' })} column={column} />
         ),
@@ -70,7 +70,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'phone',
+        id: 'PHONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
         ),
@@ -86,7 +86,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row?.source?.name,
-        id: 'source',
+        id: 'SOURCE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
         ),
@@ -104,7 +104,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row?.city_name,
-        id: 'city name',
+        id: 'CITY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CITY' })} column={column} />
         ),
@@ -122,7 +122,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row?.email,
-        id: 'email',
+        id: 'EMAIL',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.EMAIL' })} column={column} />
         ),
@@ -138,7 +138,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row?.birth_date,
-        id: 'birth date',
+        id: 'BIRTH_DATE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
@@ -159,7 +159,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row.application_count,
-        id: 'applications',
+        id: 'APPLICATIONS',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.APPLICATIONS' })}
@@ -181,7 +181,7 @@ export const useClientsListIndividualColumns = ({
       },
       {
         accessorFn: (row) => row.applications_packages_count,
-        id: 'applications packages',
+        id: 'PACKAGES',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PACKAGES' })} column={column} />
         ),

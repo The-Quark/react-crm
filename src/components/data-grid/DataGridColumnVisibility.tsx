@@ -45,7 +45,9 @@ export function DataGridColumnVisibility<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.columnDef.meta?.headerTitle || column.id}
+                {formatMessage({
+                  id: `SYSTEM.${column.columnDef.meta?.headerTitle || column.id}`
+                }) || column.id}
               </DropdownMenuCheckboxItem>
             );
           })}

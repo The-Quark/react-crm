@@ -36,7 +36,7 @@ export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChang
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('name')?.setFilterValue(value);
+    table.getColumn('SUBDIVISION')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,6 @@ export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChang
   } = useQuery({
     queryKey: ['globalParamsCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 5,
     enabled: isViewer || isSuperAdmin
   });
 

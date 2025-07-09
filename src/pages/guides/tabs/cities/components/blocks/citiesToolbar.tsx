@@ -51,8 +51,8 @@ export const CitiesToolbar: FC<Props> = ({ currentCountry, onCountryChange, coun
             type="text"
             placeholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('CITY')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('CITY')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>

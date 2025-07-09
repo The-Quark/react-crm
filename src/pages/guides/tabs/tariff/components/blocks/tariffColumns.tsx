@@ -20,7 +20,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -36,7 +36,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
       },
       {
         accessorFn: (row) => row.country.name,
-        id: 'country',
+        id: 'COUNTRY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
         ),
@@ -55,7 +55,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
       },
       {
         accessorFn: (row) => row.package_type?.code,
-        id: 'packager type',
+        id: 'PACKAGE_TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
@@ -77,7 +77,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
       },
       {
         accessorFn: (row) => row.price,
-        id: 'price',
+        id: 'PRICE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRICE' })} column={column} />
         ),
@@ -95,7 +95,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
       },
       {
         accessorFn: (row) => row.weight_from,
-        id: 'weight from',
+        id: 'WEIGHT_FROM',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.WEIGHT_FROM' })}
@@ -117,7 +117,7 @@ export const useTariffColumns = (): ColumnDef<Tariff>[] => {
       },
       {
         accessorFn: (row) => row.weight_to,
-        id: 'weight to',
+        id: 'WEIGHT_TO',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.WEIGHT_TO' })} column={column} />
         ),

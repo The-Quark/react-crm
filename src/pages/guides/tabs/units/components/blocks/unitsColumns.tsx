@@ -20,7 +20,7 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -36,7 +36,7 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'NAME',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.NAME' })} column={column} />
         ),
@@ -53,7 +53,7 @@ export const useUnitsColumns = (): ColumnDef<Unit>[] => {
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),

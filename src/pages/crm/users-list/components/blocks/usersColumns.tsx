@@ -22,7 +22,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -39,7 +39,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'user',
+        id: 'USER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.USER' })} column={column} />
         ),
@@ -83,7 +83,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.roles[0].name,
-        id: 'role',
+        id: 'ROLE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ROLE' })} column={column} />
         ),
@@ -101,7 +101,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.company?.company_name,
-        id: 'company name',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -120,7 +120,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -136,7 +136,7 @@ export const useUsersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<U
       },
       {
         accessorFn: (row) => row.updated_at,
-        id: 'recentlyActivity',
+        id: 'RECENT_ACTIVITY',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}

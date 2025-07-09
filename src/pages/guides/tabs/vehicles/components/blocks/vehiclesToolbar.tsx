@@ -34,7 +34,7 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('plate number')?.setFilterValue(value);
+    table.getColumn('PLATE_NUMBER')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

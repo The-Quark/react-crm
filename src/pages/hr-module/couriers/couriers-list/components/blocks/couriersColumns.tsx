@@ -21,7 +21,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -38,7 +38,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       {
         accessorFn: (row) =>
           `${row.first_name} ${row.last_name}${row.patronymic ? ` ${row.patronymic}` : ''}`,
-        id: 'courier',
+        id: 'COURIER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COURIER' })} column={column} />
         ),
@@ -82,7 +82,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'phone',
+        id: 'PHONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
         ),
@@ -99,7 +99,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row?.courier_type,
-        id: 'courier type',
+        id: 'COURIER_TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.COURIER_TYPE' })}
@@ -121,7 +121,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.vehicle?.plate_number,
-        id: 'delivery_count',
+        id: 'PLATE_NUMBER',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PLATE_NUMBER' })}
@@ -143,7 +143,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.vehicle?.plate_number,
-        id: 'delivery_count',
+        id: 'DELIVERY_COUNT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DELIVERY_COUNT' })}
@@ -163,7 +163,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.vehicle?.plate_number,
-        id: 'active_delivery_count',
+        id: 'ACTIVE_DELIVERY_COUNT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.ACTIVE_DELIVERY_COUNT' })}
@@ -183,7 +183,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'COURIER_STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.COURIER_STATUS' })}
@@ -202,7 +202,7 @@ export const useCouriersColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDe
       },
       {
         accessorFn: (row) => row.updated_at,
-        id: 'recentlyActivity',
+        id: 'RECENT_ACTIVITY',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.RECENT_ACTIVITY' })}

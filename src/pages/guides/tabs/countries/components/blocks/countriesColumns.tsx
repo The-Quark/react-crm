@@ -12,7 +12,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -28,7 +28,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'COUNTRY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
         ),
@@ -45,7 +45,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       },
       {
         accessorFn: (row) => row.iso2,
-        id: 'iso2',
+        id: 'ISO',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ISO' })} column={column} />
         ),
@@ -62,7 +62,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       },
       {
         accessorFn: (row) => row.phone_code,
-        id: 'phone code',
+        id: 'PHONE_CODE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PHONE_CODE' })}
@@ -83,7 +83,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       },
       {
         accessorFn: (row) => row.currency.name,
-        id: 'currency',
+        id: 'CURRENCY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
         ),
@@ -102,7 +102,7 @@ export const useCountriesColumns = (): ColumnDef<Country>[] => {
       },
       {
         accessorFn: (row) => row.timezones,
-        id: 'timezones',
+        id: 'TIMEZONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TIMEZONE' })} column={column} />
         ),

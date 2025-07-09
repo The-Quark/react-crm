@@ -21,7 +21,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -37,7 +37,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'LANGUAGE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LANGUAGE' })} column={column} />
         ),
@@ -54,7 +54,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.native_name,
-        id: 'native name',
+        id: 'LANGUAGE_NATIVE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.LANGUAGE_NATIVE' })}
@@ -76,7 +76,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -92,7 +92,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.direction,
-        id: 'direction',
+        id: 'DIRECTION',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.DIRECTION' })} column={column} />
         ),
@@ -111,7 +111,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.locale,
-        id: 'locale',
+        id: 'LOCALE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LOCALE' })} column={column} />
         ),
@@ -128,7 +128,7 @@ export const useLanguagesColumns = (): ColumnDef<Language>[] => {
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

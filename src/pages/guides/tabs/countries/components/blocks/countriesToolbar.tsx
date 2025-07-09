@@ -20,8 +20,8 @@ export const CountriesToolbar: FC = () => {
             type="text"
             placeholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRIES' })}
             className="input input-sm ps-8"
-            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
+            value={(table.getColumn('COUNTRY')?.getFilterValue() as string) ?? ''}
+            onChange={(e) => table.getColumn('COUNTRY')?.setFilterValue(e.target.value)}
           />
         </div>
       </div>

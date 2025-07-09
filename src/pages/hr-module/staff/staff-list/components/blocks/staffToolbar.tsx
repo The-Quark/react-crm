@@ -33,7 +33,7 @@ export const StaffToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onS
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('USER')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

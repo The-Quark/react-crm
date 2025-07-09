@@ -32,7 +32,7 @@ export const useTemplatesColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -48,7 +48,7 @@ export const useTemplatesColumns = ({
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -64,7 +64,7 @@ export const useTemplatesColumns = ({
       },
       {
         accessorFn: (row) => row.type,
-        id: 'type',
+        id: 'TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
         ),
@@ -81,7 +81,7 @@ export const useTemplatesColumns = ({
       },
       {
         accessorFn: (row) => row.company_name,
-        id: 'company name',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),

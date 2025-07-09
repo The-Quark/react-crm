@@ -33,7 +33,7 @@ export const DriversToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, o
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('DRIVER')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

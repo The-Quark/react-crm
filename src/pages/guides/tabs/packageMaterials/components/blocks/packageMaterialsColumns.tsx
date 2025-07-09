@@ -21,7 +21,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -37,7 +37,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'NAME',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.NAME' })} column={column} />
         ),
@@ -54,7 +54,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -70,7 +70,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.price,
-        id: 'price',
+        id: 'PRICE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRICE' })} column={column} />
         ),
@@ -87,7 +87,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.unit.name,
-        id: 'unit name',
+        id: 'UNIT',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.UNIT' })} column={column} />
         ),
@@ -106,7 +106,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.company.map((c) => c.company_name).join(', '),
-        id: 'company_name',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -128,7 +128,7 @@ export const usePackageMaterialsColumns = (): ColumnDef<PackageMaterial>[] => {
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

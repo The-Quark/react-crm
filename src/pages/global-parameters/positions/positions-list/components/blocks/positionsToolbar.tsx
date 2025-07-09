@@ -36,7 +36,7 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('POSITION')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,6 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
   } = useQuery({
     queryKey: ['globalParamsCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 5,
     enabled: isViewer || isSuperAdmin
   });
 

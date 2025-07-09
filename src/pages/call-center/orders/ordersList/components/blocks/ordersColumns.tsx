@@ -31,7 +31,7 @@ export const useOrdersColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -47,7 +47,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.order_code,
-        id: 'order code',
+        id: 'ORDER_CODE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.ORDER_CODE' })}
@@ -72,7 +72,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.sender?.full_name,
-        id: 'sender full name',
+        id: 'SENDER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SENDER' })} column={column} />
         ),
@@ -91,7 +91,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.receiver?.full_name,
-        id: 'receiver full name',
+        id: 'RECEIVER',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.RECEIVER' })} column={column} />
         ),
@@ -110,7 +110,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.delivery_category,
-        id: 'delivery category',
+        id: 'CATEGORY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CATEGORY' })} column={column} />
         ),
@@ -128,7 +128,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.hawb_pdf,
-        id: 'hawb pdf',
+        id: 'QR',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.QR' })} column={column} />
         ),
@@ -166,7 +166,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -184,7 +184,7 @@ export const useOrdersColumns = ({
       },
       {
         accessorFn: (row) => row.created_at,
-        id: 'created at',
+        id: 'CREATED_AT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}

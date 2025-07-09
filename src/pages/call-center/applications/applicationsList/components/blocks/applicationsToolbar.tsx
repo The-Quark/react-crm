@@ -47,7 +47,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('full name')?.setFilterValue(value);
+    table.getColumn('APPLICATION')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +59,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
   const handleStatusChange = (value: string) => {
     const newStatus = value === 'all' ? undefined : (value as ApplicationsStatus);
 
-    table.getColumn('status')?.setFilterValue(newStatus || '');
+    table.getColumn('STATUS')?.setFilterValue(newStatus || '');
     if (onStatusChange) {
       onStatusChange(newStatus);
     }
@@ -69,7 +69,7 @@ export const ApplicationsToolbar: FC<ToolbarProps> = ({
     if (onDateRangeChange) {
       onDateRangeChange(range);
     }
-    table.getColumn('created at')?.setFilterValue(range);
+    table.getColumn('CREATED_AT')?.setFilterValue(range);
   };
 
   return (

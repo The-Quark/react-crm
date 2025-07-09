@@ -31,7 +31,7 @@ export const useApplicationsColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -47,7 +47,7 @@ export const useApplicationsColumns = ({
       },
       {
         accessorFn: (row) => row?.full_name,
-        id: 'full name',
+        id: 'APPLICATION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.APPLICATION' })}
@@ -74,7 +74,7 @@ export const useApplicationsColumns = ({
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'phone',
+        id: 'PHONE_NUMBER',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
@@ -94,7 +94,7 @@ export const useApplicationsColumns = ({
       },
       {
         accessorFn: (row) => row.source.name,
-        id: 'source name',
+        id: 'SOURCE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
         ),
@@ -112,7 +112,7 @@ export const useApplicationsColumns = ({
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -129,7 +129,7 @@ export const useApplicationsColumns = ({
       },
       {
         accessorFn: (row) => row.created_at,
-        id: 'created at',
+        id: 'CREATED_AT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}

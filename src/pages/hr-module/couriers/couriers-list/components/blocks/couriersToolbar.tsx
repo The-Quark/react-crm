@@ -44,7 +44,7 @@ export const CouriersToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, 
     if (onSearch) {
       onSearch(value);
     }
-    table.getColumn('title')?.setFilterValue(value);
+    table.getColumn('COURIER')?.setFilterValue(value);
   }, SEARCH_DEBOUNCE_DELAY);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -21,7 +21,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -37,7 +37,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'CURRENCY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
         ),
@@ -54,7 +54,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -70,7 +70,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.symbol,
-        id: 'symbol',
+        id: 'SYMBOL',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SYMBOL' })} column={column} />
         ),
@@ -87,7 +87,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.rate_to_base,
-        id: 'rate to base',
+        id: 'RATE_TO_BASE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.RATE_TO_BASE' })}
@@ -109,7 +109,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.is_base,
-        id: 'is base',
+        id: 'BASE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.BASE' })} column={column} />
         ),
@@ -126,7 +126,7 @@ export const useCurrenciesColumns = (): ColumnDef<Currency>[] => {
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

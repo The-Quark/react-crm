@@ -12,7 +12,7 @@ export const useCitiesColumns = (): ColumnDef<City>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -28,9 +28,9 @@ export const useCitiesColumns = (): ColumnDef<City>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'CITY',
         header: ({ column }) => (
-          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CITY' })} column={column} />
         ),
         enableSorting: false,
         cell: (info) => (

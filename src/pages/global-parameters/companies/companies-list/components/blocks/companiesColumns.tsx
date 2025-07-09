@@ -26,7 +26,7 @@ export const useParametersColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -42,7 +42,7 @@ export const useParametersColumns = ({
       },
       {
         accessorFn: (row) => row.company_name,
-        id: 'company name',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -69,7 +69,7 @@ export const useParametersColumns = ({
       },
       {
         accessorFn: (row) => row.timezone,
-        id: 'timezone',
+        id: 'TIMEZONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TIMEZONE' })} column={column} />
         ),
@@ -87,7 +87,7 @@ export const useParametersColumns = ({
       },
       {
         accessorFn: (row) => row.legal_address,
-        id: 'legal address',
+        id: 'LEGAL_ADDRESS',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
@@ -109,7 +109,7 @@ export const useParametersColumns = ({
       },
       {
         accessorFn: (row) => row.warehouse_address,
-        id: 'warehouse address',
+        id: 'WAREHOUSE_ADDRESS',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
@@ -131,7 +131,7 @@ export const useParametersColumns = ({
       },
       {
         accessorFn: (row) => row.airlines,
-        id: 'airlines',
+        id: 'AIRLINES',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.AIRLINES' })} column={column} />
         ),

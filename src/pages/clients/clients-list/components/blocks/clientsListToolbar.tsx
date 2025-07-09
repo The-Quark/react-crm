@@ -42,7 +42,7 @@ export const ClientsListToolbar: FC<Props> = ({
   const [searchPhoneValue, setSearchPhoneValue] = useState('');
   const [selectedClientCity, setSelectedClientCity] = useState<number | undefined>(currentCityId);
 
-  const nameColumn = clientType === 'individual' ? 'full name' : 'company name';
+  const nameColumn = clientType === 'individual' ? 'CLIENT' : 'COMPANY';
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading } = useQuery({
@@ -56,12 +56,12 @@ export const ClientsListToolbar: FC<Props> = ({
       if (value === '__CLEAR__') {
         setSelectedClientCity(undefined);
         onClientCity?.(null as unknown as number);
-        table.getColumn('city name')?.setFilterValue(undefined);
+        table.getColumn('CITY')?.setFilterValue(undefined);
       } else {
         const cityId = value ? Number(value) : undefined;
         setSelectedClientCity(cityId);
         onClientCity?.(cityId as number);
-        table.getColumn('city name')?.setFilterValue(cityId);
+        table.getColumn('CITY')?.setFilterValue(cityId);
       }
     },
     [onClientCity, table]
@@ -69,26 +69,26 @@ export const ClientsListToolbar: FC<Props> = ({
 
   const debouncedSearch = useMemo(
     () =>
-      debounce((type: 'term' | 'phone', value: string) => {
-        if (type === 'term') {
+      debounce((type: 'TERM' | 'PHONE', value: string) => {
+        if (type === 'TERM') {
           onSearchTerm?.(value);
           table.getColumn(nameColumn)?.setFilterValue(value);
         } else {
           onSearchPhone?.(value);
-          table.getColumn('phone')?.setFilterValue(value);
+          table.getColumn('PHONE')?.setFilterValue(value);
         }
       }, SEARCH_DEBOUNCE_DELAY),
     [onSearchTerm, onSearchPhone, table, nameColumn]
   );
 
   const handleSearchChange = useCallback(
-    (type: 'term' | 'phone') => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (type: 'TERM' | 'PHONE') => (event: React.ChangeEvent<HTMLInputElement>) => {
       let value = event.target.value;
 
-      if (type === 'phone') {
+      if (type === 'PHONE') {
         if (value === '') {
           setSearchPhoneValue('');
-          debouncedSearch('phone', '');
+          debouncedSearch('PHONE', '');
           return;
         }
         if (!value.startsWith('+7') && searchPhoneValue === '') {
@@ -101,7 +101,7 @@ export const ClientsListToolbar: FC<Props> = ({
         }
       }
 
-      if (type === 'term') {
+      if (type === 'TERM') {
         setSearchTermValue(value);
       } else {
         setSearchPhoneValue(value);
@@ -192,7 +192,7 @@ export const ClientsListToolbar: FC<Props> = ({
             placeholder="+7 (000) 000-00-00"
             className="input input-sm ps-8"
             value={searchPhoneValue}
-            onChange={handleSearchChange('phone')}
+            onChange={handleSearchChange('PHONE')}
             maxLength={16}
           />
         </div>
@@ -207,7 +207,7 @@ export const ClientsListToolbar: FC<Props> = ({
             placeholder={`${formatMessage({ id: 'SYSTEM.SEARCH' })} ${clientType === 'individual' ? formatMessage({ id: 'SYSTEM.CLIENT' }) : formatMessage({ id: 'SYSTEM.COMPANY' })}`}
             className="input input-sm ps-8"
             value={searchTermValue}
-            onChange={handleSearchChange('term')}
+            onChange={handleSearchChange('TERM')}
           />
         </div>
       </div>

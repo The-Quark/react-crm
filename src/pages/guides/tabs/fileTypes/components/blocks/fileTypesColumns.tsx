@@ -20,7 +20,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -36,7 +36,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'SOURCE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
         ),
@@ -53,7 +53,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       },
       {
         accessorFn: (row) => row.step,
-        id: 'step',
+        id: 'STEP',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STEP' })} column={column} />
         ),
@@ -69,7 +69,7 @@ export const useFileTypesColumns = (): ColumnDef<FileType>[] => {
       },
       {
         accessorFn: (row) => row.types,
-        id: 'types',
+        id: 'TYPES',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPES' })} column={column} />
         ),

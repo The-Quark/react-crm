@@ -31,7 +31,7 @@ export const useCargoColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -47,7 +47,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'MAWB',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.MAWB' })} column={column} />
         ),
@@ -69,7 +69,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row.packages.map((pkg) => pkg.hawb).join(', '),
-        id: 'hawb',
+        id: 'HAWB',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB' })} column={column} />
         ),
@@ -90,7 +90,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row.document_count,
-        id: 'documents count',
+        id: 'DOCUMENT_COUNT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DOCUMENT_COUNT' })}
@@ -112,7 +112,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row?.delivery_category?.map((category) => category).join(', ') ?? '',
-        id: 'delivery category',
+        id: 'DELIVERY_CATEGORY',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
@@ -136,7 +136,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -153,7 +153,7 @@ export const useCargoColumns = ({
       },
       {
         accessorFn: (row) => row.created_at,
-        id: 'created at',
+        id: 'CREATED_AT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}

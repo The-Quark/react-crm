@@ -29,7 +29,7 @@ export const usePositionsColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -45,7 +45,7 @@ export const usePositionsColumns = ({
       },
       {
         accessorFn: (row) => row.title,
-        id: 'title',
+        id: 'POSITION',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.POSITION' })} column={column} />
         ),
@@ -67,7 +67,7 @@ export const usePositionsColumns = ({
       },
       {
         accessorFn: (row) => row.company?.company_name,
-        id: 'company',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -85,7 +85,7 @@ export const usePositionsColumns = ({
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

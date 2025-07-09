@@ -28,7 +28,7 @@ export const useClientsListLegalColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -44,7 +44,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row.company_name,
-        id: 'company name',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -71,7 +71,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row.phone,
-        id: 'phone',
+        id: 'PHONE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PHONE' })} column={column} />
         ),
@@ -87,7 +87,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row?.source?.name,
-        id: 'source',
+        id: 'SOURCE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
         ),
@@ -105,7 +105,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row?.city_name,
-        id: 'city name',
+        id: 'CITY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CITY' })} column={column} />
         ),
@@ -123,7 +123,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row?.email,
-        id: 'email',
+        id: 'EMAIL',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.EMAIL' })} column={column} />
         ),
@@ -139,7 +139,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row.application_count,
-        id: 'applications',
+        id: 'APPLICATIONS',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.APPLICATIONS' })}
@@ -161,7 +161,7 @@ export const useClientsListLegalColumns = ({
       },
       {
         accessorFn: (row) => row.applications_packages_count,
-        id: 'applications packages',
+        id: 'PACKAGES',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PACKAGES' })} column={column} />
         ),

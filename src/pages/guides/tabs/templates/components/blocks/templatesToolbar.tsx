@@ -49,16 +49,16 @@ export const TemplatesToolbar: FC<Props> = ({
     () => ({
       code: debounce((value: string) => {
         onSearchCode?.(value);
-        table.getColumn('code')?.setFilterValue(value);
+        table.getColumn('CODE')?.setFilterValue(value);
       }, SEARCH_DEBOUNCE_DELAY)
     }),
     [onSearchCode, table]
   );
 
   const handleSearchChange = useCallback(
-    (type: 'code' | 'title') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (type: 'CODE' | 'TITLE') => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
-      if (type === 'code') {
+      if (type === 'CODE') {
         setSearchCode(value);
         debouncedSearch.code(value);
       }
@@ -77,7 +77,7 @@ export const TemplatesToolbar: FC<Props> = ({
     [onLanguageChange]
   );
 
-  const renderSearchInput = (type: 'code' | 'title', placeholder: string, value: string) => (
+  const renderSearchInput = (type: 'CODE' | 'TITLE', placeholder: string, value: string) => (
     <div className="relative">
       <KeenIcon
         icon="magnifier"
@@ -118,7 +118,7 @@ export const TemplatesToolbar: FC<Props> = ({
 
         <DataGridColumnVisibility table={table} />
         {renderSearchInput(
-          'code',
+          'CODE',
           formatMessage({ id: 'SYSTEM.SEARCH_TEMPLATE_CODE' }),
           searchCode
         )}

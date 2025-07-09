@@ -21,7 +21,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -37,7 +37,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       },
       {
         accessorFn: (row) => row.airline.name,
-        id: 'name',
+        id: 'AIRLINE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.AIRLINE' })} column={column} />
         ),
@@ -56,7 +56,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       },
       {
         accessorFn: (row) => row.price_per_kg,
-        id: 'price per kg',
+        id: 'PRICE_PER_KG',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PRICE_PER_KG' })}
@@ -77,7 +77,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       },
       {
         accessorFn: (row) => row.from_city.name,
-        id: 'from city',
+        id: 'FROM_CITY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.FROM_CITY' })} column={column} />
         ),
@@ -96,7 +96,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
 
       {
         accessorFn: (row) => row.to_city.name,
-        id: 'to city',
+        id: 'TO_CITY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TO_CITY' })} column={column} />
         ),
@@ -114,7 +114,7 @@ export const useAirlineRatesColumns = (): ColumnDef<AirlineRate>[] => {
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

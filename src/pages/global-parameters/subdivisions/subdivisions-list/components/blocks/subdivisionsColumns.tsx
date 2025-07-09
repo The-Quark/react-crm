@@ -29,7 +29,7 @@ export const useSubdivisionsColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -45,7 +45,7 @@ export const useSubdivisionsColumns = ({
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'SUBDIVISION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
@@ -70,7 +70,7 @@ export const useSubdivisionsColumns = ({
       },
       {
         accessorFn: (row) => row.company?.company_name,
-        id: 'company',
+        id: 'COMPANY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COMPANY' })} column={column} />
         ),
@@ -88,7 +88,7 @@ export const useSubdivisionsColumns = ({
       },
       {
         accessorFn: (row) => row.currency.name,
-        id: 'currency',
+        id: 'CURRENCY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CURRENCY' })} column={column} />
         ),
@@ -106,7 +106,7 @@ export const useSubdivisionsColumns = ({
       },
       {
         accessorFn: (row) => row.language.name,
-        id: 'language',
+        id: 'LANGUAGE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.LANGUAGE' })} column={column} />
         ),
@@ -124,7 +124,7 @@ export const useSubdivisionsColumns = ({
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

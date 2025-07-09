@@ -22,7 +22,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -38,7 +38,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.plate_number,
-        id: 'plate number',
+        id: 'PLATE_NUMBER',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.PLATE_NUMBER' })}
@@ -60,7 +60,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.type,
-        id: 'type',
+        id: 'TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
         ),
@@ -76,7 +76,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.brand,
-        id: 'brand',
+        id: 'BRAND',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.BRAND' })} column={column} />
         ),
@@ -93,7 +93,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.model,
-        id: 'model',
+        id: 'MODEL',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.MODEL' })} column={column} />
         ),
@@ -110,7 +110,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.avg_fuel_consumption,
-        id: 'avg fuel consumption',
+        id: 'AVERAGE_FUEL_CONSUMPTION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.AVERAGE_FUEL_CONSUMPTION' })}
@@ -132,7 +132,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),

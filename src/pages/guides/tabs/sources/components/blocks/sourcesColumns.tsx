@@ -21,7 +21,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -37,7 +37,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'SOURCE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.SOURCE' })} column={column} />
         ),
@@ -54,7 +54,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       },
       {
         accessorFn: (row) => row.code,
-        id: 'code',
+        id: 'CODE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
         ),
@@ -70,7 +70,7 @@ export const useSourcesColumns = (): ColumnDef<Source>[] => {
       },
       {
         accessorFn: (row) => row.is_active,
-        id: 'active',
+        id: 'ACTIVE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ACTIVE' })} column={column} />
         ),

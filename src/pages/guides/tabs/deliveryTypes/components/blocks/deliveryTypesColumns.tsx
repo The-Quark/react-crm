@@ -20,7 +20,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -36,7 +36,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
+        id: 'TYPE',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TYPE' })} column={column} />
         ),
@@ -53,7 +53,7 @@ export const useDeliveryTypesColumns = (): ColumnDef<DeliveryType>[] => {
       },
       {
         accessorFn: (row) => row.description,
-        id: 'description',
+        id: 'DESCRIPTION',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.DESCRIPTION' })}

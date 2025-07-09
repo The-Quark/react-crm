@@ -32,7 +32,7 @@ export const usePackagesColumns = ({
     () => [
       {
         accessorFn: (row) => row.id,
-        id: 'id',
+        id: 'ID',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
         ),
@@ -48,7 +48,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row.hawb,
-        id: 'hawb',
+        id: 'HAWB',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB' })} column={column} />
         ),
@@ -75,7 +75,7 @@ export const usePackagesColumns = ({
             ? `${client?.first_name} ${client.last_name} ${client.patronymic ?? ''}`.trim()
             : client?.company_name || '';
         },
-        id: 'client full name',
+        id: 'CLIENT',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CLIENT' })} column={column} />
         ),
@@ -100,7 +100,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row.hawb_pdf,
-        id: 'hawb pdf',
+        id: 'HAWB_DOC',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB_DOC' })} column={column} />
         ),
@@ -124,7 +124,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row?.delivery_category,
-        id: 'delivery category',
+        id: 'CATEGORY',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CATEGORY' })} column={column} />
         ),
@@ -142,7 +142,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row?.assigned_user,
-        id: 'assigned user',
+        id: 'ASSIGNED',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ASSIGNED' })} column={column} />
         ),
@@ -165,7 +165,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row?.order?.nominal_cost,
-        id: 'nominal cost',
+        id: 'NOMINAL_COST',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (${currency.code})`}
@@ -188,7 +188,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row?.order?.customs_clearance,
-        id: 'customs clearance',
+        id: 'CUSTOMS_CLEARANCE',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' }) + ` (${currency.code})`}
@@ -211,7 +211,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row.status,
-        id: 'status',
+        id: 'STATUS',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.STATUS' })} column={column} />
         ),
@@ -229,7 +229,7 @@ export const usePackagesColumns = ({
       },
       {
         accessorFn: (row) => row.created_at,
-        id: 'created at',
+        id: 'CREATED_AT',
         header: ({ column }) => (
           <DataGridColumnHeader
             title={formatMessage({ id: 'SYSTEM.CREATED_AT' })}
