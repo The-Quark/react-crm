@@ -64,7 +64,6 @@ const formSchema = Yup.object().shape({
 });
 
 const getInitialValues = (
-  isLoading: boolean,
   applicationId: string | number,
   mainForm: IOrderFormValues | null,
   isEditMode: boolean
@@ -146,7 +145,7 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
-  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo, isLoading } =
+  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo } =
     useOrderCreation();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
@@ -155,7 +154,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const formik = useFormik({
-    initialValues: getInitialValues(isLoading, applicationId || '', mainFormData, isEditMode),
+    initialValues: getInitialValues(applicationId || '', mainFormData, isEditMode),
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData({ ...mainFormData, ...values });
@@ -243,11 +242,14 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
         (app) => app.id === formik.values.application_id
       );
       if (selectedApp) {
-        formik.setFieldValue('sender_contact_id', selectedApp.client_id || '');
-        formik.setFieldValue('weight', selectedApp.weight || '');
-        formik.setFieldValue('width', selectedApp.width || '');
-        formik.setFieldValue('length', selectedApp.length || '');
-        formik.setFieldValue('height', selectedApp.height || '');
+        formik.setFieldValue(
+          'sender_contact_id',
+          selectedApp.client_id || mainFormData?.sender_contact_id
+        );
+        formik.setFieldValue('weight', selectedApp.weight || mainFormData?.weight || '');
+        formik.setFieldValue('width', selectedApp.width || mainFormData?.width || '');
+        formik.setFieldValue('length', selectedApp.length || mainFormData?.length || '');
+        formik.setFieldValue('height', selectedApp.height || mainFormData?.height || '');
         setModalInfoData({
           ...modalInfo,
           application_full_name: selectedApp?.full_name ?? ''

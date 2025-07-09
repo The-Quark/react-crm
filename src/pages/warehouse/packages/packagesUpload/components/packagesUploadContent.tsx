@@ -85,7 +85,7 @@ export const PackagesUploadContent = () => {
     error: fileTypeError
   } = useQuery({
     queryKey: ['packagesFileType'],
-    queryFn: () => getFileTypes({})
+    queryFn: () => getFileTypes({ package_id: id ? parseInt(id) : undefined })
   });
 
   const selectedFileType = useMemo(() => {

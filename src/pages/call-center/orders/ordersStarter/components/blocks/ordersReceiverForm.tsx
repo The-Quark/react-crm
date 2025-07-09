@@ -60,12 +60,8 @@ const formSchema = Yup.object().shape({
   receiver_notes: Yup.string().optional()
 });
 
-const getInitialValues = (
-  isLoading: boolean,
-  isEditMode: boolean,
-  mainForm: IOrderFormValues | null
-): IOrderFormValues => {
-  if (!isEditMode && mainForm) {
+const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues => {
+  if (mainForm) {
     return {
       receiver_first_name: mainForm?.receiver_first_name || '',
       receiver_last_name: mainForm?.receiver_last_name || '',
@@ -73,31 +69,8 @@ const getInitialValues = (
       receiver_company_name: mainForm?.receiver_company_name || '',
       receiver_bin: mainForm?.receiver_bin || '',
       receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
-      receiver_country_id: mainForm?.receiver_country_id
-        ? Number(mainForm.receiver_country_id)
-        : '',
-      receiver_city_id: mainForm?.receiver_city_id ? Number(mainForm.receiver_city_id) : '',
-      receiver_phone: mainForm?.receiver_phone || '',
-      receiver_street: mainForm?.receiver_street || '',
-      receiver_house: mainForm?.receiver_house || '',
-      receiver_apartment: mainForm?.receiver_apartment || '',
-      receiver_location_description: mainForm?.receiver_location_description || '',
-      receiver_notes: mainForm?.receiver_notes || '',
-      receiver_contact_id: mainForm?.receiver_contact_id || ''
-    };
-  }
-  if (isEditMode && mainForm) {
-    return {
-      receiver_first_name: mainForm?.receiver_first_name || '',
-      receiver_last_name: mainForm?.receiver_last_name || '',
-      receiver_patronymic: mainForm?.receiver_patronymic || '',
-      receiver_company_name: mainForm?.receiver_company_name || '',
-      receiver_bin: mainForm?.receiver_bin || '',
-      receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
-      receiver_country_id: mainForm?.receiver_country_id
-        ? Number(mainForm.receiver_country_id)
-        : '',
-      receiver_city_id: mainForm?.receiver_city_id ? Number(mainForm.receiver_city_id) : '',
+      receiver_country_id: mainForm?.receiver_country_id || '',
+      receiver_city_id: mainForm?.receiver_city_id || '',
       receiver_phone: mainForm?.receiver_phone || '',
       receiver_street: mainForm?.receiver_street || '',
       receiver_house: mainForm?.receiver_house || '',
@@ -127,15 +100,23 @@ const getInitialValues = (
 };
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmModal }) => {
-  const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
-    useOrderCreation();
   const { formatMessage } = useIntl();
+  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-  const [selectedClientId, setSelectedClientId] = useState<string>(
-    mainFormData?.receiver_contact_id?.toString() || ''
-  );
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const formik = useFormik({
+    initialValues: getInitialValues(mainFormData),
+    validationSchema: formSchema,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      setMainFormData({ ...mainFormData, ...values });
+      onConfirmModal?.();
+    }
+  });
 
   const {
     data: clientsData,
@@ -147,14 +128,15 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
   });
 
-  const formik = useFormik({
-    initialValues: getInitialValues(isLoading, isEditMode, mainFormData),
-    validationSchema: formSchema,
-    enableReinitialize: true,
-    onSubmit: (values) => {
-      setMainFormData({ ...mainFormData, ...values });
-      onConfirmModal?.();
-    }
+  const {
+    data: specificClientData,
+    isLoading: specificClientLoading,
+    isError: specificClientIsError,
+    error: specificClientError
+  } = useQuery({
+    queryKey: ['orderReceiverSpecificClient', formik.values.sender_contact_id],
+    queryFn: () => getClients({ id: Number(formik.values.sender_contact_id) }),
+    enabled: !!formik.values.sender_contact_id && !isEditMode && isInitialLoad
   });
 
   const {
@@ -180,60 +162,71 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
   });
 
   const handleClientChange = (clientId: string, clientData?: Client) => {
-    setSelectedClientId(clientId);
     const selectedClient =
-      clientData || clientsData?.result?.find((client) => client.id === Number(clientId));
+      clientData ||
+      clientsData?.result?.find((client) => client.id === Number(clientId)) ||
+      specificClientData?.result?.find((client) => client.id === Number(clientId));
 
     if (selectedClient) {
       const isLegalClient = selectedClient.type === 'legal';
+      const currentValues = formik.values;
 
-      formik.setValues({
-        ...formik.values,
+      const baseValues = {
+        ...currentValues,
         receiver_contact_id: clientId,
-        receiver_first_name: isLegalClient ? '' : selectedClient.first_name || '',
-        receiver_last_name: isLegalClient ? '' : selectedClient.last_name || '',
-        receiver_patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
-        receiver_company_name: isLegalClient ? selectedClient.company_name || '' : '',
-        receiver_bin: isLegalClient ? selectedClient.bin || '' : '',
         receiver_type: selectedClient.type || 'individual',
-        receiver_phone: selectedClient.phone || '',
-        receiver_country_id: selectedClient.country_id || '',
-        receiver_city_id: selectedClient.city_id || '',
-        receiver_street: formik.values.receiver_street || '',
-        receiver_house: formik.values.receiver_house || '',
-        receiver_apartment: formik.values.receiver_apartment || '',
-        receiver_location_description: formik.values.receiver_location_description || '',
-        receiver_notes: formik.values.receiver_notes || ''
-      });
+        receiver_phone: selectedClient.phone || currentValues.receiver_phone,
+        receiver_country_id: selectedClient.country_id || currentValues.receiver_country_id,
+        receiver_city_id: selectedClient.city_id || currentValues.receiver_city_id,
+        receiver_street: currentValues.receiver_street || '',
+        receiver_house: currentValues.receiver_house || '',
+        receiver_apartment: currentValues.receiver_apartment || '',
+        receiver_location_description: currentValues.receiver_location_description || '',
+        receiver_notes: currentValues.receiver_notes || ''
+      };
+
+      if (isLegalClient) {
+        formik.setValues({
+          ...baseValues,
+          receiver_company_name: selectedClient.company_name || '',
+          receiver_bin: selectedClient.bin || '',
+          receiver_first_name: '',
+          receiver_last_name: '',
+          receiver_patronymic: ''
+        });
+      } else {
+        formik.setValues({
+          ...baseValues,
+          receiver_first_name: selectedClient.first_name || '',
+          receiver_last_name: selectedClient.last_name || '',
+          receiver_patronymic: selectedClient.patronymic || '',
+          receiver_company_name: '',
+          receiver_bin: ''
+        });
+      }
+
       setModalInfoData({
         ...modalInfo,
-        receiver_country_name: selectedClient?.country_name ?? '',
-        receiver_city_name: selectedClient?.city_name ?? ''
+        receiver_country_name: selectedClient?.country_name ?? modalInfo?.receiver_country_name,
+        receiver_city_name: selectedClient?.city_name ?? modalInfo?.receiver_city_name
       });
     }
   };
 
   useEffect(() => {
-    if (formik.values.receiver_contact_id && !isEditMode) {
-      const fetchClientData = async () => {
-        try {
-          const response = await getClients({ id: Number(formik.values.receiver_contact_id) });
-          const client = response.result?.[0];
-          if (client) {
-            handleClientChange(String(client.id), client);
-          }
-        } catch (error) {
-          console.error('Failed to fetch client data:', error);
-        }
-      };
-
-      fetchClientData();
+    if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
+      const client = specificClientData.result[0];
+      handleClientChange(String(client.id), client);
+      setIsInitialLoad(false);
     }
-  }, [formik.values.receiver_contact_id]);
+  }, [specificClientData, isInitialLoad, isEditMode]);
 
-  const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
-  const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
-  const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
+  const isFormLoading = countriesLoading || specificClientLoading || (isEditMode && citiesLoading);
+  const isFormError =
+    countriesIsError || clientsIsError || specificClientIsError || (isEditMode && citiesIsError);
+  const formErrors = [countriesError, clientsError, specificClientError, citiesError].filter(
+    (error) => error !== null
+  );
 
   if (isFormLoading) {
     return <SharedLoading simple />;
@@ -271,6 +264,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             onSearchTermChange={setClientSearchTerm}
             loading={clientsLoading}
           />
+
+          <input type="hidden" name="receiver_type" value={formik.values.receiver_type} />
 
           {formik.values.receiver_type === 'legal' ? (
             <>
