@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { useIntl } from 'react-intl';
-import { BIN_LENGTH, CACHE_TIME, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
 import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -23,18 +23,18 @@ interface Props {
 }
 
 const formSchema = Yup.object().shape({
-  sender_first_name: Yup.string().when('client_type', {
+  sender_first_name: Yup.string().when('sender_type', {
     is: 'individual',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  sender_last_name: Yup.string().when('client_type', {
+  sender_last_name: Yup.string().when('sender_type', {
     is: 'individual',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   sender_patronymic: Yup.string().optional(),
-  sender_bin: Yup.string().when('client_type', {
+  sender_bin: Yup.string().when('sender_type', {
     is: 'legal',
     then: (schema) =>
       schema
@@ -43,7 +43,7 @@ const formSchema = Yup.object().shape({
         .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  sender_company_name: Yup.string().when('client_type', {
+  sender_company_name: Yup.string().when('sender_type', {
     is: 'legal',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
@@ -170,30 +170,39 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
       const isLegalClient = selectedClient.type === 'legal';
       const currentValues = formik.values;
 
-      formik.setValues({
+      const baseValues = {
         ...currentValues,
         sender_contact_id: clientId,
-        sender_first_name: isLegalClient
-          ? currentValues.sender_first_name
-          : selectedClient.first_name || currentValues.sender_first_name,
-        sender_last_name: isLegalClient
-          ? currentValues.sender_last_name
-          : selectedClient.last_name || currentValues.sender_last_name,
-        sender_patronymic: isLegalClient
-          ? currentValues.sender_patronymic
-          : selectedClient.patronymic || currentValues.sender_patronymic,
-        sender_company_name: isLegalClient ? selectedClient.company_name || '' : '',
-        sender_bin: isLegalClient ? selectedClient.bin || '' : '',
         sender_type: selectedClient.type || 'individual',
         sender_phone: selectedClient.phone || currentValues.sender_phone,
         sender_country_id: selectedClient.country_id || currentValues.sender_country_id,
         sender_city_id: selectedClient.city_id || currentValues.sender_city_id,
-        sender_street: formik.values.sender_street || '',
-        sender_house: formik.values.sender_house || '',
-        sender_apartment: formik.values.sender_apartment || '',
-        sender_location_description: formik.values.sender_location_description || '',
-        sender_notes: formik.values.sender_notes || ''
-      });
+        sender_street: currentValues.sender_street || '',
+        sender_house: currentValues.sender_house || '',
+        sender_apartment: currentValues.sender_apartment || '',
+        sender_location_description: currentValues.sender_location_description || '',
+        sender_notes: currentValues.sender_notes || ''
+      };
+
+      if (isLegalClient) {
+        formik.setValues({
+          ...baseValues,
+          sender_company_name: selectedClient.company_name || '',
+          sender_bin: selectedClient.bin || '',
+          sender_first_name: '',
+          sender_last_name: '',
+          sender_patronymic: ''
+        });
+      } else {
+        formik.setValues({
+          ...baseValues,
+          sender_first_name: selectedClient.first_name || '',
+          sender_last_name: selectedClient.last_name || '',
+          sender_patronymic: selectedClient.patronymic || '',
+          sender_company_name: '',
+          sender_bin: ''
+        });
+      }
 
       setModalInfoData({
         ...modalInfo,
@@ -230,6 +239,12 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   useEffect(() => {
     shouldLoadClientData.current = true;
   }, [clientSearchTerm]);
+
+  useEffect(() => {
+    if (formik.values.sender_type) {
+      formik.validateForm();
+    }
+  }, [formik.values.sender_type]);
 
   const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
   const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
@@ -271,6 +286,8 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             onSearchTermChange={setClientSearchTerm}
             loading={clientsLoading}
           />
+
+          <input type="hidden" name="sender_type" value={formik.values.sender_type} />
 
           {formik.values.sender_type === 'legal' ? (
             <>

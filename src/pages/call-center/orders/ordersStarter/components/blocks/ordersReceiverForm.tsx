@@ -23,18 +23,18 @@ interface Props {
 }
 
 const formSchema = Yup.object().shape({
-  receiver_first_name: Yup.string().when('client_type', {
+  receiver_first_name: Yup.string().when('receiver_type', {
     is: 'individual',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  receiver_last_name: Yup.string().when('client_type', {
+  receiver_last_name: Yup.string().when('receiver_type', {
     is: 'individual',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_patronymic: Yup.string().optional(),
-  receiver_bin: Yup.string().when('client_type', {
+  receiver_bin: Yup.string().when('receiver_type', {
     is: 'legal',
     then: (schema) =>
       schema
@@ -43,7 +43,7 @@ const formSchema = Yup.object().shape({
         .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  receiver_name: Yup.string().when('client_type', {
+  receiver_name: Yup.string().when('receiver_type', {
     is: 'legal',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
