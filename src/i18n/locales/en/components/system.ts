@@ -151,6 +151,7 @@ const System = {
   'SYSTEM.HAWB': 'HAWB',
   'SYSTEM.HAWB_DOC': 'HAWB doc',
   'SYSTEM.ASSIGNED_USER': 'Assigned user',
+  'SYSTEM.ASSIGNED': 'Assigned',
   'SYSTEM.PACKAGE_DETAILS': 'Package Details',
   'SYSTEM.BASE': 'Base',
   'SYSTEM.DOCUMENT': 'Document',
@@ -441,7 +442,9 @@ const System = {
   'SYSTEM.SIZES': 'Sizes',
   'SYSTEM.ROUTE': 'Route',
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'Country of Departure',
-  'SYSTEM.COUNTRY_OF_ARRIVAL': 'Country of Arrival'
+  'SYSTEM.COUNTRY_OF_ARRIVAL': 'Country of Arrival',
+  'SYSTEM.ENTITY_TYPE': 'Entity Type',
+  'SYSTEM.SELECT_ENTITY_TYPE': 'Select Entity Type'
 };
 
 export default System;

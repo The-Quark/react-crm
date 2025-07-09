@@ -5,6 +5,7 @@ export interface FileType {
   name: string;
   types: string[];
   step: number;
+  entity_type: string | null;
   created_at: string;
   updated_at: string;
 }

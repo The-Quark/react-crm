@@ -151,6 +151,7 @@ const System = {
   'SYSTEM.HAWB': 'HAWB',
   'SYSTEM.HAWB_DOC': 'وثيقة HAWB',
   'SYSTEM.ASSIGNED_USER': 'المستخدم المعين',
+  'SYSTEM.ASSIGNED': 'معين',
   'SYSTEM.PACKAGE_DETAILS': 'تفاصيل الطرد',
   'SYSTEM.BASE': 'الأساس',
   'SYSTEM.DOCUMENT': 'وثيقة',
@@ -441,7 +442,9 @@ const System = {
   'SYSTEM.SIZES': 'الأحجام',
   'SYSTEM.ROUTE': 'المسار',
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'بلد المغادرة',
-  'SYSTEM.COUNTRY_OF_ARRIVAL': 'بلد الوصول'
+  'SYSTEM.COUNTRY_OF_ARRIVAL': 'بلد الوصول',
+  'SYSTEM.ENTITY_TYPE': 'نوع الكيان',
+  'SYSTEM.SELECT_ENTITY_TYPE': 'اختر نوع الكيان'
 };
 
 export default System;

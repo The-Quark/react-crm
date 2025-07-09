@@ -64,6 +64,19 @@ export const timezoneMock = [
   }
 ];
 
+export const mockEntityTypes = [
+  {
+    id: 1,
+    name: 'Package',
+    value: 'package'
+  },
+  {
+    id: 2,
+    name: 'Cargo',
+    value: 'cargo'
+  }
+];
+
 export const mockApplicationsStatus = [
   {
     id: 1,

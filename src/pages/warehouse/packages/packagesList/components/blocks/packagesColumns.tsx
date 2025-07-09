@@ -143,10 +143,7 @@ export const usePackagesColumns = ({
         accessorFn: (row) => row?.assigned_user,
         id: 'assigned user',
         header: ({ column }) => (
-          <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.ASSIGNED_USER' })}
-            column={column}
-          />
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ASSIGNED' })} column={column} />
         ),
         enableSorting: false,
         cell: (info) => {

@@ -27,10 +27,6 @@ import {
 } from '@/partials/sharedUI';
 import { useNavigate } from 'react-router-dom';
 import { UserStatus } from '@/api/enums';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/utils/lib/utils.ts';
-import { KeenIcon } from '@/components';
-import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Gender } from '@/api/enums';
 import { mockGenderOptions, mockUserStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { format } from 'date-fns';

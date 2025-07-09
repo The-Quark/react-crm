@@ -12,10 +12,17 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { getFileTypes, putFileType, postFileType } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { SharedError, SharedInput, SharedInputTags, SharedLoading } from '@/partials/sharedUI';
+import {
+  SharedError,
+  SharedInput,
+  SharedInputTags,
+  SharedLoading,
+  SharedSelect
+} from '@/partials/sharedUI';
 import { FileTypesResponse } from '@/api/get/getGuides/getFileTypes/types.ts';
 import { IFileTypeFormValues } from '@/api/post/postGuides/postFileType/types.ts';
 import { useIntl } from 'react-intl';
+import { mockDeliveryCategories, mockEntityTypes } from '@/utils';
 
 interface Props {
   open: boolean;
@@ -34,16 +41,19 @@ const validationSchema = Yup.object().shape({
 
 const getInitialValues = (isEditMode: boolean, data: FileTypesResponse): IFileTypeFormValues => {
   if (isEditMode && data?.result) {
+    const dataResult = data.result[0];
     return {
-      name: data.result[0].name || '',
-      step: data.result[0].step || 0,
-      types: data.result[0].types || []
+      name: dataResult.name || '',
+      step: dataResult.step || 0,
+      types: dataResult.types || [],
+      entity_type: dataResult.entity_type || ''
     };
   }
   return {
     name: '',
     step: 0,
-    types: []
+    types: [],
+    entity_type: ''
   };
 };
 
@@ -143,6 +153,18 @@ const FileTypeModal: FC<Props> = ({ open, onOpenChange, id }) => {
                 label={formatMessage({ id: 'SYSTEM.TYPES' })}
                 error={formik.errors.types as string}
                 touched={formik.touched.types}
+              />
+
+              <SharedSelect
+                name="entity_type"
+                label={formatMessage({ id: 'SYSTEM.ENTITY_TYPE' })}
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_ENTITY_TYPE' })}
+                formik={formik}
+                isClearable
+                options={mockEntityTypes.map((entity) => ({
+                  label: entity.name,
+                  value: entity.value
+                }))}
               />
 
               <div className="flex justify-end">

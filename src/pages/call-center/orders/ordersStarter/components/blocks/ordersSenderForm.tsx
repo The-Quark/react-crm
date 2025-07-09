@@ -60,11 +60,7 @@ const formSchema = Yup.object().shape({
   sender_notes: Yup.string().optional()
 });
 
-const getInitialValues = (
-  isLoading: boolean,
-  isEditMode: boolean,
-  mainForm: IOrderFormValues | null
-): IOrderFormValues => {
+const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues => {
   if (mainForm) {
     return {
       ...mainForm,
@@ -107,18 +103,22 @@ const getInitialValues = (
 
 export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   const { formatMessage } = useIntl();
-  const { setMainFormData, mainFormData, setModalInfoData, modalInfo, isLoading } =
-    useOrderCreation();
+  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-  const [selectedClientId, setSelectedClientId] = useState<string>(
-    mainFormData?.sender_contact_id?.toString() || ''
-  );
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  const isInitialMount = useRef(true);
-  const shouldLoadClientData = useRef(true);
+  const formik = useFormik({
+    initialValues: getInitialValues(mainFormData),
+    validationSchema: formSchema,
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      setMainFormData({ ...mainFormData, ...values });
+      onNext();
+    }
+  });
 
   const {
     data: clientsData,
@@ -130,14 +130,15 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
   });
 
-  const formik = useFormik({
-    initialValues: getInitialValues(isLoading, isEditMode, mainFormData),
-    validationSchema: formSchema,
-    enableReinitialize: true,
-    onSubmit: (values) => {
-      setMainFormData({ ...mainFormData, ...values });
-      onNext();
-    }
+  const {
+    data: specificClientData,
+    isLoading: specificClientLoading,
+    isError: specificClientIsError,
+    error: specificClientError
+  } = useQuery({
+    queryKey: ['orderSenderSpecificClient', formik.values.sender_contact_id],
+    queryFn: () => getClients({ id: Number(formik.values.sender_contact_id) }),
+    enabled: !!formik.values.sender_contact_id && !isEditMode && isInitialLoad
   });
 
   const {
@@ -162,9 +163,10 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   });
 
   const handleClientChange = (clientId: string, clientData?: Client) => {
-    setSelectedClientId(clientId);
     const selectedClient =
-      clientData || clientsData?.result?.find((client) => client.id === Number(clientId));
+      clientData ||
+      clientsData?.result?.find((client) => client.id === Number(clientId)) ||
+      specificClientData?.result?.find((client) => client.id === Number(clientId));
 
     if (selectedClient) {
       const isLegalClient = selectedClient.type === 'legal';
@@ -213,42 +215,19 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   };
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
+    if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
+      const client = specificClientData.result[0];
+      handleClientChange(String(client.id), client);
+      setIsInitialLoad(false);
     }
-    if (shouldLoadClientData.current && formik.values.sender_contact_id && !isEditMode) {
-      shouldLoadClientData.current = false;
+  }, [specificClientData, isInitialLoad, isEditMode]);
 
-      const fetchClientData = async () => {
-        try {
-          const response = await getClients({ id: Number(formik.values.sender_contact_id) });
-          const client = response.result?.[0];
-          if (client) {
-            handleClientChange(String(client.id), client);
-          }
-        } catch (error) {
-          console.error('Failed to fetch client data:', error);
-        }
-      };
-
-      fetchClientData();
-    }
-  }, [formik.values.sender_contact_id, isEditMode]);
-
-  useEffect(() => {
-    shouldLoadClientData.current = true;
-  }, [clientSearchTerm]);
-
-  useEffect(() => {
-    if (formik.values.sender_type) {
-      formik.validateForm();
-    }
-  }, [formik.values.sender_type]);
-
-  const isFormLoading = countriesLoading || (isEditMode && citiesLoading);
-  const isFormError = countriesIsError || clientsIsError || (isEditMode && citiesIsError);
-  const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
+  const isFormLoading = countriesLoading || specificClientLoading || (isEditMode && citiesLoading);
+  const isFormError =
+    countriesIsError || clientsIsError || specificClientIsError || (isEditMode && citiesIsError);
+  const formErrors = [countriesError, clientsError, specificClientError, citiesError].filter(
+    (error) => error !== null
+  );
 
   if (isFormLoading) {
     return <SharedLoading simple />;

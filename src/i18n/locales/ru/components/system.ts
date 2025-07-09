@@ -149,8 +149,9 @@ const System = {
   'SYSTEM.NEW_PACKAGE': 'Новая посылка',
   'SYSTEM.SEARCH_HAWB': 'Поиск HAWB',
   'SYSTEM.HAWB': 'HAWB',
-  'SYSTEM.HAWB_DOC': 'Документ HAWB',
+  'SYSTEM.HAWB_DOC': 'HAWB Док.',
   'SYSTEM.ASSIGNED_USER': 'Назначенный пользователь',
+  'SYSTEM.ASSIGNED': 'Назначен',
   'SYSTEM.PACKAGE_DETAILS': 'Детали посылки',
   'SYSTEM.BASE': 'База',
   'SYSTEM.DOCUMENT': 'Документ',
@@ -441,7 +442,9 @@ const System = {
   'SYSTEM.SIZES': 'Размеры',
   'SYSTEM.ROUTE': 'Маршрут',
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'Страна отправления',
-  'SYSTEM.COUNTRY_OF_ARRIVAL': 'Страна прибытия'
+  'SYSTEM.COUNTRY_OF_ARRIVAL': 'Страна прибытия',
+  'SYSTEM.ENTITY_TYPE': 'Тип сущности',
+  'SYSTEM.SELECT_ENTITY_TYPE': 'Выберите тип сущности'
 };
 
 export default System;
