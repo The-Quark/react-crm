@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-import { useLanguage } from '@/providers';
+import { useCurrency, useLanguage } from '@/providers';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
@@ -23,6 +23,7 @@ export const usePackagesColumns = ({
   const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
+  const { currency } = useCurrency();
   const { has } = useUserPermissions();
 
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -160,6 +161,52 @@ export const usePackagesColumns = ({
         },
         meta: {
           headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.order?.nominal_cost,
+        id: 'nominal cost',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (${currency.code})`}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original?.order?.nominal_cost
+                ? `${info.row.original?.order?.nominal_cost}  ${currency.label}`
+                : '-'}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[60px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.order?.customs_clearance,
+        id: 'customs clearance',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' }) + ` (${currency.code})`}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original?.order?.customs_clearance
+                ? `${info.row.original?.order?.nominal_cost}  ${currency.label}`
+                : '-'}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[60px]'
         }
       },
       {
