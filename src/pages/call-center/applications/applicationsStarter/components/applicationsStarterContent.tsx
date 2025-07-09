@@ -349,6 +349,7 @@ export const ApplicationsStarterContent = ({
     if (sourcesIsError) return <SharedError error={sourcesError} />;
     if (clientsIsError) return <SharedError error={clientsError} />;
     if (clientIsError) return <SharedError error={clientError} />;
+    if (boxTypesIsError) return <SharedError error={boxTypesError} />;
     return null;
   };
 

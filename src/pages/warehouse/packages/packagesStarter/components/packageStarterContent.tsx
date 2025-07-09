@@ -101,7 +101,7 @@ const getInitialValues = (
     box_height: '',
     places_count: '',
     price: '',
-    status: 'ready_for_shipment'
+    status: ''
   };
 };
 

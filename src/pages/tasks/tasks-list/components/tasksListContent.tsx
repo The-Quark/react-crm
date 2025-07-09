@@ -23,7 +23,7 @@ export const TasksListContent = () => {
     queryKey: ['tasks', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getTask({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         title: searchTerm
       })

@@ -26,7 +26,7 @@ export const GuidesPackagesContent = () => {
     ],
     queryFn: () =>
       getPackageTypes({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         code: searchTerm,
         language_code: selectedLanguage.code

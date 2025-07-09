@@ -27,7 +27,7 @@ export const GuidesTemplatesContent = () => {
     queryFn: () =>
       getTemplates({
         language_code: selectedLanguage.code,
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         code: searchCodeTerm
       }),

@@ -15,7 +15,7 @@ export const GuidesTariffsContent = () => {
     queryKey: ['guidesTariffs', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getTariffs({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         country: searchTerm
       }),

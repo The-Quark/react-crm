@@ -16,7 +16,7 @@ export const GuidesAirlinesContent = () => {
     queryKey: ['guidesAirlines', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getAirlines({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

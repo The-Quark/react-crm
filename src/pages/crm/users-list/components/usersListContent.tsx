@@ -22,7 +22,7 @@ export const UsersListContent = () => {
     queryKey: ['users', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getUserList({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         full_name: searchTerm
       })

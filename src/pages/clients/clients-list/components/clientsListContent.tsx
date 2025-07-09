@@ -38,7 +38,7 @@ export const ClientsListContent = () => {
     queryFn: () =>
       getClients({
         type: clientType,
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         full_name: searchTerm,
         phones: searchPhone,
@@ -87,6 +87,14 @@ export const ClientsListContent = () => {
     }));
   };
 
+  const handleClientTypeChange = (type: ClientType) => {
+    setClientType(type);
+    setSearchTerm('');
+    setSearchPhone('');
+    setClientCityId(undefined);
+    setPagination(initialPagination);
+  };
+
   const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
     setPagination(initialPagination);
@@ -109,6 +117,7 @@ export const ClientsListContent = () => {
   return (
     <Container>
       <DataGrid
+        key={clientType}
         serverSide
         columns={clientType === 'individual' ? columnsIndividual : columnsLegal}
         data={data?.result || []}
@@ -117,7 +126,7 @@ export const ClientsListContent = () => {
         toolbar={
           <ClientsListToolbar
             clientType={clientType}
-            setClientType={setClientType}
+            setClientType={handleClientTypeChange}
             onSearchTerm={handleSearchTerm}
             onSearchPhone={handleSearchPhone}
             currentCityId={clientCityId}

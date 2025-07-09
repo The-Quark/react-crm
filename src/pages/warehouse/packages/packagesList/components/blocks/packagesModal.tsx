@@ -73,7 +73,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
                   <h4 className="text-lg font-semibold mb-3">
-                    {formatMessage({ id: 'SYSTEM.BASE' })}
+                    {formatMessage({ id: 'SYSTEM.PACKAGE' })}
                   </h4>
                   <div className="grid gap-2.5">
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -156,18 +156,25 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                   </div>
                 </div>
-                {packageData?.client && packageData.client.type === 'legal' ? (
+                {packageData?.client && (
                   <div className="">
                     <h4 className="text-lg font-semibold mb-3">
-                      {formatMessage({ id: 'SYSTEM.COMPANY_INFO' })}
+                      {formatMessage({ id: 'SYSTEM.CLIENT' })}
                     </h4>
                     <div className="grid gap-2.5">
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                         <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.NAME' })}
+                          {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
                         </label>
                         <div className="flex columns-1 w-full">
-                          {packageData.client.company_name || '-'}
+                          <a
+                            className="link"
+                            href={`/clients/id=${packageData?.client?.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {packageData?.client?.fullname || '-'}
+                          </a>
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -184,70 +191,6 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                         </label>
                         <div className="flex columns-1 w-full">
                           {packageData.client.email || '-'}
-                        </div>
-                      </div>
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {(packageData.client.representative_last_name || '-') +
-                            ' ' +
-                            (packageData.client.representative_first_name || '-') +
-                            ' ' +
-                            (packageData.client.representative_patronymic || '-')}
-                        </div>
-                      </div>
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PHONE' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {packageData.client.representative_phone || '-'}
-                        </div>
-                      </div>
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.REPRESENTATIVE_EMAIL' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {packageData.client.representative_email || '-'}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">
-                      {formatMessage({ id: 'SYSTEM.CLIENT' })}
-                    </h4>
-                    <div className="grid gap-2.5">
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {(packageData.client?.last_name || '-') +
-                            ' ' +
-                            (packageData.client?.first_name || '-') +
-                            ' ' +
-                            (packageData.client?.patronymic || '-')}
-                        </div>
-                      </div>
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.PHONE' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {packageData.client?.phone || '-'}
-                        </div>
-                      </div>
-                      <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                        <label className="form-label max-w-56 text-gray-600">
-                          {formatMessage({ id: 'SYSTEM.EMAIL' })}
-                        </label>
-                        <div className="flex columns-1 w-full">
-                          {packageData.client?.email || '-'}
                         </div>
                       </div>
                     </div>

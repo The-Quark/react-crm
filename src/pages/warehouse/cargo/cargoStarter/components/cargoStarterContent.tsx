@@ -16,7 +16,7 @@ import {
 } from '@/partials/sharedUI';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICargoPostFormValues } from '@/api/post/postWorkflow/postCargo/types.ts';
-import { CargoStatus } from '@/api/enums';
+import { CargoStatus, PackageStatus } from '@/api/enums';
 import { cargoStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
@@ -108,7 +108,7 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
     error: packagesError
   } = useQuery({
     queryKey: ['cargoPackages', searchTerm],
-    queryFn: () => getPackages({ status: 'ready_for_shipment', hawb: searchTerm }),
+    queryFn: () => getPackages({ status: PackageStatus.PACKAGE_RECEIVED, hawb: searchTerm }),
     staleTime: CACHE_TIME
   });
 

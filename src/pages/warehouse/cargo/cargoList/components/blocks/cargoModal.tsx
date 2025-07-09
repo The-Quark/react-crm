@@ -11,7 +11,7 @@ import { KeenIcon } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import { getCargo } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { DialogActions } from '@mui/material';
+import { DialogActions, Divider } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useIntl } from 'react-intl';
@@ -69,25 +69,17 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.HAWB' })}
-                      </label>
-                      <div className="flex columns-1 w-full">
-                        {cargo.packages?.length
-                          ? cargo.packages.map((pkg, idx) => (
-                              <span key={idx} className="block">
-                                {pkg.hawb || '-'}
-                              </span>
-                            ))
-                          : '-'}
-                      </div>
-                    </div>
-                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                      <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.DELIVERY_CATEGORY' })}
                       </label>
                       <div className="flex columns-1 w-full">
                         {cargo.delivery_category?.map((cat) => cat) || '-'}
                       </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.DOCUMENT_COUNT' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{cargo.document_count || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
@@ -125,6 +117,39 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                       </label>
                       <div className="flex columns-1 w-full">{cargo.status || '-'}</div>
                     </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold mb-3">
+                    {formatMessage({ id: 'SYSTEM.PACKAGES' })}
+                  </h4>
+                  <div className="grid gap-2.5">
+                    {cargo.packages.map((pkg, ids) => (
+                      <>
+                        {ids > 0 && <Divider className="pt-2" />}
+                        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                          <label className="form-label max-w-56 text-gray-600">
+                            {formatMessage({ id: 'SYSTEM.HAWB' })}
+                          </label>
+                          <div className="flex columns-1 w-full">
+                            <a
+                              className="link"
+                              href={`/warehouse/packages/list/id=${pkg.id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {pkg.hawb || '-'}
+                            </a>
+                          </div>
+                        </div>
+                        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                          <label className="form-label max-w-56 text-gray-600">
+                            {formatMessage({ id: 'SYSTEM.STATUS' })}
+                          </label>
+                          <div className="flex columns-1 w-full">{pkg.status || '-'}</div>
+                        </div>
+                      </>
+                    ))}
                   </div>
                 </div>
                 <div>

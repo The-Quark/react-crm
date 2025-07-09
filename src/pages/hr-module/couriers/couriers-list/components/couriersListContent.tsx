@@ -33,7 +33,7 @@ export const CouriersListContent = () => {
       getUserByParams({
         companyId: selectedCompanyId,
         role: 'courier',
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize
       }),
     enabled: selectedCompanyId !== undefined

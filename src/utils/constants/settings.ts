@@ -8,6 +8,6 @@ export const SEARCH_PER_PAGE = 50;
 export const PHONE_MAX_LENGTH = 12;
 export const DEFAULT_SEARCH_PAGE_NUMBER = 50;
 export const initialPagination = {
-  pageIndex: 0,
+  pageIndex: 1,
   pageSize: 15
 };

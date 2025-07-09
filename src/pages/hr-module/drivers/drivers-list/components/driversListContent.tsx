@@ -27,7 +27,7 @@ export const DriversListContent = () => {
       getUserByParams({
         companyId: selectedCompanyId,
         role: 'driver',
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize
       }),
     enabled: selectedCompanyId !== undefined

@@ -38,7 +38,7 @@ export const PackagesListContent = () => {
     ],
     queryFn: () =>
       getPackages({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         status: status,
         hawb: searchTerm,

@@ -18,7 +18,7 @@ import { PHONE_MAX_LENGTH, SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface Props {
   clientType: ClientType;
-  setClientType: React.Dispatch<React.SetStateAction<ClientType>>;
+  setClientType: (type: ClientType) => void;
   onSearchTerm?: (searchTerm: string) => void;
   onSearchPhone?: (searchPhone: string) => void;
   currentCityId?: number;
@@ -44,11 +44,6 @@ export const ClientsListToolbar: FC<Props> = ({
 
   const nameColumn = clientType === 'individual' ? 'full name' : 'company name';
   const canManage = has('manage clients') || currentUser?.roles[0].name === 'superadmin';
-
-  const handleClientTypeChange = useCallback(
-    (type: 'individual' | 'legal') => () => setClientType(type),
-    [setClientType]
-  );
 
   const { data, isLoading } = useQuery({
     queryKey: ['clientCities'],
@@ -129,7 +124,7 @@ export const ClientsListToolbar: FC<Props> = ({
                 type="radio"
                 value={type}
                 checked={clientType === type}
-                onChange={handleClientTypeChange(type)}
+                onChange={() => setClientType(type)}
               />
               <span className="radio-label">
                 {formatMessage({ id: `SYSTEM.${type.toUpperCase()}` })}

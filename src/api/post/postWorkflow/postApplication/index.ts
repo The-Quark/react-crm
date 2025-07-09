@@ -3,10 +3,10 @@ import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplicat
 import { APPLICATION_URL } from '@/api/url';
 
 export const postApplication = async (
-  data: Omit<IApplicationPostFormValues, 'id' | 'created_at' | 'updated_at'>
+  data: IApplicationPostFormValues
 ): Promise<IApplicationPostFormValues> => {
   return await axios
-    .post<IApplicationPostFormValues>(APPLICATION_URL, data, {
+    .post<IApplicationPostFormValues>(APPLICATION_URL, (({ status, ...rest }) => rest)(data), {
       headers: { 'Content-Type': 'application/json' }
     })
     .then((res) => res.data);

@@ -16,7 +16,7 @@ export const GuidesVehiclesContent = () => {
     queryKey: ['guidesVehicles', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getVehicles({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         plate_number: searchTerm
       }),

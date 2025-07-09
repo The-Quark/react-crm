@@ -33,7 +33,7 @@ export const MyDraftsContent = () => {
     ],
     queryFn: () =>
       getOrders({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         searchorder: searchTerm,
         delivery_category: deliveryCategory,

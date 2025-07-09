@@ -33,7 +33,7 @@ export const SubdivisionsListContent = () => {
     queryFn: () =>
       getGlobalParamsSubdivisions({
         company_id: selectedCompanyId,
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

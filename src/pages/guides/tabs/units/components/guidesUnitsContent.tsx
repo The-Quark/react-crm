@@ -15,7 +15,7 @@ export const GuidesUnitsContent = () => {
     queryKey: ['guidesUnits', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getUnits({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

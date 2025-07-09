@@ -34,7 +34,7 @@ export const DepartmentsListContent = () => {
     queryFn: () =>
       getGlobalParamsDepartments({
         company_id: selectedCompanyId,
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

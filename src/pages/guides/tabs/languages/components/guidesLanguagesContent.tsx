@@ -16,7 +16,7 @@ export const GuidesLanguagesContent = () => {
     queryKey: ['guidesLanguages', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getLanguages({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

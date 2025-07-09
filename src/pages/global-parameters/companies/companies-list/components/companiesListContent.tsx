@@ -21,7 +21,7 @@ export const CompaniesListContent = () => {
     queryKey: ['global-parameters', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getGlobalParameters({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         company_name: searchTerm
       })

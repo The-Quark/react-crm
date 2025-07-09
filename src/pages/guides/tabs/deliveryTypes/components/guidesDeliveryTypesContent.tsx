@@ -15,7 +15,7 @@ export const GuidesDeliveryTypesContent = () => {
     queryKey: ['guidesDeliveryTypes', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getDeliveryTypes({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

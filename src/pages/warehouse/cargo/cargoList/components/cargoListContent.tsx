@@ -39,7 +39,7 @@ export const CargoListContent = () => {
     ],
     queryFn: () =>
       getCargo({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         code: searchTermCode,
         hawb: searchTermPackage,

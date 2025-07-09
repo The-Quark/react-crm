@@ -16,7 +16,7 @@ export const GuidesFileTypesContent = () => {
     queryKey: ['guidesFileTypes', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getFileTypes({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

@@ -15,7 +15,7 @@ export const GuidesSourcesContent = () => {
     queryKey: ['guidesSources', pagination.pageIndex, pagination.pageSize, searchTerm],
     queryFn: () =>
       getSources({
-        page: pagination.pageIndex + 1,
+        page: pagination.pageIndex,
         per_page: pagination.pageSize,
         name: searchTerm
       }),

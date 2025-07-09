@@ -1,6 +1,7 @@
 import { PackageStatus } from '@/api/enums';
 import { IPagination } from '@/api/generalManualTypes';
 import { User } from '@/api/get/getUser/getCurrentUser/types.ts';
+import { Client } from '@/api/get/getClients/types.ts';
 
 interface Media {
   id: number;
@@ -56,34 +57,7 @@ interface Order {
   deleted_at: string | null;
   delivery_category: string;
 }
-interface Client {
-  id: number;
-  type: 'individual' | 'legal';
-  phone: string;
-  email: string;
-  registered_at: string;
-  notes: string | null;
-  source_id: number;
-  last_name: string;
-  first_name: string;
-  patronymic: string;
-  birth_date: string;
-  gender: 'male' | 'female' | 'other';
-  company_name: string | null;
-  business_type: string | null;
-  bin: string | null;
-  legal_address: string | null;
-  representative_last_name: string | null;
-  representative_first_name: string | null;
-  representative_patronymic: string | null;
-  representative_phone: string | null;
-  representative_email: string | null;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  application_count: number;
-  applications_packages_count: number;
-}
+
 export interface Package {
   id: number;
   hawb: string;
