@@ -43,7 +43,7 @@ const formSchema = Yup.object().shape({
         .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
-  receiver_name: Yup.string().when('receiver_type', {
+  receiver_company_name: Yup.string().when('receiver_type', {
     is: 'legal',
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
@@ -63,6 +63,7 @@ const formSchema = Yup.object().shape({
 const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues => {
   if (mainForm) {
     return {
+      ...mainForm,
       receiver_first_name: mainForm?.receiver_first_name || '',
       receiver_last_name: mainForm?.receiver_last_name || '',
       receiver_patronymic: mainForm?.receiver_patronymic || '',
@@ -134,9 +135,9 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     isError: specificClientIsError,
     error: specificClientError
   } = useQuery({
-    queryKey: ['orderReceiverSpecificClient', formik.values.sender_contact_id],
-    queryFn: () => getClients({ id: Number(formik.values.sender_contact_id) }),
-    enabled: !!formik.values.sender_contact_id && !isEditMode && isInitialLoad
+    queryKey: ['orderReceiverSpecificClient', formik.values.receiver_contact_id],
+    queryFn: () => getClients({ id: Number(formik.values.receiver_contact_id) }),
+    enabled: !!formik.values.receiver_contact_id && !isEditMode && isInitialLoad
   });
 
   const {
