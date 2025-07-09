@@ -1,6 +1,7 @@
 import { IPagination } from '@/api/generalManualTypes';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
+import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 
 interface DeliveryType {
   id: number;
@@ -44,24 +45,6 @@ interface User {
   avatar: string;
   last_login: string;
   last_ip: string;
-  deleted_at: string | null;
-}
-
-interface Application {
-  id: number;
-  source_id: number;
-  status: string;
-  full_name: string;
-  phone: string;
-  email: string | null;
-  message: string | null;
-  processed_at: string | null;
-  client_id: number | null;
-  order_id: number | null;
-  created_by: number;
-  company_id: number | null;
-  created_at: string;
-  updated_at: string;
   deleted_at: string | null;
 }
 

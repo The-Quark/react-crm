@@ -78,9 +78,9 @@ const getInitialValues = (
       width: packageData?.width?.toString() ?? '',
       length: packageData?.length?.toString() ?? '',
       height: packageData?.height?.toString() ?? '',
-      volume: packageData?.volume?.toString() ?? '',
-      places_count: packageData?.places_count?.toString() ?? '',
-      price: packageData?.price?.toString() ?? '',
+      volume: packageData?.volume ?? '',
+      places_count: packageData?.places_count ?? '',
+      price: packageData?.price ?? '',
       box_type_id: packageData?.box_type_id?.toString() ?? '',
       box_width: packageData?.box_width?.toString() ?? '',
       box_length: packageData?.box_length?.toString() ?? '',
@@ -230,7 +230,11 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           height: selectedOrder.height?.toString() ?? '',
           volume: selectedOrder.volume?.toString() ?? '',
           places_count: selectedOrder.places_count?.toString() ?? '',
-          price: selectedOrder.price?.toString() ?? ''
+          price: selectedOrder.price?.toString() ?? '',
+          box_type_id: selectedOrder.application?.box_type_id?.toString() ?? '',
+          box_width: selectedOrder.application?.box_width?.toString() ?? '',
+          box_length: selectedOrder.application?.box_length?.toString() ?? '',
+          box_height: selectedOrder.application?.box_height?.toString() ?? ''
         });
       }
     },
@@ -358,9 +362,9 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           />
           <SharedInput
             name="price"
-            label={formatMessage({ id: 'SYSTEM.PRICE' }) + ` (${currentCurrency.code})`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
             formik={formik}
-            type="text"
+            type="number"
             disabled
           />
 

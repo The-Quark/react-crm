@@ -61,30 +61,7 @@ export const formSchema = Yup.object().shape({
     .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
     .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
-  client_id: Yup.string().optional().nullable(),
-  box_type_id: Yup.string().test(
-    'box-type-or-dimensions',
-    'VALIDATION.TYPE_REQUIRED',
-    function (value) {
-      const { box_width, box_height, box_length } = this.parent;
-      return !!value || (!!box_width && !!box_height && !!box_length);
-    }
-  ),
-  box_width: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.WIDTH_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  }),
-  box_length: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.LENGTH_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  }),
-  box_height: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.HEIGHT_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  })
+  client_id: Yup.string().optional().nullable()
 });
 
 const getInitialValues = (
