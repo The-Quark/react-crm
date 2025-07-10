@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { getAirlines, getGlobalParameters, postCargo, putCargo, getPackages } from '@/api';
+import { getAirlines, postCargo, putCargo, getPackages } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
