@@ -90,7 +90,7 @@ const System = {
   'SYSTEM.APARTMENT': 'Квартира',
   'SYSTEM.NOTES': 'Примечания',
   'SYSTEM.DELIVERY_TYPE': 'Тип доставки',
-  'SYSTEM.PACKAGE_TYPE': 'Тип упаковки',
+  'SYSTEM.PACKAGE_TYPE': 'Тип посылки',
   'SYSTEM.ORDER_CONTENT': 'Содержимое заказа',
   'SYSTEM.WEIGHT': 'Вес',
   'SYSTEM.DIMENSIONS': 'Габариты',

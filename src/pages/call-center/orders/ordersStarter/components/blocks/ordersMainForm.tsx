@@ -149,7 +149,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     useOrderCreation();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
-  const { currency: currentCurrency } = useCurrency();
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -399,7 +398,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           {formik.values.customs_clearance && (
             <SharedDecimalInput
               name="nominal_cost"
-              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (${currentCurrency.code})`}
+              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (USD)`}
               formik={formik}
             />
           )}
@@ -439,7 +438,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           />
           <SharedInput
             name="price"
-            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })}`}
             formik={formik}
             type="text"
             disabled

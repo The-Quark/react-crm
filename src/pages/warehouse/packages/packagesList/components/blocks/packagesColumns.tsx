@@ -168,7 +168,7 @@ export const usePackagesColumns = ({
         id: 'NOMINAL_COST',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (${currency.code})`}
+            title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (USD)`}
             column={column}
           />
         ),
@@ -177,7 +177,7 @@ export const usePackagesColumns = ({
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
               {info.row.original?.order?.nominal_cost
-                ? `${info.row.original?.order?.nominal_cost}  ${currency.label}`
+                ? `${info.row.original?.order?.nominal_cost} $`
                 : '-'}
             </span>
           </div>
@@ -191,7 +191,7 @@ export const usePackagesColumns = ({
         id: 'CUSTOMS_CLEARANCE',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' }) + ` (${currency.code})`}
+            title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' }) + ` (USD)`}
             column={column}
           />
         ),
@@ -200,7 +200,7 @@ export const usePackagesColumns = ({
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
               {info.row.original?.order?.customs_clearance
-                ? `${info.row.original?.order?.nominal_cost}  ${currency.label}`
+                ? `${info.row.original?.order?.nominal_cost} $`
                 : '-'}
             </span>
           </div>

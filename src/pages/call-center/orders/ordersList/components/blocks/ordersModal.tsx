@@ -17,7 +17,6 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useIntl } from 'react-intl';
 import { OrderStatus } from '@/api/enums';
-import { useCurrency } from '@/providers';
 
 interface Props {
   open: boolean;
@@ -28,7 +27,6 @@ interface Props {
 export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
-  const { currency } = useCurrency();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -296,7 +294,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                           {formatMessage({ id: 'SYSTEM.NOMINAL_COST' })}
                         </label>
                         <div className="flex columns-1 w-full">
-                          {order?.nominal_cost || '-'} {` (${currency.code})`}
+                          {order?.nominal_cost || '-'} {` (USD)`}
                         </div>
                       </div>
                     )}
@@ -318,9 +316,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.PRICE' })}
                       </label>
-                      <div className="flex columns-1 w-full">
-                        {order.price || '-'} {`(${currency.code})`}
-                      </div>
+                      <div className="flex columns-1 w-full">{order.price || '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">

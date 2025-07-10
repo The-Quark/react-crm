@@ -295,7 +295,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
           {formik.values.customs_clearance && (
             <SharedDecimalInput
               name="nominal_cost"
-              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (${currentCurrency.code})`}
+              label={`${formatMessage({ id: 'SYSTEM.NOMINAL_COST' })} (USD)`}
               formik={formik}
             />
           )}

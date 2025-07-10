@@ -157,8 +157,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                   {mainFormData?.customs_clearance && (
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">
-                        {formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) +
-                          ` (${currentCurrency.code})`}
+                        {formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (USD)`}
                       </label>
                       <div className="flex columns-1 w-full">{mainFormData?.nominal_cost}</div>
                     </div>
