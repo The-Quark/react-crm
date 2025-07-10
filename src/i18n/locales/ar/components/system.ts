@@ -446,7 +446,9 @@ const System = {
   'SYSTEM.ENTITY_TYPE': 'نوع الكيان',
   'SYSTEM.SELECT_ENTITY_TYPE': 'اختر نوع الكيان',
   'SYSTEM.APPROVE': 'الموافقة',
-  'SYSTEM.REJECT': 'الرفض'
+  'SYSTEM.REJECT': 'الرفض',
+  'SYSTEM.RATING': 'التقييم',
+  'SYSTEM.CLIENT_STATUS': 'حالة العميل'
 };
 
 export default System;

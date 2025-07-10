@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { mockGenderOptions, PHONE_REG_EXP } from '@/utils';
+import { mockClientSystemStatus, mockGenderOptions, PHONE_REG_EXP } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -11,6 +11,7 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedRating,
   SharedSelect,
   SharedTextArea
 } from '@/partials/sharedUI';
@@ -58,7 +59,9 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     notes: clientData && clientData.notes !== null ? clientData.notes : '',
     source_id: clientData ? clientData.source_id.toString() : '',
     country_id: clientData && clientData.country_id != null ? clientData.country_id.toString() : '',
-    city_id: clientData && clientData.city_id != null ? clientData.city_id.toString() : ''
+    city_id: clientData && clientData.city_id != null ? clientData.city_id.toString() : '',
+    client_status: clientData && clientData.client_status != null ? clientData.client_status : '',
+    client_rating: clientData && clientData.client_rating != null ? clientData.client_rating : 1
   };
 
   const formik = useFormik({
@@ -232,6 +235,21 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         loading={citiesLoading}
         searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
         emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
+      />
+      <SharedSelect
+        name="client_status"
+        label={formatMessage({ id: 'SYSTEM.CLIENT_STATUS' })}
+        formik={formik}
+        isClearable
+        options={mockClientSystemStatus.map((opt) => ({
+          label: opt.name,
+          value: opt.value
+        }))}
+      />
+      <SharedRating
+        name="client_rating"
+        label={formatMessage({ id: 'SYSTEM.RATING' })}
+        formik={formik}
       />
       <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
 

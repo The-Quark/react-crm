@@ -222,6 +222,22 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.RATING' })}
+                    </label>
+                    <div className="flex columns-1 w-full flex-wrap">
+                      {data.result[0]?.client_rating}
+                    </div>
+                  </div>
+                  <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label className="form-label max-w-56">
+                      {formatMessage({ id: 'SYSTEM.CLIENT_STATUS' })}
+                    </label>
+                    <div className="flex columns-1 w-full flex-wrap">
+                      {data.result[0]?.client_status}
+                    </div>
+                  </div>
+                  <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label className="form-label max-w-56">
                       {formatMessage({ id: 'SYSTEM.NOTES' })}
                     </label>
                     <div className="flex columns-1 w-full flex-wrap">{data.result[0]?.notes}</div>

@@ -12,7 +12,8 @@ import {
   PackageStatus,
   OrderStatus,
   GenderUser,
-  DeliveryCategories
+  DeliveryCategories,
+  ClientSystemStatus
 } from '@/api/enums';
 import { toAbsoluteUrl } from '@/utils';
 
@@ -466,6 +467,11 @@ export const mockApplicationsStatusOptions = [
 export const mockGenderUserOptions = [
   { id: 1, name: 'Female', value: GenderUser.FEMALE },
   { id: 2, name: 'Male', value: GenderUser.MALE }
+];
+
+export const mockClientSystemStatus = [
+  { id: 1, name: 'Vip', value: ClientSystemStatus.VIP },
+  { id: 2, name: 'Gold', value: ClientSystemStatus.GOLD }
 ];
 
 export const mockLicenseCategoryOptions = [

@@ -172,3 +172,8 @@ export enum DeliveryCategories {
   C2C = 'c2c',
   C2B = 'c2b'
 }
+
+export enum ClientSystemStatus {
+  GOLD = 'gold',
+  VIP = 'vip'
+}

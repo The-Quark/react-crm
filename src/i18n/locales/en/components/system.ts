@@ -446,7 +446,9 @@ const System = {
   'SYSTEM.ENTITY_TYPE': 'Entity Type',
   'SYSTEM.SELECT_ENTITY_TYPE': 'Select Entity Type',
   'SYSTEM.APPROVE': 'Approve',
-  'SYSTEM.REJECT': 'Reject'
+  'SYSTEM.REJECT': 'Reject',
+  'SYSTEM.RATING': 'Rating',
+  'SYSTEM.CLIENT_STATUS': 'Client Status'
 };
 
 export default System;

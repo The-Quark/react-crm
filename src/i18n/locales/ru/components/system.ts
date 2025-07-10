@@ -446,7 +446,9 @@ const System = {
   'SYSTEM.ENTITY_TYPE': 'Тип сущности',
   'SYSTEM.SELECT_ENTITY_TYPE': 'Выберите тип сущности',
   'SYSTEM.APPROVE': 'Одобрить',
-  'SYSTEM.REJECT': 'Отклонить'
+  'SYSTEM.REJECT': 'Отклонить',
+  'SYSTEM.RATING': 'Рейтинг',
+  'SYSTEM.CLIENT_STATUS': 'Статус клиента'
 };
 
 export default System;
