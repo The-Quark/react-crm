@@ -444,7 +444,9 @@ const System = {
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'Страна отправления',
   'SYSTEM.COUNTRY_OF_ARRIVAL': 'Страна прибытия',
   'SYSTEM.ENTITY_TYPE': 'Тип сущности',
-  'SYSTEM.SELECT_ENTITY_TYPE': 'Выберите тип сущности'
+  'SYSTEM.SELECT_ENTITY_TYPE': 'Выберите тип сущности',
+  'SYSTEM.APPROVE': 'Одобрить',
+  'SYSTEM.REJECT': 'Отклонить'
 };
 
 export default System;

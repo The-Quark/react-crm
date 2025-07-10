@@ -444,7 +444,9 @@ const System = {
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'بلد المغادرة',
   'SYSTEM.COUNTRY_OF_ARRIVAL': 'بلد الوصول',
   'SYSTEM.ENTITY_TYPE': 'نوع الكيان',
-  'SYSTEM.SELECT_ENTITY_TYPE': 'اختر نوع الكيان'
+  'SYSTEM.SELECT_ENTITY_TYPE': 'اختر نوع الكيان',
+  'SYSTEM.APPROVE': 'الموافقة',
+  'SYSTEM.REJECT': 'الرفض'
 };
 
 export default System;

@@ -444,7 +444,9 @@ const System = {
   'SYSTEM.COUNTRY_OF_DEPARTURE': 'Country of Departure',
   'SYSTEM.COUNTRY_OF_ARRIVAL': 'Country of Arrival',
   'SYSTEM.ENTITY_TYPE': 'Entity Type',
-  'SYSTEM.SELECT_ENTITY_TYPE': 'Select Entity Type'
+  'SYSTEM.SELECT_ENTITY_TYPE': 'Select Entity Type',
+  'SYSTEM.APPROVE': 'Approve',
+  'SYSTEM.REJECT': 'Reject'
 };
 
 export default System;

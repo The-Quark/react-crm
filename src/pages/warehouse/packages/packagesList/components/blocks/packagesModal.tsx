@@ -8,8 +8,8 @@ import {
   DialogTitle
 } from '@/components/ui/dialog.tsx';
 import { KeenIcon } from '@/components';
-import { useQuery } from '@tanstack/react-query';
-import { getPackages } from '@/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getPackages, putPackageStatus } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
@@ -29,12 +29,21 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['packageID', id],
     queryFn: () => (id !== null ? getPackages({ id: Number(id) }) : Promise.reject('Invalid ID'))
+  });
+
+  const statusMutation = useMutation({
+    mutationFn: putPackageStatus,
+    onSuccess: () => {
+      handleClose();
+      queryClient.invalidateQueries({ queryKey: ['packages'] });
+    }
   });
 
   const packageData = data?.result?.[0];
@@ -46,6 +55,24 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
   const handleCreateCargo = (applicationId: number | null) => {
     if (applicationId !== null) {
       navigate(`/warehouse/cargo/starter?package_id=${applicationId}`);
+    }
+  };
+
+  const handleApprove = () => {
+    if (id) {
+      statusMutation.mutate({
+        id,
+        status: PackageStatus.DONE_CUSTOM_CLEARANCE
+      });
+    }
+  };
+
+  const handleReject = () => {
+    if (id) {
+      statusMutation.mutate({
+        id,
+        status: PackageStatus.START_CUSTOM_CLEARANCE
+      });
     }
   };
 
@@ -244,7 +271,25 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
               <a className="btn btn-md btn-light" href={`/warehouse/packages/starter/${id}`}>
                 {formatMessage({ id: 'SYSTEM.UPDATE_PACKAGE' })}
               </a>
-              {data?.result[0].status === PackageStatus.PACKAGE_RECEIVED && (
+              {packageData?.status === PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL && (
+                <>
+                  <button
+                    className="btn btn-md btn-danger"
+                    onClick={handleReject}
+                    disabled={id === null || statusMutation.isPending}
+                  >
+                    {formatMessage({ id: 'SYSTEM.REJECT' })}
+                  </button>
+                  <button
+                    className="btn btn-md btn-primary"
+                    onClick={handleApprove}
+                    disabled={id === null || statusMutation.isPending}
+                  >
+                    {formatMessage({ id: 'SYSTEM.APPROVE' })}
+                  </button>
+                </>
+              )}
+              {packageData?.status === PackageStatus.PACKAGE_RECEIVED && (
                 <button
                   className="btn btn-md btn-primary"
                   onClick={() => handleCreateCargo(id)}

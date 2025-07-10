@@ -165,7 +165,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
         } else {
           await postPackage(values);
         }
-        queryClient.invalidateQueries({ queryKey: ['package'] });
+        queryClient.invalidateQueries({ queryKey: ['packages'] });
         navigate('/warehouse/packages/list');
         resetForm();
         setSearchOrderTerm('');

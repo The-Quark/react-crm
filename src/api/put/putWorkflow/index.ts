@@ -5,3 +5,4 @@ export * from './putPackage';
 export * from './putOrderSender';
 export * from './putOrderReceiver';
 export * from './putOrderStatus';
+export * from './putPackageStatus';
