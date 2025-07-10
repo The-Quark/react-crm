@@ -125,7 +125,7 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                   </h4>
                   <div className="grid gap-2.5">
                     {cargo.packages.map((pkg, ids) => (
-                      <>
+                      <div key={pkg.id}>
                         {ids > 0 && <Divider className="pt-2" />}
                         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                           <label className="form-label max-w-56 text-gray-600">
@@ -148,7 +148,7 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                           </label>
                           <div className="flex columns-1 w-full">{pkg.status || '-'}</div>
                         </div>
-                      </>
+                      </div>
                     ))}
                   </div>
                 </div>
