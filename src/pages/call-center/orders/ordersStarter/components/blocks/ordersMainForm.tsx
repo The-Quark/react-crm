@@ -14,7 +14,7 @@ import {
 import { useFormik } from 'formik';
 import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { useCurrency, useLanguage } from '@/providers';
+import { useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
@@ -65,10 +65,9 @@ const formSchema = Yup.object().shape({
 
 const getInitialValues = (
   applicationId: string | number,
-  mainForm: IOrderFormValues | null,
-  isEditMode: boolean
+  mainForm: IOrderFormValues | null
 ): IOrderFormValues => {
-  if (!isEditMode && mainForm) {
+  if (mainForm) {
     return {
       id: 0,
       application_id: mainForm.application_id || applicationId || '',
@@ -93,32 +92,6 @@ const getInitialValues = (
       sender_contact_id: mainForm.sender_contact_id || ''
     };
   }
-  if (isEditMode && mainForm) {
-    return {
-      id: mainForm.id || 0,
-      application_id: mainForm.application_id || applicationId || '',
-      status: mainForm.status || undefined,
-      delivery_type: mainForm.delivery_type || '',
-      delivery_category: mainForm.delivery_category || DeliveryCategories.B2B,
-      package_type: mainForm.package_type || '',
-      is_express: mainForm.is_express || false,
-      nominal_cost: mainForm?.nominal_cost || '',
-      weight: mainForm.weight || '',
-      width: mainForm.width || '',
-      length: mainForm.length || '',
-      height: mainForm.height || '',
-      volume: mainForm.volume || '',
-      places_count: mainForm.places_count || 0,
-      customs_clearance: mainForm.customs_clearance || false,
-      is_international: mainForm.is_international || false,
-      price: mainForm.price || '',
-      package_description: mainForm.package_description || '',
-      special_wishes: mainForm.special_wishes || '',
-      order_content: mainForm.order_content || [],
-      sender_contact_id: mainForm.sender_contact_id || ''
-    };
-  }
-
   return {
     id: 0,
     application_id: applicationId || '',
@@ -153,7 +126,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const formik = useFormik({
-    initialValues: getInitialValues(applicationId || '', mainFormData, isEditMode),
+    initialValues: getInitialValues(applicationId || '', mainFormData),
     validationSchema: formSchema,
     onSubmit: (values) => {
       setMainFormData({ ...mainFormData, ...values });
@@ -161,36 +134,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     },
     enableReinitialize: true
   });
-
-  useEffect(() => {
-    const { weight, width, length, height } = formik.values;
-    if (weight && width && length && height) {
-      const calculateData: IPostCalculateFormFields = {
-        weight,
-        width,
-        length,
-        height,
-        nominal_cost: formik.values.nominal_cost ?? '',
-        is_express: formik.values.is_express ?? false
-      };
-      postOrderCalculate(calculateData)
-        .then((response) => {
-          formik.setFieldValue('volume', response.volume);
-          formik.setFieldValue('places_count', response.places_count);
-          formik.setFieldValue('price', response.price);
-        })
-        .catch((error) => {
-          console.error('Error calculating order:', error);
-        });
-    }
-  }, [
-    formik.values.weight,
-    formik.values.width,
-    formik.values.length,
-    formik.values.height,
-    formik.values.is_express,
-    formik.values.nominal_cost
-  ]);
 
   const {
     data: applicationsData,
@@ -236,7 +179,37 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   });
 
   useEffect(() => {
-    if (formik.values.application_id && !formik.values.sender_contact_id) {
+    const { weight, width, length, height } = formik.values;
+    if (weight && width && length && height) {
+      const calculateData: IPostCalculateFormFields = {
+        weight,
+        width,
+        length,
+        height,
+        nominal_cost: formik.values.nominal_cost ?? '',
+        is_express: formik.values.is_express ?? false
+      };
+      postOrderCalculate(calculateData)
+        .then((response) => {
+          formik.setFieldValue('volume', response.volume);
+          formik.setFieldValue('places_count', response.places_count);
+          formik.setFieldValue('price', response.price);
+        })
+        .catch((error) => {
+          console.error('Error calculating order:', error);
+        });
+    }
+  }, [
+    formik.values.weight,
+    formik.values.width,
+    formik.values.length,
+    formik.values.height,
+    formik.values.is_express,
+    formik.values.nominal_cost
+  ]);
+
+  useEffect(() => {
+    if (formik.values.application_id) {
       const selectedApp = applicationsData?.result?.find(
         (app) => app.id === formik.values.application_id
       );

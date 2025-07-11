@@ -31,7 +31,7 @@ export const ApplicationsClientBlock: FC<Props> = ({
       patronymic: '',
       company_name: '',
       bin: '',
-      client_type: 'individual',
+      client_type: ClientType.INDIVIDUAL,
       phone: '',
       email: '',
       source: '',
@@ -41,7 +41,7 @@ export const ApplicationsClientBlock: FC<Props> = ({
 
   const handleClientTypeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newType = e.target.value as 'individual' | 'legal';
+      const newType = e.target.value as ClientType;
       const currentClientId = formik.values.client_id;
       formik.resetForm();
       formik.setFieldValue('client_type', newType);
@@ -94,10 +94,10 @@ export const ApplicationsClientBlock: FC<Props> = ({
             formik={formik}
             options={[
               {
-                value: 'individual',
+                value: ClientType.INDIVIDUAL,
                 label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_INDIVIDUAL' })
               },
-              { value: 'legal', label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
+              { value: ClientType.LEGAL, label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
             ]}
             disabled={!!formik.values.client_id}
             onChange={handleClientTypeChange}

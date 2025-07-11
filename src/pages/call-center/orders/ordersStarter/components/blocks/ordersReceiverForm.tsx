@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -9,12 +9,14 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedRadio,
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useIntl } from 'react-intl';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
+import { ClientType } from '@/api/enums';
 
 interface Props {
   onBack: () => void;
@@ -24,18 +26,18 @@ interface Props {
 
 const formSchema = Yup.object().shape({
   receiver_first_name: Yup.string().when('receiver_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_last_name: Yup.string().when('receiver_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   receiver_patronymic: Yup.string().optional(),
   receiver_bin: Yup.string().when('receiver_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) =>
       schema
         .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
@@ -44,7 +46,7 @@ const formSchema = Yup.object().shape({
     otherwise: (schema) => schema.optional()
   }),
   receiver_company_name: Yup.string().when('receiver_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
@@ -69,7 +71,9 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
       receiver_patronymic: mainForm?.receiver_patronymic || '',
       receiver_company_name: mainForm?.receiver_company_name || '',
       receiver_bin: mainForm?.receiver_bin || '',
-      receiver_type: mainForm?.receiver_type || (mainForm?.receiver_bin ? 'legal' : 'individual'),
+      receiver_type:
+        mainForm?.receiver_type ||
+        (mainForm?.receiver_bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
       receiver_country_id: mainForm?.receiver_country_id || '',
       receiver_city_id: mainForm?.receiver_city_id || '',
       receiver_phone: mainForm?.receiver_phone || '',
@@ -87,7 +91,7 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
     receiver_patronymic: '',
     receiver_company_name: '',
     receiver_bin: '',
-    receiver_type: 'individual',
+    receiver_type: ClientType.INDIVIDUAL,
     receiver_country_id: '',
     receiver_city_id: '',
     receiver_phone: '',
@@ -162,81 +166,144 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     enabled: !!formik.values.receiver_country_id
   });
 
-  const handleClientChange = (clientId: string, clientData?: Client) => {
-    const selectedClient =
-      clientData ||
-      clientsData?.result?.find((client) => client.id === Number(clientId)) ||
-      specificClientData?.result?.find((client) => client.id === Number(clientId));
-
-    if (selectedClient) {
-      const isLegalClient = selectedClient.type === 'legal';
-      const currentValues = formik.values;
-
-      const baseValues = {
-        ...currentValues,
-        receiver_contact_id: clientId,
-        receiver_type: selectedClient.type || 'individual',
-        receiver_phone: selectedClient.phone || currentValues.receiver_phone,
-        receiver_country_id: selectedClient.country_id || currentValues.receiver_country_id,
-        receiver_city_id: selectedClient.city_id || currentValues.receiver_city_id,
-        receiver_street: currentValues.receiver_street || '',
-        receiver_house: currentValues.receiver_house || '',
-        receiver_apartment: currentValues.receiver_apartment || '',
-        receiver_location_description: currentValues.receiver_location_description || '',
-        receiver_notes: currentValues.receiver_notes || ''
-      };
-
-      if (isLegalClient) {
+  const handleClientChange = useCallback(
+    (clientId: string, clientData?: Client) => {
+      if (clientId === '') {
         formik.setValues({
-          ...baseValues,
-          receiver_company_name: selectedClient.company_name || '',
-          receiver_bin: selectedClient.bin || '',
+          ...formik.values,
+          receiver_contact_id: '',
           receiver_first_name: '',
           receiver_last_name: '',
-          receiver_patronymic: ''
-        });
-      } else {
-        formik.setValues({
-          ...baseValues,
-          receiver_first_name: selectedClient.first_name || '',
-          receiver_last_name: selectedClient.last_name || '',
-          receiver_patronymic: selectedClient.patronymic || '',
+          receiver_patronymic: '',
           receiver_company_name: '',
-          receiver_bin: ''
+          receiver_bin: '',
+          receiver_type: ClientType.INDIVIDUAL,
+          receiver_phone: '',
+          receiver_country_id: '',
+          receiver_city_id: '',
+          receiver_street: '',
+          receiver_house: '',
+          receiver_apartment: ''
+        });
+        return;
+      }
+      const selectedClient =
+        clientData ||
+        clientsData?.result?.find((client) => client.id === Number(clientId)) ||
+        specificClientData?.result?.find((client) => client.id === Number(clientId));
+
+      if (selectedClient) {
+        const isLegalClient = selectedClient.type === ClientType.LEGAL;
+        const currentValues = formik.values;
+
+        const baseValues = {
+          ...currentValues,
+          receiver_contact_id: clientId,
+          receiver_type: selectedClient.type || ClientType.INDIVIDUAL,
+          receiver_phone: selectedClient.phone || currentValues.receiver_phone,
+          receiver_country_id: selectedClient.country_id || currentValues.receiver_country_id,
+          receiver_city_id: selectedClient.city_id || currentValues.receiver_city_id,
+          receiver_street: currentValues.receiver_street || '',
+          receiver_house: currentValues.receiver_house || '',
+          receiver_apartment: currentValues.receiver_apartment || '',
+          receiver_location_description: currentValues.receiver_location_description || '',
+          receiver_notes: currentValues.receiver_notes || ''
+        };
+
+        if (isLegalClient) {
+          formik.setValues({
+            ...baseValues,
+            receiver_company_name: selectedClient.company_name || '',
+            receiver_bin: selectedClient.bin || '',
+            receiver_first_name: '',
+            receiver_last_name: '',
+            receiver_patronymic: ''
+          });
+        } else {
+          formik.setValues({
+            ...baseValues,
+            receiver_first_name: selectedClient.first_name || '',
+            receiver_last_name: selectedClient.last_name || '',
+            receiver_patronymic: selectedClient.patronymic || '',
+            receiver_company_name: '',
+            receiver_bin: ''
+          });
+        }
+
+        setModalInfoData({
+          ...modalInfo,
+          receiver_country_name: selectedClient?.country_name ?? modalInfo?.receiver_country_name,
+          receiver_city_name: selectedClient?.city_name ?? modalInfo?.receiver_city_name
         });
       }
-
-      setModalInfoData({
-        ...modalInfo,
-        receiver_country_name: selectedClient?.country_name ?? modalInfo?.receiver_country_name,
-        receiver_city_name: selectedClient?.city_name ?? modalInfo?.receiver_city_name
-      });
-    }
-  };
+    },
+    [clientsData, specificClientData, formik, modalInfo, setModalInfoData]
+  );
 
   useEffect(() => {
     if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
-      const client = specificClientData.result[0];
-      handleClientChange(String(client.id), client);
+      handleClientChange(String(specificClientData.result[0].id), specificClientData.result[0]);
       setIsInitialLoad(false);
     }
-  }, [specificClientData, isInitialLoad, isEditMode]);
+  }, [specificClientData, isInitialLoad, isEditMode, handleClientChange]);
+
+  const handleCountryChange = useCallback(
+    (val: string | number) => {
+      const selectedCountry = countriesData?.data?.find((country) => country.id === val);
+      formik.setFieldValue('receiver_country_id', val ? Number(val) : '');
+      formik.setFieldValue('receiver_city_id', '');
+      setModalInfoData({
+        ...modalInfo,
+        receiver_country_name: selectedCountry?.name ?? '',
+        receiver_city_name: ''
+      });
+    },
+    [countriesData, formik, modalInfo, setModalInfoData]
+  );
+
+  const handleCityChange = useCallback(
+    (val: string | number) => {
+      const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
+      formik.setFieldValue('receiver_city_id', val ? Number(val) : '');
+      setModalInfoData({
+        ...modalInfo,
+        receiver_city_name: selectedCity?.name ?? ''
+      });
+    },
+    [citiesData, formik, modalInfo, setModalInfoData]
+  );
+
+  const handleClientTypeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newType = e.target.value as ClientType;
+      const currentClientId = formik.values.receiver_contact_id;
+      formik.setValues({
+        ...formik.values,
+        receiver_type: newType,
+        receiver_first_name: newType === ClientType.LEGAL ? '' : formik.values.receiver_first_name,
+        receiver_last_name: newType === ClientType.LEGAL ? '' : formik.values.receiver_last_name,
+        receiver_patronymic: newType === ClientType.LEGAL ? '' : formik.values.receiver_patronymic,
+        receiver_company_name:
+          newType === ClientType.INDIVIDUAL ? '' : formik.values.receiver_company_name,
+        receiver_bin: newType === ClientType.INDIVIDUAL ? '' : formik.values.receiver_bin,
+        receiver_contact_id: currentClientId
+      });
+    },
+    [formik]
+  );
 
   const isFormLoading = countriesLoading || specificClientLoading || (isEditMode && citiesLoading);
   const isFormError =
     countriesIsError || clientsIsError || specificClientIsError || (isEditMode && citiesIsError);
-  const formErrors = [countriesError, clientsError, specificClientError, citiesError].filter(
-    (error) => error !== null
-  );
 
-  if (isFormLoading) {
-    return <SharedLoading simple />;
-  }
+  if (isFormLoading) return <SharedLoading simple />;
 
   if (isFormError) {
+    const errors = [countriesError, clientsError, specificClientError, citiesError].filter(Boolean);
+
     return (
-      <div>
-        {formErrors.map((error, index) => (
+      <div className="space-y-2">
+        {errors.map((error, index) => (
           <SharedError key={index} error={error} />
         ))}
       </div>
@@ -266,9 +333,22 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             loading={clientsLoading}
           />
 
-          <input type="hidden" name="receiver_type" value={formik.values.receiver_type} />
+          <SharedRadio
+            name="receiver_type"
+            label={formatMessage({ id: 'SYSTEM.CLIENT_TYPE' })}
+            formik={formik}
+            options={[
+              {
+                value: ClientType.INDIVIDUAL,
+                label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_INDIVIDUAL' })
+              },
+              { value: ClientType.LEGAL, label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
+            ]}
+            disabled={!!formik.values.receiver_contact_id}
+            onChange={handleClientTypeChange}
+          />
 
-          {formik.values.receiver_type === 'legal' ? (
+          {formik.values.receiver_type === ClientType.LEGAL ? (
             <>
               <SharedInput
                 name="receiver_company_name"
@@ -302,7 +382,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
               />
             </>
           )}
-
           <SharedInput
             name="receiver_phone"
             label={formatMessage({ id: 'SYSTEM.PHONE' })}
@@ -315,16 +394,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             options={countriesData?.data ?? []}
             placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
-            onChange={(val) => {
-              const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-              formik.setFieldValue('receiver_country_id', val ? Number(val) : '');
-              formik.setFieldValue('receiver_city_id', '');
-              setModalInfoData({
-                ...modalInfo,
-                receiver_country_name: selectedCountry?.name ?? '',
-                receiver_city_name: ''
-              });
-            }}
+            onChange={handleCountryChange}
             error={formik.errors.receiver_country_id as string}
             touched={formik.touched.receiver_country_id}
             searchTerm={searchTerm}
@@ -340,14 +410,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
                 : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
-            onChange={(val) => {
-              formik.setFieldValue('receiver_city_id', val ? Number(val) : '');
-              const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-              setModalInfoData({
-                ...modalInfo,
-                receiver_city_name: selectedCity?.name ?? ''
-              });
-            }}
+            onChange={handleCityChange}
             error={formik.errors.receiver_city_id as string}
             touched={formik.touched.receiver_city_id}
             searchTerm={citySearchTerm}

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useIntl } from 'react-intl';
 import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
@@ -10,11 +10,13 @@ import {
   SharedError,
   SharedInput,
   SharedLoading,
+  SharedRadio,
   SharedTextArea
 } from '@/partials/sharedUI';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { Client } from '@/api/get/getClients/types.ts';
+import { ClientType } from '@/api/enums';
 
 interface Props {
   onNext: () => void;
@@ -24,18 +26,18 @@ interface Props {
 
 const formSchema = Yup.object().shape({
   sender_first_name: Yup.string().when('sender_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   sender_last_name: Yup.string().when('sender_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   sender_patronymic: Yup.string().optional(),
   sender_bin: Yup.string().when('sender_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) =>
       schema
         .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
@@ -44,7 +46,7 @@ const formSchema = Yup.object().shape({
     otherwise: (schema) => schema.optional()
   }),
   sender_company_name: Yup.string().when('sender_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
@@ -69,7 +71,8 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
       sender_patronymic: mainForm.sender_patronymic || '',
       sender_company_name: mainForm.sender_company_name || '',
       sender_bin: mainForm.sender_bin || '',
-      sender_type: mainForm.sender_type || (mainForm.sender_bin ? 'legal' : 'individual'),
+      sender_type:
+        mainForm.sender_type || (mainForm.sender_bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
       sender_country_id: mainForm.sender_country_id || '',
       sender_city_id: mainForm.sender_city_id || '',
       sender_phone: mainForm.sender_phone || '',
@@ -88,7 +91,7 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
     sender_patronymic: '',
     sender_company_name: '',
     sender_bin: '',
-    sender_type: 'individual',
+    sender_type: ClientType.INDIVIDUAL,
     sender_country_id: '',
     sender_city_id: '',
     sender_phone: '',
@@ -162,20 +165,41 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     enabled: !!formik.values.sender_country_id
   });
 
-  const handleClientChange = (clientId: string, clientData?: Client) => {
-    const selectedClient =
-      clientData ||
-      clientsData?.result?.find((client) => client.id === Number(clientId)) ||
-      specificClientData?.result?.find((client) => client.id === Number(clientId));
+  const handleClientChange = useCallback(
+    (clientId: string, clientData?: Client) => {
+      if (clientId === '') {
+        formik.setValues({
+          ...formik.values,
+          sender_contact_id: '',
+          sender_first_name: '',
+          sender_last_name: '',
+          sender_patronymic: '',
+          sender_company_name: '',
+          sender_bin: '',
+          sender_type: ClientType.INDIVIDUAL,
+          sender_phone: '',
+          sender_country_id: '',
+          sender_city_id: '',
+          sender_street: '',
+          sender_house: '',
+          sender_apartment: ''
+        });
+        return;
+      }
+      const selectedClient =
+        clientData ||
+        clientsData?.result?.find((client) => client.id === Number(clientId)) ||
+        specificClientData?.result?.find((client) => client.id === Number(clientId));
 
-    if (selectedClient) {
-      const isLegalClient = selectedClient.type === 'legal';
+      if (!selectedClient) return;
+
+      const isLegalClient = selectedClient.type === ClientType.LEGAL;
       const currentValues = formik.values;
 
       const baseValues = {
         ...currentValues,
         sender_contact_id: clientId,
-        sender_type: selectedClient.type || 'individual',
+        sender_type: selectedClient.type || ClientType.INDIVIDUAL,
         sender_phone: selectedClient.phone || currentValues.sender_phone,
         sender_country_id: selectedClient.country_id || currentValues.sender_country_id,
         sender_city_id: selectedClient.city_id || currentValues.sender_city_id,
@@ -186,57 +210,99 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
         sender_notes: currentValues.sender_notes || ''
       };
 
-      if (isLegalClient) {
-        formik.setValues({
-          ...baseValues,
-          sender_company_name: selectedClient.company_name || '',
-          sender_bin: selectedClient.bin || '',
-          sender_first_name: '',
-          sender_last_name: '',
-          sender_patronymic: ''
-        });
-      } else {
-        formik.setValues({
-          ...baseValues,
-          sender_first_name: selectedClient.first_name || '',
-          sender_last_name: selectedClient.last_name || '',
-          sender_patronymic: selectedClient.patronymic || '',
-          sender_company_name: '',
-          sender_bin: ''
-        });
-      }
+      const valuesToSet = isLegalClient
+        ? {
+            ...baseValues,
+            sender_company_name: selectedClient.company_name || '',
+            sender_bin: selectedClient.bin || '',
+            sender_first_name: '',
+            sender_last_name: '',
+            sender_patronymic: ''
+          }
+        : {
+            ...baseValues,
+            sender_first_name: selectedClient.first_name || '',
+            sender_last_name: selectedClient.last_name || '',
+            sender_patronymic: selectedClient.patronymic || '',
+            sender_company_name: '',
+            sender_bin: ''
+          };
+
+      formik.setValues(valuesToSet);
 
       setModalInfoData({
         ...modalInfo,
         sender_country_name: selectedClient?.country_name ?? modalInfo?.sender_country_name,
         sender_city_name: selectedClient?.city_name ?? modalInfo?.sender_city_name
       });
-    }
-  };
+    },
+    [clientsData, specificClientData, formik, modalInfo, setModalInfoData]
+  );
 
   useEffect(() => {
     if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
-      const client = specificClientData.result[0];
-      handleClientChange(String(client.id), client);
+      handleClientChange(String(specificClientData.result[0].id), specificClientData.result[0]);
       setIsInitialLoad(false);
     }
-  }, [specificClientData, isInitialLoad, isEditMode]);
+  }, [specificClientData, isInitialLoad, isEditMode, handleClientChange]);
+
+  const handleCountryChange = useCallback(
+    (val: string | number) => {
+      const selectedCountry = countriesData?.data?.find((country) => country.id === val);
+      formik.setFieldValue('sender_country_id', val ? Number(val) : '');
+      formik.setFieldValue('sender_city_id', '');
+      setModalInfoData({
+        ...modalInfo,
+        sender_country_name: selectedCountry?.name ?? '',
+        sender_city_name: ''
+      });
+    },
+    [countriesData, formik, modalInfo, setModalInfoData]
+  );
+
+  const handleCityChange = useCallback(
+    (val: string | number) => {
+      const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
+      formik.setFieldValue('sender_city_id', val ? Number(val) : '');
+      setModalInfoData({
+        ...modalInfo,
+        sender_city_name: selectedCity?.name ?? ''
+      });
+    },
+    [citiesData, formik, modalInfo, setModalInfoData]
+  );
+
+  const handleClientTypeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newType = e.target.value as ClientType;
+      const currentClientId = formik.values.sender_contact_id;
+      formik.setValues({
+        ...formik.values,
+        sender_type: newType,
+        sender_first_name: newType === ClientType.LEGAL ? '' : formik.values.sender_first_name,
+        sender_last_name: newType === ClientType.LEGAL ? '' : formik.values.sender_last_name,
+        sender_patronymic: newType === ClientType.LEGAL ? '' : formik.values.sender_patronymic,
+        sender_company_name:
+          newType === ClientType.INDIVIDUAL ? '' : formik.values.sender_company_name,
+        sender_bin: newType === ClientType.INDIVIDUAL ? '' : formik.values.sender_bin,
+        sender_contact_id: currentClientId
+      });
+    },
+    [formik]
+  );
 
   const isFormLoading = countriesLoading || specificClientLoading || (isEditMode && citiesLoading);
   const isFormError =
     countriesIsError || clientsIsError || specificClientIsError || (isEditMode && citiesIsError);
-  const formErrors = [countriesError, clientsError, specificClientError, citiesError].filter(
-    (error) => error !== null
-  );
 
-  if (isFormLoading) {
-    return <SharedLoading simple />;
-  }
+  if (isFormLoading) return <SharedLoading simple />;
 
   if (isFormError) {
+    const errors = [countriesError, clientsError, specificClientError, citiesError].filter(Boolean);
+
     return (
-      <div>
-        {formErrors.map((error, index) => (
+      <div className="space-y-2">
+        {errors.map((error, index) => (
           <SharedError key={index} error={error} />
         ))}
       </div>
@@ -266,9 +332,22 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             loading={clientsLoading}
           />
 
-          <input type="hidden" name="sender_type" value={formik.values.sender_type} />
+          <SharedRadio
+            name="sender_type"
+            label={formatMessage({ id: 'SYSTEM.CLIENT_TYPE' })}
+            formik={formik}
+            options={[
+              {
+                value: ClientType.INDIVIDUAL,
+                label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_INDIVIDUAL' })
+              },
+              { value: ClientType.LEGAL, label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
+            ]}
+            disabled={!!formik.values.sender_contact_id}
+            onChange={handleClientTypeChange}
+          />
 
-          {formik.values.sender_type === 'legal' ? (
+          {formik.values.sender_type === ClientType.LEGAL ? (
             <>
               <SharedInput
                 name="sender_company_name"
@@ -302,7 +381,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
               />
             </>
           )}
-
           <SharedInput
             name="sender_phone"
             label={formatMessage({ id: 'SYSTEM.PHONE' })}
@@ -315,16 +393,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             options={countriesData?.data ?? []}
             placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
-            onChange={(val) => {
-              const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-              formik.setFieldValue('sender_country_id', val ? Number(val) : '');
-              formik.setFieldValue('sender_city_id', '');
-              setModalInfoData({
-                ...modalInfo,
-                sender_country_name: selectedCountry?.name ?? '',
-                sender_city_name: ''
-              });
-            }}
+            onChange={handleCountryChange}
             error={formik.errors.sender_country_id as string}
             touched={formik.touched.sender_country_id}
             searchTerm={searchTerm}
@@ -340,14 +409,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
                 : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
-            onChange={(val) => {
-              formik.setFieldValue('sender_city_id', val ? Number(val) : '');
-              const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-              setModalInfoData({
-                ...modalInfo,
-                sender_city_name: selectedCity?.name ?? ''
-              });
-            }}
+            onChange={handleCityChange}
             error={formik.errors.sender_city_id as string}
             touched={formik.touched.sender_city_id}
             searchTerm={citySearchTerm}
