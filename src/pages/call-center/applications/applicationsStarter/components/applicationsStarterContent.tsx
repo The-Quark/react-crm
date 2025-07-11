@@ -257,7 +257,7 @@ export const ApplicationsStarterContent = ({
     }
   }, [clientData?.result, formik.values.client_id]);
 
-  const isLoading = sourcesLoading || clientsLoading || boxTypesLoading;
+  const isLoading = sourcesLoading || clientsLoading || boxTypesLoading || clientLoading;
 
   const renderError = () => {
     if (sourcesIsError) return <SharedError error={sourcesError} />;

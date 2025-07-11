@@ -219,7 +219,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                 )}
 
                 {/* Order Block */}
-                <div>
+                <div className="border-b pb-4">
                   <h4 className="text-lg font-semibold mb-3">
                     {formatMessage({ id: 'SYSTEM.ORDER_INFO' })}
                   </h4>
@@ -414,7 +414,7 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                 )}
 
                 {/* QR Code Block */}
-                <div className="border-t pt-4">
+                <div>
                   <h4 className="text-lg font-semibold mb-3">
                     {formatMessage({ id: 'SYSTEM.QR_CODE' })}
                   </h4>

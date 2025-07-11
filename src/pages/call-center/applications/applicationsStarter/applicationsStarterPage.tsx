@@ -5,9 +5,11 @@ import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getApplications } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { useIntl } from 'react-intl';
 
 export const ApplicationsStarterPage = () => {
   const { id } = useParams<{ id?: string }>();
+  const { formatMessage } = useIntl();
   const isEditMode = !!id;
   const applicationId = id ? parseInt(id, 10) : undefined;
 
@@ -23,7 +25,7 @@ export const ApplicationsStarterPage = () => {
   });
 
   if (isEditMode && (applicationId === undefined || isNaN(applicationId))) {
-    return <SharedError error={new Error('Invalid application ID')} />;
+    return <SharedError error={new Error(formatMessage({ id: 'SYSTEM.ERROR.INVALID_ID' }))} />;
   }
   if (isEditMode && applicationIsError) return <SharedError error={applicationError} />;
 

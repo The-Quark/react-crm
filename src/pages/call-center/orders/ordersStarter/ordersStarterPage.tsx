@@ -6,11 +6,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getOrders } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { OrderCreationProvider } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
+import { useIntl } from 'react-intl';
 
 export const OrdersStarterPage = () => {
   const { id } = useParams<{ id: string }>();
-
+  const { formatMessage } = useIntl();
   const isEditMode = !!id;
+  const orderId = id ? parseInt(id, 10) : undefined;
 
   const {
     data: orderData,
@@ -19,30 +21,41 @@ export const OrdersStarterPage = () => {
     isError
   } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => getOrders({ id: Number(id) }),
+    queryFn: () => getOrders({ id: orderId! }),
     enabled: isEditMode
   });
 
-  if (isEditMode && isError) {
+  if (isEditMode && (orderId === undefined || isNaN(orderId))) {
     return (
       <Container>
-        <SharedError error={error} />
+        <SharedError error={new Error(formatMessage({ id: 'SYSTEM.ERROR.INVALID_ID' }))} />
       </Container>
     );
   }
 
-  if (isEditMode && isLoading) {
-    return (
-      <Container>
-        <SharedLoading />
-      </Container>
-    );
+  if (isEditMode) {
+    if (isLoading) {
+      return (
+        <Container>
+          <SharedLoading />
+        </Container>
+      );
+    }
+    if (isError) {
+      return (
+        <Container>
+          <SharedError error={error} />
+        </Container>
+      );
+    }
   }
+
+  const initialData = isEditMode ? (orderData?.result?.[0] ?? null) : null;
 
   return (
     <Container>
-      <OrderCreationProvider initialData={isEditMode ? orderData?.result[0] : null}>
-        <OrdersStarterContent isEditMode={isEditMode} orderId={Number(id)} />
+      <OrderCreationProvider initialData={initialData}>
+        <OrdersStarterContent isEditMode={isEditMode} orderId={orderId} />
       </OrderCreationProvider>
     </Container>
   );
