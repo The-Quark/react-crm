@@ -12,6 +12,8 @@ import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesLis
 import { initialPagination } from '@/utils';
 import { useParams } from 'react-router';
 
+type ModalType = 'view' | 'delete' | 'createCargo' | null;
+
 export const PackagesListContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
@@ -19,11 +21,14 @@ export const PackagesListContent = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<PackageStatus>();
-  const [deliveryCategory, setDeliveryCategory] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(id ? true : false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isCargoCreateModalOpen, setIsCargoCreateModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(id ? Number(id) : null);
+  const [deliveryCategory, setDeliveryCategory] = useState<string>();
+  const [modal, setModal] = useState<{
+    type: ModalType;
+    id?: number | null;
+  }>({
+    type: id ? 'view' : null,
+    id: id ? Number(id) : null
+  });
   const [isDeleting, setIsDeleting] = useState(false);
   const [pagination, setPagination] = useState(initialPagination);
 
@@ -47,28 +52,26 @@ export const PackagesListContent = () => {
   });
 
   const handleDeleteClick = (id: number) => {
-    setSelectedId(id);
-    setIsDeleteModalOpen(true);
+    setModal({ type: 'delete', id });
   };
 
   const handleConfirmDelete = async () => {
-    if (!selectedId) return;
+    if (!modal.id) return;
 
     setIsDeleting(true);
     try {
-      await deletePackage(selectedId);
+      await deletePackage(modal.id);
       await queryClient.invalidateQueries({ queryKey: ['packages'] });
-      setIsDeleteModalOpen(false);
+      setModal({ type: null });
+    } catch (error) {
+      console.error('Failed to delete package:', error);
     } finally {
       setIsDeleting(false);
     }
   };
 
   const columns = usePackagesColumns({
-    onRowClick: (id) => {
-      setSelectedId(id);
-      setIsModalOpen(true);
-    },
+    onRowClick: (id) => setModal({ type: 'view', id }),
     onDeleteClick: handleDeleteClick
   });
 
@@ -114,7 +117,7 @@ export const PackagesListContent = () => {
             onStatusChange={handleStatusChange}
             currentDeliveryCategory={deliveryCategory}
             onDeliveryCategoryChange={handleDeliveryCategoryChange}
-            onCreateCargo={() => setIsCargoCreateModalOpen(true)}
+            onCreateCargo={() => setModal({ type: 'createCargo' })}
           />
         }
         pagination={{
@@ -127,18 +130,22 @@ export const PackagesListContent = () => {
           loading: isFetching && <SharedLoading simple />
         }}
       />
-      <PackagesModal open={isModalOpen} id={selectedId} handleClose={() => setIsModalOpen(false)} />
+      <PackagesModal
+        open={modal.type === 'view'}
+        id={modal.id ?? null}
+        handleClose={() => setModal({ type: null })}
+      />
       <SharedDeleteModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        open={modal.type === 'delete'}
+        onClose={() => setModal({ type: null })}
         onConfirm={handleConfirmDelete}
         title={formatMessage({ id: 'SYSTEM.DELETE_PACKAGE' })}
         description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_PACKAGE_DESCRIPTION' })}
         isLoading={isDeleting}
       />
       <PackagesCargoCreateModal
-        open={isCargoCreateModalOpen}
-        handleClose={() => setIsCargoCreateModalOpen(false)}
+        open={modal.type === 'createCargo'}
+        handleClose={() => setModal({ type: null })}
       />
     </Container>
   );

@@ -8,7 +8,7 @@ import { AxiosError } from 'axios';
 import * as Yup from 'yup';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { ApplicationsStatus } from '@/api/enums';
+import { ApplicationsStatus, ClientType } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@/utils/lib/helpers.ts';
 import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_DEBOUNCE_DELAY, SEARCH_PER_PAGE } from '@/utils';
@@ -27,17 +27,17 @@ interface Props {
 
 export const formSchema = Yup.object().shape({
   first_name: Yup.string().when('client_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   last_name: Yup.string().when('client_type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   bin: Yup.string().when('client_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) =>
       schema
         .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
@@ -46,7 +46,7 @@ export const formSchema = Yup.object().shape({
     otherwise: (schema) => schema.optional()
   }),
   company_name: Yup.string().when('client_type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
@@ -100,7 +100,7 @@ const getInitialValues = (
     patronymic: '',
     company_name: '',
     bin: '',
-    client_type: 'individual',
+    client_type: ClientType.INDIVIDUAL,
     client_id: clientId ?? '',
     weight: '',
     width: '',
@@ -168,11 +168,11 @@ export const ApplicationsStarterContent = ({
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       const payload = {
         ...values,
-        ...(values.client_type === 'individual' && {
+        ...(values.client_type === ClientType.INDIVIDUAL && {
           company_name: undefined,
           bin: undefined
         }),
-        ...(values.client_type === 'legal' && {
+        ...(values.client_type === ClientType.LEGAL && {
           first_name: undefined,
           last_name: undefined,
           patronymic: undefined
@@ -238,7 +238,7 @@ export const ApplicationsStarterContent = ({
       last_name: client.last_name || '',
       patronymic: client.patronymic || '',
       company_name: client.company_name || '',
-      client_type: client.type || 'individual',
+      client_type: client.type || ClientType.INDIVIDUAL,
       phone: client.phone || '',
       email: client.email || '',
       source: client.source?.code || '',
