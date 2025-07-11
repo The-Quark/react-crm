@@ -448,7 +448,8 @@ const System = {
   'SYSTEM.APPROVE': 'الموافقة',
   'SYSTEM.REJECT': 'الرفض',
   'SYSTEM.RATING': 'التقييم',
-  'SYSTEM.CLIENT_STATUS': 'حالة العميل'
+  'SYSTEM.CLIENT_STATUS': 'حالة العميل',
+  'SYSTEM.ERROR.INVALID_ID': 'معرف غير صالح'
 };
 
 export default System;

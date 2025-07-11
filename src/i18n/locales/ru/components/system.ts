@@ -448,7 +448,8 @@ const System = {
   'SYSTEM.APPROVE': 'Одобрить',
   'SYSTEM.REJECT': 'Отклонить',
   'SYSTEM.RATING': 'Рейтинг',
-  'SYSTEM.CLIENT_STATUS': 'Статус клиента'
+  'SYSTEM.CLIENT_STATUS': 'Статус клиента',
+  'SYSTEM.ERROR.INVALID_ID': 'Недействительный идентификатор'
 };
 
 export default System;

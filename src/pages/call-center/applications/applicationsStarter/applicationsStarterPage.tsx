@@ -7,8 +7,9 @@ import { getApplications } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 
 export const ApplicationsStarterPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id?: string }>();
   const isEditMode = !!id;
+  const applicationId = id ? parseInt(id, 10) : undefined;
 
   const {
     data: applicationData,
@@ -17,13 +18,16 @@ export const ApplicationsStarterPage = () => {
     error: applicationError
   } = useQuery({
     queryKey: ['application', id],
-    queryFn: () => getApplications({ id: id ? parseInt(id) : undefined }),
+    queryFn: () => getApplications({ id: applicationId }),
     enabled: isEditMode
   });
 
-  if (isEditMode && applicationIsError) {
-    return <SharedError error={applicationError} />;
+  if (isEditMode && (applicationId === undefined || isNaN(applicationId))) {
+    return <SharedError error={new Error('Invalid application ID')} />;
   }
+  if (isEditMode && applicationIsError) return <SharedError error={applicationError} />;
+
+  const initialData = applicationData?.result?.[0] ?? undefined;
 
   return (
     <Container>
@@ -33,7 +37,7 @@ export const ApplicationsStarterPage = () => {
         <ApplicationsStarterContent
           isEditMode={isEditMode}
           applicationId={Number(id)}
-          applicationData={applicationData?.result[0]}
+          applicationData={initialData}
         />
       )}
     </Container>

@@ -448,7 +448,8 @@ const System = {
   'SYSTEM.APPROVE': 'Approve',
   'SYSTEM.REJECT': 'Reject',
   'SYSTEM.RATING': 'Rating',
-  'SYSTEM.CLIENT_STATUS': 'Client Status'
+  'SYSTEM.CLIENT_STATUS': 'Client Status',
+  'SYSTEM.ERROR.INVALID_ID': 'Invalid id'
 };
 
 export default System;
