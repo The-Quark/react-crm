@@ -1,3 +1,8 @@
+export enum ClientType {
+  LEGAL = 'legal',
+  INDIVIDUAL = 'individual'
+}
+
 export enum UserCourierType {
   PEDESTRIAN = 'pedestrian',
   MOTORBIKE = 'motorbike',
