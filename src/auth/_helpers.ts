@@ -1,6 +1,7 @@
-import { getData, setData } from '@/utils';
+import { getData, I18N_CONFIG_KEY, LOCAL_STORAGE_CURRENCY_KEY, setData } from '@/utils';
 import { type AuthModel } from './_models';
 import { toast } from 'sonner';
+import { CurrencySystem } from '@/providers';
 
 const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
   import.meta.env.VITE_APP_VERSION
@@ -37,18 +38,24 @@ const removeAuth = () => {
 };
 
 export function setupAxios(axios: any) {
-  const languageCode = getData('i18nConfig');
+  const languageCode = getData(I18N_CONFIG_KEY) || 'en';
+  const currencyCode = (getData(LOCAL_STORAGE_CURRENCY_KEY) as CurrencySystem)?.code || 'USD';
+
   axios.defaults.headers.common['Accept'] = 'application/json';
-  axios.defaults.headers.common['Accept-Language'] = languageCode || 'en';
+  axios.defaults.headers.common['Accept-Language'] = languageCode;
+  axios.defaults.headers.common['Accept-Currency'] = currencyCode;
   axios.defaults.headers.Accept = 'application/json';
 
   axios.interceptors.request.use(
-    (config: { headers: { [key: string]: any; Authorization?: string } }) => {
+    (config: {
+      headers: { [key: string]: any; Authorization?: string; 'Accept-Currency'?: string };
+    }) => {
       const auth = getAuth();
       if (auth?.token) {
         config.headers.Authorization = `Bearer ${auth.token}`;
       }
-      config.headers['Accept-Language'] = languageCode || 'en';
+      config.headers['Accept-Language'] = languageCode;
+      config.headers['Accept-Currency'] = currencyCode;
       return config;
     },
     async (err: any) => await Promise.reject(err)

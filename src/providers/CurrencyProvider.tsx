@@ -1,42 +1,89 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CURRENCIES, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
+import { useQuery } from '@tanstack/react-query';
+import { getCurrencies } from '@/api';
 
-type Currency = (typeof CURRENCIES)[number];
+export type CurrencySystem = {
+  name: string;
+  code: string;
+  symbol: string;
+};
 
 interface CurrencyContextType {
-  currency: Currency;
-  setCurrency: (currency: Currency) => void;
+  currency: CurrencySystem;
+  setCurrency: (currency: CurrencySystem) => void;
+  availableCurrencies: CurrencySystem[];
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
 export const CurrencyProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currency, setCurrency] = useState<Currency>(CURRENCIES[0]);
+  const [currency, setCurrency] = useState<CurrencySystem>(CURRENCIES[0]);
+  const [availableCurrencies, setAvailableCurrencies] = useState<CurrencySystem[]>([...CURRENCIES]);
+
+  const { data, isError, isSuccess } = useQuery({
+    queryKey: ['currencies'],
+    queryFn: () => getCurrencies({ is_active: true })
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
-    if (saved) {
+    if (isError) {
+      setAvailableCurrencies([...CURRENCIES]);
+      return;
+    }
+    if (isSuccess && data?.result) {
+      const serverCurrencies: CurrencySystem[] = data.result.map((item) => ({
+        code: item.code,
+        symbol: item.symbol,
+        name: item.name
+      }));
+
+      setAvailableCurrencies(serverCurrencies);
+    }
+  }, [data, isError, isSuccess]);
+
+  useEffect(() => {
+    // Инициализация валюты из localStorage
+    const initializeCurrency = () => {
       try {
-        const parsed = JSON.parse(saved) as Currency;
-        const found = CURRENCIES.find((item) => item.code === parsed.code);
-        if (found) {
-          setCurrency(found);
+        const saved = localStorage.getItem(LOCAL_STORAGE_CURRENCY_KEY);
+
+        if (saved) {
+          const parsed = JSON.parse(saved) as CurrencySystem;
+          const found = availableCurrencies.find((item) => item.code === parsed.code);
+
+          if (found) {
+            setCurrency(found);
+          } else {
+            const defaultCurrency = availableCurrencies[0] || CURRENCIES[0];
+            setCurrency(defaultCurrency);
+            localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, JSON.stringify(defaultCurrency));
+          }
+        } else {
+          const defaultCurrency = availableCurrencies[0] || CURRENCIES[0];
+          setCurrency(defaultCurrency);
+          localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, JSON.stringify(defaultCurrency));
         }
       } catch (e) {
-        console.error('Failed to parse currency from localStorage', e);
+        console.error('Failed to initialize currency', e);
+        const defaultCurrency = availableCurrencies[0] || CURRENCIES[0];
+        setCurrency(defaultCurrency);
+        localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, JSON.stringify(defaultCurrency));
       }
-    } else {
-      localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, JSON.stringify(CURRENCIES[0]));
-    }
-  }, []);
+    };
 
-  const handleSetCurrency = (newCurrency: Currency) => {
+    initializeCurrency();
+  }, [availableCurrencies]);
+
+  const handleSetCurrency = (newCurrency: CurrencySystem) => {
     setCurrency(newCurrency);
     localStorage.setItem(LOCAL_STORAGE_CURRENCY_KEY, JSON.stringify(newCurrency));
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency: handleSetCurrency }}>
+    <CurrencyContext.Provider
+      value={{ currency, setCurrency: handleSetCurrency, availableCurrencies }}
+    >
       {children}
     </CurrencyContext.Provider>
   );

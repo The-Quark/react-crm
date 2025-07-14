@@ -495,18 +495,18 @@ export const mockLicenseCategoryOptions = [
 
 export const CURRENCIES = [
   {
+    name: 'US Dollar',
     code: 'USD',
-    label: '$',
-    flag: toAbsoluteUrl('/media/flags/united-states.svg')
+    symbol: '$'
   },
   {
-    code: 'RUB',
-    label: '₽',
-    flag: toAbsoluteUrl('/media/flags/russia.svg')
+    name: 'Euro',
+    code: 'EUR',
+    symbol: '€'
   },
   {
+    name: 'Tenge',
     code: 'KZT',
-    label: '₸',
-    flag: toAbsoluteUrl('/media/flags/kazakhstan.svg')
+    symbol: '₸'
   }
 ] as const;

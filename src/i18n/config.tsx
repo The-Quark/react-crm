@@ -3,14 +3,13 @@ import { type TLanguage } from './types.d';
 import ar from './locales/ar/ar.ts';
 import en from './locales/en/en.ts';
 import ru from './locales/ru/ru.ts';
+import { I18N_CONFIG_KEY } from '@/utils';
 
 const I18N_MESSAGES = {
   en: en,
   ru: ru,
   ar: ar
 };
-
-const I18N_CONFIG_KEY = 'i18nConfig';
 
 const I18N_LANGUAGES: readonly TLanguage[] = [
   {
