@@ -8,7 +8,9 @@ import {
   Users,
   CarFront,
   Truck,
-  Bike
+  Bike,
+  Package2,
+  Car
 } from 'lucide-react';
 
 interface TypeBadgeProps {
@@ -38,6 +40,21 @@ export const SharedTypeBadge = ({ type, className, showIcon = true }: TypeBadgeP
       label: 'Packages',
       color: 'badge-info',
       icon: Package
+    },
+    [TaskType.DELIVERY]: {
+      label: 'Delivery',
+      color: 'badge-info',
+      icon: Package2
+    },
+    [TaskType.DRIVER]: {
+      label: 'Driver',
+      color: 'badge-info',
+      icon: Car
+    },
+    [TaskType.COURIER]: {
+      label: 'Courier',
+      color: 'badge-info',
+      icon: Bike
     },
     [TaskType.USERS]: {
       label: 'Users',

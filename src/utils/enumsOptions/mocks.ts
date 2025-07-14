@@ -422,7 +422,10 @@ export const taskTypeOptions = [
   { id: 2, name: 'Orders', value: TaskType.ORDERS },
   { id: 3, name: 'Applications', value: TaskType.APPLICATIONS },
   { id: 4, name: 'Packages', value: TaskType.PACKAGES },
-  { id: 5, name: 'Users', value: TaskType.USERS }
+  { id: 5, name: 'Users', value: TaskType.USERS },
+  { id: 6, name: 'Delivery', value: TaskType.DELIVERY },
+  { id: 7, name: 'Courier', value: TaskType.COURIER },
+  { id: 8, name: 'Driver', value: TaskType.DRIVER }
 ];
 
 export const mockDeliveryCategories = [

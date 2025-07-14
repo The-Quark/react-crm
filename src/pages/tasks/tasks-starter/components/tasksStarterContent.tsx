@@ -21,10 +21,6 @@ import {
   taskStatusOptions,
   taskTypeOptions
 } from '@/utils/enumsOptions/mocks.ts';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
-import { cn } from '@/utils/lib/utils.ts';
-import { KeenIcon } from '@/components';
-import { CalendarDate } from '@/components/ui/calendarDate.tsx';
 import { Task } from '@/api/get/getTask/types.ts';
 import { useIntl } from 'react-intl';
 import { DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';

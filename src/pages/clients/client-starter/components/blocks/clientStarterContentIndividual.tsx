@@ -10,6 +10,7 @@ import {
   SharedDateDayPicker,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedRating,
   SharedSelect,
@@ -150,6 +151,11 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       <SharedInput
         name="patronymic"
         label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+        formik={formik}
+      />
+      <SharedIntlPhoneInput
+        name="phone"
+        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
         formik={formik}
       />
       <SharedInput

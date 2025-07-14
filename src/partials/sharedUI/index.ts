@@ -19,3 +19,4 @@ export * from './sharedDeleteModal.tsx';
 export * from './sharedDateDayPicker.tsx';
 export * from './sharedCheckBox.tsx';
 export * from './sharedRating.tsx';
+export * from './sharedIntlPhoneInput.tsx';

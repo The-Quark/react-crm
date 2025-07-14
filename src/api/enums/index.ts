@@ -67,7 +67,10 @@ export enum TaskType {
   ORDERS = 'orders',
   APPLICATIONS = 'applications',
   PACKAGES = 'packages',
-  USERS = 'users'
+  USERS = 'users',
+  DELIVERY = 'delivery',
+  COURIER = 'courier',
+  DRIVER = 'driver'
 }
 
 export enum TemplateType {
