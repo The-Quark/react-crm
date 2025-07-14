@@ -17,9 +17,10 @@ import { postPackageAssignUser } from '@/api';
 interface MenuOptionsProps {
   id?: number;
   onDeleteClick: (id: number) => void;
+  assignUserId?: number;
 }
 
-export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
+export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick, assignUserId }) => {
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
@@ -54,19 +55,23 @@ export const PackagesMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick })
               <MenuTitle>{formatMessage({ id: 'SYSTEM.UPLOAD_FILE' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
-          <MenuSeparator />
-          <MenuItem onClick={handleAssignToMe} disabled={assignMutation.isPending}>
-            <MenuLink>
-              <MenuIcon>
-                <KeenIcon icon="user-tick" />
-              </MenuIcon>
-              <MenuTitle>
-                {assignMutation.isPending
-                  ? formatMessage({ id: 'SYSTEM.ASSIGNING' })
-                  : formatMessage({ id: 'SYSTEM.ASSIGN_TO_ME' })}
-              </MenuTitle>
-            </MenuLink>
-          </MenuItem>
+          {!assignUserId && (
+            <>
+              <MenuSeparator />
+              <MenuItem onClick={handleAssignToMe} disabled={assignMutation.isPending}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="user-tick" />
+                  </MenuIcon>
+                  <MenuTitle>
+                    {assignMutation.isPending
+                      ? formatMessage({ id: 'SYSTEM.ASSIGNING' })
+                      : formatMessage({ id: 'SYSTEM.ASSIGN_TO_ME' })}
+                  </MenuTitle>
+                </MenuLink>
+              </MenuItem>
+            </>
+          )}
           <MenuSeparator />
           <MenuItem>
             <MenuLink path={`/warehouse/packages/starter/${id}`}>

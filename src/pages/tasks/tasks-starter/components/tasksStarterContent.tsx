@@ -39,7 +39,6 @@ export const formSchema = Yup.object().shape({
     .required('VALIDATION.PRIORITY_REQUIRED'),
   status: Yup.mixed<TaskStatus>().oneOf(Object.values(TaskStatus)).optional(),
   assigned_by: Yup.number().integer().required('VALIDATION.ASSIGNED_BY_REQUIRED'),
-  assigned_to: Yup.number().integer().required('VALIDATION.ASSIGNED_TO_REQUIRED'),
   order_id: Yup.string().optional(),
   package_id: Yup.string().optional(),
   due_date: Yup.string().required('VALIDATION.DUE_DATE_REQUIRED')
@@ -139,7 +138,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
           type: taskData.type ?? TaskType.INNER,
           priority: taskData.priority ?? TaskPriority.LOW,
           order_id: taskData.order_id ?? '',
-          assigned_to: taskData.assigned_to.id ?? '',
+          assigned_to: taskData.assigned_to?.id ?? '',
           assigned_by: taskData.assigned_by.id ?? '',
           package_id: taskData.package_id ?? '',
           due_date: taskData.due_date ?? '',
@@ -258,6 +257,7 @@ export const TasksStarterContent: FC<Props> = ({ taskId, taskData, isEditMode })
             searchTerm={searchOrderTerm}
             onSearchTermChange={setSearchOrderTerm}
             loading={ordersLoading}
+            clearable
           />
 
           <SharedAutocomplete

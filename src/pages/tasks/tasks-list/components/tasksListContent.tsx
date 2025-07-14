@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Container, DataGrid } from '@/components';
 import { getTask } from '@/api/get';
 import { useQuery, useQueryClient } from '@tanstack/react-query';

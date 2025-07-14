@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/components';
-import { useCurrency, useLanguage } from '@/providers';
+import { useLanguage } from '@/providers';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
@@ -23,7 +23,6 @@ export const usePackagesColumns = ({
   const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
-  const { currency } = useCurrency();
   const { has } = useUserPermissions();
 
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
@@ -280,7 +279,8 @@ export const usePackagesColumns = ({
               </MenuToggle>
               {PackagesMenuOptions({
                 id: info.row.original.id,
-                onDeleteClick: onDeleteClick
+                onDeleteClick: onDeleteClick,
+                assignUserId: info.row.original.assigned_user?.id
               })}
             </MenuItem>
           </Menu>

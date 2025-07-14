@@ -51,7 +51,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
         }
       },
       {
-        accessorFn: (row) => row.title,
+        accessorFn: (row) => row.type,
         id: 'TASK',
         header: ({ column }) => (
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.TASK' })} column={column} />
@@ -121,7 +121,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
         }
       },
       {
-        accessorFn: (row) => formatUserName(row.assigned_to),
+        accessorFn: (row) => formatUserName(row.assigned_to ?? undefined),
         id: 'ASSIGNED_TO',
         header: ({ column }) => (
           <DataGridColumnHeader
@@ -133,7 +133,7 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <div className="leading-none text-gray-800 font-normal">
-              {formatUserName(info.row.original.assigned_to)}
+              {formatUserName(info.row.original.assigned_to ?? undefined)}
             </div>
           </div>
         ),

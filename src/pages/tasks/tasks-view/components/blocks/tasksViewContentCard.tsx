@@ -106,14 +106,22 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
             <label className="text-md font-bold">
               {formatMessage({ id: 'SYSTEM.ASSIGNED_BY' })}
             </label>
-            {renderUserInfo(task.assigned_by)}
+            {task.assigned_by &&
+              renderUserInfo({
+                ...task.assigned_by,
+                patronymic: task.assigned_by.patronymic ?? ''
+              })}
           </div>
 
           <div className="space-y-2">
             <label className="text-md font-bold">
               {formatMessage({ id: 'SYSTEM.ASSIGNED_TO' })}
             </label>
-            {renderUserInfo(task?.assigned_to)}
+            {task.assigned_to &&
+              renderUserInfo({
+                ...task.assigned_to,
+                patronymic: task.assigned_to.patronymic ?? ''
+              })}
           </div>
         </div>
 
