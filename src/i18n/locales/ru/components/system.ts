@@ -251,7 +251,7 @@ const System = {
   'SYSTEM.STATUS_ACTIVE': 'Активен',
   'SYSTEM.STATUS_INACTIVE': 'Неактивен',
   'SYSTEM.TASK': 'Задача',
-  'SYSTEM.ASSIGNED_BY': 'Назначено',
+  'SYSTEM.ASSIGNED_BY': 'Назначил',
   'SYSTEM.ASSIGNED_TO': 'Назначено для',
   'SYSTEM.PRIORITY': 'Приоритет',
   'SYSTEM.VIEW': 'Просмотр',

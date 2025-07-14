@@ -218,7 +218,8 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
               </MenuToggle>
               {TasksMenuOptions({
                 id: info.row.original.id,
-                onDeleteClick: onDeleteClick
+                onDeleteClick: onDeleteClick,
+                assignUserId: info.row.original.assigned_to?.id
               })}
             </MenuItem>
           </Menu>
