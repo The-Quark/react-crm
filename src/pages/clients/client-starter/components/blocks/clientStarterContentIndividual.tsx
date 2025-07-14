@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { mockClientSystemStatus, mockGenderOptions, PHONE_REG_EXP } from '@/utils';
+import { mockClientSystemStatus, mockGenderOptions } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -32,9 +32,7 @@ const validateSchema = Yup.object().shape({
   first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
   last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
   source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED')
 });
@@ -153,16 +151,15 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
         formik={formik}
       />
-      <SharedIntlPhoneInput
-        name="phone"
-        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
-        formik={formik}
-      />
       <SharedInput
         name="phone"
         label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
         formik={formik}
-        type="tel"
+      />
+      <SharedIntlPhoneInput
+        name="phone"
+        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+        formik={formik}
       />
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
         <label className="form-label max-w-56">
