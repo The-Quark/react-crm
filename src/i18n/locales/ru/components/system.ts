@@ -449,7 +449,11 @@ const System = {
   'SYSTEM.REJECT': 'Отклонить',
   'SYSTEM.RATING': 'Рейтинг',
   'SYSTEM.CLIENT_STATUS': 'Статус клиента',
-  'SYSTEM.ERROR.INVALID_ID': 'Недействительный идентификатор'
+  'SYSTEM.ERROR.INVALID_ID': 'Недействительный идентификатор',
+  'SYSTEM.AIRPORTS': 'Аэропорты',
+  'SYSTEM.NEW_AIRPORT': 'Новый аэропорт',
+  'SYSTEM.SEARCH_AIRPORT': 'Поиск аэропорта',
+  'SYSTEM.AIRPORT_NAME': 'Название аэропорта'
 };
 
 export default System;

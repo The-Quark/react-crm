@@ -13,3 +13,4 @@ export * from './postVehicle';
 export * from './postFileType';
 export * from './postBoxType';
 export * from './postTariff';
+export * from './postAirport';

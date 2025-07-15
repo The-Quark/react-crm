@@ -95,3 +95,5 @@ export const BOX_TYPES = `${api}/box-types`;
 export const TARIFFS = `${api}/tariffs`;
 
 export const PACKAGE_STATUS = `${api}/package/status_change`;
+
+export const AIRPORTS = `${api}/airports`;

@@ -14,3 +14,4 @@ export * from './getLanguages';
 export * from './getFileTypes';
 export * from './getBoxTypes';
 export * from './getTariffs';
+export * from './getAirports';

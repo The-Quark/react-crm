@@ -131,6 +131,10 @@ export const AllMenuSideBar: TMenuConfig = [
         path: '/guides/vehicles'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',
+        path: '/guides/airports'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',
         path: '/guides/airlines'
       },

@@ -68,6 +68,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/vehicles'
       },
       {
+        title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',
+        path: '/guides/airports'
+      },
+      {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',
         path: '/guides/airlines'
       },
@@ -144,6 +148,10 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.VEHICLES',
         path: '/guides/vehicles'
+      },
+      {
+        title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',
+        path: '/guides/airports'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.AIRLINES',

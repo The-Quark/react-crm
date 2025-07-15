@@ -30,7 +30,8 @@ import {
   GuidesUnitsPage,
   GuidesFileTypesPage,
   GuidesBoxTypesPage,
-  GuidesTariffPage
+  GuidesTariffPage,
+  GuidesAirportsPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { ApplicationsListPage, OrdersListPage } from '@/pages/call-center';
@@ -86,6 +87,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
         <Route path="/guides/tariffs" element={<GuidesTariffPage />} />
         <Route path="/guides/airlines" element={<GuidesAirlinesPage />} />
+        <Route path="/guides/airports" element={<GuidesAirportsPage />} />
         <Route path="/guides/airline-rates" element={<GuidesAirlineRatesPage />} />
         <Route path="/guides/delivery-types" element={<GuidesDeliveryTypesPage />} />
         <Route path="/guides/package-types" element={<GuidesPackageTypesPage />} />

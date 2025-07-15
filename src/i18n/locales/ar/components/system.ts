@@ -449,7 +449,11 @@ const System = {
   'SYSTEM.REJECT': 'الرفض',
   'SYSTEM.RATING': 'التقييم',
   'SYSTEM.CLIENT_STATUS': 'حالة العميل',
-  'SYSTEM.ERROR.INVALID_ID': 'معرف غير صالح'
+  'SYSTEM.ERROR.INVALID_ID': 'معرف غير صالح',
+  'SYSTEM.AIRPORTS': 'المطارات',
+  'SYSTEM.NEW_AIRPORT': 'مطار جديد',
+  'SYSTEM.SEARCH_AIRPORT': 'البحث عن مطار',
+  'SYSTEM.AIRPORT_NAME': 'اسم المطار'
 };
 
 export default System;

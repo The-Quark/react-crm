@@ -46,6 +46,7 @@ const Menu = {
   'MENU.MEGAMENU.GUIDES.LANGUAGES': 'اللغات',
   'MENU.MEGAMENU.GUIDES.SOURCES': 'المصادر',
   'MENU.MEGAMENU.GUIDES.VEHICLES': 'المركبات',
+  'MENU.MEGAMENU.GUIDES.AIRPORTS': 'المطارات',
   'MENU.MEGAMENU.GUIDES.AIRLINES': 'شركات الطيران',
   'MENU.MEGAMENU.GUIDES.AIRLINE_RATES': 'أسعار شركات الطيران',
   'MENU.MEGAMENU.GUIDES.DELIVERY_TYPES': 'أنواع التوصيل',

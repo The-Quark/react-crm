@@ -1,0 +1,117 @@
+import React, { useMemo } from 'react';
+import { ColumnDef } from '@tanstack/react-table';
+import { DataGridColumnHeader } from '@/components';
+import { useLanguage } from '@/providers';
+import { deleteAirport } from '@/api';
+import { useAuthContext } from '@/auth';
+import { useUserPermissions } from '@/hooks';
+import { useIntl } from 'react-intl';
+import { Airport } from '@/api/get/getGuides/getAirports/types.ts';
+import AirportsModal from '@/pages/guides/tabs/airports/components/blocks/airportsModal.tsx';
+import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
+
+export const useAirportsColumns = (): ColumnDef<Airport>[] => {
+  const { isRTL } = useLanguage();
+  const { currentUser } = useAuthContext();
+  const { has } = useUserPermissions();
+  const { formatMessage } = useIntl();
+  const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+  const columns = useMemo<ColumnDef<Airport>[]>(
+    () => [
+      {
+        accessorFn: (row) => row.id,
+        id: 'ID',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ID' })} column={column} />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.id}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'w-0'
+        }
+      },
+      {
+        accessorFn: (row) => row.name,
+        id: 'AIRPORT_NAME',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.AIRPORT_NAME' })}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex flex-col gap-0.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.name}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[200px]',
+          cellClassName: 'text-gray-700 font-normal'
+        }
+      },
+      {
+        accessorFn: (row) => row.code,
+        id: 'CODE',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">{info.row.original.code}</div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.country_id,
+        id: 'COUNTRY',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.COUNTRY' })} column={column} />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div className="leading-none text-gray-800 font-normal">
+              {info.row.original.country?.name}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[100px]'
+        }
+      },
+      {
+        id: 'click',
+        header: () => '',
+        enableSorting: false,
+        cell: (info) => (
+          <GuidesMenuOptions
+            id={info.row.original.id}
+            invalidateRequestKey="guidesAirports"
+            deleteRequest={deleteAirport}
+            renderModal={({ open, onOpenChange }) => (
+              <AirportsModal
+                open={open}
+                onOpenChange={() => onOpenChange(true)}
+                id={info.row.original.id}
+              />
+            )}
+          />
+        ),
+        meta: {
+          headerClassName: 'w-[60px]'
+        }
+      }
+    ],
+    [isRTL]
+  );
+  return canManage ? columns : columns.slice(0, -1);
+};

@@ -1,5 +1,10 @@
 import { useFormikContext } from 'formik';
-import { SharedInput, SharedSelect, SharedTextArea } from '@/partials/sharedUI';
+import {
+  SharedInput,
+  SharedIntlPhoneInput,
+  SharedSelect,
+  SharedTextArea
+} from '@/partials/sharedUI';
 import { IApplicationPostFormValues } from '@/api/post/postWorkflow/postApplication/types.ts';
 import { useIntl } from 'react-intl';
 import { mockApplicationsStatusOptions } from '@/utils';
@@ -17,11 +22,10 @@ export const ApplicationsContactBlock: FC<Props> = ({ isEditMode, sourcesData })
 
   return (
     <>
-      <SharedInput
+      <SharedIntlPhoneInput
         name="phone"
         label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
         formik={formik}
-        type="tel"
       />
       <SharedSelect
         name="source"

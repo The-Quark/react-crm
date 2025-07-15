@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { mockClientSystemStatus, PHONE_REG_EXP } from '@/utils';
+import { mockClientSystemStatus } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -9,6 +9,7 @@ import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedRating,
   SharedSelect,
@@ -31,16 +32,11 @@ const validateSchema = Yup.object().shape({
     .length(12, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
     .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
     .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
-  representative_phone: Yup.string().matches(
-    PHONE_REG_EXP,
-    'VALIDATION.FORM_VALIDATION_PHONE_INVALID'
-  ),
+  representative_phone: Yup.string(),
   representative_email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
   notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
   source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional()
 });
 
@@ -157,11 +153,10 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         type="number"
         maxlength={12}
       />
-      <SharedInput
+      <SharedIntlPhoneInput
         name="phone"
         label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
         formik={formik}
-        type="tel"
       />
       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
         <label className="form-label max-w-56">
@@ -268,11 +263,10 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PATRONYMIC' })}
         formik={formik}
       />
-      <SharedInput
+      <SharedIntlPhoneInput
         name="representative_phone"
         label={formatMessage({ id: 'SYSTEM.REPRESENTATIVE_PHONE' })}
         formik={formik}
-        type="tel"
       />
       <SharedInput
         name="representative_email"

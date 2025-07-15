@@ -449,7 +449,11 @@ const System = {
   'SYSTEM.REJECT': 'Reject',
   'SYSTEM.RATING': 'Rating',
   'SYSTEM.CLIENT_STATUS': 'Client Status',
-  'SYSTEM.ERROR.INVALID_ID': 'Invalid id'
+  'SYSTEM.ERROR.INVALID_ID': 'Invalid id',
+  'SYSTEM.AIRPORTS': 'Airports',
+  'SYSTEM.NEW_AIRPORT': 'New Airport',
+  'SYSTEM.SEARCH_AIRPORT': 'Search Airport',
+  'SYSTEM.AIRPORT_NAME': 'Airport Name'
 };
 
 export default System;

@@ -12,3 +12,4 @@ export * from './putSource';
 export * from './putFileType';
 export * from './putBoxType';
 export * from './putTariff';
+export * from './putAirport';
