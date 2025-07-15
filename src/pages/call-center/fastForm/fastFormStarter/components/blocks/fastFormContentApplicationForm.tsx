@@ -8,7 +8,6 @@ import {
   CACHE_TIME,
   cleanValues,
   debounce,
-  PHONE_REG_EXP,
   SEARCH_DEBOUNCE_DELAY,
   SEARCH_PER_PAGE
 } from '@/utils';
@@ -18,6 +17,7 @@ import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedRadio,
   SharedSelect,
@@ -58,9 +58,7 @@ export const formSchema = Yup.object().shape({
   }),
   source: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
   client_type: Yup.string().required('VALIDATION.FORM_VALIDATION_CLIENT_TYPE_REQUIRED'),
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
   client_id: Yup.string().optional().nullable(),
   message: Yup.string().optional()
@@ -343,11 +341,10 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
             )}
           </>
 
-          <SharedInput
+          <SharedIntlPhoneInput
             name="phone"
             label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
             formik={formik}
-            type="tel"
           />
 
           <SharedSelect

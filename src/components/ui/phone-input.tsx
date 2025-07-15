@@ -18,49 +18,63 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/utils/lib/utils.ts';
 import { useIntl } from 'react-intl';
 
+// Create a context for error state
+const PhoneInputErrorContext = React.createContext<boolean>(false);
+
 type PhoneInputProps = Omit<React.ComponentProps<'input'>, 'onChange' | 'value' | 'ref'> &
   Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
     onChange?: (value: RPNInput.Value) => void;
+    hasError?: boolean;
   };
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = React.forwardRef<
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
->(({ className, onChange, value, ...props }, ref) => {
+>(({ className, onChange, value, hasError = false, ...props }, ref) => {
   return (
-    <RPNInput.default
-      ref={ref}
-      className={cn('flex', className)}
-      flagComponent={FlagComponent}
-      countrySelectComponent={CountrySelect}
-      inputComponent={InputComponent}
-      smartCaret={false}
-      value={value || undefined}
-      /**
-       * Handles the onChange event.
-       *
-       * react-phone-number-input might trigger the onChange event as undefined
-       * when a valid phone number is not entered. To prevent this,
-       * the value is coerced to an empty string.
-       *
-       * @param {E164Number | undefined} value - The entered value
-       */
-      onChange={(value) => onChange?.(value || ('' as RPNInput.Value))}
-      {...props}
-    />
+    <PhoneInputErrorContext.Provider value={hasError}>
+      <RPNInput.default
+        ref={ref}
+        className={cn('flex', className)}
+        flagComponent={FlagComponent}
+        countrySelectComponent={CountrySelect}
+        inputComponent={InputComponent}
+        smartCaret={false}
+        value={value || undefined}
+        /**
+         * Handles the onChange event.
+         *
+         * react-phone-number-input might trigger the onChange event as undefined
+         * when a valid phone number is not entered. To prevent this,
+         * the value is coerced to an empty string.
+         *
+         * @param {E164Number | undefined} value - The entered value
+         */
+        onChange={(value) => onChange?.(value || ('' as RPNInput.Value))}
+        {...props}
+      />
+    </PhoneInputErrorContext.Provider>
   );
 });
 PhoneInput.displayName = 'PhoneInput';
 
 const InputComponent = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
-  ({ className, ...props }, ref) => (
-    <Input
-      className={cn('rounded-e-lg rounded-s-none ', className)}
-      {...props}
-      ref={ref}
-      size={undefined}
-    />
-  )
+  ({ className, ...props }, ref) => {
+    const hasError = React.useContext(PhoneInputErrorContext);
+
+    return (
+      <Input
+        className={cn(
+          'rounded-e-lg rounded-s-none',
+          hasError && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+          className
+        )}
+        {...props}
+        ref={ref}
+        size={undefined}
+      />
+    );
+  }
 );
 InputComponent.displayName = 'InputComponent';
 
@@ -79,6 +93,7 @@ const CountrySelect = ({
   options: countryList,
   onChange
 }: CountrySelectProps) => {
+  const hasError = React.useContext(PhoneInputErrorContext);
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
@@ -90,7 +105,10 @@ const CountrySelect = ({
         <Button
           type="button"
           variant="outline"
-          className="flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10"
+          className={cn(
+            'flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10',
+            hasError && 'border-red-500 focus:border-red-500 focus:ring-red-500'
+          )}
           disabled={disabled}
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />

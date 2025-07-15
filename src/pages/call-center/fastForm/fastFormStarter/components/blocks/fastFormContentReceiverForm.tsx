@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { BIN_LENGTH, CACHE_TIME, cleanValues, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, CACHE_TIME, cleanValues, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
 import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -8,6 +8,7 @@ import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedTextArea
 } from '@/partials/sharedUI';
@@ -49,9 +50,7 @@ const formSchema = Yup.object().shape({
   }),
   city_id: Yup.number().required('VALIDATION.CITY_REQUIRED'),
   country_id: Yup.number().required('VALIDATION.COUNTRY_REQUIRED'),
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   street: Yup.string().required('VALIDATION.STREET_REQUIRED'),
   house: Yup.string().required('VALIDATION.HOUSE_REQUIRED'),
   apartment: Yup.string().optional(),
@@ -277,11 +276,10 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
             </>
           )}
 
-          <SharedInput
+          <SharedIntlPhoneInput
             name="phone"
-            label={formatMessage({ id: 'SYSTEM.PHONE' })}
+            label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
             formik={formik}
-            type="tel"
           />
 
           <SharedAutocomplete

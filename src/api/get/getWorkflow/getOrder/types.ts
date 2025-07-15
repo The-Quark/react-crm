@@ -2,6 +2,7 @@ import { IPagination } from '@/api/generalManualTypes';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
 import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
+import { Client } from '@/api/get/getClients/types.ts';
 
 interface DeliveryType {
   id: number;
@@ -103,6 +104,7 @@ export interface Order {
   status: string;
   status_changed_at: string;
   client_id: number | null;
+  client: Client | null;
   created_by: User;
   is_international: boolean;
   created_at: string;

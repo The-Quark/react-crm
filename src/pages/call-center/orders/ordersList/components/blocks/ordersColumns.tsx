@@ -236,7 +236,7 @@ export const useOrdersColumns = ({
               {OrdersMenuOptions({
                 id: info.row.original.id,
                 onDeleteClick: onDeleteClick,
-                clientRating: info.row.original.application?.client?.client_rating
+                clientRating: info.row.original.client?.client_rating
               })}
             </MenuItem>
           </Menu>

@@ -8,6 +8,7 @@ import {
   SharedAutocomplete,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedRadio,
   SharedTextArea
@@ -52,9 +53,7 @@ const formSchema = Yup.object().shape({
   }),
   receiver_city_id: Yup.number().required('VALIDATION.CITY_REQUIRED'),
   receiver_country_id: Yup.number().required('VALIDATION.COUNTRY_REQUIRED'),
-  receiver_phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+  receiver_phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
   receiver_street: Yup.string().required('VALIDATION.STREET_REQUIRED'),
   receiver_house: Yup.string().required('VALIDATION.HOUSE_REQUIRED'),
   receiver_apartment: Yup.string().optional(),
@@ -382,11 +381,10 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
               />
             </>
           )}
-          <SharedInput
+          <SharedIntlPhoneInput
             name="receiver_phone"
-            label={formatMessage({ id: 'SYSTEM.PHONE' })}
+            label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
             formik={formik}
-            type="tel"
           />
           <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.COUNTRY' })}

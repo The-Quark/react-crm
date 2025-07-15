@@ -18,10 +18,12 @@ const DataGridPagination = () => {
   const btnArrowClasses = btnBaseClasses + ' rtl:transform rtl:rotate-180';
   const { formatMessage } = useIntl();
   const totalRows = props.pagination?.total || 0;
-  const pageIndex = table.getState().pagination.pageIndex - 1;
+  const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
-  const from = pageIndex * pageSize + 1;
-  const to = Math.min((pageIndex + 1) * pageSize, totalRows);
+
+  // Поскольку pageIndex начинается с 1, корректируем расчет диапазона
+  const from = (pageIndex - 1) * pageSize + 1;
+  const to = Math.min(pageIndex * pageSize, totalRows);
 
   // Replace placeholders in paginationInfo
   const paginationInfo = formatMessage(
@@ -37,9 +39,10 @@ const DataGridPagination = () => {
   const pageCount = table.getPageCount();
   const paginationMoreLimit = props.pagination?.moreLimit || 5;
 
-  // Determine the start and end of the pagination group
-  const currentGroupStart = Math.floor(pageIndex / paginationMoreLimit) * paginationMoreLimit;
-  const currentGroupEnd = Math.min(currentGroupStart + paginationMoreLimit, pageCount);
+  // Корректируем группировку для pageIndex начинающегося с 1
+  const currentGroupStart =
+    Math.floor((pageIndex - 1) / paginationMoreLimit) * paginationMoreLimit + 1;
+  const currentGroupEnd = Math.min(currentGroupStart + paginationMoreLimit, pageCount + 1);
 
   // Render page buttons based on the current group
   const renderPageButtons = () => {
@@ -54,7 +57,7 @@ const DataGridPagination = () => {
           })}
           onClick={() => table.setPageIndex(i)}
         >
-          {i + 1}
+          {i}
         </Button>
       );
     }
@@ -63,7 +66,7 @@ const DataGridPagination = () => {
 
   // Render a "previous" ellipsis button if there are previous pages to show
   const renderEllipsisPrevButton = () => {
-    if (currentGroupStart > 0) {
+    if (currentGroupStart > 1) {
       return (
         <Button
           className={btnBaseClasses}
@@ -79,7 +82,7 @@ const DataGridPagination = () => {
 
   // Render a "next" ellipsis button if there are more pages to show after the current group
   const renderEllipsisNextButton = () => {
-    if (currentGroupEnd < pageCount) {
+    if (currentGroupEnd <= pageCount) {
       return (
         <Button
           className={btnBaseClasses}
@@ -127,7 +130,7 @@ const DataGridPagination = () => {
             variant="ghost"
             className={btnArrowClasses}
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            disabled={pageIndex <= 1}
           >
             <span className="sr-only">{formatMessage({ id: 'SYSTEM.GO_TO_PREVIOUS_PAGE' })}</span>
             <ChevronLeftIcon className="size-4" />
@@ -143,7 +146,7 @@ const DataGridPagination = () => {
             variant="ghost"
             className={btnArrowClasses}
             onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            disabled={pageIndex >= pageCount}
           >
             <span className="sr-only">{formatMessage({ id: 'SYSTEM.GO_TO_NEXT_PAGE' })}</span>
             <ChevronRightIcon className="size-4" />

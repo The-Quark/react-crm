@@ -42,6 +42,7 @@ export const SharedIntlPhoneInput = <T,>({
     formik.setFieldValue(fieldName, value);
     onChange?.(value);
   };
+
   return (
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
       <label className="form-label max-w-56">{label}</label>
@@ -54,6 +55,7 @@ export const SharedIntlPhoneInput = <T,>({
           placeholder={placeholder || label}
           className="w-full"
           international={true}
+          hasError={!!hasError}
         />
         {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">
