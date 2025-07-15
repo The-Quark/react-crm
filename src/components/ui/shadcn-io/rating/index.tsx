@@ -3,30 +3,19 @@
 import { cn } from '@/utils/lib/utils.ts';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { type LucideProps, StarIcon } from 'lucide-react';
-import {
-  Children,
-  cloneElement,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import { Children, cloneElement, createContext, useCallback, useContext } from 'react';
 import type { KeyboardEvent, MouseEvent, ReactElement, ReactNode } from 'react';
 
 type RatingContextValue = {
   value: number;
   readOnly: boolean;
-  hoverValue: number | null;
-  focusedStar: number | null;
   handleValueChange: (
     event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>,
     value: number
   ) => void;
   handleKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
-  setHoverValue: (value: number | null) => void;
-  setFocusedStar: (value: number | null) => void;
+  allowFraction: boolean;
+  max: number;
 };
 
 const RatingContext = createContext<RatingContextValue | null>(null);
@@ -50,37 +39,46 @@ export const RatingButton = ({
   className,
   icon = <StarIcon />
 }: RatingButtonProps) => {
-  const {
-    value,
-    readOnly,
-    hoverValue,
-    focusedStar,
-    handleValueChange,
-    handleKeyDown,
-    setHoverValue,
-    setFocusedStar
-  } = useRating();
+  const { value, readOnly, handleValueChange, handleKeyDown, allowFraction } = useRating();
 
   const index = providedIndex ?? 0;
-  const isActive = index < (hoverValue ?? focusedStar ?? value ?? 0);
-  let tabIndex = -1;
+  const currentValue = value ?? 0;
 
-  if (!readOnly) {
-    tabIndex = value === index + 1 ? 0 : -1;
+  // Упрощенная логика для отображения звезд
+  const isFullyActive = currentValue >= index + 1;
+  const isPartiallyActive = allowFraction && currentValue > index && currentValue < index + 1;
+
+  let fillPercentage = 0;
+  if (isFullyActive) {
+    fillPercentage = 100;
+  } else if (isPartiallyActive) {
+    // Точный расчет процента заполнения для половинчатых звезд
+    const fraction = currentValue - index;
+    fillPercentage = fraction * 100 - 6;
   }
+
+  const tabIndex = readOnly ? -1 : Math.floor(currentValue) === index + 1 ? 0 : -1;
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (!readOnly && allowFraction) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const percent = (event.clientX - rect.left) / rect.width;
+      const starValue = percent <= 0.5 ? index + 0.5 : index + 1;
+      handleValueChange(event, starValue);
+    } else {
+      handleValueChange(event, index + 1);
+    }
+  };
 
   return (
     <button
       type="button"
-      onClick={(event) => handleValueChange(event, index + 1)}
-      onMouseEnter={() => !readOnly && setHoverValue(index + 1)}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
-      onFocus={() => setFocusedStar(index + 1)}
-      onBlur={() => setFocusedStar(null)}
       disabled={readOnly}
       className={cn(
         'rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-        'p-0.5',
+        'p-0.5 relative inline-block',
         readOnly && 'cursor-default',
         className
       )}
@@ -89,12 +87,27 @@ export const RatingButton = ({
       {cloneElement(icon, {
         size,
         className: cn(
-          'transition-colors duration-200',
-          isActive && 'fill-current',
+          'transition-colors duration-200 text-gray-300',
           !readOnly && 'cursor-pointer'
         ),
         'aria-hidden': 'true'
       })}
+
+      {fillPercentage > 0 && (
+        <div
+          className="absolute top-0.5 left-0.5 overflow-hidden"
+          style={{ width: `${fillPercentage}%` }}
+        >
+          {cloneElement(icon, {
+            size,
+            className: cn(
+              'transition-colors duration-200 fill-yellow-400 text-yellow-400',
+              !readOnly && 'cursor-pointer'
+            ),
+            'aria-hidden': 'true'
+          })}
+        </div>
+      )}
     </button>
   );
 };
@@ -108,6 +121,8 @@ export type RatingProps = {
   ) => void;
   onValueChange?: (value: number) => void;
   readOnly?: boolean;
+  allowFraction?: boolean;
+  max?: number;
   className?: string;
   children?: ReactNode;
 };
@@ -118,13 +133,12 @@ export const Rating = ({
   defaultValue,
   onChange,
   readOnly = false,
+  allowFraction = false,
+  max = 5,
   className,
   children,
   ...props
 }: RatingProps) => {
-  const [hoverValue, setHoverValue] = useState<number | null>(null);
-  const [focusedStar, setFocusedStar] = useState<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [value, onValueChange] = useControllableState({
     defaultProp: defaultValue ?? 0,
     prop: controlledValue,
@@ -134,11 +148,12 @@ export const Rating = ({
   const handleValueChange = useCallback(
     (event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>, newValue: number) => {
       if (!readOnly) {
-        onChange?.(event, newValue);
-        onValueChange?.(newValue);
+        const clampedValue = Math.min(max, Math.max(0, newValue));
+        onChange?.(event, clampedValue);
+        onValueChange?.(clampedValue);
       }
     },
-    [readOnly, onChange, onValueChange]
+    [readOnly, onChange, onValueChange, max]
   );
 
   const handleKeyDown = useCallback(
@@ -147,22 +162,29 @@ export const Rating = ({
         return;
       }
 
-      const total = Children.count(children);
-      let newValue = focusedStar !== null ? focusedStar : (value ?? 0);
+      let newValue = value ?? 0;
 
       switch (event.key) {
         case 'ArrowRight':
           if (event.shiftKey || event.metaKey) {
-            newValue = total;
+            newValue = max;
           } else {
-            newValue = Math.min(total, newValue + 1);
+            if (allowFraction) {
+              newValue = Math.min(max, newValue + 0.5);
+            } else {
+              newValue = Math.min(max, newValue + 1);
+            }
           }
           break;
         case 'ArrowLeft':
           if (event.shiftKey || event.metaKey) {
-            newValue = 1;
+            newValue = allowFraction ? 0.5 : 1;
           } else {
-            newValue = Math.max(1, newValue - 1);
+            if (allowFraction) {
+              newValue = Math.max(0, newValue - 0.5);
+            } else {
+              newValue = Math.max(1, newValue - 1);
+            }
           }
           break;
         default:
@@ -170,38 +192,26 @@ export const Rating = ({
       }
 
       event.preventDefault();
-      setFocusedStar(newValue);
       handleValueChange(event, newValue);
     },
-    [focusedStar, value, children, readOnly, handleValueChange]
+    [value, readOnly, handleValueChange, max, allowFraction]
   );
-
-  useEffect(() => {
-    if (focusedStar !== null && containerRef.current) {
-      const buttons = containerRef.current.querySelectorAll('button');
-      buttons[focusedStar - 1]?.focus();
-    }
-  }, [focusedStar]);
 
   const contextValue: RatingContextValue = {
     value: value ?? 0,
     readOnly,
-    hoverValue,
-    focusedStar,
     handleValueChange,
     handleKeyDown,
-    setHoverValue,
-    setFocusedStar
+    allowFraction,
+    max
   };
 
   return (
     <RatingContext.Provider value={contextValue}>
       <div
-        ref={containerRef}
         className={cn('inline-flex items-center gap-0.5', className)}
         role="radiogroup"
         aria-label="Rating"
-        onMouseLeave={() => setHoverValue(null)}
         {...props}
       >
         {Children.map(children, (child, index) => {
