@@ -186,7 +186,28 @@ export const usePackagesColumns = ({
         }
       },
       {
-        accessorFn: (row) => row?.order?.customs_clearance,
+        accessorFn: (row) => row?.shipping_cost,
+        id: 'SHIPPING_COST',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.SHIPPING_COST' }) + ` (USD)`}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original?.shipping_cost ? `${info.row.original?.shipping_cost} $` : '-'}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[60px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.customs_clearance_cost,
         id: 'CUSTOMS_CLEARANCE',
         header: ({ column }) => (
           <DataGridColumnHeader
@@ -198,9 +219,7 @@ export const usePackagesColumns = ({
         cell: (info) => (
           <div className="flex items-center gap-1.5">
             <span className="leading-none text-gray-800 font-normal">
-              {info.row.original?.order?.customs_clearance
-                ? `${info.row.original?.order?.nominal_cost} $`
-                : '-'}
+              {info.row.original?.shipping_cost ? `${info.row.original?.shipping_cost} $` : '-'}
             </span>
           </div>
         ),

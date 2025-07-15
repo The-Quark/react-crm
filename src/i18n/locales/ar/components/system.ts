@@ -453,7 +453,8 @@ const System = {
   'SYSTEM.AIRPORTS': 'المطارات',
   'SYSTEM.NEW_AIRPORT': 'مطار جديد',
   'SYSTEM.SEARCH_AIRPORT': 'البحث عن مطار',
-  'SYSTEM.AIRPORT_NAME': 'اسم المطار'
+  'SYSTEM.AIRPORT_NAME': 'اسم المطار',
+  'SYSTEM.SHIPPING_COST': 'تكلفة الشحن'
 };
 
 export default System;

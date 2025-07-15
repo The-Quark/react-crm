@@ -453,7 +453,8 @@ const System = {
   'SYSTEM.AIRPORTS': 'Аэропорты',
   'SYSTEM.NEW_AIRPORT': 'Новый аэропорт',
   'SYSTEM.SEARCH_AIRPORT': 'Поиск аэропорта',
-  'SYSTEM.AIRPORT_NAME': 'Название аэропорта'
+  'SYSTEM.AIRPORT_NAME': 'Название аэропорта',
+  'SYSTEM.SHIPPING_COST': 'Стоимость доставки'
 };
 
 export default System;

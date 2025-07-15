@@ -453,7 +453,8 @@ const System = {
   'SYSTEM.AIRPORTS': 'Airports',
   'SYSTEM.NEW_AIRPORT': 'New Airport',
   'SYSTEM.SEARCH_AIRPORT': 'Search Airport',
-  'SYSTEM.AIRPORT_NAME': 'Airport Name'
+  'SYSTEM.AIRPORT_NAME': 'Airport Name',
+  'SYSTEM.SHIPPING_COST': 'Shipping Cost'
 };
 
 export default System;

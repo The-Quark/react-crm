@@ -65,6 +65,8 @@ export interface Package {
   media: Media[];
   medias: Media[];
   hawb_pdf: string;
+  shipping_cost: string | null;
+  customs_clearance_cost: string | null;
 }
 export interface PackagesResponse extends IPagination {
   result: Package[];
