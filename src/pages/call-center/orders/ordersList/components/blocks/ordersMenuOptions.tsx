@@ -11,18 +11,21 @@ import { FC } from 'react';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useIntl } from 'react-intl';
+import { CLIENT_MIN_INVOICE_RATING } from '@/utils';
 
 interface MenuOptionsProps {
   id?: number;
   onDeleteClick: (id: number) => void;
+  clientRating?: number | null;
 }
 
-export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
+export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick, clientRating }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
 
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
+  const canCreateInvoice = (clientRating ?? 0) >= CLIENT_MIN_INVOICE_RATING;
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
@@ -37,6 +40,19 @@ export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =
             </MenuLink>
           </MenuItem>
           <MenuSeparator />
+          {canCreateInvoice && (
+            <>
+              <MenuItem>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="tag" />
+                  </MenuIcon>
+                  <MenuTitle>{formatMessage({ id: 'SYSTEM.CREATE_INVOICE' })}</MenuTitle>
+                </MenuLink>
+              </MenuItem>
+              <MenuSeparator />
+            </>
+          )}
           <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>
               <MenuIcon>

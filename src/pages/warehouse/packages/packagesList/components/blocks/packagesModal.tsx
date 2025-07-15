@@ -10,7 +10,7 @@ import {
 import { KeenIcon } from '@/components';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPackages, putPackageStatus } from '@/api';
-import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { SharedError, SharedFileCard, SharedLoading } from '@/partials/sharedUI';
 import { DialogActions } from '@mui/material';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
@@ -75,6 +75,23 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
       });
     }
   };
+
+  const handleOpenFile = (url: string, mimeType: string) => {
+    if (mimeType.startsWith('image/') || mimeType === 'application/pdf') {
+      window.open(url, '_blank');
+    } else {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = '';
+      link.target = '_blank';
+      link.click();
+    }
+  };
+
+  const lastDocument =
+    packageData?.media && packageData.media.length > 0
+      ? packageData.media[packageData.media.length - 1]
+      : null;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -261,6 +278,23 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
                     </div>
                   </div>
                 )}
+
+                {packageData.status === PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL &&
+                  lastDocument && (
+                    <div className="border-b pb-4">
+                      <h4 className="text-lg font-semibold mb-3">
+                        {formatMessage({ id: 'SYSTEM.LAST_UPLOADED_DOCUMENT' })}
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <SharedFileCard
+                          file={lastDocument}
+                          onClick={() =>
+                            handleOpenFile(lastDocument.original_url, lastDocument.mime_type)
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
               </div>
             </div>
           )}

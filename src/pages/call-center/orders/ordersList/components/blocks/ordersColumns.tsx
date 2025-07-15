@@ -235,7 +235,8 @@ export const useOrdersColumns = ({
               </MenuToggle>
               {OrdersMenuOptions({
                 id: info.row.original.id,
-                onDeleteClick: onDeleteClick
+                onDeleteClick: onDeleteClick,
+                clientRating: info.row.original.application?.client?.client_rating
               })}
             </MenuItem>
           </Menu>

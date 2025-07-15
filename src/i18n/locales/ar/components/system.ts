@@ -454,7 +454,9 @@ const System = {
   'SYSTEM.NEW_AIRPORT': 'مطار جديد',
   'SYSTEM.SEARCH_AIRPORT': 'البحث عن مطار',
   'SYSTEM.AIRPORT_NAME': 'اسم المطار',
-  'SYSTEM.SHIPPING_COST': 'تكلفة الشحن'
+  'SYSTEM.SHIPPING_COST': 'تكلفة الشحن',
+  'SYSTEM.CREATE_INVOICE': 'إنشاء فاتورة',
+  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'آخر وثيقة تم رفعها'
 };
 
 export default System;
