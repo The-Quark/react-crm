@@ -474,7 +474,10 @@ export const mockGenderUserOptions = [
 
 export const mockClientSystemStatus = [
   { id: 1, name: 'Vip', value: ClientSystemStatus.VIP },
-  { id: 2, name: 'Gold', value: ClientSystemStatus.GOLD }
+  { id: 2, name: 'Gold', value: ClientSystemStatus.GOLD },
+  { id: 3, name: 'Regular', value: ClientSystemStatus.REGULAR },
+  { id: 4, name: 'Blacklist', value: ClientSystemStatus.BLACKLIST },
+  { id: 5, name: 'Test', value: ClientSystemStatus.TEST }
 ];
 
 export const mockLicenseCategoryOptions = [

@@ -54,7 +54,6 @@ export const SharedIntlPhoneInput = <T,>({
           placeholder={placeholder || label}
           className="w-full"
           international={true}
-          searchCountryPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
         />
         {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">

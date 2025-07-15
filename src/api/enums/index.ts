@@ -182,6 +182,9 @@ export enum DeliveryCategories {
 }
 
 export enum ClientSystemStatus {
+  REGULAR = 'regular',
   GOLD = 'gold',
-  VIP = 'vip'
+  VIP = 'vip',
+  BLACKLIST = 'blacklist',
+  TEST = 'test'
 }

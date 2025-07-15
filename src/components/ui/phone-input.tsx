@@ -16,17 +16,17 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/utils/lib/utils.ts';
+import { useIntl } from 'react-intl';
 
 type PhoneInputProps = Omit<React.ComponentProps<'input'>, 'onChange' | 'value' | 'ref'> &
   Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
     onChange?: (value: RPNInput.Value) => void;
-    searchCountryPlaceholder?: string;
   };
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = React.forwardRef<
   React.ElementRef<typeof RPNInput.default>,
   PhoneInputProps
->(({ className, onChange, value, searchCountryPlaceholder, ...props }, ref) => {
+>(({ className, onChange, value, ...props }, ref) => {
   return (
     <RPNInput.default
       ref={ref}
@@ -71,19 +71,18 @@ type CountrySelectProps = {
   value: RPNInput.Country;
   options: CountryEntry[];
   onChange: (country: RPNInput.Country) => void;
-  searchCountryPlaceholder?: string;
 };
 
 const CountrySelect = ({
   disabled,
   value: selectedCountry,
   options: countryList,
-  onChange,
-  searchCountryPlaceholder
+  onChange
 }: CountrySelectProps) => {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
+  const { formatMessage } = useIntl();
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen} modal>
@@ -117,11 +116,11 @@ const CountrySelect = ({
                 }
               }, 0);
             }}
-            placeholder={searchCountryPlaceholder || 'Search country...'}
+            placeholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' }) || 'Search country...'}
           />
           <CommandList>
             <ScrollArea ref={scrollAreaRef} className="h-72">
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandEmpty>{formatMessage({ id: 'SYSTEM.EMPTY_STATE' })}</CommandEmpty>
               <CommandGroup>
                 {countryList.map(({ value, label }) =>
                   value ? (

@@ -151,11 +151,6 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
         formik={formik}
       />
-      <SharedInput
-        name="phone"
-        label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
-        formik={formik}
-      />
       <SharedIntlPhoneInput
         name="phone"
         label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
