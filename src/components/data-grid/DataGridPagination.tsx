@@ -14,9 +14,9 @@ import { useIntl } from 'react-intl';
 
 const DataGridPagination = () => {
   const { table, props } = useDataGrid();
+  const { formatMessage } = useIntl();
   const btnBaseClasses = 'size-7 p-0 text-[13px]';
   const btnArrowClasses = btnBaseClasses + ' rtl:transform rtl:rotate-180';
-  const { formatMessage } = useIntl();
   const totalRows = props.pagination?.total || 0;
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;

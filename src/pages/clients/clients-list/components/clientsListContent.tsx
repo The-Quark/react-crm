@@ -71,44 +71,51 @@ export const ClientsListContent = () => {
     }));
   };
 
-  const columnsIndividual = useClientsListIndividualColumns({
-    onRowClick: (id) => {
-      setSelectedId(id);
-      setIsModalOpen(true);
-    },
-    onDeleteClick: handleDeleteClick
-  });
-
-  const columnsLegal = useClientsListLegalColumns({
-    onRowClick: (id) => {
-      setSelectedId(id);
-      setIsModalOpen(true);
-    },
-    onDeleteClick: handleDeleteClick
-  });
-
-  const handleClientTypeChange = (type: ClientType) => {
-    setClientType(type);
+  const resetFiltersAndPagination = useCallback(() => {
     setSearchTerm('');
     setSearchPhone('');
     setClientCityId(undefined);
     setPagination(initialPagination);
-  };
+  }, []);
 
-  const handleSearchTerm = (term: string) => {
+  const handleClientTypeChange = useCallback(
+    (type: ClientType) => {
+      setClientType(type);
+      resetFiltersAndPagination();
+    },
+    [resetFiltersAndPagination]
+  );
+
+  const handleSearchTerm = useCallback((term: string) => {
     setSearchTerm(term);
     setPagination(initialPagination);
-  };
+  }, []);
 
-  const handleSearchPhone = (phone: string) => {
+  const handleSearchPhone = useCallback((phone: string) => {
     setSearchPhone(phone);
     setPagination(initialPagination);
-  };
+  }, []);
 
-  const handleClientCity = (cityId: number) => {
+  const handleClientCity = useCallback((cityId: number) => {
     setClientCityId(cityId);
     setPagination(initialPagination);
-  };
+  }, []);
+
+  const columnsIndividual = useClientsListIndividualColumns({
+    onRowClick: useCallback((id: number) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    }, []),
+    onDeleteClick: handleDeleteClick
+  });
+
+  const columnsLegal = useClientsListLegalColumns({
+    onRowClick: useCallback((id: number) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    }, []),
+    onDeleteClick: handleDeleteClick
+  });
 
   if (isError) {
     return <SharedError error={error} />;
