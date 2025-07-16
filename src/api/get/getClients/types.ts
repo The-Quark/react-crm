@@ -48,7 +48,7 @@ export interface Client {
   search_application: string | null;
   phone_history: null | string[];
   client_status: null | string;
-  client_rating: null | number;
+  client_rating: null | string;
 }
 
 export interface IClientResponse extends IPagination {

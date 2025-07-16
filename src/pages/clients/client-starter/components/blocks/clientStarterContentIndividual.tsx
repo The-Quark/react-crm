@@ -60,7 +60,8 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     country_id: clientData && clientData.country_id != null ? clientData.country_id.toString() : '',
     city_id: clientData && clientData.city_id != null ? clientData.city_id.toString() : '',
     client_status: clientData && clientData.client_status != null ? clientData.client_status : '',
-    client_rating: clientData && clientData.client_rating != null ? clientData.client_rating : 1
+    client_rating:
+      clientData && clientData.client_rating != null ? Number(clientData.client_rating) : 1
   };
 
   const formik = useFormik({

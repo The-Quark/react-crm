@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Container, DataGrid } from '@/components';
 import { ClientsListToolbar } from '@/pages/clients/clients-list/components/blocks/clientsListToolbar.tsx';
 import { useClientsListIndividualColumns } from '@/pages/clients/clients-list/components/blocks/clientsListIndividualColumns.tsx';
@@ -16,12 +16,12 @@ export const ClientsListContent = () => {
   const { id } = useParams<{ id: string }>();
 
   const [clientType, setClientType] = useState<ClientType>('individual');
-  const [isModalOpen, setIsModalOpen] = useState(id ? true : false);
+  const [isModalOpen, setIsModalOpen] = useState(!!id);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(id ? Number(id) : null);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
-  const [clientCityId, setClientCityId] = useState<number>();
+  const [clientCityId, setClientCityId] = useState<number | undefined>();
   const [pagination, setPagination] = useState(initialPagination);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -46,12 +46,12 @@ export const ClientsListContent = () => {
       })
   });
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = useCallback((id: number) => {
     setSelectedId(id);
     setIsDeleteModalOpen(true);
-  };
+  }, []);
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = useCallback(async () => {
     if (!selectedId) return;
     setIsDeleting(true);
     try {
@@ -61,6 +61,14 @@ export const ClientsListContent = () => {
     } finally {
       setIsDeleting(false);
     }
+  }, [selectedId, queryClient]);
+
+  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: params.pageIndex,
+      pageSize: params.pageSize
+    }));
   };
 
   const columnsIndividual = useClientsListIndividualColumns({
@@ -78,14 +86,6 @@ export const ClientsListContent = () => {
     },
     onDeleteClick: handleDeleteClick
   });
-
-  const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: params.pageIndex,
-      pageSize: params.pageSize
-    }));
-  };
 
   const handleClientTypeChange = (type: ClientType) => {
     setClientType(type);
