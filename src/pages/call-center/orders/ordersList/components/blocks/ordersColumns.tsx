@@ -278,7 +278,7 @@ export const useOrdersColumns = ({
                 onDeleteClick: onDeleteClick,
                 clientRating:
                   info.row.original.client?.type === ClientType.LEGAL
-                    ? info.row.original.client?.client_rating
+                    ? Number(info.row.original.client?.client_rating) || undefined
                     : undefined
               })}
             </MenuItem>
