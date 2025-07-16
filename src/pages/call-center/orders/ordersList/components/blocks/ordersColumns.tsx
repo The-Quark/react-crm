@@ -10,6 +10,7 @@ import { DateRange } from 'react-day-picker';
 import { OrdersMenuOptions } from '@/pages/call-center/orders/ordersList/components/blocks/ordersMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { filterDateRange } from '@/utils';
+import { ClientType } from '@/api/enums';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
@@ -275,7 +276,10 @@ export const useOrdersColumns = ({
               {OrdersMenuOptions({
                 id: info.row.original.id,
                 onDeleteClick: onDeleteClick,
-                clientRating: info.row.original.client?.client_rating
+                clientRating:
+                  info.row.original.client?.type === ClientType.LEGAL
+                    ? info.row.original.client?.client_rating
+                    : undefined
               })}
             </MenuItem>
           </Menu>
