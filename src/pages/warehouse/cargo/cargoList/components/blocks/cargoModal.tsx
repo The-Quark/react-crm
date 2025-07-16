@@ -126,8 +126,8 @@ export const CargoModal: FC<Props> = ({ open, id, handleClose }) => {
                   <div className="grid gap-2.5">
                     {cargo.packages.map((pkg, ids) => (
                       <div key={pkg.id}>
-                        {ids > 0 && <Divider className="pt-2" />}
-                        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                        {ids > 0 && <Divider />}
+                        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mt-2">
                           <label className="form-label max-w-56 text-gray-600">
                             {formatMessage({ id: 'SYSTEM.HAWB' })}
                           </label>

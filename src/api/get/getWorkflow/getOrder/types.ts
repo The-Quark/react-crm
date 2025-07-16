@@ -98,7 +98,6 @@ export interface Order {
   volume: string;
   places_count: number;
   customs_clearance: boolean;
-  price: string;
   package_description?: string;
   special_wishes?: string;
   status: string;
@@ -120,6 +119,9 @@ export interface Order {
   cargo: Cargo | null;
   hawb_pdf: string;
   is_draft: boolean;
+  currency_code: string | null;
+  currency_rate: string | null;
+  price: string | null;
 }
 
 export interface IOrdersResponse extends IPagination {

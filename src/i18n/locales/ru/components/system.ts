@@ -456,7 +456,9 @@ const System = {
   'SYSTEM.AIRPORT_NAME': 'Название аэропорта',
   'SYSTEM.SHIPPING_COST': 'Стоимость доставки',
   'SYSTEM.CREATE_INVOICE': 'Сформировать счет',
-  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Последний загруженный документ'
+  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Последний загруженный документ',
+  'SYSTEM.CURRENCY_RATE': 'Курс валюты',
+  'SYSTEM.SELECT_AIRPORT': 'Выберите аэропорт'
 };
 
 export default System;

@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useIntl } from 'react-intl';
-import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
 import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -80,7 +80,8 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
       sender_apartment: mainForm.sender_apartment || '',
       sender_location_description: mainForm.sender_location_description || '',
       sender_notes: mainForm.sender_notes || '',
-      sender_contact_id: mainForm.sender_contact_id || ''
+      sender_contact_id: mainForm.sender_contact_id || '',
+      receiver_country_id: mainForm.receiver_contact_id || ''
     };
   }
 

@@ -127,6 +127,45 @@ export const useOrdersColumns = ({
         }
       },
       {
+        accessorFn: (row) => row?.price,
+        id: 'PRICE',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.PRICE' })} column={column} />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.price ?? '-'}&nbsp;{info.row.original.currency_code ?? ''}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
+        accessorFn: (row) => row?.currency_rate,
+        id: 'CURRENCY_RATE',
+        header: ({ column }) => (
+          <DataGridColumnHeader
+            title={formatMessage({ id: 'SYSTEM.CURRENCY_RATE' })}
+            column={column}
+          />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <span className="leading-none text-gray-800 font-normal">
+              {info.row.original.currency_rate ?? '-'}
+            </span>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'min-w-[150px]'
+        }
+      },
+      {
         accessorFn: (row) => row.hawb_pdf,
         id: 'QR',
         header: ({ column }) => (

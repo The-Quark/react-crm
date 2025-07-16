@@ -456,7 +456,9 @@ const System = {
   'SYSTEM.AIRPORT_NAME': 'Airport Name',
   'SYSTEM.SHIPPING_COST': 'Shipping Cost',
   'SYSTEM.CREATE_INVOICE': 'Create Invoice',
-  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Last Uploaded Document'
+  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Last Uploaded Document',
+  'SYSTEM.CURRENCY_RATE': 'Currency Rate',
+  'SYSTEM.SELECT_AIRPORT': 'Select Airport'
 };
 
 export default System;

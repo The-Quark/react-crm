@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { getAirlines, postCargo, putCargo, getPackages } from '@/api';
+import { getAirlines, postCargo, putCargo, getPackages, getAirports } from '@/api';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
@@ -87,6 +87,8 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
   const [loading, setLoading] = useState(false);
   const [searchAirlineTerm, setSearchAirlineTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [fromSearchTerm, setFromSearchTerm] = useState('');
+  const [toSearchTerm, setToSearchTerm] = useState('');
 
   const packageIdsParam = searchParams.get('package_id');
 
@@ -98,6 +100,17 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
   } = useQuery({
     queryKey: ['cargoAirlines'],
     queryFn: () => getAirlines({ is_active: true }),
+    staleTime: CACHE_TIME
+  });
+
+  const {
+    data: airportsData,
+    isLoading: airportsLoading,
+    isError: airportsIsError,
+    error: airportsError
+  } = useQuery({
+    queryKey: ['cargoAirports'],
+    queryFn: () => getAirports({}),
     staleTime: CACHE_TIME
   });
 
@@ -154,6 +167,8 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
           arrival_date: values.arrival_date
             ? format(new Date(values.arrival_date), 'dd.MM.yyyy HH:mm:ss')
             : '',
+          from_airport: values.from_airport.toString(),
+          to_airport: values.to_airport.toString(),
           departure_date: values.departure_date
             ? format(new Date(values.departure_date), 'dd.MM.yyyy HH:mm:ss')
             : ''
@@ -177,11 +192,12 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
     }
   });
 
-  const isLoading = airlinesLoading || packagesLoading;
+  const isLoading = airlinesLoading || packagesLoading || airportsLoading;
 
   const renderError = () => {
     if (airlinesIsError) return <SharedError error={airlinesError} />;
     if (packagesIsError) return <SharedError error={packagesError} />;
+    if (airportsIsError) return <SharedError error={airportsError} />;
     return null;
   };
 
@@ -250,10 +266,24 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
             formik={formik}
           />
 
-          <SharedInput
-            name="from_airport"
+          <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.FROM_AIRPORT' })}
-            formik={formik}
+            value={formik.values.from_airport ?? ''}
+            options={
+              airportsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.name
+              })) ?? []
+            }
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
+            onChange={(val) => {
+              formik.setFieldValue('from_airport', val);
+            }}
+            error={formik.errors.from_airport as string}
+            touched={formik.touched.from_airport}
+            searchTerm={fromSearchTerm}
+            onSearchTermChange={setFromSearchTerm}
           />
 
           <SharedDateTimePicker
@@ -262,10 +292,24 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
             formik={formik}
           />
 
-          <SharedInput
-            name="to_airport"
+          <SharedAutocomplete
             label={formatMessage({ id: 'SYSTEM.TO_AIRPORT' })}
-            formik={formik}
+            value={formik.values.to_airport ?? ''}
+            options={
+              airportsData?.result?.map((app) => ({
+                id: app.id,
+                name: app.name
+              })) ?? []
+            }
+            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
+            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
+            onChange={(val) => {
+              formik.setFieldValue('to_airport', val);
+            }}
+            error={formik.errors.to_airport as string}
+            touched={formik.touched.to_airport}
+            searchTerm={toSearchTerm}
+            onSearchTermChange={setToSearchTerm}
           />
 
           {isEditMode && (

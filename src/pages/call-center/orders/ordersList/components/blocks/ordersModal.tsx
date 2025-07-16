@@ -316,7 +316,15 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                       <label className="form-label max-w-56 text-gray-600">
                         {formatMessage({ id: 'SYSTEM.PRICE' })}
                       </label>
-                      <div className="flex columns-1 w-full">{order.price || '-'}</div>
+                      <div className="flex columns-1 w-full">
+                        {order.price ?? '-'}&nbsp;{order.currency_code ?? ''}
+                      </div>
+                    </div>
+                    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                      <label className="form-label max-w-56 text-gray-600">
+                        {formatMessage({ id: 'SYSTEM.CURRENCY_RATE' })}
+                      </label>
+                      <div className="flex columns-1 w-full">{order.currency_rate ?? '-'}</div>
                     </div>
                     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                       <label className="form-label max-w-56 text-gray-600">

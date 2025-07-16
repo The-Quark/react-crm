@@ -456,7 +456,9 @@ const System = {
   'SYSTEM.AIRPORT_NAME': 'اسم المطار',
   'SYSTEM.SHIPPING_COST': 'تكلفة الشحن',
   'SYSTEM.CREATE_INVOICE': 'إنشاء فاتورة',
-  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'آخر وثيقة تم رفعها'
+  'SYSTEM.LAST_UPLOADED_DOCUMENT': 'آخر وثيقة تم رفعها',
+  'SYSTEM.CURRENCY_RATE': 'سعر العملة',
+  'SYSTEM.SELECT_AIRPORT': 'اختر المطار'
 };
 
 export default System;
