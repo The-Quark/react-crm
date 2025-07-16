@@ -14,7 +14,7 @@ import {
 import { useFormik } from 'formik';
 import { getApplications, getDeliveryTypes, getPackageTypes, postOrderCalculate } from '@/api';
 import { useQuery } from '@tanstack/react-query';
-import { useLanguage } from '@/providers';
+import { useCurrency, useLanguage } from '@/providers';
 import { useOrderCreation } from '@/pages/call-center/orders/ordersStarter/components/context/orderCreationContext.tsx';
 import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
@@ -122,8 +122,10 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     useOrderCreation();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
+  const { currency } = useCurrency();
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [triggerCurrency, setTriggerCurrency] = useState(currency.code);
 
   const formik = useFormik({
     initialValues: getInitialValues(applicationId || '', mainFormData),
@@ -205,7 +207,9 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     formik.values.length,
     formik.values.height,
     formik.values.is_express,
-    formik.values.nominal_cost
+    formik.values.nominal_cost,
+    triggerCurrency,
+    currency.code
   ]);
 
   useEffect(() => {
@@ -411,7 +415,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
           />
           <SharedInput
             name="price"
-            label={`${formatMessage({ id: 'SYSTEM.PRICE' })}`}
+            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currency.code})`}
             formik={formik}
             type="text"
             disabled

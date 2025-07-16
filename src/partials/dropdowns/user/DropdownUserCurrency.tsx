@@ -15,6 +15,7 @@ const DropdownUserCurrency = ({ menuItemRef }: IDropdownUserCurrenciesProps) => 
 
   const handleCurrency = (currency: typeof currentCurrency) => {
     setCurrency(currency);
+    window.location.reload();
     if (menuItemRef.current) {
       menuItemRef.current.hide();
     }

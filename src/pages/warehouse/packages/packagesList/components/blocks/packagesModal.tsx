@@ -281,7 +281,7 @@ export const PackagesModal: FC<Props> = ({ open, id, handleClose }) => {
 
                 {packageData.status === PackageStatus.AWAITING_CUSTOM_CLEARANCE_APPROVAL &&
                   lastDocument && (
-                    <div className="border-b pb-4">
+                    <div className="pb-4">
                       <h4 className="text-lg font-semibold mb-3">
                         {formatMessage({ id: 'SYSTEM.LAST_UPLOADED_DOCUMENT' })}
                       </h4>
