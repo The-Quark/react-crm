@@ -18,7 +18,7 @@ const getVehicles = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (plate_number) params.append('plate_number', plate_number);
 
   return await axios.get<VehiclesResponse>(VEHICLE_URL, { params }).then((res) => res.data);

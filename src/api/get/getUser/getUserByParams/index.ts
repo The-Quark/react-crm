@@ -20,7 +20,7 @@ export const getUserByParams = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (companyId) params.append('company_id', companyId.toString());
   if (role) params.append('role', role.toString());
 

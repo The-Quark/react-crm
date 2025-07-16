@@ -15,7 +15,7 @@ export const getUserNotifications = async ({
   const params = new URLSearchParams();
   if (type) params.append('type', type.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   return await axios
     .get<INotificationResponse>(USER_NOTIFICATIONS, { params })
     .then((res) => res.data);

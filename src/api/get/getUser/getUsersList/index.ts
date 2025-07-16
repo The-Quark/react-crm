@@ -15,7 +15,7 @@ const getUserList = async ({
   const params = new URLSearchParams();
 
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (full_name) params.append('full_name', full_name);
 
   return await axios.get<UserListResponse>(USERS_LIST_URL, { params }).then((res) => res.data);

@@ -20,7 +20,7 @@ const getAirlines = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (name) params.append('name', name);
   if (typeof is_active === 'boolean') params.append('is_active', is_active ? '1' : '0');
 

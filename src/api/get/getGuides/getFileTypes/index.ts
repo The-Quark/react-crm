@@ -26,7 +26,7 @@ const getFileTypes = async ({
   if (cargo_id) params.append('cargo_id', cargo_id.toString());
   if (package_id) params.append('package_id', package_id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (name) params.append('name', name.toString());
   if (step) params.append('step', step.toString());
 

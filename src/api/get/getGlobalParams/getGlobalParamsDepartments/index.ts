@@ -22,7 +22,7 @@ export const getGlobalParamsDepartments = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (company_id) params.append('company_id', company_id.toString());
   if (name) params.append('name', name.toString());
   if (typeof is_active === 'boolean') params.append('is_active', is_active ? '1' : '0');

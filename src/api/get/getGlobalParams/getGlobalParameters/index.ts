@@ -18,7 +18,7 @@ const getGlobalParameters = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (company_name) params.append('company_name', company_name);
 
   return axios

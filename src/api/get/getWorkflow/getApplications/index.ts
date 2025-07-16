@@ -24,7 +24,7 @@ const getApplications = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (full_name) params.append('full_name', full_name);
   if (status) params.append('status', status);
   if (start_date) params.append('start_date', start_date);

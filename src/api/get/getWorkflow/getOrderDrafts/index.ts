@@ -26,7 +26,7 @@ const getOrderDrafts = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (searchorder) params.append('searchorder', searchorder.toString());
   if (status) params.append('status', status.toString());
   if (delivery_category) params.append('delivery_category', delivery_category.toString());

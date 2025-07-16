@@ -18,7 +18,7 @@ const getTariffs = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (country) params.append('country', country);
 
   return await axios.get<TariffsResponse>(TARIFFS, { params }).then((res) => res.data);

@@ -9,6 +9,6 @@ export const PHONE_MAX_LENGTH = 12;
 export const DEFAULT_SEARCH_PAGE_NUMBER = 50;
 export const CLIENT_MIN_INVOICE_RATING = 3.5;
 export const initialPagination = {
-  pageIndex: 1,
+  pageIndex: 0,
   pageSize: 15
 };

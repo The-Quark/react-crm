@@ -18,7 +18,7 @@ const getTask = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (title) params.append('title', title.toString());
 
   return axios.get<ITasksResponse>(TASK_URL, { params }).then((res) => res.data);

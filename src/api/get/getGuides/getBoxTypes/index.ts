@@ -13,7 +13,7 @@ const getBoxTypes = async ({ name, id, page, per_page }: IGetBoxType): Promise<B
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (name) params.append('name', name);
 
   return await axios.get<BoxTypeResponse>(BOX_TYPES, { params }).then((res) => res.data);

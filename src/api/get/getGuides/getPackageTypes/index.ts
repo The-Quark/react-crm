@@ -22,7 +22,7 @@ const getPackageTypes = async ({
 
   if (id) params.append('id', id.toString());
   if (per_page) params.append('per_page', per_page.toString());
-  if (page) params.append('page', page.toString());
+  if (page) params.append('page', (page + 1).toString());
   if (code) params.append('code', code.toString());
   if (language_code) params.append('language_code', language_code.toString());
   if (typeof is_active === 'boolean') params.append('is_active', is_active ? '1' : '0');
