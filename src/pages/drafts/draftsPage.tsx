@@ -9,6 +9,8 @@ import { TabPanel, Tabs, TabsList } from '@mui/base';
 import { ApplicationsBlock } from '@/pages/drafts/blocks/applications/applicationsBlock.tsx';
 import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { OrdersBlock } from '@/pages/drafts/blocks/orders/ordersBlock.tsx';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 
 type TabType = 'application' | 'order' | 'package' | 'cargo';
 
@@ -72,7 +74,12 @@ export const DraftsPage = () => {
               />
             </TabPanel>
             <TabPanel value={2}>
-              <div>Orders content</div>
+              <OrdersBlock
+                orders={(data?.result as Order[]) || []}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                totalCount={data?.total || 0}
+              />
             </TabPanel>
             <TabPanel value={3}>
               <div>Packages content</div>
