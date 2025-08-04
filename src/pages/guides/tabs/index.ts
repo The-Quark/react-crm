@@ -14,3 +14,4 @@ export * from './fileTypes/guidesFileTypesPage.tsx';
 export * from './boxTypes/guidesBoxTypesPage.tsx';
 export * from './tariff/guidesTariffPage.tsx';
 export * from './airports/guidesAirportsPage.tsx';
+export * from './cities/guidesCitiesPage.tsx';

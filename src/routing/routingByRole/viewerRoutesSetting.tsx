@@ -40,6 +40,7 @@ import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
 import { CouriersListPage } from '@/pages/hr-module';
+import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -60,14 +61,15 @@ const ViewerRoutesSetting = () => {
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
+        <Route path="drafts" element={<DraftsPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/applications/list/:id" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
         <Route path="/call-center/orders/list/:id" element={<OrdersListPage />} />
-        <Route path="/warehouse/packages/list/:id" element={<PackagesListPage />} />
         <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
-        <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
+        <Route path="/warehouse/packages/list/:id" element={<PackagesListPage />} />
         <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
+        <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />

@@ -98,8 +98,7 @@ import {
   ApplicationsStarterPage,
   OrdersStarterPage,
   OrdersListPage,
-  FastFormStarterPage,
-  MyDraftsPage
+  FastFormStarterPage
 } from '@/pages/call-center';
 
 import { Demo1Layout } from '@/layouts/demo1';
@@ -122,9 +121,9 @@ import {
   GuidesFileTypesPage,
   GuidesBoxTypesPage,
   GuidesTariffPage,
-  GuidesAirportsPage
+  GuidesAirportsPage,
+  GuidesCitiesPage
 } from '@/pages/guides';
-import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage, DriversStarterPage } from '@/pages/hr-module/drivers';
 import { StaffListPage, StaffStarterPage } from '@/pages/hr-module/staff';
@@ -137,6 +136,7 @@ import {
   CargoUploadPage,
   CargoStarterPage
 } from '@/pages/warehouse';
+import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -174,6 +174,7 @@ const AllRoutesSetting = () => {
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
         <Route path="/hr-module/couriers/starter" element={<CouriersStarterPage />} />
         <Route path="/hr-module/couriers/starter/:id" element={<CouriersStarterPage />} />
+        <Route path="/drafts" element={<DraftsPage />} />
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
@@ -182,7 +183,6 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
         <Route path="/call-center/orders/list/:id" element={<OrdersListPage />} />
-        <Route path="/call-center/my-drafts" element={<MyDraftsPage />} />
         <Route path="/call-center/fast-form/start" element={<FastFormStarterPage />} />
         <Route path="/warehouse/packages/starter" element={<PackagesStarterPage />} />
         <Route path="/warehouse/packages/starter/:id" element={<PackagesStarterPage />} />
@@ -203,6 +203,7 @@ const AllRoutesSetting = () => {
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
         <Route path="/guides/tariffs" element={<GuidesTariffPage />} />
+        <Route path="/guides/cities" element={<GuidesCitiesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
         <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />

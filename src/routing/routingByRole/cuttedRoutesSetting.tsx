@@ -65,6 +65,7 @@ import {
   StaffStarterPage
 } from '@/pages/hr-module';
 import { RolesListPage, RolesStarterPage } from '@/pages/roles-permissions';
+import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 
 interface Props {
   permissions: string[];
@@ -239,6 +240,7 @@ const routeConfig = [
   {
     permission: 'manage orders',
     routes: [
+      { path: '/drafts', element: <DraftsPage /> },
       { path: '/call-center/orders/starter', element: <OrdersStarterPage /> },
       {
         path: '/call-center/orders/starter/:id',
@@ -275,6 +277,7 @@ const routeConfig = [
   {
     permission: 'view orders',
     routes: [
+      { path: '/drafts', element: <DraftsPage /> },
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
       { path: '/call-center/orders/list/:id', element: <OrdersListPage /> },
       { path: '/warehouse/packages/list/:id', element: <PackagesListPage /> },
