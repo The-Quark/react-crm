@@ -47,7 +47,7 @@ export const DraftsPage = () => {
     <Container>
       <Toolbar>
         <ToolbarHeading>
-          <h1 className="text-xl font-medium leading-none text-gray-900">
+          <h1 className="text-xl font-medium leading-none text-gray-900 mx-4">
             {formatMessage({ id: 'SYSTEM.DRAFTS' })}
           </h1>
         </ToolbarHeading>
@@ -57,7 +57,7 @@ export const DraftsPage = () => {
         className="justify-between px-5 mb-2"
         onChange={(_, value) => handleTabChange(value as number)}
       >
-        <TabsList className="justify-between px-5 mb-2.5">
+        <TabsList className="justify-between mb-2.5">
           <div className="flex items-center gap-5">
             <Tab value={1}>{formatMessage({ id: 'SYSTEM.APPLICATIONS' })}</Tab>
             <Tab value={2}>{formatMessage({ id: 'SYSTEM.ORDERS' })}</Tab>

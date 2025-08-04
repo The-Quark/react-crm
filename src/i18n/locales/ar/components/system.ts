@@ -95,6 +95,7 @@ const System = {
   'SYSTEM.WEIGHT': 'الوزن',
   'SYSTEM.DIMENSIONS': 'الأبعاد',
   'SYSTEM.PRICE': 'السعر',
+  'SYSTEM.CHECK_HISTORY': 'تحقق من التاريخ',
   'SYSTEM.DELIVERY_CATEGORY': 'فئة التوصيل',
   'SYSTEM.QR_CODE': 'رمز QR',
   'SYSTEM.DOWNLOAD_QR': 'تنزيل رمز QR',

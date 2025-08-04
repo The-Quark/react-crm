@@ -20,6 +20,7 @@ const System = {
   'SYSTEM.TAGS_TITLE': 'Access Rights',
   'SYSTEM.ID': 'ID',
   'SYSTEM.RECOVER': 'Recover',
+  'SYSTEM.CHECK_HISTORY': 'Check History',
   'SYSTEM.APPLICATION': 'Application',
   'SYSTEM.PHONE_NUMBER': 'Phone number',
   'SYSTEM.SOURCE': 'Source',

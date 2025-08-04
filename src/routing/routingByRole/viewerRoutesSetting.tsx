@@ -41,6 +41,7 @@ import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
 import { CouriersListPage } from '@/pages/hr-module';
 import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
+import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -62,6 +63,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
         <Route path="drafts" element={<DraftsPage />} />
+        <Route path="/audit-changes/:entity_type/:entity_id" element={<AuditChangesPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
         <Route path="/call-center/applications/list/:id" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />

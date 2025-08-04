@@ -101,3 +101,5 @@ export const AIRPORTS = `${api}/airports`;
 export const TRASH = `${api}/trash`;
 
 export const RESTORE = `${api}/restore`;
+
+export const AUDIT_LOG = `${api}/audit-log`;

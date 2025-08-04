@@ -36,6 +36,15 @@ const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =>
               <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
             </MenuLink>
           </MenuItem>
+          {/*<MenuSeparator />*/}
+          {/*<MenuItem>*/}
+          {/*  <MenuLink path={`/audit-changes/application/${id}`}>*/}
+          {/*    <MenuIcon>*/}
+          {/*      <KeenIcon icon="archive" />*/}
+          {/*    </MenuIcon>*/}
+          {/*    <MenuTitle>{formatMessage({ id: 'SYSTEM.CHECK_HISTORY' })}</MenuTitle>*/}
+          {/*  </MenuLink>*/}
+          {/*</MenuItem>*/}
           <MenuSeparator />
           <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>

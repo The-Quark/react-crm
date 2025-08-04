@@ -53,6 +53,15 @@ export const OrdersMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick, cli
               <MenuSeparator />
             </>
           )}
+          <MenuItem>
+            <MenuLink path={`/audit-changes/order/${id}`}>
+              <MenuIcon>
+                <KeenIcon icon="archive" />
+              </MenuIcon>
+              <MenuTitle>{formatMessage({ id: 'SYSTEM.CHECK_HISTORY' })}</MenuTitle>
+            </MenuLink>
+          </MenuItem>
+          <MenuSeparator />
           <MenuItem onClick={() => id && onDeleteClick(id)}>
             <MenuLink>
               <MenuIcon>

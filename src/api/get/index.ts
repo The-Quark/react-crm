@@ -6,3 +6,4 @@ export * from './getGlobalParams';
 export * from './getClients';
 export * from './getUser';
 export * from './getTrash';
+export * from './getAuditLog';
