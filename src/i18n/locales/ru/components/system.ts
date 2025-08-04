@@ -19,6 +19,7 @@ const System = {
   'SYSTEM.UNNAMED_ROLE': 'Безымянная роль',
   'SYSTEM.TAGS_TITLE': 'Права доступа',
   'SYSTEM.ID': 'ID',
+  'SYSTEM.RECOVER': 'Восстановить',
   'SYSTEM.APPLICATION': 'Заявка',
   'SYSTEM.PHONE_NUMBER': 'Номер телефона',
   'SYSTEM.SOURCE': 'Источник',

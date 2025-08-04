@@ -106,6 +106,7 @@ const System = {
   'SYSTEM.CREATE_NEW_ORDER': 'إنشاء طلب جديد',
   'SYSTEM.STEP': 'خطوة',
   'SYSTEM.OF': 'من',
+  'SYSTEM.RECOVER': 'استعادة',
   'SYSTEM.SENDER_INFORMATION': 'معلومات المرسل',
   'SYSTEM.RECEIVER_INFORMATION': 'معلومات المستلم',
   'SYSTEM.SENDER_DETAILS': 'تفاصيل المرسل',

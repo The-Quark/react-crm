@@ -19,6 +19,7 @@ const System = {
   'SYSTEM.UNNAMED_ROLE': 'Unnamed Role',
   'SYSTEM.TAGS_TITLE': 'Access Rights',
   'SYSTEM.ID': 'ID',
+  'SYSTEM.RECOVER': 'Recover',
   'SYSTEM.APPLICATION': 'Application',
   'SYSTEM.PHONE_NUMBER': 'Phone number',
   'SYSTEM.SOURCE': 'Source',

@@ -4,3 +4,4 @@ export * from './postGlobalParams';
 export * from './postWorkflow';
 export * from './postClient';
 export * from './postTask';
+export * from './postRestore';

@@ -97,3 +97,7 @@ export const TARIFFS = `${api}/tariffs`;
 export const PACKAGE_STATUS = `${api}/package/status_change`;
 
 export const AIRPORTS = `${api}/airports`;
+
+export const TRASH = `${api}/trash`;
+
+export const RESTORE = `${api}/restore`;
