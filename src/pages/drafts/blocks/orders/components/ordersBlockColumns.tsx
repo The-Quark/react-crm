@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader, KeenIcon } from '@/components';
@@ -11,6 +11,39 @@ import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { filterDateRange } from '@/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRestore } from '@/api';
+
+const QrCodeCell = ({
+  hawbPdf,
+  formatMessage
+}: {
+  hawbPdf: string | null;
+  formatMessage: (msg: { id: string }) => string;
+}) => {
+  const [hasImageError, setHasImageError] = useState(false);
+
+  if (!hawbPdf || hawbPdf.trim() === '') {
+    return <div className="text-gray-400 text-center">{formatMessage({ id: 'SYSTEM.NO_QR' })}</div>;
+  }
+
+  const url = hawbPdf.startsWith('http') ? hawbPdf : `https://${hawbPdf}`;
+
+  return (
+    <div className="flex items-center gap-1.5 group justify-center">
+      {hasImageError ? (
+        <a className="link" href={url} target="_blank" rel="noopener noreferrer">
+          qr.svg
+        </a>
+      ) : (
+        <img
+          src={url}
+          alt="QR Code"
+          className="w-14 h-14 object-contain transition-transform group-hover:scale-150 self-center"
+          onError={() => setHasImageError(true)}
+        />
+      )}
+    </div>
+  );
+};
 
 export const useOrdersBlockColumns = (): ColumnDef<Order>[] => {
   const { formatMessage } = useIntl();
@@ -174,33 +207,9 @@ export const useOrdersBlockColumns = (): ColumnDef<Order>[] => {
           <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.QR' })} column={column} />
         ),
         enableSorting: false,
-        cell: (info) => {
-          if (!info.row.original.hawb_pdf || info.row.original.hawb_pdf.trim() === '') {
-            return (
-              <div className="text-gray-400 text-center">
-                {formatMessage({ id: 'SYSTEM.NO_QR' })}
-              </div>
-            );
-          }
-
-          const url = info.row.original.hawb_pdf.startsWith('http')
-            ? info.row.original.hawb_pdf
-            : `https://${info.row.original.hawb_pdf}`;
-
-          return (
-            <div className="flex items-center gap-1.5 group justify-center">
-              <img
-                src={url}
-                alt="QR Code"
-                className="w-14 h-14 object-contain transition-transform group-hover:scale-150 self-center"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.outerHTML = `<a class="link" href="${url}" target="_blank" rel="noopener noreferrer">qr.svg</a>`;
-                }}
-              />
-            </div>
-          );
-        },
+        cell: (info) => (
+          <QrCodeCell hawbPdf={info.row.original.hawb_pdf} formatMessage={formatMessage} />
+        ),
         meta: {
           headerClassName: 'min-w-[100px]'
         }
