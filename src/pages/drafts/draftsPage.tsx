@@ -11,6 +11,10 @@ import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { OrdersBlock } from '@/pages/drafts/blocks/orders/ordersBlock.tsx';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
+import { PackagesBlock } from '@/pages/drafts/blocks/packages/packagesBlock.tsx';
+import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
+import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
+import { CargoBlock } from '@/pages/drafts/blocks/cargo/cargoBlock.tsx';
 
 type TabType = 'application' | 'order' | 'package' | 'cargo';
 
@@ -82,10 +86,20 @@ export const DraftsPage = () => {
               />
             </TabPanel>
             <TabPanel value={3}>
-              <div>Packages content</div>
+              <PackagesBlock
+                orders={(data?.result as Package[]) || []}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                totalCount={data?.total || 0}
+              />
             </TabPanel>
             <TabPanel value={4}>
-              <div>Cargo content</div>
+              <CargoBlock
+                orders={(data?.result as Cargo[]) || []}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                totalCount={data?.total || 0}
+              />
             </TabPanel>
           </>
         )}
