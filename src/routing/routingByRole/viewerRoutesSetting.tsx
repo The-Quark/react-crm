@@ -47,38 +47,29 @@ const ViewerRoutesSetting = () => {
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-
         <Route path="/global-parameters/view-parameters/:id" element={<CompaniesViewPage />} />
         <Route path="/global-parameters/list" element={<CompaniesListPage />} />
-
         <Route path="/global-parameters/departments/list" element={<DepartmentsListPage />} />
-
         <Route path="/global-parameters/subdivisions/list" element={<SubdivisionsListPage />} />
-
         <Route path="/global-parameters/positions/list" element={<PositionsListPage />} />
-
         <Route path="/roles-permissions/roles/list" element={<RolesListPage />} />
-
         <Route path="/tasks/list" element={<TasksListPage />} />
         <Route path="/tasks/view/:id" element={<TasksViewPage />} />
-
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/:id" element={<ClientsListPage />} />
-
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
-
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
+        <Route path="/call-center/applications/list/:id" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/orders/list/:id" element={<OrdersListPage />} />
         <Route path="/warehouse/packages/list/:id" element={<PackagesListPage />} />
         <Route path="/warehouse/packages/list" element={<PackagesListPage />} />
         <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
         <Route path="/warehouse/cargo/list" element={<CargoListPage />} />
-
         <Route path="/crm/users/list" element={<UsersListPage />} />
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
-
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />

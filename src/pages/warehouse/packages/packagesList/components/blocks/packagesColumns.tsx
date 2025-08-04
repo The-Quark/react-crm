@@ -167,7 +167,7 @@ export const usePackagesColumns = ({
         id: 'NOMINAL_COST',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' }) + ` (USD)`}
+            title={formatMessage({ id: 'SYSTEM.NOMINAL_COST' })}
             column={column}
           />
         ),
@@ -190,7 +190,7 @@ export const usePackagesColumns = ({
         id: 'SHIPPING_COST',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.SHIPPING_COST' }) + ` (USD)`}
+            title={formatMessage({ id: 'SYSTEM.SHIPPING_COST' })}
             column={column}
           />
         ),
@@ -211,7 +211,7 @@ export const usePackagesColumns = ({
         id: 'CUSTOMS_CLEARANCE',
         header: ({ column }) => (
           <DataGridColumnHeader
-            title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' }) + ` (USD)`}
+            title={formatMessage({ id: 'SYSTEM.CUSTOMS_CLEARANCE' })}
             column={column}
           />
         ),

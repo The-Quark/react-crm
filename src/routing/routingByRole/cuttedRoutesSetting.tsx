@@ -225,12 +225,16 @@ const routeConfig = [
     routes: [
       { path: '/call-center/applications/starter', element: <ApplicationsStarterPage /> },
       { path: '/call-center/applications/starter/:id', element: <ApplicationsStarterPage /> },
-      { path: '/call-center/applications/list', element: <ApplicationsListPage /> }
+      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
+      { path: '/call-center/applications/list/:id', element: <ApplicationsListPage /> }
     ]
   },
   {
     permission: 'view applications',
-    routes: [{ path: '/call-center/applications/list', element: <ApplicationsListPage /> }]
+    routes: [
+      { path: '/call-center/applications/list', element: <ApplicationsListPage /> },
+      { path: '/call-center/applications/list/:id', element: <ApplicationsListPage /> }
+    ]
   },
   {
     permission: 'manage orders',
@@ -241,6 +245,7 @@ const routeConfig = [
         element: <OrdersStarterPage />
       },
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/orders/list/:id', element: <OrdersListPage /> },
       { path: '/call-center/my-drafts', element: <MyDraftsPage /> },
       { path: '/call-center/fast-form/starter', element: <FastFormStarterPage /> },
       { path: '/warehouse/packages/starter', element: <PackagesStarterPage /> },
@@ -271,6 +276,7 @@ const routeConfig = [
     permission: 'view orders',
     routes: [
       { path: '/call-center/orders/list', element: <OrdersListPage /> },
+      { path: '/call-center/orders/list/:id', element: <OrdersListPage /> },
       { path: '/warehouse/packages/list/:id', element: <PackagesListPage /> },
       { path: '/warehouse/packages/list', element: <PackagesListPage /> },
       { path: '/warehouse/cargo/list/:id', element: <CargoListPage /> },

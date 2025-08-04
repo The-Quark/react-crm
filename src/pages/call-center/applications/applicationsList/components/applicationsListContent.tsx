@@ -11,19 +11,26 @@ import { ApplicationsStatus } from '@/api/enums';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { initialPagination } from '@/utils';
+import { useParams } from 'react-router';
+
+type ModalType = 'view' | 'delete' | null;
 
 export const ApplicationListContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState<ApplicationsStatus>();
   const [dateRange, setDateRange] = useState<DateRange>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [modal, setModal] = useState<{
+    type: ModalType;
+    id?: number | null;
+  }>({
+    type: id ? 'view' : null,
+    id: id ? Number(id) : null
+  });
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedApplicationId, setSelectedApplicationId] = useState<number | null>(null);
   const [pagination, setPagination] = useState(initialPagination);
 
   const { data, isError, error, isFetching, isPending } = useQuery({
@@ -47,27 +54,25 @@ export const ApplicationListContent = () => {
   });
 
   const handleDeleteClick = (id: number) => {
-    setSelectedId(id);
-    setIsDeleteModalOpen(true);
+    setModal({ type: 'delete', id });
   };
 
   const handleConfirmDelete = async () => {
-    if (!selectedId) return;
+    if (!modal.id) return;
     setIsDeleting(true);
     try {
-      await deleteApplication(selectedId);
+      await deleteApplication(modal.id);
       await queryClient.invalidateQueries({ queryKey: ['applications'] });
-      setIsDeleteModalOpen(false);
+      setModal({ type: null });
+    } catch (error) {
+      console.error('Failed to delete application:', error);
     } finally {
       setIsDeleting(false);
     }
   };
 
   const columns = useApplicationsColumns({
-    onRowClick: (id) => {
-      setSelectedApplicationId(id);
-      setIsModalOpen(true);
-    },
+    onRowClick: (id) => setModal({ type: 'view', id }),
     onDeleteClick: handleDeleteClick
   });
 
@@ -126,13 +131,13 @@ export const ApplicationListContent = () => {
         }}
       />
       <ApplicationsModal
-        open={isModalOpen}
-        id={selectedApplicationId}
-        handleClose={() => setIsModalOpen(false)}
+        open={modal.type === 'view'}
+        id={modal.id ?? null}
+        handleClose={() => setModal({ type: null })}
       />
       <SharedDeleteModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        open={modal.type === 'delete'}
+        onClose={() => setModal({ type: null })}
         onConfirm={handleConfirmDelete}
         title={formatMessage({ id: 'SYSTEM.DELETE_APPLICATION' })}
         description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_APPLICATION_DESCRIPTION' })}

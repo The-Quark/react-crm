@@ -185,7 +185,14 @@ export const OrdersModal: FC<Props> = ({ open, id, handleClose }) => {
                           {formatMessage({ id: 'SYSTEM.FULL_NAME' })}
                         </label>
                         <div className="flex columns-1 w-full">
-                          {order.application.full_name || '-'}
+                          <a
+                            className="link"
+                            href={`/call-center/applications/list/id=${order.application.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {order.application.full_name || '-'}
+                          </a>
                         </div>
                       </div>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

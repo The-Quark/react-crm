@@ -177,9 +177,11 @@ const AllRoutesSetting = () => {
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />
+        <Route path="/call-center/applications/list/:id" element={<ApplicationsListPage />} />
         <Route path="/call-center/orders/starter" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/starter/:id" element={<OrdersStarterPage />} />
         <Route path="/call-center/orders/list" element={<OrdersListPage />} />
+        <Route path="/call-center/orders/list/:id" element={<OrdersListPage />} />
         <Route path="/call-center/my-drafts" element={<MyDraftsPage />} />
         <Route path="/call-center/fast-form/start" element={<FastFormStarterPage />} />
         <Route path="/warehouse/packages/starter" element={<PackagesStarterPage />} />

@@ -75,10 +75,10 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
         }
       },
       {
-        accessorFn: (row) => row.order?.order_code,
-        id: 'ORDER',
+        accessorFn: (row) => row.package?.hawb,
+        id: 'HAWB',
         header: ({ column }) => (
-          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.ORDER' })} column={column} />
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.HAWB' })} column={column} />
         ),
         enableSorting: false,
         cell: (info) => (
@@ -86,9 +86,11 @@ export const useTasksColumns = ({ onDeleteClick }: UseColumnsProps): ColumnDef<T
             <div className="flex flex-col gap-0.5">
               <a
                 className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
-                href={`/call-center/orders/list`}
+                href={`/warehouse/packages/list/id=${info.row.original.package?.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {info.row.original.order?.order_code}
+                {info.row.original.package?.hawb}
               </a>
             </div>
           </div>

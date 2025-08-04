@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Task } from '@/api/get/getTask/types.ts';
 import { formatDate } from '@/utils/lib/utils.ts';
 import { useIntl } from 'react-intl';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
+import { SharedPriorityBadge, SharedTypeBadge } from '@/partials/sharedUI';
 
 interface IGeneralSettingsProps {
   task: Task | null;
@@ -43,7 +45,7 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
           <div className="space-y-3">
             <div className="flex items-baseline gap-2.5">
               <label className="text-md font-bold min-w-32">
-                {formatMessage({ id: 'SYSTEM.NAME' })}:
+                {formatMessage({ id: 'SYSTEM.TITLE' })}:
               </label>
               <div className="font-medium text-sm">{task.title}</div>
             </div>
@@ -52,28 +54,34 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
               <label className="text-md font-bold min-w-32">
                 {formatMessage({ id: 'SYSTEM.STATUS' })}:
               </label>
-              <div className="capitalize text-sm">{task.status.replace('_', ' ')}</div>
+              <div className="capitalize text-sm">
+                <SharedStatusBadge status={task.status} />
+              </div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
               <label className="text-md font-bold min-w-32">
                 {formatMessage({ id: 'SYSTEM.PRIORITY' })}:
               </label>
-              <div className="capitalize text-sm">{task.priority}</div>
+              <div className="capitalize text-sm">
+                <SharedPriorityBadge priority={task.priority} />
+              </div>
             </div>
 
             <div className="flex items-baseline gap-2.5">
               <label className="text-md font-bold min-w-32">
                 {formatMessage({ id: 'SYSTEM.TYPE' })}:
               </label>
-              <div className="capitalize text-sm">{task.type}</div>
+              <div className="capitalize text-sm">
+                <SharedTypeBadge type={task.type} />
+              </div>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-baseline gap-2.5">
               <label className="text-md font-bold min-w-32">
-                {formatMessage({ id: 'SYSTEM.PICK_DATE' })}:
+                {formatMessage({ id: 'SYSTEM.DUE_DATE' })}:
               </label>
               <div className="capitalize text-sm">{formatDate(task.due_date)}</div>
             </div>
@@ -87,7 +95,7 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
 
             <div className="flex items-baseline gap-2.5">
               <label className="text-md font-bold min-w-32">
-                {formatMessage({ id: 'SYSTEM.LAST_UPDATED' }) ?? 'Last Updated'}:
+                {formatMessage({ id: 'SYSTEM.LAST_UPDATED' })}:
               </label>
               <div className="capitalize text-sm">{formatDate(task.updated_at)}</div>
             </div>
@@ -125,11 +133,51 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
           </div>
         </div>
 
+        {task.package && (
+          <div className="space-y-2">
+            <label className="text-md font-bold">
+              {formatMessage({ id: 'SYSTEM.PACKAGE_DETAILS' })}
+            </label>
+            <div className="space-y-1">
+              <div className="flex gap-1">
+                {formatMessage({ id: 'SYSTEM.HAWB' })}:
+                <a
+                  className="link"
+                  href={`/warehouse/packages/list/id=${task.package.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {task.package.hawb}
+                </a>
+              </div>
+              <p className="capitalize text-sm">
+                {formatMessage({ id: 'SYSTEM.WEIGHT' })}: {task.package.weight}
+              </p>
+              <p className="capitalize text-sm">
+                {formatMessage({ id: 'SYSTEM.DIMENSIONS' })}: {task.package.dimensions}
+              </p>
+              <p className="capitalize text-sm">
+                {formatMessage({ id: 'SYSTEM.STATUS' })}: {task.package.status}
+              </p>
+            </div>
+          </div>
+        )}
+
         {task.order && (
           <div className="space-y-2">
             <label className="text-md font-bold">{formatMessage({ id: 'SYSTEM.ORDER' })}</label>
             <div className="space-y-1">
-              <p className="capitalize text-sm">{task.order.order_code}</p>
+              <div className="flex gap-1">
+                {formatMessage({ id: 'SYSTEM.CODE' })}:
+                <a
+                  className="link"
+                  href={`/call-center/orders/list/id=${task.order.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {task.order.order_code}
+                </a>
+              </div>
               <p className="capitalize text-sm">
                 {formatMessage({ id: 'SYSTEM.STATUS' })}: {task.order.status}
               </p>
@@ -153,28 +201,6 @@ export const TasksViewContentCard: FC<IGeneralSettingsProps> = ({ task }) => {
               </p>
               <p className="capitalize text-sm">{task.client.phone}</p>
               <p className="capitalize text-sm">{task.client.email}</p>
-            </div>
-          </div>
-        )}
-
-        {task.package && (
-          <div className="space-y-2">
-            <label className="text-md font-bold">
-              {formatMessage({ id: 'SYSTEM.PACKAGE_DETAILS' })}
-            </label>
-            <div className="space-y-1">
-              <p className="capitalize text-sm">
-                {formatMessage({ id: 'SYSTEM.HAWB' })}: {task.package.hawb}
-              </p>
-              <p className="capitalize text-sm">
-                {formatMessage({ id: 'SYSTEM.WEIGHT' })}: {task.package.weight}
-              </p>
-              <p className="capitalize text-sm">
-                {formatMessage({ id: 'SYSTEM.DIMENSIONS' })}: {task.package.dimensions}
-              </p>
-              <p className="capitalize text-sm">
-                {formatMessage({ id: 'SYSTEM.STATUS' })}: {task.package.status}
-              </p>
             </div>
           </div>
         )}
