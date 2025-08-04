@@ -64,7 +64,12 @@ export const DraftsPage = () => {
         ) : (
           <>
             <TabPanel value={1}>
-              <ApplicationsBlock applications={(data?.result as Application[]) || []} />
+              <ApplicationsBlock
+                applications={(data?.result as Application[]) || []}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                totalCount={data?.total || 0}
+              />
             </TabPanel>
             <TabPanel value={2}>
               <div>Orders content</div>

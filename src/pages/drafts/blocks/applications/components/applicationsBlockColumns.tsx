@@ -12,13 +12,7 @@ import { filterDateRange } from '@/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postRestore } from '@/api';
 
-interface UseApplicationsBlockColumnsProps {
-  onRowClick: (id: number) => void;
-}
-
-export const useApplicationsBlockColumns = ({
-  onRowClick
-}: UseApplicationsBlockColumnsProps): ColumnDef<Application>[] => {
+export const useApplicationsBlockColumns = (): ColumnDef<Application>[] => {
   const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
@@ -69,10 +63,7 @@ export const useApplicationsBlockColumns = ({
         cell: (info) => {
           return (
             <div className="flex flex-col gap-0.5">
-              <div
-                className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
-                onClick={() => onRowClick(info.row.original.id)}
-              >
+              <div className="leading-none font-medium text-sm text-gray-900">
                 {info.row.original?.full_name}
               </div>
             </div>
@@ -185,7 +176,7 @@ export const useApplicationsBlockColumns = ({
         }
       }
     ],
-    [isRTL, canManage, onRowClick]
+    [isRTL, canManage]
   );
   return canManage ? columns : columns.slice(0, -1);
 };

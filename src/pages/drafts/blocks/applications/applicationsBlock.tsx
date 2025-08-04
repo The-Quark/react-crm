@@ -2,28 +2,31 @@ import { useIntl } from 'react-intl';
 import { Container, DataGrid } from '@/components';
 import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
 import { useApplicationsBlockColumns } from '@/pages/drafts/blocks/applications/components/applicationsBlockColumns.tsx';
-import React, { FC, useState } from 'react';
-import { initialPagination } from '@/utils';
+import React, { FC } from 'react';
 
 interface Props {
   applications: Application[];
+  pagination: { pageIndex: number; pageSize: number };
+  onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => void;
+  totalCount: number;
 }
 
-export const ApplicationsBlock: FC<Props> = ({ applications }) => {
+export const ApplicationsBlock: FC<Props> = ({
+  applications,
+  pagination,
+  onPaginationChange,
+  totalCount
+}) => {
   const { formatMessage } = useIntl();
-  const [pagination, setPagination] = useState(initialPagination);
-  const [selectedId, setSelectedId] = useState<number>(0);
 
-  const columns = useApplicationsBlockColumns({
-    onRowClick: (id) => setSelectedId(id)
-  });
+  const columns = useApplicationsBlockColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
-    setPagination((prev) => ({
-      ...prev,
+    onPaginationChange({
+      ...pagination,
       pageIndex: params.pageIndex,
       pageSize: params.pageSize
-    }));
+    });
   };
 
   return (
@@ -42,7 +45,7 @@ export const ApplicationsBlock: FC<Props> = ({ applications }) => {
         pagination={{
           page: pagination.pageIndex,
           size: pagination.pageSize,
-          total: applications.length || 0
+          total: totalCount
         }}
       />
     </Container>
