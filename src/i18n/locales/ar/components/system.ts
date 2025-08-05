@@ -23,6 +23,7 @@ const System = {
   'SYSTEM.PHONE_NUMBER': 'رقم الهاتف',
   'SYSTEM.SOURCE': 'المصدر',
   'SYSTEM.CREATED_AT': 'تاريخ الإنشاء',
+  'SYSTEM.NO_CHANGES_FOUND': 'لم يتم العثور على تغييرات',
   'SYSTEM.MANAGE_APPLICATIONS': 'إدارة الطلبات',
   'SYSTEM.EDIT': 'تعديل',
   'SYSTEM.DELETE': 'حذف',

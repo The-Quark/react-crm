@@ -24,6 +24,7 @@ const System = {
   'SYSTEM.TRASH': 'Trash',
   'SYSTEM.OLD_VALUES': 'Old Values',
   'SYSTEM.NEW_VALUES': 'New Values',
+  'SYSTEM.NO_CHANGES_FOUND': 'No changes found',
   'SYSTEM.APPLICATION': 'Application',
   'SYSTEM.PHONE_NUMBER': 'Phone number',
   'SYSTEM.SOURCE': 'Source',

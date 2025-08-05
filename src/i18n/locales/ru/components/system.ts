@@ -22,6 +22,7 @@ const System = {
   'SYSTEM.TRASH': 'Корзина',
   'SYSTEM.OLD_VALUES': 'Старые значения',
   'SYSTEM.NEW_VALUES': 'Новые значения',
+  'SYSTEM.NO_CHANGES_FOUND': 'Изменения не найдены',
   'SYSTEM.CHECK_HISTORY': 'Проверить историю',
   'SYSTEM.RECOVER': 'Восстановить',
   'SYSTEM.APPLICATION': 'Заявка',
