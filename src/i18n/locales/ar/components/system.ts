@@ -19,6 +19,8 @@ const System = {
   'SYSTEM.UNNAMED_ROLE': 'دور غير مسمى',
   'SYSTEM.TAGS_TITLE': 'صلاحيات الوصول',
   'SYSTEM.ID': 'المعرف',
+  'SYSTEM.DEPARTURE_POINT': 'نقطة المغادرة',
+  'SYSTEM.ARRIVAL_POINT': 'نقطة الوصول',
   'SYSTEM.APPLICATION': 'طلب',
   'SYSTEM.PHONE_NUMBER': 'رقم الهاتف',
   'SYSTEM.SOURCE': 'المصدر',

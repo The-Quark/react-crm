@@ -19,6 +19,8 @@ const System = {
   'SYSTEM.UNNAMED_ROLE': 'Безымянная роль',
   'SYSTEM.TAGS_TITLE': 'Права доступа',
   'SYSTEM.ID': 'ID',
+  'SYSTEM.DEPARTURE_POINT': 'Пункт отправления',
+  'SYSTEM.ARRIVAL_POINT': 'Пункт прибытия',
   'SYSTEM.TRASH': 'Корзина',
   'SYSTEM.OLD_VALUES': 'Старые значения',
   'SYSTEM.NEW_VALUES': 'Новые значения',

@@ -11,12 +11,12 @@ export const ApplicationsRouteBlock = () => {
       <h3 className="card-title">{formatMessage({ id: 'SYSTEM.ROUTE' })}</h3>
       <SharedInput
         name="country_of_departure"
-        label={formatMessage({ id: 'SYSTEM.COUNTRY_OF_DEPARTURE' })}
+        label={formatMessage({ id: 'SYSTEM.DEPARTURE_POINT' })}
         formik={formik}
       />
       <SharedInput
         name="country_of_arrival"
-        label={formatMessage({ id: 'SYSTEM.COUNTRY_OF_ARRIVAL' })}
+        label={formatMessage({ id: 'SYSTEM.ARRIVAL_POINT' })}
         formik={formik}
       />
     </>

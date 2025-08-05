@@ -19,6 +19,8 @@ const System = {
   'SYSTEM.UNNAMED_ROLE': 'Unnamed Role',
   'SYSTEM.TAGS_TITLE': 'Access Rights',
   'SYSTEM.ID': 'ID',
+  'SYSTEM.DEPARTURE_POINT': 'Departure point',
+  'SYSTEM.ARRIVAL_POINT': 'Arrival point',
   'SYSTEM.RECOVER': 'Recover',
   'SYSTEM.CHECK_HISTORY': 'Check History',
   'SYSTEM.TRASH': 'Trash',
