@@ -22,6 +22,8 @@ const System = {
   'SYSTEM.RECOVER': 'Recover',
   'SYSTEM.CHECK_HISTORY': 'Check History',
   'SYSTEM.TRASH': 'Trash',
+  'SYSTEM.OLD_VALUES': 'Old Values',
+  'SYSTEM.NEW_VALUES': 'New Values',
   'SYSTEM.APPLICATION': 'Application',
   'SYSTEM.PHONE_NUMBER': 'Phone number',
   'SYSTEM.SOURCE': 'Source',

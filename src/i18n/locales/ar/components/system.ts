@@ -115,6 +115,8 @@ const System = {
   'SYSTEM.RECEIVER_DETAILS': 'تفاصيل المستلم',
   'SYSTEM.INTERNATIONAL': 'دولي',
   'SYSTEM.YES': 'نعم',
+  'SYSTEM.OLD_VALUES': 'القيم القديمة',
+  'SYSTEM.NEW_VALUES': 'القيم الجديدة',
   'SYSTEM.CUSTOMS_CLEARANCE': 'التخليص الجمركي',
   'SYSTEM.WIDTH': 'العرض',
   'SYSTEM.LENGTH': 'الطول',

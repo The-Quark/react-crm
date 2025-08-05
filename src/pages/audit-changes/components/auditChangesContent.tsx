@@ -1,76 +1,51 @@
-import { FC } from 'react';
-import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
+import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
+import { Log } from '@/api/get/getAuditLog/types.ts';
+import { Container } from '@/components';
 
 interface IGeneralSettingsProps {
-  parameter: ParametersModel | null;
+  logs?: Log;
 }
 
-export const AuditChangesContent: FC<IGeneralSettingsProps> = ({ parameter }) => {
+export const AuditChangesContent: FC<IGeneralSettingsProps> = ({ logs }) => {
   const { formatMessage } = useIntl();
   return (
-    <div className="card pb-2.5">
-      <div className="card-header" id="general_settings">
-        <h3 className="card-title">{formatMessage({ id: 'SYSTEM.COMPANY' })}</h3>
-      </div>
-      <div className="card-body grid gap-5">
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">
-            {formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}
-          </label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.company_name}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56"> {formatMessage({ id: 'SYSTEM.TIMEZONE' })}</label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.timezone}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56"> {formatMessage({ id: 'SYSTEM.CURRENCY' })}</label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.currency}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56"> {formatMessage({ id: 'SYSTEM.LANGUAGE' })}</label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.language.name}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">
-            {formatMessage({ id: 'SYSTEM.LEGAL_ADDRESS' })}
-          </label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.legal_address}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">
-            {formatMessage({ id: 'SYSTEM.WAREHOUSE_ADDRESS' })}
-          </label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.warehouse_address}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.AIRLINES' })}</label>
-          <div className="flex columns-1 w-full flex-wrap">
-            {parameter?.airlines.map((airline) => airline.name).join(', ')}
+    <Container>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.OLD_VALUES' })}</h3>
+          </div>
+          <div className="card-body grid gap-4">
+            {logs?.changes &&
+              Object.entries(logs.changes).map(([field, change]) => (
+                <div key={`old-${field}`} className="flex items-baseline gap-2.5">
+                  <label className="form-label min-w-[120px] capitalize">{field}:</label>
+                  <div className="flex-1">
+                    {change.old?.toString() || formatMessage({ id: 'SYSTEM.NO_VALUE' })}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
 
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">
-            {formatMessage({ id: 'SYSTEM.DIMENSIONS_PER_PLACE' })}
-          </label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.dimensions_per_place}</div>
-        </div>
-
-        <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <label className="form-label max-w-56">
-            {formatMessage({ id: 'SYSTEM.COST_PER_PLACE' })}
-          </label>
-          <div className="flex columns-1 w-full flex-wrap">{parameter?.cost_per_airplace}</div>
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.NEW_VALUES' })}</h3>
+          </div>
+          <div className="card-body grid gap-4">
+            {logs?.changes &&
+              Object.entries(logs.changes).map(([field, change]) => (
+                <div key={`new-${field}`} className="flex items-baseline gap-2.5">
+                  <label className="form-label min-w-[120px] capitalize">{field}:</label>
+                  <div className="flex-1">
+                    {change.new?.toString() || formatMessage({ id: 'SYSTEM.NO_VALUE' })}
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container } from '@/components';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getAuditLog } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
+import { AuditChangesContent } from '@/pages/audit-changes/components/auditChangesContent.tsx';
 
 export const AuditChangesPage = () => {
   const { entity_type, entity_id } = useParams<{
@@ -20,11 +20,11 @@ export const AuditChangesPage = () => {
   });
 
   if (isLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   if (isError) {
     return <SharedError error={error} />;
   }
-  return <Container>qwerty</Container>;
+  return <AuditChangesContent logs={data?.result[0] ?? undefined} />;
 };

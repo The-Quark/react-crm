@@ -20,6 +20,8 @@ const System = {
   'SYSTEM.TAGS_TITLE': 'Права доступа',
   'SYSTEM.ID': 'ID',
   'SYSTEM.TRASH': 'Корзина',
+  'SYSTEM.OLD_VALUES': 'Старые значения',
+  'SYSTEM.NEW_VALUES': 'Новые значения',
   'SYSTEM.CHECK_HISTORY': 'Проверить историю',
   'SYSTEM.RECOVER': 'Восстановить',
   'SYSTEM.APPLICATION': 'Заявка',
