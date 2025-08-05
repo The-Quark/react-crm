@@ -83,7 +83,8 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           sender_patronymic: initialData.sender.patronymic || '',
           sender_company_name: initialData.sender.company_name || '',
           sender_bin: initialData.sender.bin || '',
-          sender_type: initialData.sender.type || (initialData.sender.bin ? 'legal' : 'individual'),
+          sender_type:
+            initialData.sender.sender_type || (initialData.sender.bin ? 'legal' : 'individual'),
           sender_country_id: initialData.sender.city?.country_id || '',
           sender_city_id: initialData.sender.city_id || '',
           sender_phone: initialData.sender.phone || '',
@@ -98,7 +99,8 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           receiver_company_name: initialData.receiver.company_name || '',
           receiver_bin: initialData.receiver.bin || '',
           receiver_type:
-            initialData.receiver.type || (initialData.receiver.bin ? 'legal' : 'individual'),
+            initialData.receiver.receiver_type ||
+            (initialData.receiver.bin ? 'legal' : 'individual'),
           receiver_country_id: initialData.receiver.city?.country_id || '',
           receiver_city_id: initialData.receiver.city_id || '',
           receiver_phone: initialData.receiver.phone || '',

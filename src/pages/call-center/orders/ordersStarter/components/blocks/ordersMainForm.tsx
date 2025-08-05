@@ -89,7 +89,8 @@ const getInitialValues = (
       package_description: mainForm.package_description || '',
       special_wishes: mainForm.special_wishes || '',
       order_content: mainForm.order_content || [],
-      sender_contact_id: mainForm.sender_contact_id || ''
+      sender_contact_id: mainForm.sender_contact_id || '',
+      sender_type: mainForm.sender_type || 'individual'
     };
   }
   return {
@@ -113,7 +114,8 @@ const getInitialValues = (
     package_description: '',
     special_wishes: '',
     order_content: [],
-    sender_contact_id: ''
+    sender_contact_id: '',
+    sender_type: 'individual'
   };
 };
 

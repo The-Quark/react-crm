@@ -297,6 +297,8 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
 
   if (isFormLoading) return <SharedLoading simple />;
 
+  console.log('client type', formik.values.sender_type);
+
   if (isFormError) {
     const errors = [countriesError, clientsError, specificClientError, citiesError].filter(Boolean);
 

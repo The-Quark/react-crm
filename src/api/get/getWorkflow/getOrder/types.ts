@@ -76,6 +76,8 @@ interface Person {
   updated_at: string;
   deleted_at: string | null;
   type: 'legal' | 'individual';
+  sender_type: 'legal' | 'individual';
+  receiver_type: 'legal' | 'individual';
   company_name: string | null;
   bin: string | null;
 }
