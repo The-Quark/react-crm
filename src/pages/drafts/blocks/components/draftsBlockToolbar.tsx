@@ -28,7 +28,7 @@ interface ToolbarProps {
   onDateRangeChange?: (range: DateRange | undefined) => void;
 }
 
-export const MyDraftsToolbar: FC<ToolbarProps> = ({
+export const DraftsBlockToolbar: FC<ToolbarProps> = ({
   onSearch,
   onDeliveryCategory,
   onStatus,

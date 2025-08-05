@@ -1,25 +1,25 @@
 import { useIntl } from 'react-intl';
 import { Container, DataGrid } from '@/components';
-import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
-import { useApplicationsBlockColumns } from '@/pages/drafts/blocks/applications/components/applicationsBlockColumns.tsx';
 import React, { FC } from 'react';
+import { usePackagesBlockColumns } from '@/pages/trash/blocks/packages/components/packagesBlockColumns.tsx';
+import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 
 interface Props {
-  applications: Application[];
+  orders: Package[];
   pagination: { pageIndex: number; pageSize: number };
   onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => void;
   totalCount: number;
 }
 
-export const ApplicationsBlock: FC<Props> = ({
-  applications,
+export const PackagesBlock: FC<Props> = ({
+  orders,
   pagination,
   onPaginationChange,
   totalCount
 }) => {
   const { formatMessage } = useIntl();
 
-  const columns = useApplicationsBlockColumns();
+  const columns = usePackagesBlockColumns();
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     onPaginationChange({
@@ -34,12 +34,12 @@ export const ApplicationsBlock: FC<Props> = ({
       <DataGrid
         serverSide
         columns={columns}
-        data={applications || []}
+        data={orders || []}
         onFetchData={handleFetchData}
         layout={{ card: true }}
         toolbar={
           <div className="card-header px-5 py-5 border-b-0 flex-wrap gap-2">
-            <h3 className="card-title"> {formatMessage({ id: 'SYSTEM.APPLICATIONS' })}</h3>
+            <h3 className="card-title"> {formatMessage({ id: 'SYSTEM.PACKAGES' })}</h3>
           </div>
         }
         pagination={{

@@ -7,14 +7,14 @@ import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
-import { MyDraftsMenuOptions } from '@/pages/call-center/my-drafts/components/blocks/myDraftsMenuOptions.tsx';
+import { DraftsBlockMenuOptions } from '@/pages/drafts/blocks/components/draftsBlockMenuOptions.tsx';
 import { useIntl } from 'react-intl';
 
 interface UseColumnsProps {
   onDeleteClick: (id: number) => void;
 }
 
-export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef<Order>[] => {
+export const useDraftsBlockColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef<Order>[] => {
   const { isRTL } = useLanguage();
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
@@ -226,7 +226,7 @@ export const useMyDraftsColumn = ({ onDeleteClick }: UseColumnsProps): ColumnDef
               <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
                 <KeenIcon icon="dots-vertical" />
               </MenuToggle>
-              {MyDraftsMenuOptions({
+              {DraftsBlockMenuOptions({
                 id: info.row.original.id,
                 onDeleteClick: onDeleteClick
               })}

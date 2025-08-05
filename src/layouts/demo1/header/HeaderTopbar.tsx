@@ -60,6 +60,16 @@ const HeaderTopbar = () => {
                 path="/drafts"
                 className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
               >
+                <KeenIcon icon="scroll" />
+              </MenuLink>
+            </MenuItem>
+          </Menu>
+          <Menu>
+            <MenuItem>
+              <MenuLink
+                path="/trash"
+                className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
+              >
                 <KeenIcon icon="trash-square" />
               </MenuLink>
             </MenuItem>

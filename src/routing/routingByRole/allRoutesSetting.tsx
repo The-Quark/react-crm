@@ -136,8 +136,9 @@ import {
   CargoUploadPage,
   CargoStarterPage
 } from '@/pages/warehouse';
-import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
+import { TrashPage } from '@/pages/trash/trashPage.tsx';
 import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
+import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -175,8 +176,10 @@ const AllRoutesSetting = () => {
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
         <Route path="/hr-module/couriers/starter" element={<CouriersStarterPage />} />
         <Route path="/hr-module/couriers/starter/:id" element={<CouriersStarterPage />} />
+        <Route path="/trash" element={<TrashPage />} />
         <Route path="/drafts" element={<DraftsPage />} />
         <Route path="/audit-changes/:entity_type/:entity_id" element={<AuditChangesPage />} />
+        <Route path="/call-center/order" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/starter/:id" element={<ApplicationsStarterPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />

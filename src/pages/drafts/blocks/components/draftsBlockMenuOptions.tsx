@@ -17,7 +17,7 @@ interface MenuOptionsProps {
   onDeleteClick: (id: number) => void;
 }
 
-export const MyDraftsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
+export const DraftsBlockMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();

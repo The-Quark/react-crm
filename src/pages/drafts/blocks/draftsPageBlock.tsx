@@ -5,11 +5,11 @@ import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/shared
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
-import { useMyDraftsColumn } from '@/pages/call-center/my-drafts/components/blocks/myDraftsColumns.tsx';
-import { MyDraftsToolbar } from '@/pages/call-center/my-drafts/components/blocks/myDraftsToolbar.tsx';
+import { useDraftsBlockColumn } from '@/pages/drafts/blocks/components/draftsBlockColumns.tsx';
+import { DraftsBlockToolbar } from '@/pages/drafts/blocks/components/draftsBlockToolbar.tsx';
 import { initialPagination } from '@/utils';
 
-export const MyDraftsContent = () => {
+export const DraftsPageBlock = () => {
   const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,7 +62,7 @@ export const MyDraftsContent = () => {
     }
   };
 
-  const columns = useMyDraftsColumn({ onDeleteClick: handleDeleteClick });
+  const columns = useDraftsBlockColumn({ onDeleteClick: handleDeleteClick });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
     setPagination((prev) => ({
@@ -105,7 +105,7 @@ export const MyDraftsContent = () => {
         onFetchData={handleFetchData}
         layout={{ card: true }}
         toolbar={
-          <MyDraftsToolbar
+          <DraftsBlockToolbar
             onSearch={handleSearch}
             onStatus={handleStatus}
             onDeliveryCategory={handleDeliveryCategory}

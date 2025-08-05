@@ -40,8 +40,9 @@ import { TasksListPage, TasksViewPage } from '@/pages/tasks';
 import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
 import { CouriersListPage } from '@/pages/hr-module';
-import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
+import { TrashPage } from '@/pages/trash/trashPage.tsx';
+import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -62,6 +63,7 @@ const ViewerRoutesSetting = () => {
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />
         <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
+        <Route path="trash" element={<TrashPage />} />
         <Route path="drafts" element={<DraftsPage />} />
         <Route path="/audit-changes/:entity_type/:entity_id" element={<AuditChangesPage />} />
         <Route path="/call-center/applications/list" element={<ApplicationsListPage />} />

@@ -2,7 +2,7 @@ import { useIntl } from 'react-intl';
 import { Container, DataGrid } from '@/components';
 import React, { FC } from 'react';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
-import { useOrdersBlockColumns } from '@/pages/drafts/blocks/orders/components/ordersBlockColumns.tsx';
+import { useOrdersBlockColumns } from '@/pages/trash/blocks/orders/components/ordersBlockColumns.tsx';
 
 interface Props {
   orders: Order[];
