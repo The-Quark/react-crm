@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CURRENCIES, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getCurrencies } from '@/api';
+import { getAuth } from '@/auth';
 
 export type CurrencySystem = {
   name: string;
@@ -23,10 +24,16 @@ export const CurrencyProvider = ({ children }: { children: React.ReactNode }) =>
 
   const { data, isError, isSuccess } = useQuery({
     queryKey: ['currencies'],
-    queryFn: () => getCurrencies({ is_active: true })
+    queryFn: () => getCurrencies({ is_active: true }),
+    enabled: !!getAuth()
   });
 
   useEffect(() => {
+    const auth = getAuth();
+    if (!auth) {
+      setAvailableCurrencies([...CURRENCIES]);
+      return;
+    }
     if (isError) {
       setAvailableCurrencies([...CURRENCIES]);
       return;
