@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, SEARCH_PER_PAGE } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getCitiesByCountryCode, getClients, getCountries } from '@/api';
 import { useFormik } from 'formik';
@@ -249,7 +249,9 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
   const handleCountryChange = useCallback(
     (val: string | number) => {
       const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-      formik.setFieldValue('receiver_country_id', val ? Number(val) : '');
+      console.log('test1: ', formik.values.receiver_country_id);
+      formik.setFieldValue('receiver_country_id', val ? val : '');
+      console.log('test2: ', formik.values.receiver_country_id);
       formik.setFieldValue('receiver_city_id', '');
       setModalInfoData({
         ...modalInfo,

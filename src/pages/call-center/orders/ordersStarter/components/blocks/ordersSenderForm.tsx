@@ -160,7 +160,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['orderSenderCities', formik.values.sender_country_id],
+    queryKey: ['orderSenderCities', formik.values.sender_country_id, formik.values.sender_city_id],
     queryFn: () => getCitiesByCountryCode(formik.values.sender_country_id as string | number, 'id'),
     enabled: !!formik.values.sender_country_id
   });
@@ -209,6 +209,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
         sender_location_description: currentValues.sender_location_description || '',
         sender_notes: currentValues.sender_notes || ''
       };
+      console.log('fa: ', baseValues);
 
       const valuesToSet = isLegalClient
         ? {
@@ -236,7 +237,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
         sender_city_name: selectedClient?.city_name ?? modalInfo?.sender_city_name
       });
     },
-    [clientsData, specificClientData, formik, modalInfo, setModalInfoData]
+    [clientsData, specificClientData, formik, modalInfo, setModalInfoData, citiesLoading]
   );
 
   useEffect(() => {
@@ -263,7 +264,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   const handleCityChange = useCallback(
     (val: string | number) => {
       const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-      formik.setFieldValue('sender_city_id', val ? Number(val) : '');
+      // formik.setFieldValue('sender_city_id', val ? Number(val) : '');
       setModalInfoData({
         ...modalInfo,
         sender_city_name: selectedCity?.name ?? ''
@@ -296,8 +297,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
     countriesIsError || clientsIsError || specificClientIsError || (isEditMode && citiesIsError);
 
   if (isFormLoading) return <SharedLoading simple />;
-
-  console.log('client type', formik.values.sender_type);
 
   if (isFormError) {
     const errors = [countriesError, clientsError, specificClientError, citiesError].filter(Boolean);
@@ -405,9 +404,11 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             value={formik.values.sender_city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
             placeholder={
-              formik.values.sender_city_id
-                ? formatMessage({ id: 'SYSTEM.SELECT' })
-                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+              citiesLoading
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formik.values.sender_country_id
+                  ? formatMessage({ id: 'SYSTEM.SELECT' })
+                  : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             onChange={handleCityChange}

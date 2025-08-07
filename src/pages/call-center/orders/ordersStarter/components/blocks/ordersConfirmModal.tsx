@@ -34,10 +34,11 @@ export const OrdersConfirmModal: FC<Props> = ({
   const { currency: currentCurrency } = useCurrency();
   const queryClient = useQueryClient();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
 
   const handleConfirm = async () => {
-    setIsSubmitting(true);
+    setIsSubmittingOrder(true);
     try {
       if (!mainFormData) throw new Error('mainFormData is null');
       await onOrderSubmit(mainFormData);
@@ -47,12 +48,12 @@ export const OrdersConfirmModal: FC<Props> = ({
     } catch (error) {
       console.error('Error submitting order:', error);
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingOrder(false);
     }
   };
 
   const handleDraftConfirm = async () => {
-    setIsSubmitting(true);
+    setIsSubmittingDraft(true);
     try {
       if (!mainFormData) throw new Error('mainFormData is null');
       await onOrderDraftSubmit(mainFormData);
@@ -62,7 +63,7 @@ export const OrdersConfirmModal: FC<Props> = ({
     } catch (error) {
       console.error('Error submitting draft:', error);
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingDraft(false);
     }
   };
 
@@ -379,18 +380,18 @@ export const OrdersConfirmModal: FC<Props> = ({
           <button
             className="btn btn-md btn-light mr-3 mb-3"
             onClick={handleDraftConfirm}
-            disabled={isSubmitting}
+            disabled={isSubmittingDraft}
           >
-            {isSubmitting
+            {isSubmittingDraft
               ? formatMessage({ id: 'SYSTEM.LOADING' })
               : formatMessage({ id: 'SYSTEM.SEND_TO_DRAFT' })}
           </button>
           <button
             className="btn btn-md btn-primary mr-3 mb-3"
             onClick={handleConfirm}
-            disabled={isSubmitting}
+            disabled={isSubmittingOrder}
           >
-            {isSubmitting
+            {isSubmittingOrder
               ? formatMessage({ id: 'SYSTEM.LOADING' })
               : formatMessage({ id: 'SYSTEM.CONFIRM_ORDER' })}
           </button>

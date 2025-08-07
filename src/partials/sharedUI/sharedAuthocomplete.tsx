@@ -56,6 +56,7 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
 }) => {
   const { formatMessage } = useIntl();
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+  console.log('tres: ', value);
 
   const selectTriggerClasses = clsx('w-full', {
     'border-danger focus:border-danger': touched && error
