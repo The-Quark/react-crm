@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { BIN_LENGTH, cleanValues, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
-import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
+import { getCitiesByCountryCode, getClients, getCountries } from '@/api';
 import { useQuery } from '@tanstack/react-query';
 import {
   SharedAutocomplete,
@@ -17,6 +17,7 @@ import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderRecei
 import { Client } from '@/api/get/getClients/types.ts';
 import { useIntl } from 'react-intl';
 import { ClientType } from '@/api/enums';
+import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 
 interface Props {
   onConfirmModal?: () => void;
@@ -25,18 +26,18 @@ interface Props {
 
 const formSchema = Yup.object().shape({
   first_name: Yup.string().when('type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   last_name: Yup.string().when('type', {
-    is: 'individual',
+    is: ClientType.INDIVIDUAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
   patronymic: Yup.string().optional(),
   bin: Yup.string().when('type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) =>
       schema
         .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
@@ -45,7 +46,7 @@ const formSchema = Yup.object().shape({
     otherwise: (schema) => schema.optional()
   }),
   company_name: Yup.string().when('type', {
-    is: 'legal',
+    is: ClientType.LEGAL,
     then: (schema) => schema.required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     otherwise: (schema) => schema.optional()
   }),
@@ -163,9 +164,11 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
 
     if (selectedClient) {
       const isLegalClient = selectedClient.type === ClientType.LEGAL;
+      const currentValues = formik.values;
 
-      formik.setValues({
-        ...formik.values,
+      const baseValues = {
+        ...currentValues,
+        contact_id: String(selectedClient.id),
         first_name: isLegalClient ? '' : selectedClient.first_name || '',
         last_name: isLegalClient ? '' : selectedClient.last_name || '',
         patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
@@ -182,7 +185,29 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
         notes: formik.values.notes || '',
         country_name: selectedClient?.country_name ?? '',
         city_name: selectedClient?.city_name ?? ''
-      });
+      };
+
+      if (isLegalClient) {
+        formik.setValues({
+          ...baseValues,
+          company_name: selectedClient.company_name || '',
+          bin: selectedClient.bin || '',
+          first_name: '',
+          last_name: '',
+          patronymic: '',
+          type: ClientType.LEGAL as IOrderFormValues['receiver_type']
+        });
+      } else {
+        formik.setValues({
+          ...baseValues,
+          first_name: selectedClient.first_name || '',
+          last_name: selectedClient.last_name || '',
+          patronymic: selectedClient.patronymic || '',
+          company_name: '',
+          bin: '',
+          type: ClientType.INDIVIDUAL as IOrderFormValues['receiver_type']
+        });
+      }
     }
   };
 
@@ -265,7 +290,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
             loading={clientsLoading}
           />
 
-          {formik.values.type === 'legal' ? (
+          {formik.values.type === ClientType.LEGAL ? (
             <>
               <SharedInput
                 name="company_name"
