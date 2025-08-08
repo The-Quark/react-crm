@@ -192,7 +192,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
         specificClientData?.result?.find((client) => client.id === Number(clientId));
 
       if (!selectedClient) return;
-
       const isLegalClient = selectedClient.type === ClientType.LEGAL;
       const currentValues = formik.values;
 
@@ -209,7 +208,6 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
         sender_location_description: currentValues.sender_location_description || '',
         sender_notes: currentValues.sender_notes || ''
       };
-      console.log('fa: ', baseValues);
 
       const valuesToSet = isLegalClient
         ? {
@@ -274,11 +272,15 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
 
   const handleCityChange = useCallback(
     (val: string | number) => {
+      if (formik.values.sender_city_id === (val ? Number(val) : '')) {
+        return;
+      }
+
       const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
       formik.setFieldValue('sender_city_id', val ? Number(val) : '');
       formik.setFieldValue('sender_city_name', selectedCity?.name ?? '');
     },
-    [citiesData, formik]
+    [formik, citiesData]
   );
 
   const handleClientTypeChange = useCallback(
@@ -399,11 +401,16 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
             value={formik.values.sender_country_id ?? ''}
             options={countriesData?.data ?? []}
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
+            placeholder={
+              countriesLoading
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formatMessage({ id: 'SYSTEM.SELECT' })
+            }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
             onChange={handleCountryChange}
             error={formik.errors.sender_country_id as string}
             touched={formik.touched.sender_country_id}
+            loading={countriesLoading}
             searchTerm={searchTerm}
             onSearchTermChange={setSearchTerm}
           />

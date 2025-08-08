@@ -111,7 +111,6 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  console.log('mainFormData: ', mainFormData);
 
   const formik = useFormik({
     initialValues: getInitialValues(mainFormData),

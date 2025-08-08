@@ -56,7 +56,6 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
 }) => {
   const { formatMessage } = useIntl();
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
-  console.log('tres: ', value);
 
   const selectTriggerClasses = clsx('w-full', {
     'border-danger focus:border-danger': touched && error
@@ -76,13 +75,13 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
 
   const handleValueChange = useCallback(
     (val: string) => {
-      if (val === '__clear__') {
-        onChange('');
-      } else {
-        onChange(Number(val));
+      const newValue = val === '__clear__' ? '' : Number(val);
+      if (value === newValue) {
+        return;
       }
+      onChange(newValue);
     },
-    [onChange]
+    [onChange, value]
   );
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +154,11 @@ const SharedAutocompleteComponent: React.FC<SharedAutocompleteProps> = ({
     <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
-        <Select value={value?.toString()} onValueChange={handleValueChange} disabled={disabled}>
+        <Select
+          value={value?.toString()}
+          onValueChange={loading ? () => value : handleValueChange}
+          disabled={disabled}
+        >
           <SelectTrigger className={selectTriggerClasses}>
             <SelectValue placeholder={placeholder || formatMessage({ id: 'SYSTEM.SELECT' })} />
           </SelectTrigger>
