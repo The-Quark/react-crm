@@ -102,21 +102,12 @@ const getInitialValues = (
 };
 
 export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack }) => {
-  const { mainForm, setMainForm } = useFastFormContext();
   const { formatMessage } = useIntl();
+  const { mainForm, setMainForm } = useFastFormContext();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
-
-  const {
-    data: clientsData,
-    isLoading: clientsLoading,
-    isError: clientsIsError,
-    error: clientsError
-  } = useQuery({
-    queryKey: ['fastFormReceiverClients', clientSearchTerm],
-    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
-  });
 
   const formik = useFormik({
     initialValues: getInitialValues(mainForm?.order?.receiver as IReceiverOrderFormValues),
@@ -136,14 +127,23 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
   });
 
   const {
+    data: clientsData,
+    isLoading: clientsLoading,
+    isError: clientsIsError,
+    error: clientsError
+  } = useQuery({
+    queryKey: ['fastFormReceiverClients', clientSearchTerm],
+    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
+  });
+
+  const {
     data: countriesData,
     isLoading: countriesLoading,
     isError: countriesIsError,
     error: countriesError
   } = useQuery({
     queryKey: ['fastFormReceiverCountries'],
-    queryFn: () => getCountries('id,iso2,name'),
-    staleTime: Infinity
+    queryFn: () => getCountries('id,iso2,name')
   });
 
   const {
@@ -152,7 +152,7 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['fastFormReceiverCities', formik.values.country_id],
+    queryKey: ['fastFormReceiverCities', formik.values.country_id, formik.values.city_id],
     queryFn: () => getCitiesByCountryCode(formik.values.country_id as string | number, 'id'),
     enabled: !!formik.values.country_id
   });
@@ -304,9 +304,11 @@ export const FastFormContentReceiverForm: FC<Props> = ({ onConfirmModal, onBack 
             value={formik.values.city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
             placeholder={
-              formik.values.city_id
-                ? formatMessage({ id: 'SYSTEM.SELECT' })
-                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+              citiesLoading
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formik.values.country_id
+                  ? formatMessage({ id: 'SYSTEM.SELECT' })
+                  : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             onChange={(val) => {

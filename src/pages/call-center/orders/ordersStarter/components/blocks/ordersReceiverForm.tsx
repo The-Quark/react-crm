@@ -159,7 +159,11 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
     isError: citiesIsError,
     error: citiesError
   } = useQuery({
-    queryKey: ['orderReceiverCities', formik.values.receiver_country_id],
+    queryKey: [
+      'orderReceiverCities',
+      formik.values.receiver_country_id,
+      formik.values.receiver_city_id
+    ],
     queryFn: () =>
       getCitiesByCountryCode(formik.values.receiver_country_id as string | number, 'id'),
     enabled: !!formik.values.receiver_country_id
