@@ -1,5 +1,3 @@
-import { IPagination } from '@/api/generalManualTypes';
-
 export interface City {
   id: number;
   name: string;

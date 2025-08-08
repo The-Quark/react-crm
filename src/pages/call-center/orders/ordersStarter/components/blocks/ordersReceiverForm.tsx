@@ -105,7 +105,7 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
 
 export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmModal }) => {
   const { formatMessage } = useIntl();
-  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
+  const { setMainFormData, mainFormData } = useOrderCreation();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -207,7 +207,9 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
           receiver_house: currentValues.receiver_house || '',
           receiver_apartment: currentValues.receiver_apartment || '',
           receiver_location_description: currentValues.receiver_location_description || '',
-          receiver_notes: currentValues.receiver_notes || ''
+          receiver_notes: currentValues.receiver_notes || '',
+          receiver_country_name: selectedClient?.country_name ?? '',
+          receiver_city_name: selectedClient?.city_name ?? ''
         };
 
         if (isLegalClient) {
@@ -231,16 +233,26 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             receiver_type: ClientType.INDIVIDUAL as IOrderFormValues['receiver_type']
           });
         }
-
-        setModalInfoData({
-          ...modalInfo,
-          receiver_country_name: selectedClient?.country_name ?? modalInfo?.receiver_country_name,
-          receiver_city_name: selectedClient?.city_name ?? modalInfo?.receiver_city_name
-        });
       }
     },
-    [clientsData, specificClientData, formik, modalInfo, setModalInfoData]
+    [clientsData, specificClientData, formik]
   );
+
+  useEffect(() => {
+    if (isEditMode && mainFormData && countriesData && citiesData) {
+      const countryName = countriesData.data.find(
+        (c: any) => c.id === mainFormData.receiver_country_id
+      )?.name;
+      const cityName = citiesData.data[0]?.cities?.find(
+        (c: any) => c.id === mainFormData.receiver_city_id
+      )?.name;
+      formik.setValues({
+        ...formik.values,
+        receiver_country_name: countryName || '',
+        receiver_city_name: cityName || ''
+      });
+    }
+  }, [isEditMode, mainFormData, countriesData, citiesData]);
 
   useEffect(() => {
     if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
@@ -252,29 +264,21 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
   const handleCountryChange = useCallback(
     (val: string | number) => {
       const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-      console.log('test1: ', formik.values.receiver_country_id);
       formik.setFieldValue('receiver_country_id', val ? val : '');
-      console.log('test2: ', formik.values.receiver_country_id);
       formik.setFieldValue('receiver_city_id', '');
-      setModalInfoData({
-        ...modalInfo,
-        receiver_country_name: selectedCountry?.name ?? '',
-        receiver_city_name: ''
-      });
+      formik.setFieldValue('receiver_country_name', selectedCountry?.name ?? '');
+      formik.setFieldValue('receiver_city_name', '');
     },
-    [countriesData, formik, modalInfo, setModalInfoData]
+    [countriesData, formik]
   );
 
   const handleCityChange = useCallback(
     (val: string | number) => {
       const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
       formik.setFieldValue('receiver_city_id', val ? Number(val) : '');
-      setModalInfoData({
-        ...modalInfo,
-        receiver_city_name: selectedCity?.name ?? ''
-      });
+      formik.setFieldValue('receiver_city_name', selectedCity?.name ?? '');
     },
-    [citiesData, formik, modalInfo, setModalInfoData]
+    [citiesData, formik]
   );
 
   const handleClientTypeChange = useCallback(
@@ -408,9 +412,11 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             value={formik.values.receiver_city_id ?? ''}
             options={citiesData?.data[0]?.cities ?? []}
             placeholder={
-              formik.values.receiver_city_id
-                ? formatMessage({ id: 'SYSTEM.SELECT' })
-                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+              citiesLoading
+                ? formatMessage({ id: 'SYSTEM.LOADING' })
+                : formik.values.sender_country_id
+                  ? formatMessage({ id: 'SYSTEM.SELECT' })
+                  : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
             onChange={handleCityChange}

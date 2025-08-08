@@ -29,7 +29,7 @@ export const OrdersConfirmModal: FC<Props> = ({
   onOrderDraftSubmit
 }) => {
   const { formatMessage } = useIntl();
-  const { mainFormData, modalInfo } = useOrderCreation();
+  const { mainFormData } = useOrderCreation();
   const navigate = useNavigate();
   const { currency: currentCurrency } = useCurrency();
   const queryClient = useQueryClient();
@@ -249,7 +249,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.COUNTRY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.sender_country_name || '-'}
+                      {mainFormData?.sender_country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -257,7 +257,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.CITY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.sender_city_name || '-'}
+                      {mainFormData?.sender_city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -322,7 +322,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.COUNTRY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.receiver_country_name || '-'}
+                      {mainFormData?.receiver_country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -330,7 +330,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.CITY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.receiver_city_name || '-'}
+                      {mainFormData?.receiver_city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

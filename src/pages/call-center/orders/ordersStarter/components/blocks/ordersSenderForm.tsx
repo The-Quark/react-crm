@@ -106,7 +106,7 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
 
 export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
   const { formatMessage } = useIntl();
-  const { setMainFormData, mainFormData, setModalInfoData, modalInfo } = useOrderCreation();
+  const { setMainFormData, mainFormData } = useOrderCreation();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -229,16 +229,30 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             sender_bin: ''
           };
 
-      formik.setValues(valuesToSet as IOrderFormValues);
-
-      setModalInfoData({
-        ...modalInfo,
-        sender_country_name: selectedClient?.country_name ?? modalInfo?.sender_country_name,
-        sender_city_name: selectedClient?.city_name ?? modalInfo?.sender_city_name
-      });
+      formik.setValues({
+        ...valuesToSet,
+        sender_country_name: selectedClient?.country_name ?? '',
+        sender_city_name: selectedClient?.city_name ?? ''
+      } as IOrderFormValues);
     },
-    [clientsData, specificClientData, formik, modalInfo, setModalInfoData, citiesLoading]
+    [clientsData, specificClientData, formik, citiesLoading]
   );
+
+  useEffect(() => {
+    if (isEditMode && mainFormData && countriesData && citiesData) {
+      const countryName = countriesData.data.find(
+        (c: any) => c.id === mainFormData.sender_country_id
+      )?.name;
+      const cityName = citiesData.data[0]?.cities?.find(
+        (c: any) => c.id === mainFormData.sender_city_id
+      )?.name;
+      formik.setValues({
+        ...formik.values,
+        sender_country_name: countryName || '',
+        sender_city_name: cityName || ''
+      });
+    }
+  }, [isEditMode, mainFormData, countriesData, citiesData]);
 
   useEffect(() => {
     if (specificClientData?.result?.[0] && isInitialLoad && !isEditMode) {
@@ -252,25 +266,19 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
       const selectedCountry = countriesData?.data?.find((country) => country.id === val);
       formik.setFieldValue('sender_country_id', val ? Number(val) : '');
       formik.setFieldValue('sender_city_id', '');
-      setModalInfoData({
-        ...modalInfo,
-        sender_country_name: selectedCountry?.name ?? '',
-        sender_city_name: ''
-      });
+      formik.setFieldValue('sender_country_name', selectedCountry?.name ?? '');
+      formik.setFieldValue('sender_city_name', '');
     },
-    [countriesData, formik, modalInfo, setModalInfoData]
+    [countriesData, formik]
   );
 
   const handleCityChange = useCallback(
     (val: string | number) => {
       const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-      // formik.setFieldValue('sender_city_id', val ? Number(val) : '');
-      setModalInfoData({
-        ...modalInfo,
-        sender_city_name: selectedCity?.name ?? ''
-      });
+      formik.setFieldValue('sender_city_id', val ? Number(val) : '');
+      formik.setFieldValue('sender_city_name', selectedCity?.name ?? '');
     },
-    [citiesData, formik, modalInfo, setModalInfoData]
+    [citiesData, formik]
   );
 
   const handleClientTypeChange = useCallback(

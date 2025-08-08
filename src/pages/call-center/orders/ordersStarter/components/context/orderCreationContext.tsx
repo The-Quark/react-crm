@@ -4,21 +4,12 @@ import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { ClientType, DeliveryCategories } from '@/api/enums';
 
-interface IModalInfo {
-  sender_country_name?: string;
-  sender_city_name?: string;
-  receiver_country_name?: string;
-  receiver_city_name?: string;
-}
-
 interface OrderCreationContextType {
   mainFormData: IOrderFormValues | null;
-  modalInfo: IModalInfo | null;
   applicationId?: number | null;
   isLoading: boolean;
   setApplicationId: (id?: number) => void;
   setMainFormData: (data: IOrderFormValues) => void;
-  setModalInfoData: (data: IModalInfo) => void;
   clearAll: () => void;
   updateFormField: <K extends keyof IOrderFormValues>(field: K, value: IOrderFormValues[K]) => void;
 }
@@ -26,11 +17,9 @@ interface OrderCreationContextType {
 const OrderCreationContext = createContext<OrderCreationContextType>({
   applicationId: null,
   mainFormData: null,
-  modalInfo: null,
   isLoading: false,
   setApplicationId: () => {},
   setMainFormData: () => {},
-  setModalInfoData: () => {},
   clearAll: () => {},
   updateFormField: () => {}
 });
@@ -42,9 +31,7 @@ interface OrderCreationProviderProps {
 
 export const OrderCreationProvider = ({ children, initialData }: OrderCreationProviderProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const [mainFormData, setMainFormDataState] = useState<IOrderFormValues | null>(null);
-  const [modalInfo, setModalInfo] = useState<IModalInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [applicationId, setApplicationIdState] = useState<number | null>(
     searchParams.get('application_id') ? Number(searchParams.get('application_id')) : null
@@ -141,10 +128,6 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
     [setSearchParams]
   );
 
-  const setModalInfoData = useCallback((data: IModalInfo) => {
-    setModalInfo(data);
-  }, []);
-
   const setMainFormData = useCallback((data: IOrderFormValues) => {
     setMainFormDataState(data);
   }, []);
@@ -162,7 +145,6 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
   const clearAll = useCallback(() => {
     setApplicationIdState(null);
     setMainFormDataState(null);
-    setModalInfo(null);
     setSearchParams((prev) => {
       ['application_id'].forEach((param) => prev.delete(param));
       return prev;
@@ -173,9 +155,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
     () => ({
       applicationId,
       mainFormData,
-      modalInfo,
       isLoading,
-      setModalInfoData,
       setMainFormData,
       setApplicationId,
       clearAll,
@@ -184,9 +164,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
     [
       applicationId,
       mainFormData,
-      modalInfo,
       isLoading,
-      setModalInfoData,
       setMainFormData,
       setApplicationId,
       clearAll,
