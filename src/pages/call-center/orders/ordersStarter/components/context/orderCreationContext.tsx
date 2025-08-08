@@ -86,7 +86,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           sender_company_name: initialData.sender.company_name || '',
           sender_bin: initialData.sender.bin || '',
           sender_type:
-            initialData.sender.sender_type ||
+            (initialData.sender.sender_type as ClientType) ||
             (initialData.sender.bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
           sender_country_id: initialData.sender.city?.country_id || '',
           sender_city_id: initialData.sender.city_id || '',
@@ -102,7 +102,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           receiver_company_name: initialData.receiver.company_name || '',
           receiver_bin: initialData.receiver.bin || '',
           receiver_type:
-            initialData.receiver.receiver_type ||
+            (initialData?.receiver.receiver_type as ClientType) ||
             (initialData.receiver.bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
           receiver_country_id: initialData.receiver.city?.country_id || '',
           receiver_city_id: initialData.receiver.city_id || '',
