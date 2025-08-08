@@ -22,6 +22,8 @@ import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
 import { ApplicationsStatus, ClientType, DeliveryCategories } from '@/api/enums';
 import { useIntl } from 'react-intl';
+import { DeliveryType } from '@/api/get/getGuides/getDeliveryTypes/types.ts';
+import { PackageType } from '@/api/get/getGuides/getPackageTypes/types.ts';
 
 interface Props {
   onNext: () => void;
@@ -65,16 +67,29 @@ const formSchema = Yup.object().shape({
 
 const getInitialValues = (
   applicationId: string | number,
-  mainForm: IOrderFormValues | null
+  mainForm: IOrderFormValues | null,
+  deliveryTypesData?: DeliveryType[],
+  packageTypesData?: PackageType[]
 ): IOrderFormValues => {
   if (mainForm) {
+    const deliveryTypeName =
+      mainForm.delivery_type_name ||
+      deliveryTypesData?.find((t) => t.id === mainForm.delivery_type)?.name ||
+      '';
+    const packageTypeName =
+      mainForm.package_type_name ||
+      packageTypesData?.find((t) => t.id === mainForm.package_type)?.language[0]?.name ||
+      packageTypesData?.find((t) => t.id === mainForm.package_type)?.code ||
+      '';
     return {
       id: 0,
       application_id: mainForm.application_id || applicationId || '',
       status: undefined,
       delivery_type: mainForm.delivery_type || '',
+      delivery_type_name: deliveryTypeName,
       delivery_category: mainForm.delivery_category || DeliveryCategories.B2B,
       package_type: mainForm.package_type || '',
+      package_type_name: packageTypeName,
       is_express: mainForm.is_express || false,
       nominal_cost: mainForm.nominal_cost || '',
       weight: mainForm.weight || '',
@@ -120,23 +135,12 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
-  const { setMainFormData, applicationId, mainFormData, setModalInfoData, modalInfo } =
-    useOrderCreation();
+  const { setMainFormData, applicationId, mainFormData } = useOrderCreation();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const { currency } = useCurrency();
 
   const [searchTerm, setSearchTerm] = useState('');
-
-  const formik = useFormik({
-    initialValues: getInitialValues(applicationId || '', mainFormData),
-    validationSchema: formSchema,
-    onSubmit: (values) => {
-      setMainFormData({ ...mainFormData, ...values });
-      onNext();
-    },
-    enableReinitialize: true
-  });
 
   const {
     data: applicationsData,
@@ -179,6 +183,21 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
         language_code: currentLanguage.code,
         is_active: true
       })
+  });
+
+  const formik = useFormik({
+    initialValues: getInitialValues(
+      applicationId || '',
+      mainFormData,
+      deliveryTypesData?.result,
+      packageTypesData?.result
+    ),
+    validationSchema: formSchema,
+    onSubmit: (values) => {
+      setMainFormData({ ...mainFormData, ...values });
+      onNext();
+    },
+    enableReinitialize: true
   });
 
   useEffect(() => {
@@ -226,10 +245,10 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
         formik.setFieldValue('width', selectedApp.width || mainFormData?.width || '');
         formik.setFieldValue('length', selectedApp.length || mainFormData?.length || '');
         formik.setFieldValue('height', selectedApp.height || mainFormData?.height || '');
-        setModalInfoData({
-          ...modalInfo,
-          application_full_name: selectedApp?.full_name ?? ''
-        });
+        formik.setFieldValue(
+          'application_full_name',
+          selectedApp.full_name || mainFormData?.application_full_name || ''
+        );
       }
     }
   }, [applicationsData?.result, formik.values.application_id]);
@@ -273,10 +292,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
               const selectedApp = applicationsData?.result?.find((app) => app.id === val);
               formik.setFieldValue('application_id', val);
               formik.setFieldValue('sender_contact_id', selectedApp?.client_id || '');
-              setModalInfoData({
-                ...modalInfo,
-                application_full_name: selectedApp?.full_name ?? ''
-              });
+              formik.setFieldValue('application_full_name', selectedApp?.full_name || '');
             }}
             error={formik.errors.application_id as string}
             touched={formik.touched.application_id}
@@ -298,10 +314,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             onChange={(value) => {
               formik.setFieldValue('delivery_type', value);
               const selectedType = deliveryTypesData?.result?.find((type) => type.id === value);
-              setModalInfoData({
-                ...modalInfo,
-                delivery_type_name: selectedType?.name ?? ''
-              });
+              formik.setFieldValue('delivery_type_name', selectedType?.name || '');
             }}
           />
           <SharedSelect
@@ -333,10 +346,10 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
             onChange={(value) => {
               formik.setFieldValue('package_type', value);
               const selectedType = packageTypesData?.result?.find((type) => type.id === value);
-              setModalInfoData({
-                ...modalInfo,
-                package_type_name: selectedType?.language[0]?.name || selectedType?.code || ''
-              });
+              formik.setFieldValue(
+                'package_type_name',
+                selectedType?.language[0]?.name || selectedType?.code || ''
+              );
             }}
           />
           <SharedInputTags

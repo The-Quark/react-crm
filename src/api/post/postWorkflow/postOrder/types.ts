@@ -3,12 +3,15 @@ import { ClientType } from '@/api/enums';
 export interface IOrderFormValues {
   id?: number;
   application_id?: number | string;
+  application_full_name?: string;
   sender_id?: number;
   receiver_id?: number;
   source_id?: number | string;
   delivery_type?: number | string;
+  delivery_type_name?: string;
   delivery_category?: string;
   package_type?: number | string;
+  package_type_name?: string;
   weight?: number | string;
   width?: number | string;
   length?: number | string;

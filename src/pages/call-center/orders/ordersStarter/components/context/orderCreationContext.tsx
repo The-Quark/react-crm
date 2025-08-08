@@ -5,9 +5,6 @@ import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { ClientType, DeliveryCategories } from '@/api/enums';
 
 interface IModalInfo {
-  application_full_name?: string;
-  delivery_type_name?: string;
-  package_type_name?: string;
   sender_country_name?: string;
   sender_city_name?: string;
   receiver_country_name?: string;

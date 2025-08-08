@@ -100,7 +100,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.APPLICATION' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.application_full_name || '-'}
+                      {mainFormData?.application_full_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -108,7 +108,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.DELIVERY_TYPE' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.delivery_type_name || '-'}
+                      {mainFormData?.delivery_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -134,7 +134,7 @@ export const OrdersConfirmModal: FC<Props> = ({
                       {formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.package_type_name || '-'}
+                      {mainFormData?.package_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
