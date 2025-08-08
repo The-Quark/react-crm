@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { BIN_LENGTH, cleanValues, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
@@ -214,6 +214,30 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
     }
   }, [formik.values.contact_id]);
 
+  const handleCountryChange = useCallback(
+    (val: string | number) => {
+      const selectedCountry = countriesData?.data?.find((country) => country.id === val);
+      formik.setFieldValue('country_id', val ? Number(val) : '');
+      formik.setFieldValue('city_id', '');
+      formik.setFieldValue('country_name', selectedCountry?.name ?? '');
+      formik.setFieldValue('city_name', '');
+    },
+    [countriesData, formik]
+  );
+
+  const handleCityChange = useCallback(
+    (val: string | number) => {
+      if (formik.values.city_id === (val ? Number(val) : '')) {
+        return;
+      }
+
+      const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
+      formik.setFieldValue('city_id', val ? Number(val) : '');
+      formik.setFieldValue('city_name', selectedCity?.name ?? '');
+    },
+    [formik, citiesData]
+  );
+
   const isFormLoading = countriesLoading;
   const isFormError = countriesIsError || clientsIsError;
   const formErrors = [countriesError, clientsError, citiesError].filter((error) => error !== null);
@@ -300,13 +324,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
                 : formatMessage({ id: 'SYSTEM.SELECT' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
-            onChange={(val) => {
-              const selectedCountry = countriesData?.data?.find((country) => country.id === val);
-              formik.setFieldValue('country_id', val ? Number(val) : '');
-              formik.setFieldValue('city_id', '');
-              formik.setFieldValue('country_name', selectedCountry?.name ?? '');
-              formik.setFieldValue('city_name', '');
-            }}
+            onChange={handleCountryChange}
             error={formik.errors.country_id as string}
             touched={formik.touched.country_id}
             searchTerm={searchTerm}
@@ -325,11 +343,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
                   : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
             }
             searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
-            onChange={(val) => {
-              formik.setFieldValue('city_id', val ? Number(val) : '');
-              const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-              formik.setFieldValue('city_name', selectedCity?.name ?? '');
-            }}
+            onChange={handleCityChange}
             error={formik.errors.city_id as string}
             touched={formik.touched.city_id}
             searchTerm={citySearchTerm}
