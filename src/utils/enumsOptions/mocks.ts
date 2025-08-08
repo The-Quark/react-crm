@@ -15,7 +15,6 @@ import {
   DeliveryCategories,
   ClientSystemStatus
 } from '@/api/enums';
-import { toAbsoluteUrl } from '@/utils';
 
 export const timezoneMock = [
   {

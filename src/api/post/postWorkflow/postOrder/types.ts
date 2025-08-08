@@ -1,3 +1,5 @@
+import { ClientType } from '@/api/enums';
+
 export interface IOrderFormValues {
   id?: number;
   application_id?: number | string;
@@ -26,10 +28,12 @@ export interface IOrderFormValues {
   sender_last_name?: string;
   sender_patronymic?: string;
   sender_bin?: string;
-  sender_type?: 'individual' | 'legal';
+  sender_type?: ClientType.INDIVIDUAL | ClientType.LEGAL;
   sender_company_name?: string;
   sender_country_id?: number | string;
+  sender_country_name?: string;
   sender_city_id?: number | string;
+  sender_city_name?: string;
   sender_phone?: string;
   sender_street?: string;
   sender_house?: string;
@@ -41,10 +45,12 @@ export interface IOrderFormValues {
   receiver_last_name?: string;
   receiver_patronymic?: string;
   receiver_bin?: string;
-  receiver_type?: 'individual' | 'legal';
+  receiver_type?: ClientType.INDIVIDUAL | ClientType.LEGAL;
   receiver_company_name?: string;
   receiver_country_id?: number | string;
+  receiver_country_name?: string;
   receiver_city_id?: number | string;
+  receiver_city_name?: string;
   receiver_phone?: string;
   receiver_street?: string;
   receiver_house?: string;

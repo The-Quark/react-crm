@@ -111,6 +111,7 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [clientSearchTerm, setClientSearchTerm] = useState('');
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  console.log('mainFormData: ', mainFormData);
 
   const formik = useFormik({
     initialValues: getInitialValues(mainFormData),
@@ -216,7 +217,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             receiver_bin: selectedClient.bin || '',
             receiver_first_name: '',
             receiver_last_name: '',
-            receiver_patronymic: ''
+            receiver_patronymic: '',
+            receiver_type: ClientType.LEGAL as IOrderFormValues['receiver_type']
           });
         } else {
           formik.setValues({
@@ -225,7 +227,8 @@ export const OrdersReceiverForm: FC<Props> = ({ onBack, isEditMode, onConfirmMod
             receiver_last_name: selectedClient.last_name || '',
             receiver_patronymic: selectedClient.patronymic || '',
             receiver_company_name: '',
-            receiver_bin: ''
+            receiver_bin: '',
+            receiver_type: ClientType.INDIVIDUAL as IOrderFormValues['receiver_type']
           });
         }
 

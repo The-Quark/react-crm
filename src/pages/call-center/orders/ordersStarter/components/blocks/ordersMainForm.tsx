@@ -20,7 +20,7 @@ import { mockDeliveryCategories, mockOrdersStatus } from '@/utils/enumsOptions/m
 import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types.ts';
 import { IPostCalculateFormFields } from '@/api/post/postWorkflow/postOrderCalculate/types';
-import { ApplicationsStatus, DeliveryCategories } from '@/api/enums';
+import { ApplicationsStatus, ClientType, DeliveryCategories } from '@/api/enums';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -90,7 +90,7 @@ const getInitialValues = (
       special_wishes: mainForm.special_wishes || '',
       order_content: mainForm.order_content || [],
       sender_contact_id: mainForm.sender_contact_id || '',
-      sender_type: mainForm.sender_type || 'individual'
+      sender_type: mainForm.sender_type || ClientType.INDIVIDUAL
     };
   }
   return {
@@ -115,7 +115,7 @@ const getInitialValues = (
     special_wishes: '',
     order_content: [],
     sender_contact_id: '',
-    sender_type: 'individual'
+    sender_type: ClientType.INDIVIDUAL
   };
 };
 
@@ -127,7 +127,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const { currency } = useCurrency();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [triggerCurrency, setTriggerCurrency] = useState(currency.code);
 
   const formik = useFormik({
     initialValues: getInitialValues(applicationId || '', mainFormData),
@@ -210,7 +209,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     formik.values.height,
     formik.values.is_express,
     formik.values.nominal_cost,
-    triggerCurrency,
     currency.code
   ]);
 

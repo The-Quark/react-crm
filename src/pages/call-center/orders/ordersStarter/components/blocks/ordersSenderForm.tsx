@@ -81,7 +81,7 @@ const getInitialValues = (mainForm: IOrderFormValues | null): IOrderFormValues =
       sender_location_description: mainForm.sender_location_description || '',
       sender_notes: mainForm.sender_notes || '',
       sender_contact_id: mainForm.sender_contact_id || '',
-      receiver_country_id: mainForm.receiver_contact_id || ''
+      receiver_contact_id: mainForm.receiver_contact_id || ''
     };
   }
 
@@ -229,7 +229,7 @@ export const OrdersSenderForm: FC<Props> = ({ onNext, onBack, isEditMode }) => {
             sender_bin: ''
           };
 
-      formik.setValues(valuesToSet);
+      formik.setValues(valuesToSet as IOrderFormValues);
 
       setModalInfoData({
         ...modalInfo,

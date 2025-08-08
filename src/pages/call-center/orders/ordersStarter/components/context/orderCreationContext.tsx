@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { useSearchParams } from 'react-router-dom';
 import { IOrderFormValues } from '@/api/post/postWorkflow/postOrder/types';
 import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
+import { ClientType, DeliveryCategories } from '@/api/enums';
 
 interface IModalInfo {
   application_full_name?: string;
@@ -62,7 +63,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           application_id: initialData.application_id ?? '',
           status: initialData.status,
           delivery_type: initialData?.delivery_type?.id || '',
-          delivery_category: initialData?.delivery_category || 'b2b',
+          delivery_category: initialData?.delivery_category || DeliveryCategories.B2B,
           package_type: initialData?.package_type?.id || '',
           weight: initialData?.weight || '',
           width: initialData?.width || '',
@@ -73,6 +74,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           places_count: initialData?.places_count || 0,
           customs_clearance: initialData?.customs_clearance || false,
           is_international: initialData?.is_international || false,
+          is_express: initialData?.is_express || false,
           price: initialData?.price || '',
           package_description: initialData?.package_description || '',
           special_wishes: initialData?.special_wishes || '',
@@ -84,7 +86,8 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           sender_company_name: initialData.sender.company_name || '',
           sender_bin: initialData.sender.bin || '',
           sender_type:
-            initialData.sender.sender_type || (initialData.sender.bin ? 'legal' : 'individual'),
+            initialData.sender.sender_type ||
+            (initialData.sender.bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
           sender_country_id: initialData.sender.city?.country_id || '',
           sender_city_id: initialData.sender.city_id || '',
           sender_phone: initialData.sender.phone || '',
@@ -100,7 +103,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
           receiver_bin: initialData.receiver.bin || '',
           receiver_type:
             initialData.receiver.receiver_type ||
-            (initialData.receiver.bin ? 'legal' : 'individual'),
+            (initialData.receiver.bin ? ClientType.LEGAL : ClientType.INDIVIDUAL),
           receiver_country_id: initialData.receiver.city?.country_id || '',
           receiver_city_id: initialData.receiver.city_id || '',
           receiver_phone: initialData.receiver.phone || '',
