@@ -25,6 +25,7 @@ import {
 } from '@/partials/sharedUI';
 import { useFastFormContext } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { useIntl } from 'react-intl';
+import { ClientType } from '@/api/enums';
 
 interface Props {
   onNext: () => void;
@@ -73,12 +74,12 @@ const getInitialValues = (
       bin: applicationData.bin || '',
       phone: applicationData.phone || '',
       message: applicationData.message || '',
-      source: applicationData.source || 'insta',
+      source: applicationData.source || '',
       first_name: applicationData.first_name || '',
       last_name: applicationData.last_name || '',
       patronymic: applicationData.patronymic || '',
       company_name: applicationData.company_name || '',
-      client_type: applicationData.client_type || 'individual',
+      client_type: applicationData.client_type || ClientType.INDIVIDUAL,
       client_id: applicationData.client_id || ''
     };
   }
@@ -92,7 +93,7 @@ const getInitialValues = (
     patronymic: '',
     company_name: '',
     bin: '',
-    client_type: 'individual',
+    client_type: ClientType.INDIVIDUAL,
     client_id: ''
   };
 };
@@ -110,7 +111,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
       patronymic: '',
       company_name: '',
       bin: '',
-      client_type: 'individual',
+      client_type: ClientType.INDIVIDUAL,
       phone: '',
       email: '',
       source: '',
@@ -206,7 +207,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
 
   const handleClientTypeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newType = e.target.value as 'individual' | 'legal';
+      const newType = e.target.value as ClientType;
       const currentClientId = formik.values.client_id;
       formik.resetForm();
       formik.setFieldValue('client_type', newType);
@@ -228,7 +229,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
       last_name: client.last_name || '',
       patronymic: client.patronymic || '',
       company_name: client.company_name || '',
-      client_type: client.type || 'individual',
+      client_type: client.type || ClientType.INDIVIDUAL,
       phone: client.phone || '',
       email: client.email || '',
       source: client.source?.code || '',
@@ -294,17 +295,17 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
             formik={formik}
             options={[
               {
-                value: 'individual',
+                value: ClientType.INDIVIDUAL,
                 label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_INDIVIDUAL' })
               },
-              { value: 'legal', label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
+              { value: ClientType.LEGAL, label: formatMessage({ id: 'SYSTEM.CLIENT_TYPE_LEGAL' }) }
             ]}
             disabled={!!formik.values.client_id}
             onChange={handleClientTypeChange}
           />
 
           <>
-            {formik.values.client_type === 'legal' && (
+            {formik.values.client_type === ClientType.LEGAL && (
               <>
                 <SharedInput
                   name="company_name"
@@ -320,7 +321,7 @@ export const FastFormContentApplicationForm = ({ onNext }: Props) => {
                 />
               </>
             )}
-            {formik.values.client_type === 'individual' && (
+            {formik.values.client_type === ClientType.INDIVIDUAL && (
               <>
                 <SharedInput
                   name="first_name"

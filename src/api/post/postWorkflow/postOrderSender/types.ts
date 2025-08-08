@@ -1,3 +1,5 @@
+import { ClientType } from '@/api/enums';
+
 export interface ISenderOrderFormValues {
   first_name?: string;
   last_name?: string;
@@ -6,12 +8,14 @@ export interface ISenderOrderFormValues {
   company_name?: string;
   country_id: number | string;
   city_id: number | string;
+  type?: ClientType.INDIVIDUAL | ClientType.LEGAL;
   phone: string;
   street: string;
-  type?: 'individual' | 'legal';
   house: string;
   apartment?: string;
   location_description?: string;
   notes?: string;
   contact_id?: number | null | string;
+  country_name?: string;
+  city_name?: string;
 }

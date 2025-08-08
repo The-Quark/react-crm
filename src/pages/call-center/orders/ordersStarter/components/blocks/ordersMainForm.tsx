@@ -227,8 +227,7 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     formik.values.length,
     formik.values.height,
     formik.values.is_express,
-    formik.values.nominal_cost,
-    currency.code
+    formik.values.nominal_cost
   ]);
 
   useEffect(() => {

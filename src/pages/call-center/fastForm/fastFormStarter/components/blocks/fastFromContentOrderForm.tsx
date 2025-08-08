@@ -106,7 +106,7 @@ const getInitialValues = (orderData: IOrderFormValues): IOrderFormValues => {
 };
 
 export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
-  const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
+  const { mainForm, setMainForm } = useFastFormContext();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const { currency: currentCurrency } = useCurrency();
@@ -218,10 +218,7 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             onChange={(value) => {
               formik.setFieldValue('delivery_type', value);
               const selectedType = deliveryTypesData?.result?.find((type) => type.id === value);
-              setModalInfoData({
-                ...modalInfo,
-                delivery_type_name: selectedType?.name ?? ''
-              });
+              formik.setFieldValue('delivery_type_name', selectedType?.name || '');
             }}
           />
           <SharedSelect
@@ -253,10 +250,10 @@ export const FastFormContentOrderForm: FC<Props> = ({ onNext, onBack }) => {
             onChange={(value) => {
               formik.setFieldValue('package_type', value);
               const selectedType = packageTypesData?.result?.find((type) => type.id === value);
-              setModalInfoData({
-                ...modalInfo,
-                package_type_name: selectedType?.language[0]?.name || selectedType?.code || ''
-              });
+              formik.setFieldValue(
+                'package_type_name',
+                selectedType?.language[0]?.name || selectedType?.code || ''
+              );
             }}
           />
           <SharedInputTags

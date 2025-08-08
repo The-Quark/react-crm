@@ -25,7 +25,7 @@ interface Props {
 export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOrderSubmit }) => {
   const { formatMessage } = useIntl();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mainForm, modalInfo } = useFastFormContext();
+  const { mainForm } = useFastFormContext();
   const navigate = useNavigate();
   const { currency: currentCurrency } = useCurrency();
 
@@ -148,7 +148,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.DELIVERY_TYPE' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.delivery_type_name || '-'}
+                      {mainForm?.order?.delivery_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -172,7 +172,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.PACKAGE_TYPE' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.package_type_name || '-'}
+                      {mainForm?.order?.package_type_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -279,7 +279,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.COUNTRY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.sender_country_name || '-'}
+                      {mainForm?.order?.sender?.country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -287,7 +287,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.CITY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.sender_city_name || '-'}
+                      {mainForm?.order?.sender?.city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -356,7 +356,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.COUNTRY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.receiver_country_name || '-'}
+                      {mainForm?.order?.receiver?.country_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -364,7 +364,7 @@ export const FastFormContentConfirmModal: FC<Props> = ({ open, handleClose, onOr
                       {formatMessage({ id: 'SYSTEM.CITY' })}
                     </label>
                     <div className="flex columns-1 w-full">
-                      {modalInfo?.receiver_city_name || '-'}
+                      {mainForm?.order?.receiver?.city_name || '-'}
                     </div>
                   </div>
                   <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">

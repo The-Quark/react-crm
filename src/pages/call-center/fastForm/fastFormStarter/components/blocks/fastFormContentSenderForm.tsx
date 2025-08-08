@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { BIN_LENGTH, CACHE_TIME, cleanValues, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, cleanValues, SEARCH_PER_PAGE } from '@/utils';
 import { useFormik } from 'formik';
 import { getCountries, getCitiesByCountryCode, getClients } from '@/api';
 import { useQuery } from '@tanstack/react-query';
@@ -19,6 +19,8 @@ import {
 } from '@/pages/call-center/fastForm/fastFormStarter/components/context/fastFormContext.tsx';
 import { Client } from '@/api/get/getClients/types.ts';
 import { useIntl } from 'react-intl';
+import { ClientType } from '@/api/enums';
+import { IReceiverOrderFormValues } from '@/api/post/postWorkflow/postOrderReceiver/types.ts';
 
 interface Props {
   onNext: () => void;
@@ -64,7 +66,7 @@ const formSchema = Yup.object().shape({
 const getInitialValues = (
   mainFormSender: ISenderOrderFormValues | null,
   mainForm: IFastFormContext | null
-) => {
+): ISenderOrderFormValues => {
   if (mainForm) {
     return {
       first_name: mainFormSender?.first_name || mainForm.application?.first_name || '',
@@ -72,7 +74,10 @@ const getInitialValues = (
       patronymic: mainFormSender?.patronymic || mainForm.application?.patronymic || '',
       bin: mainFormSender?.bin || mainForm.application?.bin || '',
       company_name: mainFormSender?.company_name || mainForm.application?.company_name || '',
-      type: mainFormSender?.type || mainForm.application?.client_type || 'individual',
+      type:
+        (mainFormSender?.type as ClientType) ||
+        (mainForm.application?.client_type as ClientType) ||
+        ClientType.INDIVIDUAL,
       country_id: mainFormSender?.country_id ? Number(mainFormSender.country_id) : '',
       city_id: mainFormSender?.city_id ? Number(mainFormSender.city_id) : '',
       phone: mainFormSender?.phone || mainForm.application?.phone || '',
@@ -91,7 +96,7 @@ const getInitialValues = (
     patronymic: '',
     bin: '',
     company_name: '',
-    type: 'individual',
+    type: ClientType.INDIVIDUAL,
     country_id: '',
     city_id: '',
     phone: '',
@@ -105,7 +110,7 @@ const getInitialValues = (
 };
 
 export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
-  const { mainForm, setMainForm, setModalInfoData, modalInfo } = useFastFormContext();
+  const { mainForm, setMainForm } = useFastFormContext();
   const { formatMessage } = useIntl();
   const [searchTerm, setSearchTerm] = useState('');
   const [citySearchTerm, setCitySearchTerm] = useState('');
@@ -118,8 +123,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
     error: clientsError
   } = useQuery({
     queryKey: ['fastFormClients', clientSearchTerm],
-    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm }),
-    staleTime: CACHE_TIME
+    queryFn: () => getClients({ per_page: SEARCH_PER_PAGE, search_application: clientSearchTerm })
   });
 
   const formik = useFormik({
@@ -169,7 +173,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
       clientData || clientsData?.result?.find((client) => client.id === Number(clientId));
 
     if (selectedClient) {
-      const isLegalClient = selectedClient.type === 'legal';
+      const isLegalClient = selectedClient.type === ClientType.LEGAL;
 
       formik.setValues({
         ...formik.values,
@@ -178,7 +182,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
         patronymic: isLegalClient ? '' : selectedClient.patronymic || '',
         company_name: isLegalClient ? selectedClient.company_name || '' : '',
         bin: isLegalClient ? selectedClient.bin || '' : '',
-        type: selectedClient.type || 'individual',
+        type: (selectedClient.type as ClientType) || ClientType.INDIVIDUAL,
         phone: selectedClient.phone || '',
         country_id: selectedClient.country_id || '',
         city_id: selectedClient.city_id || '',
@@ -186,13 +190,9 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
         house: formik.values.house || '',
         apartment: formik.values.apartment || '',
         location_description: formik.values.location_description || '',
-        notes: formik.values.notes || ''
-      });
-
-      setModalInfoData({
-        ...modalInfo,
-        sender_country_name: selectedClient?.country_name ?? '',
-        sender_city_name: selectedClient?.city_name ?? ''
+        notes: formik.values.notes || '',
+        country_name: selectedClient?.country_name ?? '',
+        city_name: selectedClient?.city_name ?? ''
       });
     }
   };
@@ -256,7 +256,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
             loading={clientsLoading}
           />
 
-          {formik.values.type === 'legal' ? (
+          {formik.values.type === ClientType.LEGAL ? (
             <>
               <SharedInput
                 name="company_name"
@@ -301,11 +301,8 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
               const selectedCountry = countriesData?.data?.find((country) => country.id === val);
               formik.setFieldValue('country_id', val ? Number(val) : '');
               formik.setFieldValue('city_id', '');
-              setModalInfoData({
-                ...modalInfo,
-                sender_country_name: selectedCountry?.name ?? '',
-                sender_city_name: ''
-              });
+              formik.setFieldValue('country_name', selectedCountry?.name ?? '');
+              formik.setFieldValue('city_name', '');
             }}
             error={formik.errors.country_id as string}
             touched={formik.touched.country_id}
@@ -326,10 +323,7 @@ export const FastFormContentSenderForm: FC<Props> = ({ onNext, onBack }) => {
             onChange={(val) => {
               formik.setFieldValue('city_id', val ? Number(val) : '');
               const selectedCity = citiesData?.data[0]?.cities?.find((city) => city.id === val);
-              setModalInfoData({
-                ...modalInfo,
-                sender_city_name: selectedCity?.name ?? ''
-              });
+              formik.setFieldValue('city_name', selectedCity?.name ?? '');
             }}
             error={formik.errors.city_id as string}
             touched={formik.touched.city_id}
