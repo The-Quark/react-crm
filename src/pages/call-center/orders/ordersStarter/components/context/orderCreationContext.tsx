@@ -5,6 +5,7 @@ import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { ClientType, DeliveryCategories } from '@/api/enums';
 
 interface OrderCreationContextType {
+  initialData?: Order | null;
   mainFormData: IOrderFormValues | null;
   applicationId?: number | null;
   isLoading: boolean;
@@ -16,6 +17,7 @@ interface OrderCreationContextType {
 
 const OrderCreationContext = createContext<OrderCreationContextType>({
   applicationId: null,
+  initialData: null,
   mainFormData: null,
   isLoading: false,
   setApplicationId: () => {},
@@ -153,6 +155,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
 
   const contextValue = useMemo(
     () => ({
+      initialData,
       applicationId,
       mainFormData,
       isLoading,
@@ -162,6 +165,7 @@ export const OrderCreationProvider = ({ children, initialData }: OrderCreationPr
       updateFormField
     }),
     [
+      initialData,
       applicationId,
       mainFormData,
       isLoading,

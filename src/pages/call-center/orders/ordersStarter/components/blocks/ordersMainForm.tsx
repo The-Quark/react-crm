@@ -135,7 +135,7 @@ const getInitialValues = (
 };
 
 export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
-  const { setMainFormData, applicationId, mainFormData } = useOrderCreation();
+  const { setMainFormData, applicationId, mainFormData, initialData } = useOrderCreation();
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const { currency } = useCurrency();
@@ -150,15 +150,12 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   } = useQuery({
     queryKey: ['applications', searchTerm],
     queryFn: () =>
-      getApplications(
-        isEditMode
-          ? { per_page: DEFAULT_SEARCH_PAGE_NUMBER }
-          : {
-              status: ApplicationsStatus.NEW,
-              per_page: DEFAULT_SEARCH_PAGE_NUMBER,
-              full_name: searchTerm
-            }
-      )
+      getApplications({
+        status: ApplicationsStatus.NEW,
+        per_page: DEFAULT_SEARCH_PAGE_NUMBER,
+        full_name: searchTerm
+      }),
+    enabled: isEditMode
   });
 
   const {
@@ -276,29 +273,44 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
     <div className="grid gap-5 lg:gap-7.5">
       <form className="pb-2.5" onSubmit={formik.handleSubmit} noValidate>
         <div className="card-body grid gap-5">
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.APPLICATION' })}
-            value={formik.values.application_id ?? ''}
-            options={
-              (applicationsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.full_name
-              })) as { id: number; name: string }[]) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_APPLICATION' })}
-            onChange={(val) => {
-              const selectedApp = applicationsData?.result?.find((app) => app.id === val);
-              formik.setFieldValue('application_id', val);
-              formik.setFieldValue('sender_contact_id', selectedApp?.client_id || '');
-              formik.setFieldValue('application_full_name', selectedApp?.full_name || '');
-            }}
-            error={formik.errors.application_id as string}
-            touched={formik.touched.application_id}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-            loading={applicationsLoading}
-          />
+          {isEditMode ? (
+            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
+              <label className="form-label max-w-56">
+                {formatMessage({ id: 'SYSTEM.APPLICATION' })}
+              </label>
+              <div className="flex columns-1 w-full flex-wrap">
+                <input
+                  className="input w-full"
+                  value={initialData?.application?.full_name}
+                  disabled={true}
+                />
+              </div>
+            </div>
+          ) : (
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.APPLICATION' })}
+              value={formik.values.application_id ?? ''}
+              options={
+                (applicationsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.full_name
+                })) as { id: number; name: string }[]) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_APPLICATION' })}
+              onChange={(val) => {
+                const selectedApp = applicationsData?.result?.find((app) => app.id === val);
+                formik.setFieldValue('application_id', val);
+                formik.setFieldValue('sender_contact_id', selectedApp?.client_id || '');
+                formik.setFieldValue('application_full_name', selectedApp?.full_name || '');
+              }}
+              error={formik.errors.application_id as string}
+              touched={formik.touched.application_id}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              loading={applicationsLoading}
+            />
+          )}
           <SharedSelect
             name="delivery_type"
             label={formatMessage({ id: 'SYSTEM.DELIVERY_TYPE' })}
