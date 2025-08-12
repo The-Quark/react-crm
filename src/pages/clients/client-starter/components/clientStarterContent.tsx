@@ -41,10 +41,13 @@ const ClientStarterContent = () => {
   });
 
   useEffect(() => {
-    if (clientData?.result?.[0]?.type && clientType !== clientData.result[0].type) {
+    if (isEditMode && clientData?.result?.[0]?.type) {
       setClientType(clientData.result[0].type);
     }
-  }, [clientData]);
+    if (!isEditMode) {
+      setClientType('individual');
+    }
+  }, [clientData, isEditMode]);
 
   if (isEditMode && clientIsError) {
     return <SharedError error={clientError} />;
@@ -105,6 +108,7 @@ const ClientStarterContent = () => {
                 </h3>
               </div>
             )}
+            {isEditMode}
             {clientType === 'individual' ? (
               <ClientStarterContentIndividual
                 clientData={isEditMode ? clientData?.result[0] : undefined}
