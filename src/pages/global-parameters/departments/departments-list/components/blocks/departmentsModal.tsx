@@ -15,6 +15,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { IGlobalParamsDepartments } from '@/api/get/getGlobalParams/getGlobalParamsDepartments/types.ts';
 import {
   SharedAutocomplete,
+  SharedCheckBox,
   SharedError,
   SharedInput,
   SharedLoading,
@@ -31,7 +32,7 @@ import { useIntl } from 'react-intl';
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  id?: number;
+  id: number | null;
 }
 
 const validationSchema = Yup.object().shape({
@@ -76,6 +77,9 @@ export const DepartmentsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formDepartments', id],
     queryFn: () => getGlobalParamsDepartments({ id: Number(id) }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: !!id && open
   });
 
@@ -87,7 +91,6 @@ export const DepartmentsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['positionsCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 2,
     enabled: open
   });
 
@@ -173,29 +176,11 @@ export const DepartmentsModal: FC<Props> = ({ open, onOpenChange, id }) => {
               />
 
               {!!id && (
-                <div className="flex  flex-wrap items-center lg:flex-nowrap gap-2.5">
-                  <label className="form-label max-w-56">
-                    {formatMessage({ id: 'SYSTEM.ACTIVE' })}
-                  </label>
-                  <div className="flex columns-1 w-full flex-wrap">
-                    <div className="flex items-center gap-5">
-                      <label className="checkbox-group flex items-center gap-2">
-                        <input
-                          className="checkbox"
-                          type="checkbox"
-                          name="is_active"
-                          checked={formik.values.is_active}
-                          onChange={(e) => formik.setFieldValue('is_active', e.target.checked)}
-                        />
-                      </label>
-                    </div>
-                    {formik.touched.is_active && formik.errors.is_active && (
-                      <span role="alert" className="text-danger text-xs mt-1">
-                        {formatMessage({ id: formik.errors.is_active })}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SharedCheckBox
+                  name="is_active"
+                  label={formatMessage({ id: 'SYSTEM.ACTIVE' })}
+                  formik={formik}
+                />
               )}
 
               <div className="flex justify-end">

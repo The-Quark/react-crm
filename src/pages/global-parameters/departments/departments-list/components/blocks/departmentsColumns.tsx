@@ -12,11 +12,15 @@ import { useIntl } from 'react-intl';
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
+  onViewClick: (id: number) => void;
+  onFormClick: (id: number) => void;
 }
 
 export const useDepartmentsColumns = ({
   onRowClick,
-  onDeleteClick
+  onDeleteClick,
+  onViewClick,
+  onFormClick
 }: UseColumnsProps): ColumnDef<Department>[] => {
   const { isRTL } = useLanguage();
   const { formatMessage } = useIntl();
@@ -110,7 +114,12 @@ export const useDepartmentsColumns = ({
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <DepartmentsMenuOptions id={info.row.original.id} onDeleteClick={onDeleteClick} />
+          <DepartmentsMenuOptions
+            id={info.row.original.id}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+            onFormClick={onFormClick}
+          />
         ),
         meta: {
           headerClassName: 'w-[60px]'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
@@ -22,6 +22,8 @@ import {
 import { useNavigate } from 'react-router';
 import { ParametersModel } from '@/api/get/getGlobalParams/getGlobalParameters/types.ts';
 import { useIntl } from 'react-intl';
+import { getData, LOCAL_STORAGE_CURRENCY_KEY } from '@/utils';
+import { CurrencySystem } from '@/providers';
 
 interface Props {
   isEditMode: boolean;
@@ -77,7 +79,7 @@ const getInitialValues = (
   return {
     company_name: '',
     timezone: '',
-    currency: localStorage.getItem('app_currency') || 'USD',
+    currency: (getData(LOCAL_STORAGE_CURRENCY_KEY) as CurrencySystem)?.code || 'USD',
     language: currentLanguage,
     legal_address: '',
     warehouse_address: '',
@@ -140,12 +142,11 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
             ...values,
             airlines: values.airlines
           });
-          navigate('/global-parameters/list');
         } else {
           await postGlobalParameter(values);
-          resetForm();
-          navigate('/global-parameters/list');
         }
+        resetForm();
+        navigate('/global-parameters/list');
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -154,22 +155,6 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
       setSubmitting(false);
     }
   });
-
-  useEffect(() => {
-    if (parameterData && isEditMode) {
-      formik.setValues({
-        company_name: parameterData.company_name ?? '',
-        timezone: parameterData.timezone ?? '',
-        currency: parameterData.currency ?? '',
-        language: parameterData.language.code ?? '',
-        legal_address: parameterData.legal_address ?? '',
-        warehouse_address: parameterData.warehouse_address ?? '',
-        airlines: parameterData?.airlines.map((airline) => airline.id.toString()) || [],
-        dimensions_per_place: parameterData.dimensions_per_place ?? '',
-        cost_per_airplace: parseFloat(parameterData.cost_per_airplace) ?? 0
-      });
-    }
-  }, [parameterData, isEditMode, airlinesData]);
 
   if (isLanguagesError) {
     return <SharedError error={languagesErrorMessage} />;
@@ -181,19 +166,17 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
   if (airlinesIsError) {
     return <SharedError error={airlinesError} />;
   }
+  const isLoading = loadingCurrencies || loadingLanguages || airlinesLoading;
 
   return (
     <div className="grid gap-5 lg:gap-7.5">
-      {loadingCurrencies ||
-      loadingLanguages ||
-      airlinesLoading ||
-      (isEditMode && !parameterData) ? (
-        <SharedLoading />
-      ) : (
-        <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
-          <div className="card-header" id="general_settings">
-            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.COMPANY' })}</h3>
-          </div>
+      <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
+        <div className="card-header" id="general_settings">
+          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.COMPANY' })}</h3>
+        </div>
+        {isLoading ? (
+          <SharedLoading simple />
+        ) : (
           <div className="card-body grid gap-5">
             <SharedInput
               name="company_name"
@@ -286,8 +269,8 @@ export const CompaniesStarterContent = ({ isEditMode, parameterData, parameterId
               </button>
             </div>
           </div>
-        </form>
-      )}
+        )}
+      </form>
     </div>
   );
 };

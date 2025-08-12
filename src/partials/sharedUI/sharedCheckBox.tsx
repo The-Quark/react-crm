@@ -22,7 +22,7 @@ export const SharedCheckBox = <T,>({ name, label, formik, onChange }: SharedInpu
   };
 
   return (
-    <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
+    <div className="flex flex-wrap items-center lg:flex-nowrap gap-2.5">
       <label className="form-label max-w-56">{label}</label>
       <div className="flex columns-1 w-full flex-wrap">
         <label className="checkbox-group flex items-center gap-2">
@@ -32,9 +32,9 @@ export const SharedCheckBox = <T,>({ name, label, formik, onChange }: SharedInpu
             onChange={handleChange}
             onBlur={formik.handleBlur}
             name={fieldName}
-            className="checkbox-sm"
+            className="checkbox"
           />
-          <span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>
+          {/*<span className="checkbox-label">{formatMessage({ id: 'SYSTEM.YES' })}</span>*/}
         </label>
         {hasError && (
           <span role="alert" className="text-danger text-xs mt-1">

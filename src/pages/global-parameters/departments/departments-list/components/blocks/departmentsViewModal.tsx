@@ -18,15 +18,19 @@ interface Props {
   open: boolean;
   id: number | null;
   handleClose: () => void;
+  handleFormClick: (id: number | null) => void;
 }
 
-export const DepartmentsViewModal: FC<Props> = ({ open, id, handleClose }) => {
+export const DepartmentsViewModal: FC<Props> = ({ open, id, handleClose, handleFormClick }) => {
   const { formatMessage } = useIntl();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['department', id],
     queryFn: () =>
-      id !== null ? getGlobalParamsDepartments({ id: Number(id) }) : Promise.reject('Invalid ID')
+      id !== null ? getGlobalParamsDepartments({ id: Number(id) }) : Promise.reject('Invalid ID'),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true
   });
 
   return (
@@ -46,10 +50,10 @@ export const DepartmentsViewModal: FC<Props> = ({ open, id, handleClose }) => {
           </button>
         </DialogHeader>
         <DialogBody className="py-0 mb-5 ps-5 pe-3 me-3">
-          {isLoading && <SharedLoading />}
-          {isError && <SharedError error={error} />}
-          {data?.result && (
-            <div className="card pb-2.5">
+          <div className="card pb-2.5">
+            {isLoading && <SharedLoading simple />}
+            {isError && <SharedError error={error} />}
+            {data?.result && (
               <div className="card-body grid gap-5">
                 <div className="border-b pb-4">
                   <h4 className="text-lg font-semibold mb-4">
@@ -147,14 +151,18 @@ export const DepartmentsViewModal: FC<Props> = ({ open, id, handleClose }) => {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </DialogBody>
 
         <DialogActions>
-          {/*<button className="btn btn-md btn-primary m-3" disabled={id === null}>*/}
-          {/*  Create Department*/}
-          {/*</button>*/}
+          <button
+            className="btn btn-md btn-primary m-3"
+            disabled={id === null}
+            onClick={() => handleFormClick(id)}
+          >
+            {formatMessage({ id: 'SYSTEM.EDIT' })}
+          </button>
         </DialogActions>
       </DialogContent>
     </Dialog>

@@ -18,10 +18,10 @@ export const CompaniesStarterPage = () => {
   } = useQuery({
     queryKey: ['global-parameter', id],
     queryFn: () => getGlobalParameters({ id: id ? parseInt(id) : undefined }),
-    enabled: isEditMode,
+    gcTime: 0,
     staleTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true
+    refetchOnMount: true,
+    enabled: isEditMode
   });
 
   if (isEditMode && parameterIsError) {

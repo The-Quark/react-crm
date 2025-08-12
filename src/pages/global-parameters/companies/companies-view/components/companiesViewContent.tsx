@@ -8,7 +8,10 @@ const GlobalParameterViewContent = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['global-parameter-id', id],
-    queryFn: () => getGlobalParameters({ id: Number(id) })
+    queryFn: () => getGlobalParameters({ id: Number(id) }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true
   });
 
   if (isLoading) {

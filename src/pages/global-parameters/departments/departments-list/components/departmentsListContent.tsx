@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Container, DataGrid } from '@/components';
 import { getGlobalParamsDepartments } from '@/api/get';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -6,10 +5,16 @@ import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/shared
 import { useDepartmentsColumns } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsColumns.tsx';
 import { DepartmentsToolbar } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsToolbar.tsx';
 import { useAuthContext } from '@/auth';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DepartmentsViewModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsViewModal.tsx';
 import { deleteGlobalParamsDepartments } from '@/api';
 import { initialPagination } from '@/utils';
+import { DepartmentsModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsModal.tsx';
+
+type ModalState = {
+  type: 'view' | 'form' | 'delete' | null;
+  departmentId: number | null;
+};
 
 export const DepartmentsListContent = () => {
   const { currentUser } = useAuthContext();
@@ -17,11 +22,12 @@ export const DepartmentsListContent = () => {
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState<number | null>(null);
   const [pagination, setPagination] = useState(initialPagination);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [modalState, setModalState] = useState<ModalState>({
+    type: null,
+    departmentId: null
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -38,33 +44,38 @@ export const DepartmentsListContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: selectedCompanyId !== undefined
   });
 
+  const handleModalOpen = (type: ModalState['type'], departmentId: number | null = null) => {
+    setModalState({ type, departmentId });
+  };
+
+  const handleModalClose = () => {
+    setModalState({ type: null, departmentId: null });
+  };
+
   const handleConfirmDelete = async () => {
-    if (!selectedDepartmentId) return;
+    if (!modalState.departmentId) return;
 
     setIsDeleting(true);
     try {
-      await deleteGlobalParamsDepartments(selectedDepartmentId);
+      await deleteGlobalParamsDepartments(modalState.departmentId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsDepartments'] });
-      setIsDeleteModalOpen(false);
+      handleModalClose();
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const handleDeleteClick = (id: number) => {
-    setSelectedDepartmentId(id);
-    setIsDeleteModalOpen(true);
-  };
-
   const columns = useDepartmentsColumns({
-    onRowClick: (id) => {
-      setSelectedDepartmentId(id);
-      setIsModalOpen(true);
-    },
-    onDeleteClick: handleDeleteClick
+    onRowClick: (id) => handleModalOpen('view', id),
+    onDeleteClick: (id) => handleModalOpen('delete', id),
+    onViewClick: (id) => handleModalOpen('view', id),
+    onFormClick: (id) => handleModalOpen('form', id)
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -97,6 +108,8 @@ export const DepartmentsListContent = () => {
             initialCompanyId={initialCompanyId}
             onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
             onSearch={handleSearch}
+            handleFormClick={() => handleModalOpen('form', modalState.departmentId)}
+            id={modalState.departmentId}
           />
         }
         pagination={{
@@ -109,14 +122,23 @@ export const DepartmentsListContent = () => {
           loading: isFetching && <SharedLoading simple />
         }}
       />
+
       <DepartmentsViewModal
-        open={isModalOpen}
-        id={selectedDepartmentId}
-        handleClose={() => setIsModalOpen(false)}
+        open={modalState.type === 'view'}
+        id={modalState.departmentId}
+        handleClose={handleModalClose}
+        handleFormClick={() => handleModalOpen('form', modalState.departmentId)}
       />
+
+      <DepartmentsModal
+        open={modalState.type === 'form'}
+        onOpenChange={handleModalClose}
+        id={modalState.departmentId}
+      />
+
       <SharedDeleteModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        open={modalState.type === 'delete'}
+        onClose={handleModalClose}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
       />
