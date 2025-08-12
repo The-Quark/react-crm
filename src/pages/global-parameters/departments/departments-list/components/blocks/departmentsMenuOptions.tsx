@@ -67,6 +67,7 @@ export const DepartmentsMenuOptions: FC<MenuOptionsProps> = ({
                   <MenuTitle>{formatMessage({ id: 'SYSTEM.VIEW' })}</MenuTitle>
                 </MenuLink>
               </MenuItem>
+              <MenuSeparator />
               <MenuItem onClick={() => id && onFormClick(id)}>
                 <MenuLink>
                   <MenuIcon>

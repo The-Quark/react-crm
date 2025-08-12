@@ -8,6 +8,12 @@ import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import { SubdivisionsViewModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsViewModal.tsx';
 import { initialPagination } from '@/utils';
+import { SubdivisionsModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsModal.tsx';
+
+type ModalState = {
+  type: 'view' | 'form' | 'delete' | null;
+  subdivisionId: number | null;
+};
 
 export const SubdivisionsListContent = () => {
   const { currentUser } = useAuthContext();
@@ -16,11 +22,12 @@ export const SubdivisionsListContent = () => {
 
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSubId, setSelectedSubId] = useState<number | null>(null);
   const [pagination, setPagination] = useState(initialPagination);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [modalState, setModalState] = useState<ModalState>({
+    type: null,
+    subdivisionId: null
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -37,33 +44,37 @@ export const SubdivisionsListContent = () => {
         per_page: pagination.pageSize,
         name: searchTerm
       }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: selectedCompanyId !== undefined
   });
 
-  const handleConfirmDelete = async () => {
-    if (!selectedSubId) return;
+  const handleModalOpen = (type: ModalState['type'], subdivisionId: number | null = null) => {
+    setModalState({ type, subdivisionId });
+  };
 
+  const handleModalClose = () => {
+    setModalState({ type: null, subdivisionId: null });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!modalState.subdivisionId) return;
     setIsDeleting(true);
     try {
-      await deleteGlobalParamsSubdivision(selectedSubId);
+      await deleteGlobalParamsSubdivision(modalState.subdivisionId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsSubdivisions'] });
-      setIsDeleteModalOpen(false);
+      handleModalClose();
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const handleDeleteClick = (id: number) => {
-    setSelectedSubId(id);
-    setIsDeleteModalOpen(true);
-  };
-
   const columns = useSubdivisionsColumns({
-    onRowClick: (id) => {
-      setSelectedSubId(id);
-      setIsModalOpen(true);
-    },
-    onDeleteClick: handleDeleteClick
+    onRowClick: (id) => handleModalOpen('view', id),
+    onDeleteClick: (id) => handleModalOpen('delete', id),
+    onViewClick: (id) => handleModalOpen('view', id),
+    onFormClick: (id) => handleModalOpen('form', id)
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -97,6 +108,8 @@ export const SubdivisionsListContent = () => {
             initialCompanyId={initialCompanyId}
             onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
             onSearch={handleSearch}
+            handleFormClick={() => handleModalOpen('form', modalState.subdivisionId)}
+            id={modalState.subdivisionId}
           />
         }
         pagination={{
@@ -110,13 +123,19 @@ export const SubdivisionsListContent = () => {
         }}
       />
       <SubdivisionsViewModal
-        open={isModalOpen}
-        id={selectedSubId}
-        handleClose={() => setIsModalOpen(false)}
+        open={modalState.type === 'view'}
+        id={modalState.subdivisionId}
+        handleClose={handleModalClose}
+        handleFormClick={() => handleModalOpen('form', modalState.subdivisionId)}
+      />
+      <SubdivisionsModal
+        open={modalState.type === 'form'}
+        onOpenChange={handleModalClose}
+        id={modalState.subdivisionId}
       />
       <SharedDeleteModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        open={modalState.type === 'delete'}
+        onClose={handleModalClose}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
       />

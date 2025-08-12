@@ -12,11 +12,15 @@ import { useIntl } from 'react-intl';
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
+  onViewClick: (id: number) => void;
+  onFormClick: (id: number) => void;
 }
 
 export const useSubdivisionsColumns = ({
   onRowClick,
-  onDeleteClick
+  onDeleteClick,
+  onViewClick,
+  onFormClick
 }: UseColumnsProps): ColumnDef<Subdivision>[] => {
   const { isRTL } = useLanguage();
   const { formatMessage } = useIntl();
@@ -144,7 +148,12 @@ export const useSubdivisionsColumns = ({
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <SubdivisionsMenuOptions id={info.row.original.id} onDeleteClick={onDeleteClick} />
+          <SubdivisionsMenuOptions
+            id={info.row.original.id}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+            onFormClick={onFormClick}
+          />
         ),
         meta: {
           headerClassName: 'w-[60px]'

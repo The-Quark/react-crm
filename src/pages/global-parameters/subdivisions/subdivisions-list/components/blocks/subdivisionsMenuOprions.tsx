@@ -13,16 +13,21 @@ import React, { FC, useState } from 'react';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { useLanguage } from '@/providers';
-import { SubdivisionModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsModal.tsx';
 import { useIntl } from 'react-intl';
 
 interface MenuOptionsProps {
   id?: number;
   onDeleteClick: (id: number) => void;
+  onViewClick: (id: number) => void;
+  onFormClick: (id: number) => void;
 }
 
-export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
-  const [activeModal, setActiveModal] = useState<boolean>(false);
+export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({
+  id,
+  onDeleteClick,
+  onViewClick,
+  onFormClick
+}) => {
   const { currentUser } = useAuthContext();
   const { formatMessage } = useIntl();
   const { has } = useUserPermissions();
@@ -30,14 +35,6 @@ export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClic
 
   const canManageSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-
-  const handleOpen = () => {
-    setActiveModal(true);
-  };
-
-  const handleClose = () => {
-    setActiveModal(false);
-  };
 
   return (
     <Menu className="items-stretch">
@@ -59,34 +56,40 @@ export const SubdivisionsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClic
         <MenuToggle className="btn btn-sm btn-icon btn-light btn-clear">
           <KeenIcon icon="dots-vertical" />
         </MenuToggle>
-        {!activeModal && (
-          <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
-            {canManageSettings && (
-              <>
-                <MenuItem onClick={handleOpen}>
-                  <MenuLink>
-                    <MenuIcon>
-                      <KeenIcon icon="pencil" />
-                    </MenuIcon>
-                    <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
-                  </MenuLink>
-                </MenuItem>
-                <MenuSeparator />
-                <MenuItem onClick={() => id && onDeleteClick(id)}>
-                  <MenuLink>
-                    <MenuIcon>
-                      <KeenIcon icon="trash" className="text-danger !text-red-500" />
-                    </MenuIcon>
-                    <MenuTitle className="text-danger !text-red-500">
-                      {formatMessage({ id: 'SYSTEM.DELETE' })}
-                    </MenuTitle>
-                  </MenuLink>
-                </MenuItem>
-              </>
-            )}
-          </MenuSub>
-        )}
-        {activeModal && <SubdivisionModal open={activeModal} onOpenChange={handleClose} id={id} />}
+        <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
+          {canManageSettings && (
+            <>
+              <MenuItem onClick={() => id && onViewClick(id)}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="more-2" />
+                  </MenuIcon>
+                  <MenuTitle>{formatMessage({ id: 'SYSTEM.VIEW' })}</MenuTitle>
+                </MenuLink>
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem onClick={() => id && onFormClick(id)}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="pencil" />
+                  </MenuIcon>
+                  <MenuTitle>{formatMessage({ id: 'SYSTEM.EDIT' })}</MenuTitle>
+                </MenuLink>
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem onClick={() => id && onDeleteClick(id)}>
+                <MenuLink>
+                  <MenuIcon>
+                    <KeenIcon icon="trash" className="text-danger !text-red-500" />
+                  </MenuIcon>
+                  <MenuTitle className="text-danger !text-red-500">
+                    {formatMessage({ id: 'SYSTEM.DELETE' })}
+                  </MenuTitle>
+                </MenuLink>
+              </MenuItem>
+            </>
+          )}
+        </MenuSub>
       </MenuItem>
     </Menu>
   );

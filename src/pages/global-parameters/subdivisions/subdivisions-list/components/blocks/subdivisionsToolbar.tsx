@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { SubdivisionModal } from '@/pages/global-parameters/subdivisions/subdivisions-list/components/blocks/subdivisionsModal.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
@@ -14,15 +13,22 @@ interface Props {
   initialCompanyId?: number;
   onCompanyChange: (companyId: number | null) => void;
   onSearch?: (searchTerm: string) => void;
+  handleFormClick: (id: number | null) => void;
+  id: number | null;
 }
 
-export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
+export const SubdivisionToolbar: FC<Props> = ({
+  initialCompanyId,
+  onCompanyChange,
+  onSearch,
+  id,
+  handleFormClick
+}) => {
   const { table } = useDataGrid();
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
 
-  const [modalOpen, setModalOpen] = useState(false);
   const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchValue, setSearchValue] = useState('');
@@ -43,14 +49,6 @@ export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChang
     const value = event.target.value;
     setSearchValue(value);
     debouncedSearch(value);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleOpen = () => {
-    setModalOpen(true);
   };
 
   const {
@@ -78,7 +76,7 @@ export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChang
       <h3 className="card-title">{formatMessage({ id: 'SYSTEM.SUBDIVISIONS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
-          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          <button className="btn btn-sm btn-primary" onClick={() => handleFormClick(id)}>
             {formatMessage({ id: 'SYSTEM.NEW_SUBDIVISION' })}
           </button>
         )}
@@ -117,7 +115,6 @@ export const SubdivisionToolbar: FC<Props> = ({ initialCompanyId, onCompanyChang
           />
         </div>
       </div>
-      <SubdivisionModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

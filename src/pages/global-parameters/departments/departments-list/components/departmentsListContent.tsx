@@ -20,6 +20,7 @@ export const DepartmentsListContent = () => {
   const { currentUser } = useAuthContext();
   const queryClient = useQueryClient();
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : undefined;
+
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
   const [pagination, setPagination] = useState(initialPagination);
