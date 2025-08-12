@@ -78,7 +78,6 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
             ? format(new Date(values.birth_date), 'dd.MM.yyyy HH:mm:ss')
             : null
         };
-
         if (clientData) {
           await putClient(clientData.id, payload);
         } else {

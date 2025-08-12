@@ -74,6 +74,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const formik = useFormik({
     initialValues,
     validationSchema: validateSchema,
+    enableReinitialize: true,
     onSubmit: async (values, { setStatus, setSubmitting, resetForm }) => {
       setLoading(true);
       setStatus(null);
@@ -209,7 +210,6 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
         searchTerm={countrySearchTerm}
         onSearchTermChange={setCountrySearchTerm}
       />
-
       <SharedAutocomplete
         label={formatMessage({ id: 'SYSTEM.CITY' })}
         value={formik.values.city_id ?? clientData?.city_id ?? ''}

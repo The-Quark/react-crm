@@ -6,14 +6,13 @@ import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getClients, getSources } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { CACHE_TIME, SEARCH_PER_PAGE } from '@/utils';
+import { SEARCH_PER_PAGE } from '@/utils';
 import { useIntl } from 'react-intl';
-import { ClientType } from '@/api/generalManualTypes';
 
 const ClientStarterContent = () => {
   const { id } = useParams<{ id: string }>();
   const { formatMessage } = useIntl();
-  const [clientType, setClientType] = useState<ClientType>('individual');
+  const [clientType, setClientType] = useState('');
 
   const isEditMode = !!id;
 
@@ -23,8 +22,11 @@ const ClientStarterContent = () => {
     isError: clientIsError,
     error: clientError
   } = useQuery({
-    queryKey: ['client', id],
+    queryKey: ['client-by-id', id],
     queryFn: () => getClients({ id: id ? parseInt(id) : undefined }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 
@@ -103,17 +105,17 @@ const ClientStarterContent = () => {
                 </h3>
               </div>
             )}
-            {isEditMode && !clientData ? null : clientType === 'individual' ? (
+            {clientType === 'individual' ? (
               <ClientStarterContentIndividual
                 clientData={isEditMode ? clientData?.result[0] : undefined}
                 sourcesData={sourcesData?.result}
               />
-            ) : (
+            ) : clientType === 'legal' ? (
               <ClientStarterContentLegal
                 clientData={isEditMode ? clientData?.result[0] : undefined}
                 sourcesData={sourcesData?.result}
               />
-            )}
+            ) : null}
           </div>
         </div>
       )}
