@@ -307,25 +307,38 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
           </h3>
         </div>
         <div className="card-body grid gap-5">
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.ORDER' })}
-            value={formik.values.order_id ?? ''}
-            options={
-              ordersData?.result?.map((app) => ({
-                id: app.id,
-                name: String(app.order_code || app.id)
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
-            onChange={handleOrderChange}
-            error={formik.errors.order_id as string}
-            touched={formik.touched.order_id}
-            searchTerm={searchOrderTerm}
-            onSearchTermChange={setSearchOrderTerm}
-            disabled={!!orderIdFromUrl}
-            loading={ordersLoading}
-          />
+          {isEditMode ? (
+            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
+              <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.ORDER' })}</label>
+              <div className="flex columns-1 w-full flex-wrap">
+                <input
+                  className="input w-full"
+                  value={packageData?.order?.order_code ?? ''}
+                  disabled={true}
+                />
+              </div>
+            </div>
+          ) : (
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.ORDER' })}
+              value={formik.values.order_id ?? ''}
+              options={
+                ordersData?.result?.map((app) => ({
+                  id: app.id,
+                  name: String(app.order_code || app.id)
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
+              onChange={handleOrderChange}
+              error={formik.errors.order_id as string}
+              touched={formik.touched.order_id}
+              searchTerm={searchOrderTerm}
+              onSearchTermChange={setSearchOrderTerm}
+              disabled={!!orderIdFromUrl}
+              loading={ordersLoading}
+            />
+          )}
           <SharedDecimalInput
             name="weight"
             label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}

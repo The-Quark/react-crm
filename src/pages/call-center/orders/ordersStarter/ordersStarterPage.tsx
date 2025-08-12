@@ -22,6 +22,9 @@ export const OrdersStarterPage = () => {
   } = useQuery({
     queryKey: ['order', id],
     queryFn: () => getOrders({ id: orderId! }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 

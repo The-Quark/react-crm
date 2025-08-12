@@ -21,6 +21,9 @@ export const PackagesStarterPage = () => {
   } = useQuery({
     queryKey: ['package', id],
     queryFn: () => getPackages({ id: packageId }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 

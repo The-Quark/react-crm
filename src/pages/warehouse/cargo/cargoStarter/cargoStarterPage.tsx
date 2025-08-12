@@ -21,6 +21,9 @@ export const CargoStarterPage = () => {
   } = useQuery({
     queryKey: ['cargoID', id],
     queryFn: () => getCargo({ id: cargoId }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 
