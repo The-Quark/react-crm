@@ -16,6 +16,7 @@ import {
   SharedDecimalInput,
   SharedError,
   SharedInput,
+  SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -296,6 +297,8 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
     return <SharedError error={ordersError || boxTypesError} />;
   }
 
+  const isLoading = ordersLoading || boxTypesLoading;
+
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
@@ -306,154 +309,160 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
               : formatMessage({ id: 'SYSTEM.NEW_PACKAGE' })}
           </h3>
         </div>
-        <div className="card-body grid gap-5">
-          {isEditMode ? (
-            <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
-              <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.ORDER' })}</label>
-              <div className="flex columns-1 w-full flex-wrap">
-                <input
-                  className="input w-full"
-                  value={packageData?.order?.order_code ?? ''}
-                  disabled={true}
-                />
+        {isLoading ? (
+          <SharedLoading simple />
+        ) : (
+          <div className="card-body grid gap-5">
+            {isEditMode ? (
+              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
+                <label className="form-label max-w-56">
+                  {formatMessage({ id: 'SYSTEM.ORDER' })}
+                </label>
+                <div className="flex columns-1 w-full flex-wrap">
+                  <input
+                    className="input w-full"
+                    value={packageData?.order?.order_code ?? ''}
+                    disabled={true}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
+            ) : (
+              <SharedAutocomplete
+                label={formatMessage({ id: 'SYSTEM.ORDER' })}
+                value={formik.values.order_id ?? ''}
+                options={
+                  ordersData?.result?.map((app) => ({
+                    id: app.id,
+                    name: String(app.order_code || app.id)
+                  })) ?? []
+                }
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
+                onChange={handleOrderChange}
+                error={formik.errors.order_id as string}
+                touched={formik.touched.order_id}
+                searchTerm={searchOrderTerm}
+                onSearchTermChange={setSearchOrderTerm}
+                disabled={!!orderIdFromUrl}
+                loading={ordersLoading}
+              />
+            )}
+            <SharedDecimalInput
+              name="weight"
+              label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
+              formik={formik}
+            />
+            <SharedDecimalInput
+              name="width"
+              label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+              formik={formik}
+            />
+            <SharedDecimalInput
+              name="length"
+              label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+              formik={formik}
+            />
+            <SharedDecimalInput
+              name="height"
+              label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+              formik={formik}
+            />
+            <SharedInput
+              name="volume"
+              label={formatMessage({ id: 'SYSTEM.VOLUME' }) + ' (см³)'}
+              type="number"
+              formik={formik}
+              disabled
+            />
+            <SharedInput
+              name="places_count"
+              label={formatMessage({ id: 'SYSTEM.PLACE_COUNT' })}
+              type="number"
+              formik={formik}
+              disabled
+            />
+            <SharedInput
+              name="price"
+              label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
+              formik={formik}
+              type="number"
+              disabled
+            />
+
+            {isEditMode && (
+              <>
+                <SharedSelect
+                  name="status"
+                  label={formatMessage({ id: 'SYSTEM.STATUS' })}
+                  formik={formik}
+                  options={packageStatusOptions.map((status) => ({
+                    label: status.name,
+                    value: status.value
+                  }))}
+                />
+              </>
+            )}
+            <Divider />
+            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.BOX_TYPE' })}</h3>
             <SharedAutocomplete
-              label={formatMessage({ id: 'SYSTEM.ORDER' })}
-              value={formik.values.order_id ?? ''}
+              label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
+              value={formik.values.box_type_id ?? ''}
               options={
-                ordersData?.result?.map((app) => ({
+                boxTypesData?.result?.map((app) => ({
                   id: app.id,
-                  name: String(app.order_code || app.id)
+                  name: String(app.name || app.id)
                 })) ?? []
               }
-              placeholder={formatMessage({ id: 'SYSTEM.SELECT_ORDER' })}
-              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_ORDER' })}
-              onChange={handleOrderChange}
-              error={formik.errors.order_id as string}
-              touched={formik.touched.order_id}
-              searchTerm={searchOrderTerm}
-              onSearchTermChange={setSearchOrderTerm}
-              disabled={!!orderIdFromUrl}
-              loading={ordersLoading}
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
+              onChange={handleBoxTypeChange}
+              error={formik.errors.box_type_id as string}
+              touched={formik.touched.box_type_id}
+              searchTerm={searchBoxTypeTerm}
+              onSearchTermChange={setSearchBoxTypeTerm}
+              loading={boxTypesLoading}
             />
-          )}
-          <SharedDecimalInput
-            name="weight"
-            label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
-            formik={formik}
-          />
-          <SharedDecimalInput
-            name="width"
-            label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
-            formik={formik}
-          />
-          <SharedDecimalInput
-            name="length"
-            label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
-            formik={formik}
-          />
-          <SharedDecimalInput
-            name="height"
-            label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
-            formik={formik}
-          />
-          <SharedInput
-            name="volume"
-            label={formatMessage({ id: 'SYSTEM.VOLUME' }) + ' (см³)'}
-            type="number"
-            formik={formik}
-            disabled
-          />
-          <SharedInput
-            name="places_count"
-            label={formatMessage({ id: 'SYSTEM.PLACE_COUNT' })}
-            type="number"
-            formik={formik}
-            disabled
-          />
-          <SharedInput
-            name="price"
-            label={`${formatMessage({ id: 'SYSTEM.PRICE' })} (${currentCurrency.code})`}
-            formik={formik}
-            type="number"
-            disabled
-          />
-
-          {isEditMode && (
-            <>
-              <SharedSelect
-                name="status"
-                label={formatMessage({ id: 'SYSTEM.STATUS' })}
-                formik={formik}
-                options={packageStatusOptions.map((status) => ({
-                  label: status.name,
-                  value: status.value
-                }))}
-              />
-            </>
-          )}
-          <Divider />
-          <h3 className="card-title">{formatMessage({ id: 'SYSTEM.BOX_TYPE' })}</h3>
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
-            value={formik.values.box_type_id ?? ''}
-            options={
-              boxTypesData?.result?.map((app) => ({
-                id: app.id,
-                name: String(app.name || app.id)
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
-            onChange={handleBoxTypeChange}
-            error={formik.errors.box_type_id as string}
-            touched={formik.touched.box_type_id}
-            searchTerm={searchBoxTypeTerm}
-            onSearchTermChange={setSearchBoxTypeTerm}
-            loading={boxTypesLoading}
-          />
-          <SharedDecimalInput
-            name="box_width"
-            label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
-            formik={formik}
-            disabled={!!formik.values.box_type_id}
-          />
-          <SharedDecimalInput
-            name="box_length"
-            label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
-            formik={formik}
-            disabled={!!formik.values.box_type_id}
-          />
-          <SharedDecimalInput
-            name="box_height"
-            label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
-            formik={formik}
-            disabled={!!formik.values.box_type_id}
-          />
-          <div className="flex justify-end gap-4">
-            <button
-              className="btn btn-danger"
-              onClick={handleCancel}
-              type="button"
-              disabled={cancelLoading || !formik.values.order_id}
-            >
-              {cancelLoading
-                ? formatMessage({ id: 'SYSTEM.CANCELLING' })
-                : formatMessage({ id: 'SYSTEM.CANCEL' })}
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={submitLoading || formik.isSubmitting}
-            >
-              {submitLoading
-                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
-                : formatMessage({ id: 'SYSTEM.CREATE' })}
-            </button>
+            <SharedDecimalInput
+              name="box_width"
+              label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
+              formik={formik}
+              disabled={!!formik.values.box_type_id}
+            />
+            <SharedDecimalInput
+              name="box_length"
+              label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
+              formik={formik}
+              disabled={!!formik.values.box_type_id}
+            />
+            <SharedDecimalInput
+              name="box_height"
+              label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+              formik={formik}
+              disabled={!!formik.values.box_type_id}
+            />
+            <div className="flex justify-end gap-4">
+              <button
+                className="btn btn-danger"
+                onClick={handleCancel}
+                type="button"
+                disabled={cancelLoading || !formik.values.order_id}
+              >
+                {cancelLoading
+                  ? formatMessage({ id: 'SYSTEM.CANCELLING' })
+                  : formatMessage({ id: 'SYSTEM.CANCEL' })}
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitLoading || formik.isSubmitting}
+              >
+                {submitLoading
+                  ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                  : formatMessage({ id: 'SYSTEM.CREATE' })}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );

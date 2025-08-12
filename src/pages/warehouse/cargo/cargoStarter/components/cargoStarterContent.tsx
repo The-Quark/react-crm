@@ -52,15 +52,15 @@ const getInitialValues = (
 ): ICargoPostFormValues => {
   if (isEditMode && cargoData) {
     return {
-      arrival_date: cargoData.arrival_date,
-      departure_date: cargoData.departure_date,
-      from_airport: cargoData.from_airport,
-      is_international: cargoData.is_international,
-      notes: cargoData.notes,
-      packages: cargoData.packages.map((pkg) => pkg.id.toString()),
-      to_airport: cargoData.to_airport,
-      code: cargoData.code,
-      airline: cargoData.airline.toString(),
+      arrival_date: cargoData.arrival_date ?? '',
+      departure_date: cargoData.departure_date ?? '',
+      from_airport: cargoData.from_airport ?? '',
+      is_international: cargoData.is_international ?? false,
+      notes: cargoData.notes ?? '',
+      packages: cargoData.packages.map((pkg) => pkg.id.toString()) ?? '',
+      to_airport: cargoData.to_airport ?? '',
+      code: cargoData.code ?? '',
+      airline: cargoData.airline.toString() ?? '',
       status: cargoData.status as unknown as CargoStatus
     };
   }
@@ -201,10 +201,6 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
     return null;
   };
 
-  if (isLoading) {
-    return <SharedLoading simple />;
-  }
-
   const errorComponent = renderError();
   if (errorComponent) {
     return errorComponent;
@@ -220,129 +216,147 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
               : formatMessage({ id: 'SYSTEM.NEW_CARGO' })}
           </h3>
         </div>
-
-        <div className="card-body grid gap-5">
-          <SharedMultiSelect
-            options={packageOptions}
-            selectedValues={formik.values.packages.map(String)}
-            onChange={(values) => formik.setFieldValue('packages', values)}
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_PACKAGES' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_PACKAGES' })}
-            label={formatMessage({ id: 'SYSTEM.PACKAGES' })}
-            error={formik.errors.packages as string}
-            touched={formik.touched.packages}
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-            loading={packagesLoading}
-          />
-          <SharedInput
-            name="code"
-            label={formatMessage({ id: 'SYSTEM.MAWB_CODE' })}
-            formik={formik}
-          />
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.AIRLINE' })}
-            value={formik.values.airline ?? ''}
-            options={
-              airlinesData?.result?.map((app) => ({
-                id: app.id,
-                name: app.name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRLINE' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRLINE' })}
-            onChange={(val) => {
-              formik.setFieldValue('airline', val);
-            }}
-            error={formik.errors.airline as string}
-            touched={formik.touched.airline}
-            searchTerm={searchAirlineTerm}
-            onSearchTermChange={setSearchAirlineTerm}
-          />
-
-          <SharedDateTimePicker
-            name="departure_date"
-            label={formatMessage({ id: 'SYSTEM.DEPARTURE_DATE' })}
-            formik={formik}
-          />
-
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.FROM_AIRPORT' })}
-            value={formik.values.from_airport ?? ''}
-            options={
-              airportsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
-            onChange={(val) => {
-              formik.setFieldValue('from_airport', val);
-            }}
-            error={formik.errors.from_airport as string}
-            touched={formik.touched.from_airport}
-            searchTerm={fromSearchTerm}
-            onSearchTermChange={setFromSearchTerm}
-          />
-
-          <SharedDateTimePicker
-            name="arrival_date"
-            label={formatMessage({ id: 'SYSTEM.ARRIVAL_DATE' })}
-            formik={formik}
-          />
-
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.TO_AIRPORT' })}
-            value={formik.values.to_airport ?? ''}
-            options={
-              airportsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
-            onChange={(val) => {
-              formik.setFieldValue('to_airport', val);
-            }}
-            error={formik.errors.to_airport as string}
-            touched={formik.touched.to_airport}
-            searchTerm={toSearchTerm}
-            onSearchTermChange={setToSearchTerm}
-          />
-
-          {isEditMode && (
-            <SharedSelect
-              name="status"
-              label={formatMessage({ id: 'SYSTEM.STATUS' })}
+        {isLoading ? (
+          <SharedLoading simple />
+        ) : (
+          <div className="card-body grid gap-5">
+            {isEditMode ? (
+              <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 ">
+                <label className="form-label max-w-56">
+                  {formatMessage({ id: 'SYSTEM.PACKAGE' })}
+                </label>
+                <div className="flex columns-1 w-full flex-wrap">
+                  <input
+                    className="input w-full"
+                    value={cargoData?.packages.map((pkg) => pkg.hawb.toString()) ?? ''}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+            ) : (
+              <SharedMultiSelect
+                options={packageOptions}
+                selectedValues={formik.values.packages.map(String)}
+                onChange={(values) => formik.setFieldValue('packages', values)}
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_PACKAGES' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_PACKAGES' })}
+                label={formatMessage({ id: 'SYSTEM.PACKAGES' })}
+                error={formik.errors.packages as string}
+                touched={formik.touched.packages}
+                searchTerm={searchTerm}
+                onSearchTermChange={setSearchTerm}
+                loading={packagesLoading}
+              />
+            )}
+            <SharedInput
+              name="code"
+              label={formatMessage({ id: 'SYSTEM.MAWB_CODE' })}
               formik={formik}
-              disabled={true}
-              options={cargoStatusOptions.map((status) => ({
-                label: status.name,
-                value: status.value
-              }))}
             />
-          )}
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.AIRLINE' })}
+              value={formik.values.airline ?? ''}
+              options={
+                airlinesData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.name
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRLINE' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRLINE' })}
+              onChange={(val) => {
+                formik.setFieldValue('airline', val);
+              }}
+              error={formik.errors.airline as string}
+              touched={formik.touched.airline}
+              searchTerm={searchAirlineTerm}
+              onSearchTermChange={setSearchAirlineTerm}
+            />
 
-          <SharedTextArea
-            name="notes"
-            label={formatMessage({ id: 'SYSTEM.NOTES' })}
-            formik={formik}
-          />
+            <SharedDateTimePicker
+              name="departure_date"
+              label={formatMessage({ id: 'SYSTEM.DEPARTURE_DATE' })}
+              formik={formik}
+            />
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
-            >
-              {loading
-                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
-                : formatMessage({ id: 'SYSTEM.SAVE' })}
-            </button>
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.FROM_AIRPORT' })}
+              value={formik.values.from_airport ?? ''}
+              options={
+                airportsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.name
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
+              onChange={(val) => {
+                formik.setFieldValue('from_airport', val);
+              }}
+              error={formik.errors.from_airport as string}
+              touched={formik.touched.from_airport}
+              searchTerm={fromSearchTerm}
+              onSearchTermChange={setFromSearchTerm}
+            />
+
+            <SharedDateTimePicker
+              name="arrival_date"
+              label={formatMessage({ id: 'SYSTEM.ARRIVAL_DATE' })}
+              formik={formik}
+            />
+
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.TO_AIRPORT' })}
+              value={formik.values.to_airport ?? ''}
+              options={
+                airportsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.name
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_AIRPORT' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_AIRPORT' })}
+              onChange={(val) => {
+                formik.setFieldValue('to_airport', val);
+              }}
+              error={formik.errors.to_airport as string}
+              touched={formik.touched.to_airport}
+              searchTerm={toSearchTerm}
+              onSearchTermChange={setToSearchTerm}
+            />
+
+            {isEditMode && (
+              <SharedSelect
+                name="status"
+                label={formatMessage({ id: 'SYSTEM.STATUS' })}
+                formik={formik}
+                disabled={true}
+                options={cargoStatusOptions.map((status) => ({
+                  label: status.name,
+                  value: status.value
+                }))}
+              />
+            )}
+
+            <SharedTextArea
+              name="notes"
+              label={formatMessage({ id: 'SYSTEM.NOTES' })}
+              formik={formik}
+            />
+
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading || formik.isSubmitting}
+              >
+                {loading
+                  ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                  : formatMessage({ id: 'SYSTEM.SAVE' })}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );
