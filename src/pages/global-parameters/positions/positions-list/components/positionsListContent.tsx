@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { deleteGlobalParamsPosition, getGlobalParamsPositions } from '@/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,6 +8,12 @@ import { useAuthContext } from '@/auth';
 import { useState } from 'react';
 import { PositionsViewModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsViewModal.tsx';
 import { initialPagination } from '@/utils';
+import { PositionsModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsModal.tsx';
+
+type ModalState = {
+  type: 'view' | 'form' | 'delete' | null;
+  positionId: number | null;
+};
 
 export const PositionsListContent = () => {
   const { currentUser } = useAuthContext();
@@ -17,11 +22,12 @@ export const PositionsListContent = () => {
 
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | undefined>(initialCompanyId);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPositionId, setSelectedPositionId] = useState<number | null>(null);
   const [pagination, setPagination] = useState(initialPagination);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [modalState, setModalState] = useState<ModalState>({
+    type: null,
+    positionId: null
+  });
 
   const { data, isError, error, isFetching, isPending } = useQuery({
     queryKey: [
@@ -38,32 +44,37 @@ export const PositionsListContent = () => {
         per_page: pagination.pageSize,
         title: searchTerm
       }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: selectedCompanyId !== undefined
   });
 
+  const handleModalOpen = (type: ModalState['type'], positionId: number | null = null) => {
+    setModalState({ type, positionId });
+  };
+
+  const handleModalClose = () => {
+    setModalState({ type: null, positionId: null });
+  };
+
   const handleConfirmDelete = async () => {
-    if (!selectedPositionId) return;
+    if (!modalState.positionId) return;
     setIsDeleting(true);
     try {
-      await deleteGlobalParamsPosition(selectedPositionId);
+      await deleteGlobalParamsPosition(modalState.positionId);
       await queryClient.invalidateQueries({ queryKey: ['globalParamsPositions'] });
-      setIsDeleteModalOpen(false);
+      handleModalClose();
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const handleDeleteClick = (id: number) => {
-    setSelectedPositionId(id);
-    setIsDeleteModalOpen(true);
-  };
-
   const columns = usePositionsColumns({
-    onRowClick: (id) => {
-      setSelectedPositionId(id);
-      setIsModalOpen(true);
-    },
-    onDeleteClick: handleDeleteClick
+    onRowClick: (id) => handleModalOpen('view', id),
+    onDeleteClick: (id) => handleModalOpen('delete', id),
+    onViewClick: (id) => handleModalOpen('view', id),
+    onFormClick: (id) => handleModalOpen('form', id)
   });
 
   const handleFetchData = async (params: { pageIndex: number; pageSize: number }) => {
@@ -96,6 +107,8 @@ export const PositionsListContent = () => {
             initialCompanyId={initialCompanyId}
             onCompanyChange={(companyId) => setSelectedCompanyId(companyId ?? undefined)}
             onSearch={handleSearch}
+            handleFormClick={() => handleModalOpen('form', modalState.positionId)}
+            id={modalState.positionId}
           />
         }
         pagination={{
@@ -109,13 +122,19 @@ export const PositionsListContent = () => {
         }}
       />
       <PositionsViewModal
-        open={isModalOpen}
-        id={selectedPositionId}
-        handleClose={() => setIsModalOpen(false)}
+        open={modalState.type === 'view'}
+        id={modalState.positionId}
+        handleClose={handleModalClose}
+        handleFormClick={() => handleModalOpen('form', modalState.positionId)}
+      />
+      <PositionsModal
+        open={modalState.type === 'form'}
+        onOpenChange={handleModalClose}
+        id={modalState.positionId}
       />
       <SharedDeleteModal
-        open={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        open={modalState.type === 'delete'}
+        onClose={handleModalClose}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
       />

@@ -31,7 +31,7 @@ import { useIntl } from 'react-intl';
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  id?: number;
+  id: number | null;
 }
 
 const validationSchema = Yup.object().shape({
@@ -76,6 +76,9 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['formPositions', id],
     queryFn: () => getGlobalParamsPositions({ id: Number(id) }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: !!id && open
   });
 
@@ -87,7 +90,6 @@ export const PositionsModal: FC<Props> = ({ open, onOpenChange, id }) => {
   } = useQuery({
     queryKey: ['positionsCompany'],
     queryFn: () => getGlobalParameters(),
-    staleTime: 1000 * 60 * 2,
     enabled: open
   });
 

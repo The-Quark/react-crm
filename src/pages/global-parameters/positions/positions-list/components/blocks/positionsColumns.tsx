@@ -12,11 +12,15 @@ import { useIntl } from 'react-intl';
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
+  onViewClick: (id: number) => void;
+  onFormClick: (id: number) => void;
 }
 
 export const usePositionsColumns = ({
   onRowClick,
-  onDeleteClick
+  onDeleteClick,
+  onViewClick,
+  onFormClick
 }: UseColumnsProps): ColumnDef<Position>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
@@ -105,7 +109,12 @@ export const usePositionsColumns = ({
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <PositionsMenuOptions id={info.row.original.id} onDeleteClick={onDeleteClick} />
+          <PositionsMenuOptions
+            id={info.row.original.id}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+            onFormClick={onFormClick}
+          />
         ),
         meta: {
           headerClassName: 'w-[60px]'

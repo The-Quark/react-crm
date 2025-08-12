@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
-import { PositionsModal } from '@/pages/global-parameters/positions/positions-list/components/blocks/positionsModal.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { getGlobalParameters } from '@/api';
 import { SharedAutocompleteBase, SharedError } from '@/partials/sharedUI';
@@ -14,12 +13,19 @@ interface Props {
   initialCompanyId?: number;
   onCompanyChange: (companyId: number | null) => void;
   onSearch?: (searchTerm: string) => void;
+  handleFormClick: (id: number | null) => void;
+  id: number | null;
 }
 
-export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange, onSearch }) => {
+export const PositionsToolbar: FC<Props> = ({
+  initialCompanyId,
+  onCompanyChange,
+  onSearch,
+  id,
+  handleFormClick
+}) => {
   const { table } = useDataGrid();
   const { formatMessage } = useIntl();
-  const [modalOpen, setModalOpen] = useState(false);
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
 
@@ -43,14 +49,6 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
     const value = event.target.value;
     setSearchValue(value);
     debouncedSearch(value);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleOpen = () => {
-    setModalOpen(true);
   };
 
   const {
@@ -78,7 +76,7 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
       <h3 className="card-title">{formatMessage({ id: 'SYSTEM.POSITIONS' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
-          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          <button className="btn btn-sm btn-primary" onClick={() => handleFormClick(id)}>
             {formatMessage({ id: 'SYSTEM.NEW_POSITION' })}
           </button>
         )}
@@ -117,7 +115,6 @@ export const PositionsToolbar: FC<Props> = ({ initialCompanyId, onCompanyChange,
           />
         </div>
       </div>
-      <PositionsModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };
