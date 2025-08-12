@@ -11,7 +11,7 @@ import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { ApplicationsStatus, ClientType } from '@/api/enums';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@/utils/lib/helpers.ts';
-import { BIN_LENGTH, PHONE_REG_EXP, SEARCH_DEBOUNCE_DELAY, SEARCH_PER_PAGE } from '@/utils';
+import { BIN_LENGTH, SEARCH_DEBOUNCE_DELAY, SEARCH_PER_PAGE } from '@/utils';
 import { Divider } from '@mui/material';
 import { ApplicationsClientBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsClientBlock.tsx';
 import { ApplicationsContactBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsContactBlock.tsx';
@@ -64,16 +64,16 @@ const getInitialValues = (
 ): IApplicationPostFormValues => {
   if (isEditMode && applicationData) {
     return {
-      email: applicationData.client?.email || '',
-      bin: applicationData.client?.bin || '',
-      phone: applicationData.client?.phone || '',
+      email: applicationData?.email || '',
+      bin: applicationData?.bin || '',
+      phone: applicationData?.phone || '',
       message: applicationData.message || '',
       source: applicationData.source.code || 'insta',
-      first_name: applicationData.client?.first_name || '',
-      last_name: applicationData.client?.last_name || '',
-      patronymic: applicationData.client?.patronymic || '',
-      company_name: applicationData.client?.company_name || '',
-      client_type: applicationData.client?.type || 'individual',
+      first_name: applicationData?.first_name || '',
+      last_name: applicationData?.last_name || '',
+      patronymic: applicationData?.patronymic || '',
+      company_name: applicationData?.company_name || '',
+      client_type: applicationData?.client_type || 'individual',
       client_id: applicationData.client_id || clientId,
       weight: applicationData?.weight?.toString() ?? '',
       width: applicationData?.width?.toString() ?? '',
@@ -265,10 +265,6 @@ export const ApplicationsStarterContent = ({
     return null;
   };
 
-  if (isLoading) {
-    return <SharedLoading simple />;
-  }
-
   const errorComponent = renderError();
   if (errorComponent) {
     return errorComponent;
@@ -285,32 +281,36 @@ export const ApplicationsStarterContent = ({
                 : formatMessage({ id: 'SYSTEM.NEW_APPLICATION' })}
             </h3>
           </div>
-          <div className="card-body grid gap-5">
-            <ApplicationsClientBlock
-              isEditMode={isEditMode}
-              clientsData={clientsData?.result}
-              clientLoading={clientsLoading || clientLoading}
-              onSearchChange={handleSearchChange}
-              searchTerm={inputValue}
-            />
-            <ApplicationsContactBlock isEditMode={isEditMode} sourcesData={sourcesData?.result} />
-            <Divider />
-            <ApplicationsRouteBlock />
-            <Divider />
-            <ApplicationsDimensionsBlock />
-            <Divider />
-            <ApplicationsBoxTypeBlock
-              boxTypesLoading={boxTypesLoading}
-              boxTypesData={boxTypesData?.result}
-            />
-            <div className="flex justify-end">
-              <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
-                {formik.isSubmitting
-                  ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
-                  : formatMessage({ id: 'SYSTEM.SAVE' })}
-              </button>
+          {isLoading ? (
+            <SharedLoading simple />
+          ) : (
+            <div className="card-body grid gap-5">
+              <ApplicationsClientBlock
+                isEditMode={isEditMode}
+                clientsData={clientsData?.result}
+                clientLoading={clientsLoading || clientLoading}
+                onSearchChange={handleSearchChange}
+                searchTerm={inputValue}
+              />
+              <ApplicationsContactBlock isEditMode={isEditMode} sourcesData={sourcesData?.result} />
+              <Divider />
+              <ApplicationsRouteBlock />
+              <Divider />
+              <ApplicationsDimensionsBlock />
+              <Divider />
+              <ApplicationsBoxTypeBlock
+                boxTypesLoading={boxTypesLoading}
+                boxTypesData={boxTypesData?.result}
+              />
+              <div className="flex justify-end">
+                <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+                  {formik.isSubmitting
+                    ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                    : formatMessage({ id: 'SYSTEM.SAVE' })}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </form>
       </div>
     </FormikProvider>

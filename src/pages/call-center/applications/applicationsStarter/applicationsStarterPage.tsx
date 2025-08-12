@@ -21,6 +21,9 @@ export const ApplicationsStarterPage = () => {
   } = useQuery({
     queryKey: ['application', id],
     queryFn: () => getApplications({ id: applicationId }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 
@@ -38,7 +41,7 @@ export const ApplicationsStarterPage = () => {
       ) : (
         <ApplicationsStarterContent
           isEditMode={isEditMode}
-          applicationId={Number(id)}
+          applicationId={applicationId}
           applicationData={initialData}
         />
       )}
