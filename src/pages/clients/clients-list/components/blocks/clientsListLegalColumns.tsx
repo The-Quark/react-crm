@@ -43,6 +43,27 @@ export const useClientsListLegalColumns = ({
         }
       },
       {
+        accessorFn: (row) => row?.initials_code,
+        id: 'CODE',
+        header: ({ column }) => (
+          <DataGridColumnHeader title={formatMessage({ id: 'SYSTEM.CODE' })} column={column} />
+        ),
+        enableSorting: false,
+        cell: (info) => (
+          <div className="flex items-center gap-1.5">
+            <div
+              className="leading-none font-medium text-sm text-gray-900 hover:text-primary"
+              onClick={() => onRowClick(info.row.original.id)}
+            >
+              {info.row.original?.initials_code}
+            </div>
+          </div>
+        ),
+        meta: {
+          headerClassName: 'w-0'
+        }
+      },
+      {
         accessorFn: (row) => row.company_name,
         id: 'COMPANY',
         header: ({ column }) => (

@@ -112,7 +112,8 @@ const Validation = {
   'VALIDATION.STEP_REQUIRED': 'Шаг обязателен',
   'VALIDATION.WEIGHT_FROM_REQUIRED': 'Минимальный вес обязателен',
   'VALIDATION.WEIGHT_TO_REQUIRED': 'Максимальный вес обязателен',
-  'VALIDATION.NOMINAL_COST_REQUIRED': 'Номинальная стоимость обязательна'
+  'VALIDATION.NOMINAL_COST_REQUIRED': 'Номинальная стоимость обязательна',
+  'VALIDATION.MIN_3_SYMBOLS': 'Минимум 3 символа'
 };
 
 export default Validation;

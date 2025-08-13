@@ -111,7 +111,8 @@ const Validation = {
   'VALIDATION.STEP_REQUIRED': 'Step is required',
   'VALIDATION.WEIGHT_FROM_REQUIRED': 'Weight from is required',
   'VALIDATION.WEIGHT_TO_REQUIRED': 'Weight to is required',
-  'VALIDATION.NOMINAL_COST_REQUIRED': 'Nominal cost is required'
+  'VALIDATION.NOMINAL_COST_REQUIRED': 'Nominal cost is required',
+  'VALIDATION.MIN_3_SYMBOLS': 'Minimum 3 characters'
 };
 
 export default Validation;

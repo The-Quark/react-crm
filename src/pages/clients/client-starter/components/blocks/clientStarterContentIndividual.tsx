@@ -28,15 +28,6 @@ interface Props {
   sourcesData?: Source[];
 }
 
-const validateSchema = Yup.object().shape({
-  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
-  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
-  email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
-  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
-  source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED')
-});
-
 const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -46,9 +37,24 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const validateSchema = Yup.object().shape({
+    first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+    last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+    initials_code: clientData
+      ? Yup.string()
+          .min(3, 'VALIDATION.MIN_3_SYMBOLS')
+          .required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED')
+      : Yup.string().optional(),
+    email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
+    source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED')
+  });
+
   const initialValues: IClientFormValues = {
     type: 'individual',
     first_name: clientData ? clientData.first_name : '',
+    initials_code: clientData ? clientData.initials_code : '',
     last_name: clientData ? clientData.last_name : '',
     patronymic: clientData && clientData.patronymic !== null ? clientData.patronymic : '',
     birth_date: clientData ? clientData.birth_date : '',
@@ -81,6 +87,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
         if (clientData) {
           await putClient(clientData.id, payload);
         } else {
+          payload.initials_code = undefined;
           await postClient(payload);
         }
         resetForm();
@@ -136,6 +143,13 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
 
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+      {clientData && (
+        <SharedInput
+          name="initials_code"
+          label={formatMessage({ id: 'SYSTEM.CODE' })}
+          formik={formik}
+        />
+      )}
       <SharedInput
         name="first_name"
         label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}

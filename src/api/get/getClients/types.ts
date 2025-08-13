@@ -14,6 +14,7 @@ interface Source {
 
 export interface Client {
   id: number;
+  initials_code: string | null;
   type: ClientType;
   phone: string;
   email: string | null;

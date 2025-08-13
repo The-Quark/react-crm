@@ -111,7 +111,8 @@ const Validation = {
   'VALIDATION.STEP_REQUIRED': 'الخطوة مطلوبة',
   'VALIDATION.WEIGHT_FROM_REQUIRED': 'الوزن من مطلوب',
   'VALIDATION.WEIGHT_TO_REQUIRED': 'الوزن إلى مطلوب',
-  'VALIDATION.NOMINAL_COST_REQUIRED': 'التكلفة الاسمية مطلوبة'
+  'VALIDATION.NOMINAL_COST_REQUIRED': 'التكلفة الاسمية مطلوبة',
+  'VALIDATION.MIN_3_SYMBOLS': 'الحد الأدنى 3 رموز'
 };
 
 export default Validation;

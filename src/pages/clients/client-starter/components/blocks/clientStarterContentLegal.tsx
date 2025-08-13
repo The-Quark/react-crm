@@ -26,20 +26,6 @@ interface Props {
   sourcesData?: Source[];
 }
 
-const validateSchema = Yup.object().shape({
-  company_name: Yup.string().required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
-  bin: Yup.string()
-    .length(12, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
-    .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
-    .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
-  representative_phone: Yup.string(),
-  representative_email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
-  notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
-  source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
-  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional()
-});
-
 const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -49,11 +35,31 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const [citySearchTerm, setCitySearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const validateSchema = Yup.object().shape({
+    company_name: Yup.string().required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
+    bin: Yup.string()
+      .length(12, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
+      .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
+      .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
+    representative_phone: Yup.string(),
+    initials_code: clientData
+      ? Yup.string()
+          .min(3, 'VALIDATION.MIN_3_SYMBOLS')
+          .required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED')
+      : Yup.string().optional(),
+    representative_email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
+    notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
+    source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional()
+  });
+
   const initialValues: IClientFormValues = {
     type: 'legal',
     company_name: clientData?.company_name || '',
     bin: clientData?.bin || '',
     business_type: clientData?.business_type || '',
+    initials_code: clientData?.initials_code || '',
     legal_address: clientData?.legal_address || '',
     representative_first_name: clientData?.representative_first_name || '',
     representative_last_name: clientData?.representative_last_name || '',
@@ -85,9 +91,10 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
             bin: String(values.bin)
           });
         } else {
+          const { initials_code, ...postValues } = values;
           await postClient({
-            ...values,
-            bin: String(values.bin)
+            ...postValues,
+            bin: String(postValues.bin)
           });
         }
         resetForm();
@@ -143,6 +150,13 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
 
   return (
     <form className="card-body grid gap-5" onSubmit={formik.handleSubmit} noValidate>
+      {clientData && (
+        <SharedInput
+          name="initials_code"
+          label={formatMessage({ id: 'SYSTEM.CODE' })}
+          formik={formik}
+        />
+      )}
       <SharedInput
         name="company_name"
         label={formatMessage({ id: 'SYSTEM.COMPANY_NAME' })}

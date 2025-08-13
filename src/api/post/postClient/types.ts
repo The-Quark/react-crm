@@ -3,6 +3,7 @@ export interface IClientFormValues {
   phone?: string;
   email?: string;
   notes?: string;
+  initials_code?: string | null;
   source_id: string;
   country_id?: string;
   client_status?: string;

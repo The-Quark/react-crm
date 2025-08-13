@@ -69,6 +69,14 @@ export const ClientsListProfileModal: FC<Props> = ({ open, id, handleClose }) =>
                     <>
                       <div className="flex items-baseline flex-wrap lg:flex-nowrap  gap-2.5">
                         <label className="form-label max-w-56">
+                          {formatMessage({ id: 'SYSTEM.CODE' })}
+                        </label>
+                        <div className="flex columns-1 w-full flex-wrap">
+                          {data.result[0].initials_code}
+                        </div>
+                      </div>
+                      <div className="flex items-baseline flex-wrap lg:flex-nowrap  gap-2.5">
+                        <label className="form-label max-w-56">
                           {formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
                         </label>
                         <div className="flex columns-1 w-full flex-wrap">
