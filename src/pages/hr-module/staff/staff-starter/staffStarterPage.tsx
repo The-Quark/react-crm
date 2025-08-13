@@ -18,6 +18,9 @@ export const StaffStarterPage = () => {
   } = useQuery({
     queryKey: ['staffID', id],
     queryFn: () => getUserByParams({ id: Number(id) }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 
