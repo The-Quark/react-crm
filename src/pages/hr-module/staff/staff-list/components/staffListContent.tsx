@@ -33,7 +33,6 @@ export const StaffListContent = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
-
     setIsDeleting(true);
     try {
       await deleteUser(selectedId);

@@ -42,46 +42,47 @@ interface Props {
   userId?: number;
 }
 
-export const formSchemaPost = Yup.object().shape({
-  phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
-  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
-  patronymic: Yup.string().optional(),
-  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
-  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
-  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
-  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
-  email: Yup.string()
-    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
-    .required('VALIDATION.EMAIL_REQUIRED'),
-  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
-  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
-  password: Yup.string()
-    .min(10, 'VALIDATION.PASSWORD_MIN')
-    .max(100, 'VALIDATION.PASSWORD_MAX')
-    .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
-    .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
-    .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
-    .required('VALIDATION.PASSWORD_REQUIRED')
-});
-
-export const formSchemaPut = Yup.object().shape({
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
-  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
-  patronymic: Yup.string().optional(),
-  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
-  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
-  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
-  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
-  email: Yup.string()
-    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
-    .required('VALIDATION.EMAIL_REQUIRED'),
-  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
-  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED')
-});
+const formSchemas = {
+  post: Yup.object().shape({
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+    last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+    patronymic: Yup.string().optional(),
+    birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+    subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+    department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+    position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+    email: Yup.string()
+      .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+      .required('VALIDATION.EMAIL_REQUIRED'),
+    country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+    city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
+    password: Yup.string()
+      .min(10, 'VALIDATION.PASSWORD_MIN')
+      .max(100, 'VALIDATION.PASSWORD_MAX')
+      .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
+      .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
+      .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
+      .required('VALIDATION.PASSWORD_REQUIRED')
+  }),
+  put: Yup.object().shape({
+    phone: Yup.string()
+      .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
+      .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+    last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+    patronymic: Yup.string().optional(),
+    birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+    subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+    department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+    position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+    email: Yup.string()
+      .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+      .required('VALIDATION.EMAIL_REQUIRED'),
+    country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+    city_id: Yup.string().required('VALIDATION.CITY_REQUIRED')
+  })
+};
 
 const getInitialValues = (
   isEditMode: boolean,
@@ -135,18 +136,20 @@ const getInitialValues = (
 
 export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
   const queryClient = useQueryClient();
-  const { formatMessage } = useIntl();
   const navigate = useNavigate();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
 
   const [loading, setLoading] = useState(false);
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
-  const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
-  const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
-  const [searchPositionTerm, setSearchPositionTerm] = useState('');
-  const [searchCountryTerm, setSearchCountryTerm] = useState('');
-  const [searchCityTerm, setSearchCityTerm] = useState('');
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(false);
+  const [searchTerms, setSearchTerms] = useState({
+    company: '',
+    department: '',
+    subdivision: '',
+    position: '',
+    country: '',
+    city: ''
+  });
 
   const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
   const isAdmin = currentUser?.roles[0].name === 'superadmin';
@@ -174,7 +177,7 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
 
   const formik = useFormik({
     initialValues: getInitialValues(isEditMode, usersData as IGetUserByParams, initialCompanyId),
-    validationSchema: isEditMode ? formSchemaPut : formSchemaPost,
+    validationSchema: isEditMode ? formSchemas.put : formSchemas.post,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
@@ -211,19 +214,20 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
         if (isEditMode) {
           await putUser(payloadPut, removeAvatar);
           await putUserRole(payloadRoleUpdate);
-          queryClient.invalidateQueries({ queryKey: ['staff'] });
-          navigate('/hr-module/staff/list');
-          resetForm();
         } else {
           await postCreateUser(payloadPost);
-          queryClient.invalidateQueries({ queryKey: ['staff'] });
-          navigate('/hr-module/staff/list');
-          resetForm();
         }
-        setSearchCompanyTerm('');
-        setSearchDepartmentTerm('');
-        setSearchSubdivisionTerm('');
-        setSearchPositionTerm('');
+        queryClient.invalidateQueries({ queryKey: ['staff'] });
+        navigate('/hr-module/staff/list');
+        resetForm();
+        setSearchTerms({
+          company: '',
+          department: '',
+          subdivision: '',
+          position: '',
+          country: '',
+          city: ''
+        });
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -390,8 +394,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               }}
               error={formik.errors.country_id as string}
               touched={formik.touched.country_id}
-              searchTerm={searchCountryTerm}
-              onSearchTermChange={setSearchCountryTerm}
+              searchTerm={searchTerms.country}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, country: term })}
               loading={countriesLoading}
             />
             <SharedAutocomplete
@@ -407,8 +411,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               onChange={(val) => formik.setFieldValue('city_id', val)}
               error={formik.errors.city_id as string}
               touched={formik.touched.city_id}
-              searchTerm={searchCityTerm}
-              onSearchTermChange={setSearchCityTerm}
+              searchTerm={searchTerms.city}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, city: term })}
               disabled={!formik.values.country_id}
               loading={citiesLoading}
               errorText={
@@ -482,14 +486,12 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
                   formik.setFieldValue('department_id', '');
                   formik.setFieldValue('subdivision_id', '');
                   formik.setFieldValue('position_id', '');
-                  setSearchDepartmentTerm('');
-                  setSearchSubdivisionTerm('');
-                  setSearchPositionTerm('');
+                  setSearchTerms({ ...searchTerms, department: '', subdivision: '', position: '' });
                 }}
                 error={formik.errors.company_id as string}
                 touched={formik.touched.company_id}
-                searchTerm={searchCompanyTerm}
-                onSearchTermChange={setSearchCompanyTerm}
+                searchTerm={searchTerms.company}
+                onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, company: term })}
               />
             )}
             <SharedAutocomplete
@@ -509,8 +511,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               disabled={!formik.values.company_id}
               error={formik.errors.department_id as string}
               touched={formik.touched.department_id}
-              searchTerm={searchDepartmentTerm}
-              onSearchTermChange={setSearchDepartmentTerm}
+              searchTerm={searchTerms.department}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, department: term })}
               loading={departmentsLoading}
             />
 
@@ -531,8 +533,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               disabled={!formik.values.company_id}
               error={formik.errors.subdivision_id as string}
               touched={formik.touched.subdivision_id}
-              searchTerm={searchSubdivisionTerm}
-              onSearchTermChange={setSearchSubdivisionTerm}
+              searchTerm={searchTerms.subdivision}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, subdivision: term })}
               loading={subdivisionsLoading}
             />
 
@@ -553,8 +555,8 @@ export const StaffStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               disabled={!formik.values.company_id}
               error={formik.errors.position_id as string}
               touched={formik.touched.position_id}
-              searchTerm={searchPositionTerm}
-              onSearchTermChange={setSearchPositionTerm}
+              searchTerm={searchTerms.position}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, position: term })}
               loading={positionsLoading}
             />
             {!isEditMode && (
