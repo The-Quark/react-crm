@@ -49,12 +49,14 @@ type KanbanContextProps<
   columns: C[];
   data: T[];
   activeCardId: string | null;
+  isDragDisabled: boolean;
 };
 
 const KanbanContext = createContext<KanbanContextProps>({
   columns: [],
   data: [],
-  activeCardId: null
+  activeCardId: null,
+  isDragDisabled: true
 });
 
 export type KanbanBoardProps = {
@@ -65,13 +67,14 @@ export type KanbanBoardProps = {
 
 export const KanbanBoard = ({ id, children, className }: KanbanBoardProps) => {
   const { isOver, setNodeRef } = useDroppable({
-    id
+    id,
+    disabled: true
   });
 
   return (
     <div
       className={cn(
-        'flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all',
+        'flex min-h-40 min-w-44 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all',
         isOver ? 'ring-primary' : 'ring-transparent',
         className
       )}
@@ -93,10 +96,19 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
   children,
   className
 }: KanbanCardProps<T>) => {
+  const { isDragDisabled } = useContext(KanbanContext) as KanbanContextProps;
   const { attributes, listeners, setNodeRef, transition, transform, isDragging } = useSortable({
     id
   });
   const { activeCardId } = useContext(KanbanContext) as KanbanContextProps;
+
+  if (isDragDisabled) {
+    return (
+      <Card className={cn('gap-4 rounded-md p-3 shadow-sm', className)}>
+        {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+      </Card>
+    );
+  }
 
   const style = {
     transition,
@@ -146,17 +158,23 @@ export const KanbanCards = <T extends KanbanItemProps = KanbanItemProps>({
   className,
   ...props
 }: KanbanCardsProps<T>) => {
-  const { data } = useContext(KanbanContext) as KanbanContextProps<T>;
+  const { data, isDragDisabled } = useContext(KanbanContext) as KanbanContextProps<T>;
   const filteredData = data.filter((item) => item.column === props.id);
   const items = filteredData.map((item) => item.id);
 
   return (
     <ScrollArea className="overflow-hidden">
-      <SortableContext items={items}>
+      {isDragDisabled ? (
         <div className={cn('flex flex-grow flex-col gap-2 p-2', className)} {...props}>
           {filteredData.map(children)}
         </div>
-      </SortableContext>
+      ) : (
+        <SortableContext items={items}>
+          <div className={cn('flex flex-grow flex-col gap-2 p-2', className)} {...props}>
+            {filteredData.map(children)}
+          </div>
+        </SortableContext>
+      )}
       <ScrollBar orientation="vertical" />
     </ScrollArea>
   );
@@ -176,6 +194,7 @@ export type KanbanProviderProps<
   className?: string;
   columns: C[];
   data: T[];
+  isDragDisabled?: boolean;
   onDataChange?: (data: T[]) => void;
   onDragStart?: (event: DragStartEvent) => void;
   onDragEnd?: (event: DragEndEvent) => void;
@@ -193,6 +212,7 @@ export const KanbanProvider = <
   className,
   columns,
   data,
+  isDragDisabled = true,
   onDataChange,
   ...props
 }: KanbanProviderProps<T, C>) => {
@@ -291,7 +311,7 @@ export const KanbanProvider = <
   };
 
   return (
-    <KanbanContext.Provider value={{ columns, data, activeCardId }}>
+    <KanbanContext.Provider value={{ columns, data, activeCardId, isDragDisabled }}>
       <DndContext
         accessibility={{ announcements }}
         collisionDetection={closestCenter}
@@ -301,7 +321,7 @@ export const KanbanProvider = <
         sensors={sensors}
         {...props}
       >
-        <div className={cn('grid size-full auto-cols-fr grid-flow-col gap-4', className)}>
+        <div className={cn('flex gap-4 gap-x-4 pb-4 scrollable-x-auto', className)}>
           {columns.map((column) => children(column))}
         </div>
         {typeof window !== 'undefined' &&
