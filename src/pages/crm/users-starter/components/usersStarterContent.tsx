@@ -41,50 +41,47 @@ interface Props {
   userId?: number;
 }
 
-export const formSchemaPost = Yup.object().shape({
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
-  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
-  patronymic: Yup.string().optional(),
-  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
-  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
-  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
-  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
-  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
-  email: Yup.string()
-    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
-    .required('VALIDATION.EMAIL_REQUIRED'),
-  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
-  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
-  password: Yup.string()
-    .min(10, 'VALIDATION.PASSWORD_MIN')
-    .max(100, 'VALIDATION.PASSWORD_MAX')
-    .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
-    .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
-    .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
-    .required('VALIDATION.PASSWORD_REQUIRED')
-});
-
-export const formSchemaPut = Yup.object().shape({
-  phone: Yup.string()
-    .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-    .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-  first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
-  last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
-  patronymic: Yup.string().optional(),
-  birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
-  company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
-  subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
-  department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
-  position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
-  email: Yup.string()
-    .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
-    .required('VALIDATION.EMAIL_REQUIRED'),
-  country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
-  city_id: Yup.string().required('VALIDATION.CITY_REQUIRED')
-});
+const formSchemas = {
+  post: Yup.object().shape({
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+    last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+    patronymic: Yup.string().optional(),
+    birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+    company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
+    subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+    department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+    position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+    email: Yup.string()
+      .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+      .required('VALIDATION.EMAIL_REQUIRED'),
+    country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+    city_id: Yup.string().required('VALIDATION.CITY_REQUIRED'),
+    password: Yup.string()
+      .min(10, 'VALIDATION.PASSWORD_MIN')
+      .max(100, 'VALIDATION.PASSWORD_MAX')
+      .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
+      .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
+      .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
+      .required('VALIDATION.PASSWORD_REQUIRED')
+  }),
+  put: Yup.object().shape({
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
+    last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
+    patronymic: Yup.string().optional(),
+    birth_date: Yup.string().required('VALIDATION.BIRTH_DATE_REQUIRED'),
+    company_id: Yup.string().required('VALIDATION.COMPANY_REQUIRED'),
+    subdivision_id: Yup.string().required('VALIDATION.SUBDIVISION_REQUIRED'),
+    department_id: Yup.string().required('VALIDATION.DEPARTMENT_REQUIRED'),
+    position_id: Yup.string().required('VALIDATION.POSITION_REQUIRED'),
+    email: Yup.string()
+      .email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID')
+      .required('VALIDATION.EMAIL_REQUIRED'),
+    country_id: Yup.string().required('VALIDATION.COUNTRY_REQUIRED'),
+    city_id: Yup.string().required('VALIDATION.CITY_REQUIRED')
+  })
+};
 
 const getInitialValues = (
   isEditMode: boolean,
@@ -137,31 +134,24 @@ const getInitialValues = (
 };
 
 export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }) => {
-  const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
 
-  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
-
   const [loading, setLoading] = useState(false);
-  const [searchCompanyTerm, setSearchCompanyTerm] = useState('');
-  const [searchDepartmentTerm, setSearchDepartmentTerm] = useState('');
-  const [searchSubdivisionTerm, setSearchSubdivisionTerm] = useState('');
-  const [searchPositionTerm, setSearchPositionTerm] = useState('');
-  const [searchCountryTerm, setSearchCountryTerm] = useState('');
-  const [searchCityTerm, setSearchCityTerm] = useState('');
   const [removeAvatar, setRemoveAvatar] = useState<boolean>(false);
-
-  const {
-    data: companiesData,
-    isLoading: companiesLoading,
-    isError: companiesIsError,
-    error: companiesError
-  } = useQuery({
-    queryKey: ['users-companies'],
-    queryFn: () => getGlobalParameters()
+  const [searchTerms, setSearchTerms] = useState({
+    company: '',
+    department: '',
+    subdivision: '',
+    position: '',
+    country: '',
+    city: ''
   });
+
+  const initialCompanyId = currentUser?.company_id ? Number(currentUser.company_id) : '';
+  const isAdmin = currentUser?.roles[0].name === 'superadmin';
 
   const {
     data: rolesData,
@@ -173,9 +163,19 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     queryFn: () => getRoles(currentUser ? Number(currentUser.id) : 0, true)
   });
 
+  const {
+    data: companiesData,
+    isLoading: companiesLoading,
+    isError: companiesIsError,
+    error: companiesError
+  } = useQuery({
+    queryKey: ['users-companies'],
+    queryFn: () => getGlobalParameters()
+  });
+
   const formik = useFormik({
     initialValues: getInitialValues(isEditMode, usersData as IGetUserByParams, initialCompanyId),
-    validationSchema: isEditMode ? formSchemaPut : formSchemaPost,
+    validationSchema: isEditMode ? formSchemas.put : formSchemas.post,
     enableReinitialize: true,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       setLoading(true);
@@ -210,19 +210,20 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
         if (isEditMode) {
           await putUser(payloadPut, removeAvatar);
           await putUserRole(payloadRoleUpdate);
-          queryClient.invalidateQueries({ queryKey: ['users'] });
-          navigate('/crm/users/list');
-          resetForm();
         } else {
           await postCreateUser(payloadPost);
-          queryClient.invalidateQueries({ queryKey: ['users'] });
-          navigate('/crm/users/list');
-          resetForm();
         }
-        setSearchCompanyTerm('');
-        setSearchDepartmentTerm('');
-        setSearchSubdivisionTerm('');
-        setSearchPositionTerm('');
+        queryClient.invalidateQueries({ queryKey: ['users'] });
+        navigate('/crm/users/list');
+        resetForm();
+        setSearchTerms({
+          company: '',
+          department: '',
+          subdivision: '',
+          position: '',
+          country: '',
+          city: ''
+        });
       } catch (err) {
         const error = err as AxiosError<{ message?: string }>;
         console.error(error.response?.data?.message || error.message);
@@ -238,10 +239,11 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: departmentsIsError,
     error: departmentsError
   } = useQuery({
-    queryKey: ['drivers-departments', formik.values.company_id],
+    queryKey: ['users-departments', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsDepartments({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       })
   });
 
@@ -251,10 +253,11 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: subdivisionsIsError,
     error: subdivisionsError
   } = useQuery({
-    queryKey: ['drivers-subdivisions', formik.values.company_id],
+    queryKey: ['users-subdivisions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsSubdivisions({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       })
   });
 
@@ -264,10 +267,11 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     isError: positionsIsError,
     error: positionsError
   } = useQuery({
-    queryKey: ['drivers-positions', formik.values.company_id],
+    queryKey: ['users-positions', formik.values.company_id],
     queryFn: () =>
       getGlobalParamsPositions({
-        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined
+        company_id: formik.values.company_id ? Number(formik.values.company_id) : undefined,
+        is_active: true
       })
   });
 
@@ -300,10 +304,6 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     enabled: !!formik.values.country_id || !!usersData?.result[0]?.location?.country_id
   });
 
-  if (companiesLoading || rolesLoading) {
-    return <SharedLoading />;
-  }
-
   if (countriesIsError) {
     return <SharedError error={countriesError} />;
   }
@@ -331,6 +331,8 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
     return <SharedError error={subdivisionsError} />;
   }
 
+  const isLoading = companiesLoading || rolesLoading || countriesLoading;
+
   return (
     <div className="grid gap-5 lg:gap-7.5">
       <form className="card pb-2.5" onSubmit={formik.handleSubmit} noValidate>
@@ -342,236 +344,240 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
           </h3>
         </div>
 
-        <div className="card-body grid gap-5">
-          <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
-            <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.PHOTO' })}</label>
-            <div className="flex items-center justify-between flex-wrap grow gap-2.5">
-              <span className="text-2sm font-medium text-gray-600">
-                {formatMessage({ id: 'SYSTEM.PHOTO_DIMENSIONS' })}
-              </span>
-              <CrudAvatarUpload
-                avatarUser={formik.values.avatar}
-                onChange={(newAvatar) => formik.setFieldValue('avatar', newAvatar)}
-                onChangeRemoveAvatar={() => {
-                  formik.setFieldValue('avatar', null);
-                  setRemoveAvatar(true);
-                }}
-              />
+        {isLoading ? (
+          <SharedLoading simple />
+        ) : (
+          <div className="card-body grid gap-5">
+            <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
+              <label className="form-label max-w-56">{formatMessage({ id: 'SYSTEM.PHOTO' })}</label>
+              <div className="flex items-center justify-between flex-wrap grow gap-2.5">
+                <span className="text-2sm font-medium text-gray-600">
+                  {formatMessage({ id: 'SYSTEM.PHOTO_DIMENSIONS' })}
+                </span>
+                <CrudAvatarUpload
+                  avatarUser={formik.values.avatar}
+                  onChange={(newAvatar) => formik.setFieldValue('avatar', newAvatar)}
+                  onChangeRemoveAvatar={() => {
+                    formik.setFieldValue('avatar', null);
+                    setRemoveAvatar(true);
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          <SharedInput
-            name="first_name"
-            label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
-            formik={formik}
-          />
-          <SharedInput
-            name="last_name"
-            label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
-            formik={formik}
-          />
-          <SharedInput
-            name="patronymic"
-            label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
-            formik={formik}
-          />
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
-            value={formik.values.country_id}
-            options={countriesData?.data ?? []}
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
-            onChange={(val) => {
-              formik.setFieldValue('country_id', val);
-              formik.setFieldValue('city_id', '');
-            }}
-            error={formik.errors.country_id as string}
-            touched={formik.touched.country_id}
-            searchTerm={searchCountryTerm}
-            onSearchTermChange={setSearchCountryTerm}
-            loading={countriesLoading}
-          />
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.CITY' })}
-            value={formik.values.city_id}
-            options={citiesData?.data[0]?.cities ?? []}
-            placeholder={
-              formik.values.country_id
-                ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
-                : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
-            }
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
-            onChange={(val) => formik.setFieldValue('city_id', val)}
-            error={formik.errors.city_id as string}
-            touched={formik.touched.city_id}
-            searchTerm={searchCityTerm}
-            onSearchTermChange={setSearchCityTerm}
-            disabled={!formik.values.country_id}
-            loading={citiesLoading}
-            errorText={
-              citiesIsError ? formatMessage({ id: 'SYSTEM.FAILED_LOAD_CITIES' }) : undefined
-            }
-            emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
-          />
-          <SharedSelect
-            name="role"
-            label={formatMessage({ id: 'SYSTEM.ROLE' })}
-            formik={formik}
-            options={
-              rolesData?.result
-                ? rolesData.result.map((opt) => ({
-                    label: opt.name,
-                    value: opt.name
-                  }))
-                : []
-            }
-          />
-          <SharedSelect
-            name="gender"
-            label={formatMessage({ id: 'SYSTEM.GENDER' })}
-            formik={formik}
-            options={mockGenderOptions.map((opt) => ({
-              label: formatMessage({ id: `SYSTEM.GENDER_${opt.value.toUpperCase()}` }),
-              value: opt.value
-            }))}
-          />
-          {isEditMode && (
-            <SharedSelect
-              name="status"
-              label={formatMessage({ id: 'SYSTEM.STATUS' })}
+            <SharedInput
+              name="first_name"
+              label={formatMessage({ id: 'SYSTEM.FIRST_NAME' })}
               formik={formik}
-              options={mockUserStatusOptions.map((opt) => ({
-                label: opt.name,
+            />
+            <SharedInput
+              name="last_name"
+              label={formatMessage({ id: 'SYSTEM.LAST_NAME' })}
+              formik={formik}
+            />
+            <SharedInput
+              name="patronymic"
+              label={formatMessage({ id: 'SYSTEM.PATRONYMIC' })}
+              formik={formik}
+            />
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.COUNTRY' })}
+              value={formik.values.country_id}
+              options={countriesData?.data ?? []}
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_COUNTRY' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COUNTRY' })}
+              onChange={(val) => {
+                formik.setFieldValue('country_id', val);
+                formik.setFieldValue('city_id', '');
+              }}
+              error={formik.errors.country_id as string}
+              touched={formik.touched.country_id}
+              searchTerm={searchTerms.country}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, country: term })}
+              loading={countriesLoading}
+            />
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.CITY' })}
+              value={formik.values.city_id}
+              options={citiesData?.data[0]?.cities ?? []}
+              placeholder={
+                formik.values.country_id
+                  ? formatMessage({ id: 'SYSTEM.SELECT_CITY' })
+                  : formatMessage({ id: 'SYSTEM.SELECT_COUNTRY_FIRST' })
+              }
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_CITY' })}
+              onChange={(val) => formik.setFieldValue('city_id', val)}
+              error={formik.errors.city_id as string}
+              touched={formik.touched.city_id}
+              searchTerm={searchTerms.city}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, city: term })}
+              disabled={!formik.values.country_id}
+              loading={citiesLoading}
+              errorText={
+                citiesIsError ? formatMessage({ id: 'SYSTEM.FAILED_LOAD_CITIES' }) : undefined
+              }
+              emptyText={formatMessage({ id: 'SYSTEM.NO_CITIES_AVAILABLE' })}
+            />
+            <SharedSelect
+              name="role"
+              label={formatMessage({ id: 'SYSTEM.ROLE' })}
+              formik={formik}
+              options={
+                rolesData?.result
+                  ? rolesData.result.map((opt) => ({
+                      label: opt.name,
+                      value: opt.name
+                    }))
+                  : []
+              }
+            />
+            <SharedSelect
+              name="gender"
+              label={formatMessage({ id: 'SYSTEM.GENDER' })}
+              formik={formik}
+              options={mockGenderOptions.map((opt) => ({
+                label: formatMessage({ id: `SYSTEM.GENDER_${opt.value.toUpperCase()}` }),
                 value: opt.value
               }))}
             />
-          )}
-          <SharedDateDayPicker
-            name="birth_date"
-            label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
-            formik={formik}
-          />
-          <SharedInput
-            name="phone"
-            label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
-            formik={formik}
-            type="tel"
-          />
-          <SharedInput
-            name="email"
-            label={formatMessage({ id: 'SYSTEM.EMAIL' })}
-            formik={formik}
-            type="email"
-          />
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.COMPANY' })}
-            value={formik.values.company_id ?? ''}
-            options={
-              companiesData?.result?.map((company) => ({
-                id: company.id,
-                name: company.company_name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
-            onChange={(val) => {
-              formik.setFieldValue('company_id', val);
-              formik.setFieldValue('department_id', '');
-              formik.setFieldValue('subdivision_id', '');
-              formik.setFieldValue('position_id', '');
-              setSearchDepartmentTerm('');
-              setSearchSubdivisionTerm('');
-              setSearchPositionTerm('');
-            }}
-            error={formik.errors.company_id as string}
-            touched={formik.touched.company_id}
-            searchTerm={searchCompanyTerm}
-            onSearchTermChange={setSearchCompanyTerm}
-          />
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
-            value={formik.values.department_id ?? ''}
-            options={
-              departmentsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_DEPARTMENT' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_DEPARTMENT' })}
-            onChange={(val) => {
-              formik.setFieldValue('department_id', val);
-            }}
-            disabled={!formik.values.company_id}
-            error={formik.errors.department_id as string}
-            touched={formik.touched.department_id}
-            searchTerm={searchDepartmentTerm}
-            onSearchTermChange={setSearchDepartmentTerm}
-            loading={departmentsLoading}
-          />
-
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
-            value={formik.values.subdivision_id ?? ''}
-            options={
-              subdivisionsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.name
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_SUBDIVISION' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_SUBDIVISION' })}
-            onChange={(val) => {
-              formik.setFieldValue('subdivision_id', val);
-            }}
-            disabled={!formik.values.company_id}
-            error={formik.errors.subdivision_id as string}
-            touched={formik.touched.subdivision_id}
-            searchTerm={searchSubdivisionTerm}
-            onSearchTermChange={setSearchSubdivisionTerm}
-            loading={subdivisionsLoading}
-          />
-
-          <SharedAutocomplete
-            label={formatMessage({ id: 'SYSTEM.POSITION' })}
-            value={formik.values.position_id ?? ''}
-            options={
-              positionsData?.result?.map((app) => ({
-                id: app.id,
-                name: app.title
-              })) ?? []
-            }
-            placeholder={formatMessage({ id: 'SYSTEM.SELECT_POSITION' })}
-            searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_POSITION' })}
-            onChange={(val) => {
-              formik.setFieldValue('position_id', val);
-            }}
-            disabled={!formik.values.company_id}
-            error={formik.errors.position_id as string}
-            touched={formik.touched.position_id}
-            searchTerm={searchPositionTerm}
-            onSearchTermChange={setSearchPositionTerm}
-            loading={positionsLoading}
-          />
-          {!isEditMode && (
-            <SharedInput
-              name="password"
-              label={formatMessage({ id: 'SYSTEM.PASSWORD' })}
+            {isEditMode && (
+              <SharedSelect
+                name="status"
+                label={formatMessage({ id: 'SYSTEM.STATUS' })}
+                formik={formik}
+                options={mockUserStatusOptions.map((opt) => ({
+                  label: opt.name,
+                  value: opt.value
+                }))}
+              />
+            )}
+            <SharedDateDayPicker
+              name="birth_date"
+              label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
               formik={formik}
-              type="password"
             />
-          )}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading || formik.isSubmitting}
-            >
-              {loading
-                ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
-                : formatMessage({ id: 'SYSTEM.SAVE' })}
-            </button>
+            <SharedInput
+              name="phone"
+              label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
+              formik={formik}
+              type="tel"
+            />
+            <SharedInput
+              name="email"
+              label={formatMessage({ id: 'SYSTEM.EMAIL' })}
+              formik={formik}
+              type="email"
+            />
+            {isAdmin && (
+              <SharedAutocomplete
+                label={formatMessage({ id: 'SYSTEM.COMPANY' })}
+                value={formik.values.company_id ?? ''}
+                options={
+                  companiesData?.result?.map((company) => ({
+                    id: company.id,
+                    name: company.company_name
+                  })) ?? []
+                }
+                placeholder={formatMessage({ id: 'SYSTEM.SELECT_COMPANY' })}
+                searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_COMPANY' })}
+                onChange={(val) => {
+                  formik.setFieldValue('company_id', val);
+                  formik.setFieldValue('department_id', '');
+                  formik.setFieldValue('subdivision_id', '');
+                  formik.setFieldValue('position_id', '');
+                  setSearchTerms({ ...searchTerms, department: '', subdivision: '', position: '' });
+                }}
+                error={formik.errors.company_id as string}
+                touched={formik.touched.company_id}
+                searchTerm={searchTerms.company}
+                onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, company: term })}
+              />
+            )}
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.DEPARTMENT' })}
+              value={formik.values.department_id ?? ''}
+              options={
+                departmentsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.name
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_DEPARTMENT' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_DEPARTMENT' })}
+              onChange={(val) => {
+                formik.setFieldValue('department_id', val);
+              }}
+              disabled={!formik.values.company_id}
+              error={formik.errors.department_id as string}
+              touched={formik.touched.department_id}
+              searchTerm={searchTerms.department}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, department: term })}
+              loading={departmentsLoading}
+            />
+
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.SUBDIVISION' })}
+              value={formik.values.subdivision_id ?? ''}
+              options={
+                subdivisionsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.name
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_SUBDIVISION' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_SUBDIVISION' })}
+              onChange={(val) => {
+                formik.setFieldValue('subdivision_id', val);
+              }}
+              disabled={!formik.values.company_id}
+              error={formik.errors.subdivision_id as string}
+              touched={formik.touched.subdivision_id}
+              searchTerm={searchTerms.subdivision}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, subdivision: term })}
+              loading={subdivisionsLoading}
+            />
+
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.POSITION' })}
+              value={formik.values.position_id ?? ''}
+              options={
+                positionsData?.result?.map((app) => ({
+                  id: app.id,
+                  name: app.title
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_POSITION' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_POSITION' })}
+              onChange={(val) => {
+                formik.setFieldValue('position_id', val);
+              }}
+              disabled={!formik.values.company_id}
+              error={formik.errors.position_id as string}
+              touched={formik.touched.position_id}
+              searchTerm={searchTerms.position}
+              onSearchTermChange={(term) => setSearchTerms({ ...searchTerms, position: term })}
+              loading={positionsLoading}
+            />
+            {!isEditMode && (
+              <SharedInput
+                name="password"
+                label={formatMessage({ id: 'SYSTEM.PASSWORD' })}
+                formik={formik}
+                type="password"
+              />
+            )}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading || formik.isSubmitting}
+              >
+                {loading
+                  ? formatMessage({ id: 'SYSTEM.PLEASE_WAIT' })
+                  : formatMessage({ id: 'SYSTEM.SAVE' })}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );
