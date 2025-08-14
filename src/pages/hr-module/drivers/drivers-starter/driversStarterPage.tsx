@@ -18,6 +18,9 @@ export const DriversStarterPage = () => {
   } = useQuery({
     queryKey: ['driversID', id],
     queryFn: () => getUserByParams({ id: Number(id) }),
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: true,
     enabled: isEditMode
   });
 

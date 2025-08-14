@@ -14,7 +14,6 @@ import { IUserFormValues } from '@/api/post/postUser/types.ts';
 import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
 import * as Yup from 'yup';
-import { PHONE_REG_EXP } from '@/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
 import {
@@ -66,9 +65,7 @@ const formSchemas = {
       .required('VALIDATION.PASSWORD_REQUIRED')
   }),
   put: Yup.object().shape({
-    phone: Yup.string()
-      .matches(PHONE_REG_EXP, 'VALIDATION.FORM_VALIDATION_PHONE_INVALID')
-      .required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
+    phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
     first_name: Yup.string().required('VALIDATION.FORM_VALIDATION_FIRST_NAME_REQUIRED'),
     last_name: Yup.string().required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED'),
     patronymic: Yup.string().optional(),

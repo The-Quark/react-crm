@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteUser, getUserByParams } from '@/api';
@@ -35,12 +34,13 @@ export const DriversListContent = () => {
 
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
-
     setIsDeleting(true);
     try {
       await deleteUser(selectedId);
       await queryClient.invalidateQueries({ queryKey: ['drivers'] });
       setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting staff:', error);
     } finally {
       setIsDeleting(false);
     }

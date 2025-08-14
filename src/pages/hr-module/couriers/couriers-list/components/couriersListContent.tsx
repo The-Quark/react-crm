@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { DataGrid, Container } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteUser, getUserByParams } from '@/api';
