@@ -466,7 +466,9 @@ const System = {
   'SYSTEM.CREATE_INVOICE': 'Create Invoice',
   'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Last Uploaded Document',
   'SYSTEM.CURRENCY_RATE': 'Currency Rate',
-  'SYSTEM.SELECT_AIRPORT': 'Select Airport'
+  'SYSTEM.SELECT_AIRPORT': 'Select Airport',
+  'SYSTEM.KANBAN': 'Kanban',
+  'SYSTEM.TABLE': 'Table'
 };
 
 export default System;

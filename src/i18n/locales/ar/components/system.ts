@@ -466,7 +466,9 @@ const System = {
   'SYSTEM.CREATE_INVOICE': 'إنشاء فاتورة',
   'SYSTEM.LAST_UPLOADED_DOCUMENT': 'آخر وثيقة تم رفعها',
   'SYSTEM.CURRENCY_RATE': 'سعر العملة',
-  'SYSTEM.SELECT_AIRPORT': 'اختر المطار'
+  'SYSTEM.SELECT_AIRPORT': 'اختر المطار',
+  'SYSTEM.KANBAN': 'كانبان',
+  'SYSTEM.TABLE': 'جدول'
 };
 
 export default System;

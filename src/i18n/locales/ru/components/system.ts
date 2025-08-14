@@ -466,7 +466,9 @@ const System = {
   'SYSTEM.CREATE_INVOICE': 'Сформировать счет',
   'SYSTEM.LAST_UPLOADED_DOCUMENT': 'Последний загруженный документ',
   'SYSTEM.CURRENCY_RATE': 'Курс валюты',
-  'SYSTEM.SELECT_AIRPORT': 'Выберите аэропорт'
+  'SYSTEM.SELECT_AIRPORT': 'Выберите аэропорт',
+  'SYSTEM.KANBAN': 'Канбан',
+  'SYSTEM.TABLE': 'Таблица'
 };
 
 export default System;

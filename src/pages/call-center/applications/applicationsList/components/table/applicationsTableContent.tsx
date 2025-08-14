@@ -1,12 +1,14 @@
 import { useIntl } from 'react-intl';
-import { Container, DataGrid } from '@/components';
+import { DataGrid } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteApplication, getApplications } from '@/api';
 import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/sharedUI';
-import { useApplicationsColumns } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsColumns.tsx';
-import { ApplicationsToolbar } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsToolbar.tsx';
 import { useState } from 'react';
-import { ApplicationsModal } from '@/pages/call-center/applications/applicationsList/components/blocks/applicationsModal.tsx';
+import {
+  ApplicationsModal,
+  useApplicationsColumns,
+  ApplicationsToolbar
+} from '@/pages/call-center/applications/applicationsList/components/table/blocks';
 import { ApplicationsStatus } from '@/api/enums';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
@@ -15,7 +17,7 @@ import { useParams } from 'react-router';
 
 type ModalType = 'view' | 'delete' | null;
 
-export const ApplicationListContent = () => {
+export const ApplicationsTableContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
@@ -104,7 +106,7 @@ export const ApplicationListContent = () => {
   }
 
   return (
-    <Container>
+    <>
       <DataGrid
         serverSide
         columns={columns}
@@ -143,6 +145,6 @@ export const ApplicationListContent = () => {
         description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_APPLICATION_DESCRIPTION' })}
         isLoading={isDeleting}
       />
-    </Container>
+    </>
   );
 };
