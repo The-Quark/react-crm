@@ -44,7 +44,7 @@ export const OrdersKanbanContent = () => {
     return <SharedError error={ordersError} />;
   }
   if (ordersLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   const columns =

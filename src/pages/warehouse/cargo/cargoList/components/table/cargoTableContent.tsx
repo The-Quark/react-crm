@@ -1,18 +1,17 @@
-/* eslint-disable prettier/prettier */
-import { DataGrid, Container } from '@/components';
+import { DataGrid } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteCargo, getCargo } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { CargoToolbar } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoToolbar.tsx';
-import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoColumns.tsx';
-import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoModal.tsx';
+import { CargoToolbar } from '@/pages/warehouse/cargo/cargoList/components/table/blocks/cargoToolbar.tsx';
+import { useCargoColumns } from '@/pages/warehouse/cargo/cargoList/components/table/blocks/cargoColumns.tsx';
+import { CargoModal } from '@/pages/warehouse/cargo/cargoList/components/table/blocks/cargoModal.tsx';
 import { CargoStatus } from '@/api/enums';
 import { useIntl } from 'react-intl';
 import { initialPagination } from '@/utils';
 import { useParams } from 'react-router';
 
-export const CargoListContent = () => {
+export const CargoTableContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
@@ -109,7 +108,7 @@ export const CargoListContent = () => {
   }
 
   return (
-    <Container>
+    <>
       <DataGrid
         serverSide
         columns={columns}
@@ -145,6 +144,6 @@ export const CargoListContent = () => {
         description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_CARGO_DESCRIPTION' })}
         isLoading={isDeleting}
       />
-    </Container>
+    </>
   );
 };

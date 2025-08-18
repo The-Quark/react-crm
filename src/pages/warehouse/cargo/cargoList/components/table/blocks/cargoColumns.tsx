@@ -6,7 +6,7 @@ import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
-import { CargoMenuOptions } from '@/pages/warehouse/cargo/cargoList/components/blocks/cargoMenuOptions.tsx';
+import { CargoMenuOptions } from '@/pages/warehouse/cargo/cargoList/components/table/blocks/cargoMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { useIntl } from 'react-intl';
 import { filterDateRange } from '@/utils';

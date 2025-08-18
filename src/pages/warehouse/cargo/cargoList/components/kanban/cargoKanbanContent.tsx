@@ -8,12 +8,9 @@ import {
 } from '@/components/ui/shadcn-io/kanban';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getApplications, getSources } from '@/api';
+import { getCargo } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { Source } from '@/api/get/getGuides/getSources/types.ts';
-import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
-import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
-import { initialPagination, initialPaginationSizes } from '@/utils';
+import { cargoStatusOptions, initialPagination, initialPaginationSizes } from '@/utils';
 import {
   Select,
   SelectContent,
@@ -22,61 +19,45 @@ import {
   SelectValue
 } from '@/components/ui/select.tsx';
 import { useIntl } from 'react-intl';
+import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
 
-export const ApplicationsKanbanContent = () => {
+export const CargoKanbanContent = () => {
   const { formatMessage } = useIntl();
   const [pagination, setPagination] = useState(initialPagination);
 
   const {
-    data: sourcesData,
-    isLoading: sourcesLoading,
-    isError: sourcesIsError,
-    error: sourcesError
+    data: cargoData,
+    isError: cargoIsError,
+    error: cargoError,
+    isLoading: cargoLoading
   } = useQuery({
-    queryKey: ['sources'],
+    queryKey: ['cargo', pagination],
     queryFn: () =>
-      getSources({ is_active: true, page: pagination.pageIndex, per_page: pagination.pageSize })
-  });
-
-  const {
-    data: applicationsData,
-    isError: applicationsIsError,
-    error: applicationsError,
-    isLoading: applicationsLoading
-  } = useQuery({
-    queryKey: ['applications', pagination],
-    queryFn: () =>
-      getApplications({
+      getCargo({
         page: pagination.pageIndex,
         per_page: pagination.pageSize
       })
   });
 
-  if (sourcesIsError || applicationsIsError) {
-    return <SharedError error={sourcesError || applicationsError} />;
+  if (cargoIsError) {
+    return <SharedError error={cargoError} />;
   }
-  if (sourcesLoading || applicationsLoading) {
+  if (cargoLoading) {
     return <SharedLoading simple />;
   }
 
   const columns =
-    sourcesData?.result?.map((source: Source) => ({
-      id: source.id.toString(),
-      name: source.name
+    cargoStatusOptions?.map((status) => ({
+      id: status.value,
+      name: status.name
     })) || [];
 
-  const applications =
-    applicationsData?.result?.map((app: Application) => ({
+  const cargoInfo =
+    cargoData?.result?.map((app: Cargo) => ({
       id: app.id.toString(),
-      name: app.full_name || `${app.last_name} ${app.first_name} ${app.patronymic}` || '-',
-      sourceId: app.source_id.toString(),
-      phone: app.phone,
-      email: app.email,
+      name: app.code || '-',
       status: app.status,
-      createdAt: app.created_at,
-      message: app.message,
-      clientType: app.client_type,
-      companyName: app.company_name
+      createdAt: app.created_at
     })) || [];
 
   const handlePageSizeChange = (value: string) => {
@@ -86,7 +67,6 @@ export const ApplicationsKanbanContent = () => {
       pageIndex: 0
     }));
   };
-
   return (
     <>
       <div className="flex items-center my-4 gap-3 justify-end">
@@ -108,9 +88,9 @@ export const ApplicationsKanbanContent = () => {
       </div>
       <KanbanProvider
         columns={columns}
-        data={applications.map((app) => ({
+        data={cargoInfo.map((app) => ({
           ...app,
-          column: app.sourceId
+          column: app.status
         }))}
       >
         {(column) => (
@@ -118,15 +98,14 @@ export const ApplicationsKanbanContent = () => {
             <KanbanHeader>{column.name}</KanbanHeader>
             <KanbanCards id={column.id}>
               {(item) => {
-                const app = applications.find((a) => a.id === item.id);
-                if (!app || app.sourceId !== column.id) return false;
+                const cargo = cargoInfo.find((a) => a.id === item.id);
+                if (!cargo || cargo.status !== column.id) return false;
                 return (
-                  <KanbanCard column={column.id} id={app.id} key={app.id} name={app.name}>
+                  <KanbanCard column={column.id} id={cargo.id} key={cargo.id} name={cargo.name}>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <p className="m-0 font-medium text-sm">{app.name}</p>
+                        <p className="m-0 font-medium text-sm">{cargo.name}</p>
                       </div>
-                      <SharedStatusBadge status={app.status} />
                     </div>
                   </KanbanCard>
                 );

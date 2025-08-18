@@ -1,12 +1,13 @@
 import React from 'react';
 import { SharedHeader } from '@/partials/sharedUI';
-import { CargoListContent } from '@/pages/warehouse/cargo/cargoList/components/cargoListContent.tsx';
+import { CargoTabContent } from '@/pages/warehouse/cargo/cargoList/components/cargoTabContent.tsx';
 
 export const CargoListPage = () => {
   return (
     <>
+      s
       <SharedHeader />
-      <CargoListContent />
+      <CargoTabContent />
     </>
   );
 };

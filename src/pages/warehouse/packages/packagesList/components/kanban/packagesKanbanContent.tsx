@@ -43,7 +43,7 @@ export const PackagesKanbanContent = () => {
     return <SharedError error={packagesError} />;
   }
   if (packagesLoading) {
-    return <SharedLoading />;
+    return <SharedLoading simple />;
   }
 
   const columns =
@@ -98,13 +98,13 @@ export const PackagesKanbanContent = () => {
             <KanbanHeader>{column.name}</KanbanHeader>
             <KanbanCards id={column.id}>
               {(item) => {
-                const order = packages.find((a) => a.id === item.id);
-                if (!order || order.status !== column.id) return false;
+                const pack = packages.find((a) => a.id === item.id);
+                if (!pack || pack.status !== column.id) return false;
                 return (
-                  <KanbanCard column={column.id} id={order.id} key={order.id} name={order.name}>
+                  <KanbanCard column={column.id} id={pack.id} key={pack.id} name={pack.name}>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <p className="m-0 font-medium text-sm">{order.name}</p>
+                        <p className="m-0 font-medium text-sm">{pack.name}</p>
                       </div>
                     </div>
                   </KanbanCard>

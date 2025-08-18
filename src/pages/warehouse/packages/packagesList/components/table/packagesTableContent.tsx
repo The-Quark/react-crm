@@ -1,4 +1,4 @@
-import { DataGrid, Container } from '@/components';
+import { DataGrid } from '@/components';
 import { useIntl } from 'react-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deletePackage, getPackages } from '@/api';
@@ -103,7 +103,7 @@ export const PackagesTableContent = () => {
   }
 
   return (
-    <Container>
+    <>
       <DataGrid
         serverSide
         columns={columns}
@@ -147,6 +147,6 @@ export const PackagesTableContent = () => {
         open={modal.type === 'createCargo'}
         handleClose={() => setModal({ type: null })}
       />
-    </Container>
+    </>
   );
 };
