@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteUser, getUserByParams } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useAuthContext } from '@/auth';
-import { useDriversColumns } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversColumns.tsx';
-import { DriversToolbar } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversToolbar.tsx';
+import { useDriversColumns } from '@/pages/car-park/drivers/drivers-list/components/blocks/driversColumns.tsx';
+import { DriversToolbar } from '@/pages/car-park/drivers/drivers-list/components/blocks/driversToolbar.tsx';
 import { useState } from 'react';
 import { initialPagination } from '@/utils';
 

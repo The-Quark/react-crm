@@ -18,7 +18,6 @@ import { ClientsListPage } from '@/pages/clients';
 import {
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
-  GuidesVehiclesPage,
   GuidesSourcesPage,
   GuidesPackageTypesPage,
   GuidesAirlinesPage,
@@ -37,12 +36,12 @@ import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.ts
 import { ApplicationsListPage, OrdersListPage } from '@/pages/call-center';
 import { PackagesListPage, CargoListPage } from '@/pages/warehouse';
 import { TasksListPage, TasksViewPage } from '@/pages/tasks';
-import { DriversListPage } from '@/pages/hr-module/drivers';
 import { StaffListPage } from '@/pages/hr-module/staff';
 import { CouriersListPage } from '@/pages/hr-module';
 import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
 import { TrashPage } from '@/pages/trash/trashPage.tsx';
 import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
+import { VehiclesPage } from '@/pages/car-park';
 
 const ViewerRoutesSetting = () => {
   return (
@@ -61,7 +60,6 @@ const ViewerRoutesSetting = () => {
         <Route path="/clients" element={<ClientsListPage />} />
         <Route path="/clients/:id" element={<ClientsListPage />} />
         <Route path="/hr-module/staff/list" element={<StaffListPage />} />
-        <Route path="/hr-module/drivers/list" element={<DriversListPage />} />
         <Route path="/hr-module/couriers/list" element={<CouriersListPage />} />
         <Route path="trash" element={<TrashPage />} />
         <Route path="drafts" element={<DraftsPage />} />
@@ -76,12 +74,12 @@ const ViewerRoutesSetting = () => {
         <Route path="/warehouse/cargo/list/:id" element={<CargoListPage />} />
         <Route path="/crm/users/list" element={<UsersListPage />} />
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
+        <Route path="/car-park/vehicles" element={<VehiclesPage />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
-        <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
         <Route path="/guides/tariffs" element={<GuidesTariffPage />} />
         <Route path="/guides/airlines" element={<GuidesAirlinesPage />} />
         <Route path="/guides/airports" element={<GuidesAirportsPage />} />

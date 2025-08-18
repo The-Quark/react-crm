@@ -35,8 +35,7 @@ import {
   GuidesSourcesPage,
   GuidesTariffPage,
   GuidesTemplatesPage,
-  GuidesUnitsPage,
-  GuidesVehiclesPage
+  GuidesUnitsPage
 } from '@/pages/guides';
 import { GuidesCitiesPage } from '@/pages/guides/tabs/cities/guidesCitiesPage.tsx';
 import {
@@ -58,8 +57,6 @@ import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
 import {
   CouriersListPage,
   CouriersStarterPage,
-  DriversListPage,
-  DriversStarterPage,
   StaffListPage,
   StaffStarterPage
 } from '@/pages/hr-module';
@@ -94,7 +91,6 @@ const routeConfig = [
       { path: '/guides/cities', element: <GuidesCitiesPage /> },
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
-      { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/tariffs', element: <GuidesTariffPage /> },
       { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
       { path: '/guides/airports', element: <GuidesAirportsPage /> },
@@ -122,7 +118,6 @@ const routeConfig = [
       { path: '/guides/languages', element: <GuidesLanguagesPage /> },
       { path: '/guides/tariffs', element: <GuidesTariffPage /> },
       { path: '/guides/sources', element: <GuidesSourcesPage /> },
-      { path: '/guides/vehicles', element: <GuidesVehiclesPage /> },
       { path: '/guides/packages', element: <GuidesPackageTypesPage /> },
       { path: '/guides/airlines', element: <GuidesAirlinesPage /> },
       { path: '/guides/airports', element: <GuidesAirportsPage /> },
@@ -161,9 +156,6 @@ const routeConfig = [
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
       { path: '/hr-module/staff/starter', element: <StaffStarterPage /> },
       { path: '/hr-module/staff/starter/:id', element: <StaffStarterPage /> },
-      { path: '/hr-module/drivers/list', element: <DriversListPage /> },
-      { path: '/hr-module/drivers/starter', element: <DriversStarterPage /> },
-      { path: '/hr-module/drivers/starter/:id', element: <DriversStarterPage /> },
       { path: '/hr-module/couriers/list', element: <CouriersListPage /> },
       { path: '/hr-module/couriers/starter', element: <CouriersStarterPage /> },
       { path: '/hr-module/couriers/starter/:id', element: <CouriersStarterPage /> }
@@ -175,7 +167,6 @@ const routeConfig = [
       { path: '/crm/users/list', element: <UsersListPage /> },
       { path: '/crm/users/public-profile/:id', element: <UsersPublicProfilePage /> },
       { path: '/hr-module/staff/list', element: <StaffListPage /> },
-      { path: '/hr-module/drivers/list', element: <DriversListPage /> },
       { path: '/hr-module/couriers/list', element: <CouriersListPage /> }
     ]
   },

@@ -100,7 +100,6 @@ import {
   OrdersListPage,
   FastFormStarterPage
 } from '@/pages/call-center';
-
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthPage } from '@/auth';
@@ -108,7 +107,6 @@ import { ClientsListPage, ClientStarterPage } from '@/pages/clients';
 import {
   GuidesCurrenciesPage,
   GuidesLanguagesPage,
-  GuidesVehiclesPage,
   GuidesSourcesPage,
   GuidesPackageTypesPage,
   GuidesAirlinesPage,
@@ -125,7 +123,6 @@ import {
   GuidesCitiesPage
 } from '@/pages/guides';
 import { TasksListPage, TasksStarterPage, TasksViewPage } from '@/pages/tasks';
-import { DriversListPage, DriversStarterPage } from '@/pages/hr-module/drivers';
 import { StaffListPage, StaffStarterPage } from '@/pages/hr-module/staff';
 import { CouriersListPage, CouriersStarterPage } from '@/pages/hr-module';
 import {
@@ -139,6 +136,7 @@ import {
 import { TrashPage } from '@/pages/trash/trashPage.tsx';
 import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
 import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
+import { VehiclesPage, DriversListPage, DriversStarterPage } from '@/pages/car-park';
 
 const AllRoutesSetting = () => {
   return (
@@ -204,6 +202,10 @@ const AllRoutesSetting = () => {
         <Route path="/crm/users/list" element={<UsersListPage />} />,
         <Route path="/crm/users/public-profile/:id" element={<UsersPublicProfilePage />} />
         <Route path="/crm/users/users-permissions/:id" element={<UsersPermissionsStarter />} />
+        <Route path="/car-park/drivers" element={<DriversListPage />} />
+        <Route path="/car-park/drivers/starter" element={<DriversStarterPage />} />
+        <Route path="/car-park/drivers/starter/:id" element={<DriversStarterPage />} />
+        <Route path="/car-park/vehicles" element={<VehiclesPage />} />
         <Route path="/guides/currencies" element={<GuidesCurrenciesPage />} />
         <Route path="/guides/countries" element={<GuidesCountriesPage />} />
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
@@ -211,7 +213,6 @@ const AllRoutesSetting = () => {
         <Route path="/guides/cities" element={<GuidesCitiesPage />} />
         <Route path="/guides/languages" element={<GuidesLanguagesPage />} />
         <Route path="/guides/sources" element={<GuidesSourcesPage />} />
-        <Route path="/guides/vehicles" element={<GuidesVehiclesPage />} />
         <Route path="/guides/airlines" element={<GuidesAirlinesPage />} />
         <Route path="/guides/airports" element={<GuidesAirportsPage />} />
         <Route path="/guides/airline-rates" element={<GuidesAirlineRatesPage />} />

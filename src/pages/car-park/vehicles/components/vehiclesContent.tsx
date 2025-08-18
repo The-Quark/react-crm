@@ -1,7 +1,7 @@
 import { DataGrid, Container } from '@/components';
 import { useQuery } from '@tanstack/react-query';
-import { useVehiclesColumns } from '@/pages/carPark/vehicles/components/blocks/vehiclesColumn.tsx';
-import { VehiclesToolbar } from '@/pages/carPark/vehicles/components/blocks/vehiclesToolbar.tsx';
+import { useVehiclesColumns } from '@/pages/car-park/vehicles/components/blocks/vehiclesColumn.tsx';
+import { VehiclesToolbar } from '@/pages/car-park/vehicles/components/blocks/vehiclesToolbar.tsx';
 import { getVehicles } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
 import { useState } from 'react';

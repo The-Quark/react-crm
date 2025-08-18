@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getUserByParams } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { DriversStarterContent } from '@/pages/carPark/drivers/drivers-starter/components/driversStarterContent.tsx';
+import { DriversStarterContent } from '@/pages/car-park/drivers/drivers-starter/components/driversStarterContent.tsx';
 
 export const DriversStarterPage = () => {
   const { id } = useParams<{ id: string }>();

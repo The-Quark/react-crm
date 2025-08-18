@@ -60,10 +60,6 @@ export const ViewerMenuSideBar: TMenuConfig = [
         path: '/hr-module/staff/list'
       },
       {
-        title: 'MENU.MEGAMENU.DRIVERS',
-        path: '/hr-module/drivers/list'
-      },
-      {
         title: 'MENU.MEGAMENU.COURIERS',
         path: '/hr-module/couriers/list'
       }
@@ -103,6 +99,20 @@ export const ViewerMenuSideBar: TMenuConfig = [
     path: '/crm/users/list'
   },
   {
+    title: 'MENU.MEGAMENU.CAR_PARK',
+    icon: 'car',
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CAR_PARK.DRIVERS',
+        path: '/car-park/drivers'
+      },
+      {
+        title: 'MENU.MEGAMENU.CAR_PARK.VEHICLES',
+        path: '/car-park/vehicles'
+      }
+    ]
+  },
+  {
     title: 'MENU.MEGAMENU.GUIDES',
     icon: 'minus-folder',
     children: [
@@ -125,10 +135,6 @@ export const ViewerMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.GUIDES.SOURCES',
         path: '/guides/sources'
-      },
-      {
-        title: 'MENU.MEGAMENU.GUIDES.VEHICLES',
-        path: '/guides/vehicles'
       },
       {
         title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',

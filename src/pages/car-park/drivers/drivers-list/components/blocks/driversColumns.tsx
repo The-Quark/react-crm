@@ -4,7 +4,7 @@ import { DataGridColumnHeader, KeenIcon, Menu, MenuItem, MenuToggle } from '@/co
 import { useLanguage } from '@/providers';
 import { UserModel } from '@/api/get/getUser/getUsersList/types.ts';
 import { toAbsoluteUrl } from '@/utils';
-import { DriversMenuOptions } from '@/pages/hr-module/drivers/drivers-list/components/blocks/driversMenuOptions.tsx';
+import { DriversMenuOptions } from '@/pages/car-park/drivers/drivers-list/components/blocks/driversMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { useIntl } from 'react-intl';
 

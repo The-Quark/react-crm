@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { DataGridColumnVisibility, KeenIcon, useDataGrid } from '@/components';
-import VehicleModal from '@/pages/carPark/vehicles/components/blocks/vehiclesModal.tsx';
+import VehicleModal from '@/pages/car-park/vehicles/components/blocks/vehiclesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { debounce } from '@/utils/lib/helpers.ts';

@@ -5,7 +5,7 @@ import { useLanguage } from '@/providers';
 import { Vehicle } from '@/api/get/getGuides/getVehicles/types.ts';
 import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
 import { deleteVehicle } from '@/api';
-import VehiclesModal from '@/pages/guides/tabs/vehicles/components/blocks/vehiclesModal.tsx';
+import VehiclesModal from '@/pages/car-park/vehicles/components/blocks/vehiclesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';

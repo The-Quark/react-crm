@@ -64,10 +64,6 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/sources'
       },
       {
-        title: 'MENU.MEGAMENU.GUIDES.VEHICLES',
-        path: '/guides/vehicles'
-      },
-      {
         title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',
         path: '/guides/airports'
       },
@@ -146,10 +142,6 @@ export const CuttedMenuSideBar: TMenuConfig = [
         path: '/guides/sources'
       },
       {
-        title: 'MENU.MEGAMENU.GUIDES.VEHICLES',
-        path: '/guides/vehicles'
-      },
-      {
         title: 'MENU.MEGAMENU.GUIDES.AIRPORTS',
         path: '/guides/airports'
       },
@@ -217,6 +209,21 @@ export const CuttedMenuSideBar: TMenuConfig = [
     path: '/crm/users/list'
   },
   {
+    title: 'MENU.MEGAMENU.CAR_PARK',
+    icon: 'car',
+    requiredPermissions: ['everything'],
+    children: [
+      {
+        title: 'MENU.MEGAMENU.CAR_PARK.DRIVERS',
+        path: '/car-park/drivers'
+      },
+      {
+        title: 'MENU.MEGAMENU.CAR_PARK.VEHICLES',
+        path: '/car-park/vehicles'
+      }
+    ]
+  },
+  {
     title: 'MENU.MEGAMENU.HR_MODULE',
     icon: 'address-book',
     requiredPermissions: ['manage users'],
@@ -224,10 +231,6 @@ export const CuttedMenuSideBar: TMenuConfig = [
       {
         title: 'MENU.MEGAMENU.STAFF',
         path: '/hr-module/staff/list'
-      },
-      {
-        title: 'MENU.MEGAMENU.DRIVERS',
-        path: '/hr-module/drivers/list'
       },
       {
         title: 'MENU.MEGAMENU.COURIERS',
