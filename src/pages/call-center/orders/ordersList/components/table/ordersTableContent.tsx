@@ -1,11 +1,11 @@
-import { DataGrid, Container } from '@/components';
+import { DataGrid } from '@/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteOrder, getOrders } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { useOrdersColumns } from '@/pages/call-center/orders/ordersList/components/blocks/ordersColumns.tsx';
-import { OrdersToolbar } from '@/pages/call-center/orders/ordersList/components/blocks/ordersToolbar.tsx';
-import { OrdersModal } from '@/pages/call-center/orders/ordersList/components/blocks/ordersModal.tsx';
+import { useOrdersColumns } from '@/pages/call-center/orders/ordersList/components/table/blocks/ordersColumns.tsx';
+import { OrdersToolbar } from '@/pages/call-center/orders/ordersList/components/table/blocks/ordersToolbar.tsx';
+import { OrdersModal } from '@/pages/call-center/orders/ordersList/components/table/blocks/ordersModal.tsx';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
@@ -14,7 +14,7 @@ import { useParams } from 'react-router';
 
 type ModalType = 'view' | 'delete' | null;
 
-export const OrdersListContent = () => {
+export const OrdersTableContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
@@ -112,7 +112,7 @@ export const OrdersListContent = () => {
   }
 
   return (
-    <Container>
+    <>
       <DataGrid
         serverSide
         columns={columns}
@@ -153,6 +153,6 @@ export const OrdersListContent = () => {
         description={formatMessage({ id: 'SYSTEM.CONFIRM_DELETE_ORDER_DESCRIPTION' })}
         isLoading={isDeleting}
       />
-    </Container>
+    </>
   );
 };

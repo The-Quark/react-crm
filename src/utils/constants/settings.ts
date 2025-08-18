@@ -12,3 +12,4 @@ export const initialPagination = {
   pageIndex: 0,
   pageSize: 15
 };
+export const initialPaginationSizes = [15, 25, 50, 100];

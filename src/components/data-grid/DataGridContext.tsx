@@ -20,7 +20,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import { DataGridInner } from './DataGridInner';
 import { TDataGridProps } from './DataGrid';
 import { debounce } from '@/utils/lib/helpers.ts';
-import { deepMerge } from '@/utils';
+import { deepMerge, initialPagination, initialPaginationSizes } from '@/utils';
 
 export interface IDataGridContextProps<TData extends object> {
   props: TDataGridProps<TData>;
@@ -53,7 +53,7 @@ export const DataGridProvider = <TData extends object>(props: TDataGridProps<TDa
     },
     pagination: {
       info: '{from} - {to} of {count}',
-      sizes: [15, 25, 50, 100],
+      sizes: initialPaginationSizes,
       sizesLabel: 'Show',
       sizesDescription: 'per page',
       size: 5,

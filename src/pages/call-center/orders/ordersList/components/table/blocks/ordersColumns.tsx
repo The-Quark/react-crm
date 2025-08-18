@@ -7,7 +7,7 @@ import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
-import { OrdersMenuOptions } from '@/pages/call-center/orders/ordersList/components/blocks/ordersMenuOptions.tsx';
+import { OrdersMenuOptions } from '@/pages/call-center/orders/ordersList/components/table/blocks/ordersMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { filterDateRange } from '@/utils';
 import { ClientType } from '@/api/enums';

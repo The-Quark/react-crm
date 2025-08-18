@@ -8,12 +8,11 @@ import {
 } from '@/components/ui/shadcn-io/kanban';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getApplications, getSources } from '@/api';
+import { getOrders } from '@/api';
 import { SharedError, SharedLoading } from '@/partials/sharedUI';
-import { Source } from '@/api/get/getGuides/getSources/types.ts';
+import { initialPagination, initialPaginationSizes, mockOrdersStatus } from '@/utils';
+import { Order } from '@/api/get/getWorkflow/getOrder/types.ts';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
-import { Application } from '@/api/get/getWorkflow/getApplications/types.ts';
-import { initialPagination, initialPaginationSizes } from '@/utils';
 import {
   Select,
   SelectContent,
@@ -23,60 +22,44 @@ import {
 } from '@/components/ui/select.tsx';
 import { useIntl } from 'react-intl';
 
-export const ApplicationsKanbanContent = () => {
+export const OrdersKanbanContent = () => {
   const { formatMessage } = useIntl();
   const [pagination, setPagination] = useState(initialPagination);
-
   const {
-    data: sourcesData,
-    isLoading: sourcesLoading,
-    isError: sourcesIsError,
-    error: sourcesError
+    data: ordersData,
+    isError: ordersIsError,
+    error: ordersError,
+    isLoading: ordersLoading
   } = useQuery({
-    queryKey: ['sources'],
+    queryKey: ['orders'],
     queryFn: () =>
-      getSources({ is_active: true, page: pagination.pageIndex, per_page: pagination.pageSize })
-  });
-
-  const {
-    data: applicationsData,
-    isError: applicationsIsError,
-    error: applicationsError,
-    isLoading: applicationsLoading
-  } = useQuery({
-    queryKey: ['applications', pagination],
-    queryFn: () =>
-      getApplications({
+      getOrders({
         page: pagination.pageIndex,
-        per_page: pagination.pageSize
+        per_page: pagination.pageSize,
+        is_draft: false
       })
   });
 
-  if (sourcesIsError || applicationsIsError) {
-    return <SharedError error={sourcesError || applicationsError} />;
+  if (ordersIsError) {
+    return <SharedError error={ordersError} />;
   }
-  if (sourcesLoading || applicationsLoading) {
+  if (ordersLoading) {
     return <SharedLoading />;
   }
 
   const columns =
-    sourcesData?.result?.map((source: Source) => ({
-      id: source.id.toString(),
-      name: source.name
+    mockOrdersStatus?.map((status) => ({
+      id: status.value,
+      name: status.name
     })) || [];
 
-  const applications =
-    applicationsData?.result?.map((app: Application) => ({
+  const orders =
+    ordersData?.result?.map((app: Order) => ({
       id: app.id.toString(),
-      name: app.full_name || `${app.last_name} ${app.first_name} ${app.patronymic}` || '-',
-      sourceId: app.source_id.toString(),
-      phone: app.phone,
-      email: app.email,
+      name: app.order_code || '-',
       status: app.status,
       createdAt: app.created_at,
-      message: app.message,
-      clientType: app.client_type,
-      companyName: app.company_name
+      is_express: app.is_express
     })) || [];
 
   const handlePageSizeChange = (value: string) => {
@@ -108,9 +91,9 @@ export const ApplicationsKanbanContent = () => {
       </div>
       <KanbanProvider
         columns={columns}
-        data={applications.map((app) => ({
+        data={orders.map((app) => ({
           ...app,
-          column: app.sourceId
+          column: app.status
         }))}
       >
         {(column) => (
@@ -118,16 +101,16 @@ export const ApplicationsKanbanContent = () => {
             <KanbanHeader>{column.name}</KanbanHeader>
             <KanbanCards id={column.id}>
               {(item) => {
-                const app = applications.find((a) => a.id === item.id);
-                if (!app || app.sourceId !== column.id) return false;
+                const order = orders.find((a) => a.id === item.id);
+                if (!order || order.status !== column.id) return false;
                 return (
-                  <KanbanCard column={column.id} id={app.id} key={app.id} name={app.name}>
+                  <KanbanCard column={column.id} id={order.id} key={order.id} name={order.name}>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
-                        <p className="m-0 font-medium text-sm">{app.name}</p>
+                        <p className="m-0 font-medium text-sm">{order.name}</p>
                       </div>
-                      <SharedStatusBadge status={app.status} />
                     </div>
+                    {order.is_express && <SharedStatusBadge status="express" />}
                   </KanbanCard>
                 );
               }}
