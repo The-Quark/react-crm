@@ -6,7 +6,7 @@ import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { DateRange } from 'react-day-picker';
-import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesMenuOptions.tsx';
+import { PackagesMenuOptions } from '@/pages/warehouse/packages/packagesList/components/table/blocks/packagesMenuOptions.tsx';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { useIntl } from 'react-intl';
 import { filterDateRange } from '@/utils';

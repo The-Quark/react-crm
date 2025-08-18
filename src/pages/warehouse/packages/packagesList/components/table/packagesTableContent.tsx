@@ -4,17 +4,17 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { deletePackage, getPackages } from '@/api';
 import { SharedLoading, SharedError, SharedDeleteModal } from '@/partials/sharedUI';
 import { useState } from 'react';
-import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesColumns.tsx';
-import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesToolbar.tsx';
-import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesModal.tsx';
+import { usePackagesColumns } from '@/pages/warehouse/packages/packagesList/components/table/blocks/packagesColumns.tsx';
+import { PackagesToolbar } from '@/pages/warehouse/packages/packagesList/components/table/blocks/packagesToolbar.tsx';
+import { PackagesModal } from '@/pages/warehouse/packages/packagesList/components/table/blocks/packagesModal.tsx';
 import { PackageStatus } from '@/api/enums';
-import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesList/components/blocks/packagesCargoCreateModal.tsx';
+import { PackagesCargoCreateModal } from '@/pages/warehouse/packages/packagesList/components/table/blocks/packagesCargoCreateModal.tsx';
 import { initialPagination } from '@/utils';
 import { useParams } from 'react-router';
 
 type ModalType = 'view' | 'delete' | 'createCargo' | null;
 
-export const PackagesListContent = () => {
+export const PackagesTableContent = () => {
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
