@@ -321,8 +321,10 @@ export const KanbanProvider = <
         sensors={sensors}
         {...props}
       >
-        <div className={cn('flex gap-4 gap-x-4 pb-4 scrollable-x-auto', className)}>
-          {columns.map((column) => children(column))}
+        <div className="w-full relative min-h-[600px]">
+          <div className="absolute inset-2 overflow-x-auto py-2">
+            <div className="flex gap-2 h-full ">{columns.map((column) => children(column))}</div>
+          </div>
         </div>
         {typeof window !== 'undefined' &&
           createPortal(
