@@ -21,7 +21,7 @@ import { useIntl } from 'react-intl';
 interface Props {
   open: boolean;
   onOpenChange: () => void;
-  id?: number;
+  id?: number | null;
 }
 
 const vehiclesTypes = [

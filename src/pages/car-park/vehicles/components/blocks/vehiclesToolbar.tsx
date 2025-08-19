@@ -9,26 +9,19 @@ import { SEARCH_DEBOUNCE_DELAY } from '@/utils';
 
 interface ToolbarProps {
   onSearch?: (searchTerm: string) => void;
+  handleFormClick: (id: number | null) => void;
+  id: number | null;
 }
 
-export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
+export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch, id, handleFormClick }) => {
   const { table } = useDataGrid();
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const [searchValue, setSearchValue] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
 
   const canManageGlobalSettings =
     has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
 
   const debouncedSearch = debounce((value: string) => {
     if (onSearch) {
@@ -48,7 +41,7 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
       <h3 className="card-title">{formatMessage({ id: 'SYSTEM.VEHICLES' })}</h3>
       <div className="flex flex-wrap items-center gap-2.5">
         {canManageGlobalSettings && (
-          <button className="btn btn-sm btn-primary" onClick={handleOpen}>
+          <button className="btn btn-sm btn-primary" onClick={() => handleFormClick(id)}>
             {formatMessage({ id: 'SYSTEM.NEW_VEHICLE' })}
           </button>
         )}
@@ -67,7 +60,6 @@ export const VehiclesToolbar: FC<ToolbarProps> = ({ onSearch }) => {
           />
         </div>
       </div>
-      <VehicleModal open={modalOpen} onOpenChange={handleClose} />
     </div>
   );
 };

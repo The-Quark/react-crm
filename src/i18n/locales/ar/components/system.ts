@@ -1,6 +1,7 @@
 const System = {
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'نظرة عامة على جميع السجلات',
   'SYSTEM.CARD_COUNT': 'عدد البطاقات',
+  'SYSTEM.VEHICLE_DETAILS': 'تفاصيل المركبة',
   'SYSTEM.CSV_DOWNLOAD': 'تحميل CSV',
   'SYSTEM.PHONE': 'هاتف',
   'SYSTEM.EMAIL': 'بريد إلكتروني',

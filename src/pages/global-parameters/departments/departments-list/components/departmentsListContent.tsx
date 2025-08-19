@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Container, DataGrid } from '@/components';
 import { getGlobalParamsDepartments } from '@/api/get';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -5,7 +6,6 @@ import { SharedDeleteModal, SharedError, SharedLoading } from '@/partials/shared
 import { useDepartmentsColumns } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsColumns.tsx';
 import { DepartmentsToolbar } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsToolbar.tsx';
 import { useAuthContext } from '@/auth';
-import React, { useState } from 'react';
 import { DepartmentsViewModal } from '@/pages/global-parameters/departments/departments-list/components/blocks/departmentsViewModal.tsx';
 import { deleteGlobalParamsDepartments } from '@/api';
 import { initialPagination } from '@/utils';

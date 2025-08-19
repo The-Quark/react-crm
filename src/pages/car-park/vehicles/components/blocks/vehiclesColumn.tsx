@@ -3,21 +3,33 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataGridColumnHeader } from '@/components';
 import { useLanguage } from '@/providers';
 import { Vehicle } from '@/api/get/getGuides/getVehicles/types.ts';
-import { GuidesMenuOptions } from '@/pages/guides/components/guidesMenuOptions.tsx';
-import { deleteVehicle } from '@/api';
-import VehiclesModal from '@/pages/car-park/vehicles/components/blocks/vehiclesModal.tsx';
 import { useAuthContext } from '@/auth';
 import { useUserPermissions } from '@/hooks';
 import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 import { SharedTypeBadge } from '@/partials/sharedUI';
 import { useIntl } from 'react-intl';
+import { VehiclesMenuOptions } from '@/pages/car-park/vehicles/components/blocks/vehiclesMenuOptions.tsx';
 
-export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
+interface UseColumnsProps {
+  onRowClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
+  onViewClick: (id: number) => void;
+  onFormClick: (id: number) => void;
+}
+
+export const useVehiclesColumns = ({
+  onRowClick,
+  onDeleteClick,
+  onViewClick,
+  onFormClick
+}: UseColumnsProps): ColumnDef<Vehicle>[] => {
   const { isRTL } = useLanguage();
   const { currentUser } = useAuthContext();
-  const { has } = useUserPermissions();
   const { formatMessage } = useIntl();
+  const { has } = useUserPermissions();
+
   const canManage = has('manage global settings') || currentUser?.roles[0].name === 'superadmin';
+
   const columns = useMemo<ColumnDef<Vehicle>[]>(
     () => [
       {
@@ -47,9 +59,14 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         ),
         enableSorting: false,
         cell: (info) => (
-          <div className="flex flex-col gap-0.5">
-            <div className="leading-none text-gray-800 font-normal">
-              {info.row.original.plate_number}
+          <div className="flex items-center gap-2.5">
+            <div className="flex flex-col gap-0.5">
+              <div
+                className="leading-none font-medium text-sm text-gray-900 hover:text-primary cursor-pointer"
+                onClick={() => onRowClick(info.row.original.id)}
+              >
+                {info.row.original.plate_number}
+              </div>
             </div>
           </div>
         ),
@@ -152,17 +169,11 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         header: () => '',
         enableSorting: false,
         cell: (info) => (
-          <GuidesMenuOptions
+          <VehiclesMenuOptions
             id={info.row.original.id}
-            invalidateRequestKey="guidesVehicles"
-            deleteRequest={deleteVehicle}
-            renderModal={({ open, onOpenChange }) => (
-              <VehiclesModal
-                open={open}
-                onOpenChange={() => onOpenChange(true)}
-                id={info.row.original.id}
-              />
-            )}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+            onFormClick={onFormClick}
           />
         ),
         meta: {
@@ -170,7 +181,7 @@ export const useVehiclesColumns = (): ColumnDef<Vehicle>[] => {
         }
       }
     ],
-    [isRTL]
+    [isRTL, canManage, onDeleteClick]
   );
   return canManage ? columns : columns.slice(0, -1);
 };
