@@ -1,5 +1,6 @@
 const System = {
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'Overview of All Records',
+  'SYSTEM.CARD_COUNT': 'Card Count',
   'SYSTEM.CSV_DOWNLOAD': 'CSV Download',
   'SYSTEM.PHONE': 'Phone',
   'SYSTEM.EMAIL': 'Email',

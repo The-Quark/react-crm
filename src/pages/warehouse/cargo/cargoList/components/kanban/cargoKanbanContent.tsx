@@ -71,7 +71,7 @@ export const CargoKanbanContent = () => {
     <>
       <div className="flex items-center my-4 gap-3 justify-end">
         <div className="text-sm text-muted-foreground">
-          {formatMessage({ id: 'SYSTEM.ROWS_PER_PAGE' })}
+          {formatMessage({ id: 'SYSTEM.CARD_COUNT' })}
         </div>
         <Select value={pagination.pageSize.toString()} onValueChange={handlePageSizeChange}>
           <SelectTrigger className="w-[70px]" size="sm">

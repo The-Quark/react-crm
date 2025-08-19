@@ -1,5 +1,6 @@
 const System = {
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'Обзор всех записей',
+  'SYSTEM.CARD_COUNT': 'Количество карт',
   'SYSTEM.CSV_DOWNLOAD': 'Скачать CSV',
   'SYSTEM.PHONE': 'Телефон',
   'SYSTEM.EMAIL': 'Электронная почта',
