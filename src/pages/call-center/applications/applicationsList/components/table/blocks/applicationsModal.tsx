@@ -297,13 +297,13 @@ export const ApplicationsModal: FC<Props> = ({ open, id, handleClose }) => {
           )}
         </DialogBody>
         {canManage && (
-          <DialogActions>
+          <DialogActions className="m-2">
             <a className="btn btn-md btn-light" href={`/call-center/applications/starter/${id}`}>
               {formatMessage({ id: 'SYSTEM.UPDATE_APPLICATION' })}
             </a>
             {data?.result[0].status === ApplicationsStatus.NEW && (
               <button
-                className="btn btn-md btn-primary m-3"
+                className="btn btn-md btn-primary"
                 onClick={() => handleCreateOrder(id)}
                 disabled={id === null}
               >

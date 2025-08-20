@@ -180,7 +180,8 @@ export const useApplicationsColumns = ({
               </MenuToggle>
               {ApplicationsMenuOptions({
                 id: info.row.original.id,
-                onDeleteClick: onDeleteClick
+                onDeleteClick: onDeleteClick,
+                onRowClick: onRowClick
               })}
             </MenuItem>
           </Menu>

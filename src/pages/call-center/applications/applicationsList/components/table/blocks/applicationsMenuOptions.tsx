@@ -15,9 +15,10 @@ import { useIntl } from 'react-intl';
 interface MenuOptionsProps {
   id?: number;
   onDeleteClick: (id: number) => void;
+  onRowClick: (id: number) => void;
 }
 
-const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) => {
+const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick, onRowClick }) => {
   const { formatMessage } = useIntl();
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
@@ -26,6 +27,14 @@ const ApplicationsMenuOptions: FC<MenuOptionsProps> = ({ id, onDeleteClick }) =>
 
   return (
     <MenuSub className="menu-default" rootClassName="w-full max-w-[200px]">
+      <MenuItem onClick={() => id && onRowClick(id)}>
+        <MenuLink>
+          <MenuIcon>
+            <KeenIcon icon="more-2" />
+          </MenuIcon>
+          <MenuTitle>{formatMessage({ id: 'SYSTEM.VIEW' })}</MenuTitle>
+        </MenuLink>
+      </MenuItem>
       {canManage && (
         <>
           <MenuItem>
