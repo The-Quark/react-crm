@@ -14,12 +14,14 @@ import { ClientType } from '@/api/enums';
 
 interface UseColumnsProps {
   onRowClick: (id: number) => void;
+  onRowQrClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
 }
 
 export const useOrdersColumns = ({
   onRowClick,
-  onDeleteClick
+  onDeleteClick,
+  onRowQrClick
 }: UseColumnsProps): ColumnDef<Order>[] => {
   const { formatMessage } = useIntl();
   const { isRTL } = useLanguage();
@@ -196,6 +198,7 @@ export const useOrdersColumns = ({
                   e.currentTarget.onerror = null;
                   e.currentTarget.outerHTML = `<a class="link" href="${url}" target="_blank" rel="noopener noreferrer">qr.svg</a>`;
                 }}
+                onClick={() => onRowQrClick(info.row.original.id)}
               />
             </div>
           );

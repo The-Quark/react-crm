@@ -11,8 +11,9 @@ import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
 import { initialPagination } from '@/utils';
 import { useParams } from 'react-router';
+import { OrdersQrModal } from '@/pages/call-center/orders/ordersList/components/table/blocks/ordersQrModal.tsx';
 
-type ModalType = 'view' | 'delete' | null;
+type ModalType = 'view' | 'delete' | 'qr' | null;
 
 export const OrdersTableContent = () => {
   const { formatMessage } = useIntl();
@@ -76,6 +77,7 @@ export const OrdersTableContent = () => {
 
   const columns = useOrdersColumns({
     onRowClick: (id) => setModal({ type: 'view', id }),
+    onRowQrClick: (id) => setModal({ type: 'qr', id }),
     onDeleteClick: handleDeleteClick
   });
 
@@ -142,6 +144,11 @@ export const OrdersTableContent = () => {
       />
       <OrdersModal
         open={modal.type === 'view'}
+        id={modal.id ?? null}
+        handleClose={() => setModal({ type: null })}
+      />
+      <OrdersQrModal
+        open={modal.type === 'qr'}
         id={modal.id ?? null}
         handleClose={() => setModal({ type: null })}
       />
