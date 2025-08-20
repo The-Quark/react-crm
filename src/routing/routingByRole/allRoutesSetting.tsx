@@ -137,6 +137,7 @@ import { TrashPage } from '@/pages/trash/trashPage.tsx';
 import { AuditChangesPage } from '@/pages/audit-changes/auditChangesPage.tsx';
 import { DraftsPage } from '@/pages/drafts/draftsPage.tsx';
 import { VehiclesPage, DriversListPage, DriversStarterPage } from '@/pages/car-park';
+import AdminLogsPage from '@/pages/admin-logs/adminLogsPage.tsx';
 
 const AllRoutesSetting = () => {
   return (
@@ -144,6 +145,7 @@ const AllRoutesSetting = () => {
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/admin-logs" element={<AdminLogsPage />} />
         <Route path="/global-parameters/starter-parameters" element={<CompaniesStarterPage />} />
         <Route
           path="/global-parameters/starter-parameters/:id"

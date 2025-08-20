@@ -22,6 +22,7 @@ const HeaderTopbar = () => {
   const { currentUser } = useAuthContext();
   const { has } = useUserPermissions();
   const canManage = has('manage orders') || currentUser?.roles[0].name === 'superadmin';
+  const isAdmin = currentUser?.roles[0].name === 'superadmin';
 
   const { data, isLoading, isError } = useQuery<INotificationResponse>({
     queryKey: ['notifications', notificationType, pageIndex],
@@ -122,6 +123,18 @@ const HeaderTopbar = () => {
           })}
         </MenuItem>
       </Menu>
+      {isAdmin && (
+        <Menu>
+          <MenuItem>
+            <MenuLink
+              path="/admin-logs"
+              className="btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500"
+            >
+              <KeenIcon icon="message-programming" />
+            </MenuLink>
+          </MenuItem>
+        </Menu>
+      )}
 
       <Menu>
         <MenuItem

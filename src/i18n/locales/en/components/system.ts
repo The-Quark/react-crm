@@ -1,4 +1,7 @@
 const System = {
+  'SYSTEM.TIME': 'Time',
+  'SYSTEM.TRACE': 'Trace',
+  'SYSTEM.LOGS': 'Logs',
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'Overview of All Records',
   'SYSTEM.CARD_COUNT': 'Card Count',
   'SYSTEM.VEHICLE_DETAILS': 'Vehicle Details',

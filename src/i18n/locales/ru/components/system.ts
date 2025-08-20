@@ -1,4 +1,7 @@
 const System = {
+  'SYSTEM.TIME': 'Время',
+  'SYSTEM.TRACE': 'Трассировка',
+  'SYSTEM.LOGS': 'Логи',
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'Обзор всех записей',
   'SYSTEM.CARD_COUNT': 'Количество карт',
   'SYSTEM.VEHICLE_DETAILS': 'Детали транспортного средства',

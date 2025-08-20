@@ -1,4 +1,7 @@
 const System = {
+  'SYSTEM.TIME': 'نظام.الوقت": "الوقت',
+  'SYSTEM.TRACE': 'نظام.التتبع": "التتبع',
+  'SYSTEM.LOGS': 'نظام.السجلات": "السجلات',
   'SYSTEM.OVERVIEW_ALL_RECORDS': 'نظرة عامة على جميع السجلات',
   'SYSTEM.CARD_COUNT': 'عدد البطاقات',
   'SYSTEM.VEHICLE_DETAILS': 'تفاصيل المركبة',
