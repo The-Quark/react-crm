@@ -48,7 +48,16 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
     phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
     notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
-    source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED')
+    source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
+    password: clientData
+      ? Yup.string()
+          .min(10, 'VALIDATION.PASSWORD_MIN')
+          .max(100, 'VALIDATION.PASSWORD_MAX')
+          .matches(/[A-Z]/, 'VALIDATION.PASSWORD_UPPERCASE')
+          .matches(/\d/, 'VALIDATION.PASSWORD_NUMBER')
+          .matches(/[^a-zA-Z0-9]/, 'VALIDATION.PASSWORD_SPECIAL_CHAR')
+          .optional()
+      : Yup.mixed().notRequired()
   });
 
   const initialValues: IClientFormValues = {
@@ -67,7 +76,8 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
     city_id: clientData && clientData.city_id != null ? clientData.city_id.toString() : '',
     client_status: clientData && clientData.client_status != null ? clientData.client_status : '',
     client_rating:
-      clientData && clientData.client_rating != null ? Number(clientData.client_rating) : 1
+      clientData && clientData.client_rating != null ? Number(clientData.client_rating) : 1,
+    password: ''
   };
 
   const formik = useFormik({
@@ -85,6 +95,9 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
             : null
         };
         if (clientData) {
+          if (!payload.password) {
+            delete payload.password;
+          }
           await putClient(clientData.id, payload);
         } else {
           payload.initials_code = undefined;
@@ -265,6 +278,14 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       />
       <SharedTextArea name="notes" label={formatMessage({ id: 'SYSTEM.NOTES' })} formik={formik} />
 
+      {clientData && (
+        <SharedInput
+          name="password"
+          label={formatMessage({ id: 'SYSTEM.PASSWORD' })}
+          formik={formik}
+          type="password"
+        />
+      )}
       <div className="flex justify-end">
         <button type="submit" className="btn btn-primary" disabled={loading || formik.isSubmitting}>
           {loading

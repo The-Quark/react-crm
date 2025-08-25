@@ -23,4 +23,5 @@ export interface IClientFormValues {
   representative_patronymic?: string;
   representative_phone?: string;
   representative_email?: string;
+  password?: string;
 }
