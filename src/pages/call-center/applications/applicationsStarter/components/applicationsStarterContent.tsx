@@ -16,8 +16,7 @@ import { Divider } from '@mui/material';
 import { ApplicationsClientBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsClientBlock.tsx';
 import { ApplicationsContactBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsContactBlock.tsx';
 import { ApplicationsRouteBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsRouteBlock.tsx';
-import { ApplicationsDimensionsBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsDimensionsBlock.tsx';
-import { ApplicationsBoxTypeBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsBoxTypeBlock.tsx';
+import { ApplicationsDimensionBlock } from '@/pages/call-center/applications/applicationsStarter/components/blocks/applicationsDimensionBlock.tsx';
 
 interface Props {
   isEditMode: boolean;
@@ -296,9 +295,7 @@ export const ApplicationsStarterContent = ({
               <Divider />
               <ApplicationsRouteBlock />
               <Divider />
-              <ApplicationsDimensionsBlock />
-              <Divider />
-              <ApplicationsBoxTypeBlock
+              <ApplicationsDimensionBlock
                 boxTypesLoading={boxTypesLoading}
                 boxTypesData={boxTypesData?.result}
               />
