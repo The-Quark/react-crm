@@ -26,8 +26,8 @@ import { packageStatusOptions } from '@/utils/enumsOptions/mocks.ts';
 import { decimalValidation, DEFAULT_SEARCH_PAGE_NUMBER } from '@/utils';
 import { Package } from '@/api/get/getWorkflow/getPackages/types.ts';
 import { useIntl } from 'react-intl';
-import { Divider } from '@mui/material';
 import { useCurrency } from '@/providers';
+import { BoxType } from '@/api/get/getGuides/getBoxTypes/types.ts';
 
 interface Props {
   isEditMode: boolean;
@@ -49,21 +49,6 @@ export const formSchema = Yup.object().shape({
       return !!value || (!!box_width && !!box_height && !!box_length);
     }
   ),
-  box_width: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.WIDTH_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  }),
-  box_length: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.LENGTH_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  }),
-  box_height: Yup.string().when('box_type_id', {
-    is: (val: string) => !val,
-    then: (schema) => schema.required('VALIDATION.HEIGHT_REQUIRED'),
-    otherwise: (schema) => schema.optional()
-  }),
   status: Yup.string().optional()
 });
 
@@ -83,9 +68,6 @@ const getInitialValues = (
       places_count: packageData?.places_count ?? '',
       price: packageData?.price ?? '',
       box_type_id: packageData?.box_type_id?.toString() ?? '',
-      box_width: packageData?.box_width?.toString() ?? '',
-      box_length: packageData?.box_length?.toString() ?? '',
-      box_height: packageData?.box_height?.toString() ?? '',
       status: packageData.status as unknown as PackageStatus
     };
   }
@@ -97,9 +79,6 @@ const getInitialValues = (
     height: '',
     volume: '',
     box_type_id: '',
-    box_width: '',
-    box_length: '',
-    box_height: '',
     places_count: '',
     price: '',
     status: ''
@@ -117,6 +96,7 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
   const [searchBoxTypeTerm, setSearchBoxTypeTerm] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [selectedBoxType, setSelectedBoxType] = useState<BoxType | null>(null);
 
   const orderIdFromUrl = useMemo(() => {
     const id = searchParams.get('order_id');
@@ -186,30 +166,33 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
         formik.setValues({
           ...formik.values,
           box_type_id: '',
-          box_width: '',
-          box_height: '',
-          box_length: ''
+          width: '',
+          height: '',
+          length: ''
         });
+        setSelectedBoxType(null);
         return;
       }
       const id = typeof boxTypeId === 'number' ? boxTypeId.toString() : boxTypeId;
-      const selectedBoxType = boxTypesData?.result?.find((box) => box.id === Number(id));
-      if (selectedBoxType) {
+      const foundBoxType = boxTypesData?.result?.find((box) => box.id === Number(id));
+      if (foundBoxType) {
         formik.setValues({
           ...formik.values,
           box_type_id: id,
-          box_width: selectedBoxType.width?.toString() ?? '',
-          box_height: selectedBoxType.height?.toString() ?? '',
-          box_length: selectedBoxType.length?.toString() ?? ''
+          width: foundBoxType.width?.toString() ?? '',
+          height: foundBoxType.height?.toString() ?? '',
+          length: foundBoxType.length?.toString() ?? ''
         });
+        setSelectedBoxType(foundBoxType ?? null);
       } else {
         formik.setValues({
           ...formik.values,
           box_type_id: id,
-          box_width: '',
-          box_height: '',
-          box_length: ''
+          width: '',
+          height: '',
+          length: ''
         });
+        setSelectedBoxType(null);
       }
     },
     [formik, boxTypesData?.result]
@@ -273,6 +256,19 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
 
     calculateVolume();
   }, [formik.values.weight, formik.values.width, formik.values.length, formik.values.height]);
+
+  useEffect(() => {
+    if (selectedBoxType && formik.values.box_type_id) {
+      const isWidthChanged = formik.values.width !== selectedBoxType.width?.toString();
+      const isHeightChanged = formik.values.height !== selectedBoxType.height?.toString();
+      const isLengthChanged = formik.values.length !== selectedBoxType.length?.toString();
+
+      if (isWidthChanged || isHeightChanged || isLengthChanged) {
+        formik.setFieldValue('box_type_id', '');
+        setSelectedBoxType(null);
+      }
+    }
+  }, [formik.values.width, formik.values.height, formik.values.length, selectedBoxType, formik]);
 
   const handleCancel = useCallback(async () => {
     if (!formik.values.order_id) return;
@@ -347,10 +343,23 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
                 loading={ordersLoading}
               />
             )}
-            <SharedDecimalInput
-              name="weight"
-              label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
-              formik={formik}
+            <SharedAutocomplete
+              label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
+              value={formik.values.box_type_id ?? ''}
+              options={
+                boxTypesData?.result?.map((app) => ({
+                  id: app.id,
+                  name: String(`${app.name} (${app.width}x${app.length}x${app.height} cm)`)
+                })) ?? []
+              }
+              placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
+              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
+              onChange={handleBoxTypeChange}
+              error={formik.errors.box_type_id as string}
+              touched={formik.touched.box_type_id}
+              searchTerm={searchBoxTypeTerm}
+              onSearchTermChange={setSearchBoxTypeTerm}
+              loading={boxTypesLoading}
             />
             <SharedDecimalInput
               name="width"
@@ -365,6 +374,11 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
             <SharedDecimalInput
               name="height"
               label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
+              formik={formik}
+            />
+            <SharedDecimalInput
+              name="weight"
+              label={formatMessage({ id: 'SYSTEM.WEIGHT' }) + ' (kg)'}
               formik={formik}
             />
             <SharedInput
@@ -402,44 +416,6 @@ export const PackageStarterContent = ({ isEditMode, packageId, packageData }: Pr
                 />
               </>
             )}
-            <Divider />
-            <h3 className="card-title">{formatMessage({ id: 'SYSTEM.BOX_TYPE' })}</h3>
-            <SharedAutocomplete
-              label={formatMessage({ id: 'SYSTEM.BOX_TYPE' })}
-              value={formik.values.box_type_id ?? ''}
-              options={
-                boxTypesData?.result?.map((app) => ({
-                  id: app.id,
-                  name: String(app.name || app.id)
-                })) ?? []
-              }
-              placeholder={formatMessage({ id: 'SYSTEM.SELECT_BOX_TYPE' })}
-              searchPlaceholder={formatMessage({ id: 'SYSTEM.SEARCH_BOX_TYPE' })}
-              onChange={handleBoxTypeChange}
-              error={formik.errors.box_type_id as string}
-              touched={formik.touched.box_type_id}
-              searchTerm={searchBoxTypeTerm}
-              onSearchTermChange={setSearchBoxTypeTerm}
-              loading={boxTypesLoading}
-            />
-            <SharedDecimalInput
-              name="box_width"
-              label={formatMessage({ id: 'SYSTEM.WIDTH' }) + ' (cm)'}
-              formik={formik}
-              disabled={!!formik.values.box_type_id}
-            />
-            <SharedDecimalInput
-              name="box_length"
-              label={formatMessage({ id: 'SYSTEM.LENGTH' }) + ' (cm)'}
-              formik={formik}
-              disabled={!!formik.values.box_type_id}
-            />
-            <SharedDecimalInput
-              name="box_height"
-              label={formatMessage({ id: 'SYSTEM.HEIGHT' }) + ' (cm)'}
-              formik={formik}
-              disabled={!!formik.values.box_type_id}
-            />
             <div className="flex justify-end gap-4">
               <button
                 className="btn btn-danger"
