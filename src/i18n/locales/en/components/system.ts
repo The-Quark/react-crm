@@ -473,7 +473,10 @@ const System = {
   'SYSTEM.CURRENCY_RATE': 'Currency Rate',
   'SYSTEM.SELECT_AIRPORT': 'Select Airport',
   'SYSTEM.KANBAN': 'Kanban',
-  'SYSTEM.TABLE': 'Table'
+  'SYSTEM.TABLE': 'Table',
+  'SYSTEM.NO_CARGO_NOTIFICATIONS': 'No cargo notifications',
+  'SYSTEM.NO_NOTIFICATIONS_DESCRIPTION':
+    'There are currently no notifications available for cargo creation'
 };
 
 export default System;

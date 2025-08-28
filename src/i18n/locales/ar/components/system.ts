@@ -473,7 +473,9 @@ const System = {
   'SYSTEM.CURRENCY_RATE': 'سعر العملة',
   'SYSTEM.SELECT_AIRPORT': 'اختر المطار',
   'SYSTEM.KANBAN': 'كانبان',
-  'SYSTEM.TABLE': 'جدول'
+  'SYSTEM.TABLE': 'جدول',
+  'SYSTEM.NO_CARGO_NOTIFICATIONS': 'لا توجد إشعارات شحن',
+  'SYSTEM.NO_NOTIFICATIONS_DESCRIPTION': 'لا توجد إشعارات متاحة حاليًا لإنشاء شحنة'
 };
 
 export default System;

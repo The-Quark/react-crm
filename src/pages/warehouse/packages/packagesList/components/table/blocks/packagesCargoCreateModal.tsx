@@ -58,46 +58,60 @@ export const PackagesCargoCreateModal: FC<Props> = ({ open, handleClose }) => {
           {isLoading && <SharedLoading />}
           {isError && <SharedError error={error} />}
           {data?.notifications && (
-            <div className="grid gap-4">
-              {data.notifications.map((notification, index) => (
-                <div key={index} className="card p-4">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <h4 className="font-semibold">
-                        {formatMessage({ id: 'SYSTEM.SENDER_CITY' })}
-                      </h4>
-                      <p>{notification.sender_city_name}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">
-                        {formatMessage({ id: 'SYSTEM.RECEIVER_CITY' })}
-                      </h4>
-                      <p>{notification.receiver_city_name}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">
-                        {formatMessage({ id: 'SYSTEM.PACKAGE_COUNT' })}
-                      </h4>
-                      <p>{notification.count}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">
-                        {formatMessage({ id: 'SYSTEM.PACKAGE_IDS' })}
-                      </h4>
-                      <p>{notification.package_ids.join(', ')}</p>
-                    </div>
-                  </div>
-                  {canManage && (
-                    <button
-                      className="btn btn-primary self-end"
-                      onClick={() => handleCreateCargo(notification.package_ids)}
-                    >
-                      {formatMessage({ id: 'SYSTEM.CREATE_CARGO' })}
-                    </button>
-                  )}
+            <>
+              {data.notifications.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <KeenIcon icon="logistic" className="text-muted-foreground text-4xl mb-4" />
+                  <p className="text-lg font-medium text-muted-foreground">
+                    {formatMessage({ id: 'SYSTEM.NO_CARGO_NOTIFICATIONS' })}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {formatMessage({ id: 'SYSTEM.NO_NOTIFICATIONS_DESCRIPTION' })}
+                  </p>
                 </div>
-              ))}
-            </div>
+              ) : (
+                <div className="grid gap-4">
+                  {data.notifications.map((notification, index) => (
+                    <div key={index} className="card p-4">
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <h4 className="font-semibold">
+                            {formatMessage({ id: 'SYSTEM.SENDER_CITY' })}
+                          </h4>
+                          <p>{notification.sender_city_name}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">
+                            {formatMessage({ id: 'SYSTEM.RECEIVER_CITY' })}
+                          </h4>
+                          <p>{notification.receiver_city_name}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">
+                            {formatMessage({ id: 'SYSTEM.PACKAGE_COUNT' })}
+                          </h4>
+                          <p>{notification.count}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">
+                            {formatMessage({ id: 'SYSTEM.PACKAGE_IDS' })}
+                          </h4>
+                          <p>{notification.package_ids.join(', ')}</p>
+                        </div>
+                      </div>
+                      {canManage && (
+                        <button
+                          className="btn btn-primary self-end"
+                          onClick={() => handleCreateCargo(notification.package_ids)}
+                        >
+                          {formatMessage({ id: 'SYSTEM.CREATE_CARGO' })}
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </DialogBody>
       </DialogContent>

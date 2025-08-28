@@ -473,7 +473,10 @@ const System = {
   'SYSTEM.CURRENCY_RATE': 'Курс валюты',
   'SYSTEM.SELECT_AIRPORT': 'Выберите аэропорт',
   'SYSTEM.KANBAN': 'Канбан',
-  'SYSTEM.TABLE': 'Таблица'
+  'SYSTEM.TABLE': 'Таблица',
+  'SYSTEM.NO_CARGO_NOTIFICATIONS': 'Нет уведомлений о грузах',
+  'SYSTEM.NO_NOTIFICATIONS_DESCRIPTION':
+    'На данный момент нет доступных уведомлений для создания груза'
 };
 
 export default System;
