@@ -19,6 +19,7 @@ interface Props<T> {
   isClearable?: boolean;
   disabled?: boolean;
   onChange?: (value: string | number) => void;
+  emptyMessage?: string;
 }
 
 export const SharedSelect = <T,>({
@@ -29,7 +30,8 @@ export const SharedSelect = <T,>({
   placeholder,
   isClearable = false,
   disabled = false,
-  onChange
+  onChange,
+  emptyMessage
 }: Props<T>) => {
   const { formatMessage } = useIntl();
   const fieldName = name.toString();
@@ -37,9 +39,11 @@ export const SharedSelect = <T,>({
   const hasError = formik.touched[name] && formik.errors[name];
 
   const CLEAR_OPTION_VALUE = '__CLEAR__';
+  const isEmpty = options.length === 0;
 
   const selectTriggerClasses = clsx({
-    'border-danger focus:border-danger': hasError
+    'border-danger focus:border-danger': hasError,
+    'opacity-50 cursor-not-allowed': isEmpty
   });
 
   return (
@@ -64,16 +68,26 @@ export const SharedSelect = <T,>({
             <SelectValue placeholder={placeholder || formatMessage({ id: 'SYSTEM.SELECT' })} />
           </SelectTrigger>
           <SelectContent>
-            {isClearable && currentValue !== null && currentValue !== undefined && (
-              <SelectItem value={CLEAR_OPTION_VALUE}>
-                <span className="text-muted-foreground">Clear selection</span>
-              </SelectItem>
+            {isEmpty ? (
+              <div className="py-2 px-2 text-center text-muted-foreground text-sm">
+                {emptyMessage || formatMessage({ id: 'SYSTEM.EMPTY_STATE' })}
+              </div>
+            ) : (
+              <>
+                {isClearable && currentValue !== null && currentValue !== undefined && (
+                  <SelectItem value={CLEAR_OPTION_VALUE}>
+                    <span className="text-muted-foreground">
+                      {formatMessage({ id: 'SYSTEM.CLEAR_SELECTION' })}
+                    </span>
+                  </SelectItem>
+                )}
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={String(option.value)}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </>
             )}
-            {options.map((option) => (
-              <SelectItem key={option.value} value={String(option.value)}>
-                {option.label}
-              </SelectItem>
-            ))}
           </SelectContent>
         </Select>
         {hasError && (
