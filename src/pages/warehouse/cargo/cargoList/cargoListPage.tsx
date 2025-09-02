@@ -5,7 +5,6 @@ import { CargoTabContent } from '@/pages/warehouse/cargo/cargoList/components/ca
 export const CargoListPage = () => {
   return (
     <>
-      s
       <SharedHeader />
       <CargoTabContent />
     </>

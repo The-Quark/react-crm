@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select.tsx';
 import { useIntl } from 'react-intl';
 import { Cargo } from '@/api/get/getWorkflow/getCargo/types.ts';
+import { SharedStatusBadge } from '@/partials/sharedUI/sharedStatusBadge.tsx';
 
 export const CargoKanbanContent = () => {
   const { formatMessage } = useIntl();
@@ -106,6 +107,7 @@ export const CargoKanbanContent = () => {
                       <div className="flex items-center justify-between">
                         <p className="m-0 font-medium text-sm">{cargo.name}</p>
                       </div>
+                      <SharedStatusBadge status={cargo.status} />
                     </div>
                   </KanbanCard>
                 );

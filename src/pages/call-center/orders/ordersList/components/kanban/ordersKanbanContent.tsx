@@ -109,8 +109,8 @@ export const OrdersKanbanContent = () => {
                       <div className="flex items-center justify-between">
                         <p className="m-0 font-medium text-sm">{order.name}</p>
                       </div>
+                      {order.is_express && <SharedStatusBadge status="express" />}
                     </div>
-                    {order.is_express && <SharedStatusBadge status="express" />}
                   </KanbanCard>
                 );
               }}
