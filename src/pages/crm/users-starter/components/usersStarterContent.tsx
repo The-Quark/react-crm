@@ -21,6 +21,7 @@ import {
   SharedDateDayPicker,
   SharedError,
   SharedInput,
+  SharedIntlPhoneInput,
   SharedLoading,
   SharedSelect
 } from '@/partials/sharedUI';
@@ -454,11 +455,10 @@ export const UsersStarterContent: FC<Props> = ({ isEditMode, usersData, userId }
               label={formatMessage({ id: 'SYSTEM.BIRTH_DATE' })}
               formik={formik}
             />
-            <SharedInput
+            <SharedIntlPhoneInput
               name="phone"
               label={formatMessage({ id: 'SYSTEM.PHONE_NUMBER' })}
               formik={formik}
-              type="tel"
             />
             <SharedInput
               name="email"

@@ -139,7 +139,6 @@ export const OrdersMainForm: FC<Props> = ({ onNext, isEditMode }) => {
   const { formatMessage } = useIntl();
   const { currentLanguage } = useLanguage();
   const { currency } = useCurrency();
-  console.log('OrdersMainForm render', { applicationId, isEditMode });
 
   const [searchTerm, setSearchTerm] = useState('');
 
