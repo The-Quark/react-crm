@@ -330,7 +330,6 @@ export const CargoStarterContent = ({ cargoId, cargoData, isEditMode }: Props) =
                 name="status"
                 label={formatMessage({ id: 'SYSTEM.STATUS' })}
                 formik={formik}
-                disabled={true}
                 options={cargoStatusOptions.map((status) => ({
                   label: status.name,
                   value: status.value
