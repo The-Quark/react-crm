@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { mockClientSystemStatus, mockGenderOptions } from '@/utils';
+import { mockClientSystemStatus, mockGenderOptions, NOTES_MAX_LENGTH } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -47,7 +47,7 @@ const ClientStarterContentIndividual: FC<Props> = ({ clientData, sourcesData }) 
       : Yup.string().optional(),
     email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional().nullable(),
     phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
-    notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
+    notes: Yup.string().max(NOTES_MAX_LENGTH, 'VALIDATION.MAXIMUM_500_SYMBOLS').nullable(),
     source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
     password: clientData
       ? Yup.string()

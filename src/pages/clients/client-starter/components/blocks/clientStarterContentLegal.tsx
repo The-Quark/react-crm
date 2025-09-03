@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { mockClientSystemStatus } from '@/utils';
+import { BIN_LENGTH, mockClientSystemStatus, NOTES_MAX_LENGTH } from '@/utils';
 import { IClientFormValues } from '@/api/post/postClient/types.ts';
 import { getCitiesByCountryCode, getCountries, postClient, putClient } from '@/api';
 import { AxiosError } from 'axios';
@@ -38,7 +38,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
   const validateSchema = Yup.object().shape({
     company_name: Yup.string().required('VALIDATION.FORM_VALIDATION_COMPANY_NAME_REQUIRED'),
     bin: Yup.string()
-      .length(12, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
+      .length(BIN_LENGTH, 'VALIDATION.FORM_VALIDATION_BIN_LENGTH')
       .matches(/^\d+$/, 'VALIDATION.FORM_VALIDATION_BIN_DIGITS')
       .required('VALIDATION.FORM_VALIDATION_BIN_REQUIRED'),
     representative_phone: Yup.string(),
@@ -48,7 +48,7 @@ const ClientStarterContentLegal: FC<Props> = ({ clientData, sourcesData }) => {
           .required('VALIDATION.FORM_VALIDATION_LAST_NAME_REQUIRED')
       : Yup.string().optional(),
     representative_email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
-    notes: Yup.string().max(500, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
+    notes: Yup.string().max(NOTES_MAX_LENGTH, 'VALIDATION.MAXIMUM_500_SYMBOLS'),
     source_id: Yup.string().required('VALIDATION.FORM_VALIDATION_SOURCE_REQUIRED'),
     phone: Yup.string().required('VALIDATION.FORM_VALIDATION_PHONE_REQUIRED'),
     email: Yup.string().email('VALIDATION.FORM_VALIDATION_EMAIL_INVALID').optional(),
